@@ -51,8 +51,8 @@ chmod +x scripts/install.sh
 
 ```bash
 mkdir -p ~/.claude/skills/agent-teams-playbook
-cp SKILL.md ~/.claude/skills/agent-teams-playbook/
-cp README.md ~/.claude/skills/agent-teams-playbook/
+cp .claude/skills/agent-teams-playbook/SKILL.md ~/.claude/skills/agent-teams-playbook/
+cp .claude/skills/agent-teams-playbook/README.md ~/.claude/skills/agent-teams-playbook/
 ```
 
 ### Verify Installation
@@ -120,8 +120,19 @@ Stage 0: Planning Setup → Stage 1: Task Analysis + Skill Discovery → Stage 2
 
 ```text
 agent-teams-playbook/
-├── SKILL.md    # Runtime loaded (concise, ~170 lines)
-└── README.md   # Developer documentation (full details)
+├── .agents/skills/agent-teams-playbook/   # Codex skill package
+│   ├── SKILL.md
+│   └── README.md
+├── .claude/skills/agent-teams-playbook/   # Claude Code skill package
+│   ├── SKILL.md
+│   └── README.md
+├── .codex/config.toml                     # Codex project metadata
+├── scripts/install.sh                     # Standalone installer
+├── CHANGELOG.md
+├── NOTICE
+├── LICENSE
+├── SKILL.md                               # Root compatibility entrypoint
+└── README.md                              # Developer documentation
 ```
 
 ## Compatibility

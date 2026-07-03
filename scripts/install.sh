@@ -60,14 +60,14 @@ OPTIONS:
     -h, --help              Show this help message
     -v, --version           Show version information
     -t, --target TARGET     Install target: claude, codex, openclaw, cursor, all
-    --from-github           Download SKILL.md and README.md from GitHub main.
+    --from-github           Download the target runtime skill package from GitHub main.
                             Default: copy from the local checkout.
 
 DESCRIPTION:
     Installs the agent-teams-playbook Skill by:
     1. Detecting your operating system
     2. Creating the installation directory
-    3. Copying SKILL.md and README.md from the local checkout
+    3. Copying the target runtime skill package from the local checkout
        or downloading them from GitHub with --from-github
     4. Verifying the installation
     5. Optionally enabling Claude Code fork mode
@@ -192,19 +192,40 @@ create_directory() {
     echo
 }
 
+package_subdir_for_target() {
+    case "$1" in
+        claude)
+            echo ".claude/skills/${SKILL_NAME}"
+            ;;
+        codex)
+            echo ".agents/skills/${SKILL_NAME}"
+            ;;
+        *)
+            echo ""
+            ;;
+    esac
+}
+
 # Feature 3: File Download
 copy_local_files() {
     local install_dir="$1"
+    local target="$2"
     print_header "Step 3: Copying Files from Local Checkout"
 
     local script_dir
     script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
     local repo_dir
     repo_dir="$(cd "${script_dir}/.." && pwd)"
+    local package_subdir
+    package_subdir="$(package_subdir_for_target "${target}")"
+    local source_dir="${repo_dir}"
+    if [ -n "${package_subdir}" ] && [ -d "${repo_dir}/${package_subdir}" ]; then
+        source_dir="${repo_dir}/${package_subdir}"
+    fi
     local files=("SKILL.md" "README.md")
 
     for file in "${files[@]}"; do
-        local source="${repo_dir}/${file}"
+        local source="${source_dir}/${file}"
         local output="${install_dir}/${file}"
 
         print_info "Copying ${file}..."
@@ -223,9 +244,15 @@ copy_local_files() {
 
 download_files() {
     local install_dir="$1"
+    local target="$2"
     print_header "Step 3: Downloading Files from GitHub"
 
+    local package_subdir
+    package_subdir="$(package_subdir_for_target "${target}")"
     local base_url="https://raw.githubusercontent.com/${GITHUB_REPO}/${GITHUB_BRANCH}"
+    if [ -n "${package_subdir}" ]; then
+        base_url="${base_url}/${package_subdir}"
+    fi
     local files=("SKILL.md" "README.md")
     local download_cmd=""
 
@@ -395,9 +422,9 @@ main() {
         create_directory "${install_dir}"
 
         if [ "${INSTALL_SOURCE}" = "github" ]; then
-            download_files "${install_dir}"
+            download_files "${install_dir}" "${target}"
         else
-            copy_local_files "${install_dir}"
+            copy_local_files "${install_dir}" "${target}"
         fi
 
         if verify_installation "${install_dir}"; then

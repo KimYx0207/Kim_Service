@@ -1,0 +1,5 @@
+#:schema https://developers.openai.com/codex/config-schema.json
+
+[features]
+# Expose Codex's native request_user_input tool in Default mode when supported.
+default_mode_request_user_input = true
