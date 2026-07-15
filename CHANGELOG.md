@@ -38,6 +38,7 @@ Kim Service uses one repository-level two-part public version (`V<major>.<minor>
 - Memory 3-Layer package validation and 27 installer, migration, recording, poisoning-resistance, and loader-preservation tests passed; real Claude Code and Codex Hook smoke remains a separate runtime proof layer.
 - All catalog-declared component checks passed through the shared `node scripts/check-components.mjs` runner; components without an independent command remained covered by the same repository root gate.
 - The exact `V1.0` release-contract regression passed, including rejection of legacy or malformed collection version forms and empty CHANGELOG sections.
+- The release gate accepts the manifest's `owner/repository` identity while still requiring `origin` to resolve to the matching GitHub repository URL.
 - README layout regressions passed for incorrect banner width, missing centered containers, uncentered payment tables or cells, and payment codes split across rows.
 - `node scripts/check-repository.mjs --release` is required to pass on the clean `main` release commit before tag creation.
 - Remote branch, tag, Release metadata, and fresh-tag-clone checks are required after publication and are reported separately from local readiness.

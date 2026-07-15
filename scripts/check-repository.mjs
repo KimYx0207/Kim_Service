@@ -142,8 +142,11 @@ function checkReleaseReadiness(catalog) {
   }
 
   const remoteName = release.remoteName ?? 'origin';
+  const repository = release.repository ?? catalog?.repository ?? '';
   const expectedRemote = normalizeGitHubRemote(
-    release.repository ?? catalog?.repository ?? ''
+    /^(?:https?:\/\/|ssh:\/\/|git@)/i.test(repository)
+      ? repository
+      : 'https://github.com/' + repository
   );
   for (const remoteKind of [
     { label: 'fetch', args: ['remote', 'get-url', '--all', remoteName] },
