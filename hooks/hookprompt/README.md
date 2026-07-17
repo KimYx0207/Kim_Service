@@ -258,27 +258,18 @@ Windows 下建议使用绝对路径，并使用 `/` 或转义后的 `\\`：
 "args": ["C:/Users/your-name/.claude/hooks/user-prompt-submit.js"]
 ```
 
-### 报错提到 `PreToolUse:Bash` 和 `graphify.EXE`
+### 返回 `{}` 不代表安装失败
 
-这不是 HookPrompt 的 `UserPromptSubmit` 报错，也与 Node.js 版本无关。若错误中出现类似下面的路径：
+HookPrompt 会主动跳过“测试”“测试输入”“好的”等没有明确任务含义的短文本，此时返回 `{}` 是正常行为。不要用这些词做正向验收，也不要因此删除 Hook 或降级 Node.js。
 
-```text
-/usr/bin/bash: C:Users...Scriptsgraphify.EXE: command not found
+Windows PowerShell 可以用课程中的真实任务句测试：
+
+```powershell
+'{"hook_event_name":"UserPromptSubmit","prompt":"帮我整理一下这批报价"}' |
+  node "$env:USERPROFILE\.claude\hooks\user-prompt-submit.js"
 ```
 
-说明项目的 `.codex/hooks.json` 把 Windows 绝对路径直接交给了 Bash，路径中的反斜杠被当作转义符。不要删除 HookPrompt，也不需要降级 Node.js。打开报错项目自己的 `.codex/hooks.json`，将 Graphify 命令改为可从 `PATH` 解析的形式：
-
-```json
-"command": "graphify hook-check"
-```
-
-如果必须使用绝对路径，请同时使用正斜杠和外层引号，例如：
-
-```json
-"command": "\"C:/Users/your-name/AppData/Local/Programs/Python/Python311/Scripts/graphify.exe\" hook-check"
-```
-
-保存后重新打开会话，再重试原来的 Bash 命令。只有错误明确指向 `UserPromptSubmit` 或 `user-prompt-submit.js` 时，才继续检查 HookPrompt 配置。
+输出中出现 `hookSpecificOutput` 和 `additionalContext`，说明脚本与输入协议正常。然后完全退出并重新打开 Claude Code，再输入同一句话验证真实 `UserPromptSubmit` 触发。直接运行 `node user-prompt-submit.js "测试"` 不是有效测试，因为 Hook 从标准输入读取事件 JSON，不读取这个位置参数。
 
 ### 没有显示优化过程
 

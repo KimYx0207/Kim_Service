@@ -4,8 +4,8 @@
 
 ## Kim Service Unreleased - 2026-07-17
 
-- 同步 `KimYx0207/HookPrompt` 修订 `53fd35e0cf71c563c0a8feebcb17b7a2441c8e04` 的双语排障说明。
-- 明确区分 HookPrompt 的 `UserPromptSubmit` 与 Graphify 的 `PreToolUse:Bash` 路径错误，避免误删 HookPrompt 或误降级 Node.js。
+- 同步 `KimYx0207/HookPrompt` 修订 `83299e7094937f8d0179ff60d304c1c5a25a5740` 的双语验证说明。
+- 明确 `{}` 是短文本主动跳过结果，并提供从标准输入传入真实任务 JSON 的正向验收命令。
 
 ## Kim Service V1.0 - 2026-07-15
 

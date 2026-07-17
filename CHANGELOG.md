@@ -10,9 +10,9 @@ Kim Service uses one repository-level two-part public version (`V<major>.<minor>
 
 ### User-visible changes
 
-- Added Chinese and English troubleshooting for Windows `PreToolUse:Bash` failures that mention `graphify.EXE`.
-- Clarified that this error belongs to a Graphify command path in the failing project's `.codex/hooks.json`, not HookPrompt's `UserPromptSubmit` or the installed Node.js version.
-- Documented portable `graphify hook-check` configuration and a correctly quoted forward-slash absolute-path fallback.
+- Added Chinese and English guidance explaining that `{}` is the expected skip result for short text without a clear task.
+- Added a positive PowerShell verification command that passes a real task as `UserPromptSubmit` JSON through standard input.
+- Clarified that positional arguments such as `node user-prompt-submit.js "test"` do not exercise the HookPrompt input protocol.
 
 ### Breaking changes and migration
 
@@ -21,11 +21,11 @@ Kim Service uses one repository-level two-part public version (`V<major>.<minor>
 ### Verification
 
 - HookPrompt tests passed 32/32.
-- The portable Graphify command completed locally without the malformed Windows-path error.
+- The course task sentence returned `hookSpecificOutput` and `additionalContext` through the documented PowerShell route.
 
 ### Source revisions
 
-- HookPrompt: `53fd35e0cf71c563c0a8feebcb17b7a2441c8e04`.
+- HookPrompt: `83299e7094937f8d0179ff60d304c1c5a25a5740`.
 
 ## V1.1 - 2026-07-15
 

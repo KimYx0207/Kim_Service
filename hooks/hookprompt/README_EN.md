@@ -258,27 +258,18 @@ Use absolute paths with `/` or escaped `\\`:
 "args": ["C:/Users/your-name/.claude/hooks/user-prompt-submit.js"]
 ```
 
-### The error mentions `PreToolUse:Bash` and `graphify.EXE`
+### Returning `{}` Does Not Mean Installation Failed
 
-This is not a HookPrompt `UserPromptSubmit` failure and is unrelated to the Node.js version. An error such as:
+HookPrompt intentionally skips short text without a clear task, such as "test", "test input", or "ok". Returning `{}` is expected in that case. Do not use those words as a positive acceptance test, remove the hook, or downgrade Node.js because of this result.
 
-```text
-/usr/bin/bash: C:Users...Scriptsgraphify.EXE: command not found
+On Windows PowerShell, test with a real task sentence:
+
+```powershell
+'{"hook_event_name":"UserPromptSubmit","prompt":"Please organize these quotations for me"}' |
+  node "$env:USERPROFILE\.claude\hooks\user-prompt-submit.js"
 ```
 
-means the project's `.codex/hooks.json` passed an unquoted Windows absolute path to Bash, which treated the backslashes as escape characters. Do not remove HookPrompt or downgrade Node.js. Open `.codex/hooks.json` in the failing project and use a Graphify command that can be resolved from `PATH`:
-
-```json
-"command": "graphify hook-check"
-```
-
-If an absolute path is required, use forward slashes and quote the executable:
-
-```json
-"command": "\"C:/Users/your-name/AppData/Local/Programs/Python/Python311/Scripts/graphify.exe\" hook-check"
-```
-
-Reopen the session and retry the original Bash command. Continue troubleshooting HookPrompt only when the error explicitly identifies `UserPromptSubmit` or `user-prompt-submit.js`.
+If the output contains `hookSpecificOutput` and `additionalContext`, the script and input protocol are working. Fully exit and reopen Claude Code, then enter the same sentence to verify the real `UserPromptSubmit` event. Running `node user-prompt-submit.js "test"` is not a valid test because the hook reads event JSON from standard input, not from that positional argument.
 
 ### Optimization Does Not Appear
 
