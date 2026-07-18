@@ -107,7 +107,7 @@ Copy-Item -Recurse .claude D:\YourProject\
           {
             "type": "command",
             "command": "node",
-            "args": [".claude/hooks/user-prompt-submit.js"]
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/hooks/user-prompt-submit.js"]
           }
         ]
       }
@@ -170,7 +170,7 @@ chmod +x ~/.claude/hooks/*.sh
 
 ### Codex
 
-把 `.codex/hooks/user-prompt-submit.js` 复制到你的 Codex hook 目录，并在对应 `hooks.json` 中配置 `UserPromptSubmit`。项目级使用时，直接保留本仓库的 `.codex/hooks.json` 即可。
+把 `.codex/hooks/user-prompt-submit.js` 复制到你的 Codex hook 目录，并在对应 `hooks.json` 中配置 `UserPromptSubmit`。项目级使用时，直接保留本仓库的 `.codex/hooks.json` 即可；其中的启动命令会从当前目录向上查找项目根下的 Hook 脚本，因此会话进入 `docs/`、`src/` 等子目录后仍能运行。
 
 ## 配置选项
 
@@ -250,7 +250,19 @@ node test-hook.js
 4. 本机必须能运行 `node -v`。
 5. 修改配置后需要重启 Claude Code 或重新打开相关会话。
 
-### Windows 找不到脚本
+### 提示 `Cannot find module` 或 `node:internal/modules/cjs/loader`
+
+这类错误表示 Node 无法加载 Hook 入口或其依赖；`loader` 后面的行号只和 Node 版本有关，不能单凭行号判断具体是哪个脚本。
+
+项目级 Claude Code 配置应使用 `${CLAUDE_PROJECT_DIR}`，不要写成随当前工作目录变化的相对路径：
+
+```json
+"args": ["${CLAUDE_PROJECT_DIR}/.claude/hooks/user-prompt-submit.js"]
+```
+
+本仓库的 `.codex/hooks.json` 使用向上查找方式定位项目脚本，不依赖会话停留在项目根目录。如果你自行简化成 `node .codex/hooks/user-prompt-submit.js`，进入子目录后也可能出现同类错误。
+
+### Windows 全局安装找不到脚本
 
 Windows 下建议使用绝对路径，并使用 `/` 或转义后的 `\\`：
 

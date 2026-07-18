@@ -107,7 +107,7 @@ The target `.claude/settings.json` should use `UserPromptSubmit`:
           {
             "type": "command",
             "command": "node",
-            "args": [".claude/hooks/user-prompt-submit.js"]
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/hooks/user-prompt-submit.js"]
           }
         ]
       }
@@ -170,7 +170,7 @@ Then configure `~/.claude/settings.json`. Absolute paths are more reliable for g
 
 ### Codex
 
-Copy `.codex/hooks/user-prompt-submit.js` to your Codex hook directory and configure `UserPromptSubmit` in `hooks.json`. For project-level usage, keep this repository's `.codex/hooks.json`.
+Copy `.codex/hooks/user-prompt-submit.js` to your Codex hook directory and configure `UserPromptSubmit` in `hooks.json`. For project-level usage, keep this repository's `.codex/hooks.json`; its launcher walks upward from the current directory to find the project hook, so it still works after the session enters a subdirectory such as `docs/` or `src/`.
 
 ## Configuration
 
@@ -250,7 +250,19 @@ Check:
 4. `node -v` must work.
 5. Restart Claude Code or reopen the relevant session after configuration changes.
 
-### Windows Cannot Find the Script
+### `Cannot find module` or `node:internal/modules/cjs/loader`
+
+This means Node could not load the hook entry point or one of its dependencies. The line number after `loader` depends on the Node version and does not identify the failing script by itself.
+
+Project-level Claude Code configuration should use `${CLAUDE_PROJECT_DIR}` instead of a path relative to the current working directory:
+
+```json
+"args": ["${CLAUDE_PROJECT_DIR}/.claude/hooks/user-prompt-submit.js"]
+```
+
+This repository's `.codex/hooks.json` locates the project script by walking upward, so it does not require the session to remain at the project root. Replacing it with `node .codex/hooks/user-prompt-submit.js` can reintroduce the same failure after entering a subdirectory.
+
+### Windows Global Install Cannot Find the Script
 
 Use absolute paths with `/` or escaped `\\`:
 
