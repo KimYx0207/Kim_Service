@@ -182,80 +182,6 @@ function log(message, color = 'reset') {
     console.log(`${colors[color]}${message}${colors.reset}`);
 }
 
-function runConfiguredCommand(command, args, cwd, input, shell = false) {
-    return new Promise((resolve) => {
-        const child = spawn(command, args, {
-            cwd,
-            shell,
-            stdio: ['pipe', 'pipe', 'pipe'],
-            env: process.env
-        });
-        let stdout = '';
-        let stderr = '';
-        child.stdout.on('data', (data) => { stdout += data.toString(); });
-        child.stderr.on('data', (data) => { stderr += data.toString(); });
-        child.on('close', (code) => resolve({ code, stdout, stderr }));
-        child.stdin.end(input);
-    });
-}
-
-function hasOptimizedContext(result) {
-    if (result.code !== 0) return false;
-    try {
-        const output = JSON.parse(result.stdout);
-        return Boolean(output.hookSpecificOutput?.additionalContext);
-    } catch {
-        return false;
-    }
-}
-
-async function runCwdPathTests() {
-    const nestedCwd = path.join(__dirname, 'docs');
-    const input = JSON.stringify({
-        hook_event_name: 'UserPromptSubmit',
-        prompt: '帮我检查这个路径问题'
-    });
-    const expectedClaudeArg = '${CLAUDE_PROJECT_DIR}/.claude/hooks/user-prompt-submit.js';
-    const claudeConfigFiles = [
-        '.claude/settings.json',
-        '.claude/settings.json.example-windows',
-        '.claude/settings.json.example-unix'
-    ];
-    const claudeHandlers = claudeConfigFiles.map((relativePath) => {
-        const config = JSON.parse(fs.readFileSync(path.join(__dirname, relativePath), 'utf8'));
-        return config.hooks.UserPromptSubmit[0].hooks[0];
-    });
-    const claudeContractOk = claudeHandlers.every((handler) => (
-        handler.command === 'node' &&
-        handler.args?.length === 1 &&
-        handler.args[0] === expectedClaudeArg
-    ));
-    const claudeArg = claudeHandlers[0].args[0].replace('${CLAUDE_PROJECT_DIR}', __dirname);
-    const claudeRun = await runConfiguredCommand('node', [claudeArg], nestedCwd, input);
-
-    const codexConfig = JSON.parse(fs.readFileSync(path.join(__dirname, '.codex', 'hooks.json'), 'utf8'));
-    const codexHandler = codexConfig.hooks.UserPromptSubmit[0].hooks[0];
-    const codexContractOk = !codexHandler.command.includes('node .codex/hooks/user-prompt-submit.js');
-    const codexRun = await runConfiguredCommand(codexHandler.command, [], nestedCwd, input, true);
-
-    return [
-        {
-            name: 'Claude 配置 / 从 docs 子目录触发',
-            passed: claudeContractOk && hasOptimizedContext(claudeRun),
-            error: claudeContractOk
-                ? (hasOptimizedContext(claudeRun) ? undefined : claudeRun.stderr || '未返回优化上下文')
-                : 'Claude 配置未统一使用 CLAUDE_PROJECT_DIR'
-        },
-        {
-            name: 'Codex 配置 / 从 docs 子目录触发',
-            passed: codexContractOk && hasOptimizedContext(codexRun),
-            error: codexContractOk
-                ? (hasOptimizedContext(codexRun) ? undefined : codexRun.stderr || '未返回优化上下文')
-                : 'Codex 配置仍使用会随 CWD 漂移的直接相对路径'
-        }
-    ];
-}
-
 // 运行单个测试
 function runTest(testCase, hookTarget) {
     return new Promise((resolve) => {
@@ -391,16 +317,6 @@ async function main() {
             await new Promise(resolve => setTimeout(resolve, 100));
         }
     }
-
-    log(`\n${'='.repeat(60)}`, 'cyan');
-    log('配置路径回归测试', 'cyan');
-    log('='.repeat(60), 'cyan');
-    const cwdPathResults = await runCwdPathTests();
-    cwdPathResults.forEach((result) => {
-        log(`${result.passed ? '✅' : '❌'} ${result.name}`, result.passed ? 'green' : 'red');
-        if (result.error) log(`   错误: ${result.error}`, 'yellow');
-    });
-    results.push(...cwdPathResults);
 
     // 输出总结
     log('\n' + '='.repeat(60), 'cyan');

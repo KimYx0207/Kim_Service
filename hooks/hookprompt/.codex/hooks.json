@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node -e \"const{existsSync}=require('fs'),{dirname,join}=require('path');let d=process.cwd(),p;while(!existsSync(p=join(d,'.codex','hooks','user-prompt-submit.js'))&&dirname(d)!==d)d=dirname(d);if(!existsSync(p))throw Error('HookPrompt project hook not found above '+process.cwd());require(p)\"",
+            "command": "node .codex/hooks/user-prompt-submit.js",
             "timeout": 10
           }
         ]

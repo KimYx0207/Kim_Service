@@ -2,12 +2,6 @@
 
 本文件记录 HookPrompt 的重要变更。
 
-## Kim Service Unreleased - 2026-07-18
-
-- 同步 `KimYx0207/HookPrompt` 修订 `807d4b314dcbfb98baefc42b43fc7085d02ab4ba` 的工作目录无关 Hook 入口。
-- Claude Code 项目配置使用 `${CLAUDE_PROJECT_DIR}`；Codex 项目配置从当前目录向上定位项目 Hook。
-- 新增从 `docs/` 子目录触发的 Claude Code 与 Codex 路径回归测试，并补充模块加载错误的准确诊断说明。
-
 ## Kim Service Unreleased - 2026-07-17
 
 - 同步 `KimYx0207/HookPrompt` 修订 `83299e7094937f8d0179ff60d304c1c5a25a5740` 的双语验证说明。

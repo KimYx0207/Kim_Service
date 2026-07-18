@@ -2,19 +2,17 @@
 
 Kim Service uses one repository-level two-part public version (`V<major>.<minor>`) and one GitHub Release for the aggregated Hook and Skill collection. Component CHANGELOG files record component provenance; this file is the release-note authority.
 
-## Unreleased - 2026-07-18
+## Unreleased - 2026-07-17
 
 ### Affected components
 
-- HookPrompt configuration, tests, and documentation.
+- HookPrompt documentation.
 
 ### User-visible changes
 
 - Added Chinese and English guidance explaining that `{}` is the expected skip result for short text without a clear task.
 - Added a positive PowerShell verification command that passes a real task as `UserPromptSubmit` JSON through standard input.
 - Clarified that positional arguments such as `node user-prompt-submit.js "test"` do not exercise the HookPrompt input protocol.
-- Made Claude Code project hooks independent of the session working directory through `${CLAUDE_PROJECT_DIR}`.
-- Made Codex project hooks locate the repository script from nested working directories and documented accurate `MODULE_NOT_FOUND` diagnosis.
 
 ### Breaking changes and migration
 
@@ -22,12 +20,12 @@ Kim Service uses one repository-level two-part public version (`V<major>.<minor>
 
 ### Verification
 
-- HookPrompt tests passed 34/34, including Claude Code and Codex launches from the `docs/` subdirectory.
+- HookPrompt tests passed 32/32.
 - The course task sentence returned `hookSpecificOutput` and `additionalContext` through the documented PowerShell route.
 
 ### Source revisions
 
-- HookPrompt: `807d4b314dcbfb98baefc42b43fc7085d02ab4ba`.
+- HookPrompt: `83299e7094937f8d0179ff60d304c1c5a25a5740`.
 
 ## V1.1 - 2026-07-15
 

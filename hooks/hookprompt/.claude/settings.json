@@ -6,7 +6,7 @@
           {
             "type": "command",
             "command": "node",
-            "args": ["${CLAUDE_PROJECT_DIR}/.claude/hooks/user-prompt-submit.js"]
+            "args": [".claude/hooks/user-prompt-submit.js"]
           }
         ]
       }
