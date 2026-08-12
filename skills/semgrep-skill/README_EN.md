@@ -4,10 +4,10 @@
 
 <div align="center">
 
-![GitHub stars](https://img.shields.io/github/stars/KimYx0207/Kim_Service?style=social)
-![GitHub forks](https://img.shields.io/github/forks/KimYx0207/Kim_Service?style=social)
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Version](https://img.shields.io/badge/Claude_Code-2.1.39-green.svg)
+[![GitHub stars](https://img.shields.io/github/stars/KimYx0207/Kim_Service?style=social)](https://github.com/KimYx0207/Kim_Service)
+[![GitHub forks](https://img.shields.io/github/forks/KimYx0207/Kim_Service?style=social)](https://github.com/KimYx0207/Kim_Service)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/KimYx0207/Kim_Service)
+[![Version](https://img.shields.io/badge/Claude_Code-2.1.39-green.svg)](https://github.com/KimYx0207/Kim_Service)
 
 **Just say "scan for vulnerabilities" in Claude Code — powered by Semgrep**
 
