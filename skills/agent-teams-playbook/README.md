@@ -4,11 +4,11 @@
 
 <div align="center">
 
-![GitHub stars](https://img.shields.io/github/stars/KimYx0207/agent-teams-playbook?style=social)
-![GitHub forks](https://img.shields.io/github/forks/KimYx0207/agent-teams-playbook?style=social)
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Version](https://img.shields.io/badge/version-4.8.0-green.svg)
-![Runtime](https://img.shields.io/badge/runtimes-Claude%20Code%20%7C%20Codex%20%7C%20OpenClaw%20%7C%20Cursor-blue.svg)
+[![GitHub stars](https://img.shields.io/github/stars/KimYx0207/agent-teams-playbook?style=social)](https://github.com/KimYx0207/Kim_Service)
+[![GitHub forks](https://img.shields.io/github/forks/KimYx0207/agent-teams-playbook?style=social)](https://github.com/KimYx0207/Kim_Service)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/KimYx0207/Kim_Service)
+[![Version](https://img.shields.io/badge/version-4.8.0-green.svg)](https://github.com/KimYx0207/Kim_Service)
+[![Runtime](https://img.shields.io/badge/runtimes-Claude%20Code%20%7C%20Codex%20%7C%20OpenClaw%20%7C%20Cursor-blue.svg)](https://github.com/KimYx0207/Kim_Service)
 
 </div>
 
