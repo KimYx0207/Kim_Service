@@ -1,7 +1,7 @@
 <div align="center">
 
 <h1 style="font-size: 4em; font-weight: 900; margin-bottom: 0.1em; letter-spacing: 0.04em;">GoalPro</h1>
-<p style="font-size: 1.1em; color: #2563eb; font-weight: 600; margin-top: 0;">意图放大、Goal Prompt 与 Loop Prompt 协议</p>
+<p style="font-size: 1.1em; color: #2563eb; font-weight: 600; margin-top: 0;">意图区分、Goal Prompt 与按需 Loop Prompt 协议</p>
 
 <p>
   <strong>简体中文</strong>
@@ -18,18 +18,20 @@
 
 ## 简介
 
-**GoalPro** 是一个给 Codex 和 Claude Code 共用的 `goalpro` Skill，用来写出高质量 Goal Prompt，并附带交付后继续进化用的 Loop Prompt。
+**GoalPro** 是一个给 Codex 和 Claude Code 共用的 `goalpro` Skill，用来写出高质量 Goal Prompt；只有存在真实后续迭代需求时，才附带交付后继续进化用的 Loop Prompt。
 
 它要解决的问题很直接：用户给 Agent 的任务常常是模糊的、情绪化的、战略标准不清的。模型如果直接执行，很容易过度规划、乱读上下文、先改后想、命令跑通就假装完成。
 
-GoalPro 的作用，是先把请求变成两段交给执行者使用的、可复制、可验证、可暂停的提示词：
+GoalPro 的作用，是先把请求变成一段交给执行者使用的、可复制、可验证、可暂停的 Goal Prompt；若交付后还会出现决定下一轮动作的新证据，再追加 Loop Prompt：
 
 - **Goal Prompt**：启动本轮执行，核心是可执行的 **Goal Contract**。
-- **Loop Prompt**：在本轮执行结果出来之后使用，引导复盘、差距修复和持续进化；开头先给 `时间参数`，让用户直接填写下一轮什么时候继续，如“手动贴入结果后”或“每天早上 09:00”。
+- **Loop Prompt（按需）**：仅在真实后续迭代需求存在时使用，引导复盘、差距修复和持续进化；开头先给 `时间参数`，让用户直接填写下一轮什么时候继续，如“手动贴入结果后”或“每天早上 09:00”。
 
 Goal Prompt 要回答：
 
-- 真实意图是什么？
+- 用户明确表达了什么意图？
+- 哪些只是 AI 推断的潜在意图？
+- 哪些价值判断必须由用户确认？
 - 完成后局面应该发生什么变化？
 - 什么算赢，什么算失败？
 - 需要哪些证据、上下文和反证？
@@ -52,13 +54,13 @@ Loop Prompt 要回答：
 
 > 目标不是把提示词写长，也不是替用户执行 goal，而是把 Agent 从“猜用户想要什么”拉回到“按清楚的完成契约执行”。
 
-GoalPro 默认只输出可复制的 Goal Prompt + Loop Prompt，并在输出后停住。两个提示词必须用代码块外的 `Goal Prompt:` / `Loop Prompt:` 标签分开，不额外包一层 prompt rewrite 解释。只有用户另外明确授权执行，后续 Codex / Claude Code / 其他 Agent 才按 Goal Prompt 开始做事；Loop Prompt 只在拿到执行结果后用于持续进化。Loop Prompt 开头必须先给一个可填写的 `时间参数`，但写了时间不等于已经创建后台任务；如果用户要真正定时或后台运行，需要单独设置自动化。
+GoalPro 默认只输出可复制的 Goal Prompt，并在输出后停住，不额外包一层 prompt rewrite 解释。只有用户明确要求持续迭代，或交付后会出现决定下一轮动作的新证据时，才追加独立的 Loop Prompt。只有用户另外明确授权执行，后续 Codex / Claude Code / 其他 Agent 才按 Goal Prompt 开始做事；Loop Prompt 只在拿到执行结果后用于持续进化。Loop Prompt 开头必须先给一个可填写的 `时间参数`，但写了时间不等于已经创建后台任务；如果用户要真正定时或后台运行，需要单独设置自动化。
 
 ```mermaid
 flowchart LR
     subgraph intent["意图层"]
-        A["表面请求"] --> B["真实意图"]
-        B --> C["战略结果"]
+        A["表面请求"] --> B["三类意图区分"]
+        B --> C["已确认战略结果"]
     end
 
     subgraph contract["契约层"]
@@ -104,32 +106,33 @@ flowchart LR
 
 ### 一句话总结
 
-> 先放大真实意图，再锁定战略标准，然后写成 Agent 能执行、用户能验收、结果能继续进化的双提示词。
+> 先区分用户意图、AI 推断和价值判断，再锁定战略标准，默认交付 Goal Prompt；真实需要迭代时再追加 Loop Prompt。
 
 ## GoalPro 是什么、不是什么
 
 | 概念 | 它是什么 | 它不是什么 |
 |---|---|---|
-| **GoalPro Skill** | 写出 Goal Prompt + Loop Prompt 的 Skill | 执行 goal 的工具，也不是简单的提示词润色器 |
+| **GoalPro Skill** | 默认写出 Goal Prompt，并按真实迭代需求追加 Loop Prompt 的 Skill | 执行 goal 的工具，也不是简单的提示词润色器 |
 | **Goal Prompt** | 给执行者启动本轮任务的可执行提示词，核心是 Goal Contract | 一串漂亮但无法验收的愿景 |
 | **Loop Prompt** | 给执行结果之后使用的持续循环协议，开头给 `时间参数`，每轮产出 `Next LOOP packet` | 当前回合的自动执行授权、一次性返工提示词、后台调度器本身，或无限循环的借口 |
 | **Goal Contract** | Goal Prompt 里的可执行、可验证、可暂停目标说明 | 空泛愿景或待办清单 |
-| **Workflow lens** | 生成 Goal Prompt / Loop Prompt 时使用的判断层：识别重复工作，并把必要的 Trigger / Checkpoint / Brief 写进这两段提示词 | 第三个输出、Workflow Prompt、执行器、流程图交付物，或后台自动化 |
+| **Workflow lens** | 识别重复工作，并把必要的 Trigger / Checkpoint / Brief 写进 Goal Prompt；存在真实循环时再写进 Loop Prompt | 第三个输出、Workflow Prompt、执行器、流程图交付物，或后台自动化 |
 | **Deep Research 门槛** | 战略和外部事实任务的证据前置要求 | 为了显得专业而堆链接 |
 | **Inventory** | 大改前的影响面、调用方、测试入口盘点 | 先重构再补解释 |
 | **表达经济** | 战略完整后的删空话 | 把省字数当核心目标 |
 
-## 好 Goal + Loop 的质量门
+## 好 Goal / 可选 Loop 的质量门
 
-输出 Goal Prompt + Loop Prompt 前，先过这七个门：
+输出 Goal Prompt / 可选 Loop Prompt 前，先过这八个门：
 
-1. **意图对齐**：不能只复述用户原话，必须说清用户真正要改变的局面；如果多种解释会改变路线、风险或验收，先问或写明默认假设。
-2. **字段互证**：`Intent`、`Strategic outcome`、`Decision standard`、`Execution policy`、`Verification` 必须互相支撑，不能各写各的。
+1. **意图区分**：分别写清 `User-stated intent`、`AI-inferred potential intent`、`Value judgments requiring confirmation`，不把推断或价值判断冒充用户原意。
+2. **字段互证**：三类意图字段、`Strategic outcome`、`Decision standard`、`Execution policy`、`Verification` 必须互相支撑，不能各写各的。
 3. **可执行**：执行者能看出对象、动作、先读什么、做哪一片、不做什么、何时暂停。
 4. **可验收**：验证证据必须对应用户目标，不能用命令通过冒充真实完成；完成后必须展示一个实际样例、案例片段、截图说明或改后输出片段，让用户能判断是否通过。
-5. **Workflow lens**：看到每天、每周、自动、持续、发布、运营、监控、队列、复盘等信号时，先判断是不是重复工作；只有重复工作才在 Goal Prompt / Loop Prompt 里补 Trigger、Checkpoint、Brief，不新增第三段输出。
-6. **可进化**：Loop Prompt 必须先给 `时间参数`，再要求读取上一轮真实结果和证据，指出剩余差距，给出 Done / Continue / Pause 判断，在 Continue 时输出 `Next LOOP packet`，并用 guardrails 防止无限循环。
-7. **不过度**：小任务不强行 deep research、inventory、workflow lens 或 eval；只有会改变判断、防止真实失败时才加流程。
+5. **Loop 按需**：复杂、多步骤或多文件本身不触发 Loop；只有用户明确要求，或交付后会出现决定下一轮动作的新证据时才生成。
+6. **Workflow lens**：看到每天、每周、自动、持续、发布、运营、监控、队列、复盘等信号时，先判断是不是重复工作；只有重复工作才补 Trigger、Checkpoint、Brief，不新增第三段输出。
+7. **可进化**：若生成 Loop Prompt，必须先给 `时间参数`，再要求读取上一轮真实结果和证据，指出剩余差距，给出 Done / Continue / Pause 判断，在 Continue 时输出 `Next LOOP packet`，并用 guardrails 防止无限循环。
+8. **不过度**：小任务不强行 deep research、inventory、workflow lens、Loop 或 eval；只有会改变判断、防止真实失败时才加机制。
 
 ## 快速示例
 
@@ -137,7 +140,7 @@ flowchart LR
 
 > 帮我写一个高质量 goal，让 Codex 修这个项目，别再跑偏。
 
-**GoalPro 应该输出两段：**
+**GoalPro 默认只输出 Goal Prompt：**
 
 Goal Prompt:
 
@@ -145,8 +148,14 @@ Goal Prompt:
 Goal:
 修复项目当前阻塞问题，并交付一份能证明行为恢复的变更。
 
-Intent:
-用户真正要的不是“看起来改了代码”，而是让 Agent 先搞清失败点、影响面和验收标准，再做最小必要修复。
+User-stated intent:
+修复项目，并避免 Codex 再次跑偏。
+
+AI-inferred potential intent:
+用户可能更在意可验证的行为恢复，而不只是“看起来改了代码”；这是基于“别再跑偏”的推断，可由用户修正。
+
+Value judgments requiring confirmation:
+是否优先最小改动而非更彻底重构；若该选择会改变修复路线，先确认。
 
 Strategic outcome:
 项目从不可判断/不可运行状态回到可验证状态；后续继续迭代时不会靠聊天记忆猜测完成度。
@@ -163,6 +172,8 @@ Execution policy:
 Stop conditions:
 需要删除数据、发布、处理密钥、改公共接口，或发现多条互斥路线时暂停确认。
 ```
+
+若用户明确要求交付后继续根据运行结果迭代，再追加：
 
 Loop Prompt:
 
@@ -277,12 +288,12 @@ Skill 名称是 `goalpro`。
 
 | 任务 | 方法重点 | 输出 |
 |---|---|---|
-| **模糊需求** | 放大真实意图、定义成败标准 | Goal Prompt + Loop Prompt |
-| **战略任务** | Deep Research、证据地图、反证 | Research-backed Goal Prompt + Loop Prompt |
-| **执行前 goal** | 先读上下文、分片执行、验证 | Codex `/goal` block 或 Claude Code 任务提示词 + Loop Prompt |
+| **模糊需求** | 区分三类意图、定义成败标准 | Goal Prompt |
+| **战略任务** | Deep Research、证据地图、反证 | Research-backed Goal Prompt；真实需要迭代时追加 Loop |
+| **执行前 goal** | 先读上下文、分片执行、验证 | Codex `/goal` block 或 Claude Code 任务提示词 |
 | **大改/重构** | Inventory、影响面、测试入口 | 分片计划和暂停条件 |
-| **修复跑偏** | 找旧目标错位点、重写边界 | 修正版 Goal Prompt + Loop Prompt |
-| **重复工作/自动化** | 判断是否是可委托 workflow，写清 Trigger / Checkpoint / Brief / source of truth | Goal Prompt + Loop Prompt，必要时给自动化设置说明 |
+| **修复跑偏** | 找旧目标错位点、重写边界 | 修正版 Goal Prompt |
+| **重复工作/自动化** | 判断是否是可委托 workflow，写清 Trigger / Checkpoint / Brief / source of truth | Goal Prompt + Loop Prompt |
 | **交付后进化** | 复盘上一轮结果、定位差距、收敛验证 | Loop Prompt |
 | **验收收尾** | 区分结构检查、本地验证、人工验收 | 最终报告标准 |
 
@@ -316,10 +327,10 @@ X <a href="https://x.com/KimYx0207">@KimYx0207</a> |
 
 ## 方法架构
 
-GoalPro 的核心不是固定模板，而是一条把意图写成可执行 Goal Prompt、再给出交付后 Loop Prompt 的主干。它保障提示词质量，不替执行者完成任务。遇到持续、自动、发布、运营、监控、队列、复盘类请求时，先用 workflow lens 判断哪些信息应该写进这两段提示词；workflow lens 自己不成为第三个交付物。
+GoalPro 的核心不是固定模板，而是一条先区分三类意图、再写成可执行 Goal Prompt，并按真实后续迭代需求决定是否追加 Loop Prompt 的主干。它保障提示词质量，不替执行者完成任务。遇到持续、自动、发布、运营、监控、队列、复盘类请求时，先用 workflow lens 判断哪些信息应该写进 Goal；真实循环存在时再写进 Loop。workflow lens 自己不成为第三个交付物。
 
 ```text
-Critical -> Fetch -> Thinking -> Workflow lens -> Inventory -> Contract -> Review -> Verification -> Loop
+Critical -> Fetch -> Thinking -> Workflow lens -> Inventory -> Contract -> Review -> Verification -> Loop gate
 ```
 
 ### 主干
@@ -329,12 +340,12 @@ Critical -> Fetch -> Thinking -> Workflow lens -> Inventory -> Contract -> Revie
 | **Critical** | 用户真正要改变什么？ | 回到意图，不直接执行表面请求 |
 | **Fetch** | 哪些材料会改变判断？ | 先读本地上下文或外部来源 |
 | **Thinking** | 哪条路线最能赢？ | 比较取舍，标出反证和未知 |
-| **Workflow lens** | 这是一件一次性任务，还是可委托的重复工作？ | 重复工作才把 Trigger、Checkpoint、Brief 写进 Goal Prompt / Loop Prompt；一次性任务不加流程包袱 |
+| **Workflow lens** | 这是一件一次性任务，还是可委托的重复工作？ | 重复工作才把 Trigger、Checkpoint、Brief 写进 Goal；一次性任务不加流程包袱 |
 | **Inventory** | 执行者需要先知道哪些影响面和验证入口？ | 大改前把盘点要求写进 goal |
 | **Contract** | 如何写成执行者能照着做的契约？ | 补齐目标、边界、暂停条件 |
 | **Review** | 有没有空话、越界、假完成？ | 删掉装饰性流程，保留判断 |
 | **Verification** | 执行者最后要拿什么证明完成？ | 区分未验证、结构检查、本地验证、人工验收 |
-| **Loop** | 执行结果回来后如何继续进化？ | 写清复盘证据、剩余差距、迭代上限和停止条件 |
+| **Loop gate** | 交付后是否会出现决定下一轮动作的新证据？ | 是才写 Loop；复杂或多步骤本身不触发 |
 
 ### Deep Research 门
 
@@ -345,7 +356,7 @@ flowchart TD
     A["用户请求"] --> B{"是否影响战略 / 外部事实 / 高风险？"}
     B -->|否| C["本地 Fetch<br/>读会改变判断的材料"]
     B -->|是| D["Deep Research<br/>来源 + 反证 + 信心等级"]
-    C --> E["Goal Prompt + Loop Prompt"]
+    C --> E["Goal Prompt<br/>按需追加 Loop Prompt"]
     D --> F{"证据是否足够？"}
     F -->|足够| E
     F -->|不足| G["Draft Goal / Research Plan"]
@@ -401,7 +412,9 @@ flowchart LR
 | 字段 | 作用 | 常见错误 |
 |---|---|---|
 | `Goal` | 一句话说明任务对象、动作和方向 | 写成愿景 |
-| `Intent` | 放大后的真实意图 | 复述用户原话 |
+| `User-stated intent` | 用户明确表达或已经确认的意图 | 把 AI 猜测写成用户原意 |
+| `AI-inferred potential intent` | AI 基于上下文推断的潜在意图，并标注依据与不确定性 | 省略推断标签或过度心理揣测 |
+| `Value judgments requiring confirmation` | 会改变优先级、质量线、风险容忍或取舍的待确认判断 | 静默替用户做价值决定 |
 | `Strategic outcome` | 完成后局面发生什么变化 | 只写交付物 |
 | `Decision standard` | 路线判断、优先级、失败条件 | “高质量”但不可判 |
 | `Evidence standard` | 来源、验证、反证、信心等级 | 搜到资料就算完成 |
@@ -439,7 +452,7 @@ flowchart LR
 | 原则 | 原因 |
 |---|---|
 | 意图完成度优先 | 任务真正完成，比提示词漂亮更重要 |
-| 意图对齐先过门 | 表面请求、真实意图、战略结果、执行策略和验收证据必须互相支撑 |
+| 意图区分先过门 | 用户明确意图、AI 推断、待确认价值判断必须分开，战略结果和验收证据只绑定已确认意图 |
 | 可执行性优先 | goal 必须让执行者知道对象、动作、边界、检查点和停止条件 |
 | 证据先于战略 | 没有 Fetch 的战略只能是草案 |
 | 上下文按需读取 | 全仓库漫游会制造噪音和误判 |
@@ -449,7 +462,7 @@ flowchart LR
 | 验证分层 | 结构检查、本地验证、线上验证、人工验收不是一回事 |
 | 完成后给样例 | 改完必须给用户看实际样例/案例片段，否则用户无法判断是否通过 |
 | Prompt-only 边界 | GoalPro 产出 goal 后停止，执行需要用户另行授权 |
-| 输出永远是两段提示词 | 默认只交付 `Goal Prompt` 和 `Loop Prompt`；workflow lens、inventory、deep research 都只是生成这两段提示词的判断规则 |
+| 默认只交付 Goal Prompt | 一次性交付不附送 Loop；只有存在真实后续迭代需求时才追加 `Loop Prompt` |
 | Loop 不是执行授权 | Loop Prompt 只供交付后粘贴使用，不能让 GoalPro 当前回合继续执行 |
 | Loop 有时间入口 | 开头先给 `时间参数`；定时/后台执行属于自动化设置，需要显式授权 |
 | Loop 必须可持续且可停止 | 每轮结束要输出 `Next LOOP packet` 或明确 Done / Pause，同时保留 guardrails，不能只修一轮也不能无限循环 |
