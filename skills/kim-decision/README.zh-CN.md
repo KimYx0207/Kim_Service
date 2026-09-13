@@ -9,10 +9,10 @@
 </p>
 
 <p>
-  <img alt="Runtime" src="https://img.shields.io/badge/runtime-Claude%20Code%20%7C%20Codex-111827"/>
-  <img alt="Skill" src="https://img.shields.io/badge/type-Agent%20Skill-7c3aed"/>
-  <img alt="Stars" src="https://img.shields.io/github/stars/KimYx0207/Kim_Decision?style=flat&logo=github"/>
-  <img alt="License" src="https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-green"/>
+  <a href="https://github.com/KimYx0207/Kim_Service"><img alt="Runtime" src="https://img.shields.io/badge/runtime-Claude%20Code%20%7C%20Codex-111827"/></a>
+  <a href="https://github.com/KimYx0207/Kim_Service"><img alt="Skill" src="https://img.shields.io/badge/type-Agent%20Skill-7c3aed"/></a>
+  <a href="https://github.com/KimYx0207/Kim_Service"><img alt="Stars" src="https://img.shields.io/github/stars/KimYx0207/Kim_Decision?style=flat&logo=github"/></a>
+  <a href="https://github.com/KimYx0207/Kim_Service"><img alt="License" src="https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-green"/></a>
 </p>
 
 </div>

@@ -4,6 +4,11 @@
 
 这是一个使用随组件发布的本地 Semgrep 规则进行静态分析和密钥模式检查的 Claude Code Skill。默认行为是只读、离线、不上传代码、不自动修复。
 
+[![GitHub stars](https://img.shields.io/github/stars/KimYx0207/Kim_Service?style=social)](https://github.com/KimYx0207/Kim_Service)
+[![GitHub forks](https://img.shields.io/github/forks/KimYx0207/Kim_Service?style=social)](https://github.com/KimYx0207/Kim_Service)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/KimYx0207/Kim_Service)
+[![Version](https://img.shields.io/badge/Claude_Code-2.1.39-green.svg)](https://github.com/KimYx0207/Kim_Service)
+
 ## 能力边界
 
 当前本地规则只检查：

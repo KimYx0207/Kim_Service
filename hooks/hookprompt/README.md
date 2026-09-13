@@ -6,11 +6,11 @@
 
 **把随口说出的需求，自动整理成可执行、可验收的专业提示词**
 
-![GitHub stars](https://img.shields.io/github/stars/KimYx0207/HookPrompt?style=social)
-![GitHub forks](https://img.shields.io/github/forks/KimYx0207/HookPrompt?style=social)
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Runtime](https://img.shields.io/badge/runtime-Claude%20Code%20%7C%20Codex-111827)
-![Language](https://img.shields.io/badge/language-JavaScript-orange.svg)
+[![GitHub stars](https://img.shields.io/github/stars/KimYx0207/HookPrompt?style=social)](https://github.com/KimYx0207/Kim_Service)
+[![GitHub forks](https://img.shields.io/github/forks/KimYx0207/HookPrompt?style=social)](https://github.com/KimYx0207/Kim_Service)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/KimYx0207/Kim_Service)
+[![Runtime](https://img.shields.io/badge/runtime-Claude%20Code%20%7C%20Codex-111827)](https://github.com/KimYx0207/Kim_Service)
+[![Language](https://img.shields.io/badge/language-JavaScript-orange.svg)](https://github.com/KimYx0207/Kim_Service)
 
 </div>
 

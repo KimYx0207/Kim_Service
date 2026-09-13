@@ -4,6 +4,11 @@
 
 This Claude Code Skill runs static-analysis and secret-pattern checks with rules bundled in the component. Its default behavior is read-only and offline: it does not upload code, fetch remote rules, or apply fixes.
 
+[![GitHub stars](https://img.shields.io/github/stars/KimYx0207/Kim_Service?style=social)](https://github.com/KimYx0207/Kim_Service)
+[![GitHub forks](https://img.shields.io/github/forks/KimYx0207/Kim_Service?style=social)](https://github.com/KimYx0207/Kim_Service)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/KimYx0207/Kim_Service)
+[![Version](https://img.shields.io/badge/Claude_Code-2.1.39-green.svg)](https://github.com/KimYx0207/Kim_Service)
+
 ## Boundary
 
 The current local baseline detects only:

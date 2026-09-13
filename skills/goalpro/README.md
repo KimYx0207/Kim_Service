@@ -8,10 +8,10 @@
 </p>
 
 <p>
-  <img alt="Runtime" src="https://img.shields.io/badge/runtime-Claude%20Code%20%7C%20Codex-111827"/>
-  <img alt="Skill" src="https://img.shields.io/badge/type-Agent%20Skill-2563eb"/>
-  <img alt="Language" src="https://img.shields.io/badge/language-中文-16a34a"/>
-  <img alt="Status" src="https://img.shields.io/badge/status-active-7c3aed"/>
+  <a href="https://github.com/KimYx0207/Kim_Service"><img alt="Runtime" src="https://img.shields.io/badge/runtime-Claude%20Code%20%7C%20Codex-111827"/></a>
+  <a href="https://github.com/KimYx0207/Kim_Service"><img alt="Skill" src="https://img.shields.io/badge/type-Agent%20Skill-2563eb"/></a>
+  <a href="https://github.com/KimYx0207/Kim_Service"><img alt="Language" src="https://img.shields.io/badge/language-中文-16a34a"/></a>
+  <a href="https://github.com/KimYx0207/Kim_Service"><img alt="Status" src="https://img.shields.io/badge/status-active-7c3aed"/></a>
 </p>
 
 </div>
