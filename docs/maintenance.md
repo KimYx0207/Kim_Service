@@ -33,7 +33,7 @@
 
     node scripts/catalog-automation.mjs build --provenance-revision <source-commit>
 
-生成器只更新待定的本仓库组件，逐个比较该提交中的完整文件树和当前组件字节；缺文件、改动或多出的未跟踪文件都会拒绝。已有外部与 canonical direct-sync 来源保持原样。随后提交生成结果并执行干净树发布门。提交来源只证明这些字节的出处，不代表模型实测、原生支持或 Promotion Evidence。
+生成器只更新待定或已经标记为 `committed-component-tree` 的本仓库组件，逐个比较该提交中的完整文件树和当前组件字节；缺文件、改动或多出的未跟踪文件都会拒绝。已有外部与 canonical direct-sync 来源保持原样。组件后续修改后必须先提交源码，再用同一命令绑定新提交。随后提交生成结果并执行干净树发布门。提交来源只证明这些字节的出处，不代表模型实测、原生支持或 Promotion Evidence。
 
 ## 组件与公开边界
 

@@ -168,6 +168,12 @@ test('explicit provenance finalization binds exact committed bytes and preserves
   const before = fs.readFileSync(path.join(root, 'catalog.json'));
   buildCatalogArtifacts(root, { provenanceRevision: commit });
   assert.deepEqual(fs.readFileSync(path.join(root, 'catalog.json')), before);
+  fs.appendFileSync(path.join(root, 'tools/new-tool/SKILL.md'), 'next source revision\n');
+  assert.throws(() => buildCatalogArtifacts(root, { provenanceRevision: commit }), /differs from provenance commit/);
+  const nextCommit = commitFixture(root);
+  const refreshed = buildCatalogArtifacts(root, { provenanceRevision: nextCommit });
+  assert.equal(refreshed.catalog.components.find((item) => item.id === 'new-tool').revision, nextCommit);
+  assert.equal(refreshed.catalog.components.find((item) => item.id === 'old-skill').revision, 'recorded-revision');
 });
 
 for (const change of ['edited', 'untracked', 'missing-from-commit']) {

@@ -166,7 +166,7 @@ function replaceStagedFile(temporaryPath, outputPath) {
   }
 }
 
-function finalizePendingProvenance(root, catalog, revision) {
+function finalizeLocalProvenance(root, catalog, revision) {
   const git = (args, encoding = 'utf8') => execFileSync('git', args, {
     cwd: root, encoding, stdio: ['ignore', 'pipe', 'pipe'], maxBuffer: 16 * 1024 * 1024
   });
@@ -175,8 +175,8 @@ function finalizePendingProvenance(root, catalog, revision) {
   for (const component of catalog.components) {
     const pending = component.snapshot === 'capability-contract-pending-release' ||
       String(component.revision ?? '').startsWith('pending-local:');
-    if (!pending) continue;
-    assert(component.source === `canonical:${component.path}`, `Pending provenance must name its local canonical component: ${component.id}`);
+    if (!pending && component.snapshot !== 'committed-component-tree') continue;
+    assert(component.source === `canonical:${component.path}`, `Local provenance must name its local canonical component: ${component.id}`);
     const entries = git(['ls-tree', '-rz', '--full-tree', commit, '--', component.path])
       .split('\0').filter(Boolean).map((entry) => {
         const [header, ...nameParts] = entry.split('\t');
@@ -206,7 +206,7 @@ export function computeCatalogArtifacts(rootPath, { provenanceRevision } = {}) {
   const currentCatalog = JSON.parse(fs.readFileSync(catalogPath, 'utf8'));
   const capabilityIndex = buildCapabilityIndex(root);
   const catalog = buildCatalogDocument(currentCatalog, capabilityIndex);
-  if (provenanceRevision) finalizePendingProvenance(root, catalog, provenanceRevision);
+  if (provenanceRevision) finalizeLocalProvenance(root, catalog, provenanceRevision);
   return {
     capabilityIndex,
     catalog,

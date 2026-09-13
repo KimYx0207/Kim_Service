@@ -30,7 +30,7 @@
       "snapshot": "committed-component-tree",
       "version": "0.1.0",
       "contractSha256": "636d8e3bbe0a4beb2ed3f2213dd8fc1b8579a71be61799d21abd0f9be9171bde",
-      "contentSha256": "282d3eef2d37ded4191feb63f6806afed09d85a4859abaf3a705df9ad2ee7afd",
+      "contentSha256": "f2f5fd6907384b073a163a060c20cd84e695a60b6afd737c6a0211263de4cea3",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -49,7 +49,7 @@
       "snapshot": "committed-component-tree",
       "version": "0.1.0",
       "contractSha256": "31614dd79a427bf77cfacadfd8e647e82da1eabe5bdd710598fd6fbbd0731a8f",
-      "contentSha256": "9a1e294693461589ef0f0be390d0045688ecccb214ed7be7d44fef4cfc5ae927",
+      "contentSha256": "4357d3542b65eece1012e10a3f0b23461bd8998efa592b1cc6bc195245e4ebfe",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -68,7 +68,7 @@
       "snapshot": "committed-component-tree",
       "version": "0.1.0",
       "contractSha256": "ccda4df854314c735721749d49fb4e586f422d9e6dda5ca1acccccf647e5ec64",
-      "contentSha256": "b8807933e0480402bb30dfe9dd8d342d3c83ff6b1048b378a1aee7e901c6f801",
+      "contentSha256": "2f6435c3652b599228d46d1be367d0dd2b871db3bc754f3f6b418b2dd37e43e7",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -106,7 +106,7 @@
       "snapshot": "committed-component-tree",
       "version": "0.1.0",
       "contractSha256": "4d97d45e3fa2afa9a6242036a71e06cc120de4eec3349814f5063aed41e2fa86",
-      "contentSha256": "afc32eeb9e915286e69d0584fdcd357666b074341dbec8e48d9834aaff2a3a84",
+      "contentSha256": "ac165affd966857e97ba6cf1078cd24acba0037238481fad65c70481c95a3558",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -125,7 +125,7 @@
       "snapshot": "committed-component-tree",
       "version": "0.1.0",
       "contractSha256": "44a83dd08b6774704f3b1d91d3d6d8b8b97917c06f42daf8fd0d0a70f3e9f86d",
-      "contentSha256": "1ac34465cb9cff62c797135459774ec198177ba723db1495473e75b95877c149",
+      "contentSha256": "d66b6531f7d30e39d4fcafdeaf673d0727dbda7a8a3d6aa1809401a38f6a169f",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -144,7 +144,7 @@
       "snapshot": "committed-component-tree",
       "version": "0.1.0",
       "contractSha256": "b8bd598f8575f9c8d11129c6c7d173852ac29b52b17cfba1369dc2f72c55f2f6",
-      "contentSha256": "a3d71626a0bb57c7e7da7e7d0165be63254679cf964c74174bfe07fc5e8e8396",
+      "contentSha256": "e48c8aa2a4bc4360ece9124986a1a56ec55311dcd0003d62ea792d9cdb9a54b6",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -163,7 +163,7 @@
       "snapshot": "committed-component-tree",
       "version": "0.1.0",
       "contractSha256": "a05dc9d8365347f4724891d76c81fd615a378584e480436d41de47461d740fe5",
-      "contentSha256": "c81247daa67dba8938569fd4bf2ce08b85da865c132f4329c8a249d6ecb36b8f",
+      "contentSha256": "98e88270dc062986aae2303465513e6cd30a145621d5f54a777f1c8eb79a83d2",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -182,7 +182,7 @@
       "snapshot": "committed-component-tree",
       "version": "0.1.0",
       "contractSha256": "931b6de51cf3780cb4886a5d3e3a8e41b50888581b930bc841f81fd9b15c3f0e",
-      "contentSha256": "3f8c3d6bd43f9c6619b3f03b7660cb030ecd03dd2cbb14ac5022456fec198b18",
+      "contentSha256": "3699e8ac48d7357bdc6127b3a6f2f8b712329885bd0fe428b3a95fde5c162c1f",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -201,7 +201,7 @@
       "snapshot": "committed-component-tree",
       "version": "0.1.0",
       "contractSha256": "4bc12e6fe29ce73e0197980bcf4f700d0498020115b013c999936f0fa74bd59c",
-      "contentSha256": "30a2038dbecd48d45101389ceb2040bb172795d36c9c91bc3631bfe599bb507e",
+      "contentSha256": "6ef40fcf4ac3f453cd92d30e381d835ae0fafc23e3f96e065cdeb28cb528812d",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -239,7 +239,7 @@
       "snapshot": "committed-component-tree",
       "version": "0.1.0",
       "contractSha256": "ea33470a94f91980f8a0d071a2bff1bfc8858cbe87e3533aa116f7a2250abb81",
-      "contentSha256": "1a4ec202d6dca26d532c3f3656180951a8c465f1db22a52b95062bdbe01e1f9f",
+      "contentSha256": "c4ca06373b78b4bc546868f28770d0e9f37b39c10275d7fdc5c14af45a3c7c83",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -258,7 +258,7 @@
       "snapshot": "committed-component-tree",
       "version": "0.1.0",
       "contractSha256": "2e26c8320f7a39555b314e8e324ba96704248186d3826255302b68e60e6e7740",
-      "contentSha256": "56df0a39d66ec0ab35369adec5256788be277822116f7d4ba4de7f739847ff78",
+      "contentSha256": "97f32cc33f561c3c049e57d6ad18aef8329ced29a0856c52f19fdc15caf6bb3a",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -296,7 +296,7 @@
       "snapshot": "committed-component-tree",
       "version": "0.1.0",
       "contractSha256": "c3d26a1372d6717ee97af2e2cf967478c962ba4b8e2539d6e9ac05f755465a31",
-      "contentSha256": "0c4ce938c6605aa476756325c67eb21294fef31227fa32d187bc537036567048",
+      "contentSha256": "84711e015ce4356136336d04d57111e97aff8ec2b423172450b47c8daa7ab901",
       "required": [
         "AGENT.md",
         "capability.json",

@@ -4,3 +4,5 @@
 
 - 首版副业方向筛选角色、输入输出合同、完整示例与独立本地检查。
 - 不自动发送、发布、付费或变更业务系统。
+
+来源：Kim Service 自有组件 `agents/side-business-evaluator`。
