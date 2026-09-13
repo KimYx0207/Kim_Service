@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "id": "pricing-cost-analyst",
+  "componentType": "agent",
+  "componentVersion": "0.1.0",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "pricing-cost-analyst-assist",
+      "summary": "报价与成本测算：把一单收入、现金成本、时间成本和固定支出分开计算，比较报价方案。每个结果都有算式和假设，不把目标销量当预测，也不将现金结余冒充包含全部成本的利润。",
+      "useWhen": [
+        "用户说「这项服务该怎么报价」",
+        "用户说「帮我算一单到底剩多少」",
+        "用户说「要做几单才能覆盖固定成本」"
+      ],
+      "doNotUseWhen": [
+        "副业方向选择交给 side-business-evaluator。",
+        "第一周任务安排交给 launch-planner。",
+        "不做金融投资建议、税务法律结论或收益保证。"
+      ],
+      "input": {
+        "type": "object",
+        "properties": {
+          "offer": {
+            "type": "string",
+            "description": "产品或服务：交付范围、候选售价与退款条件"
+          },
+          "variableCosts": {
+            "type": "string",
+            "description": "每单成本：材料、手续费、履约时间及时间计价方式"
+          },
+          "fixedCosts": {
+            "type": "string",
+            "description": "固定支出与情景：周期、工具费、候选订单量；未知项必须标明"
+          }
+        },
+        "required": [
+          "offer"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "assumptions": {
+            "type": "array",
+            "description": "假设与缺项：列币种、工时、单量、计价口径和缺少的退款、税费等成本",
+            "items": {
+              "type": "string"
+            }
+          },
+          "unitEconomics": {
+            "type": "array",
+            "description": "单笔测算：分别计算每单现金贡献与计入时间后的贡献，固定成本另列",
+            "items": {
+              "type": "string"
+            }
+          },
+          "scenarios": {
+            "type": "array",
+            "description": "报价情景比较：对不同报价或工时列同口径算式与结果，情景单量不当销量预测",
+            "items": {
+              "type": "string"
+            }
+          },
+          "breakEven": {
+            "type": "string",
+            "description": "覆盖固定成本所需单量：用固定成本除以正的单笔贡献并向上取整；贡献非正时说明无法覆盖"
+          },
+          "recommendation": {
+            "type": "string",
+            "description": "报价建议与验证：给候选报价、交付边界与应收集的实际成本证据，不承诺利润或收益"
+          }
+        },
+        "required": [
+          "assumptions",
+          "unitEconomics",
+          "scenarios",
+          "breakEven",
+          "recommendation"
+        ]
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "商业算术可继续，涉及个人金融投资、法律或医疗专业结论时停下。不能根据目标订单量声称市场一定买单，不能替用户收款或购买工具。",
+          "涉及医疗诊断、法律胜诉或金融投资收益等专业结论时停下，由具备资质的人员判断；涉及发布、对外发送或付款时须由用户另行授权。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

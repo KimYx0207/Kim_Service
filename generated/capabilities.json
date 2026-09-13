@@ -1,7 +1,7 @@
 {
   "capabilities": [
     {
-      "componentContentSha256": "ff059e34ab959b15dce1bf1c8845703d627d8f148f5a0ca190ae967426c0d81e",
+      "componentContentSha256": "f0b708b715d9a617397f3cc0ba597af51916f9b70fc34086467d17b15ea8fe14",
       "componentId": "agent-teams-playbook",
       "componentPath": "skills/agent-teams-playbook",
       "componentType": "skill",
@@ -97,7 +97,7 @@
       ]
     },
     {
-      "componentContentSha256": "6222ff90fab7558b5cee1d33ef252f6bf0f353cb955cc2a5dcabe3e47896c189",
+      "componentContentSha256": "b9e5e7ab1c4cbac1d30332d1ea70ba9972e0f13f7e8199d9c85acd0a36ef630d",
       "componentId": "semgrep-skill",
       "componentPath": "skills/semgrep-skill",
       "componentType": "skill",
@@ -181,7 +181,7 @@
       ]
     },
     {
-      "componentContentSha256": "6222ff90fab7558b5cee1d33ef252f6bf0f353cb955cc2a5dcabe3e47896c189",
+      "componentContentSha256": "b9e5e7ab1c4cbac1d30332d1ea70ba9972e0f13f7e8199d9c85acd0a36ef630d",
       "componentId": "semgrep-skill",
       "componentPath": "skills/semgrep-skill",
       "componentType": "skill",
@@ -267,7 +267,7 @@
       ]
     },
     {
-      "componentContentSha256": "2ab0e19b9cc1a743fb5865083773c78f0c133d1dc5b4c2200f603e38965f527b",
+      "componentContentSha256": "b9f243feae09dc60327deede768f51fc2e42dafc45e14e67ef34f03e0d8d0bee",
       "componentId": "hookprompt",
       "componentPath": "hooks/hookprompt",
       "componentType": "hook",
@@ -438,7 +438,292 @@
       ]
     },
     {
-      "componentContentSha256": "52760525e6b766b567a15b6b96ff81ed56e8733d32e3ea566c85675bdb207091",
+      "componentContentSha256": "282d3eef2d37ded4191feb63f6806afed09d85a4859abaf3a705df9ad2ee7afd",
+      "componentId": "concept-tutor",
+      "componentPath": "agents/concept-tutor",
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contractSha256": "636d8e3bbe0a4beb2ed3f2213dd8fc1b8579a71be61799d21abd0f9be9171bde",
+      "doNotUseWhen": [
+        "整节课教案交给 lesson-planner。",
+        "批量出题交给 exercise-designer。",
+        "不代做正在进行的受限考试，不诊断学习障碍。"
+      ],
+      "entrypoint": "AGENT.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "有考试限制时只讲同类概念与练习；碰到医疗、法律、金融决策结论时停下，不把课本知识当个人专业建议。",
+          "涉及医疗诊断、法律胜诉或金融投资收益等专业结论时停下，由具备资质的人员判断；涉及发布、对外发送或付款时须由用户另行授权。"
+        ]
+      },
+      "id": "concept-tutor-assist",
+      "input": {
+        "properties": {
+          "currentAttempt": {
+            "description": "目前想法：做到哪一步、哪句看不懂；可说明完全没思路",
+            "type": "string"
+          },
+          "level": {
+            "description": "学习程度：年级或已有知识，未给时先用最基本语言",
+            "type": "string"
+          },
+          "question": {
+            "description": "具体问题：完整题干或概念及必要上下文",
+            "type": "string"
+          }
+        },
+        "required": [
+          "question"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "explanation": {
+            "description": "分步讲解：沿已学知识逐步解释概念，保持整体、单位和条件一致",
+            "type": "string"
+          },
+          "nextStep": {
+            "description": "下一步检查：说明下一步需要学习者展示什么，以及不同回答对应的继续方式",
+            "type": "string"
+          },
+          "stickingPoint": {
+            "description": "卡点判断：依据已展示的解法暂定卡点，证据不足时用一个检查问题定位",
+            "type": "string"
+          },
+          "transferQuestion": {
+            "description": "迁移小题：提出同一概念的迁移小题和适量提示，给学习者作答空间",
+            "type": "string"
+          },
+          "workedExample": {
+            "description": "例子与核对：给一个完整例子，并用逆运算、图示或另一种方法核对",
+            "type": "string"
+          }
+        },
+        "required": [
+          "stickingPoint",
+          "explanation",
+          "workedExample",
+          "transferQuestion",
+          "nextStep"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "概念讲解与答疑：找到学习者卡住的那一步，选择合适的图示、类比或算式解释，再用迁移题检查理解。先理解错误来源，不把答案和公式堆给对方。",
+      "useWhen": [
+        "用户说「这道题为什么这样算」",
+        "用户说「这个概念我一直听不懂」",
+        "用户说「不要只给答案帮我讲明白」"
+      ],
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "9a1e294693461589ef0f0be390d0045688ecccb214ed7be7d44fef4cfc5ae927",
+      "componentId": "customer-service-writer",
+      "componentPath": "agents/customer-service-writer",
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contractSha256": "31614dd79a427bf77cfacadfd8e647e82da1eabe5bdd710598fd6fbbd0731a8f",
+      "doNotUseWhen": [
+        "商品页文案交给 product-listing-writer。",
+        "店铺转化与退款数据分析交给 store-performance-analyst。",
+        "不代发消息、操作退款或用话术阻挠合理售后。"
+      ],
+      "entrypoint": "AGENT.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "规则与平台要求冲突时暂停给出承诺，交商家核实；涉及赔偿法律结论、医疗损害或金融欺诈时停下并转有资质人员。",
+          "涉及医疗诊断、法律胜诉或金融投资收益等专业结论时停下，由具备资质的人员判断；涉及发布、对外发送或付款时须由用户另行授权。"
+        ]
+      },
+      "id": "customer-service-writer-assist",
+      "input": {
+        "properties": {
+          "approvedPolicy": {
+            "description": "处理规则：商家已确认的时限、权限和可用方案",
+            "type": "string"
+          },
+          "customerMessage": {
+            "description": "顾客原话：保留问题和语气，先去掉姓名、电话和完整订单号",
+            "type": "string"
+          },
+          "orderFacts": {
+            "description": "已查事实：付款、出库、物流、破损等状态；未知项明确写未知",
+            "type": "string"
+          }
+        },
+        "required": [
+          "customerMessage"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "caseSummary": {
+            "description": "问题与事实：说明顾客诉求、已经确认的订单事实和仍需人工核实的信息",
+            "type": "string"
+          },
+          "decisionPoints": {
+            "description": "处理分支：按等待、取消或状态变化列出处理分支及其适用前提",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "escalation": {
+            "description": "升级条件：说明超出一线客服权限、规则不足或需要负责人决定的条件",
+            "type": "string"
+          },
+          "followUp": {
+            "description": "跟进安排：建议核查对象、跟进节点与负责人，未确认的回访时间不写成承诺",
+            "type": "string"
+          },
+          "replyDrafts": {
+            "description": "回复草稿：给出首轮回复和必要的追问回复，承诺限于商家已确认的规则",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "caseSummary",
+          "replyDrafts",
+          "decisionPoints",
+          "escalation",
+          "followUp"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "客服与售后话术：把顾客问题、订单事实和商家已批准的处理规则变成可发送的回复草稿。每次先判断能否直接答复、需要补查还是要升级处理，不代替商家承诺退款或发货结果。",
+      "useWhen": [
+        "用户说「客户催发货该怎么回」",
+        "用户说「售后投诉怎么解释比较清楚」",
+        "用户说「帮我做一套常见客服回复」"
+      ],
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "b8807933e0480402bb30dfe9dd8d342d3c83ff6b1048b378a1aee7e901c6f801",
+      "componentId": "exercise-designer",
+      "componentPath": "agents/exercise-designer",
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contractSha256": "ccda4df854314c735721749d49fb4e586f422d9e6dda5ca1acccccf647e5ec64",
+      "doNotUseWhen": [
+        "单题理解困难交给 concept-tutor。",
+        "课堂整体安排交给 lesson-planner。",
+        "不泄露未公开试卷、复制整套版权题库或替学生完成受限考试。"
+      ],
+      "entrypoint": "AGENT.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "发现题干缺条件或答案矛盾就停下修题；涉及医疗、法律、金融实务结论时停下换成普通学习情境，不收集学生个人资料。",
+          "涉及医疗诊断、法律胜诉或金融投资收益等专业结论时停下，由具备资质的人员判断；涉及发布、对外发送或付款时须由用户另行授权。"
+        ]
+      },
+      "id": "exercise-designer-assist",
+      "input": {
+        "properties": {
+          "constraints": {
+            "description": "表达限制：是否允许图表、特殊情境与学生需要的支持",
+            "type": "string"
+          },
+          "learningTarget": {
+            "description": "知识目标：年级、范围、已学内容与不能出现的知识",
+            "type": "string"
+          },
+          "questionPlan": {
+            "description": "题目需求：数量、题型、难度和预计时长",
+            "type": "string"
+          }
+        },
+        "required": [
+          "learningTarget"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "adaptations": {
+            "description": "调整建议：给支持提示或加深解释任务，保持核心知识范围不变",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "answerKey": {
+            "description": "教师版答案与解析：逐题给答案与推导，说明等价答案和必要的评分依据",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "blueprint": {
+            "description": "命题安排：按学习目标安排题型、题量和难度，标明每题检查的知识点",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "errorChecks": {
+            "description": "常见误解与核查：列常见误解，核查歧义、单位、计算及题目是否有唯一合理解",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "questions": {
+            "description": "学生版题目：提供不含答案的原创学生版题目，条件完整且不超出指定范围",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "blueprint",
+          "questions",
+          "answerKey",
+          "errorChecks",
+          "adaptations"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "原创练习与答案：按学习目标编原创题目，控制难度与条件，并独立核对每题答案。题目需要测出具体理解，而不是换数字凑数量；不复制题库或用超纲难题冒充提高。",
+      "useWhen": [
+        "用户说「按这个知识点出几道题」",
+        "用户说「帮我做练习并附答案解析」",
+        "用户说「检查这些题有没有歧义或错答案」"
+      ],
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "46dc06a5ead74f714d6e51939aa7847b175366c24b8096060abe17de883c3d01",
       "componentId": "goalpro",
       "componentPath": "skills/goalpro",
       "componentType": "skill",
@@ -518,7 +803,7 @@
       ]
     },
     {
-      "componentContentSha256": "52760525e6b766b567a15b6b96ff81ed56e8733d32e3ea566c85675bdb207091",
+      "componentContentSha256": "46dc06a5ead74f714d6e51939aa7847b175366c24b8096060abe17de883c3d01",
       "componentId": "goalpro",
       "componentPath": "skills/goalpro",
       "componentType": "skill",
@@ -594,6 +879,223 @@
       ]
     },
     {
+      "componentContentSha256": "07ae947698b3f582d7efdada49ba50210d0e9685fc9728ade0712bb6fc43cf03",
+      "componentId": "headline-cover-optimizer",
+      "componentPath": "agents/headline-cover-optimizer",
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contractSha256": "65652d85af2cf08f70db08c6fd71f6ac0c4f5014d46ed4f5dd9fd8e496184f8c",
+      "doNotUseWhen": [
+        "用户还没有内容，只有一个方向：先用 topic-planner 定选题，或 script-writer 写正文",
+        "用户要写正文、口播稿、脚本：改用 script-writer",
+        "用户要整套小红书图文发布包（含内页图）：改用 xiaohongshu-skill",
+        "用户要生成封面图片文件、修图或设计源文件：本 agent 只给文字与版式说明",
+        "用户要求用虚构结果、无法兑现的效果保证或未证实排名吸引点击"
+      ],
+      "entrypoint": "AGENT.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "标题或封面文字会构成医疗、法律、金融结论，或用到广告法极限词（最、第一、根治、国家级、稳赚）：停下，说明原因并给替代写法，由用户决定",
+          "封面要使用真实人物姓名、他人作品截图或品牌标识：先确认用户有授权"
+        ]
+      },
+      "id": "headline-cover-optimizer-optimize",
+      "input": {
+        "properties": {
+          "accountTone": {
+            "description": "账号平时的说话口气",
+            "type": "string"
+          },
+          "audience": {
+            "type": "string"
+          },
+          "bodyOrKeyPoints": {
+            "description": "正文全文，或至少 3 句核心要点",
+            "type": "string"
+          },
+          "currentTitle": {
+            "type": "string"
+          },
+          "forbiddenWords": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "goal": {
+            "description": "搜索 / 点击 / 收藏",
+            "type": "string"
+          },
+          "materialFiles": {
+            "description": "用户提供的正文文件",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "platform": {
+            "description": "目标平台与用户已确认的输入限制；未知时提供通用短标题",
+            "type": "string"
+          }
+        },
+        "required": [
+          "bodyOrKeyPoints"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "deliveryFormat": "conceptual-human-delivery",
+        "description": "面向用户的中文交付，字段与 AGENT.md「我会给你什么」一致；不承诺点击率，判断标准相对用户自己的基线。",
+        "properties": {
+          "assumptions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "blockedItems": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "consistencyCheck": {
+            "items": {
+              "properties": {
+                "deliveredInBody": {
+                  "type": "boolean"
+                },
+                "fix": {
+                  "type": "string"
+                },
+                "promise": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "coverOptions": {
+            "items": {
+              "properties": {
+                "coverText": {
+                  "type": "string"
+                },
+                "layout": {
+                  "enum": [
+                    "大字报",
+                    "真人实拍",
+                    "前后对比"
+                  ]
+                },
+                "materialsNeeded": {
+                  "type": "string"
+                },
+                "visualAnchor": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "coverText",
+                "layout",
+                "visualAnchor"
+              ],
+              "type": "object"
+            },
+            "minItems": 2,
+            "type": "array"
+          },
+          "executionAuthorized": {
+            "const": false
+          },
+          "promise": {
+            "description": "这条内容对谁、承诺了什么",
+            "type": "string"
+          },
+          "recommended": {
+            "properties": {
+              "alternate": {
+                "type": "string"
+              },
+              "main": {
+                "type": "string"
+              },
+              "reason": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "main",
+              "alternate",
+              "reason"
+            ],
+            "type": "object"
+          },
+          "titleCandidates": {
+            "items": {
+              "properties": {
+                "charCount": {
+                  "type": "integer"
+                },
+                "risk": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "type": {
+                  "enum": [
+                    "人群场景型",
+                    "数字清单型",
+                    "反差型",
+                    "提问搜索型",
+                    "第一人称经历型"
+                  ]
+                },
+                "why": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "title",
+                "type",
+                "why",
+                "risk",
+                "charCount"
+              ],
+              "type": "object"
+            },
+            "minItems": 5,
+            "type": "array"
+          }
+        },
+        "required": [
+          "promise",
+          "titleCandidates",
+          "recommended",
+          "coverOptions",
+          "consistencyCheck"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "根据已有正文给出5个标题候选、推荐组合与2套封面文字方案，核对字数、承诺和资料依据，不预测点击率。",
+      "useWhen": [
+        "用户说「标题想不出来」「帮我起个标题」「这个标题行不行」「标题太平了」",
+        "用户说「封面写什么字」「封面怎么排」「封面文字帮我想两个」",
+        "用户有正文或至少 3 句要点，想提高点击率、搜索命中或收藏",
+        "用户要 A / B 两个标题做对比测试"
+      ],
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
       "componentContentSha256": "b08827410643495d6043cdce836ba013dceb1a09105a8714380f69532b9370c1",
       "componentId": "claudecode-codex-gemini",
       "componentPath": "tools/claudecode-codex-gemini",
@@ -644,7 +1146,98 @@
       ]
     },
     {
-      "componentContentSha256": "558844fe908ab94ddcb8b43817c0971a14966c25be3e7b43749c309d296f7895",
+      "componentContentSha256": "afc32eeb9e915286e69d0584fdcd357666b074341dbec8e48d9834aaff2a3a84",
+      "componentId": "interview-coach",
+      "componentPath": "agents/interview-coach",
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contractSha256": "4d97d45e3fa2afa9a6242036a71e06cc120de4eec3349814f5063aed41e2fa86",
+      "doNotUseWhen": [
+        "简历内容修改交给 resume-editor。",
+        "日常工作沟通交给 workplace-writer。",
+        "不代替本人参加面试，不编经历，不保证通过。"
+      ],
+      "entrypoint": "AGENT.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "涉及医疗、法律、金融专业执业结论时停下，不替人证明资质；招聘歧视性问题可练习礼貌回应，不推断用户受保护属性。",
+          "涉及医疗诊断、法律胜诉或金融投资收益等专业结论时停下，由具备资质的人员判断；涉及发布、对外发送或付款时须由用户另行授权。"
+        ]
+      },
+      "id": "interview-coach-assist",
+      "input": {
+        "properties": {
+          "experience": {
+            "description": "真实事例：本人遇到的问题、做法与已知结果",
+            "type": "string"
+          },
+          "practiceMode": {
+            "description": "练习方式：逐题模拟或修改已有回答",
+            "type": "string"
+          },
+          "targetRole": {
+            "description": "目标岗位：岗位职责与面试语言",
+            "type": "string"
+          }
+        },
+        "required": [
+          "targetRole"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "feedback": {
+            "description": "有依据的反馈：引用用户原回答评价事实、本人行动、逻辑和缺项，不推测面试官心理",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "followUp": {
+            "description": "下一题或追问：针对本轮缺项提出一题追问，等待用户回答后继续反馈",
+            "type": "string"
+          },
+          "practiceTask": {
+            "description": "练习动作：给出可以重复练习的具体动作及自查标准，时长仅为练习目标",
+            "type": "string"
+          },
+          "question": {
+            "description": "本轮问题：一次提出一个与目标岗位相关的面试题，并说明要练的能力",
+            "type": "string"
+          },
+          "revisedAnswer": {
+            "description": "重组后的回答：仅用真实材料重组回答，保留未知结果，不替用户编造成功经历",
+            "type": "string"
+          }
+        },
+        "required": [
+          "question",
+          "feedback",
+          "revisedAnswer",
+          "followUp",
+          "practiceTask"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "面试练习：围绕岗位要求逐轮练习表达。根据回答追问细节，用明确标准指出哪里没有说明白，再帮助重组真实经历；不提供虚构故事让求职者背诵。",
+      "useWhen": [
+        "用户说「陪我练一次面试」",
+        "用户说「这个面试问题我不知道怎么答」",
+        "用户说「我的回答太散帮我改一下」"
+      ],
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "c38b0e1b309483fc49d5e43a6bc1aec3712c5babebab40ea31e620b864e38234",
       "componentId": "kim-decision",
       "componentPath": "skills/kim-decision",
       "componentType": "skill",
@@ -818,7 +1411,204 @@
       ]
     },
     {
-      "componentContentSha256": "6222ff90fab7558b5cee1d33ef252f6bf0f353cb955cc2a5dcabe3e47896c189",
+      "componentContentSha256": "1ac34465cb9cff62c797135459774ec198177ba723db1495473e75b95877c149",
+      "componentId": "launch-planner",
+      "componentPath": "agents/launch-planner",
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contractSha256": "44a83dd08b6774704f3b1d91d3d6d8b8b97917c06f42daf8fd0d0a70f3e9f86d",
+      "doNotUseWhen": [
+        "还没选方向先找 side-business-evaluator。",
+        "价格与成本计算交给 pricing-cost-analyst。",
+        "不创建账号、采购、签约、收款或自动联系潜在顾客。"
+      ],
+      "entrypoint": "AGENT.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "计划不是执行授权。涉及医疗、法律、金融专业服务或结论时停下；遇到购买、发送和发布步骤，只准备可审查材料，等用户授权。",
+          "涉及医疗诊断、法律胜诉或金融投资收益等专业结论时停下，由具备资质的人员判断；涉及发布、对外发送或付款时须由用户另行授权。"
+        ]
+      },
+      "id": "launch-planner-assist",
+      "input": {
+        "properties": {
+          "chosenIdea": {
+            "description": "已选方向：给谁、解决什么问题、交付什么",
+            "type": "string"
+          },
+          "constraints": {
+            "description": "现实限制：渠道、资料、依赖和必须先确认的动作",
+            "type": "string"
+          },
+          "resources": {
+            "description": "时间与预算：可支配时间、支出上限、现有工具",
+            "type": "string"
+          }
+        },
+        "required": [
+          "chosenIdea"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "acceptance": {
+            "description": "检查标准：列出能实际判断第一版可用的输入、预期结果和检查方式",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "budget": {
+            "description": "预算与投入边界：区分新增现金、已有工具和时间投入，写明预算上限而非默认花完",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "firstDeliverable": {
+            "description": "第一版交付范围：界定第一版交付物、服务对象和暂不包含的功能",
+            "type": "string"
+          },
+          "nextDecision": {
+            "description": "复盘后的选择：说明完成检查后如何选择修正、试用或扩大投入，保留需用户决定的动作",
+            "type": "string"
+          },
+          "schedule": {
+            "description": "按依赖安排的日程：按依赖排序每天或每步的产物、可用时间与受阻后的缩减办法",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "firstDeliverable",
+          "schedule",
+          "budget",
+          "acceptance",
+          "nextDecision"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "小项目启动计划：把已选方向变成按依赖排列的一周启动计划。每一步都有具体产物、检查方式和投入上限，先完成最小可交付，再依据反馈决定下一步；不自行替用户开店或收款。",
+      "useWhen": [
+        "用户说「方向定了帮我安排怎么开始」",
+        "用户说「做一个七天启动清单」",
+        "用户说「预算很少怎样先做出第一版」"
+      ],
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "a3d71626a0bb57c7e7da7e7d0165be63254679cf964c74174bfe07fc5e8e8396",
+      "componentId": "lesson-planner",
+      "componentPath": "agents/lesson-planner",
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contractSha256": "b8bd598f8575f9c8d11129c6c7d173852ac29b52b17cfba1369dc2f72c55f2f6",
+      "doNotUseWhen": [
+        "单题讲解交给 concept-tutor。",
+        "成套原创练习与答案交给 exercise-designer。",
+        "不替教师诊断学生，不复制受版权保护的整章教材。"
+      ],
+      "entrypoint": "AGENT.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "不从学习表现推断疾病或智力，不作医疗、法律、金融结论；遇到此类请求停下交合适专业人员。涉及教材原文只使用用户有权提供的必要片段。",
+          "涉及医疗诊断、法律胜诉或金融投资收益等专业结论时停下，由具备资质的人员判断；涉及发布、对外发送或付款时须由用户另行授权。"
+        ]
+      },
+      "id": "lesson-planner-assist",
+      "input": {
+        "properties": {
+          "duration": {
+            "description": "课时与条件：分钟数、可用材料和授课形式",
+            "type": "string"
+          },
+          "learnerNeeds": {
+            "description": "学习差异：已观察到的困难，不含可识别学生隐私",
+            "type": "string"
+          },
+          "lessonTopic": {
+            "description": "主题与年级：本节内容、教材线索和学生已学知识",
+            "type": "string"
+          }
+        },
+        "required": [
+          "lessonTopic"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "differentiation": {
+            "description": "分层支持：分别给需要支持和进度较快学生的具体调整，不按表现贴能力标签",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "exitCheck": {
+            "description": "离堂检查与调整：给离堂检查题、判断依据及未达目标时下一课的调整办法",
+            "type": "string"
+          },
+          "lessonFlow": {
+            "description": "课堂流程：按先后列活动、时长、教师与学生动作、材料，合计等于可用课时",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "objectives": {
+            "description": "可观察目标：用可观察的学生动作描述学习目标，并标出未核实的教材对齐要求",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "teacherPrompts": {
+            "description": "教师提问与例子：提供可直接使用的提问、正反例及追问，说明要观察的理解差异",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "objectives",
+          "lessonFlow",
+          "teacherPrompts",
+          "differentiation",
+          "exitCheck"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "备课与课堂设计：围绕一个可观察的学习目标设计课堂。根据学生起点选择讲解、操作和检查方式，让每段活动服务目标；不把一串活动名当教案，也不冒称符合未核实的教材标准。",
+      "useWhen": [
+        "用户说「帮我设计一节课」",
+        "用户说「明天这课怎么讲孩子更容易懂」",
+        "用户说「教案里怎样安排练习和检查」"
+      ],
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "b9e5e7ab1c4cbac1d30332d1ea70ba9972e0f13f7e8199d9c85acd0a36ef630d",
       "componentId": "semgrep-skill",
       "componentPath": "skills/semgrep-skill",
       "componentType": "skill",
@@ -1607,7 +2397,7 @@
       ]
     },
     {
-      "componentContentSha256": "6222ff90fab7558b5cee1d33ef252f6bf0f353cb955cc2a5dcabe3e47896c189",
+      "componentContentSha256": "b9e5e7ab1c4cbac1d30332d1ea70ba9972e0f13f7e8199d9c85acd0a36ef630d",
       "componentId": "semgrep-skill",
       "componentPath": "skills/semgrep-skill",
       "componentType": "skill",
@@ -1685,7 +2475,204 @@
       ]
     },
     {
-      "componentContentSha256": "2ab0e19b9cc1a743fb5865083773c78f0c133d1dc5b4c2200f603e38965f527b",
+      "componentContentSha256": "c81247daa67dba8938569fd4bf2ce08b85da865c132f4329c8a249d6ecb36b8f",
+      "componentId": "pricing-cost-analyst",
+      "componentPath": "agents/pricing-cost-analyst",
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contractSha256": "a05dc9d8365347f4724891d76c81fd615a378584e480436d41de47461d740fe5",
+      "doNotUseWhen": [
+        "副业方向选择交给 side-business-evaluator。",
+        "第一周任务安排交给 launch-planner。",
+        "不做金融投资建议、税务法律结论或收益保证。"
+      ],
+      "entrypoint": "AGENT.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "商业算术可继续，涉及个人金融投资、法律或医疗专业结论时停下。不能根据目标订单量声称市场一定买单，不能替用户收款或购买工具。",
+          "涉及医疗诊断、法律胜诉或金融投资收益等专业结论时停下，由具备资质的人员判断；涉及发布、对外发送或付款时须由用户另行授权。"
+        ]
+      },
+      "id": "pricing-cost-analyst-assist",
+      "input": {
+        "properties": {
+          "fixedCosts": {
+            "description": "固定支出与情景：周期、工具费、候选订单量；未知项必须标明",
+            "type": "string"
+          },
+          "offer": {
+            "description": "产品或服务：交付范围、候选售价与退款条件",
+            "type": "string"
+          },
+          "variableCosts": {
+            "description": "每单成本：材料、手续费、履约时间及时间计价方式",
+            "type": "string"
+          }
+        },
+        "required": [
+          "offer"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "assumptions": {
+            "description": "假设与缺项：列币种、工时、单量、计价口径和缺少的退款、税费等成本",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "breakEven": {
+            "description": "覆盖固定成本所需单量：用固定成本除以正的单笔贡献并向上取整；贡献非正时说明无法覆盖",
+            "type": "string"
+          },
+          "recommendation": {
+            "description": "报价建议与验证：给候选报价、交付边界与应收集的实际成本证据，不承诺利润或收益",
+            "type": "string"
+          },
+          "scenarios": {
+            "description": "报价情景比较：对不同报价或工时列同口径算式与结果，情景单量不当销量预测",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "unitEconomics": {
+            "description": "单笔测算：分别计算每单现金贡献与计入时间后的贡献，固定成本另列",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "assumptions",
+          "unitEconomics",
+          "scenarios",
+          "breakEven",
+          "recommendation"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "报价与成本测算：把一单收入、现金成本、时间成本和固定支出分开计算，比较报价方案。每个结果都有算式和假设，不把目标销量当预测，也不将现金结余冒充包含全部成本的利润。",
+      "useWhen": [
+        "用户说「这项服务该怎么报价」",
+        "用户说「帮我算一单到底剩多少」",
+        "用户说「要做几单才能覆盖固定成本」"
+      ],
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "3f8c3d6bd43f9c6619b3f03b7660cb030ecd03dd2cbb14ac5022456fec198b18",
+      "componentId": "product-listing-writer",
+      "componentPath": "agents/product-listing-writer",
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contractSha256": "931b6de51cf3780cb4886a5d3e3a8e41b50888581b930bc841f81fd9b15c3f0e",
+      "doNotUseWhen": [
+        "客服咨询与售后回复交给 customer-service-writer。",
+        "店铺数据诊断交给 store-performance-analyst。",
+        "不接选品采购、广告投放、上架操作或虚构评价。"
+      ],
+      "entrypoint": "AGENT.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "承重、防水、食品接触、医疗功效等没有依据时不写；缺资料可以交待补位，不能把愿望当商品事实。",
+          "涉及医疗诊断、法律胜诉或金融投资收益等专业结论时停下，由具备资质的人员判断；涉及发布、对外发送或付款时须由用户另行授权。"
+        ]
+      },
+      "id": "product-listing-writer-assist",
+      "input": {
+        "properties": {
+          "audience": {
+            "description": "顾客场景：卖给谁、顾客拿它做什么",
+            "type": "string"
+          },
+          "channel": {
+            "description": "销售渠道：平台与已有字数要求；未提供时给通用草稿",
+            "type": "string"
+          },
+          "productFacts": {
+            "description": "商品资料：尺寸、材料、功能、价格、限制和每项说法的来源",
+            "type": "string"
+          }
+        },
+        "required": [
+          "productFacts"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "detailCopy": {
+            "description": "详情页正文：提供可编辑的详情页正文，包含适用场景、规格、价格和使用限制",
+            "type": "string"
+          },
+          "factLedger": {
+            "description": "事实清单：逐项列规格、价格、限制和来源，把用户提供的资料与待核实说法分开",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "openQuestions": {
+            "description": "发布前待核实项：列出上架前缺少的商品信息、证明或平台要求，以及缺项影响",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "sellingPoints": {
+            "description": "卖点与证据：每项卖点同时写顾客用途及其事实依据，不用无证据的效果承诺",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "titleOptions": {
+            "description": "标题候选：给出不同侧重点的商品标题，逐一核对型号、规格与正文是否一致",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "factLedger",
+          "titleOptions",
+          "sellingPoints",
+          "detailCopy",
+          "openQuestions"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "商品页文案：把已核实的商品资料变成顾客看得懂的标题、卖点和详情页。先区分材料事实、使用场景和待证实的效果，再决定哪些内容能写；不把缺点藏进小字。",
+      "useWhen": [
+        "用户说「商品详情页不知道怎么写」",
+        "用户说「把这些参数改成顾客看得懂的卖点」",
+        "用户说「检查商品文案有没有夸大」"
+      ],
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "b9f243feae09dc60327deede768f51fc2e42dafc45e14e67ef34f03e0d8d0bee",
       "componentId": "hookprompt",
       "componentPath": "hooks/hookprompt",
       "componentType": "hook",
@@ -1809,6 +2796,416 @@
       ],
       "validation": [
         "tests/host-assets.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "30a2038dbecd48d45101389ceb2040bb172795d36c9c91bc3631bfe599bb507e",
+      "componentId": "resume-editor",
+      "componentPath": "agents/resume-editor",
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contractSha256": "4bc12e6fe29ce73e0197980bcf4f700d0498020115b013c999936f0fa74bd59c",
+      "doNotUseWhen": [
+        "面试练习交给 interview-coach。",
+        "工作周报和邮件交给 workplace-writer。",
+        "不伪造经历、证明、推荐信，不代投简历或判断录用概率。"
+      ],
+      "entrypoint": "AGENT.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "只使用用户主动提供的经历，不按年龄、婚育等属性推断能力；涉及劳动法律、医疗或金融资质判断时停下并交专业人员。",
+          "涉及医疗诊断、法律胜诉或金融投资收益等专业结论时停下，由具备资质的人员判断；涉及发布、对外发送或付款时须由用户另行授权。"
+        ]
+      },
+      "id": "resume-editor-assist",
+      "input": {
+        "properties": {
+          "constraints": {
+            "description": "表达限制：页数、语言、隐私与不希望公开的信息",
+            "type": "string"
+          },
+          "experience": {
+            "description": "真实经历：职责、本人动作、结果及可提供的依据",
+            "type": "string"
+          },
+          "jobDescription": {
+            "description": "目标岗位：岗位说明或明确的求职方向",
+            "type": "string"
+          }
+        },
+        "required": [
+          "experience"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "editNotes": {
+            "description": "修改理由：解释每处关键取舍怎样改善岗位相关性与可读性",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "evidenceGaps": {
+            "description": "待补证据：列出数字口径、个人贡献和能力描述仍需要的证明",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "matchMap": {
+            "description": "岗位匹配表：将岗位要求对应到本人经历，区分直接证据、间接相关与缺项",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "privacyCheck": {
+            "description": "隐私检查：指出公开版本应去掉或由本人决定保留的个人及第三方信息",
+            "type": "string"
+          },
+          "revisedResume": {
+            "description": "简历可用段落：给出可粘贴的简历段落，保留真实职称、时间、本人动作和可证实结果",
+            "type": "string"
+          }
+        },
+        "required": [
+          "matchMap",
+          "revisedResume",
+          "evidenceGaps",
+          "editNotes",
+          "privacyCheck"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "简历修改：把求职者真实做过的事整理成与目标岗位相关的简历。重点是选事实、说明本人行动与可证实结果；不会为了关键词编岗位、年限、证书或业绩。",
+      "useWhen": [
+        "用户说「帮我把简历改得更清楚」",
+        "用户说「这份简历怎样匹配目标岗位」",
+        "用户说「工作经历很普通不知道怎么写」"
+      ],
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "b7f944d06a3666a285379664cfae00e6be8b1d3487686229587bd670b10c93f9",
+      "componentId": "script-writer",
+      "componentPath": "agents/script-writer",
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contractSha256": "1320a8a34cdd89c412947c064f8a1a15762062eeb6975ff07767870c6378ce04",
+      "doNotUseWhen": [
+        "用户还没定选题，只说「帮我写点东西」：改用 topic-planner",
+        "用户只要标题、封面文字或封面版式：改用 headline-cover-optimizer",
+        "用户要整套小红书图文发布包（含内页图）：改用 xiaohongshu-skill",
+        "用户要逐字仿写、洗稿他人作品，或要求编造用户评价、销量、功效",
+        "用户要剪辑、配音、上传、发布等执行动作：本 agent 只交稿子"
+      ],
+      "entrypoint": "AGENT.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "稿子会给出医疗、法律、金融结论（用药、诊断、维权路径、收益承诺）：停下，说明原因并给改法，由用户决定",
+          "商品功效、数据或用户评价没有可核实来源时，标为待核实或删除；不得改写为虚构个人经历或使用感受。",
+          "用户要求逐字仿写他人作品或使用他人素材：拒绝并说明"
+        ]
+      },
+      "id": "script-writer-write-script",
+      "input": {
+        "properties": {
+          "format": {
+            "enum": [
+              "口播",
+              "分镜",
+              "图文正文",
+              "公众号文章"
+            ]
+          },
+          "lengthTarget": {
+            "description": "时长（秒）或字数",
+            "type": "string"
+          },
+          "materialFiles": {
+            "description": "用户提供的草稿或素材清单文件",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "materials": {
+            "description": "手上能拍的素材",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "mustAvoid": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "mustInclude": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "persona": {
+            "description": "人设与口头禅；缺省按朴素口语",
+            "type": "string"
+          },
+          "platform": {
+            "description": "缺省按小红书图文假设并标注",
+            "type": "string"
+          },
+          "product": {
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "verifiedClaims": {
+                "description": "有来源的卖点",
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              }
+            },
+            "type": "object"
+          },
+          "topicAndAngle": {
+            "description": "选题和切入角度，一句话",
+            "type": "string"
+          }
+        },
+        "required": [
+          "topicAndAngle"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "deliveryFormat": "conceptual-human-delivery",
+        "description": "面向用户的中文交付，字段与 AGENT.md「我会给你什么」一致；每个数字、功效、结论都在 claimsCheck 里有来源与状态。",
+        "properties": {
+          "assumptions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "claimsCheck": {
+            "items": {
+              "properties": {
+                "claim": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string"
+                },
+                "status": {
+                  "enum": [
+                    "用户亲历",
+                    "用户观察",
+                    "待核实",
+                    "已删"
+                  ]
+                }
+              },
+              "required": [
+                "claim",
+                "status"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "content": {
+            "description": "口播 / 分镜为分段表格，图文正文与公众号文章为分段正文",
+            "items": {
+              "properties": {
+                "note": {
+                  "type": "string"
+                },
+                "subtitle": {
+                  "type": "string"
+                },
+                "time": {
+                  "type": "string"
+                },
+                "visual": {
+                  "type": "string"
+                },
+                "voiceover": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "ending": {
+            "items": {
+              "type": "string"
+            },
+            "minItems": 2,
+            "type": "array"
+          },
+          "executionAuthorized": {
+            "const": false
+          },
+          "fullVoiceover": {
+            "description": "口播类形式必给，附字数与时长估算",
+            "type": "string"
+          },
+          "hooks": {
+            "items": {
+              "type": "string"
+            },
+            "minItems": 3,
+            "type": "array"
+          },
+          "oneLiner": {
+            "description": "给谁看，看完能做什么",
+            "type": "string"
+          },
+          "shotList": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "oneLiner",
+          "hooks",
+          "content",
+          "ending",
+          "claimsCheck"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "把已定选题与角度写成可直接开口念或直接发布的口播脚本、分镜表或图文正文，含 3 个开头钩子、结尾互动、拍摄清单和说法核对表；不编造功效与数据。",
+      "useWhen": [
+        "用户说「帮我写脚本」「口播稿」「分镜表」「这条视频怎么讲」",
+        "用户说「帮我写小红书正文」「公众号文章」「视频文案」",
+        "用户已有选题和角度（自己定的或来自 topic-planner），要变成能拍能发的稿子",
+        "用户有草稿，想改得更口语、更紧凑，或改成另一个时长"
+      ],
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "1a4ec202d6dca26d532c3f3656180951a8c465f1db22a52b95062bdbe01e1f9f",
+      "componentId": "side-business-evaluator",
+      "componentPath": "agents/side-business-evaluator",
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contractSha256": "ea33470a94f91980f8a0d071a2bff1bfc8858cbe87e3533aa116f7a2250abb81",
+      "doNotUseWhen": [
+        "已选方向的开工安排交给 launch-planner。",
+        "报价与收支测算交给 pricing-cost-analyst。",
+        "不荐股、不荐币、不推荐贷款入场，也不保证副业收益。"
+      ],
+      "entrypoint": "AGENT.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "医疗、法律、金融专业服务或投资结论不在范围，遇到时停下；不提出刷单、侵权搬运、拉人头或未经同意收集个人信息的方案。",
+          "涉及医疗诊断、法律胜诉或金融投资收益等专业结论时停下，由具备资质的人员判断；涉及发布、对外发送或付款时须由用户另行授权。"
+        ]
+      },
+      "id": "side-business-evaluator-assist",
+      "input": {
+        "properties": {
+          "customerAccess": {
+            "description": "能接触的人：谁有这个问题、能否获得自愿反馈",
+            "type": "string"
+          },
+          "ideas": {
+            "description": "候选方向：想尝试的服务或产品，可以只有两个",
+            "type": "string"
+          },
+          "resources": {
+            "description": "可用资源：每周时间、可承受试错预算、现有技能",
+            "type": "string"
+          }
+        },
+        "required": [
+          "resources"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "assumptions": {
+            "description": "事实与假设：区分已有技能、时间、预算、接触渠道与未经验证的需求假设",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "comparison": {
+            "description": "方向比较：逐一比较候选方向的对象、交付、投入、可获得证据与主要缺口",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "recommendation": {
+            "description": "首试方向与理由：推荐一个优先试验的方向，解释与现有条件的匹配及未证实部分",
+            "type": "string"
+          },
+          "stopSignals": {
+            "description": "继续与停止信号：定义继续、调整和停止的可观察信号，注明小样本不能证明市场规模",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "validationPlan": {
+            "description": "最小验证：安排小样品、需求问题和反馈记录，先设投入上限再决定下一步",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "assumptions",
+          "comparison",
+          "recommendation",
+          "validationPlan",
+          "stopSignals"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "副业方向筛选：结合时间、现有技能和能接触到的顾客，比较几个副业方向并设计低成本验证。先查有没有真实问题与交付能力，再谈扩大投入；不把热度当收入证据。",
+      "useWhen": [
+        "用户说「想做副业但不知道选哪种」",
+        "用户说「这几个小生意哪个更适合我先试」",
+        "用户说「怎样验证有人真的需要这个服务」"
+      ],
+      "validation": [
+        "tests/contract.test.mjs"
       ]
     },
     {
@@ -2051,6 +3448,386 @@
       ]
     },
     {
+      "componentContentSha256": "56df0a39d66ec0ab35369adec5256788be277822116f7d4ba4de7f739847ff78",
+      "componentId": "store-performance-analyst",
+      "componentPath": "agents/store-performance-analyst",
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contractSha256": "2e26c8320f7a39555b314e8e324ba96704248186d3826255302b68e60e6e7740",
+      "doNotUseWhen": [
+        "商品文案交给 product-listing-writer。",
+        "单个顾客的沟通交给 customer-service-writer。",
+        "不登录后台、调广告预算或保证增长收益。"
+      ],
+      "entrypoint": "AGENT.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "分母为零时写不适用，退款和成本缺失时不算利润；医疗、法律、金融投资结论超出本包，遇到时停下。",
+          "涉及医疗诊断、法律胜诉或金融投资收益等专业结论时停下，由具备资质的人员判断；涉及发布、对外发送或付款时须由用户另行授权。"
+        ]
+      },
+      "id": "store-performance-analyst-assist",
+      "input": {
+        "properties": {
+          "comparison": {
+            "description": "对比范围：可比的上一周期、商品或活动",
+            "type": "string"
+          },
+          "definitions": {
+            "description": "统计口径：去重方式、退款是否扣除、归因窗口和缺失值",
+            "type": "string"
+          },
+          "metrics": {
+            "description": "原始数据：日期、曝光、访客、支付订单、收入、广告费及数据出处",
+            "type": "string"
+          }
+        },
+        "required": [
+          "metrics"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "dataQuality": {
+            "description": "数据口径检查：检查周期、去重和订单口径，列缺失项及其限制的结论",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "experiments": {
+            "description": "优先检查与验证：按影响和成本安排核查或小范围验证，写清观察指标与停止条件",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "findings": {
+            "description": "可确认的变化：只列现有数据能确认的变化，说明样本量和可比性限制",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "hypotheses": {
+            "description": "待验证原因：将可能原因逐项标为待验证，并写出需要补充的证据",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "metricsTable": {
+            "description": "指标与算式：列指标名称、原始数、计算式、单位和前后变化，区分百分比与百分点",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "dataQuality",
+          "metricsTable",
+          "findings",
+          "hypotheses",
+          "experiments"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "店铺数据复盘：从商家提供的数据找出值得先检查的经营环节。统一口径后计算漏斗与变化，将可观察的相关性和待验证的原因分开，给小规模验证方案；不凭两周数据宣布算法规律。",
+      "useWhen": [
+        "用户说「店铺有浏览但没订单怎么查」",
+        "用户说「帮我复盘这周店铺数据」",
+        "用户说「活动花了钱但效果不清楚」"
+      ],
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "9aad6f2f74a8c2eeb2bdf681fbb1f356bfee4a335b024ef3ede205c03f39f889",
+      "componentId": "topic-planner",
+      "componentPath": "agents/topic-planner",
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contractSha256": "ef1d30d8d8225c5c4d5da5a23ff7ed27ab3beba8de2f326b21485bae5fa8d435",
+      "doNotUseWhen": [
+        "用户已经定了选题，只要标题、封面文字或封面版式：改用 headline-cover-optimizer",
+        "用户要口播稿、分镜表、图文正文或公众号文章：改用 script-writer",
+        "用户要整套小红书图文发布包（含内页图）：改用 xiaohongshu-skill",
+        "用户要账号定位诊断报告、变现方案、投流预算、后台数据分析或代运营：不属于本包"
+      ],
+      "entrypoint": "AGENT.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "选题落到医疗、法律或金融结论（用药、诊断、能否起诉、投资收益等）：停下，说明原因并给替代角度，由用户决定",
+          "选题围绕真实第三方（具体的人、品牌、事件当事人）展开争议：先问用户再排"
+        ]
+      },
+      "id": "topic-planner-plan-topics",
+      "input": {
+        "properties": {
+          "audience": {
+            "description": "内容给谁看",
+            "type": "string"
+          },
+          "constraints": {
+            "description": "不想发、不能发的内容",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "followerCount": {
+            "type": "string"
+          },
+          "materialFiles": {
+            "description": "用户提供的数据表或过往内容清单文件",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "niche": {
+            "description": "账号领域",
+            "type": "string"
+          },
+          "platform": {
+            "description": "发布渠道；未提供时给通用候选并标注待调整",
+            "type": "string"
+          },
+          "postsPerWeek": {
+            "type": "integer"
+          },
+          "recentPerformance": {
+            "description": "近 10 条的大致数据或「没流量」",
+            "type": "string"
+          }
+        },
+        "required": [
+          "niche"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "deliveryFormat": "conceptual-human-delivery",
+        "description": "面向用户的中文交付，字段与 AGENT.md「我会给你什么」一致；每个选题的判断标准相对用户自己的基线，不给绝对数字。",
+        "properties": {
+          "assumptions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "blockedTopics": {
+            "items": {
+              "properties": {
+                "alternativeAngle": {
+                  "type": "string"
+                },
+                "originalIdea": {
+                  "type": "string"
+                },
+                "reason": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "blockingQuestion": {
+            "description": "会影响方向的关键缺项；普通表达选择可说明假设，不把沉默当批准",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "diagnosis": {
+            "type": "string"
+          },
+          "executionAuthorized": {
+            "const": false
+          },
+          "reviewRule": {
+            "type": "string"
+          },
+          "schedule": {
+            "type": "string"
+          },
+          "topics": {
+            "items": {
+              "properties": {
+                "angle": {
+                  "type": "string"
+                },
+                "audienceScene": {
+                  "type": "string"
+                },
+                "format": {
+                  "type": "string"
+                },
+                "materials": {
+                  "type": "string"
+                },
+                "scheduledSlot": {
+                  "type": "string"
+                },
+                "successSignal": {
+                  "type": "string"
+                },
+                "trafficType": {
+                  "description": "搜索 / 推荐 / 粉丝，可组合",
+                  "type": "string"
+                },
+                "workingTitle": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "workingTitle",
+                "angle",
+                "audienceScene",
+                "trafficType",
+                "format",
+                "successSignal",
+                "scheduledSlot"
+              ],
+              "type": "object"
+            },
+            "minItems": 5,
+            "type": "array"
+          }
+        },
+        "required": [
+          "diagnosis",
+          "topics",
+          "schedule",
+          "reviewRule"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials",
+        "network:read-web-search"
+      ],
+      "sideEffects": [],
+      "summary": "为自媒体账号产出 5 个带切入角度、目标人群、流量类型、判断标准与排期的选题，并拦下涉及医疗、法律、金融结论的选题。",
+      "useWhen": [
+        "用户说「不知道发什么」「最近没流量」「帮我想几个选题」「下周或下个月发什么」",
+        "用户说「帮我做内容排期」「选题日历」「这批选题哪个先发」",
+        "用户给了账号领域和粉丝情况，要一批能直接开拍开写的选题",
+        "用户拿着一个大方向（如「母婴」「上班族做饭」「减脂」）问怎么切入"
+      ],
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "0c4ce938c6605aa476756325c67eb21294fef31227fa32d187bc537036567048",
+      "componentId": "workplace-writer",
+      "componentPath": "agents/workplace-writer",
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contractSha256": "c3d26a1372d6717ee97af2e2cf967478c962ba4b8e2539d6e9ac05f755465a31",
+      "doNotUseWhen": [
+        "求职材料交给 resume-editor。",
+        "顾客售后话术交给 customer-service-writer。",
+        "不冒充他人发送消息，不编业绩，不自动承诺同事工期。"
+      ],
+      "entrypoint": "AGENT.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "不代写虚假考勤、冒名承诺或隐瞒事故；涉及劳动法律、医疗隐私、金融披露结论时停下，保留事实摘要。",
+          "涉及医疗诊断、法律胜诉或金融投资收益等专业结论时停下，由具备资质的人员判断；涉及发布、对外发送或付款时须由用户另行授权。"
+        ]
+      },
+      "id": "workplace-writer-assist",
+      "input": {
+        "properties": {
+          "recipient": {
+            "description": "接收对象：主管、同事或跨部门合作方",
+            "type": "string"
+          },
+          "request": {
+            "description": "沟通目的：仅同步、请求帮助或请求决定",
+            "type": "string"
+          },
+          "workFacts": {
+            "description": "工作事实：完成、进行中、受阻分别列出",
+            "type": "string"
+          }
+        },
+        "required": [
+          "workFacts"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "actionRequests": {
+            "description": "需要对方做的事：列出希望谁在什么节点确认或处理什么，未给出的期限标为待定",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "messageDraft": {
+            "description": "可用正文：按收件人与目的提供周报、邮件或汇报正文，明确当前状态和下一步",
+            "type": "string"
+          },
+          "statusTable": {
+            "description": "状态核对：逐项标明已完成、进行中、待确认与预期，避免把计划写成结果",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "toneNotes": {
+            "description": "语气与口径说明：解释称呼、措辞和状态口径的选择，标出需要本人确认的承诺",
+            "type": "string"
+          },
+          "unknowns": {
+            "description": "未确定事项：保留尚未收到的资料、尚未批准的决定和未承诺的交付日期",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "messageDraft",
+          "statusTable",
+          "actionRequests",
+          "unknowns",
+          "toneNotes"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "周报与工作沟通：把零散工作事实组织成对方能据此行动的周报、进度说明或邮件草稿。先判断读者需要知道什么、决定什么，再选信息顺序；不把计划写成成果。",
+      "useWhen": [
+        "用户说「帮我把这些工作整理成周报」",
+        "用户说「延期了怎么向同事说明」",
+        "用户说「这封工作邮件太乱帮我改」"
+      ],
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
       "componentContentSha256": "a5f9de1b67bd6ad157b65a2d0d239c3c9d5f7051a473be787f7a9ed6e8eeec85",
       "componentId": "xiaohongshu-skill",
       "componentPath": "skills/xiaohongshu-skill",
@@ -2170,9 +3947,234 @@
       ]
     }
   ],
-  "capabilityCount": 25,
-  "componentCount": 10,
+  "capabilityCount": 40,
+  "componentCount": 25,
   "components": [
+    {
+      "capabilityIds": [
+        "concept-tutor-assist"
+      ],
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contentSha256": "282d3eef2d37ded4191feb63f6806afed09d85a4859abaf3a705df9ad2ee7afd",
+      "contractSha256": "636d8e3bbe0a4beb2ed3f2213dd8fc1b8579a71be61799d21abd0f9be9171bde",
+      "entrypoint": "AGENT.md",
+      "id": "concept-tutor",
+      "path": "agents/concept-tutor",
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "customer-service-writer-assist"
+      ],
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contentSha256": "9a1e294693461589ef0f0be390d0045688ecccb214ed7be7d44fef4cfc5ae927",
+      "contractSha256": "31614dd79a427bf77cfacadfd8e647e82da1eabe5bdd710598fd6fbbd0731a8f",
+      "entrypoint": "AGENT.md",
+      "id": "customer-service-writer",
+      "path": "agents/customer-service-writer",
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "exercise-designer-assist"
+      ],
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contentSha256": "b8807933e0480402bb30dfe9dd8d342d3c83ff6b1048b378a1aee7e901c6f801",
+      "contractSha256": "ccda4df854314c735721749d49fb4e586f422d9e6dda5ca1acccccf647e5ec64",
+      "entrypoint": "AGENT.md",
+      "id": "exercise-designer",
+      "path": "agents/exercise-designer",
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "headline-cover-optimizer-optimize"
+      ],
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contentSha256": "07ae947698b3f582d7efdada49ba50210d0e9685fc9728ade0712bb6fc43cf03",
+      "contractSha256": "65652d85af2cf08f70db08c6fd71f6ac0c4f5014d46ed4f5dd9fd8e496184f8c",
+      "entrypoint": "AGENT.md",
+      "id": "headline-cover-optimizer",
+      "path": "agents/headline-cover-optimizer",
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "interview-coach-assist"
+      ],
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contentSha256": "afc32eeb9e915286e69d0584fdcd357666b074341dbec8e48d9834aaff2a3a84",
+      "contractSha256": "4d97d45e3fa2afa9a6242036a71e06cc120de4eec3349814f5063aed41e2fa86",
+      "entrypoint": "AGENT.md",
+      "id": "interview-coach",
+      "path": "agents/interview-coach",
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "launch-planner-assist"
+      ],
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contentSha256": "1ac34465cb9cff62c797135459774ec198177ba723db1495473e75b95877c149",
+      "contractSha256": "44a83dd08b6774704f3b1d91d3d6d8b8b97917c06f42daf8fd0d0a70f3e9f86d",
+      "entrypoint": "AGENT.md",
+      "id": "launch-planner",
+      "path": "agents/launch-planner",
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "lesson-planner-assist"
+      ],
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contentSha256": "a3d71626a0bb57c7e7da7e7d0165be63254679cf964c74174bfe07fc5e8e8396",
+      "contractSha256": "b8bd598f8575f9c8d11129c6c7d173852ac29b52b17cfba1369dc2f72c55f2f6",
+      "entrypoint": "AGENT.md",
+      "id": "lesson-planner",
+      "path": "agents/lesson-planner",
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "pricing-cost-analyst-assist"
+      ],
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contentSha256": "c81247daa67dba8938569fd4bf2ce08b85da865c132f4329c8a249d6ecb36b8f",
+      "contractSha256": "a05dc9d8365347f4724891d76c81fd615a378584e480436d41de47461d740fe5",
+      "entrypoint": "AGENT.md",
+      "id": "pricing-cost-analyst",
+      "path": "agents/pricing-cost-analyst",
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "product-listing-writer-assist"
+      ],
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contentSha256": "3f8c3d6bd43f9c6619b3f03b7660cb030ecd03dd2cbb14ac5022456fec198b18",
+      "contractSha256": "931b6de51cf3780cb4886a5d3e3a8e41b50888581b930bc841f81fd9b15c3f0e",
+      "entrypoint": "AGENT.md",
+      "id": "product-listing-writer",
+      "path": "agents/product-listing-writer",
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "resume-editor-assist"
+      ],
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contentSha256": "30a2038dbecd48d45101389ceb2040bb172795d36c9c91bc3631bfe599bb507e",
+      "contractSha256": "4bc12e6fe29ce73e0197980bcf4f700d0498020115b013c999936f0fa74bd59c",
+      "entrypoint": "AGENT.md",
+      "id": "resume-editor",
+      "path": "agents/resume-editor",
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "script-writer-write-script"
+      ],
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contentSha256": "b7f944d06a3666a285379664cfae00e6be8b1d3487686229587bd670b10c93f9",
+      "contractSha256": "1320a8a34cdd89c412947c064f8a1a15762062eeb6975ff07767870c6378ce04",
+      "entrypoint": "AGENT.md",
+      "id": "script-writer",
+      "path": "agents/script-writer",
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "side-business-evaluator-assist"
+      ],
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contentSha256": "1a4ec202d6dca26d532c3f3656180951a8c465f1db22a52b95062bdbe01e1f9f",
+      "contractSha256": "ea33470a94f91980f8a0d071a2bff1bfc8858cbe87e3533aa116f7a2250abb81",
+      "entrypoint": "AGENT.md",
+      "id": "side-business-evaluator",
+      "path": "agents/side-business-evaluator",
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "store-performance-analyst-assist"
+      ],
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contentSha256": "56df0a39d66ec0ab35369adec5256788be277822116f7d4ba4de7f739847ff78",
+      "contractSha256": "2e26c8320f7a39555b314e8e324ba96704248186d3826255302b68e60e6e7740",
+      "entrypoint": "AGENT.md",
+      "id": "store-performance-analyst",
+      "path": "agents/store-performance-analyst",
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "topic-planner-plan-topics"
+      ],
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contentSha256": "9aad6f2f74a8c2eeb2bdf681fbb1f356bfee4a335b024ef3ede205c03f39f889",
+      "contractSha256": "ef1d30d8d8225c5c4d5da5a23ff7ed27ab3beba8de2f326b21485bae5fa8d435",
+      "entrypoint": "AGENT.md",
+      "id": "topic-planner",
+      "path": "agents/topic-planner",
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "workplace-writer-assist"
+      ],
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contentSha256": "0c4ce938c6605aa476756325c67eb21294fef31227fa32d187bc537036567048",
+      "contractSha256": "c3d26a1372d6717ee97af2e2cf967478c962ba4b8e2539d6e9ac05f755465a31",
+      "entrypoint": "AGENT.md",
+      "id": "workplace-writer",
+      "path": "agents/workplace-writer",
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
     {
       "capabilityIds": [
         "assistant-display-contract",
@@ -2180,7 +4182,7 @@
       ],
       "componentType": "hook",
       "componentVersion": "1.2.11",
-      "contentSha256": "2ab0e19b9cc1a743fb5865083773c78f0c133d1dc5b4c2200f603e38965f527b",
+      "contentSha256": "b9f243feae09dc60327deede768f51fc2e42dafc45e14e67ef34f03e0d8d0bee",
       "contractSha256": "870987b9ccf6f92b3dad39bf2a9bcb60d068aaeaf2b3fa68d70848f50991c4b4",
       "entrypoint": ".claude/hooks/user-prompt-submit.js",
       "id": "hookprompt",
@@ -2195,7 +4197,7 @@
       ],
       "componentType": "skill",
       "componentVersion": "4.8.0",
-      "contentSha256": "ff059e34ab959b15dce1bf1c8845703d627d8f148f5a0ca190ae967426c0d81e",
+      "contentSha256": "f0b708b715d9a617397f3cc0ba597af51916f9b70fc34086467d17b15ea8fe14",
       "contractSha256": "c3424584767282a7e0275a224e2bc45230149327f8d6c8109263ce8b15ac9d2c",
       "entrypoint": "SKILL.md",
       "id": "agent-teams-playbook",
@@ -2228,7 +4230,7 @@
       ],
       "componentType": "skill",
       "componentVersion": "0.1.3",
-      "contentSha256": "52760525e6b766b567a15b6b96ff81ed56e8733d32e3ea566c85675bdb207091",
+      "contentSha256": "46dc06a5ead74f714d6e51939aa7847b175366c24b8096060abe17de883c3d01",
       "contractSha256": "6920555d7b546b9cb3e6ee919de6b019498f4a2c03f99e7f01570fd33e85f7dd",
       "entrypoint": "SKILL.md",
       "id": "goalpro",
@@ -2244,7 +4246,7 @@
       ],
       "componentType": "skill",
       "componentVersion": "0.0.0+imported.fbbe41c",
-      "contentSha256": "558844fe908ab94ddcb8b43817c0971a14966c25be3e7b43749c309d296f7895",
+      "contentSha256": "c38b0e1b309483fc49d5e43a6bc1aec3712c5babebab40ea31e620b864e38234",
       "contractSha256": "e5b0c96576781f5f674ca68500e813520e40a392085663563e023e55daeef12e",
       "entrypoint": "SKILL.md",
       "id": "kim-decision",
@@ -2303,7 +4305,7 @@
       ],
       "componentType": "skill",
       "componentVersion": "1.0.0",
-      "contentSha256": "6222ff90fab7558b5cee1d33ef252f6bf0f353cb955cc2a5dcabe3e47896c189",
+      "contentSha256": "b9e5e7ab1c4cbac1d30332d1ea70ba9972e0f13f7e8199d9c85acd0a36ef630d",
       "contractSha256": "e2d8ce75a50ca03892a67a845073f7b46654904612c4fa7478203d6f506ba368",
       "entrypoint": "SKILL.md",
       "id": "semgrep-skill",

@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "id": "workplace-writer",
+  "componentType": "agent",
+  "componentVersion": "0.1.0",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "workplace-writer-assist",
+      "summary": "周报与工作沟通：把零散工作事实组织成对方能据此行动的周报、进度说明或邮件草稿。先判断读者需要知道什么、决定什么，再选信息顺序；不把计划写成成果。",
+      "useWhen": [
+        "用户说「帮我把这些工作整理成周报」",
+        "用户说「延期了怎么向同事说明」",
+        "用户说「这封工作邮件太乱帮我改」"
+      ],
+      "doNotUseWhen": [
+        "求职材料交给 resume-editor。",
+        "顾客售后话术交给 customer-service-writer。",
+        "不冒充他人发送消息，不编业绩，不自动承诺同事工期。"
+      ],
+      "input": {
+        "type": "object",
+        "properties": {
+          "workFacts": {
+            "type": "string",
+            "description": "工作事实：完成、进行中、受阻分别列出"
+          },
+          "recipient": {
+            "type": "string",
+            "description": "接收对象：主管、同事或跨部门合作方"
+          },
+          "request": {
+            "type": "string",
+            "description": "沟通目的：仅同步、请求帮助或请求决定"
+          }
+        },
+        "required": [
+          "workFacts"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "messageDraft": {
+            "type": "string",
+            "description": "可用正文：按收件人与目的提供周报、邮件或汇报正文，明确当前状态和下一步"
+          },
+          "statusTable": {
+            "type": "array",
+            "description": "状态核对：逐项标明已完成、进行中、待确认与预期，避免把计划写成结果",
+            "items": {
+              "type": "string"
+            }
+          },
+          "actionRequests": {
+            "type": "array",
+            "description": "需要对方做的事：列出希望谁在什么节点确认或处理什么，未给出的期限标为待定",
+            "items": {
+              "type": "string"
+            }
+          },
+          "unknowns": {
+            "type": "array",
+            "description": "未确定事项：保留尚未收到的资料、尚未批准的决定和未承诺的交付日期",
+            "items": {
+              "type": "string"
+            }
+          },
+          "toneNotes": {
+            "type": "string",
+            "description": "语气与口径说明：解释称呼、措辞和状态口径的选择，标出需要本人确认的承诺"
+          }
+        },
+        "required": [
+          "messageDraft",
+          "statusTable",
+          "actionRequests",
+          "unknowns",
+          "toneNotes"
+        ]
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "不代写虚假考勤、冒名承诺或隐瞒事故；涉及劳动法律、医疗隐私、金融披露结论时停下，保留事实摘要。",
+          "涉及医疗诊断、法律胜诉或金融投资收益等专业结论时停下，由具备资质的人员判断；涉及发布、对外发送或付款时须由用户另行授权。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,219 @@
+{
+  "schemaVersion": 1,
+  "id": "headline-cover-optimizer",
+  "componentType": "agent",
+  "componentVersion": "0.1.0",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "headline-cover-optimizer-optimize",
+      "summary": "根据已有正文给出5个标题候选、推荐组合与2套封面文字方案，核对字数、承诺和资料依据，不预测点击率。",
+      "useWhen": [
+        "用户说「标题想不出来」「帮我起个标题」「这个标题行不行」「标题太平了」",
+        "用户说「封面写什么字」「封面怎么排」「封面文字帮我想两个」",
+        "用户有正文或至少 3 句要点，想提高点击率、搜索命中或收藏",
+        "用户要 A / B 两个标题做对比测试"
+      ],
+      "doNotUseWhen": [
+        "用户还没有内容，只有一个方向：先用 topic-planner 定选题，或 script-writer 写正文",
+        "用户要写正文、口播稿、脚本：改用 script-writer",
+        "用户要整套小红书图文发布包（含内页图）：改用 xiaohongshu-skill",
+        "用户要生成封面图片文件、修图或设计源文件：本 agent 只给文字与版式说明",
+        "用户要求用虚构结果、无法兑现的效果保证或未证实排名吸引点击"
+      ],
+      "input": {
+        "type": "object",
+        "properties": {
+          "bodyOrKeyPoints": {
+            "type": "string",
+            "description": "正文全文，或至少 3 句核心要点"
+          },
+          "platform": {
+            "type": "string",
+            "description": "目标平台与用户已确认的输入限制；未知时提供通用短标题"
+          },
+          "audience": {
+            "type": "string"
+          },
+          "accountTone": {
+            "type": "string",
+            "description": "账号平时的说话口气"
+          },
+          "goal": {
+            "type": "string",
+            "description": "搜索 / 点击 / 收藏"
+          },
+          "currentTitle": {
+            "type": "string"
+          },
+          "forbiddenWords": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "materialFiles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "用户提供的正文文件"
+          }
+        },
+        "required": [
+          "bodyOrKeyPoints"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "deliveryFormat": "conceptual-human-delivery",
+        "description": "面向用户的中文交付，字段与 AGENT.md「我会给你什么」一致；不承诺点击率，判断标准相对用户自己的基线。",
+        "properties": {
+          "promise": {
+            "type": "string",
+            "description": "这条内容对谁、承诺了什么"
+          },
+          "titleCandidates": {
+            "type": "array",
+            "minItems": 5,
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "type": {
+                  "enum": [
+                    "人群场景型",
+                    "数字清单型",
+                    "反差型",
+                    "提问搜索型",
+                    "第一人称经历型"
+                  ]
+                },
+                "why": {
+                  "type": "string"
+                },
+                "risk": {
+                  "type": "string"
+                },
+                "charCount": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "title",
+                "type",
+                "why",
+                "risk",
+                "charCount"
+              ]
+            }
+          },
+          "recommended": {
+            "type": "object",
+            "properties": {
+              "main": {
+                "type": "string"
+              },
+              "alternate": {
+                "type": "string"
+              },
+              "reason": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "main",
+              "alternate",
+              "reason"
+            ]
+          },
+          "coverOptions": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "type": "object",
+              "properties": {
+                "coverText": {
+                  "type": "string"
+                },
+                "layout": {
+                  "enum": [
+                    "大字报",
+                    "真人实拍",
+                    "前后对比"
+                  ]
+                },
+                "visualAnchor": {
+                  "type": "string"
+                },
+                "materialsNeeded": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "coverText",
+                "layout",
+                "visualAnchor"
+              ]
+            }
+          },
+          "consistencyCheck": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "promise": {
+                  "type": "string"
+                },
+                "deliveredInBody": {
+                  "type": "boolean"
+                },
+                "fix": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "blockedItems": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "assumptions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "executionAuthorized": {
+            "const": false
+          }
+        },
+        "required": [
+          "promise",
+          "titleCandidates",
+          "recommended",
+          "coverOptions",
+          "consistencyCheck"
+        ]
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "标题或封面文字会构成医疗、法律、金融结论，或用到广告法极限词（最、第一、根治、国家级、稳赚）：停下，说明原因并给替代写法，由用户决定",
+          "封面要使用真实人物姓名、他人作品截图或品牌标识：先确认用户有授权"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

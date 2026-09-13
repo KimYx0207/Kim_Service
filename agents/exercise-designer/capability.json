@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "id": "exercise-designer",
+  "componentType": "agent",
+  "componentVersion": "0.1.0",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "exercise-designer-assist",
+      "summary": "原创练习与答案：按学习目标编原创题目，控制难度与条件，并独立核对每题答案。题目需要测出具体理解，而不是换数字凑数量；不复制题库或用超纲难题冒充提高。",
+      "useWhen": [
+        "用户说「按这个知识点出几道题」",
+        "用户说「帮我做练习并附答案解析」",
+        "用户说「检查这些题有没有歧义或错答案」"
+      ],
+      "doNotUseWhen": [
+        "单题理解困难交给 concept-tutor。",
+        "课堂整体安排交给 lesson-planner。",
+        "不泄露未公开试卷、复制整套版权题库或替学生完成受限考试。"
+      ],
+      "input": {
+        "type": "object",
+        "properties": {
+          "learningTarget": {
+            "type": "string",
+            "description": "知识目标：年级、范围、已学内容与不能出现的知识"
+          },
+          "questionPlan": {
+            "type": "string",
+            "description": "题目需求：数量、题型、难度和预计时长"
+          },
+          "constraints": {
+            "type": "string",
+            "description": "表达限制：是否允许图表、特殊情境与学生需要的支持"
+          }
+        },
+        "required": [
+          "learningTarget"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "blueprint": {
+            "type": "array",
+            "description": "命题安排：按学习目标安排题型、题量和难度，标明每题检查的知识点",
+            "items": {
+              "type": "string"
+            }
+          },
+          "questions": {
+            "type": "array",
+            "description": "学生版题目：提供不含答案的原创学生版题目，条件完整且不超出指定范围",
+            "items": {
+              "type": "string"
+            }
+          },
+          "answerKey": {
+            "type": "array",
+            "description": "教师版答案与解析：逐题给答案与推导，说明等价答案和必要的评分依据",
+            "items": {
+              "type": "string"
+            }
+          },
+          "errorChecks": {
+            "type": "array",
+            "description": "常见误解与核查：列常见误解，核查歧义、单位、计算及题目是否有唯一合理解",
+            "items": {
+              "type": "string"
+            }
+          },
+          "adaptations": {
+            "type": "array",
+            "description": "调整建议：给支持提示或加深解释任务，保持核心知识范围不变",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "blueprint",
+          "questions",
+          "answerKey",
+          "errorChecks",
+          "adaptations"
+        ]
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "发现题干缺条件或答案矛盾就停下修题；涉及医疗、法律、金融实务结论时停下换成普通学习情境，不收集学生个人资料。",
+          "涉及医疗诊断、法律胜诉或金融投资收益等专业结论时停下，由具备资质的人员判断；涉及发布、对外发送或付款时须由用户另行授权。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "id": "launch-planner",
+  "componentType": "agent",
+  "componentVersion": "0.1.0",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "launch-planner-assist",
+      "summary": "小项目启动计划：把已选方向变成按依赖排列的一周启动计划。每一步都有具体产物、检查方式和投入上限，先完成最小可交付，再依据反馈决定下一步；不自行替用户开店或收款。",
+      "useWhen": [
+        "用户说「方向定了帮我安排怎么开始」",
+        "用户说「做一个七天启动清单」",
+        "用户说「预算很少怎样先做出第一版」"
+      ],
+      "doNotUseWhen": [
+        "还没选方向先找 side-business-evaluator。",
+        "价格与成本计算交给 pricing-cost-analyst。",
+        "不创建账号、采购、签约、收款或自动联系潜在顾客。"
+      ],
+      "input": {
+        "type": "object",
+        "properties": {
+          "chosenIdea": {
+            "type": "string",
+            "description": "已选方向：给谁、解决什么问题、交付什么"
+          },
+          "resources": {
+            "type": "string",
+            "description": "时间与预算：可支配时间、支出上限、现有工具"
+          },
+          "constraints": {
+            "type": "string",
+            "description": "现实限制：渠道、资料、依赖和必须先确认的动作"
+          }
+        },
+        "required": [
+          "chosenIdea"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "firstDeliverable": {
+            "type": "string",
+            "description": "第一版交付范围：界定第一版交付物、服务对象和暂不包含的功能"
+          },
+          "schedule": {
+            "type": "array",
+            "description": "按依赖安排的日程：按依赖排序每天或每步的产物、可用时间与受阻后的缩减办法",
+            "items": {
+              "type": "string"
+            }
+          },
+          "budget": {
+            "type": "array",
+            "description": "预算与投入边界：区分新增现金、已有工具和时间投入，写明预算上限而非默认花完",
+            "items": {
+              "type": "string"
+            }
+          },
+          "acceptance": {
+            "type": "array",
+            "description": "检查标准：列出能实际判断第一版可用的输入、预期结果和检查方式",
+            "items": {
+              "type": "string"
+            }
+          },
+          "nextDecision": {
+            "type": "string",
+            "description": "复盘后的选择：说明完成检查后如何选择修正、试用或扩大投入，保留需用户决定的动作"
+          }
+        },
+        "required": [
+          "firstDeliverable",
+          "schedule",
+          "budget",
+          "acceptance",
+          "nextDecision"
+        ]
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "计划不是执行授权。涉及医疗、法律、金融专业服务或结论时停下；遇到购买、发送和发布步骤，只准备可审查材料，等用户授权。",
+          "涉及医疗诊断、法律胜诉或金融投资收益等专业结论时停下，由具备资质的人员判断；涉及发布、对外发送或付款时须由用户另行授权。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

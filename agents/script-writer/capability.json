@@ -1,0 +1,215 @@
+{
+  "schemaVersion": 1,
+  "id": "script-writer",
+  "componentType": "agent",
+  "componentVersion": "0.1.0",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "script-writer-write-script",
+      "summary": "把已定选题与角度写成可直接开口念或直接发布的口播脚本、分镜表或图文正文，含 3 个开头钩子、结尾互动、拍摄清单和说法核对表；不编造功效与数据。",
+      "useWhen": [
+        "用户说「帮我写脚本」「口播稿」「分镜表」「这条视频怎么讲」",
+        "用户说「帮我写小红书正文」「公众号文章」「视频文案」",
+        "用户已有选题和角度（自己定的或来自 topic-planner），要变成能拍能发的稿子",
+        "用户有草稿，想改得更口语、更紧凑，或改成另一个时长"
+      ],
+      "doNotUseWhen": [
+        "用户还没定选题，只说「帮我写点东西」：改用 topic-planner",
+        "用户只要标题、封面文字或封面版式：改用 headline-cover-optimizer",
+        "用户要整套小红书图文发布包（含内页图）：改用 xiaohongshu-skill",
+        "用户要逐字仿写、洗稿他人作品，或要求编造用户评价、销量、功效",
+        "用户要剪辑、配音、上传、发布等执行动作：本 agent 只交稿子"
+      ],
+      "input": {
+        "type": "object",
+        "properties": {
+          "topicAndAngle": {
+            "type": "string",
+            "description": "选题和切入角度，一句话"
+          },
+          "platform": {
+            "type": "string",
+            "description": "缺省按小红书图文假设并标注"
+          },
+          "format": {
+            "enum": [
+              "口播",
+              "分镜",
+              "图文正文",
+              "公众号文章"
+            ]
+          },
+          "lengthTarget": {
+            "type": "string",
+            "description": "时长（秒）或字数"
+          },
+          "persona": {
+            "type": "string",
+            "description": "人设与口头禅；缺省按朴素口语"
+          },
+          "materials": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "手上能拍的素材"
+          },
+          "product": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "verifiedClaims": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "有来源的卖点"
+              }
+            }
+          },
+          "mustInclude": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "mustAvoid": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "materialFiles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "用户提供的草稿或素材清单文件"
+          }
+        },
+        "required": [
+          "topicAndAngle"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "deliveryFormat": "conceptual-human-delivery",
+        "description": "面向用户的中文交付，字段与 AGENT.md「我会给你什么」一致；每个数字、功效、结论都在 claimsCheck 里有来源与状态。",
+        "properties": {
+          "oneLiner": {
+            "type": "string",
+            "description": "给谁看，看完能做什么"
+          },
+          "hooks": {
+            "type": "array",
+            "minItems": 3,
+            "items": {
+              "type": "string"
+            }
+          },
+          "content": {
+            "description": "口播 / 分镜为分段表格，图文正文与公众号文章为分段正文",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "time": {
+                  "type": "string"
+                },
+                "visual": {
+                  "type": "string"
+                },
+                "voiceover": {
+                  "type": "string"
+                },
+                "subtitle": {
+                  "type": "string"
+                },
+                "note": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "fullVoiceover": {
+            "type": "string",
+            "description": "口播类形式必给，附字数与时长估算"
+          },
+          "ending": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "type": "string"
+            }
+          },
+          "shotList": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "claimsCheck": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "claim": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string"
+                },
+                "status": {
+                  "enum": [
+                    "用户亲历",
+                    "用户观察",
+                    "待核实",
+                    "已删"
+                  ]
+                }
+              },
+              "required": [
+                "claim",
+                "status"
+              ]
+            }
+          },
+          "assumptions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "executionAuthorized": {
+            "const": false
+          }
+        },
+        "required": [
+          "oneLiner",
+          "hooks",
+          "content",
+          "ending",
+          "claimsCheck"
+        ]
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "稿子会给出医疗、法律、金融结论（用药、诊断、维权路径、收益承诺）：停下，说明原因并给改法，由用户决定",
+          "商品功效、数据或用户评价没有可核实来源时，标为待核实或删除；不得改写为虚构个人经历或使用感受。",
+          "用户要求逐字仿写他人作品或使用他人素材：拒绝并说明"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -142,3 +143,47 @@ test('build fails closed when a previously cataloged component disappears', (t) 
   );
   assert.equal(fs.existsSync(path.join(root, GENERATED_CAPABILITIES_RELATIVE_PATH)), false);
 });
+
+function commitFixture(root) {
+  const git = (args) => execFileSync('git', args, { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
+  git(['init', '-q']);
+  git(['config', 'core.autocrlf', 'false']);
+  git(['add', '--all']);
+  git(['-c', 'user.name=Catalog test', '-c', 'user.email=catalog@example.invalid', 'commit', '-qm', 'fixture source']);
+  return git(['rev-parse', 'HEAD']).trim();
+}
+
+test('explicit provenance finalization binds exact committed bytes and preserves prior sources', (t) => {
+  const root = temporaryRepository(t);
+  addComponent(root, 'skills', 'old-skill');
+  addComponent(root, 'tools', 'new-tool');
+  buildCatalogArtifacts(root);
+  const commit = commitFixture(root);
+  const { catalog } = buildCatalogArtifacts(root, { provenanceRevision: commit });
+  assert.equal(catalog.components.find((item) => item.id === 'old-skill').revision, 'recorded-revision');
+  const tool = catalog.components.find((item) => item.id === 'new-tool');
+  assert.equal(tool.revision, commit);
+  assert.equal(tool.snapshot, 'committed-component-tree');
+  assert.doesNotThrow(() => checkCatalogArtifacts(root));
+  const before = fs.readFileSync(path.join(root, 'catalog.json'));
+  buildCatalogArtifacts(root, { provenanceRevision: commit });
+  assert.deepEqual(fs.readFileSync(path.join(root, 'catalog.json')), before);
+});
+
+for (const change of ['edited', 'untracked', 'missing-from-commit']) {
+  test(`provenance finalization refuses ${change} component bytes without changing outputs`, (t) => {
+    const root = temporaryRepository(t);
+    addComponent(root, 'skills', 'old-skill');
+    if (change !== 'missing-from-commit') addComponent(root, 'tools', 'new-tool');
+    buildCatalogArtifacts(root);
+    const commit = commitFixture(root);
+    if (change === 'edited') fs.appendFileSync(path.join(root, 'tools/new-tool/SKILL.md'), 'new text\n');
+    if (change === 'untracked') fs.writeFileSync(path.join(root, 'tools/new-tool/untracked.txt'), 'extra\n');
+    if (change === 'missing-from-commit') addComponent(root, 'tools', 'new-tool');
+    const before = ['catalog.json', GENERATED_CAPABILITIES_RELATIVE_PATH].map((file) => fs.readFileSync(path.join(root, file)));
+    assert.throws(() => buildCatalogArtifacts(root, { provenanceRevision: commit }), /differs from provenance commit|absent from provenance commit/);
+    for (const [index, file] of ['catalog.json', GENERATED_CAPABILITIES_RELATIVE_PATH].entries()) {
+      assert.deepEqual(fs.readFileSync(path.join(root, file)), before[index]);
+    }
+  });
+}

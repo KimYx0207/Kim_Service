@@ -6,11 +6,11 @@
 
 **An independent professional-capability dependency repository maintained by Lao Jin (KimYx0207).**
 
-It contains discoverable, independently installable, and verifiable Hooks, Skills, and Tools, with the same package convention reserved for future qualified Agents and Apps. Kim Service does not act as a cross-component Router, task state machine, or final acceptance brain.
+It contains discoverable, independently usable, and verifiable Hooks, Skills, Tools, and professional Agents, with the same package convention reserved for future qualified Apps. Kim Service does not act as a cross-component Router, task state machine, or final acceptance brain.
 
 ## What's included
 
-- Human-facing package directories: [hooks](hooks), [skills](skills), and [tools](tools).
+- Human-facing package directories: [hooks](hooks), [skills](skills), [tools](tools), and [industry roles (Chinese)](agents/README.md).
 - Release inventory and provenance facts: [catalog.json](catalog.json).
 - Generated Capability index: [generated/capabilities.json](generated/capabilities.json).
 
@@ -19,7 +19,7 @@ The component table is not duplicated manually in this README. Root automation d
 ## How to use
 
 1. Choose a package from the generated index or its type directory.
-2. Follow the package `entrypoint`; common entrypoints are `README.md` for Hooks and Tools or `SKILL.md` for Skills.
+2. Follow the package `entrypoint`; common entrypoints are `README.md` for Hooks and Tools, `SKILL.md` for Skills, or `AGENT.md` for Agents.
 3. Follow the project instructions to install it for a project or your personal environment.
 
 Each project includes its own usage guide, license, attribution, and change history. See [GitHub Releases](https://github.com/KimYx0207/Kim_Service/releases) for the latest collection release and [CHANGELOG.md](CHANGELOG.md) for the current update notes.

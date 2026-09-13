@@ -6,11 +6,11 @@
 
 **这是老金（KimYx0207）维护的独立专业能力依赖仓库。**
 
-这里收录可发现、可单独安装、可验证的 Hook、Skill 与 Tool，并为未来合格的 Agent 和 App 保留同一包规范。每个能力包解决一个明确问题；Kim Service 不承担跨组件 Router、任务状态机或最终验收大脑。
+这里收录可发现、可单独使用、可验证的 Hook、Skill、Tool 与专业 Agent，并为未来合格的 App 保留同一包规范。每个能力包解决一个明确问题；Kim Service 不承担跨组件 Router、任务状态机或最终验收大脑。
 
 ## 收录内容
 
-- 面向人的组件目录：[hooks](hooks)、[skills](skills)、[tools](tools)。
+- 面向人的组件目录：[hooks](hooks)、[skills](skills)、[tools](tools)、[行业角色](agents/README.md)。
 - 发布库存与来源事实：[catalog.json](catalog.json)。
 - 自动生成的 Capability 索引：[generated/capabilities.json](generated/capabilities.json)。
 
@@ -19,7 +19,7 @@
 ## 怎么使用
 
 1. 从自动索引或对应类型目录选择能力包。
-2. 按包内 `entrypoint` 阅读入口；常见入口为 Hook/Tool 的 `README.md` 或 Skill 的 `SKILL.md`。
+2. 按包内 `entrypoint` 阅读入口；常见入口为 Hook/Tool 的 `README.md`、Skill 的 `SKILL.md` 或 Agent 的 `AGENT.md`。
 3. 按项目说明安装到你的项目或个人环境中。
 
 每个项目都带有自己的使用说明、许可证、归属和更新记录。合集的最新版本请查看 [GitHub Releases](https://github.com/KimYx0207/Kim_Service/releases)，本次更新内容见 [CHANGELOG.md](CHANGELOG.md)。

@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "id": "lesson-planner",
+  "componentType": "agent",
+  "componentVersion": "0.1.0",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "lesson-planner-assist",
+      "summary": "备课与课堂设计：围绕一个可观察的学习目标设计课堂。根据学生起点选择讲解、操作和检查方式，让每段活动服务目标；不把一串活动名当教案，也不冒称符合未核实的教材标准。",
+      "useWhen": [
+        "用户说「帮我设计一节课」",
+        "用户说「明天这课怎么讲孩子更容易懂」",
+        "用户说「教案里怎样安排练习和检查」"
+      ],
+      "doNotUseWhen": [
+        "单题讲解交给 concept-tutor。",
+        "成套原创练习与答案交给 exercise-designer。",
+        "不替教师诊断学生，不复制受版权保护的整章教材。"
+      ],
+      "input": {
+        "type": "object",
+        "properties": {
+          "lessonTopic": {
+            "type": "string",
+            "description": "主题与年级：本节内容、教材线索和学生已学知识"
+          },
+          "duration": {
+            "type": "string",
+            "description": "课时与条件：分钟数、可用材料和授课形式"
+          },
+          "learnerNeeds": {
+            "type": "string",
+            "description": "学习差异：已观察到的困难，不含可识别学生隐私"
+          }
+        },
+        "required": [
+          "lessonTopic"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "objectives": {
+            "type": "array",
+            "description": "可观察目标：用可观察的学生动作描述学习目标，并标出未核实的教材对齐要求",
+            "items": {
+              "type": "string"
+            }
+          },
+          "lessonFlow": {
+            "type": "array",
+            "description": "课堂流程：按先后列活动、时长、教师与学生动作、材料，合计等于可用课时",
+            "items": {
+              "type": "string"
+            }
+          },
+          "teacherPrompts": {
+            "type": "array",
+            "description": "教师提问与例子：提供可直接使用的提问、正反例及追问，说明要观察的理解差异",
+            "items": {
+              "type": "string"
+            }
+          },
+          "differentiation": {
+            "type": "array",
+            "description": "分层支持：分别给需要支持和进度较快学生的具体调整，不按表现贴能力标签",
+            "items": {
+              "type": "string"
+            }
+          },
+          "exitCheck": {
+            "type": "string",
+            "description": "离堂检查与调整：给离堂检查题、判断依据及未达目标时下一课的调整办法"
+          }
+        },
+        "required": [
+          "objectives",
+          "lessonFlow",
+          "teacherPrompts",
+          "differentiation",
+          "exitCheck"
+        ]
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "不从学习表现推断疾病或智力，不作医疗、法律、金融结论；遇到此类请求停下交合适专业人员。涉及教材原文只使用用户有权提供的必要片段。",
+          "涉及医疗诊断、法律胜诉或金融投资收益等专业结论时停下，由具备资质的人员判断；涉及发布、对外发送或付款时须由用户另行授权。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

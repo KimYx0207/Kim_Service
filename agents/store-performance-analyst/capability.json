@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "id": "store-performance-analyst",
+  "componentType": "agent",
+  "componentVersion": "0.1.0",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "store-performance-analyst-assist",
+      "summary": "店铺数据复盘：从商家提供的数据找出值得先检查的经营环节。统一口径后计算漏斗与变化，将可观察的相关性和待验证的原因分开，给小规模验证方案；不凭两周数据宣布算法规律。",
+      "useWhen": [
+        "用户说「店铺有浏览但没订单怎么查」",
+        "用户说「帮我复盘这周店铺数据」",
+        "用户说「活动花了钱但效果不清楚」"
+      ],
+      "doNotUseWhen": [
+        "商品文案交给 product-listing-writer。",
+        "单个顾客的沟通交给 customer-service-writer。",
+        "不登录后台、调广告预算或保证增长收益。"
+      ],
+      "input": {
+        "type": "object",
+        "properties": {
+          "metrics": {
+            "type": "string",
+            "description": "原始数据：日期、曝光、访客、支付订单、收入、广告费及数据出处"
+          },
+          "comparison": {
+            "type": "string",
+            "description": "对比范围：可比的上一周期、商品或活动"
+          },
+          "definitions": {
+            "type": "string",
+            "description": "统计口径：去重方式、退款是否扣除、归因窗口和缺失值"
+          }
+        },
+        "required": [
+          "metrics"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "dataQuality": {
+            "type": "array",
+            "description": "数据口径检查：检查周期、去重和订单口径，列缺失项及其限制的结论",
+            "items": {
+              "type": "string"
+            }
+          },
+          "metricsTable": {
+            "type": "array",
+            "description": "指标与算式：列指标名称、原始数、计算式、单位和前后变化，区分百分比与百分点",
+            "items": {
+              "type": "string"
+            }
+          },
+          "findings": {
+            "type": "array",
+            "description": "可确认的变化：只列现有数据能确认的变化，说明样本量和可比性限制",
+            "items": {
+              "type": "string"
+            }
+          },
+          "hypotheses": {
+            "type": "array",
+            "description": "待验证原因：将可能原因逐项标为待验证，并写出需要补充的证据",
+            "items": {
+              "type": "string"
+            }
+          },
+          "experiments": {
+            "type": "array",
+            "description": "优先检查与验证：按影响和成本安排核查或小范围验证，写清观察指标与停止条件",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "dataQuality",
+          "metricsTable",
+          "findings",
+          "hypotheses",
+          "experiments"
+        ]
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "分母为零时写不适用，退款和成本缺失时不算利润；医疗、法律、金融投资结论超出本包，遇到时停下。",
+          "涉及医疗诊断、法律胜诉或金融投资收益等专业结论时停下，由具备资质的人员判断；涉及发布、对外发送或付款时须由用户另行授权。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

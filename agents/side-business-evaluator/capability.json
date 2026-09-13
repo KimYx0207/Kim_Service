@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "id": "side-business-evaluator",
+  "componentType": "agent",
+  "componentVersion": "0.1.0",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "side-business-evaluator-assist",
+      "summary": "副业方向筛选：结合时间、现有技能和能接触到的顾客，比较几个副业方向并设计低成本验证。先查有没有真实问题与交付能力，再谈扩大投入；不把热度当收入证据。",
+      "useWhen": [
+        "用户说「想做副业但不知道选哪种」",
+        "用户说「这几个小生意哪个更适合我先试」",
+        "用户说「怎样验证有人真的需要这个服务」"
+      ],
+      "doNotUseWhen": [
+        "已选方向的开工安排交给 launch-planner。",
+        "报价与收支测算交给 pricing-cost-analyst。",
+        "不荐股、不荐币、不推荐贷款入场，也不保证副业收益。"
+      ],
+      "input": {
+        "type": "object",
+        "properties": {
+          "resources": {
+            "type": "string",
+            "description": "可用资源：每周时间、可承受试错预算、现有技能"
+          },
+          "ideas": {
+            "type": "string",
+            "description": "候选方向：想尝试的服务或产品，可以只有两个"
+          },
+          "customerAccess": {
+            "type": "string",
+            "description": "能接触的人：谁有这个问题、能否获得自愿反馈"
+          }
+        },
+        "required": [
+          "resources"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "assumptions": {
+            "type": "array",
+            "description": "事实与假设：区分已有技能、时间、预算、接触渠道与未经验证的需求假设",
+            "items": {
+              "type": "string"
+            }
+          },
+          "comparison": {
+            "type": "array",
+            "description": "方向比较：逐一比较候选方向的对象、交付、投入、可获得证据与主要缺口",
+            "items": {
+              "type": "string"
+            }
+          },
+          "recommendation": {
+            "type": "string",
+            "description": "首试方向与理由：推荐一个优先试验的方向，解释与现有条件的匹配及未证实部分"
+          },
+          "validationPlan": {
+            "type": "array",
+            "description": "最小验证：安排小样品、需求问题和反馈记录，先设投入上限再决定下一步",
+            "items": {
+              "type": "string"
+            }
+          },
+          "stopSignals": {
+            "type": "array",
+            "description": "继续与停止信号：定义继续、调整和停止的可观察信号，注明小样本不能证明市场规模",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "assumptions",
+          "comparison",
+          "recommendation",
+          "validationPlan",
+          "stopSignals"
+        ]
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "医疗、法律、金融专业服务或投资结论不在范围，遇到时停下；不提出刷单、侵权搬运、拉人头或未经同意收集个人信息的方案。",
+          "涉及医疗诊断、法律胜诉或金融投资收益等专业结论时停下，由具备资质的人员判断；涉及发布、对外发送或付款时须由用户另行授权。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

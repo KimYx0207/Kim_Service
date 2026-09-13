@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "id": "customer-service-writer",
+  "componentType": "agent",
+  "componentVersion": "0.1.0",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "customer-service-writer-assist",
+      "summary": "客服与售后话术：把顾客问题、订单事实和商家已批准的处理规则变成可发送的回复草稿。每次先判断能否直接答复、需要补查还是要升级处理，不代替商家承诺退款或发货结果。",
+      "useWhen": [
+        "用户说「客户催发货该怎么回」",
+        "用户说「售后投诉怎么解释比较清楚」",
+        "用户说「帮我做一套常见客服回复」"
+      ],
+      "doNotUseWhen": [
+        "商品页文案交给 product-listing-writer。",
+        "店铺转化与退款数据分析交给 store-performance-analyst。",
+        "不代发消息、操作退款或用话术阻挠合理售后。"
+      ],
+      "input": {
+        "type": "object",
+        "properties": {
+          "customerMessage": {
+            "type": "string",
+            "description": "顾客原话：保留问题和语气，先去掉姓名、电话和完整订单号"
+          },
+          "orderFacts": {
+            "type": "string",
+            "description": "已查事实：付款、出库、物流、破损等状态；未知项明确写未知"
+          },
+          "approvedPolicy": {
+            "type": "string",
+            "description": "处理规则：商家已确认的时限、权限和可用方案"
+          }
+        },
+        "required": [
+          "customerMessage"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "caseSummary": {
+            "type": "string",
+            "description": "问题与事实：说明顾客诉求、已经确认的订单事实和仍需人工核实的信息"
+          },
+          "replyDrafts": {
+            "type": "array",
+            "description": "回复草稿：给出首轮回复和必要的追问回复，承诺限于商家已确认的规则",
+            "items": {
+              "type": "string"
+            }
+          },
+          "decisionPoints": {
+            "type": "array",
+            "description": "处理分支：按等待、取消或状态变化列出处理分支及其适用前提",
+            "items": {
+              "type": "string"
+            }
+          },
+          "escalation": {
+            "type": "string",
+            "description": "升级条件：说明超出一线客服权限、规则不足或需要负责人决定的条件"
+          },
+          "followUp": {
+            "type": "string",
+            "description": "跟进安排：建议核查对象、跟进节点与负责人，未确认的回访时间不写成承诺"
+          }
+        },
+        "required": [
+          "caseSummary",
+          "replyDrafts",
+          "decisionPoints",
+          "escalation",
+          "followUp"
+        ]
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "规则与平台要求冲突时暂停给出承诺，交商家核实；涉及赔偿法律结论、医疗损害或金融欺诈时停下并转有资质人员。",
+          "涉及医疗诊断、法律胜诉或金融投资收益等专业结论时停下，由具备资质的人员判断；涉及发布、对外发送或付款时须由用户另行授权。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

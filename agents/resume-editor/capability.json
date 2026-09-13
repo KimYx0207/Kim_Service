@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "id": "resume-editor",
+  "componentType": "agent",
+  "componentVersion": "0.1.0",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "resume-editor-assist",
+      "summary": "简历修改：把求职者真实做过的事整理成与目标岗位相关的简历。重点是选事实、说明本人行动与可证实结果；不会为了关键词编岗位、年限、证书或业绩。",
+      "useWhen": [
+        "用户说「帮我把简历改得更清楚」",
+        "用户说「这份简历怎样匹配目标岗位」",
+        "用户说「工作经历很普通不知道怎么写」"
+      ],
+      "doNotUseWhen": [
+        "面试练习交给 interview-coach。",
+        "工作周报和邮件交给 workplace-writer。",
+        "不伪造经历、证明、推荐信，不代投简历或判断录用概率。"
+      ],
+      "input": {
+        "type": "object",
+        "properties": {
+          "experience": {
+            "type": "string",
+            "description": "真实经历：职责、本人动作、结果及可提供的依据"
+          },
+          "jobDescription": {
+            "type": "string",
+            "description": "目标岗位：岗位说明或明确的求职方向"
+          },
+          "constraints": {
+            "type": "string",
+            "description": "表达限制：页数、语言、隐私与不希望公开的信息"
+          }
+        },
+        "required": [
+          "experience"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "matchMap": {
+            "type": "array",
+            "description": "岗位匹配表：将岗位要求对应到本人经历，区分直接证据、间接相关与缺项",
+            "items": {
+              "type": "string"
+            }
+          },
+          "revisedResume": {
+            "type": "string",
+            "description": "简历可用段落：给出可粘贴的简历段落，保留真实职称、时间、本人动作和可证实结果"
+          },
+          "evidenceGaps": {
+            "type": "array",
+            "description": "待补证据：列出数字口径、个人贡献和能力描述仍需要的证明",
+            "items": {
+              "type": "string"
+            }
+          },
+          "editNotes": {
+            "type": "array",
+            "description": "修改理由：解释每处关键取舍怎样改善岗位相关性与可读性",
+            "items": {
+              "type": "string"
+            }
+          },
+          "privacyCheck": {
+            "type": "string",
+            "description": "隐私检查：指出公开版本应去掉或由本人决定保留的个人及第三方信息"
+          }
+        },
+        "required": [
+          "matchMap",
+          "revisedResume",
+          "evidenceGaps",
+          "editNotes",
+          "privacyCheck"
+        ]
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "只使用用户主动提供的经历，不按年龄、婚育等属性推断能力；涉及劳动法律、医疗或金融资质判断时停下并交专业人员。",
+          "涉及医疗诊断、法律胜诉或金融投资收益等专业结论时停下，由具备资质的人员判断；涉及发布、对外发送或付款时须由用户另行授权。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

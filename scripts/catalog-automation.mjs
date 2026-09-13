@@ -1,11 +1,13 @@
 #!/usr/bin/env node
 
 import crypto from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import {
   buildCapabilityIndex,
+  componentFilesSha256,
   serializeCapabilityIndex
 } from './capability-catalog.mjs';
 
@@ -164,7 +166,39 @@ function replaceStagedFile(temporaryPath, outputPath) {
   }
 }
 
-export function computeCatalogArtifacts(rootPath) {
+function finalizePendingProvenance(root, catalog, revision) {
+  const git = (args, encoding = 'utf8') => execFileSync('git', args, {
+    cwd: root, encoding, stdio: ['ignore', 'pipe', 'pipe'], maxBuffer: 16 * 1024 * 1024
+  });
+  const commit = git(['rev-parse', '--verify', '--end-of-options', `${revision}^{commit}`]).trim();
+  git(['merge-base', '--is-ancestor', commit, 'HEAD']);
+  for (const component of catalog.components) {
+    const pending = component.snapshot === 'capability-contract-pending-release' ||
+      String(component.revision ?? '').startsWith('pending-local:');
+    if (!pending) continue;
+    assert(component.source === `canonical:${component.path}`, `Pending provenance must name its local canonical component: ${component.id}`);
+    const entries = git(['ls-tree', '-rz', '--full-tree', commit, '--', component.path])
+      .split('\0').filter(Boolean).map((entry) => {
+        const [header, ...nameParts] = entry.split('\t');
+        const [mode, kind, blob] = header.split(' ');
+        const name = nameParts.join('\t');
+        assert(kind === 'blob' && ['100644', '100755'].includes(mode), `Committed component must contain regular files: ${component.id}`);
+        assert(name.startsWith(`${component.path}/`), `Committed component path mismatch: ${component.id}`);
+        return { relativePath: name.slice(component.path.length + 1), blob };
+      });
+    assert(entries.length > 0, `Component is absent from provenance commit: ${component.id}`);
+    const committedHash = componentFilesSha256(entries.map((entry) => ({
+      relativePath: entry.relativePath,
+      contents: git(['cat-file', 'blob', entry.blob], null)
+    })));
+    assert(committedHash === component.contentSha256,
+      `Component content differs from provenance commit (including untracked files): ${component.id}`);
+    component.revision = commit;
+    component.snapshot = 'committed-component-tree';
+  }
+}
+
+export function computeCatalogArtifacts(rootPath, { provenanceRevision } = {}) {
   const root = path.resolve(rootPath);
   const catalogPath = path.join(root, CATALOG_RELATIVE_PATH);
   assert(fs.existsSync(catalogPath) && fs.lstatSync(catalogPath).isFile(), `Missing catalog.json: ${catalogPath}`);
@@ -172,6 +206,7 @@ export function computeCatalogArtifacts(rootPath) {
   const currentCatalog = JSON.parse(fs.readFileSync(catalogPath, 'utf8'));
   const capabilityIndex = buildCapabilityIndex(root);
   const catalog = buildCatalogDocument(currentCatalog, capabilityIndex);
+  if (provenanceRevision) finalizePendingProvenance(root, catalog, provenanceRevision);
   return {
     capabilityIndex,
     catalog,
@@ -180,9 +215,9 @@ export function computeCatalogArtifacts(rootPath) {
   };
 }
 
-export function buildCatalogArtifacts(rootPath = DEFAULT_ROOT) {
+export function buildCatalogArtifacts(rootPath = DEFAULT_ROOT, options = {}) {
   const root = path.resolve(rootPath);
-  const artifacts = computeCatalogArtifacts(root);
+  const artifacts = computeCatalogArtifacts(root, options);
   const catalogPath = assertFixedRegularOutput(root, CATALOG_RELATIVE_PATH, { createParent: true });
   const capabilitiesPath = assertFixedRegularOutput(root, GENERATED_CAPABILITIES_RELATIVE_PATH, { createParent: true });
 
@@ -223,21 +258,31 @@ export function checkCatalogArtifacts(rootPath = DEFAULT_ROOT) {
 
 function parseArguments(argv) {
   const [command, ...rest] = argv;
-  assert(['build', 'check'].includes(command), 'Usage: catalog-automation.mjs build|check [--root <path>]');
+  const usage = 'Usage: catalog-automation.mjs build|check [--root <path>] [build only: --provenance-revision <commit>]';
+  assert(['build', 'check'].includes(command), usage);
   let root = DEFAULT_ROOT;
-  if (rest.length) {
-    assert(rest.length === 2 && rest[0] === '--root', 'Usage: catalog-automation.mjs build|check [--root <path>]');
-    root = path.resolve(rest[1]);
+  let provenanceRevision;
+  const seen = new Set();
+  for (let index = 0; index < rest.length; index += 2) {
+    const flag = rest[index];
+    const value = rest[index + 1];
+    assert(['--root', '--provenance-revision'].includes(flag) && value && !value.startsWith('--') && !seen.has(flag), usage);
+    seen.add(flag);
+    if (flag === '--root') root = path.resolve(value);
+    else {
+      assert(command === 'build', usage);
+      provenanceRevision = value;
+    }
   }
-  return { command, root };
+  return { command, root, provenanceRevision };
 }
 
 const isMain = process.argv[1] && pathToFileURL(path.resolve(process.argv[1])).href === import.meta.url;
 if (isMain) {
   try {
-    const { command, root } = parseArguments(process.argv.slice(2));
+    const { command, root, provenanceRevision } = parseArguments(process.argv.slice(2));
     const artifacts = command === 'build'
-      ? buildCatalogArtifacts(root)
+      ? buildCatalogArtifacts(root, { provenanceRevision })
       : checkCatalogArtifacts(root);
     console.log(
       `Catalog automation ${command} passed: ${artifacts.capabilityIndex.componentCount} components, ` +

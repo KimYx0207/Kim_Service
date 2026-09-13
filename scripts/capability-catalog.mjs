@@ -149,6 +149,17 @@ function safeRelativeFile(componentRoot, relativePath, label) {
   return normalize(relativeFromRoot);
 }
 
+export function componentFilesSha256(files) {
+  const hash = crypto.createHash('sha256');
+  for (const file of [...files].sort((left, right) => compareText(left.relativePath, right.relativePath))) {
+    hash.update(file.relativePath, 'utf8');
+    hash.update('\0');
+    hash.update(file.contents);
+    hash.update('\0');
+  }
+  return hash.digest('hex');
+}
+
 function componentTreeSha256(componentRoot) {
   const files = [];
   function walk(directory, relativeDirectory = '') {
@@ -165,15 +176,10 @@ function componentTreeSha256(componentRoot) {
     }
   }
   walk(componentRoot);
-  files.sort(compareText);
-  const hash = crypto.createHash('sha256');
-  for (const relativePath of files) {
-    hash.update(relativePath, 'utf8');
-    hash.update('\0');
-    hash.update(fs.readFileSync(path.join(componentRoot, ...relativePath.split('/'))));
-    hash.update('\0');
-  }
-  return hash.digest('hex');
+  return componentFilesSha256(files.map((relativePath) => ({
+    relativePath,
+    contents: fs.readFileSync(path.join(componentRoot, ...relativePath.split('/')))
+  })));
 }
 
 function readContract(contractPath) {

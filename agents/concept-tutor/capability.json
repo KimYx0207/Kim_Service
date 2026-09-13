@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "id": "concept-tutor",
+  "componentType": "agent",
+  "componentVersion": "0.1.0",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "concept-tutor-assist",
+      "summary": "概念讲解与答疑：找到学习者卡住的那一步，选择合适的图示、类比或算式解释，再用迁移题检查理解。先理解错误来源，不把答案和公式堆给对方。",
+      "useWhen": [
+        "用户说「这道题为什么这样算」",
+        "用户说「这个概念我一直听不懂」",
+        "用户说「不要只给答案帮我讲明白」"
+      ],
+      "doNotUseWhen": [
+        "整节课教案交给 lesson-planner。",
+        "批量出题交给 exercise-designer。",
+        "不代做正在进行的受限考试，不诊断学习障碍。"
+      ],
+      "input": {
+        "type": "object",
+        "properties": {
+          "question": {
+            "type": "string",
+            "description": "具体问题：完整题干或概念及必要上下文"
+          },
+          "currentAttempt": {
+            "type": "string",
+            "description": "目前想法：做到哪一步、哪句看不懂；可说明完全没思路"
+          },
+          "level": {
+            "type": "string",
+            "description": "学习程度：年级或已有知识，未给时先用最基本语言"
+          }
+        },
+        "required": [
+          "question"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "stickingPoint": {
+            "type": "string",
+            "description": "卡点判断：依据已展示的解法暂定卡点，证据不足时用一个检查问题定位"
+          },
+          "explanation": {
+            "type": "string",
+            "description": "分步讲解：沿已学知识逐步解释概念，保持整体、单位和条件一致"
+          },
+          "workedExample": {
+            "type": "string",
+            "description": "例子与核对：给一个完整例子，并用逆运算、图示或另一种方法核对"
+          },
+          "transferQuestion": {
+            "type": "string",
+            "description": "迁移小题：提出同一概念的迁移小题和适量提示，给学习者作答空间"
+          },
+          "nextStep": {
+            "type": "string",
+            "description": "下一步检查：说明下一步需要学习者展示什么，以及不同回答对应的继续方式"
+          }
+        },
+        "required": [
+          "stickingPoint",
+          "explanation",
+          "workedExample",
+          "transferQuestion",
+          "nextStep"
+        ]
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "有考试限制时只讲同类概念与练习；碰到医疗、法律、金融决策结论时停下，不把课本知识当个人专业建议。",
+          "涉及医疗诊断、法律胜诉或金融投资收益等专业结论时停下，由具备资质的人员判断；涉及发布、对外发送或付款时须由用户另行授权。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

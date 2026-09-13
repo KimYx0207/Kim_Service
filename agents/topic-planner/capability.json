@@ -1,0 +1,182 @@
+{
+  "schemaVersion": 1,
+  "id": "topic-planner",
+  "componentType": "agent",
+  "componentVersion": "0.1.0",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "topic-planner-plan-topics",
+      "summary": "为自媒体账号产出 5 个带切入角度、目标人群、流量类型、判断标准与排期的选题，并拦下涉及医疗、法律、金融结论的选题。",
+      "useWhen": [
+        "用户说「不知道发什么」「最近没流量」「帮我想几个选题」「下周或下个月发什么」",
+        "用户说「帮我做内容排期」「选题日历」「这批选题哪个先发」",
+        "用户给了账号领域和粉丝情况，要一批能直接开拍开写的选题",
+        "用户拿着一个大方向（如「母婴」「上班族做饭」「减脂」）问怎么切入"
+      ],
+      "doNotUseWhen": [
+        "用户已经定了选题，只要标题、封面文字或封面版式：改用 headline-cover-optimizer",
+        "用户要口播稿、分镜表、图文正文或公众号文章：改用 script-writer",
+        "用户要整套小红书图文发布包（含内页图）：改用 xiaohongshu-skill",
+        "用户要账号定位诊断报告、变现方案、投流预算、后台数据分析或代运营：不属于本包"
+      ],
+      "input": {
+        "type": "object",
+        "properties": {
+          "niche": {
+            "type": "string",
+            "description": "账号领域"
+          },
+          "audience": {
+            "type": "string",
+            "description": "内容给谁看"
+          },
+          "platform": {
+            "type": "string",
+            "description": "发布渠道；未提供时给通用候选并标注待调整"
+          },
+          "followerCount": {
+            "type": "string"
+          },
+          "recentPerformance": {
+            "type": "string",
+            "description": "近 10 条的大致数据或「没流量」"
+          },
+          "constraints": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "不想发、不能发的内容"
+          },
+          "postsPerWeek": {
+            "type": "integer"
+          },
+          "materialFiles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "用户提供的数据表或过往内容清单文件"
+          }
+        },
+        "required": [
+          "niche"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "deliveryFormat": "conceptual-human-delivery",
+        "description": "面向用户的中文交付，字段与 AGENT.md「我会给你什么」一致；每个选题的判断标准相对用户自己的基线，不给绝对数字。",
+        "properties": {
+          "diagnosis": {
+            "type": "string"
+          },
+          "blockingQuestion": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "会影响方向的关键缺项；普通表达选择可说明假设，不把沉默当批准"
+          },
+          "assumptions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "topics": {
+            "type": "array",
+            "minItems": 5,
+            "items": {
+              "type": "object",
+              "properties": {
+                "workingTitle": {
+                  "type": "string"
+                },
+                "angle": {
+                  "type": "string"
+                },
+                "audienceScene": {
+                  "type": "string"
+                },
+                "trafficType": {
+                  "type": "string",
+                  "description": "搜索 / 推荐 / 粉丝，可组合"
+                },
+                "format": {
+                  "type": "string"
+                },
+                "successSignal": {
+                  "type": "string"
+                },
+                "scheduledSlot": {
+                  "type": "string"
+                },
+                "materials": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "workingTitle",
+                "angle",
+                "audienceScene",
+                "trafficType",
+                "format",
+                "successSignal",
+                "scheduledSlot"
+              ]
+            }
+          },
+          "blockedTopics": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "originalIdea": {
+                  "type": "string"
+                },
+                "reason": {
+                  "type": "string"
+                },
+                "alternativeAngle": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "schedule": {
+            "type": "string"
+          },
+          "reviewRule": {
+            "type": "string"
+          },
+          "executionAuthorized": {
+            "const": false
+          }
+        },
+        "required": [
+          "diagnosis",
+          "topics",
+          "schedule",
+          "reviewRule"
+        ]
+      },
+      "permissions": [
+        "filesystem:read-user-materials",
+        "network:read-web-search"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "选题落到医疗、法律或金融结论（用药、诊断、能否起诉、投资收益等）：停下，说明原因并给替代角度，由用户决定",
+          "选题围绕真实第三方（具体的人、品牌、事件当事人）展开争议：先问用户再排"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

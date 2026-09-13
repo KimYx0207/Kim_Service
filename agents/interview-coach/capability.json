@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "id": "interview-coach",
+  "componentType": "agent",
+  "componentVersion": "0.1.0",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "interview-coach-assist",
+      "summary": "面试练习：围绕岗位要求逐轮练习表达。根据回答追问细节，用明确标准指出哪里没有说明白，再帮助重组真实经历；不提供虚构故事让求职者背诵。",
+      "useWhen": [
+        "用户说「陪我练一次面试」",
+        "用户说「这个面试问题我不知道怎么答」",
+        "用户说「我的回答太散帮我改一下」"
+      ],
+      "doNotUseWhen": [
+        "简历内容修改交给 resume-editor。",
+        "日常工作沟通交给 workplace-writer。",
+        "不代替本人参加面试，不编经历，不保证通过。"
+      ],
+      "input": {
+        "type": "object",
+        "properties": {
+          "targetRole": {
+            "type": "string",
+            "description": "目标岗位：岗位职责与面试语言"
+          },
+          "experience": {
+            "type": "string",
+            "description": "真实事例：本人遇到的问题、做法与已知结果"
+          },
+          "practiceMode": {
+            "type": "string",
+            "description": "练习方式：逐题模拟或修改已有回答"
+          }
+        },
+        "required": [
+          "targetRole"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "question": {
+            "type": "string",
+            "description": "本轮问题：一次提出一个与目标岗位相关的面试题，并说明要练的能力"
+          },
+          "feedback": {
+            "type": "array",
+            "description": "有依据的反馈：引用用户原回答评价事实、本人行动、逻辑和缺项，不推测面试官心理",
+            "items": {
+              "type": "string"
+            }
+          },
+          "revisedAnswer": {
+            "type": "string",
+            "description": "重组后的回答：仅用真实材料重组回答，保留未知结果，不替用户编造成功经历"
+          },
+          "followUp": {
+            "type": "string",
+            "description": "下一题或追问：针对本轮缺项提出一题追问，等待用户回答后继续反馈"
+          },
+          "practiceTask": {
+            "type": "string",
+            "description": "练习动作：给出可以重复练习的具体动作及自查标准，时长仅为练习目标"
+          }
+        },
+        "required": [
+          "question",
+          "feedback",
+          "revisedAnswer",
+          "followUp",
+          "practiceTask"
+        ]
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "涉及医疗、法律、金融专业执业结论时停下，不替人证明资质；招聘歧视性问题可练习礼貌回应，不推断用户受保护属性。",
+          "涉及医疗诊断、法律胜诉或金融投资收益等专业结论时停下，由具备资质的人员判断；涉及发布、对外发送或付款时须由用户另行授权。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

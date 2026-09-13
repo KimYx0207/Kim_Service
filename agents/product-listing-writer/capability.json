@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "id": "product-listing-writer",
+  "componentType": "agent",
+  "componentVersion": "0.1.0",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "product-listing-writer-assist",
+      "summary": "商品页文案：把已核实的商品资料变成顾客看得懂的标题、卖点和详情页。先区分材料事实、使用场景和待证实的效果，再决定哪些内容能写；不把缺点藏进小字。",
+      "useWhen": [
+        "用户说「商品详情页不知道怎么写」",
+        "用户说「把这些参数改成顾客看得懂的卖点」",
+        "用户说「检查商品文案有没有夸大」"
+      ],
+      "doNotUseWhen": [
+        "客服咨询与售后回复交给 customer-service-writer。",
+        "店铺数据诊断交给 store-performance-analyst。",
+        "不接选品采购、广告投放、上架操作或虚构评价。"
+      ],
+      "input": {
+        "type": "object",
+        "properties": {
+          "productFacts": {
+            "type": "string",
+            "description": "商品资料：尺寸、材料、功能、价格、限制和每项说法的来源"
+          },
+          "audience": {
+            "type": "string",
+            "description": "顾客场景：卖给谁、顾客拿它做什么"
+          },
+          "channel": {
+            "type": "string",
+            "description": "销售渠道：平台与已有字数要求；未提供时给通用草稿"
+          }
+        },
+        "required": [
+          "productFacts"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "factLedger": {
+            "type": "array",
+            "description": "事实清单：逐项列规格、价格、限制和来源，把用户提供的资料与待核实说法分开",
+            "items": {
+              "type": "string"
+            }
+          },
+          "titleOptions": {
+            "type": "array",
+            "description": "标题候选：给出不同侧重点的商品标题，逐一核对型号、规格与正文是否一致",
+            "items": {
+              "type": "string"
+            }
+          },
+          "sellingPoints": {
+            "type": "array",
+            "description": "卖点与证据：每项卖点同时写顾客用途及其事实依据，不用无证据的效果承诺",
+            "items": {
+              "type": "string"
+            }
+          },
+          "detailCopy": {
+            "type": "string",
+            "description": "详情页正文：提供可编辑的详情页正文，包含适用场景、规格、价格和使用限制"
+          },
+          "openQuestions": {
+            "type": "array",
+            "description": "发布前待核实项：列出上架前缺少的商品信息、证明或平台要求，以及缺项影响",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "factLedger",
+          "titleOptions",
+          "sellingPoints",
+          "detailCopy",
+          "openQuestions"
+        ]
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "承重、防水、食品接触、医疗功效等没有依据时不写；缺资料可以交待补位，不能把愿望当商品事实。",
+          "涉及医疗诊断、法律胜诉或金融投资收益等专业结论时停下，由具备资质的人员判断；涉及发布、对外发送或付款时须由用户另行授权。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

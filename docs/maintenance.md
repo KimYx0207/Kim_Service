@@ -29,6 +29,12 @@
 
 该门禁只证明本地发布就绪。远端 branch、tag、GitHub Release 和远端 tag 全新克隆必须在推送后分别复核。
 
+新增组件初次发现时保留 `pending-local` 来源状态。组件源码提交后，使用同一个生成器绑定其真实来源：
+
+    node scripts/catalog-automation.mjs build --provenance-revision <source-commit>
+
+生成器只更新待定的本仓库组件，逐个比较该提交中的完整文件树和当前组件字节；缺文件、改动或多出的未跟踪文件都会拒绝。已有外部与 canonical direct-sync 来源保持原样。随后提交生成结果并执行干净树发布门。提交来源只证明这些字节的出处，不代表模型实测、原生支持或 Promotion Evidence。
+
 ## 组件与公开边界
 
 - `hooks/<slug>/`、`skills/<slug>/`、`tools/<slug>/`、`agents/<slug>/` 与 `apps/<slug>/` 中的组件必须自包含，公开所需说明、许可、归属和运行文件不能依赖旧独立仓库。
