@@ -2,16 +2,20 @@
 
 Kim Service uses one repository-level two-part public version (`V<major>.<minor>`) and one GitHub Release for the professional-capability dependency repository. Component CHANGELOG files record component provenance; this file is the release-note authority.
 
-## Unreleased - 2026-08-09
+## V1.2 - 2026-09-14
 
 ### Affected components
 
 - Repository capability discovery and release gates.
+- Fifteen standalone Agent packs for creators, ecommerce, job seeking and workplace writing, education, and side businesses.
 - HookPrompt, Find Skill, GoalPro, Kim Decision, and Semgrep Skill.
 - Claude Code - Codex - Gemini Tool.
 
 ### User-visible changes
 
+- Added a plain-language Agent directory for choosing common deliverables: topics, titles, scripts, listings, customer replies, shop analysis, resumes, interviews, workplace documents, lessons, explanations, exercises, business evaluation, launch plans, and pricing.
+- Each Agent includes an independent contract, complete example, self-contained validation, and license. Native loading and model delivery remain `needs_probe`; a published package is not a live-runtime certification.
+- Consumers can discover the packages through `generated/capabilities.json`; Meta_Kim owns cross-package selection and governance.
 - Added Chinese and English guidance explaining that `{}` is the expected skip result for short text without a clear task.
 - Added a positive PowerShell verification command that passes a real task as `UserPromptSubmit` JSON through standard input.
 - Clarified that positional arguments such as `node user-prompt-submit.js "test"` do not exercise the HookPrompt input protocol.
@@ -30,15 +34,18 @@ Kim Service uses one repository-level two-part public version (`V<major>.<minor>
 
 - HookPrompt tests passed 32/32.
 - The course task sentence returned `hookSpecificOutput` and `additionalContext` through the documented PowerShell route.
-- Automatic discovery found 10 components and 25 Capabilities; catalog freshness and repository security gates passed.
-- All 23 declared component validation files exited successfully; this does not replace Promotion Evidence.
+- Automatic discovery found 25 components and 40 Capabilities; catalog freshness and repository security gates passed.
+- All 38 declared component validation files exited successfully. One directory-symlink installer case was skipped because this Windows host cannot create the required link; the separately enabled local CLI version probe passed. These checks do not replace Promotion Evidence.
+- Catalog and provenance regressions passed 31/31, including rejection of edited, untracked, and absent component files before binding a source commit.
 - The Claude Code - Codex - Gemini Tool passed 29/29 tests, including no-shell local CLI version probes without model invocation.
 - The bundled Semgrep rules detected the vulnerable fixture and did not flag the safe fixture.
 
 ### Source revisions
 
 - HookPrompt: `83299e7094937f8d0179ff60d304c1c5a25a5740`.
-- Claude Code - Codex - Gemini pinned upstream: `fce3202fc48d98173d8756f8002809cefb28fca5`; Kim Service adaptation remains `pending-local` until promotion and release provenance are finalized.
+- Claude Code - Codex - Gemini pinned upstream: `fce3202fc48d98173d8756f8002809cefb28fca5`.
+- The Kim Service Tool adaptation and fifteen Agent packs are content-matched to source commit `01dbd38683d9bc8fb8cb393eff787fd279f9a058` by the catalog generator. Source provenance does not promote runtime or model capability claims.
+- Preserved remote README badge revisions through `d218f4b50cb9015004492a321669112183dc37c5`.
 
 ## V1.1 - 2026-07-15
 
