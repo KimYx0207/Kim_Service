@@ -1,0 +1,152 @@
+{
+  "schemaVersion": 1,
+  "id": "hookprompt",
+  "componentType": "hook",
+  "componentVersion": "1.2.11",
+  "entrypoint": ".claude/hooks/user-prompt-submit.js",
+  "capabilities": [
+    {
+      "id": "prompt-enhancement",
+      "summary": "Transforms an eligible UserPromptSubmit prompt into structured additionalContext that asks the host model to clarify the task before executing it.",
+      "useWhen": [
+        "A user submits a substantive task prompt that benefits from explicit context, task, format, scope, success criteria, and verification guidance.",
+        "A short prompt still expresses diagnostic, repair, review, or optimization intent, such as 这个不行 or 报错了."
+      ],
+      "doNotUseWhen": [
+        "The input is a simple acknowledgement or confirmation such as 好, 继续, or ok.",
+        "The input is an ordinary slash command, a recognized host-internal message, or Codex goal-continuation context.",
+        "The caller expects HookPrompt itself to perform the requested task; it only injects instructions for the host model."
+      ],
+      "input": {
+        "type": "object",
+        "required": [
+          "prompt"
+        ],
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "User prompt supplied directly or extracted from a supported UserPromptSubmit JSON payload."
+          }
+        }
+      },
+      "output": {
+        "type": "object",
+        "required": [],
+        "description": "Union result: an enhanced prompt returns hookSpecificOutput; a filtered prompt, missing template, or fail-open error returns {}.",
+        "oneOf": [
+          {
+            "required": [
+              "hookSpecificOutput"
+            ]
+          },
+          {
+            "maxProperties": 0
+          }
+        ],
+        "properties": {
+          "hookSpecificOutput": {
+            "type": "object",
+            "required": [
+              "hookEventName",
+              "additionalContext"
+            ],
+            "properties": {
+              "hookEventName": {
+                "const": "UserPromptSubmit"
+              },
+              "additionalContext": {
+                "type": "string"
+              }
+            },
+            "description": "Enhanced UserPromptSubmit response. Filtered and fail-open outcomes use the other union branch and return {}."
+          }
+        }
+      },
+      "permissions": [
+        "Read the bundled .claude/prompt-optimizer-meta.md template.",
+        "If the bundled template is absent, optionally read .claude/prompt-optimizer-meta.md from the current user home directory.",
+        "Only when HOOKPROMPT_DEBUG=1, create and maintain sanitized fixed-name debug metadata files below the operating-system temporary directory."
+      ],
+      "sideEffects": [
+        "Injects structured instructions into the current UserPromptSubmit additionalContext; it does not execute the user's requested task.",
+        "Only when HOOKPROMPT_DEBUG=1, writes fixed-name sanitized event and length metadata under the operating-system temporary directory with rotation and seven-day retention."
+      ],
+      "humanGate": {
+        "required": false,
+        "when": []
+      },
+      "validation": [
+        "test-hook.js"
+      ]
+    },
+    {
+      "id": "assistant-display-contract",
+      "summary": "Supplies a first-response display contract for the host model: original input, optimized understanding, complete optimized prompt, then task execution.",
+      "useWhen": [
+        "HookPrompt processes an eligible user prompt and the host supports UserPromptSubmit additionalContext.",
+        "The user should be able to see how the original request was interpreted before the host model continues the real task."
+      ],
+      "doNotUseWhen": [
+        "The input was filtered and HookPrompt returned an empty object.",
+        "The host does not consume hookSpecificOutput.additionalContext.",
+        "A caller requires HookPrompt to guarantee the model's rendered reply; HookPrompt can supply the contract but cannot enforce host-model compliance."
+      ],
+      "input": {
+        "type": "object",
+        "required": [
+          "prompt"
+        ],
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "Eligible user prompt preserved inside a safe Markdown fence."
+          }
+        }
+      },
+      "output": {
+        "type": "object",
+        "required": [],
+        "description": "Union result: an eligible prompt returns hookSpecificOutput; a filtered prompt, missing template, or fail-open error returns {}.",
+        "oneOf": [
+          {
+            "required": [
+              "hookSpecificOutput"
+            ]
+          },
+          {
+            "maxProperties": 0
+          }
+        ],
+        "properties": {
+          "hookSpecificOutput": {
+            "type": "object",
+            "required": [
+              "hookEventName",
+              "additionalContext"
+            ],
+            "properties": {
+              "hookEventName": {
+                "const": "UserPromptSubmit"
+              },
+              "additionalContext": {
+                "type": "string"
+              }
+            },
+            "description": "Eligible UserPromptSubmit additionalContext containing the one-time display instructions and safely fenced original prompt."
+          }
+        }
+      },
+      "permissions": [],
+      "sideEffects": [
+        "Influences the host model's first visible response through additionalContext; HookPrompt does not directly render or send that response."
+      ],
+      "humanGate": {
+        "required": false,
+        "when": []
+      },
+      "validation": [
+        "test-hook.js"
+      ]
+    }
+  ]
+}

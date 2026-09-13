@@ -1,0 +1,2356 @@
+{
+  "capabilities": [
+    {
+      "componentContentSha256": "ff059e34ab959b15dce1bf1c8845703d627d8f148f5a0ca190ae967426c0d81e",
+      "componentId": "agent-teams-playbook",
+      "componentPath": "skills/agent-teams-playbook",
+      "componentType": "skill",
+      "componentVersion": "4.8.0",
+      "contractSha256": "c3424584767282a7e0275a224e2bc45230149327f8d6c8109263ce8b15ac9d2c",
+      "doNotUseWhen": [
+        "单 Agent 可以直接完成的一次性问答或单文件小改动",
+        "宿主没有真实的子 Agent 能力且任务也不值得采用分阶段降级流程",
+        "任务是在设计 Meta_Kim Router、Promotion 规则或其他产品级路由系统"
+      ],
+      "entrypoint": "SKILL.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "任务拆分计划尚未被用户确认且宿主或项目规则没有授权直接执行",
+          "任一子任务涉及删除、覆盖、发布、生产环境、密钥、付款或扩大权限",
+          "需要安装外部能力或执行现有授权范围外的写入"
+        ]
+      },
+      "id": "agent-teams-orchestrate",
+      "input": {
+        "properties": {
+          "constraints": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "hostCapabilities": {
+            "type": "object"
+          },
+          "successCriteria": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "task": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "task"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "deliveryFormat": "conceptual-human-delivery",
+        "description": "Conceptual sections for the orchestrating host's human-readable delivery. The Skill itself does not provide an Adapter that guarantees a strict JSON envelope.",
+        "properties": {
+          "assignments": {
+            "type": "array"
+          },
+          "degradations": {
+            "type": "array"
+          },
+          "mode": {
+            "type": "string"
+          },
+          "plan": {
+            "type": "array"
+          },
+          "results": {
+            "type": "array"
+          },
+          "verification": {
+            "type": "array"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read",
+        "filesystem:write-planning-artifacts",
+        "runtime:discover-capabilities",
+        "runtime:spawn-agents",
+        "runtime:message-agents"
+      ],
+      "sideEffects": [
+        "可按宿主真实能力启动独立子 Agent 并消耗相应运行资源",
+        "可在项目规则允许时创建或更新任务规划与进度文件",
+        "受委派 Agent 可能在各自明确的文件边界内产生变更"
+      ],
+      "summary": "为复杂任务设计并执行跨宿主的多 Agent 分工、并行协作、结果汇总与质量闸门。",
+      "useWhen": [
+        "任务可拆成多个边界清晰且适合并行或独立评审的子任务",
+        "用户明确要求多 Agent、Agent Teams、swarm、并行协作或团队编排",
+        "复杂交付需要角色分工、阶段计划、失败处理和主线程最终验收"
+      ],
+      "validation": [
+        "tests/runtime-contracts.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "6222ff90fab7558b5cee1d33ef252f6bf0f353cb955cc2a5dcabe3e47896c189",
+      "componentId": "semgrep-skill",
+      "componentPath": "skills/semgrep-skill",
+      "componentType": "skill",
+      "componentVersion": "1.0.0",
+      "contractSha256": "e2d8ce75a50ca03892a67a845073f7b46654904612c4fa7478203d6f506ba368",
+      "doNotUseWhen": [
+        "The target contains unknown, modified, linked, or unreceipted content.",
+        "The caller has not approved the write or expects Semgrep, remote rules, or the legacy code-security directory to be changed."
+      ],
+      "entrypoint": "SKILL.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "Before passing --apply for a project installation or upgrade.",
+          "Before passing --apply at user scope, which affects all projects for that user."
+        ]
+      },
+      "id": "apply-skill-installation",
+      "input": {
+        "properties": {
+          "apply": {
+            "const": true
+          },
+          "projectRoot": {
+            "type": "string"
+          },
+          "scope": {
+            "enum": [
+              "project",
+              "user"
+            ]
+          }
+        },
+        "required": [
+          "scope",
+          "apply"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "properties": {
+          "action": {
+            "const": "install"
+          },
+          "mode": {
+            "const": "apply"
+          },
+          "ok": {
+            "type": "boolean"
+          },
+          "target": {
+            "type": "string"
+          },
+          "targetHash": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ok",
+          "action",
+          "mode",
+          "target",
+          "targetHash"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "Read the component source and selected installation target.",
+        "Write only the selected semgrep-skill target and installer-owned backup directory."
+      ],
+      "sideEffects": [
+        "Creates or replaces the selected Skill projection and writes a receipt.",
+        "On upgrade, retains the verified previous installation for rollback."
+      ],
+      "summary": "Install or upgrade the Skill projection at an explicitly selected project or user scope after approval; this does not install Semgrep.",
+      "useWhen": [
+        "The caller approved applying a previously previewed project-scoped or user-scoped semgrep-skill installation."
+      ],
+      "validation": [
+        "tests/test_installer.py"
+      ]
+    },
+    {
+      "componentContentSha256": "6222ff90fab7558b5cee1d33ef252f6bf0f353cb955cc2a5dcabe3e47896c189",
+      "componentId": "semgrep-skill",
+      "componentPath": "skills/semgrep-skill",
+      "componentType": "skill",
+      "componentVersion": "1.0.0",
+      "contractSha256": "e2d8ce75a50ca03892a67a845073f7b46654904612c4fa7478203d6f506ba368",
+      "doNotUseWhen": [
+        "The current or previous installation is missing, modified, linked, unknown, or unreceipted.",
+        "The caller has not approved replacing the current projection."
+      ],
+      "entrypoint": "SKILL.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "Before passing --rollback with --apply at project or user scope."
+        ]
+      },
+      "id": "apply-skill-rollback",
+      "input": {
+        "properties": {
+          "apply": {
+            "const": true
+          },
+          "projectRoot": {
+            "type": "string"
+          },
+          "rollback": {
+            "const": true
+          },
+          "scope": {
+            "enum": [
+              "project",
+              "user"
+            ]
+          }
+        },
+        "required": [
+          "scope",
+          "apply",
+          "rollback"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "properties": {
+          "action": {
+            "const": "rollback"
+          },
+          "mode": {
+            "const": "apply"
+          },
+          "ok": {
+            "type": "boolean"
+          },
+          "target": {
+            "type": "string"
+          },
+          "targetHash": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ok",
+          "action",
+          "mode",
+          "target",
+          "targetHash"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "Read the current and receipted previous installation.",
+        "Replace only the selected semgrep-skill target and installer-owned backup entries."
+      ],
+      "sideEffects": [
+        "Restores the previous projection and retains the displaced current projection as a backup."
+      ],
+      "summary": "Restore the receipted previous Skill projection after explicit approval while preserving the displaced current version.",
+      "useWhen": [
+        "A validated previous installation exists and the caller approved restoring it."
+      ],
+      "validation": [
+        "tests/test_installer.py"
+      ]
+    },
+    {
+      "componentContentSha256": "2ab0e19b9cc1a743fb5865083773c78f0c133d1dc5b4c2200f603e38965f527b",
+      "componentId": "hookprompt",
+      "componentPath": "hooks/hookprompt",
+      "componentType": "hook",
+      "componentVersion": "1.2.11",
+      "contractSha256": "870987b9ccf6f92b3dad39bf2a9bcb60d068aaeaf2b3fa68d70848f50991c4b4",
+      "doNotUseWhen": [
+        "The input was filtered and HookPrompt returned an empty object.",
+        "The host does not consume hookSpecificOutput.additionalContext.",
+        "A caller requires HookPrompt to guarantee the model's rendered reply; HookPrompt can supply the contract but cannot enforce host-model compliance."
+      ],
+      "entrypoint": ".claude/hooks/user-prompt-submit.js",
+      "humanGate": {
+        "required": false,
+        "when": []
+      },
+      "id": "assistant-display-contract",
+      "input": {
+        "properties": {
+          "prompt": {
+            "description": "Eligible user prompt preserved inside a safe Markdown fence.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "prompt"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "description": "Union result: an eligible prompt returns hookSpecificOutput; a filtered prompt, missing template, or fail-open error returns {}.",
+        "oneOf": [
+          {
+            "required": [
+              "hookSpecificOutput"
+            ]
+          },
+          {
+            "maxProperties": 0
+          }
+        ],
+        "properties": {
+          "hookSpecificOutput": {
+            "description": "Eligible UserPromptSubmit additionalContext containing the one-time display instructions and safely fenced original prompt.",
+            "properties": {
+              "additionalContext": {
+                "type": "string"
+              },
+              "hookEventName": {
+                "const": "UserPromptSubmit"
+              }
+            },
+            "required": [
+              "hookEventName",
+              "additionalContext"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "permissions": [],
+      "sideEffects": [
+        "Influences the host model's first visible response through additionalContext; HookPrompt does not directly render or send that response."
+      ],
+      "summary": "Supplies a first-response display contract for the host model: original input, optimized understanding, complete optimized prompt, then task execution.",
+      "useWhen": [
+        "HookPrompt processes an eligible user prompt and the host supports UserPromptSubmit additionalContext.",
+        "The user should be able to see how the original request was interpreted before the host model continues the real task."
+      ],
+      "validation": [
+        "test-hook.js"
+      ]
+    },
+    {
+      "componentContentSha256": "b08827410643495d6043cdce836ba013dceb1a09105a8714380f69532b9370c1",
+      "componentId": "claudecode-codex-gemini",
+      "componentPath": "tools/claudecode-codex-gemini",
+      "componentType": "tool",
+      "componentVersion": "1.0.0-kim-service.1",
+      "contractSha256": "a5c633d21f8ff0a8c34bf2f1665591a2f40a7d97538db0f0ba03a7ef9b2aa459",
+      "doNotUseWhen": [
+        "Codex is not installed or the requested working directory is outside the declared workspace root.",
+        "The caller expects Kim Service to route or finally approve the work."
+      ],
+      "entrypoint": "cli.mjs",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "Before selecting workspace-write.",
+          "Before accepting any downstream Codex action requiring approval."
+        ]
+      },
+      "id": "bridge-codex-cli",
+      "input": {
+        "required": [
+          "prompt"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "required": [
+          "content"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "Execute the local codex executable.",
+        "Read and possibly modify files only according to the selected Codex sandbox inside the declared workspace root."
+      ],
+      "sideEffects": [
+        "May launch a Codex child process.",
+        "May change workspace files when workspace-write is explicitly selected."
+      ],
+      "summary": "Expose a bounded MCP stdio tool that invokes the local Codex CLI without a command shell.",
+      "useWhen": [
+        "A trusted MCP host needs to delegate a coding request to an already installed Codex CLI."
+      ],
+      "validation": [
+        "tests/mcp-server.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "b08827410643495d6043cdce836ba013dceb1a09105a8714380f69532b9370c1",
+      "componentId": "claudecode-codex-gemini",
+      "componentPath": "tools/claudecode-codex-gemini",
+      "componentType": "tool",
+      "componentVersion": "1.0.0-kim-service.1",
+      "contractSha256": "a5c633d21f8ff0a8c34bf2f1665591a2f40a7d97538db0f0ba03a7ef9b2aa459",
+      "doNotUseWhen": [
+        "The caller requests automatic approval mode, unrestricted environment forwarding, or a working directory outside the workspace root."
+      ],
+      "entrypoint": "cli.mjs",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "Before enabling Gemini workspace mutation or proxy forwarding.",
+          "Before accepting any downstream action that changes the environment."
+        ]
+      },
+      "id": "bridge-gemini-cli",
+      "input": {
+        "required": [
+          "prompt"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "required": [
+          "content"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "Execute the local gemini executable.",
+        "Read files exposed by the Gemini CLI sandbox and declared workspace root."
+      ],
+      "sideEffects": [
+        "May launch a Gemini child process.",
+        "May use a validated proxy only when the operator explicitly enables proxy forwarding."
+      ],
+      "summary": "Expose a bounded MCP stdio tool that invokes the local Gemini CLI without shell command composition.",
+      "useWhen": [
+        "A trusted MCP host needs a local Gemini review or analysis through the installed CLI."
+      ],
+      "validation": [
+        "tests/mcp-server.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "52760525e6b766b567a15b6b96ff81ed56e8733d32e3ea566c85675bdb207091",
+      "componentId": "goalpro",
+      "componentPath": "skills/goalpro",
+      "componentType": "skill",
+      "componentVersion": "0.1.3",
+      "contractSha256": "6920555d7b546b9cb3e6ee919de6b019498f4a2c03f99e7f01570fd33e85f7dd",
+      "doNotUseWhen": [
+        "The user wants product or business decision analysis rather than a prompt artifact; use Kim Decision instead.",
+        "The request is to select components, route work, coordinate cross-component state, execute the task, perform research, or make the final acceptance decision."
+      ],
+      "entrypoint": "SKILL.md",
+      "humanGate": {
+        "required": false,
+        "when": []
+      },
+      "id": "goalpro-goal-prompt",
+      "input": {
+        "properties": {
+          "providedContext": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "request": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "request"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "deliveryFormat": "conceptual-human-delivery",
+        "description": "Conceptual structure for a human-readable Goal Prompt. This prompt-only Skill has no Adapter that guarantees a strict JSON envelope.",
+        "properties": {
+          "artifactType": {
+            "enum": [
+              "goal-prompt",
+              "draft-goal",
+              "research-plan"
+            ]
+          },
+          "content": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "evidenceStatus": {
+            "enum": [
+              "sufficient",
+              "insufficient"
+            ]
+          },
+          "executionAuthorized": {
+            "const": false
+          }
+        },
+        "required": [
+          "content"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "read-only access to explicitly scoped context",
+        "read-only public research when current facts are required to write an evidence-bounded prompt and the host provides a research tool"
+      ],
+      "sideEffects": [],
+      "summary": "Create the Goal Prompt half of GoalPro's default two-prompt delivery without executing the target task.",
+      "useWhen": [
+        "The user asks to write, improve, or repair a goal, task prompt, or execution contract.",
+        "A task needs explicit scope, evidence, stop conditions, and verification instructions before another actor executes it."
+      ],
+      "validation": [
+        "tests/behavior.test.mjs",
+        "tests/boundary.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "52760525e6b766b567a15b6b96ff81ed56e8733d32e3ea566c85675bdb207091",
+      "componentId": "goalpro",
+      "componentPath": "skills/goalpro",
+      "componentType": "skill",
+      "componentVersion": "0.1.3",
+      "contractSha256": "6920555d7b546b9cb3e6ee919de6b019498f4a2c03f99e7f01570fd33e85f7dd",
+      "doNotUseWhen": [
+        "The user is asking GoalPro to run the loop, schedule automation, route components, execute fixes, or accept the final result."
+      ],
+      "entrypoint": "SKILL.md",
+      "humanGate": {
+        "required": false,
+        "when": []
+      },
+      "id": "goalpro-loop-prompt",
+      "input": {
+        "properties": {
+          "continuationNeed": {
+            "enum": [
+              "default-goalpro-delivery",
+              "explicit-loop-request"
+            ]
+          },
+          "previousResult": {
+            "type": "string"
+          },
+          "request": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "request",
+          "continuationNeed"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "deliveryFormat": "conceptual-human-delivery",
+        "description": "Conceptual structure for a human-readable Loop Prompt. This prompt-only Skill has no Adapter that guarantees a strict JSON envelope.",
+        "properties": {
+          "artifactType": {
+            "const": "loop-prompt"
+          },
+          "content": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "continuationNeed": {
+            "enum": [
+              "default-goalpro-delivery",
+              "explicit-loop-request"
+            ]
+          },
+          "executionAuthorized": {
+            "const": false
+          }
+        },
+        "required": [
+          "content"
+        ],
+        "type": "object"
+      },
+      "permissions": [],
+      "sideEffects": [],
+      "summary": "Create the Loop Prompt half of GoalPro's default two-prompt delivery, or a Loop Prompt requested on its own.",
+      "useWhen": [
+        "GoalPro is producing its default Goal Prompt plus Loop Prompt delivery.",
+        "The user explicitly asks for a Loop Prompt on its own and provides the previous result or Next LOOP packet."
+      ],
+      "validation": [
+        "tests/behavior.test.mjs",
+        "tests/boundary.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "b08827410643495d6043cdce836ba013dceb1a09105a8714380f69532b9370c1",
+      "componentId": "claudecode-codex-gemini",
+      "componentPath": "tools/claudecode-codex-gemini",
+      "componentType": "tool",
+      "componentVersion": "1.0.0-kim-service.1",
+      "contractSha256": "a5c633d21f8ff0a8c34bf2f1665591a2f40a7d97538db0f0ba03a7ef9b2aa459",
+      "doNotUseWhen": [
+        "The target is a user-wide configuration directory, is not an existing directory, or contains conflicting files without explicit replacement approval."
+      ],
+      "entrypoint": "cli.mjs",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "Before apply.",
+          "Before replacing a conflicting file.",
+          "Before rollback."
+        ]
+      },
+      "id": "install-host-assets",
+      "input": {
+        "required": [
+          "mode",
+          "target"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "required": [
+          "mode",
+          "operations"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "Read bundled host assets.",
+        "On explicit apply or rollback, write only beneath the selected project root."
+      ],
+      "sideEffects": [
+        "Apply writes project-scoped Claude assets and a receipt.",
+        "Rollback restores receipt-backed files or removes files created by that receipt."
+      ],
+      "summary": "Plan, apply, and rollback project-scoped Claude command and Skill assets with hash receipts.",
+      "useWhen": [
+        "A project owner wants the bundled Claude commands and private orchestration Skill installed into one explicit project root."
+      ],
+      "validation": [
+        "tests/installer.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "558844fe908ab94ddcb8b43817c0971a14966c25be3e7b43749c309d296f7895",
+      "componentId": "kim-decision",
+      "componentPath": "skills/kim-decision",
+      "componentType": "skill",
+      "componentVersion": "0.0.0+imported.fbbe41c",
+      "contractSha256": "e5b0c96576781f5f674ca68500e813520e40a392085663563e023e55daeef12e",
+      "doNotUseWhen": [
+        "The requested artifact is a Goal Prompt or Loop Prompt; use GoalPro instead.",
+        "The request is to select or route components, coordinate a cross-component state machine, execute the recommendation, or claim final acceptance."
+      ],
+      "entrypoint": "SKILL.md",
+      "humanGate": {
+        "required": false,
+        "when": []
+      },
+      "id": "kim-decision-analysis",
+      "input": {
+        "properties": {
+          "constraints": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "context": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "decisionQuestion": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "evidence": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "decisionQuestion"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "decision-ready"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "verdict": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "evidence-required"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "evidence": {
+                  "properties": {
+                    "gaps": {
+                      "minItems": 1
+                    }
+                  }
+                },
+                "verdict": {
+                  "type": "null"
+                }
+              }
+            }
+          }
+        ],
+        "deliveryFormat": "conceptual-human-delivery",
+        "description": "Conceptual sections for the host model's human-readable decision analysis. This prompt-only Skill has no Adapter that guarantees a strict JSON envelope.",
+        "properties": {
+          "artifactType": {
+            "const": "decision-analysis"
+          },
+          "evidence": {
+            "additionalProperties": false,
+            "properties": {
+              "assumptions": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "confirmed": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "gaps": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "confirmed",
+              "assumptions",
+              "gaps"
+            ],
+            "type": "object"
+          },
+          "executionAuthorized": {
+            "const": false
+          },
+          "finalAcceptanceClaimed": {
+            "const": false
+          },
+          "nextAction": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "passSignal": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "decision-ready",
+              "evidence-required"
+            ]
+          },
+          "verdict": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "evidence",
+          "nextAction",
+          "passSignal"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "read-only access to explicitly scoped evidence",
+        "read-only public research when current facts are decision-critical and the host provides a research tool"
+      ],
+      "sideEffects": [],
+      "summary": "Analyze a product, business, content, pricing, scope, or strategy choice and return an evidence-bounded decision or evidence request.",
+      "useWhen": [
+        "The user needs a product, business, content, pricing, scope, monetization, or strategy decision.",
+        "A choice needs a verdict, evidence state, smallest useful next action, and pass or kill signal."
+      ],
+      "validation": [
+        "tests/behavior.test.mjs",
+        "tests/boundary.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "6222ff90fab7558b5cee1d33ef252f6bf0f353cb955cc2a5dcabe3e47896c189",
+      "componentId": "semgrep-skill",
+      "componentPath": "skills/semgrep-skill",
+      "componentType": "skill",
+      "componentVersion": "1.0.0",
+      "contractSha256": "e2d8ce75a50ca03892a67a845073f7b46654904612c4fa7478203d6f506ba368",
+      "doNotUseWhen": [
+        "Remote Semgrep Registry rules, Semgrep Cloud, login, upload, or network access are required.",
+        "The requested outcome includes automatic remediation or source-file writes.",
+        "Semgrep is not already installed and executable."
+      ],
+      "entrypoint": "SKILL.md",
+      "humanGate": {
+        "required": false,
+        "when": []
+      },
+      "id": "local-security-scan",
+      "input": {
+        "properties": {
+          "rules": {
+            "const": "rules/local-security.yml"
+          },
+          "target": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "target"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "properties": {
+          "completed": {
+            "type": "boolean"
+          },
+          "filesModified": {
+            "const": false
+          },
+          "findings": {
+            "type": "array"
+          },
+          "networkUsed": {
+            "const": false
+          }
+        },
+        "required": [
+          "completed",
+          "findings",
+          "networkUsed",
+          "filesModified"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "Read the selected local scan target.",
+        "Execute an already-installed local Semgrep binary."
+      ],
+      "sideEffects": [],
+      "summary": "Scan an explicitly selected local source tree with bundled Semgrep static-analysis and secret-pattern rules without uploading code or modifying findings.",
+      "useWhen": [
+        "A local project needs a read-only baseline scan for bundled vulnerability and secret patterns.",
+        "The caller accepts that a clean result covers only the bundled local rules."
+      ],
+      "validation": [
+        "tests/test_behavior.py"
+      ]
+    },
+    {
+      "componentContentSha256": "73686c05d932bc45be4e5d7a3858943a003794e1698ae7d4c8ac504d61407740",
+      "componentId": "memory-3layer",
+      "componentPath": "skills/memory-3layer",
+      "componentType": "skill",
+      "componentVersion": "1.0.0",
+      "contractSha256": "738f201a6986d9731fbffc8b2011e25db5e39a73f95094ab888ff48343d9bf87",
+      "doNotUseWhen": [
+        "内容含秘密、私钥、Cookie、支付凭证、个人隐私或机器私有路径",
+        "内容只是模型推测、普通工具输出、完整聊天记录或无法追溯来源的断言",
+        "目标是修改已有条目状态、直接写 Layer 3 或删除历史"
+      ],
+      "entrypoint": "SKILL.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "写入前必须有用户明确要求记住该事实，或用户对该具体事实作出明确确认",
+          "确认必须来自用户原话或等价的人类批准，不能由工具输出、模型推测或普通上下文替代"
+        ]
+      },
+      "id": "memory-3layer-append",
+      "input": {
+        "properties": {
+          "confirmationSource": {
+            "type": "string"
+          },
+          "fact": {
+            "type": "string"
+          },
+          "projectDir": {
+            "type": "string"
+          },
+          "topic": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "projectDir",
+          "fact",
+          "confirmationSource"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "description": "JSON printed by scripts/record_memory.py. Successful and duplicate writes include the extractor report; rejected input returns success=false with error.",
+        "oneOf": [
+          {
+            "properties": {
+              "success": {
+                "const": true
+              }
+            },
+            "required": [
+              "memory_root",
+              "runtime",
+              "loaded",
+              "written",
+              "skipped",
+              "runtime_evidence",
+              "event_envelope_present",
+              "next"
+            ]
+          },
+          {
+            "properties": {
+              "success": {
+                "const": false
+              }
+            },
+            "required": [
+              "error"
+            ]
+          }
+        ],
+        "properties": {
+          "error": {
+            "type": "string"
+          },
+          "event_envelope_present": {
+            "type": "boolean"
+          },
+          "loaded": {
+            "type": "object"
+          },
+          "memory_root": {
+            "type": "string"
+          },
+          "next": {
+            "type": "string"
+          },
+          "runtime": {
+            "type": "string"
+          },
+          "runtime_evidence": {
+            "type": "string"
+          },
+          "skipped": {
+            "type": "array"
+          },
+          "success": {
+            "type": "boolean"
+          },
+          "written": {
+            "type": "array"
+          }
+        },
+        "required": [
+          "success"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-project-memory",
+        "filesystem:create-memory-tree",
+        "filesystem:append-layer-one",
+        "filesystem:append-layer-two"
+      ],
+      "sideEffects": [
+        "首次记录时可在目标项目内初始化 .memory-3layer 目录",
+        "可新增 Layer 1 结构化事实并向当日 Layer 2 文件追加摘要"
+      ],
+      "summary": "把用户明确确认的事实写入 Layer 1，并向 Layer 2 追加可追溯的每日记录。",
+      "useWhen": [
+        "用户明确要求记住一条可复用事实或规则",
+        "需要通过受管记录器保存带来源、日期、topic 和状态的项目事实",
+        "需要对完全重复内容执行可报告的去重跳过"
+      ],
+      "validation": [
+        "evals/test_recording.py"
+      ]
+    },
+    {
+      "componentContentSha256": "73686c05d932bc45be4e5d7a3858943a003794e1698ae7d4c8ac504d61407740",
+      "componentId": "memory-3layer",
+      "componentPath": "skills/memory-3layer",
+      "componentType": "skill",
+      "componentVersion": "1.0.0",
+      "contractSha256": "738f201a6986d9731fbffc8b2011e25db5e39a73f95094ab888ff48343d9bf87",
+      "doNotUseWhen": [
+        "没有可追溯证据或结论仍是模型推测",
+        "目标是自动覆盖冲突事实或物理删除历史条目",
+        "用户尚未确认 Layer 3 写入或 active 到 superseded 的状态变化"
+      ],
+      "entrypoint": "SKILL.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "写入或修改 Layer 3 MEMORY.md",
+          "把现有事实从 active 改为 superseded",
+          "任何建议会改变长期记忆而不只是生成只读复查报告"
+        ]
+      },
+      "id": "memory-3layer-govern-long-term",
+      "input": {
+        "properties": {
+          "confirmedChanges": {
+            "type": "array"
+          },
+          "evidenceRefs": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "projectDir": {
+            "type": "string"
+          },
+          "reviewScope": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "projectDir",
+          "reviewScope",
+          "evidenceRefs"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "properties": {
+          "appliedChanges": {
+            "type": "array"
+          },
+          "pendingConfirmation": {
+            "type": "array"
+          },
+          "proposals": {
+            "type": "array"
+          },
+          "review": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "review",
+          "proposals",
+          "appliedChanges",
+          "pendingConfirmation"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-project-memory",
+        "filesystem:write-layer-three",
+        "filesystem:update-memory-status"
+      ],
+      "sideEffects": [
+        "经确认后可更新 MEMORY.md 中的长期隐性知识",
+        "经确认后可把旧事实状态改为 superseded，但保留历史条目"
+      ],
+      "summary": "复查冲突与过时条目，并在人工确认后提升 Layer 3 知识或把旧事实标记为 superseded。",
+      "useWhen": [
+        "用户要求复查三层记忆中的重复、冲突、趋势或过时条目",
+        "有可追溯证据支持把稳定经验提升为 Layer 3 长期知识",
+        "新事实与旧事实冲突且需要通过状态变化保留历史"
+      ],
+      "validation": [
+        "scripts/check_memory_3layer.py"
+      ]
+    },
+    {
+      "componentContentSha256": "73686c05d932bc45be4e5d7a3858943a003794e1698ae7d4c8ac504d61407740",
+      "componentId": "memory-3layer",
+      "componentPath": "skills/memory-3layer",
+      "componentType": "skill",
+      "componentVersion": "1.0.0",
+      "contractSha256": "738f201a6986d9731fbffc8b2011e25db5e39a73f95094ab888ff48343d9bf87",
+      "doNotUseWhen": [
+        "用户只要求读取或记录记忆而不需要安装运行时接线",
+        "项目根目录不明确、现有配置无法安全合并或目标宿主不受支持",
+        "目标是修改项目外全局配置或宣称未经观察的 Hook 已实际运行"
+      ],
+      "entrypoint": "SKILL.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "写入或合并项目的宿主 Hook 配置",
+          "安装目标已存在同名但内容不同的 Skill",
+          "宿主要求用户显式审查并信任项目 Hooks"
+        ]
+      },
+      "id": "memory-3layer-install-runtime",
+      "input": {
+        "properties": {
+          "host": {
+            "enum": [
+              "claude-code",
+              "codex",
+              "manual",
+              "both"
+            ]
+          },
+          "projectDir": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "projectDir",
+          "host"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "description": "JSON printed by scripts/install_memory_3layer.py. Success includes the selected platform, target paths, initialization, config changes, adapter reports, and next step; failure includes error.",
+        "oneOf": [
+          {
+            "properties": {
+              "success": {
+                "const": true
+              }
+            },
+            "required": [
+              "requested_platform",
+              "selected_platform",
+              "memory_dir",
+              "project_dir",
+              "initialized",
+              "gitignore_changed",
+              "adapters",
+              "manual",
+              "next"
+            ]
+          },
+          {
+            "properties": {
+              "success": {
+                "const": false
+              }
+            },
+            "required": [
+              "error"
+            ]
+          }
+        ],
+        "properties": {
+          "adapters": {
+            "type": "object"
+          },
+          "error": {
+            "type": "string"
+          },
+          "gitignore_changed": {
+            "type": "boolean"
+          },
+          "initialized": {
+            "type": "boolean"
+          },
+          "manual": {
+            "type": "boolean"
+          },
+          "memory_dir": {
+            "type": "string"
+          },
+          "next": {
+            "type": "string"
+          },
+          "project_dir": {
+            "type": "string"
+          },
+          "requested_platform": {
+            "type": "string"
+          },
+          "selected_platform": {
+            "type": "string"
+          },
+          "success": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "success"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-project-config",
+        "filesystem:write-project-hooks",
+        "filesystem:install-project-skill"
+      ],
+      "sideEffects": [
+        "可在项目内安装 Skill 文件并合并 .claude 或 .codex Hook 配置",
+        "Codex Hook 仍需用户在宿主界面审查并信任后才会实际运行"
+      ],
+      "summary": "把三层记忆核心与受支持宿主的 Hook 配置安全接线，并保持现有配置与无关 Hooks。",
+      "useWhen": [
+        "用户要求为 Claude Code 或 Codex 项目安装三层记忆生命周期接线",
+        "已确认项目根目录、目标宿主、Python 可用性和配置写权限",
+        "需要以 manual 模式安装核心而不伪装自动 Hook 支持"
+      ],
+      "validation": [
+        "evals/test_install_memory_3layer.py"
+      ]
+    },
+    {
+      "componentContentSha256": "73686c05d932bc45be4e5d7a3858943a003794e1698ae7d4c8ac504d61407740",
+      "componentId": "memory-3layer",
+      "componentPath": "skills/memory-3layer",
+      "componentType": "skill",
+      "componentVersion": "1.0.0",
+      "contractSha256": "738f201a6986d9731fbffc8b2011e25db5e39a73f95094ab888ff48343d9bf87",
+      "doNotUseWhen": [
+        "用户没有明确要求迁移",
+        "目标目录含冲突、非法状态、秘密、私有机器路径或不安全链接",
+        "用户要求覆盖目标文件或删除旧版源目录"
+      ],
+      "entrypoint": "SKILL.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "从 dry-run 计划进入实际迁移写入",
+          "迁移目标目录尚不存在并需要创建",
+          "源路径或目标路径不是项目默认路径"
+        ]
+      },
+      "id": "memory-3layer-migrate",
+      "input": {
+        "properties": {
+          "dryRun": {
+            "type": "boolean"
+          },
+          "projectDir": {
+            "type": "string"
+          },
+          "sourceDir": {
+            "type": "string"
+          },
+          "targetDir": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "projectDir"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "description": "JSON printed by scripts/migrate_legacy_memory.py for both dry-run and apply outcomes.",
+        "properties": {
+          "conflict": {
+            "type": "array"
+          },
+          "copied": {
+            "type": "array"
+          },
+          "invalid": {
+            "type": "array"
+          },
+          "skipped": {
+            "type": "array"
+          }
+        },
+        "required": [
+          "copied",
+          "skipped",
+          "conflict",
+          "invalid"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-legacy-memory",
+        "filesystem:create-memory-tree",
+        "filesystem:write-migrated-memory"
+      ],
+      "sideEffects": [
+        "可在目标项目内创建 .memory-3layer 并复制已识别的数据",
+        "不会覆盖目标冲突文件，也不会删除或修改 legacy 源目录"
+      ],
+      "summary": "把识别出的旧版 .claude/memory 数据非破坏性复制到 .memory-3layer，并报告冲突与跳过项。",
+      "useWhen": [
+        "项目存在旧版 .claude/memory 且用户明确要求迁移到平台中立目录",
+        "迁移源和目标都位于已确认的目标项目内",
+        "需要先 dry-run 查看可复制、跳过和冲突计划"
+      ],
+      "validation": [
+        "evals/test_migrate_legacy_memory.py"
+      ]
+    },
+    {
+      "componentContentSha256": "73686c05d932bc45be4e5d7a3858943a003794e1698ae7d4c8ac504d61407740",
+      "componentId": "memory-3layer",
+      "componentPath": "skills/memory-3layer",
+      "componentType": "skill",
+      "componentVersion": "1.0.0",
+      "contractSha256": "738f201a6986d9731fbffc8b2011e25db5e39a73f95094ab888ff48343d9bf87",
+      "doNotUseWhen": [
+        "任务与长期项目上下文无关",
+        "目标是读取秘密、完整聊天转储或未经授权的项目外数据",
+        "用户要求写入、迁移或更改记忆生命周期状态"
+      ],
+      "entrypoint": "SKILL.md",
+      "humanGate": {
+        "required": false,
+        "when": []
+      },
+      "id": "memory-3layer-read",
+      "input": {
+        "properties": {
+          "contextBudgetChars": {
+            "minimum": 1,
+            "type": "integer"
+          },
+          "memoryDir": {
+            "type": "string"
+          },
+          "projectDir": {
+            "type": "string"
+          },
+          "recentDays": {
+            "minimum": 0,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "projectDir"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "properties": {
+          "context": {
+            "type": "string"
+          },
+          "invalidFiles": {
+            "type": "array"
+          },
+          "resolvedRoot": {
+            "type": "string"
+          },
+          "runtimeEvidence": {
+            "type": "object"
+          },
+          "statistics": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "resolvedRoot",
+          "context",
+          "statistics",
+          "invalidFiles",
+          "runtimeEvidence"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-project-memory"
+      ],
+      "sideEffects": [],
+      "summary": "只读检查三层记忆状态，并按预算加载可追溯的 active 上下文。",
+      "useWhen": [
+        "项目已有 .memory-3layer 且当前任务需要恢复跨会话上下文",
+        "用户要求查看记忆状态、条目数量、日期范围或运行证据",
+        "需要在不改写损坏文件的前提下检查三层记忆"
+      ],
+      "validation": [
+        "evals/test_recording.py",
+        "scripts/check_memory_3layer.py"
+      ]
+    },
+    {
+      "componentContentSha256": "5221bdc113b4ad716c2faaa9ffa51aed025ed411695de66ce6ccd9eda10f4d3f",
+      "componentId": "meta-skill-creator",
+      "componentPath": "skills/meta-skill-creator",
+      "componentType": "skill",
+      "componentVersion": "1.0.0",
+      "contractSha256": "2e79bd73c54cb7113f27f35d02477d0fb5eeaf46544c975ac12dc5878044d910",
+      "doNotUseWhen": [
+        "任务是一次性提示词改写且没有可重复工作流",
+        "目标、用户、压力场景、可观察产物和成功标准均未定义",
+        "用户要求该能力替代 Meta_Kim Router 或自动做最终 Promotion 决定"
+      ],
+      "entrypoint": "SKILL.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "需要删除、覆盖或大范围重构既有 Skill 资产",
+          "需要联网研究、安装依赖或写入目标 Skill 包之外的路径",
+          "候选设计会实质改变产品范围、兼容性或公开边界"
+        ]
+      },
+      "id": "meta-skill-create-refactor",
+      "input": {
+        "properties": {
+          "constraints": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "hosts": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "successCriteria": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "targetSkillPath": {
+            "type": "string"
+          },
+          "workflowEvidence": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "workflowEvidence",
+          "targetSkillPath",
+          "successCriteria"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "deliveryFormat": "conceptual-human-delivery",
+        "description": "Conceptual sections for a human-readable Skill creation or refactor delivery. No package Adapter guarantees a strict JSON envelope.",
+        "properties": {
+          "changedFiles": {
+            "type": "array"
+          },
+          "packageDecision": {
+            "type": "string"
+          },
+          "progressiveLoading": {
+            "type": "array"
+          },
+          "remainingGaps": {
+            "type": "array"
+          },
+          "triggerBoundary": {
+            "type": "object"
+          },
+          "validationPlan": {
+            "type": "array"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read",
+        "filesystem:write-target-skill",
+        "network:read-domain-sources"
+      ],
+      "sideEffects": [
+        "可在用户指定的 Skill 包内创建或重构 SKILL.md、references、assets、scripts、evals 和示例",
+        "可生成验收模板与运行记录骨架，但不会把 pending 模板伪装成通过证据"
+      ],
+      "summary": "从真实重复工作流创建或重构可复用 Skill 包，并补齐触发、边界、渐进加载、资产和验证合同。",
+      "useWhen": [
+        "用户要创建新的 Skill 或把重复工作流产品化为跨宿主能力包",
+        "现有 Skill 需要重构触发边界、第一动作、渐进加载、模板、脚本或失败路线",
+        "需要清理冗余参考并拆分人类模板与机器可验证数据"
+      ],
+      "validation": [
+        "scripts/check_meta_skill_package.py",
+        "scripts/check_closed_loop.py"
+      ]
+    },
+    {
+      "componentContentSha256": "5221bdc113b4ad716c2faaa9ffa51aed025ed411695de66ce6ccd9eda10f4d3f",
+      "componentId": "meta-skill-creator",
+      "componentPath": "skills/meta-skill-creator",
+      "componentType": "skill",
+      "componentVersion": "1.0.0",
+      "contractSha256": "2e79bd73c54cb7113f27f35d02477d0fb5eeaf46544c975ac12dc5878044d910",
+      "doNotUseWhen": [
+        "只有 prepare 脚本生成的 pending 模板却要求宣称验收通过",
+        "缺少真实 clean-session、宿主证明、冻结 rubric 人工评分或独立 reviewer 证明却要求 public-ready",
+        "任务要求由该 Skill 接管 Promotion、发布、合并或上线的最终人类决定"
+      ],
+      "entrypoint": "SKILL.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "从 core 或 conditional 评估进入 release 层验收",
+          "写入真实人工评分、reviewer attestation 或 public-ready 结论",
+          "根据评估结果执行 Promotion、发布、合并或上线"
+        ]
+      },
+      "id": "meta-skill-evaluate",
+      "input": {
+        "properties": {
+          "acceptanceEvidence": {
+            "type": "array"
+          },
+          "baselineEvidence": {
+            "type": "array"
+          },
+          "evaluationLayer": {
+            "enum": [
+              "core",
+              "conditional",
+              "release"
+            ]
+          },
+          "rubric": {
+            "type": "object"
+          },
+          "skillPath": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "skillPath",
+          "evaluationLayer"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "deliveryFormat": "conceptual-human-delivery",
+        "description": "Conceptual sections for a human-readable Skill evaluation. No package Adapter guarantees a strict JSON envelope or public-ready evidence.",
+        "properties": {
+          "evidenceLevel": {
+            "type": "string"
+          },
+          "findings": {
+            "type": "array"
+          },
+          "promotionDecision": {
+            "const": "requires-human-owner"
+          },
+          "promotionRecommendation": {
+            "type": "string"
+          },
+          "remainingGaps": {
+            "type": "array"
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-skill-package",
+        "filesystem:write-evaluation-artifacts"
+      ],
+      "sideEffects": [
+        "可生成或更新候选包内的评测结果、验收准备模板和闭环记录",
+        "只输出 Promotion 建议，最终 Promotion、发布、合并或上线决定保留给人类 owner"
+      ],
+      "summary": "评估 Skill 的触发、结构、基线、闭环和运行证据，输出分层结论与 Promotion 建议而非最终决定。",
+      "useWhen": [
+        "用户要求评审、验收、量化打分或比较一个 Skill 包",
+        "候选 Skill 需要 trigger eval、baseline、acceptance run、release gate 或闭环复盘",
+        "需要判断证据目前只到 artifact、runtime、human 或 public-ready 中的哪一层"
+      ],
+      "validation": [
+        "scripts/check_closed_loop.py",
+        "scripts/test_acceptance_runs.py"
+      ]
+    },
+    {
+      "componentContentSha256": "6222ff90fab7558b5cee1d33ef252f6bf0f353cb955cc2a5dcabe3e47896c189",
+      "componentId": "semgrep-skill",
+      "componentPath": "skills/semgrep-skill",
+      "componentType": "skill",
+      "componentVersion": "1.0.0",
+      "contractSha256": "e2d8ce75a50ca03892a67a845073f7b46654904612c4fa7478203d6f506ba368",
+      "doNotUseWhen": [
+        "The target contains unknown, modified, linked, or unreceipted content.",
+        "The caller expects the preview to write files, install Semgrep, download rules, or overwrite the legacy code-security directory."
+      ],
+      "entrypoint": "SKILL.md",
+      "humanGate": {
+        "required": false,
+        "when": []
+      },
+      "id": "preview-skill-projection-change",
+      "input": {
+        "properties": {
+          "apply": {
+            "const": false
+          },
+          "projectRoot": {
+            "type": "string"
+          },
+          "rollback": {
+            "type": "boolean"
+          },
+          "scope": {
+            "enum": [
+              "project",
+              "user"
+            ]
+          }
+        },
+        "required": [
+          "scope"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "properties": {
+          "action": {
+            "enum": [
+              "install",
+              "rollback"
+            ]
+          },
+          "mode": {
+            "const": "dry-run"
+          },
+          "ok": {
+            "type": "boolean"
+          },
+          "target": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ok",
+          "action",
+          "mode",
+          "target"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "Read the component source and the selected installation target."
+      ],
+      "sideEffects": [],
+      "summary": "Preview an installation, upgrade, or rollback of the Skill projection at an explicitly selected project or user scope without writing files.",
+      "useWhen": [
+        "The caller wants to inspect the exact target and action before authorizing an installation or rollback."
+      ],
+      "validation": [
+        "tests/test_installer.py"
+      ]
+    },
+    {
+      "componentContentSha256": "2ab0e19b9cc1a743fb5865083773c78f0c133d1dc5b4c2200f603e38965f527b",
+      "componentId": "hookprompt",
+      "componentPath": "hooks/hookprompt",
+      "componentType": "hook",
+      "componentVersion": "1.2.11",
+      "contractSha256": "870987b9ccf6f92b3dad39bf2a9bcb60d068aaeaf2b3fa68d70848f50991c4b4",
+      "doNotUseWhen": [
+        "The input is a simple acknowledgement or confirmation such as 好, 继续, or ok.",
+        "The input is an ordinary slash command, a recognized host-internal message, or Codex goal-continuation context.",
+        "The caller expects HookPrompt itself to perform the requested task; it only injects instructions for the host model."
+      ],
+      "entrypoint": ".claude/hooks/user-prompt-submit.js",
+      "humanGate": {
+        "required": false,
+        "when": []
+      },
+      "id": "prompt-enhancement",
+      "input": {
+        "properties": {
+          "prompt": {
+            "description": "User prompt supplied directly or extracted from a supported UserPromptSubmit JSON payload.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "prompt"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "description": "Union result: an enhanced prompt returns hookSpecificOutput; a filtered prompt, missing template, or fail-open error returns {}.",
+        "oneOf": [
+          {
+            "required": [
+              "hookSpecificOutput"
+            ]
+          },
+          {
+            "maxProperties": 0
+          }
+        ],
+        "properties": {
+          "hookSpecificOutput": {
+            "description": "Enhanced UserPromptSubmit response. Filtered and fail-open outcomes use the other union branch and return {}.",
+            "properties": {
+              "additionalContext": {
+                "type": "string"
+              },
+              "hookEventName": {
+                "const": "UserPromptSubmit"
+              }
+            },
+            "required": [
+              "hookEventName",
+              "additionalContext"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "permissions": [
+        "Read the bundled .claude/prompt-optimizer-meta.md template.",
+        "If the bundled template is absent, optionally read .claude/prompt-optimizer-meta.md from the current user home directory.",
+        "Only when HOOKPROMPT_DEBUG=1, create and maintain sanitized fixed-name debug metadata files below the operating-system temporary directory."
+      ],
+      "sideEffects": [
+        "Injects structured instructions into the current UserPromptSubmit additionalContext; it does not execute the user's requested task.",
+        "Only when HOOKPROMPT_DEBUG=1, writes fixed-name sanitized event and length metadata under the operating-system temporary directory with rotation and seven-day retention."
+      ],
+      "summary": "Transforms an eligible UserPromptSubmit prompt into structured additionalContext that asks the host model to clarify the task before executing it.",
+      "useWhen": [
+        "A user submits a substantive task prompt that benefits from explicit context, task, format, scope, success criteria, and verification guidance.",
+        "A short prompt still expresses diagnostic, repair, review, or optimization intent, such as 这个不行 or 报错了."
+      ],
+      "validation": [
+        "test-hook.js"
+      ]
+    },
+    {
+      "componentContentSha256": "b08827410643495d6043cdce836ba013dceb1a09105a8714380f69532b9370c1",
+      "componentId": "claudecode-codex-gemini",
+      "componentPath": "tools/claudecode-codex-gemini",
+      "componentType": "tool",
+      "componentVersion": "1.0.0-kim-service.1",
+      "contractSha256": "a5c633d21f8ff0a8c34bf2f1665591a2f40a7d97538db0f0ba03a7ef9b2aa459",
+      "doNotUseWhen": [
+        "A generic Kim Service capability should remain host-neutral, or the user has not approved file-changing command behavior."
+      ],
+      "entrypoint": "cli.mjs",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "Before installing assets.",
+          "Before any command writes files, invokes a mutating tool, or updates project documentation."
+        ]
+      },
+      "id": "provide-multi-cli-host-workflows",
+      "input": {
+        "required": [
+          "command",
+          "arguments"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "required": [
+          "hostResult"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "Permissions are declared by each host command and remain subject to the host approval system."
+      ],
+      "sideEffects": [
+        "Individual commands can request file writes or invoke MCP tools after host approval."
+      ],
+      "summary": "Provide ten upstream-derived Claude commands and a private orchestration Skill for explicit host-side use.",
+      "useWhen": [
+        "A Claude host needs an explicit command for planning, generation, review, setup, or a multi-CLI workflow."
+      ],
+      "validation": [
+        "tests/host-assets.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "8a384204cb3ae6c1d4d705fcc863604c821eaa010c5285a272dda92d6aee28ba",
+      "componentId": "find-skill",
+      "componentPath": "skills/find-skill",
+      "componentType": "skill",
+      "componentVersion": "0.0.0+imported.cf7635e",
+      "contractSha256": "9296f8f6e3e88403a6f657e8cb9be55139921dfefc98b1a5cd96197a207a320f",
+      "doNotUseWhen": [
+        "The user only asked to search, find, compare, or recommend skills.",
+        "Approval is ambiguous, applies to user scope, or does not identify the selected skill and target."
+      ],
+      "entrypoint": "SKILL.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "Before executing the exact project-scope installation command."
+        ]
+      },
+      "id": "skill-install-project",
+      "input": {
+        "properties": {
+          "agent": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "approvedCommand": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "skill": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "source": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "source",
+          "skill",
+          "agent",
+          "approvedCommand"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "deliveryFormat": "conceptual-human-delivery",
+        "description": "Conceptual installation-result sections. The approved npx command and host determine the real stdout; this Skill does not provide a JSON Adapter.",
+        "properties": {
+          "scope": {
+            "const": "project"
+          },
+          "status": {
+            "enum": [
+              "installed",
+              "failed"
+            ]
+          },
+          "verification": {
+            "type": "string"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:write-project-skills",
+        "filesystem:write-package-manager-cache",
+        "network:download-approved-skill",
+        "runtime:request-human-decision"
+      ],
+      "sideEffects": [
+        "Writes skill files or links and skill metadata inside the current project.",
+        "May download content from the approved source."
+      ],
+      "summary": "Install one selected skill into the current project after explicit approval of the exact target.",
+      "useWhen": [
+        "The user explicitly approves the displayed project-scope command, source, skill, and target agent."
+      ],
+      "validation": [
+        "tests/find-skill.behavior.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "8a384204cb3ae6c1d4d705fcc863604c821eaa010c5285a272dda92d6aee28ba",
+      "componentId": "find-skill",
+      "componentPath": "skills/find-skill",
+      "componentType": "skill",
+      "componentVersion": "0.0.0+imported.cf7635e",
+      "contractSha256": "9296f8f6e3e88403a6f657e8cb9be55139921dfefc98b1a5cd96197a207a320f",
+      "doNotUseWhen": [
+        "The user only asked to search, find, compare, or recommend skills.",
+        "Approval is ambiguous, applies to project scope, or does not identify the selected skill and target."
+      ],
+      "entrypoint": "SKILL.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "Before executing the exact user-scope installation command."
+        ]
+      },
+      "id": "skill-install-user",
+      "input": {
+        "properties": {
+          "agent": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "approvedCommand": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "skill": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "source": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "source",
+          "skill",
+          "agent",
+          "approvedCommand"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "deliveryFormat": "conceptual-human-delivery",
+        "description": "Conceptual installation-result sections. The approved npx command and host determine the real stdout; this Skill does not provide a JSON Adapter.",
+        "properties": {
+          "scope": {
+            "const": "user"
+          },
+          "status": {
+            "enum": [
+              "installed",
+              "failed"
+            ]
+          },
+          "verification": {
+            "type": "string"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:write-user-skills",
+        "filesystem:write-package-manager-cache",
+        "network:download-approved-skill",
+        "runtime:request-human-decision"
+      ],
+      "sideEffects": [
+        "Writes skill files or links and skill metadata outside the project into user-level agent configuration.",
+        "May download content from the approved source."
+      ],
+      "summary": "Install one selected skill into user-level agent configuration after explicit approval of the exact target.",
+      "useWhen": [
+        "The user explicitly approves the displayed user-scope command, source, skill, and target agent."
+      ],
+      "validation": [
+        "tests/find-skill.behavior.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "8a384204cb3ae6c1d4d705fcc863604c821eaa010c5285a272dda92d6aee28ba",
+      "componentId": "find-skill",
+      "componentPath": "skills/find-skill",
+      "componentType": "skill",
+      "componentVersion": "0.0.0+imported.cf7635e",
+      "contractSha256": "9296f8f6e3e88403a6f657e8cb9be55139921dfefc98b1a5cd96197a207a320f",
+      "doNotUseWhen": [
+        "The request is to install, update, or remove a skill rather than discover one.",
+        "External search would require disclosing private prompt text, secrets, local paths, or internal identifiers."
+      ],
+      "entrypoint": "SKILL.md",
+      "humanGate": {
+        "required": false,
+        "when": []
+      },
+      "id": "skill-search",
+      "input": {
+        "properties": {
+          "allowNetwork": {
+            "default": false,
+            "type": "boolean"
+          },
+          "task": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "task"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "deliveryFormat": "conceptual-human-delivery",
+        "description": "Conceptual sections for the host model's human-readable search report. No package Adapter guarantees a strict JSON envelope or exact field presence.",
+        "properties": {
+          "candidates": {
+            "type": "array"
+          },
+          "externalSearchStatus": {
+            "enum": [
+              "not-requested",
+              "completed",
+              "unavailable",
+              "failed"
+            ]
+          },
+          "localMatches": {
+            "type": "array"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-installed-skills",
+        "network:search-public-skills-optional"
+      ],
+      "sideEffects": [
+        "May send sanitized generic keywords to a public skill search service when network search is allowed."
+      ],
+      "summary": "Discover installed skills first and optionally search public skill sources with a sanitized query.",
+      "useWhen": [
+        "The user asks to find or compare skills for a task.",
+        "The user wants to know whether a specialized workflow is already available."
+      ],
+      "validation": [
+        "tests/find-skill.behavior.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "a5f9de1b67bd6ad157b65a2d0d239c3c9d5f7051a473be787f7a9ed6e8eeec85",
+      "componentId": "xiaohongshu-skill",
+      "componentPath": "skills/xiaohongshu-skill",
+      "componentType": "skill",
+      "componentVersion": "1.0.0",
+      "contractSha256": "efb0cf8325ffac1ee351618cc15e55cf5a7bc8ffce41ba5094ab6567642c28a5",
+      "doNotUseWhen": [
+        "用户只要单个标题、封面字、正文润色、评论回复、标签或单个绘画提示词",
+        "任务要求在未获授权时使用真实人物、客户素材、商标、联系方式或其他受限材料",
+        "任务要求该 Skill 直接登录平台、代替用户发布、私信、评论或执行其他外部写入"
+      ],
+      "entrypoint": "SKILL.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "原始请求没有提供足以改变成品方向的策略、标题封面字、视觉路线或素材授权",
+          "首张封面 MVP 生成后进入封面验收或 6 至 8 张内页批量生产",
+          "拟使用真实人物、客户素材、品牌资产、联系方式或其他非公开材料",
+          "任何发布、私信、评论、上传或其他外部写入动作"
+        ]
+      },
+      "id": "xiaohongshu-create-visual-package",
+      "input": {
+        "properties": {
+          "audience": {
+            "type": "string"
+          },
+          "autoPermission": {
+            "type": "boolean"
+          },
+          "commercialBoundaries": {
+            "type": "array"
+          },
+          "goal": {
+            "type": "string"
+          },
+          "materialUseAuthorization": {
+            "type": "array"
+          },
+          "sourceMaterials": {
+            "type": "array"
+          },
+          "topic": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "topic",
+          "goal"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "deliveryFormat": "conceptual-human-delivery",
+        "description": "Conceptual sections for a human-readable and asset-backed delivery. The Skill does not provide one strict JSON Adapter for every partial, blocked, or complete host outcome.",
+        "properties": {
+          "body": {
+            "type": "string"
+          },
+          "cover": {
+            "type": "object"
+          },
+          "evidence": {
+            "type": "array"
+          },
+          "interiorPages": {
+            "type": "array"
+          },
+          "missingRealMaterials": {
+            "type": "array"
+          },
+          "publishingBoundary": {
+            "type": "string"
+          },
+          "selectedTitle": {
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "partial_pending_mvp_confirmation",
+              "blocked_pending_human_decision",
+              "explicit_auto_permission",
+              "complete"
+            ]
+          },
+          "titleAlternatives": {
+            "type": "array"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-authorized-materials",
+        "filesystem:write-output-assets",
+        "network:read-content-research",
+        "runtime:generate-images",
+        "runtime:request-human-decision",
+        "runtime:optional-visual-workspace"
+      ],
+      "sideEffects": [
+        "可生成封面、内页图片、工作台和发布包归档文件",
+        "可为内容机会研究读取公开来源，但不会发布、私信、评论或写入平台账号",
+        "可在封面 MVP 获批后批量生成 6 至 8 张内页并消耗图片生成资源"
+      ],
+      "summary": "研究内容机会并制作含标题、正文、封面与 6 至 8 张内页的小红书图文发布包，保留视觉确认与发布边界。",
+      "useWhen": [
+        "用户明确要求完整的小红书或 Rednote 图文笔记、发布包、种草贴或引流贴",
+        "交付需要同时包含内容策略、标题正文、封面和多页内页视觉",
+        "课程、服务、产品、个人 IP、本地商家或知识分享需要一套可验收图文资产"
+      ],
+      "validation": [
+        "scripts/check-chat-output-fixtures.mjs",
+        "scripts/check-page-direction-fixtures.mjs",
+        "scripts/check-narrative-route-fixtures.mjs",
+        "scripts/check-visual-workspace-contract.mjs"
+      ]
+    }
+  ],
+  "capabilityCount": 25,
+  "componentCount": 10,
+  "components": [
+    {
+      "capabilityIds": [
+        "assistant-display-contract",
+        "prompt-enhancement"
+      ],
+      "componentType": "hook",
+      "componentVersion": "1.2.11",
+      "contentSha256": "2ab0e19b9cc1a743fb5865083773c78f0c133d1dc5b4c2200f603e38965f527b",
+      "contractSha256": "870987b9ccf6f92b3dad39bf2a9bcb60d068aaeaf2b3fa68d70848f50991c4b4",
+      "entrypoint": ".claude/hooks/user-prompt-submit.js",
+      "id": "hookprompt",
+      "path": "hooks/hookprompt",
+      "validation": [
+        "test-hook.js"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "agent-teams-orchestrate"
+      ],
+      "componentType": "skill",
+      "componentVersion": "4.8.0",
+      "contentSha256": "ff059e34ab959b15dce1bf1c8845703d627d8f148f5a0ca190ae967426c0d81e",
+      "contractSha256": "c3424584767282a7e0275a224e2bc45230149327f8d6c8109263ce8b15ac9d2c",
+      "entrypoint": "SKILL.md",
+      "id": "agent-teams-playbook",
+      "path": "skills/agent-teams-playbook",
+      "validation": [
+        "tests/runtime-contracts.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "skill-install-project",
+        "skill-install-user",
+        "skill-search"
+      ],
+      "componentType": "skill",
+      "componentVersion": "0.0.0+imported.cf7635e",
+      "contentSha256": "8a384204cb3ae6c1d4d705fcc863604c821eaa010c5285a272dda92d6aee28ba",
+      "contractSha256": "9296f8f6e3e88403a6f657e8cb9be55139921dfefc98b1a5cd96197a207a320f",
+      "entrypoint": "SKILL.md",
+      "id": "find-skill",
+      "path": "skills/find-skill",
+      "validation": [
+        "tests/find-skill.behavior.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "goalpro-goal-prompt",
+        "goalpro-loop-prompt"
+      ],
+      "componentType": "skill",
+      "componentVersion": "0.1.3",
+      "contentSha256": "52760525e6b766b567a15b6b96ff81ed56e8733d32e3ea566c85675bdb207091",
+      "contractSha256": "6920555d7b546b9cb3e6ee919de6b019498f4a2c03f99e7f01570fd33e85f7dd",
+      "entrypoint": "SKILL.md",
+      "id": "goalpro",
+      "path": "skills/goalpro",
+      "validation": [
+        "tests/behavior.test.mjs",
+        "tests/boundary.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "kim-decision-analysis"
+      ],
+      "componentType": "skill",
+      "componentVersion": "0.0.0+imported.fbbe41c",
+      "contentSha256": "558844fe908ab94ddcb8b43817c0971a14966c25be3e7b43749c309d296f7895",
+      "contractSha256": "e5b0c96576781f5f674ca68500e813520e40a392085663563e023e55daeef12e",
+      "entrypoint": "SKILL.md",
+      "id": "kim-decision",
+      "path": "skills/kim-decision",
+      "validation": [
+        "tests/behavior.test.mjs",
+        "tests/boundary.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "memory-3layer-append",
+        "memory-3layer-govern-long-term",
+        "memory-3layer-install-runtime",
+        "memory-3layer-migrate",
+        "memory-3layer-read"
+      ],
+      "componentType": "skill",
+      "componentVersion": "1.0.0",
+      "contentSha256": "73686c05d932bc45be4e5d7a3858943a003794e1698ae7d4c8ac504d61407740",
+      "contractSha256": "738f201a6986d9731fbffc8b2011e25db5e39a73f95094ab888ff48343d9bf87",
+      "entrypoint": "SKILL.md",
+      "id": "memory-3layer",
+      "path": "skills/memory-3layer",
+      "validation": [
+        "evals/test_install_memory_3layer.py",
+        "evals/test_migrate_legacy_memory.py",
+        "evals/test_recording.py",
+        "scripts/check_memory_3layer.py"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "meta-skill-create-refactor",
+        "meta-skill-evaluate"
+      ],
+      "componentType": "skill",
+      "componentVersion": "1.0.0",
+      "contentSha256": "5221bdc113b4ad716c2faaa9ffa51aed025ed411695de66ce6ccd9eda10f4d3f",
+      "contractSha256": "2e79bd73c54cb7113f27f35d02477d0fb5eeaf46544c975ac12dc5878044d910",
+      "entrypoint": "SKILL.md",
+      "id": "meta-skill-creator",
+      "path": "skills/meta-skill-creator",
+      "validation": [
+        "scripts/check_closed_loop.py",
+        "scripts/check_meta_skill_package.py",
+        "scripts/test_acceptance_runs.py"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "apply-skill-installation",
+        "apply-skill-rollback",
+        "local-security-scan",
+        "preview-skill-projection-change"
+      ],
+      "componentType": "skill",
+      "componentVersion": "1.0.0",
+      "contentSha256": "6222ff90fab7558b5cee1d33ef252f6bf0f353cb955cc2a5dcabe3e47896c189",
+      "contractSha256": "e2d8ce75a50ca03892a67a845073f7b46654904612c4fa7478203d6f506ba368",
+      "entrypoint": "SKILL.md",
+      "id": "semgrep-skill",
+      "path": "skills/semgrep-skill",
+      "validation": [
+        "tests/test_behavior.py",
+        "tests/test_installer.py"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "xiaohongshu-create-visual-package"
+      ],
+      "componentType": "skill",
+      "componentVersion": "1.0.0",
+      "contentSha256": "a5f9de1b67bd6ad157b65a2d0d239c3c9d5f7051a473be787f7a9ed6e8eeec85",
+      "contractSha256": "efb0cf8325ffac1ee351618cc15e55cf5a7bc8ffce41ba5094ab6567642c28a5",
+      "entrypoint": "SKILL.md",
+      "id": "xiaohongshu-skill",
+      "path": "skills/xiaohongshu-skill",
+      "validation": [
+        "scripts/check-chat-output-fixtures.mjs",
+        "scripts/check-narrative-route-fixtures.mjs",
+        "scripts/check-page-direction-fixtures.mjs",
+        "scripts/check-visual-workspace-contract.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "bridge-codex-cli",
+        "bridge-gemini-cli",
+        "install-host-assets",
+        "provide-multi-cli-host-workflows"
+      ],
+      "componentType": "tool",
+      "componentVersion": "1.0.0-kim-service.1",
+      "contentSha256": "b08827410643495d6043cdce836ba013dceb1a09105a8714380f69532b9370c1",
+      "contractSha256": "a5c633d21f8ff0a8c34bf2f1665591a2f40a7d97538db0f0ba03a7ef9b2aa459",
+      "entrypoint": "cli.mjs",
+      "id": "claudecode-codex-gemini",
+      "path": "tools/claudecode-codex-gemini",
+      "validation": [
+        "tests/host-assets.test.mjs",
+        "tests/installer.test.mjs",
+        "tests/mcp-server.test.mjs"
+      ]
+    }
+  ],
+  "schemaVersion": 1
+}

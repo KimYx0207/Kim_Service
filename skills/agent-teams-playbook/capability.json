@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "id": "agent-teams-playbook",
+  "componentType": "skill",
+  "componentVersion": "4.8.0",
+  "entrypoint": "SKILL.md",
+  "capabilities": [
+    {
+      "id": "agent-teams-orchestrate",
+      "summary": "为复杂任务设计并执行跨宿主的多 Agent 分工、并行协作、结果汇总与质量闸门。",
+      "useWhen": [
+        "任务可拆成多个边界清晰且适合并行或独立评审的子任务",
+        "用户明确要求多 Agent、Agent Teams、swarm、并行协作或团队编排",
+        "复杂交付需要角色分工、阶段计划、失败处理和主线程最终验收"
+      ],
+      "doNotUseWhen": [
+        "单 Agent 可以直接完成的一次性问答或单文件小改动",
+        "宿主没有真实的子 Agent 能力且任务也不值得采用分阶段降级流程",
+        "任务是在设计 Meta_Kim Router、Promotion 规则或其他产品级路由系统"
+      ],
+      "input": {
+        "type": "object",
+        "properties": {
+          "task": {
+            "type": "string"
+          },
+          "successCriteria": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "constraints": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "hostCapabilities": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "task"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "deliveryFormat": "conceptual-human-delivery",
+        "description": "Conceptual sections for the orchestrating host's human-readable delivery. The Skill itself does not provide an Adapter that guarantees a strict JSON envelope.",
+        "properties": {
+          "mode": {
+            "type": "string"
+          },
+          "plan": {
+            "type": "array"
+          },
+          "assignments": {
+            "type": "array"
+          },
+          "results": {
+            "type": "array"
+          },
+          "verification": {
+            "type": "array"
+          },
+          "degradations": {
+            "type": "array"
+          }
+        },
+        "required": []
+      },
+      "permissions": [
+        "filesystem:read",
+        "filesystem:write-planning-artifacts",
+        "runtime:discover-capabilities",
+        "runtime:spawn-agents",
+        "runtime:message-agents"
+      ],
+      "sideEffects": [
+        "可按宿主真实能力启动独立子 Agent 并消耗相应运行资源",
+        "可在项目规则允许时创建或更新任务规划与进度文件",
+        "受委派 Agent 可能在各自明确的文件边界内产生变更"
+      ],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "任务拆分计划尚未被用户确认且宿主或项目规则没有授权直接执行",
+          "任一子任务涉及删除、覆盖、发布、生产环境、密钥、付款或扩大权限",
+          "需要安装外部能力或执行现有授权范围外的写入"
+        ]
+      },
+      "validation": [
+        "tests/runtime-contracts.test.mjs"
+      ]
+    }
+  ]
+}

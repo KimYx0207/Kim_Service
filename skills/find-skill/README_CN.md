@@ -1,4 +1,4 @@
-# find-skills（Windows 兼容版）
+# find-skill（Windows 兼容版）
 
 [English](./README.md) | [中文](./README_CN.md)
 
@@ -45,8 +45,10 @@ powershell -Command "npx skills find 'react'"
 ### 从 Kim Service 直接安装（推荐）
 
 ```bash
-powershell -Command "npx skills add KimYx0207/Kim_Service@find-skills -g -y"
+powershell -Command "npx skills add KimYx0207/Kim_Service@find-skill -a codex"
 ```
+
+该示例安装到当前项目的 Codex；需要其他 Agent 时，用精确批准的 Agent 替换 `codex`。用户级安装需要单独确认并添加 `-g`；不要添加 `-y`。
 
 Kim Service 是该公开包的维护与发布源；旧独立仓库只用于记录导入快照的来源。
 
@@ -54,8 +56,8 @@ Kim Service 是该公开包的维护与发布源；旧独立仓库只用于记�
 
 ```powershell
 git clone --depth 1 https://github.com/KimYx0207/Kim_Service.git
-New-Item -ItemType Directory -Path "$env:USERPROFILE\.agents\skills\find-skills" -Force
-Copy-Item "Kim_Service\skills\find-skill\SKILL.md" "$env:USERPROFILE\.agents\skills\find-skills\SKILL.md" -Force
+New-Item -ItemType Directory -Path "$env:USERPROFILE\.agents\skills\find-skill" -Force
+Copy-Item "Kim_Service\skills\find-skill\SKILL.md" "$env:USERPROFILE\.agents\skills\find-skill\SKILL.md" -Force
 ```
 
 ### 重启 Claude Code
@@ -149,7 +151,7 @@ A：用英文关键词，中文搜索不支持。
 A：用这个 Windows 版本替换原版。
 
 **Q：怎么验证安装成功？**
-A：运行 `powershell -Command "npx skills list -g"`，看到 find-skills 就是成功了。
+A：项目级运行 `powershell -Command "npx skills list"`，用户级运行 `powershell -Command "npx skills list -g"`；在已批准的范围看到 `find-skill` 即成功。
 
 ## 致谢
 

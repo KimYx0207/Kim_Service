@@ -1,0 +1,191 @@
+{
+  "schemaVersion": 1,
+  "id": "semgrep-skill",
+  "componentType": "skill",
+  "componentVersion": "1.0.0",
+  "entrypoint": "SKILL.md",
+  "capabilities": [
+    {
+      "id": "local-security-scan",
+      "summary": "Scan an explicitly selected local source tree with bundled Semgrep static-analysis and secret-pattern rules without uploading code or modifying findings.",
+      "useWhen": [
+        "A local project needs a read-only baseline scan for bundled vulnerability and secret patterns.",
+        "The caller accepts that a clean result covers only the bundled local rules."
+      ],
+      "doNotUseWhen": [
+        "Remote Semgrep Registry rules, Semgrep Cloud, login, upload, or network access are required.",
+        "The requested outcome includes automatic remediation or source-file writes.",
+        "Semgrep is not already installed and executable."
+      ],
+      "input": {
+        "type": "object",
+        "required": ["target"],
+        "properties": {
+          "target": {"type": "string"},
+          "rules": {"const": "rules/local-security.yml"}
+        }
+      },
+      "output": {
+        "type": "object",
+        "required": ["completed", "findings", "networkUsed", "filesModified"],
+        "properties": {
+          "completed": {"type": "boolean"},
+          "findings": {"type": "array"},
+          "networkUsed": {"const": false},
+          "filesModified": {"const": false}
+        }
+      },
+      "permissions": [
+        "Read the selected local scan target.",
+        "Execute an already-installed local Semgrep binary."
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": false,
+        "when": []
+      },
+      "validation": [
+        "tests/test_behavior.py"
+      ]
+    },
+    {
+      "id": "preview-skill-projection-change",
+      "summary": "Preview an installation, upgrade, or rollback of the Skill projection at an explicitly selected project or user scope without writing files.",
+      "useWhen": [
+        "The caller wants to inspect the exact target and action before authorizing an installation or rollback."
+      ],
+      "doNotUseWhen": [
+        "The target contains unknown, modified, linked, or unreceipted content.",
+        "The caller expects the preview to write files, install Semgrep, download rules, or overwrite the legacy code-security directory."
+      ],
+      "input": {
+        "type": "object",
+        "required": ["scope"],
+        "properties": {
+          "scope": {"enum": ["project", "user"]},
+          "projectRoot": {"type": "string"},
+          "rollback": {"type": "boolean"},
+          "apply": {"const": false}
+        }
+      },
+      "output": {
+        "type": "object",
+        "required": ["ok", "action", "mode", "target"],
+        "properties": {
+          "ok": {"type": "boolean"},
+          "action": {"enum": ["install", "rollback"]},
+          "mode": {"const": "dry-run"},
+          "target": {"type": "string"}
+        }
+      },
+      "permissions": [
+        "Read the component source and the selected installation target."
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": false,
+        "when": []
+      },
+      "validation": [
+        "tests/test_installer.py"
+      ]
+    },
+    {
+      "id": "apply-skill-installation",
+      "summary": "Install or upgrade the Skill projection at an explicitly selected project or user scope after approval; this does not install Semgrep.",
+      "useWhen": [
+        "The caller approved applying a previously previewed project-scoped or user-scoped semgrep-skill installation."
+      ],
+      "doNotUseWhen": [
+        "The target contains unknown, modified, linked, or unreceipted content.",
+        "The caller has not approved the write or expects Semgrep, remote rules, or the legacy code-security directory to be changed."
+      ],
+      "input": {
+        "type": "object",
+        "required": ["scope", "apply"],
+        "properties": {
+          "scope": {"enum": ["project", "user"]},
+          "projectRoot": {"type": "string"},
+          "apply": {"const": true}
+        }
+      },
+      "output": {
+        "type": "object",
+        "required": ["ok", "action", "mode", "target", "targetHash"],
+        "properties": {
+          "ok": {"type": "boolean"},
+          "action": {"const": "install"},
+          "mode": {"const": "apply"},
+          "target": {"type": "string"},
+          "targetHash": {"type": "string"}
+        }
+      },
+      "permissions": [
+        "Read the component source and selected installation target.",
+        "Write only the selected semgrep-skill target and installer-owned backup directory."
+      ],
+      "sideEffects": [
+        "Creates or replaces the selected Skill projection and writes a receipt.",
+        "On upgrade, retains the verified previous installation for rollback."
+      ],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "Before passing --apply for a project installation or upgrade.",
+          "Before passing --apply at user scope, which affects all projects for that user."
+        ]
+      },
+      "validation": [
+        "tests/test_installer.py"
+      ]
+    },
+    {
+      "id": "apply-skill-rollback",
+      "summary": "Restore the receipted previous Skill projection after explicit approval while preserving the displaced current version.",
+      "useWhen": [
+        "A validated previous installation exists and the caller approved restoring it."
+      ],
+      "doNotUseWhen": [
+        "The current or previous installation is missing, modified, linked, unknown, or unreceipted.",
+        "The caller has not approved replacing the current projection."
+      ],
+      "input": {
+        "type": "object",
+        "required": ["scope", "apply", "rollback"],
+        "properties": {
+          "scope": {"enum": ["project", "user"]},
+          "projectRoot": {"type": "string"},
+          "apply": {"const": true},
+          "rollback": {"const": true}
+        }
+      },
+      "output": {
+        "type": "object",
+        "required": ["ok", "action", "mode", "target", "targetHash"],
+        "properties": {
+          "ok": {"type": "boolean"},
+          "action": {"const": "rollback"},
+          "mode": {"const": "apply"},
+          "target": {"type": "string"},
+          "targetHash": {"type": "string"}
+        }
+      },
+      "permissions": [
+        "Read the current and receipted previous installation.",
+        "Replace only the selected semgrep-skill target and installer-owned backup entries."
+      ],
+      "sideEffects": [
+        "Restores the previous projection and retains the displaced current projection as a backup."
+      ],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "Before passing --rollback with --apply at project or user scope."
+        ]
+      },
+      "validation": [
+        "tests/test_installer.py"
+      ]
+    }
+  ]
+}

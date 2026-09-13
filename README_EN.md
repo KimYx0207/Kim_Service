@@ -4,28 +4,22 @@
   <a href="README.md">简体中文</a> · <a href="README_EN.md">English</a>
 </p>
 
-**A collection of original AI Hooks and Agent Skills created, open-sourced, and maintained by Lao Jin (KimYx0207).**
+**An independent professional-capability dependency repository maintained by Lao Jin (KimYx0207).**
 
-These projects grew out of real needs in AI coding, content creation, decision-making, and automation. Each project solves a clear problem and can be selected, installed, and used independently.
+It contains discoverable, independently installable, and verifiable Hooks, Skills, and Tools, with the same package convention reserved for future qualified Agents and Apps. Kim Service does not act as a cross-component Router, task state machine, or final acceptance brain.
 
 ## What's included
 
-| Type | Component | What it helps you do |
-|---|---|---|
-| Hook | [HookPrompt](hooks/hookprompt) | Turns casual requests into executable and verifiable prompts |
-| Skill | [Agent Teams Playbook](skills/agent-teams-playbook) | Organizes multiple Agents to work in parallel and combine results consistently |
-| Skill | [Memory 3-Layer](skills/memory-3layer) | Adds three-layer memory for Claude Code, Codex, and other supported platforms |
-| Skill | [Find Skill](skills/find-skill) | Finds and installs useful Agent Skills |
-| Skill | [GoalPro](skills/goalpro) | Produces clear, bounded, and verifiable Goal and Loop Prompts |
-| Skill | [Kim Decision](skills/kim-decision) | Turns fuzzy questions into evidence-backed, actionable decisions |
-| Skill | [Meta Skill Creator](skills/meta-skill-creator) | Creates, refactors, and validates genuinely useful Skills |
-| Skill | [Semgrep Skill](skills/semgrep-skill) | Checks source code for security issues with Semgrep |
-| Skill | [Xiaohongshu Skill](skills/xiaohongshu-skill) | Produces reviewable Rednote copy and visual plans |
+- Human-facing package directories: [hooks](hooks), [skills](skills), and [tools](tools).
+- Release inventory and provenance facts: [catalog.json](catalog.json).
+- Generated Capability index: [generated/capabilities.json](generated/capabilities.json).
+
+The component table is not duplicated manually in this README. Root automation discovers package-level `capability.json` files and regenerates the indexes so the README, catalog, and package tree cannot silently drift apart.
 
 ## How to use
 
-1. Choose a project from the table and open its directory.
-2. For a Hook, start with `README.md`. For a Skill, start with `SKILL.md` and `README.md`.
+1. Choose a package from the generated index or its type directory.
+2. Follow the package `entrypoint`; common entrypoints are `README.md` for Hooks and Tools or `SKILL.md` for Skills.
 3. Follow the project instructions to install it for a project or your personal environment.
 
 Each project includes its own usage guide, license, attribution, and change history. See [GitHub Releases](https://github.com/KimYx0207/Kim_Service/releases) for the latest collection release and [CHANGELOG.md](CHANGELOG.md) for the current update notes.
@@ -51,4 +45,4 @@ If these open-source projects help you, please consider starring, sharing, or bu
 
 ## Open-source note
 
-Except for [Find Skill](skills/find-skill), which Lao Jin adapted from an open-source project, every project in Kim Service was originally created, open-sourced, and maintained by Lao Jin (KimYx0207). Repository-level material uses the MIT License; component-level license terms remain independently authoritative.
+Repository-level Kim Service material uses the MIT License. Each capability package has independently authoritative license and provenance records; adapted or migrated packages are governed by their `LICENSE`, `PROVENANCE`, or equivalent files.

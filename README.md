@@ -4,28 +4,22 @@
   <a href="README.md">简体中文</a> · <a href="README_EN.md">English</a>
 </p>
 
-**这是老金（KimYx0207）原创、自制并开源维护的 AI Hook 与 Agent Skills 合集。**
+**这是老金（KimYx0207）维护的独立专业能力依赖仓库。**
 
-这里收录的项目都来自老金在 AI 编码、内容创作、决策和自动化工作中的真实需求。每个项目解决一个明确问题，可以按需选择、单独安装和使用。
+这里收录可发现、可单独安装、可验证的 Hook、Skill 与 Tool，并为未来合格的 Agent 和 App 保留同一包规范。每个能力包解决一个明确问题；Kim Service 不承担跨组件 Router、任务状态机或最终验收大脑。
 
 ## 收录内容
 
-| 类型 | 组件 | 能帮你做什么 |
-|---|---|---|
-| Hook | [HookPrompt](hooks/hookprompt) | 把随口说出的需求整理成可执行、可验收的专业提示词 |
-| Skill | [Agent Teams Playbook](skills/agent-teams-playbook) | 组织多个 Agent 并行工作，并按统一规则汇总结果 |
-| Skill | [Memory 3-Layer](skills/memory-3layer) | 为 Claude Code、Codex 等平台提供三层记忆能力 |
-| Skill | [Find Skill](skills/find-skill) | 查找和安装合适的 Agent Skills |
-| Skill | [GoalPro](skills/goalpro) | 生成目标明确、边界清楚、可验收的 Goal 与 Loop Prompt |
-| Skill | [Kim Decision](skills/kim-decision) | 把模糊问题收敛成有证据、能执行的决策 |
-| Skill | [Meta Skill Creator](skills/meta-skill-creator) | 创建、重构和验收真正好用的 Skill |
-| Skill | [Semgrep Skill](skills/semgrep-skill) | 使用 Semgrep 检查代码安全问题 |
-| Skill | [Xiaohongshu Skill](skills/xiaohongshu-skill) | 生成可直接验收的小红书文案与视觉方案 |
+- 面向人的组件目录：[hooks](hooks)、[skills](skills)、[tools](tools)。
+- 发布库存与来源事实：[catalog.json](catalog.json)。
+- 自动生成的 Capability 索引：[generated/capabilities.json](generated/capabilities.json)。
+
+组件总表不再手工复制进 README。新增或修改能力包后，根脚本会从包内 `capability.json` 自动发现、校验并生成索引，避免 README、catalog 和组件目录相互漂移。
 
 ## 怎么使用
 
-1. 在上表中选择需要的项目并打开对应目录。
-2. Hook 先看目录里的 `README.md`；Skill 先看 `SKILL.md` 和 `README.md`。
+1. 从自动索引或对应类型目录选择能力包。
+2. 按包内 `entrypoint` 阅读入口；常见入口为 Hook/Tool 的 `README.md` 或 Skill 的 `SKILL.md`。
 3. 按项目说明安装到你的项目或个人环境中。
 
 每个项目都带有自己的使用说明、许可证、归属和更新记录。合集的最新版本请查看 [GitHub Releases](https://github.com/KimYx0207/Kim_Service/releases)，本次更新内容见 [CHANGELOG.md](CHANGELOG.md)。
@@ -51,4 +45,4 @@
 
 ## 开源说明
 
-除 [Find Skill](skills/find-skill) 是老金在开源项目基础上改造外，其余项目均由老金（KimYx0207）原创、自制并开源维护。Kim Service 仓库级内容采用 MIT License；各项目目录内的许可条款继续独立生效。
+Kim Service 仓库级内容采用 MIT License。每个能力包的许可证和来源记录独立生效；涉及改造或迁移的包以其 `LICENSE`、`PROVENANCE` 或同类文件为准。

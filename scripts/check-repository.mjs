@@ -10,6 +10,7 @@ import {
   inspectReleaseChangelog,
   parsePublicVersion
 } from './release-contract.mjs';
+import { checkCatalogArtifacts } from './catalog-automation.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CATALOG_PATH = path.join(ROOT, 'catalog.json');
@@ -63,6 +64,27 @@ function walk(absoluteDirectory, relativeDirectory = '') {
     if (entry.isFile()) {
       files.push(relativePath);
     }
+  }
+}
+
+function excludeIgnoredLocalFiles() {
+  if (!fs.existsSync(path.join(ROOT, '.git'))) return;
+  const candidates = [...files, ...directories];
+  if (candidates.length === 0) return;
+  const ignoredResult = git(
+    ['check-ignore', '--no-index', '-z', '--stdin'],
+    { input: candidates.join('\0') + '\0' }
+  );
+  if (ignoredResult.status !== 0 && ignoredResult.status !== 1) {
+    fail('Unable to identify local-only ignored files');
+    return;
+  }
+  const ignored = new Set(ignoredResult.stdout.split('\0').filter(Boolean).map(normalize));
+  for (let index = files.length - 1; index >= 0; index -= 1) {
+    if (ignored.has(files[index])) files.splice(index, 1);
+  }
+  for (let index = directories.length - 1; index >= 0; index -= 1) {
+    if (ignored.has(directories[index])) directories.splice(index, 1);
   }
 }
 
@@ -222,43 +244,6 @@ function checkGitRepository(catalog) {
       trackedIgnored.stdout.trim().split(/\r?\n/).join(', '));
   }
 
-  const checkIgnore = git(
-    ['check-ignore', '--no-index', '-z', '--stdin'],
-    { input: files.join('\0') + '\0' }
-  );
-  if (checkIgnore.status !== 0 && checkIgnore.status !== 1) {
-    fail('Unable to check ignored repository files');
-  } else {
-    const ignored = checkIgnore.stdout.split('\0').filter(Boolean);
-    if (ignored.length) {
-      fail('Repository files would be ignored by Git: ' + ignored.join(', '));
-    }
-  }
-}
-
-function componentTreeSha256(absoluteComponentPath) {
-  const componentFiles = [];
-  function collect(absoluteDirectory, relativeDirectory = '') {
-    for (const entry of fs.readdirSync(absoluteDirectory, { withFileTypes: true })) {
-      const relativePath = normalize(path.join(relativeDirectory, entry.name));
-      const absolutePath = path.join(absoluteDirectory, entry.name);
-      if (entry.isDirectory()) {
-        collect(absolutePath, relativePath);
-      } else if (entry.isFile()) {
-        componentFiles.push(relativePath);
-      }
-    }
-  }
-  collect(absoluteComponentPath);
-  componentFiles.sort((left, right) => left.localeCompare(right, 'en'));
-  const hash = crypto.createHash('sha256');
-  for (const relativePath of componentFiles) {
-    hash.update(relativePath, 'utf8');
-    hash.update('\0');
-    hash.update(fs.readFileSync(path.join(absoluteComponentPath, ...relativePath.split('/'))));
-    hash.update('\0');
-  }
-  return hash.digest('hex');
 }
 
 function checkCatalog(catalog) {
@@ -266,8 +251,8 @@ function checkCatalog(catalog) {
     return;
   }
 
-  if (catalog.componentCount !== 9 || catalog.components?.length !== 9) {
-    fail('Catalog must declare exactly 9 components');
+  if (!Array.isArray(catalog.components) || catalog.componentCount !== catalog.components.length) {
+    fail('Catalog componentCount must match its generated components array');
   }
 
   if (catalog.repository !== 'KimYx0207/Kim_Service') {
@@ -291,6 +276,7 @@ function checkCatalog(catalog) {
 
   const ids = new Set();
   const paths = new Set();
+  const supportedKinds = new Set(['hook', 'skill', 'agent', 'app', 'tool']);
 
   for (const component of catalog.components ?? []) {
     if (!component.id || ids.has(component.id)) {
@@ -304,8 +290,21 @@ function checkCatalog(catalog) {
     }
     paths.add(componentPath);
 
-    if (!Array.isArray(component.required)) {
-      fail('Catalog component required must be an array: ' + componentPath);
+    if (!supportedKinds.has(component.kind)) {
+      fail('Unsupported catalog component kind: ' + String(component.kind));
+    }
+    if (!/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:[-+][0-9A-Za-z.-]+)?$/.test(String(component.version ?? ''))) {
+      fail('Catalog component lacks a generated semantic version: ' + componentPath);
+    }
+    if (!/^[0-9a-f]{64}$/.test(String(component.contractSha256 ?? ''))) {
+      fail('Catalog component lacks a generated contractSha256: ' + componentPath);
+    }
+    if (!/^[0-9a-f]{64}$/.test(String(component.contentSha256 ?? ''))) {
+      fail('Catalog component lacks a generated contentSha256: ' + componentPath);
+    }
+    if (!Array.isArray(component.required) ||
+        component.required.some((item) => typeof item !== 'string' || !item.trim())) {
+      fail('Catalog component required must be an array of non-empty paths: ' + componentPath);
     }
     if (!Array.isArray(component.validation) ||
         component.validation.some((command) => typeof command !== 'string' || !command.trim())) {
@@ -325,19 +324,16 @@ function checkCatalog(catalog) {
         absoluteComponentPath,
         requiredPath
       );
-      if (!isInsideRoot(absoluteRequiredPath) ||
-          !fs.existsSync(absoluteRequiredPath)) {
+      const relativeRequiredPath = path.relative(absoluteComponentPath, absoluteRequiredPath);
+      if (!relativeRequiredPath ||
+          relativeRequiredPath === '..' ||
+          relativeRequiredPath.startsWith('..' + path.sep) ||
+          path.isAbsolute(relativeRequiredPath) ||
+          !fs.existsSync(absoluteRequiredPath) ||
+          !fs.lstatSync(absoluteRequiredPath).isFile() ||
+          fs.lstatSync(absoluteRequiredPath).isSymbolicLink()) {
         fail('Missing required component file: ' +
           componentPath + '/' + requiredPath);
-      }
-    }
-
-    if (!/^[0-9a-f]{64}$/.test(String(component.contentSha256 ?? ''))) {
-      fail('Catalog component lacks a valid contentSha256: ' + componentPath);
-    } else {
-      const actualComponentHash = componentTreeSha256(absoluteComponentPath);
-      if (actualComponentHash !== component.contentSha256) {
-        fail('Catalog component content hash drift: ' + componentPath);
       }
     }
 
@@ -345,10 +341,8 @@ function checkCatalog(catalog) {
       ? ['SKILL.md', 'README.md', 'LICENSE', 'CHANGELOG.md', 'NOTICE']
       : component.kind === 'hook'
         ? ['README.md', 'LICENSE', 'CHANGELOG.md', 'NOTICE']
-        : null;
-    if (!publicFiles) {
-      fail('Unsupported catalog component kind: ' + String(component.kind));
-    } else {
+        : [];
+    if (publicFiles.length) {
       for (const publicFile of publicFiles) {
         const absolutePublicFile = path.join(absoluteComponentPath, publicFile);
         if (!fs.existsSync(absolutePublicFile) || !fs.statSync(absolutePublicFile).isFile()) {
@@ -368,44 +362,16 @@ function checkCatalog(catalog) {
       const provenanceNeedle = source.startsWith('canonical:')
         ? source.slice('canonical:'.length)
         : revision.split('+')[0];
-      if (!provenanceNeedle || !changelog.includes(provenanceNeedle)) {
+      const pending = component.snapshot === 'capability-contract-pending-release' ||
+        revision.startsWith('pending-local:');
+      if (!pending && (!provenanceNeedle || !changelog.includes(provenanceNeedle))) {
         fail('Component CHANGELOG must record catalog provenance: ' + componentPath);
       }
     }
-  }
 
-  const declaredHooks = new Set(
-    [...paths].filter((item) => item.startsWith('hooks/'))
-  );
-  const declaredSkills = new Set(
-    [...paths].filter((item) => item.startsWith('skills/'))
-  );
-
-  if (declaredHooks.size !== 1 || declaredSkills.size !== 8) {
-    fail('Catalog must contain 1 hook and 8 skills');
-  }
-
-  for (const group of ['hooks', 'skills']) {
-    const groupPath = path.join(ROOT, group);
-    if (!fs.existsSync(groupPath)) {
-      fail('Missing component group: ' + group);
-      continue;
-    }
-
-    const actual = fs.readdirSync(groupPath, { withFileTypes: true })
-      .filter((entry) => entry.isDirectory())
-      .map((entry) => group + '/' + entry.name);
-    const declared = group === 'hooks' ? declaredHooks : declaredSkills;
-
-    for (const actualPath of actual) {
-      if (!declared.has(actualPath)) {
-        fail('Undeclared component directory: ' + actualPath);
-      }
-    }
-    for (const declaredPath of declared) {
-      if (!actual.includes(declaredPath)) {
-        fail('Catalog component is absent: ' + declaredPath);
-      }
+    if (RELEASE_MODE && (component.snapshot === 'capability-contract-pending-release' ||
+        String(component.revision ?? '').startsWith('pending-local:'))) {
+      fail('Release readiness requires finalized component provenance: ' + componentPath);
     }
   }
 
@@ -864,6 +830,9 @@ function checkReadmeLayouts(catalog) {
 
   for (const component of catalog.components ?? []) {
     if (!String(component.source || '').startsWith('canonical:')) continue;
+    if (!['hook', 'skill'].includes(component.kind)) continue;
+    if (component.snapshot === 'capability-contract-pending-release' ||
+        String(component.revision || '').startsWith('pending-local:')) continue;
     const componentRoot = path.resolve(ROOT, component.path);
     for (const filename of matchingReadmeFiles(componentRoot, layout.componentDocumentPattern, component.id)) {
       validateReadmeLayoutText(
@@ -901,7 +870,13 @@ if (fs.existsSync(path.join(ROOT, '_migration-transaction'))) {
 }
 
 walk(ROOT);
+excludeIgnoredLocalFiles();
 const catalog = readCatalog();
+try {
+  checkCatalogArtifacts(ROOT);
+} catch (error) {
+  fail(error.message);
+}
 checkCatalog(catalog);
 checkGitRepository(catalog);
 checkSensitiveFiles();

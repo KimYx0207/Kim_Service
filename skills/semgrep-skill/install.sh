@@ -1,92 +1,15 @@
 #!/usr/bin/env bash
-# claude-code-security-skill installer
-# One command to install Semgrep + Claude Code Skill
+set -euo pipefail
 
-set -e
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
 
-GREEN='\033[0;32m'
-RED='\033[0;31m'
-YELLOW='\033[1;33m'
-NC='\033[0m'
-
-SKILL_DIR="$HOME/.claude/skills/code-security"
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-
-echo ""
-echo "=================================="
-echo "  Claude Code Security Skill"
-echo "  One-Click Installer"
-echo "=================================="
-echo ""
-
-# Step 1: Check Python
-echo -e "${YELLOW}[1/4]${NC} Checking Python..."
-if command -v python3 &>/dev/null; then
-    PY_CMD="python3"
-    PY_VER=$($PY_CMD --version 2>&1)
-    echo -e "  ${GREEN}OK${NC} $PY_VER"
-elif command -v python &>/dev/null; then
-    PY_CMD="python"
-    PY_VER=$($PY_CMD --version 2>&1)
-    echo -e "  ${GREEN}OK${NC} $PY_VER"
+if command -v python3 >/dev/null 2>&1; then
+  PYTHON=python3
+elif command -v python >/dev/null 2>&1; then
+  PYTHON=python
 else
-    echo -e "  ${RED}FAIL${NC} Python not found"
-    echo ""
-    echo "  Please install Python 3.8+ first:"
-    echo "  https://www.python.org/downloads/"
-    exit 1
+  echo "Python 3 is required. This installer never installs Python or Semgrep automatically." >&2
+  exit 1
 fi
 
-# Step 2: Check/Install Semgrep
-echo -e "${YELLOW}[2/4]${NC} Checking Semgrep..."
-if command -v semgrep &>/dev/null; then
-    SG_VER=$(semgrep --version 2>&1)
-    echo -e "  ${GREEN}OK${NC} Semgrep $SG_VER"
-else
-    echo -e "  ${YELLOW}NOT FOUND${NC} Installing Semgrep..."
-    $PY_CMD -m pip install semgrep --quiet
-    if command -v semgrep &>/dev/null; then
-        SG_VER=$(semgrep --version 2>&1)
-        echo -e "  ${GREEN}OK${NC} Semgrep $SG_VER installed"
-    else
-        echo -e "  ${RED}FAIL${NC} Semgrep installation failed"
-        echo ""
-        echo "  Try manually: pip install semgrep"
-        echo "  If 'command not found', add Python Scripts to PATH"
-        exit 1
-    fi
-fi
-
-# Step 3: Install Skill
-echo -e "${YELLOW}[3/4]${NC} Installing Skill..."
-if [ ! -f "$SCRIPT_DIR/SKILL.md" ]; then
-    echo -e "  ${RED}FAIL${NC} SKILL.md not found in $SCRIPT_DIR"
-    exit 1
-fi
-
-mkdir -p "$SKILL_DIR"
-cp "$SCRIPT_DIR/SKILL.md" "$SKILL_DIR/SKILL.md"
-echo -e "  ${GREEN}OK${NC} Copied to $SKILL_DIR/SKILL.md"
-
-# Step 4: Verify
-echo -e "${YELLOW}[4/4]${NC} Verifying..."
-if [ -f "$SKILL_DIR/SKILL.md" ]; then
-    echo -e "  ${GREEN}OK${NC} Skill file exists"
-else
-    echo -e "  ${RED}FAIL${NC} Skill file not found after copy"
-    exit 1
-fi
-
-echo ""
-echo "=================================="
-echo -e "  ${GREEN}Installation Complete!${NC}"
-echo "=================================="
-echo ""
-echo "  Skill location: $SKILL_DIR/SKILL.md"
-echo "  Hot Reloading: No restart needed"
-echo ""
-echo "  Usage in Claude Code:"
-echo "    - Say: 安全扫描一下这个项目"
-echo "    - Say: 扫一下有没有漏洞"
-echo "    - Or:  /code-security"
-echo ""
+exec "$PYTHON" "$SCRIPT_DIR/scripts/install.py" "$@"

@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "id": "claudecode-codex-gemini",
+  "componentType": "tool",
+  "componentVersion": "1.0.0-kim-service.1",
+  "entrypoint": "cli.mjs",
+  "capabilities": [
+    {
+      "id": "bridge-codex-cli",
+      "summary": "Expose a bounded MCP stdio tool that invokes the local Codex CLI without a command shell.",
+      "useWhen": ["A trusted MCP host needs to delegate a coding request to an already installed Codex CLI."],
+      "doNotUseWhen": ["Codex is not installed or the requested working directory is outside the declared workspace root.", "The caller expects Kim Service to route or finally approve the work."],
+      "input": {"type": "object", "required": ["prompt"]},
+      "output": {"type": "object", "required": ["content"]},
+      "permissions": ["Execute the local codex executable.", "Read and possibly modify files only according to the selected Codex sandbox inside the declared workspace root."],
+      "sideEffects": ["May launch a Codex child process.", "May change workspace files when workspace-write is explicitly selected."],
+      "humanGate": {"required": true, "when": ["Before selecting workspace-write.", "Before accepting any downstream Codex action requiring approval."]},
+      "validation": ["tests/mcp-server.test.mjs"]
+    },
+    {
+      "id": "bridge-gemini-cli",
+      "summary": "Expose a bounded MCP stdio tool that invokes the local Gemini CLI without shell command composition.",
+      "useWhen": ["A trusted MCP host needs a local Gemini review or analysis through the installed CLI."],
+      "doNotUseWhen": ["The caller requests automatic approval mode, unrestricted environment forwarding, or a working directory outside the workspace root."],
+      "input": {"type": "object", "required": ["prompt"]},
+      "output": {"type": "object", "required": ["content"]},
+      "permissions": ["Execute the local gemini executable.", "Read files exposed by the Gemini CLI sandbox and declared workspace root."],
+      "sideEffects": ["May launch a Gemini child process.", "May use a validated proxy only when the operator explicitly enables proxy forwarding."],
+      "humanGate": {"required": true, "when": ["Before enabling Gemini workspace mutation or proxy forwarding.", "Before accepting any downstream action that changes the environment."]},
+      "validation": ["tests/mcp-server.test.mjs"]
+    },
+    {
+      "id": "install-host-assets",
+      "summary": "Plan, apply, and rollback project-scoped Claude command and Skill assets with hash receipts.",
+      "useWhen": ["A project owner wants the bundled Claude commands and private orchestration Skill installed into one explicit project root."],
+      "doNotUseWhen": ["The target is a user-wide configuration directory, is not an existing directory, or contains conflicting files without explicit replacement approval."],
+      "input": {"type": "object", "required": ["mode", "target"]},
+      "output": {"type": "object", "required": ["mode", "operations"]},
+      "permissions": ["Read bundled host assets.", "On explicit apply or rollback, write only beneath the selected project root."],
+      "sideEffects": ["Apply writes project-scoped Claude assets and a receipt.", "Rollback restores receipt-backed files or removes files created by that receipt."],
+      "humanGate": {"required": true, "when": ["Before apply.", "Before replacing a conflicting file.", "Before rollback."]},
+      "validation": ["tests/installer.test.mjs"]
+    },
+    {
+      "id": "provide-multi-cli-host-workflows",
+      "summary": "Provide ten upstream-derived Claude commands and a private orchestration Skill for explicit host-side use.",
+      "useWhen": ["A Claude host needs an explicit command for planning, generation, review, setup, or a multi-CLI workflow."],
+      "doNotUseWhen": ["A generic Kim Service capability should remain host-neutral, or the user has not approved file-changing command behavior."],
+      "input": {"type": "object", "required": ["command", "arguments"]},
+      "output": {"type": "object", "required": ["hostResult"]},
+      "permissions": ["Permissions are declared by each host command and remain subject to the host approval system."],
+      "sideEffects": ["Individual commands can request file writes or invoke MCP tools after host approval."],
+      "humanGate": {"required": true, "when": ["Before installing assets.", "Before any command writes files, invokes a mutating tool, or updates project documentation."]},
+      "validation": ["tests/host-assets.test.mjs"]
+    }
+  ]
+}

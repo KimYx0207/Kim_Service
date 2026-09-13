@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "repository": "KimYx0207/Kim_Service",
-  "componentCount": 9,
+  "componentCount": 10,
   "release": {
     "repository": "KimYx0207/Kim_Service",
     "remoteName": "origin",
@@ -28,7 +28,9 @@
       "source": "https://github.com/KimYx0207/HookPrompt",
       "revision": "83299e7094937f8d0179ff60d304c1c5a25a5740",
       "snapshot": "tracked-head-with-privacy-fix",
-      "contentSha256": "4fd4ede0413fb17803148305eb26b636ba4c6628c42aaef4bdabfe03dd6df77e",
+      "version": "1.2.11",
+      "contractSha256": "870987b9ccf6f92b3dad39bf2a9bcb60d068aaeaf2b3fa68d70848f50991c4b4",
+      "contentSha256": "2ab0e19b9cc1a743fb5865083773c78f0c133d1dc5b4c2200f603e38965f527b",
       "required": [
         "README.md",
         "README_EN.md",
@@ -37,7 +39,8 @@
         "NOTICE",
         ".claude/hooks/user-prompt-submit.js",
         ".codex/hooks/user-prompt-submit.js",
-        "test-hook.js"
+        "test-hook.js",
+        "capability.json"
       ],
       "validation": [
         "node test-hook.js"
@@ -50,7 +53,9 @@
       "source": "https://github.com/KimYx0207/Kim_Service",
       "revision": "753ff43bd9b1f9aee4d184c4f21e7f494af5a79f",
       "snapshot": "preserved-agent-teams-history-base;self-contained-component-snapshot",
-      "contentSha256": "7c7ce287896f30173e77ff12c329c5ec7cebc11fab7cdeae4ba3622d16cc1045",
+      "version": "4.8.0",
+      "contractSha256": "c3424584767282a7e0275a224e2bc45230149327f8d6c8109263ce8b15ac9d2c",
+      "contentSha256": "ff059e34ab959b15dce1bf1c8845703d627d8f148f5a0ca190ae967426c0d81e",
       "required": [
         "SKILL.md",
         "README.md",
@@ -58,10 +63,91 @@
         "LICENSE",
         "CHANGELOG.md",
         "NOTICE",
-        "tests/runtime-contracts.test.mjs"
+        "tests/runtime-contracts.test.mjs",
+        "capability.json"
       ],
       "validation": [
         "node tests/runtime-contracts.test.mjs"
+      ]
+    },
+    {
+      "id": "find-skill",
+      "kind": "skill",
+      "path": "skills/find-skill",
+      "source": "https://github.com/KimYx0207/findskill",
+      "revision": "cf7635e3755c47b472bfb6dfd854680b5662ee26+public-package-adapter",
+      "snapshot": "tracked-source-plus-self-contained-package",
+      "version": "0.0.0+imported.cf7635e",
+      "contractSha256": "9296f8f6e3e88403a6f657e8cb9be55139921dfefc98b1a5cd96197a207a320f",
+      "contentSha256": "8a384204cb3ae6c1d4d705fcc863604c821eaa010c5285a272dda92d6aee28ba",
+      "required": [
+        "SKILL.md",
+        "README.md",
+        "README_CN.md",
+        "LICENSE",
+        "CHANGELOG.md",
+        "NOTICE",
+        "capability.json",
+        "tests/find-skill.behavior.test.mjs"
+      ],
+      "validation": [
+        "node tests/find-skill.behavior.test.mjs"
+      ]
+    },
+    {
+      "id": "goalpro",
+      "kind": "skill",
+      "path": "skills/goalpro",
+      "source": "https://github.com/KimYx0207/GoalPro",
+      "revision": "39adc8db765e0e4ad4df8d4ce02e7059fed69f26",
+      "snapshot": "self-contained-public-package;monorepo-install-doc-adapter",
+      "version": "0.1.3",
+      "contractSha256": "6920555d7b546b9cb3e6ee919de6b019498f4a2c03f99e7f01570fd33e85f7dd",
+      "contentSha256": "52760525e6b766b567a15b6b96ff81ed56e8733d32e3ea566c85675bdb207091",
+      "required": [
+        "SKILL.md",
+        "references/examples.md",
+        "references/source-rules.md",
+        "README.md",
+        "CHANGELOG.md",
+        "LICENSE",
+        "NOTICE",
+        "capability.json",
+        "tests/behavior.test.mjs",
+        "tests/boundary.test.mjs"
+      ],
+      "validation": [
+        "node tests/behavior.test.mjs",
+        "node tests/boundary.test.mjs"
+      ]
+    },
+    {
+      "id": "kim-decision",
+      "kind": "skill",
+      "path": "skills/kim-decision",
+      "source": "https://github.com/KimYx0207/Kim_Decision",
+      "revision": "fbbe41cb6155ffd605c65b5af3f876ec25cfc0ea",
+      "snapshot": "self-contained-public-package-with-privacy-and-monorepo-install-doc-adapter",
+      "version": "0.0.0+imported.fbbe41c",
+      "contractSha256": "e5b0c96576781f5f674ca68500e813520e40a392085663563e023e55daeef12e",
+      "contentSha256": "558844fe908ab94ddcb8b43817c0971a14966c25be3e7b43749c309d296f7895",
+      "required": [
+        "SKILL.md",
+        "references/method.md",
+        "README.md",
+        "README.zh-CN.md",
+        "CHANGELOG.md",
+        "LICENSE",
+        "LICENSE-MIT",
+        "LICENSE-APACHE",
+        "NOTICE",
+        "capability.json",
+        "tests/behavior.test.mjs",
+        "tests/boundary.test.mjs"
+      ],
+      "validation": [
+        "node tests/behavior.test.mjs",
+        "node tests/boundary.test.mjs"
       ]
     },
     {
@@ -71,7 +157,9 @@
       "source": "canonical:skills/memory-3layer",
       "revision": "canonical-direct-sync:2592d1f68b3a005355148b5cdccceedeb74d7755e037970087639602537832fb",
       "snapshot": "canonical-direct-sync",
-      "contentSha256": "2592d1f68b3a005355148b5cdccceedeb74d7755e037970087639602537832fb",
+      "version": "1.0.0",
+      "contractSha256": "738f201a6986d9731fbffc8b2011e25db5e39a73f95094ab888ff48343d9bf87",
+      "contentSha256": "73686c05d932bc45be4e5d7a3858943a003794e1698ae7d4c8ac504d61407740",
       "required": [
         "SKILL.md",
         "README.md",
@@ -90,70 +178,15 @@
         "evals/test_install_memory_3layer.py",
         "evals/test_migrate_legacy_memory.py",
         "evals/test_recording.py",
-        "scripts/check_memory_3layer.py"
+        "scripts/check_memory_3layer.py",
+        "capability.json"
       ],
       "validation": [
-        "python scripts/check_memory_3layer.py .",
-        "python -m unittest discover -s evals -p \"test_*.py\""
+        "python evals/test_install_memory_3layer.py",
+        "python evals/test_migrate_legacy_memory.py",
+        "python evals/test_recording.py",
+        "python scripts/check_memory_3layer.py"
       ]
-    },
-    {
-      "id": "find-skill",
-      "kind": "skill",
-      "path": "skills/find-skill",
-      "source": "https://github.com/KimYx0207/findskill",
-      "revision": "cf7635e3755c47b472bfb6dfd854680b5662ee26+public-package-adapter",
-      "snapshot": "tracked-source-plus-self-contained-package",
-      "contentSha256": "51cb9bffd1629e72d3db0ea7d3fc49aaa3e9ee7f469a4fea7c0602542b0b1725",
-      "required": [
-        "SKILL.md",
-        "README.md",
-        "README_CN.md",
-        "LICENSE",
-        "CHANGELOG.md",
-        "NOTICE"
-      ],
-      "validation": []
-    },
-    {
-      "id": "goalpro",
-      "kind": "skill",
-      "path": "skills/goalpro",
-      "source": "https://github.com/KimYx0207/GoalPro",
-      "revision": "39adc8db765e0e4ad4df8d4ce02e7059fed69f26",
-      "snapshot": "self-contained-public-package;monorepo-install-doc-adapter",
-      "contentSha256": "de0b3afc94814b6e83605a84bbf9ce3c3aa9938753afd51bb2f0e04a9af6bb10",
-      "required": [
-        "SKILL.md",
-        "references/examples.md",
-        "references/source-rules.md",
-        "README.md",
-        "CHANGELOG.md",
-        "LICENSE",
-        "NOTICE"
-      ],
-      "validation": []
-    },
-    {
-      "id": "kim-decision",
-      "kind": "skill",
-      "path": "skills/kim-decision",
-      "source": "https://github.com/KimYx0207/Kim_Decision",
-      "revision": "fbbe41cb6155ffd605c65b5af3f876ec25cfc0ea",
-      "snapshot": "self-contained-public-package-with-privacy-and-monorepo-install-doc-adapter",
-      "contentSha256": "dcfbc0ab817127ef3c2e6603180821f7825d9cce220ca77ac36784d97db4243a",
-      "required": [
-        "SKILL.md",
-        "references/method.md",
-        "README.md",
-        "README.zh-CN.md",
-        "CHANGELOG.md",
-        "LICENSE",
-        "LICENSE-MIT",
-        "LICENSE-APACHE",
-        "NOTICE"
-      ],
-      "validation": []
     },
     {
       "id": "meta-skill-creator",
@@ -162,7 +195,9 @@
       "source": "canonical:skills/meta-skill-creator",
       "revision": "canonical-direct-sync:294245547c7ce33062926329e361c08dee4218bf0b33ada25d1c66a6cd39319b",
       "snapshot": "canonical-direct-sync",
-      "contentSha256": "294245547c7ce33062926329e361c08dee4218bf0b33ada25d1c66a6cd39319b",
+      "version": "1.0.0",
+      "contractSha256": "2e79bd73c54cb7113f27f35d02477d0fb5eeaf46544c975ac12dc5878044d910",
+      "contentSha256": "5221bdc113b4ad716c2faaa9ffa51aed025ed411695de66ce6ccd9eda10f4d3f",
       "required": [
         "SKILL.md",
         "README.md",
@@ -172,11 +207,12 @@
         "scripts/check_meta_skill_package.py",
         "scripts/check_closed_loop.py",
         "scripts/test_acceptance_runs.py",
-        "references/skill-contract.md"
+        "references/skill-contract.md",
+        "capability.json"
       ],
       "validation": [
-        "python scripts/check_meta_skill_package.py .",
-        "python scripts/check_closed_loop.py .",
+        "python scripts/check_closed_loop.py",
+        "python scripts/check_meta_skill_package.py",
         "python scripts/test_acceptance_runs.py"
       ]
     },
@@ -187,7 +223,9 @@
       "source": "https://github.com/KimYx0207/SkillSemgrep",
       "revision": "eb6dd5127f5dedc325b9364edf71a2034e5e35b1",
       "snapshot": "tracked-head;monorepo-install-doc-adapter",
-      "contentSha256": "20877246b522885ea4bfa04bcdd7feccf23e1bea78e6750b49518caa6261f362",
+      "version": "1.0.0",
+      "contractSha256": "e2d8ce75a50ca03892a67a845073f7b46654904612c4fa7478203d6f506ba368",
+      "contentSha256": "6222ff90fab7558b5cee1d33ef252f6bf0f353cb955cc2a5dcabe3e47896c189",
       "required": [
         "SKILL.md",
         "README.md",
@@ -196,9 +234,15 @@
         "CHANGELOG.md",
         "NOTICE",
         "install.ps1",
-        "install.sh"
+        "install.sh",
+        "capability.json",
+        "tests/test_behavior.py",
+        "tests/test_installer.py"
       ],
-      "validation": []
+      "validation": [
+        "python tests/test_behavior.py",
+        "python tests/test_installer.py"
+      ]
     },
     {
       "id": "xiaohongshu-skill",
@@ -207,7 +251,9 @@
       "source": "canonical:skills/xiaohongshu-skill",
       "revision": "canonical-direct-sync:9464b5dab5222a671b546a5dc1b3e73f45f19f53e4bb54fe3b3b2401a2b537ca",
       "snapshot": "canonical-direct-sync",
-      "contentSha256": "9464b5dab5222a671b546a5dc1b3e73f45f19f53e4bb54fe3b3b2401a2b537ca",
+      "version": "1.0.0",
+      "contractSha256": "efb0cf8325ffac1ee351618cc15e55cf5a7bc8ffce41ba5094ab6567642c28a5",
+      "contentSha256": "a5f9de1b67bd6ad157b65a2d0d239c3c9d5f7051a473be787f7a9ed6e8eeec85",
       "required": [
         "SKILL.md",
         "README.md",
@@ -218,13 +264,37 @@
         "scripts/check-chat-output-fixtures.mjs",
         "scripts/check-page-direction-fixtures.mjs",
         "scripts/check-narrative-route-fixtures.mjs",
-        "scripts/check-visual-workspace-contract.mjs"
+        "scripts/check-visual-workspace-contract.mjs",
+        "capability.json"
       ],
       "validation": [
         "node scripts/check-chat-output-fixtures.mjs",
-        "node scripts/check-page-direction-fixtures.mjs",
         "node scripts/check-narrative-route-fixtures.mjs",
+        "node scripts/check-page-direction-fixtures.mjs",
         "node scripts/check-visual-workspace-contract.mjs"
+      ]
+    },
+    {
+      "id": "claudecode-codex-gemini",
+      "kind": "tool",
+      "path": "tools/claudecode-codex-gemini",
+      "source": "canonical:tools/claudecode-codex-gemini",
+      "revision": "pending-local:a5c633d21f8ff0a8c34bf2f1665591a2f40a7d97538db0f0ba03a7ef9b2aa459",
+      "snapshot": "capability-contract-pending-release",
+      "version": "1.0.0-kim-service.1",
+      "contractSha256": "a5c633d21f8ff0a8c34bf2f1665591a2f40a7d97538db0f0ba03a7ef9b2aa459",
+      "contentSha256": "b08827410643495d6043cdce836ba013dceb1a09105a8714380f69532b9370c1",
+      "required": [
+        "capability.json",
+        "cli.mjs",
+        "tests/host-assets.test.mjs",
+        "tests/installer.test.mjs",
+        "tests/mcp-server.test.mjs"
+      ],
+      "validation": [
+        "node tests/host-assets.test.mjs",
+        "node tests/installer.test.mjs",
+        "node tests/mcp-server.test.mjs"
       ]
     }
   ],

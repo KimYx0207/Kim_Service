@@ -1,155 +1,80 @@
 ---
-name: code-security
-description: "Runs Semgrep security scans on the current project to detect vulnerabilities, secrets leakage, and OWASP Top 10 issues. Use when the user asks for security scanning, vulnerability detection, code auditing, secrets checking, or says things like 安全扫描, 代码扫描, 扫漏洞, 安全检查, 漏洞检测, 扫一下安全."
-version: "1.0"
+name: semgrep-skill
+description: "Runs offline Semgrep static-analysis and secret-pattern scans with bundled local rules. Use for local security scanning, vulnerability pattern checks, or leaked-secret checks. Never downloads rules, uploads code, installs packages, or modifies findings automatically."
+version: "1.0.0"
 context: fork
 ---
 
-# AI代码安全扫描专家
+# Local Semgrep security scan
 
-你是代码安全扫描专家，使用Semgrep对当前项目进行全面的安全漏洞检测。
+Use the bundled `rules/local-security.yml` file to scan source code locally. The
+default workflow is read-only, offline, and does not apply fixes.
 
----
+## Safety contract
 
-## 前置检查
+- Treat the directory containing this `SKILL.md` as `<skill-dir>`.
+- Scan only the target explicitly requested by the user. Default to the current
+  project when no narrower target was requested.
+- Use only `<skill-dir>/rules/local-security.yml` by default.
+- Pass `--metrics off` and `--disable-version-check`.
+- Do not use `--config auto`, `p/*`, registry URLs, remote URLs, Semgrep Cloud,
+  login, CI upload, or any other network-backed rules or service.
+- Do not use `--autofix`, edit source files, install packages, or write a report
+  file unless the user separately authorizes that action.
+- Do not print matched secret values. Report the rule, path, line, severity, and
+  a redacted explanation.
 
-在执行任何扫描前，先确认Semgrep已安装：
+## Runtime check
+
+Check for an existing Semgrep executable:
 
 ```bash
 semgrep --version
 ```
 
-如果未安装，执行：
+If it is unavailable or cannot start, stop and report the exact failure. You may
+suggest a platform-appropriate installation command, but must not execute `pip`,
+`pipx`, `brew`, a package manager, or a downloaded installer without explicit
+human approval.
+
+## Default local scan
+
+Resolve `<skill-dir>` to the installed Skill directory, then run:
 
 ```bash
-pip install semgrep
+semgrep scan --config "<skill-dir>/rules/local-security.yml" --metrics off --disable-version-check --json "<target>"
 ```
 
----
+The bundled rules currently detect a small, explicit baseline:
 
-## 核心能力
+- credential-like literals assigned to common secret names;
+- Python `subprocess` calls using `shell=True`;
+- JavaScript/TypeScript `eval(...)` calls.
 
-### 1. 全面安全扫描（默认模式）
+This is not a comprehensive security audit. A clean result means only that these
+local rules found no matches.
 
-使用Semgrep推荐规则集扫描当前项目：
+## Reporting
 
-```bash
-semgrep scan --config auto --json 2>/dev/null | python -m json.tool
-```
+Return:
 
-如果JSON输出太大，使用文本模式：
+1. Semgrep version and the exact local rules path.
+2. Scanned target and whether the command completed successfully.
+3. Findings grouped by severity, with file and line but no secret values.
+4. False-positive caveats and manual remediation suggestions.
+5. Explicit confirmation that no code was uploaded, no remote rules were used,
+   and no source files were modified.
 
-```bash
-semgrep scan --config auto
-```
+Suggested fixes are advisory text only. Any source-code change is a separate
+task requiring the user's authorization.
 
-### 2. OWASP安全审计
+## Installing this Skill
 
-专注于OWASP Top 10漏洞检测：
+The repository includes `install.ps1`, `install.sh`, and
+`scripts/install.py`. Installation is dry-run by default, requires an explicit
+`project` or `user` scope, and requires `--apply` to write. Those installers copy
+this Skill and its bundled rules only; they never install Semgrep.
 
-```bash
-semgrep scan --config "p/security-audit"
-```
-
-### 3. 语言专项扫描
-
-根据项目主要语言选择规则集：
-
-**Python项目**：
-```bash
-semgrep scan --config "p/python" --config "p/bandit"
-```
-
-**JavaScript/TypeScript项目**：
-```bash
-semgrep scan --config "p/javascript" --config "p/typescript"
-```
-
-**Go项目**：
-```bash
-semgrep scan --config "p/golang"
-```
-
-### 4. 密钥泄露检测
-
-检查代码中是否有硬编码的API密钥、密码、Token：
-
-```bash
-semgrep scan --config "p/secrets"
-```
-
-### 5. 指定文件/目录扫描
-
-```bash
-semgrep scan --config auto <目标路径>
-```
-
----
-
-## 扫描流程
-
-收到用户请求后，按以下流程执行：
-
-1. **确认环境**：检查Semgrep版本，确认已安装
-2. **识别项目语言**：检查项目中的文件类型，确定主要语言
-3. **选择扫描策略**：根据用户需求选择合适的规则集
-4. **执行扫描**：运行Semgrep命令
-5. **分析结果**：解读扫描结果，按严重程度分类
-6. **输出报告**：生成结构化的安全报告
-
----
-
-## 报告格式
-
-扫描完成后，输出以下格式的报告：
-
-### 扫描摘要
-
-| 项目 | 结果 |
-|------|------|
-| 扫描工具 | Semgrep [版本] |
-| 规则集 | [使用的规则集] |
-| 扫描文件数 | [数量] |
-| 发现问题数 | [数量] |
-
-### 问题分类
-
-按严重程度分类（高危 > 中危 > 低危 > 信息）：
-
-**高危（必须修复）**
-- [文件:行号] 问题描述 + 修复建议
-
-**中危（建议修复）**
-- [文件:行号] 问题描述 + 修复建议
-
-**低危/信息**
-- [文件:行号] 问题描述
-
-### 修复建议
-
-针对每个高危和中危问题，提供：
-1. 问题原因说明
-2. 具体修复代码
-3. 预防建议
-
----
-
-## 使用示例
-
-用户可以这样触发本Skill：
-
-- "帮我安全扫描一下这个项目"
-- "扫一下漏洞"
-- "代码扫描"
-- "检查一下有没有安全问题"
-- "扫一下有没有密钥泄露"
-- "对src目录做个安全检查"
-
----
-
-## 注意事项
-
-1. Semgrep是规则匹配工具，能发现已知模式的漏洞，但无法像Claude Code Security那样理解代码逻辑
-2. 扫描结果可能有误报，需要结合上下文判断
-3. 密钥泄露检测（p/secrets）建议每次提交前都跑一遍
-4. 大型项目扫描可能需要较长时间，可以指定子目录缩小范围
+The former frontmatter name and install directory, `code-security`, are legacy
+identifiers. New installations use `semgrep-skill`. Existing legacy directories
+are not overwritten or removed automatically.

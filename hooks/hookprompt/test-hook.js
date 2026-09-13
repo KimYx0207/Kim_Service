@@ -5,9 +5,15 @@
  * 用于本地测试user-prompt-submit hook是否正常工作
  */
 
-const { spawn } = require('child_process');
+const { spawn, spawnSync } = require('child_process');
 const path = require('path');
 const fs = require('fs');
+const os = require('os');
+const {
+    DEBUG_LOG_FILE_NAME,
+    DEBUG_LOG_MAX_BYTES,
+    DEBUG_LOG_RETENTION_MS
+} = require('./.claude/hooks/user-prompt-submit.js');
 
 // 测试用例
 const testCases = [
@@ -182,6 +188,166 @@ function log(message, color = 'reset') {
     console.log(`${colors[color]}${message}${colors.reset}`);
 }
 
+function cleanHookEnvironment(overrides = {}) {
+    const env = { ...process.env };
+    delete env.HOOKPROMPT_DEBUG;
+    delete env.HOOKPROMPT_DEBUG_DIR;
+    return { ...env, ...overrides };
+}
+
+function runHookSync(hookPath, input, env = {}) {
+    return spawnSync(process.execPath, [hookPath], {
+        input,
+        encoding: 'utf8',
+        timeout: 10000,
+        windowsHide: true,
+        env: cleanHookEnvironment(env)
+    });
+}
+
+function privacyResult(name, check) {
+    try {
+        check();
+        log(`✅ Privacy / ${name}`, 'green');
+        return { name, passed: true };
+    } catch (error) {
+        log(`❌ Privacy / ${name}: ${error.message}`, 'red');
+        return { name, passed: false, error: error.message };
+    }
+}
+
+function assertPrivacy(condition, message) {
+    if (!condition) {
+        throw new Error(message);
+    }
+}
+
+function runPrivacyTests() {
+    log('\n' + '='.repeat(60), 'cyan');
+    log('隐私日志专项测试', 'cyan');
+    log('='.repeat(60), 'cyan');
+
+    const hookPath = hookTargets[0].path;
+    const testRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'hookprompt-privacy-'));
+    const results = [];
+    const prompt = JSON.stringify({
+        hook_event_name: 'UserPromptSubmit',
+        prompt: '请优化这个足够长的隐私测试任务输入'
+    });
+
+    try {
+        const bashAdapter = fs.readFileSync(
+            path.join(__dirname, '.claude', 'hooks', 'user-prompt-submit.sh'),
+            'utf8'
+        );
+        results.push(privacyResult('Bash入口复用统一隐私实现', () => {
+            assertPrivacy(bashAdapter.includes('user-prompt-submit.js'), 'Bash入口未委托给统一JS实现');
+            assertPrivacy(!/\bLOG_FILE\b|\blog\s*\(\)/.test(bashAdapter), 'Bash入口仍保留独立日志实现');
+            assertPrivacy(!/用户输入:|USER_INPUT/.test(bashAdapter), 'Bash入口仍处理或记录用户正文');
+        }));
+
+        const defaultDirectory = path.join(testRoot, 'default-disabled');
+        const defaultRun = runHookSync(hookPath, prompt, {
+            HOOKPROMPT_DEBUG_DIR: defaultDirectory
+        });
+        results.push(privacyResult('默认完全不写日志', () => {
+            assertPrivacy(defaultRun.status === 0, `hook退出码为 ${defaultRun.status}`);
+            assertPrivacy(!fs.existsSync(defaultDirectory), '未启用debug却创建了日志目录');
+        }));
+
+        const sentinel = 'HOOKPROMPT_PRIVATE_SENTINEL_9f3c2d7a';
+        const sanitizedDirectory = path.join(testRoot, 'sanitized');
+        const sentinelRun = runHookSync(hookPath, JSON.stringify({
+            hook_event_name: 'UserPromptSubmit',
+            prompt: `请处理这个包含私密标记的完整任务：${sentinel}`
+        }), {
+            HOOKPROMPT_DEBUG: '1',
+            HOOKPROMPT_DEBUG_DIR: sanitizedDirectory
+        });
+        results.push(privacyResult('debug日志不泄漏sentinel或正文', () => {
+            const logPath = path.join(sanitizedDirectory, DEBUG_LOG_FILE_NAME);
+            assertPrivacy(sentinelRun.status === 0, `hook退出码为 ${sentinelRun.status}`);
+            assertPrivacy(fs.existsSync(logPath), '显式debug未生成固定名日志');
+            const content = fs.readFileSync(logPath, 'utf8');
+            assertPrivacy(!content.includes(sentinel), '日志泄漏了输入sentinel');
+            assertPrivacy(!content.includes('请处理这个包含私密标记'), '日志泄漏了用户正文');
+            assertPrivacy(!content.includes('additionalContext'), '日志泄漏了派生prompt字段');
+            assertPrivacy(content.includes('"event":"prompt-enhanced"'), '日志缺少允许的事件元数据');
+            assertPrivacy(content.includes('"inputLength"'), '日志缺少允许的长度元数据');
+        }));
+
+        const lifecycleDirectory = path.join(testRoot, 'lifecycle');
+        fs.mkdirSync(lifecycleDirectory);
+        const activeLog = path.join(lifecycleDirectory, DEBUG_LOG_FILE_NAME);
+        const staleArchive = `${activeLog}.3`;
+        fs.writeFileSync(activeLog, 'x'.repeat(DEBUG_LOG_MAX_BYTES), 'utf8');
+        fs.writeFileSync(staleArchive, 'stale debug metadata', 'utf8');
+        const staleDate = new Date(Date.now() - DEBUG_LOG_RETENTION_MS - 60_000);
+        fs.utimesSync(staleArchive, staleDate, staleDate);
+        const lifecycleRun = runHookSync(hookPath, prompt, {
+            HOOKPROMPT_DEBUG: '1',
+            HOOKPROMPT_DEBUG_DIR: lifecycleDirectory
+        });
+        results.push(privacyResult('固定日志轮转并清理过期归档', () => {
+            assertPrivacy(lifecycleRun.status === 0, `hook退出码为 ${lifecycleRun.status}`);
+            assertPrivacy(fs.existsSync(`${activeLog}.1`), '超限日志没有轮转到.1');
+            assertPrivacy(fs.statSync(`${activeLog}.1`).size === DEBUG_LOG_MAX_BYTES, '轮转归档内容不完整');
+            assertPrivacy(fs.existsSync(activeLog), '轮转后没有创建新的活动日志');
+            assertPrivacy(!fs.existsSync(staleArchive), '超过保留期的归档未清理');
+        }));
+
+        const invalidPath = path.join(testRoot, 'not-a-directory');
+        fs.writeFileSync(invalidPath, 'unchanged', 'utf8');
+        const outsideDirectory = path.join(__dirname, `.hookprompt-outside-${process.pid}`);
+        const invalidRun = runHookSync(hookPath, prompt, {
+            HOOKPROMPT_DEBUG: '1',
+            HOOKPROMPT_DEBUG_DIR: invalidPath
+        });
+        const outsideRun = runHookSync(hookPath, prompt, {
+            HOOKPROMPT_DEBUG: '1',
+            HOOKPROMPT_DEBUG_DIR: outsideDirectory
+        });
+        results.push(privacyResult('拒绝非法和临时目录外的日志路径', () => {
+            assertPrivacy(invalidRun.status === 0 && outsideRun.status === 0, '非法日志路径影响了hook执行');
+            assertPrivacy(fs.readFileSync(invalidPath, 'utf8') === 'unchanged', '非法目录文件被改写');
+            assertPrivacy(!fs.existsSync(outsideDirectory), '在系统临时目录外创建了日志目录');
+        }));
+
+        const junctionPath = path.join(testRoot, 'junction-log-dir');
+        const junctionTarget = path.join(__dirname, `.hookprompt-junction-target-${process.pid}`);
+        let junctionCreated = false;
+        try {
+            fs.mkdirSync(junctionTarget);
+            fs.symlinkSync(junctionTarget, junctionPath, process.platform === 'win32' ? 'junction' : 'dir');
+            junctionCreated = true;
+            const junctionRun = runHookSync(hookPath, prompt, {
+                HOOKPROMPT_DEBUG: '1',
+                HOOKPROMPT_DEBUG_DIR: junctionPath
+            });
+            results.push(privacyResult('拒绝TEMP内symlink或junction越界', () => {
+                assertPrivacy(junctionRun.status === 0, `hook退出码为 ${junctionRun.status}`);
+                assertPrivacy(!fs.existsSync(path.join(junctionTarget, DEBUG_LOG_FILE_NAME)), '日志沿junction写出了临时目录');
+            }));
+        } catch (error) {
+            if (error && ['EPERM', 'EACCES', 'ENOSYS'].includes(error.code)) {
+                log('⚠️ Privacy / 当前平台不允许创建symlink/junction，动态越界用例跳过', 'yellow');
+                results.push({ name: '拒绝TEMP内symlink或junction越界', passed: true, skipped: true });
+            } else {
+                results.push({ name: '拒绝TEMP内symlink或junction越界', passed: false, error: error.message });
+            }
+        } finally {
+            if (junctionCreated && fs.existsSync(junctionPath)) {
+                fs.unlinkSync(junctionPath);
+            }
+            fs.rmSync(junctionTarget, { recursive: true, force: true });
+        }
+    } finally {
+        fs.rmSync(testRoot, { recursive: true, force: true });
+    }
+
+    return results;
+}
+
 // 运行单个测试
 function runTest(testCase, hookTarget) {
     return new Promise((resolve) => {
@@ -318,6 +484,8 @@ async function main() {
         }
     }
 
+    const privacyResults = runPrivacyTests();
+
     // 输出总结
     log('\n' + '='.repeat(60), 'cyan');
     log('测试总结', 'cyan');
@@ -334,18 +502,12 @@ async function main() {
 
     const passedCount = results.filter(r => r.passed).length;
     const totalCount = results.length;
+    const privacyPassedCount = privacyResults.filter(r => r.passed).length;
 
-    log(`\n总计: ${passedCount}/${totalCount} 通过`, passedCount === totalCount ? 'green' : 'red');
-    if (passedCount !== totalCount) {
+    log(`\n双入口兼容: ${passedCount}/${totalCount} 通过`, passedCount === totalCount ? 'green' : 'red');
+    log(`隐私专项: ${privacyPassedCount}/${privacyResults.length} 通过`, privacyPassedCount === privacyResults.length ? 'green' : 'red');
+    if (passedCount !== totalCount || privacyPassedCount !== privacyResults.length) {
         process.exitCode = 1;
-    }
-
-    // 检查日志文件
-    const os = require('os');
-    const logFile = path.join(os.tmpdir(), 'hook-prompt-optimizer.log');
-    if (fs.existsSync(logFile)) {
-        log(`\n日志文件位置: ${logFile}`, 'blue');
-        log('查看日志: cat "' + logFile + '"', 'blue');
     }
 
     log('', 'reset');

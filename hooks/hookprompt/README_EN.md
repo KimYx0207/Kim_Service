@@ -287,17 +287,25 @@ Build a login feature with tests and error handling
 
 ### Logs
 
+No log is created by default. Enable temporary debug logging only while diagnosing the hook itself. Debug records contain event names and lengths; they never contain raw input, user input, derived prompts, or exception bodies.
+
 Windows:
 
 ```powershell
-Get-Content "$env:TEMP\hook-prompt-optimizer.log"
+$env:HOOKPROMPT_DEBUG = "1"
+# Trigger the hook once, then inspect:
+Get-Content "$env:TEMP\hookprompt-debug\hook-prompt-optimizer.log"
 ```
 
 macOS / Linux:
 
 ```bash
-cat /tmp/hook-prompt-optimizer.log
+HOOKPROMPT_DEBUG=1 claude
+# Trigger the hook once, then inspect:
+cat "${TMPDIR:-/tmp}/hookprompt-debug/hook-prompt-optimizer.log"
 ```
+
+Debug logs rotate at 64 KiB, keep at most three archives for seven days, and reject paths outside the temporary directory as well as symlink/junction log directories. Unset `HOOKPROMPT_DEBUG` after diagnosis to return to fully disabled logging.
 
 ## Changelog
 

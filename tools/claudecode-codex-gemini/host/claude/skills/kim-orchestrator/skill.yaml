@@ -1,0 +1,102 @@
+name: kim-orchestrator
+description: |
+  Kim多AI协作编排技能 - 提供10种命令，按使用顺序排列
+
+  【10个Kim命令（按序号排列）】
+  1.  /kim-setup  = 环境配置检测（Claude）
+  2.  /kim-help   = 帮助指南，命令推荐（Claude）
+  3.  /kim-plan   = 需求拆解为任务列表（Claude）
+  4.  /kim-crud   = CRUD代码生成（Claude + Codex）
+  5.  /kim-api    = API端点生成（Claude + Codex）
+  6.  /kim-form   = 表单组件生成（Claude + Codex）
+  7.  /kim-code   = 代码生成，快速开发（Claude + Codex）
+  8.  /kim-review = 代码审查，深度分析（Claude + Gemini）
+  9.  /kim-team   = 完整流程，生产级（三引擎协作）
+  10. /kim-ui2code = 截图转前端代码（三引擎协作）
+
+  【选择指南】
+  - 首次使用 → /kim-setup（检测环境）
+  - 不知道用什么 → /kim-help（智能推荐）
+  - 大需求 → /kim-plan（拆解任务）
+  - 生成代码 → /kim-crud | /kim-api | /kim-form | /kim-code
+  - 审查代码 → /kim-review
+  - 生产级 → /kim-team
+  - 截图转代码 → /kim-ui2code
+  - 简单问题 → 直接对话，无需命令
+
+  【输出目录】
+  所有中间结果保存在 .kim-orchestrator/ 目录，可追溯、可回滚
+
+  【写入规范】
+  先展示目标文件计划并获得项目写入批准。不得自动修改 README 或用户级配置；已有文件先读取并只做受管更新。
+
+version: "2.0.0"
+
+author: 老金
+
+# Kim Service runtime entrypoints. Host commands are installed from ../../commands;
+# MCP bridges remain Tool entrypoints and are never invoked through a bundled shell script.
+runtime:
+  type: host-command-bundle
+  commands_dir: ../../commands
+  codex_mcp: node <component>/cli.mjs mcp codex
+  gemini_mcp: node <component>/cli.mjs mcp gemini
+
+commands:
+  - kim-setup
+  - kim-help
+  - kim-plan
+  - kim-crud
+  - kim-api
+  - kim-form
+  - kim-code
+  - kim-review
+  - kim-team
+  - kim-ui2code
+
+# Dependencies
+dependencies:
+  required:
+    - claude  # Claude Code (installed)
+  optional:
+    - codex   # Codex CLI (code generation)
+    - gemini  # Gemini CLI (code review)
+
+# Configuration options
+config:
+  output_dir: ".kim-orchestrator"
+  auto_cleanup: false
+  verbose_logging: true
+  max_retries: 1
+
+# Usage examples
+examples:
+  - name: 环境检测
+    command: /kim-setup
+
+  - name: 查看帮助
+    command: /kim-help
+
+  - name: 需求拆解
+    command: /kim-plan "实现用户认证系统"
+
+  - name: CRUD生成
+    command: /kim-crud "User表：id, username, email, password_field"
+
+  - name: API生成
+    command: /kim-api "发送验证码接口"
+
+  - name: 表单生成
+    command: /kim-form "登录表单：用户名、密码"
+
+  - name: 代码生成
+    command: /kim-code "实现用户登录功能"
+
+  - name: 代码审查
+    command: /kim-review "src/auth/utils.py"
+
+  - name: 完整流程
+    command: /kim-team "实现JWT登录，包含注册、登录、token刷新"
+
+  - name: 截图转代码
+    command: /kim-ui2code "./design.png"

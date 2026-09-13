@@ -1,155 +1,63 @@
 [English](./README_EN.md) | [中文](./README.md)
 
-# Claude Code Security Scanning Skill
+# Semgrep Local Security Scan Skill
 
-<div align="center">
+This Claude Code Skill runs static-analysis and secret-pattern checks with rules bundled in the component. Its default behavior is read-only and offline: it does not upload code, fetch remote rules, or apply fixes.
 
-![GitHub stars](https://img.shields.io/github/stars/KimYx0207/Kim_Service?style=social)
-![GitHub forks](https://img.shields.io/github/forks/KimYx0207/Kim_Service?style=social)
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Version](https://img.shields.io/badge/Claude_Code-2.1.39-green.svg)
+## Boundary
 
-**Just say "scan for vulnerabilities" in Claude Code — powered by Semgrep**
+The current local baseline detects only:
 
-</div>
+- credential-like literals assigned to common secret names;
+- Python `subprocess(..., shell=True)`;
+- JavaScript / TypeScript `eval(...)`.
 
----
+A clean result is not a comprehensive security audit. The default workflow does not use `--config auto`, `p/*`, the Semgrep Registry, Semgrep Cloud, login, uploads, or rule downloads.
 
-## Overview
-
-A [Semgrep](https://semgrep.dev/)-based code security scanning skill for Claude Code. After installation, trigger security scans with natural language — no commands to memorize.
-
-## Features
-
-- **Comprehensive Security Scanning**: Auto-detect OWASP Top 10 vulnerabilities
-- **Secret Detection**: Find hardcoded API keys, passwords, and tokens
-- **Multi-Language Support**: Python, JavaScript/TypeScript, Go, and dozens more
-- **Structured Reports**: Categorized by High/Medium/Low severity with fix suggestions
-- **Natural Language Triggers**: Say "security scan" or "scan for vulnerabilities"
-
-## Prerequisites
-
-- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) installed
-
-Python and Semgrep are auto-installed by the setup script.
-
-## Installation
-
-### Option 1: Clone + One-Click Install (Recommended)
-
-```bash
-git clone --depth 1 https://github.com/KimYx0207/Kim_Service.git
-cd Kim_Service/skills/semgrep-skill
-```
-
-> `skills/semgrep-skill/` in Kim Service is the maintained, self-contained publication package. The former standalone repository is retained only as provenance for the imported snapshot.
-
-**Mac/Linux:**
-```bash
-bash install.sh
-```
-
-**Windows (PowerShell):**
-```powershell
-powershell -ExecutionPolicy Bypass -File install.ps1
-```
-
-**Windows (Git Bash):**
-```bash
-bash install.sh
-```
-
-### Option 2: Manual Installation
-
-**Mac/Linux:**
-```bash
-pip install semgrep
-mkdir -p ~/.claude/skills/code-security
-curl -fsSL https://raw.githubusercontent.com/KimYx0207/Kim_Service/main/skills/semgrep-skill/SKILL.md -o ~/.claude/skills/code-security/SKILL.md
-```
-
-**Windows (PowerShell):**
-```powershell
-pip install semgrep
-New-Item -ItemType Directory -Path "$env:USERPROFILE\.claude\skills\code-security" -Force
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/KimYx0207/Kim_Service/main/skills/semgrep-skill/SKILL.md" -OutFile "$env:USERPROFILE\.claude\skills\code-security\SKILL.md"
-```
-
-No restart needed — Claude Code's **Hot Reloading** auto-loads the new Skill.
+Semgrep must already be installed by the user. The component installer installs the Skill projection only and never invokes `pip` or another package manager.
 
 ## Usage
 
-### Natural Language
+Ask Claude Code to run `semgrep-skill` locally. The Skill resolves its own installation directory and executes:
 
-```
-Scan this project for security issues
-```
-```
-Check for leaked secrets
-```
-```
-Run a security audit on the src directory
+```bash
+semgrep scan --config "<skill-dir>/rules/local-security.yml" --metrics off --disable-version-check --json "<target>"
 ```
 
-### Slash Command
+Reports contain rule, path, line, severity, and redacted context. Remediation is advisory text only; changing source code is a separately authorized task.
 
-```
-/code-security
-```
+## Safe installer
 
-### Scan Modes
+Scope is mandatory and all commands are dry-run unless `--apply` / `-Apply` is present:
 
-| Mode | Trigger | Ruleset |
-|------|---------|---------|
-| Full Scan | "security scan" | `--config auto` |
-| OWASP Audit | "OWASP scan" | `p/security-audit` |
-| Secret Detection | "scan for leaked keys" | `p/secrets` |
-| Python | "scan Python code" | `p/python` + `p/bandit` |
-| JS/TS | "check JS security" | `p/javascript` + `p/typescript` |
-| Go | "Go security check" | `p/golang` |
-
-## Report Example
-
-```
-Scan Summary
-├── Tool: Semgrep v1.152.0
-├── Ruleset: auto
-├── Files Scanned: 127
-└── Issues Found: 5
-
-High (Must Fix)
-├── src/auth.py:42  SQL injection — use parameterized queries
-└── config/db.js:15 Hardcoded DB password — move to env vars
-
-Medium (Should Fix)
-├── utils/http.py:88  SSL cert not verified — enable verify=True
-└── api/upload.js:23  No file size limit — add size restriction
-
-Low
-└── tests/mock.py:5  Weak password in test — test env only
+```powershell
+.\install.ps1 -Scope Project -ProjectRoot C:\path\to\project
+.\install.ps1 -Scope Project -ProjectRoot C:\path\to\project -Apply
+.\install.ps1 -Scope User
+.\install.ps1 -Scope User -Apply
+.\install.ps1 -Scope Project -ProjectRoot C:\path\to\project -Rollback -Apply
 ```
 
-## Semgrep vs Claude Code Security
+```bash
+./install.sh --scope project --project-root /path/to/project
+./install.sh --scope project --project-root /path/to/project --apply
+./install.sh --scope project --project-root /path/to/project --rollback --apply
+```
 
-| Dimension | Semgrep (This Skill) | Claude Code Security |
-|-----------|---------------------|---------------------|
-| Approach | Rule pattern matching | AI code understanding |
-| Speed | Fast | Slower |
-| False Positives | Medium | Low (multi-stage verification) |
-| Detection | Known vulnerability patterns | Can find novel vulnerabilities |
-| Price | Free & open source | Enterprise/Team only |
-| Availability | Available now | Limited preview |
+The installer records actual SHA-256 file hashes and a target aggregate hash, retains a verified prior installation for rollback, restores the old installation on transaction failure, and refuses targets containing unknown, modified, linked, or unreceipted content.
 
-## Background
+## Rename compatibility
 
-On Feb 20, 2026, Anthropic launched Claude Code Security, finding 500+ zero-day vulnerabilities during testing. CrowdStrike dropped 8%, Okta dropped 9.2%.
+The catalog and component directory use `semgrep-skill`; frontmatter now uses the same name. `code-security` is a legacy identifier. The installer deliberately does not overwrite, move, or delete a legacy `code-security` directory. Install and validate `/semgrep-skill`, then decide separately whether to retain the legacy copy.
 
-But Claude Code Security is currently Enterprise/Team only. This Skill is the free alternative — Semgrep-based security scanning integrated into Claude Code, triggered by natural language.
+## Tests
 
-## License
+```bash
+python -m unittest discover -s tests -p "test_*.py" -v
+```
 
-MIT
+The behavior test executes the bundled rules when Semgrep is available. Installer tests cover dry-run behavior, actual-hash receipts, unknown-content refusal, upgrade rollback, and receipt-write transaction rollback.
 
-## Provenance
+## Provenance and license
 
-This component was originally imported from [KimYx0207/SkillSemgrep](https://github.com/KimYx0207/SkillSemgrep). That repository is retained as provenance only; install the current snapshot from the [Kim Service component directory](https://github.com/KimYx0207/Kim_Service/tree/main/skills/semgrep-skill).
+Originally imported from [KimYx0207/SkillSemgrep](https://github.com/KimYx0207/SkillSemgrep). The maintained version is `skills/semgrep-skill/` in Kim Service. MIT License.

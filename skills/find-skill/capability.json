@@ -1,0 +1,227 @@
+{
+  "schemaVersion": 1,
+  "id": "find-skill",
+  "componentType": "skill",
+  "componentVersion": "0.0.0+imported.cf7635e",
+  "entrypoint": "SKILL.md",
+  "capabilities": [
+    {
+      "id": "skill-search",
+      "summary": "Discover installed skills first and optionally search public skill sources with a sanitized query.",
+      "useWhen": [
+        "The user asks to find or compare skills for a task.",
+        "The user wants to know whether a specialized workflow is already available."
+      ],
+      "doNotUseWhen": [
+        "The request is to install, update, or remove a skill rather than discover one.",
+        "External search would require disclosing private prompt text, secrets, local paths, or internal identifiers."
+      ],
+      "input": {
+        "type": "object",
+        "required": [
+          "task"
+        ],
+        "properties": {
+          "task": {
+            "type": "string",
+            "minLength": 1
+          },
+          "allowNetwork": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      },
+      "output": {
+        "type": "object",
+        "required": [],
+        "deliveryFormat": "conceptual-human-delivery",
+        "description": "Conceptual sections for the host model's human-readable search report. No package Adapter guarantees a strict JSON envelope or exact field presence.",
+        "properties": {
+          "localMatches": {
+            "type": "array"
+          },
+          "externalSearchStatus": {
+            "enum": [
+              "not-requested",
+              "completed",
+              "unavailable",
+              "failed"
+            ]
+          },
+          "candidates": {
+            "type": "array"
+          }
+        }
+      },
+      "permissions": [
+        "filesystem:read-installed-skills",
+        "network:search-public-skills-optional"
+      ],
+      "sideEffects": [
+        "May send sanitized generic keywords to a public skill search service when network search is allowed."
+      ],
+      "humanGate": {
+        "required": false,
+        "when": []
+      },
+      "validation": [
+        "tests/find-skill.behavior.test.mjs"
+      ]
+    },
+    {
+      "id": "skill-install-project",
+      "summary": "Install one selected skill into the current project after explicit approval of the exact target.",
+      "useWhen": [
+        "The user explicitly approves the displayed project-scope command, source, skill, and target agent."
+      ],
+      "doNotUseWhen": [
+        "The user only asked to search, find, compare, or recommend skills.",
+        "Approval is ambiguous, applies to user scope, or does not identify the selected skill and target."
+      ],
+      "input": {
+        "type": "object",
+        "required": [
+          "source",
+          "skill",
+          "agent",
+          "approvedCommand"
+        ],
+        "properties": {
+          "source": {
+            "type": "string",
+            "minLength": 1
+          },
+          "skill": {
+            "type": "string",
+            "minLength": 1
+          },
+          "agent": {
+            "type": "string",
+            "minLength": 1
+          },
+          "approvedCommand": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "output": {
+        "type": "object",
+        "required": [],
+        "deliveryFormat": "conceptual-human-delivery",
+        "description": "Conceptual installation-result sections. The approved npx command and host determine the real stdout; this Skill does not provide a JSON Adapter.",
+        "properties": {
+          "status": {
+            "enum": [
+              "installed",
+              "failed"
+            ]
+          },
+          "scope": {
+            "const": "project"
+          },
+          "verification": {
+            "type": "string"
+          }
+        }
+      },
+      "permissions": [
+        "filesystem:write-project-skills",
+        "filesystem:write-package-manager-cache",
+        "network:download-approved-skill",
+        "runtime:request-human-decision"
+      ],
+      "sideEffects": [
+        "Writes skill files or links and skill metadata inside the current project.",
+        "May download content from the approved source."
+      ],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "Before executing the exact project-scope installation command."
+        ]
+      },
+      "validation": [
+        "tests/find-skill.behavior.test.mjs"
+      ]
+    },
+    {
+      "id": "skill-install-user",
+      "summary": "Install one selected skill into user-level agent configuration after explicit approval of the exact target.",
+      "useWhen": [
+        "The user explicitly approves the displayed user-scope command, source, skill, and target agent."
+      ],
+      "doNotUseWhen": [
+        "The user only asked to search, find, compare, or recommend skills.",
+        "Approval is ambiguous, applies to project scope, or does not identify the selected skill and target."
+      ],
+      "input": {
+        "type": "object",
+        "required": [
+          "source",
+          "skill",
+          "agent",
+          "approvedCommand"
+        ],
+        "properties": {
+          "source": {
+            "type": "string",
+            "minLength": 1
+          },
+          "skill": {
+            "type": "string",
+            "minLength": 1
+          },
+          "agent": {
+            "type": "string",
+            "minLength": 1
+          },
+          "approvedCommand": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "output": {
+        "type": "object",
+        "required": [],
+        "deliveryFormat": "conceptual-human-delivery",
+        "description": "Conceptual installation-result sections. The approved npx command and host determine the real stdout; this Skill does not provide a JSON Adapter.",
+        "properties": {
+          "status": {
+            "enum": [
+              "installed",
+              "failed"
+            ]
+          },
+          "scope": {
+            "const": "user"
+          },
+          "verification": {
+            "type": "string"
+          }
+        }
+      },
+      "permissions": [
+        "filesystem:write-user-skills",
+        "filesystem:write-package-manager-cache",
+        "network:download-approved-skill",
+        "runtime:request-human-decision"
+      ],
+      "sideEffects": [
+        "Writes skill files or links and skill metadata outside the project into user-level agent configuration.",
+        "May download content from the approved source."
+      ],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "Before executing the exact user-scope installation command."
+        ]
+      },
+      "validation": [
+        "tests/find-skill.behavior.test.mjs"
+      ]
+    }
+  ]
+}

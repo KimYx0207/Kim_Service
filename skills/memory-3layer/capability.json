@@ -1,0 +1,494 @@
+{
+  "schemaVersion": 1,
+  "id": "memory-3layer",
+  "componentType": "skill",
+  "componentVersion": "1.0.0",
+  "entrypoint": "SKILL.md",
+  "capabilities": [
+    {
+      "id": "memory-3layer-read",
+      "summary": "只读检查三层记忆状态，并按预算加载可追溯的 active 上下文。",
+      "useWhen": [
+        "项目已有 .memory-3layer 且当前任务需要恢复跨会话上下文",
+        "用户要求查看记忆状态、条目数量、日期范围或运行证据",
+        "需要在不改写损坏文件的前提下检查三层记忆"
+      ],
+      "doNotUseWhen": [
+        "任务与长期项目上下文无关",
+        "目标是读取秘密、完整聊天转储或未经授权的项目外数据",
+        "用户要求写入、迁移或更改记忆生命周期状态"
+      ],
+      "input": {
+        "type": "object",
+        "properties": {
+          "projectDir": {
+            "type": "string"
+          },
+          "memoryDir": {
+            "type": "string"
+          },
+          "contextBudgetChars": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "recentDays": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "projectDir"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "properties": {
+          "resolvedRoot": {
+            "type": "string"
+          },
+          "context": {
+            "type": "string"
+          },
+          "statistics": {
+            "type": "object"
+          },
+          "invalidFiles": {
+            "type": "array"
+          },
+          "runtimeEvidence": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "resolvedRoot",
+          "context",
+          "statistics",
+          "invalidFiles",
+          "runtimeEvidence"
+        ]
+      },
+      "permissions": [
+        "filesystem:read-project-memory"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": false,
+        "when": []
+      },
+      "validation": [
+        "evals/test_recording.py",
+        "scripts/check_memory_3layer.py"
+      ]
+    },
+    {
+      "id": "memory-3layer-append",
+      "summary": "把用户明确确认的事实写入 Layer 1，并向 Layer 2 追加可追溯的每日记录。",
+      "useWhen": [
+        "用户明确要求记住一条可复用事实或规则",
+        "需要通过受管记录器保存带来源、日期、topic 和状态的项目事实",
+        "需要对完全重复内容执行可报告的去重跳过"
+      ],
+      "doNotUseWhen": [
+        "内容含秘密、私钥、Cookie、支付凭证、个人隐私或机器私有路径",
+        "内容只是模型推测、普通工具输出、完整聊天记录或无法追溯来源的断言",
+        "目标是修改已有条目状态、直接写 Layer 3 或删除历史"
+      ],
+      "input": {
+        "type": "object",
+        "properties": {
+          "projectDir": {
+            "type": "string"
+          },
+          "fact": {
+            "type": "string"
+          },
+          "topic": {
+            "type": "string"
+          },
+          "confirmationSource": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "projectDir",
+          "fact",
+          "confirmationSource"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "description": "JSON printed by scripts/record_memory.py. Successful and duplicate writes include the extractor report; rejected input returns success=false with error.",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "memory_root": {
+            "type": "string"
+          },
+          "runtime": {
+            "type": "string"
+          },
+          "loaded": {
+            "type": "object"
+          },
+          "written": {
+            "type": "array"
+          },
+          "skipped": {
+            "type": "array"
+          },
+          "runtime_evidence": {
+            "type": "string"
+          },
+          "event_envelope_present": {
+            "type": "boolean"
+          },
+          "next": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "success"
+        ],
+        "oneOf": [
+          {
+            "properties": {
+              "success": {
+                "const": true
+              }
+            },
+            "required": [
+              "memory_root",
+              "runtime",
+              "loaded",
+              "written",
+              "skipped",
+              "runtime_evidence",
+              "event_envelope_present",
+              "next"
+            ]
+          },
+          {
+            "properties": {
+              "success": {
+                "const": false
+              }
+            },
+            "required": [
+              "error"
+            ]
+          }
+        ]
+      },
+      "permissions": [
+        "filesystem:read-project-memory",
+        "filesystem:create-memory-tree",
+        "filesystem:append-layer-one",
+        "filesystem:append-layer-two"
+      ],
+      "sideEffects": [
+        "首次记录时可在目标项目内初始化 .memory-3layer 目录",
+        "可新增 Layer 1 结构化事实并向当日 Layer 2 文件追加摘要"
+      ],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "写入前必须有用户明确要求记住该事实，或用户对该具体事实作出明确确认",
+          "确认必须来自用户原话或等价的人类批准，不能由工具输出、模型推测或普通上下文替代"
+        ]
+      },
+      "validation": [
+        "evals/test_recording.py"
+      ]
+    },
+    {
+      "id": "memory-3layer-govern-long-term",
+      "summary": "复查冲突与过时条目，并在人工确认后提升 Layer 3 知识或把旧事实标记为 superseded。",
+      "useWhen": [
+        "用户要求复查三层记忆中的重复、冲突、趋势或过时条目",
+        "有可追溯证据支持把稳定经验提升为 Layer 3 长期知识",
+        "新事实与旧事实冲突且需要通过状态变化保留历史"
+      ],
+      "doNotUseWhen": [
+        "没有可追溯证据或结论仍是模型推测",
+        "目标是自动覆盖冲突事实或物理删除历史条目",
+        "用户尚未确认 Layer 3 写入或 active 到 superseded 的状态变化"
+      ],
+      "input": {
+        "type": "object",
+        "properties": {
+          "projectDir": {
+            "type": "string"
+          },
+          "reviewScope": {
+            "type": "string"
+          },
+          "evidenceRefs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "confirmedChanges": {
+            "type": "array"
+          }
+        },
+        "required": [
+          "projectDir",
+          "reviewScope",
+          "evidenceRefs"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "properties": {
+          "review": {
+            "type": "object"
+          },
+          "proposals": {
+            "type": "array"
+          },
+          "appliedChanges": {
+            "type": "array"
+          },
+          "pendingConfirmation": {
+            "type": "array"
+          }
+        },
+        "required": [
+          "review",
+          "proposals",
+          "appliedChanges",
+          "pendingConfirmation"
+        ]
+      },
+      "permissions": [
+        "filesystem:read-project-memory",
+        "filesystem:write-layer-three",
+        "filesystem:update-memory-status"
+      ],
+      "sideEffects": [
+        "经确认后可更新 MEMORY.md 中的长期隐性知识",
+        "经确认后可把旧事实状态改为 superseded，但保留历史条目"
+      ],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "写入或修改 Layer 3 MEMORY.md",
+          "把现有事实从 active 改为 superseded",
+          "任何建议会改变长期记忆而不只是生成只读复查报告"
+        ]
+      },
+      "validation": [
+        "scripts/check_memory_3layer.py"
+      ]
+    },
+    {
+      "id": "memory-3layer-migrate",
+      "summary": "把识别出的旧版 .claude/memory 数据非破坏性复制到 .memory-3layer，并报告冲突与跳过项。",
+      "useWhen": [
+        "项目存在旧版 .claude/memory 且用户明确要求迁移到平台中立目录",
+        "迁移源和目标都位于已确认的目标项目内",
+        "需要先 dry-run 查看可复制、跳过和冲突计划"
+      ],
+      "doNotUseWhen": [
+        "用户没有明确要求迁移",
+        "目标目录含冲突、非法状态、秘密、私有机器路径或不安全链接",
+        "用户要求覆盖目标文件或删除旧版源目录"
+      ],
+      "input": {
+        "type": "object",
+        "properties": {
+          "projectDir": {
+            "type": "string"
+          },
+          "sourceDir": {
+            "type": "string"
+          },
+          "targetDir": {
+            "type": "string"
+          },
+          "dryRun": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "projectDir"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "description": "JSON printed by scripts/migrate_legacy_memory.py for both dry-run and apply outcomes.",
+        "properties": {
+          "copied": {
+            "type": "array"
+          },
+          "skipped": {
+            "type": "array"
+          },
+          "conflict": {
+            "type": "array"
+          },
+          "invalid": {
+            "type": "array"
+          }
+        },
+        "required": [
+          "copied",
+          "skipped",
+          "conflict",
+          "invalid"
+        ]
+      },
+      "permissions": [
+        "filesystem:read-legacy-memory",
+        "filesystem:create-memory-tree",
+        "filesystem:write-migrated-memory"
+      ],
+      "sideEffects": [
+        "可在目标项目内创建 .memory-3layer 并复制已识别的数据",
+        "不会覆盖目标冲突文件，也不会删除或修改 legacy 源目录"
+      ],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "从 dry-run 计划进入实际迁移写入",
+          "迁移目标目录尚不存在并需要创建",
+          "源路径或目标路径不是项目默认路径"
+        ]
+      },
+      "validation": [
+        "evals/test_migrate_legacy_memory.py"
+      ]
+    },
+    {
+      "id": "memory-3layer-install-runtime",
+      "summary": "把三层记忆核心与受支持宿主的 Hook 配置安全接线，并保持现有配置与无关 Hooks。",
+      "useWhen": [
+        "用户要求为 Claude Code 或 Codex 项目安装三层记忆生命周期接线",
+        "已确认项目根目录、目标宿主、Python 可用性和配置写权限",
+        "需要以 manual 模式安装核心而不伪装自动 Hook 支持"
+      ],
+      "doNotUseWhen": [
+        "用户只要求读取或记录记忆而不需要安装运行时接线",
+        "项目根目录不明确、现有配置无法安全合并或目标宿主不受支持",
+        "目标是修改项目外全局配置或宣称未经观察的 Hook 已实际运行"
+      ],
+      "input": {
+        "type": "object",
+        "properties": {
+          "projectDir": {
+            "type": "string"
+          },
+          "host": {
+            "enum": [
+              "claude-code",
+              "codex",
+              "manual",
+              "both"
+            ]
+          }
+        },
+        "required": [
+          "projectDir",
+          "host"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "description": "JSON printed by scripts/install_memory_3layer.py. Success includes the selected platform, target paths, initialization, config changes, adapter reports, and next step; failure includes error.",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "requested_platform": {
+            "type": "string"
+          },
+          "selected_platform": {
+            "type": "string"
+          },
+          "memory_dir": {
+            "type": "string"
+          },
+          "project_dir": {
+            "type": "string"
+          },
+          "initialized": {
+            "type": "boolean"
+          },
+          "gitignore_changed": {
+            "type": "boolean"
+          },
+          "adapters": {
+            "type": "object"
+          },
+          "manual": {
+            "type": "boolean"
+          },
+          "next": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "success"
+        ],
+        "oneOf": [
+          {
+            "properties": {
+              "success": {
+                "const": true
+              }
+            },
+            "required": [
+              "requested_platform",
+              "selected_platform",
+              "memory_dir",
+              "project_dir",
+              "initialized",
+              "gitignore_changed",
+              "adapters",
+              "manual",
+              "next"
+            ]
+          },
+          {
+            "properties": {
+              "success": {
+                "const": false
+              }
+            },
+            "required": [
+              "error"
+            ]
+          }
+        ]
+      },
+      "permissions": [
+        "filesystem:read-project-config",
+        "filesystem:write-project-hooks",
+        "filesystem:install-project-skill"
+      ],
+      "sideEffects": [
+        "可在项目内安装 Skill 文件并合并 .claude 或 .codex Hook 配置",
+        "Codex Hook 仍需用户在宿主界面审查并信任后才会实际运行"
+      ],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "写入或合并项目的宿主 Hook 配置",
+          "安装目标已存在同名但内容不同的 Skill",
+          "宿主要求用户显式审查并信任项目 Hooks"
+        ]
+      },
+      "validation": [
+        "evals/test_install_memory_3layer.py"
+      ]
+    }
+  ]
+}

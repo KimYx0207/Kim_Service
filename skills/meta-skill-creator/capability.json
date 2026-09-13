@@ -1,0 +1,195 @@
+{
+  "schemaVersion": 1,
+  "id": "meta-skill-creator",
+  "componentType": "skill",
+  "componentVersion": "1.0.0",
+  "entrypoint": "SKILL.md",
+  "capabilities": [
+    {
+      "id": "meta-skill-create-refactor",
+      "summary": "从真实重复工作流创建或重构可复用 Skill 包，并补齐触发、边界、渐进加载、资产和验证合同。",
+      "useWhen": [
+        "用户要创建新的 Skill 或把重复工作流产品化为跨宿主能力包",
+        "现有 Skill 需要重构触发边界、第一动作、渐进加载、模板、脚本或失败路线",
+        "需要清理冗余参考并拆分人类模板与机器可验证数据"
+      ],
+      "doNotUseWhen": [
+        "任务是一次性提示词改写且没有可重复工作流",
+        "目标、用户、压力场景、可观察产物和成功标准均未定义",
+        "用户要求该能力替代 Meta_Kim Router 或自动做最终 Promotion 决定"
+      ],
+      "input": {
+        "type": "object",
+        "properties": {
+          "workflowEvidence": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "targetSkillPath": {
+            "type": "string"
+          },
+          "hosts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "successCriteria": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "constraints": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "workflowEvidence",
+          "targetSkillPath",
+          "successCriteria"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "deliveryFormat": "conceptual-human-delivery",
+        "description": "Conceptual sections for a human-readable Skill creation or refactor delivery. No package Adapter guarantees a strict JSON envelope.",
+        "properties": {
+          "packageDecision": {
+            "type": "string"
+          },
+          "changedFiles": {
+            "type": "array"
+          },
+          "triggerBoundary": {
+            "type": "object"
+          },
+          "progressiveLoading": {
+            "type": "array"
+          },
+          "validationPlan": {
+            "type": "array"
+          },
+          "remainingGaps": {
+            "type": "array"
+          }
+        },
+        "required": []
+      },
+      "permissions": [
+        "filesystem:read",
+        "filesystem:write-target-skill",
+        "network:read-domain-sources"
+      ],
+      "sideEffects": [
+        "可在用户指定的 Skill 包内创建或重构 SKILL.md、references、assets、scripts、evals 和示例",
+        "可生成验收模板与运行记录骨架，但不会把 pending 模板伪装成通过证据"
+      ],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "需要删除、覆盖或大范围重构既有 Skill 资产",
+          "需要联网研究、安装依赖或写入目标 Skill 包之外的路径",
+          "候选设计会实质改变产品范围、兼容性或公开边界"
+        ]
+      },
+      "validation": [
+        "scripts/check_meta_skill_package.py",
+        "scripts/check_closed_loop.py"
+      ]
+    },
+    {
+      "id": "meta-skill-evaluate",
+      "summary": "评估 Skill 的触发、结构、基线、闭环和运行证据，输出分层结论与 Promotion 建议而非最终决定。",
+      "useWhen": [
+        "用户要求评审、验收、量化打分或比较一个 Skill 包",
+        "候选 Skill 需要 trigger eval、baseline、acceptance run、release gate 或闭环复盘",
+        "需要判断证据目前只到 artifact、runtime、human 或 public-ready 中的哪一层"
+      ],
+      "doNotUseWhen": [
+        "只有 prepare 脚本生成的 pending 模板却要求宣称验收通过",
+        "缺少真实 clean-session、宿主证明、冻结 rubric 人工评分或独立 reviewer 证明却要求 public-ready",
+        "任务要求由该 Skill 接管 Promotion、发布、合并或上线的最终人类决定"
+      ],
+      "input": {
+        "type": "object",
+        "properties": {
+          "skillPath": {
+            "type": "string"
+          },
+          "evaluationLayer": {
+            "enum": [
+              "core",
+              "conditional",
+              "release"
+            ]
+          },
+          "baselineEvidence": {
+            "type": "array"
+          },
+          "acceptanceEvidence": {
+            "type": "array"
+          },
+          "rubric": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "skillPath",
+          "evaluationLayer"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "deliveryFormat": "conceptual-human-delivery",
+        "description": "Conceptual sections for a human-readable Skill evaluation. No package Adapter guarantees a strict JSON envelope or public-ready evidence.",
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "findings": {
+            "type": "array"
+          },
+          "evidenceLevel": {
+            "type": "string"
+          },
+          "promotionRecommendation": {
+            "type": "string"
+          },
+          "promotionDecision": {
+            "const": "requires-human-owner"
+          },
+          "remainingGaps": {
+            "type": "array"
+          }
+        },
+        "required": []
+      },
+      "permissions": [
+        "filesystem:read-skill-package",
+        "filesystem:write-evaluation-artifacts"
+      ],
+      "sideEffects": [
+        "可生成或更新候选包内的评测结果、验收准备模板和闭环记录",
+        "只输出 Promotion 建议，最终 Promotion、发布、合并或上线决定保留给人类 owner"
+      ],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "从 core 或 conditional 评估进入 release 层验收",
+          "写入真实人工评分、reviewer attestation 或 public-ready 结论",
+          "根据评估结果执行 Promotion、发布、合并或上线"
+        ]
+      },
+      "validation": [
+        "scripts/check_closed_loop.py",
+        "scripts/test_acceptance_runs.py"
+      ]
+    }
+  ]
+}

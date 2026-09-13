@@ -1,4 +1,4 @@
-# find-skills (Windows Compatible Fork)
+# find-skill (Windows Compatible Fork)
 
 [English](./README.md) | [中文](./README_CN.md)
 
@@ -45,8 +45,10 @@ powershell -Command "npx skills find 'react'"
 ### Direct install from Kim Service (recommended)
 
 ```bash
-powershell -Command "npx skills add KimYx0207/Kim_Service@find-skills -g -y"
+powershell -Command "npx skills add KimYx0207/Kim_Service@find-skill -a codex"
 ```
+
+This example installs into the current project for Codex. Replace `codex` with the exact approved agent when needed. A user-level install requires separate approval and adds `-g`; do not add `-y`.
 
 Kim Service is the maintained publication source for this package. The former standalone repository is retained only as provenance for the imported snapshot.
 
@@ -54,8 +56,8 @@ Kim Service is the maintained publication source for this package. The former st
 
 ```bash
 git clone --depth 1 https://github.com/KimYx0207/Kim_Service.git
-New-Item -ItemType Directory -Path "$env:USERPROFILE\.agents\skills\find-skills" -Force
-Copy-Item "Kim_Service\skills\find-skill\SKILL.md" "$env:USERPROFILE\.agents\skills\find-skills\SKILL.md" -Force
+New-Item -ItemType Directory -Path "$env:USERPROFILE\.agents\skills\find-skill" -Force
+Copy-Item "Kim_Service\skills\find-skill\SKILL.md" "$env:USERPROFILE\.agents\skills\find-skill\SKILL.md" -Force
 ```
 
 ### Restart Claude Code
@@ -96,7 +98,7 @@ findskill/
 ## Known Limitations
 
 1. **Search only supports English keywords** - Chinese queries need to be translated by AI
-2. **Trigger is semantic** - AI may or may not trigger find-skills depending on how you phrase it. Adding "skill" to your request makes it more reliable.
+2. **Trigger is semantic** - AI may or may not trigger `find-skill` depending on how you phrase it. Adding "skill" to your request makes it more reliable.
 3. **Windows optimized** - macOS/Linux users should use the original version
 
 ## Credits

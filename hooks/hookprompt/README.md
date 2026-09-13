@@ -287,17 +287,25 @@ Windows PowerShell 可以用课程中的真实任务句测试：
 
 ### 查看日志
 
+默认不创建任何日志。只有排查 Hook 本身的问题时，才显式启用仅包含事件名和长度的临时调试日志；日志不会记录原始输入、用户输入、派生提示词或异常正文。
+
 Windows：
 
 ```powershell
-Get-Content "$env:TEMP\hook-prompt-optimizer.log"
+$env:HOOKPROMPT_DEBUG = "1"
+# 触发一次 Hook 后查看：
+Get-Content "$env:TEMP\hookprompt-debug\hook-prompt-optimizer.log"
 ```
 
 macOS / Linux：
 
 ```bash
-cat /tmp/hook-prompt-optimizer.log
+HOOKPROMPT_DEBUG=1 claude
+# 触发一次 Hook 后查看：
+cat "${TMPDIR:-/tmp}/hookprompt-debug/hook-prompt-optimizer.log"
 ```
+
+调试日志固定为 64 KiB 轮转、最多 3 个归档、保留 7 天，并拒绝临时目录外路径以及 symlink / junction 日志目录。排查结束后取消 `HOOKPROMPT_DEBUG` 即恢复完全无日志。
 
 ## 变更记录
 

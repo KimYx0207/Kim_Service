@@ -14,19 +14,162 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 
-// 跨平台临时目录
-const LOG_FILE = path.join(os.tmpdir(), 'hook-prompt-optimizer.log');
+const DEBUG_LOG_DIRECTORY_NAME = 'hookprompt-debug';
+const DEBUG_LOG_FILE_NAME = 'hook-prompt-optimizer.log';
+const DEBUG_LOG_MAX_BYTES = 64 * 1024;
+const DEBUG_LOG_ARCHIVE_COUNT = 3;
+const DEBUG_LOG_RETENTION_MS = 7 * 24 * 60 * 60 * 1000;
+const DEBUG_EVENT_NAMES = new Set([
+    'hook-error',
+    'prompt-enhanced',
+    'prompt-filtered',
+    'template-unavailable'
+]);
 
 /**
- * 记录日志
+ * Debug logging is deliberately opt-in and metadata-only. The log directory
+ * must remain inside the operating-system temporary directory, and neither the
+ * directory nor any fixed-name log file may be a symlink/junction.
  */
-function log(message) {
-    const timestamp = new Date().toISOString();
-    const logEntry = `[${timestamp}] ${message}\n`;
+function isPathInside(parent, candidate) {
+    const relative = path.relative(parent, candidate);
+    return relative === '' || (!relative.startsWith(`..${path.sep}`) && relative !== '..' && !path.isAbsolute(relative));
+}
+
+function getSafeDebugDirectory() {
+    if (process.env.HOOKPROMPT_DEBUG !== '1') {
+        return null;
+    }
+
     try {
-        fs.appendFileSync(LOG_FILE, logEntry);
-    } catch (e) {
-        // 忽略日志错误
+        const tempRoot = path.resolve(os.tmpdir());
+        const tempRootReal = fs.realpathSync(tempRoot);
+        const configured = process.env.HOOKPROMPT_DEBUG_DIR;
+        const requested = configured
+            ? path.resolve(configured)
+            : path.join(tempRoot, DEBUG_LOG_DIRECTORY_NAME);
+
+        if (!isPathInside(tempRoot, requested)) {
+            return null;
+        }
+
+        const relative = path.relative(tempRoot, requested);
+        let current = tempRoot;
+        for (const segment of relative.split(path.sep).filter(Boolean)) {
+            current = path.join(current, segment);
+            if (fs.existsSync(current)) {
+                const stat = fs.lstatSync(current);
+                if (stat.isSymbolicLink() || !stat.isDirectory()) {
+                    return null;
+                }
+            } else {
+                fs.mkdirSync(current);
+            }
+        }
+
+        const requestedStat = fs.lstatSync(requested);
+        if (requestedStat.isSymbolicLink() || !requestedStat.isDirectory()) {
+            return null;
+        }
+
+        const requestedReal = fs.realpathSync(requested);
+        if (!isPathInside(tempRootReal, requestedReal)) {
+            return null;
+        }
+
+        return requestedReal;
+    } catch {
+        return null;
+    }
+}
+
+function getDebugLogPaths(directory) {
+    const paths = [path.join(directory, DEBUG_LOG_FILE_NAME)];
+    for (let index = 1; index <= DEBUG_LOG_ARCHIVE_COUNT; index += 1) {
+        paths.push(path.join(directory, `${DEBUG_LOG_FILE_NAME}.${index}`));
+    }
+    return paths;
+}
+
+function isSafeRegularFile(filePath) {
+    if (!fs.existsSync(filePath)) {
+        return true;
+    }
+    const stat = fs.lstatSync(filePath);
+    return !stat.isSymbolicLink() && stat.isFile();
+}
+
+function maintainDebugLogs(directory, incomingBytes) {
+    const logPaths = getDebugLogPaths(directory);
+    if (logPaths.some((filePath) => !isSafeRegularFile(filePath))) {
+        return null;
+    }
+
+    const expiryCutoff = Date.now() - DEBUG_LOG_RETENTION_MS;
+    for (const filePath of logPaths) {
+        if (fs.existsSync(filePath) && fs.statSync(filePath).mtimeMs < expiryCutoff) {
+            fs.unlinkSync(filePath);
+        }
+    }
+
+    const activeLog = logPaths[0];
+    const activeBytes = fs.existsSync(activeLog) ? fs.statSync(activeLog).size : 0;
+    if (activeBytes + incomingBytes > DEBUG_LOG_MAX_BYTES) {
+        for (let index = DEBUG_LOG_ARCHIVE_COUNT; index >= 1; index -= 1) {
+            const destination = logPaths[index];
+            const source = logPaths[index - 1];
+            if (fs.existsSync(destination)) {
+                fs.unlinkSync(destination);
+            }
+            if (fs.existsSync(source)) {
+                fs.renameSync(source, destination);
+            }
+        }
+    }
+
+    return activeLog;
+}
+
+function debugLog(event, metadata = {}) {
+    const directory = getSafeDebugDirectory();
+    if (!directory) {
+        return;
+    }
+
+    const record = {
+        timestamp: new Date().toISOString(),
+        event: DEBUG_EVENT_NAMES.has(event) ? event : 'hook-error'
+    };
+    for (const key of ['inputLength', 'userInputLength', 'outputLength']) {
+        if (Number.isSafeInteger(metadata[key]) && metadata[key] >= 0) {
+            record[key] = metadata[key];
+        }
+    }
+    if (metadata.mode === 'compact' || metadata.mode === 'full') {
+        record.mode = metadata.mode;
+    }
+
+    const logEntry = `${JSON.stringify(record)}\n`;
+    try {
+        const logFile = maintainDebugLogs(directory, Buffer.byteLength(logEntry));
+        if (!logFile) {
+            return;
+        }
+        const noFollow = fs.constants.O_NOFOLLOW || 0;
+        const descriptor = fs.openSync(
+            logFile,
+            fs.constants.O_WRONLY | fs.constants.O_APPEND | fs.constants.O_CREAT | noFollow,
+            0o600
+        );
+        try {
+            if (fs.fstatSync(descriptor).isFile()) {
+                fs.writeFileSync(descriptor, logEntry, { encoding: 'utf8' });
+            }
+        } finally {
+            fs.closeSync(descriptor);
+        }
+    } catch {
+        // Debug logging must never affect hook behavior or expose exception text.
     }
 }
 
@@ -45,10 +188,8 @@ function readOptimizerTemplate() {
     if (fs.existsSync(templatePath)) {
         return fs.readFileSync(templatePath, 'utf8');
     } else if (fs.existsSync(homeTemplatePath)) {
-        log(`模板文件未在 ${templatePath} 找到，使用主目录版本`);
         return fs.readFileSync(homeTemplatePath, 'utf8');
     } else {
-        log(`错误：模板文件未找到：${templatePath} 或 ${homeTemplatePath}`);
         return null;
     }
 }
@@ -315,42 +456,56 @@ async function main() {
     // 解析输入，提取实际的用户消息
     const userInput = parseHookInput(rawInput);
 
-    // 【关键】立即检查是否需要过滤，如果需要则直接退出，不写任何日志
+    // 【关键】立即检查是否需要过滤；默认无日志，显式debug仅记录长度元数据。
     if (shouldFilter(userInput)) {
+        debugLog('prompt-filtered', {
+            inputLength: rawInput.length,
+            userInputLength: userInput.length
+        });
         process.stdout.write(JSON.stringify({}));
         return;
     }
-
-    // 只有通过过滤的输入才会执行到这里，开始写日志
-    log('========================================');
-    log('Hook执行开始');
-    log(`原始输入: ${rawInput.substring(0, 100)}...`);
-    log(`原始输入长度: ${rawInput.length}`);
-    log(`用户输入: ${userInput.substring(0, 100)}...`);
-    log(`输入长度: ${userInput.length}`);
-    log('通过过滤，开始优化...');
 
     // 默认注入完整模板，保留用户可见的完整情绪体验；需要应急缩短时显式设置 HOOKPROMPT_COMPACT_CONTEXT=1。
     const useCompactContext = process.env.HOOKPROMPT_COMPACT_CONTEXT === '1';
     const template = useCompactContext ? '' : readOptimizerTemplate();
     if (!useCompactContext && !template) {
-        log('模板未找到，返回空响应');
+        debugLog('template-unavailable', {
+            inputLength: rawInput.length,
+            userInputLength: userInput.length,
+            mode: 'full'
+        });
         process.stdout.write(JSON.stringify({}));
         return;
     }
 
     // 构建并输出优化请求
     const optimizationRequest = buildOptimizationRequest(template, userInput);
+    const serializedRequest = JSON.stringify(optimizationRequest);
 
-    log('优化请求已构建，输出JSON...');
-    log(`输出模式: ${useCompactContext ? 'compact-display-contract' : 'full-template-default'}`);
-    log(`JSON长度: ${JSON.stringify(optimizationRequest).length}`);
-    process.stdout.write(JSON.stringify(optimizationRequest));
+    debugLog('prompt-enhanced', {
+        inputLength: rawInput.length,
+        userInputLength: userInput.length,
+        outputLength: serializedRequest.length,
+        mode: useCompactContext ? 'compact' : 'full'
+    });
+    process.stdout.write(serializedRequest);
 }
 
 // 运行
-main().catch(err => {
-    // 出错时返回空响应
-    log(`错误: ${err.message}`);
-    process.stdout.write(JSON.stringify({}));
-});
+if (require.main === module) {
+    main().catch(() => {
+        // Error bodies may contain input or paths, so debug output is categorical only.
+        debugLog('hook-error');
+        process.stdout.write(JSON.stringify({}));
+    });
+}
+
+module.exports = {
+    DEBUG_LOG_ARCHIVE_COUNT,
+    DEBUG_LOG_FILE_NAME,
+    DEBUG_LOG_MAX_BYTES,
+    DEBUG_LOG_RETENTION_MS,
+    debugLog,
+    main
+};

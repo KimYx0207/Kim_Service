@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 1,
+  "id": "xiaohongshu-skill",
+  "componentType": "skill",
+  "componentVersion": "1.0.0",
+  "entrypoint": "SKILL.md",
+  "capabilities": [
+    {
+      "id": "xiaohongshu-create-visual-package",
+      "summary": "研究内容机会并制作含标题、正文、封面与 6 至 8 张内页的小红书图文发布包，保留视觉确认与发布边界。",
+      "useWhen": [
+        "用户明确要求完整的小红书或 Rednote 图文笔记、发布包、种草贴或引流贴",
+        "交付需要同时包含内容策略、标题正文、封面和多页内页视觉",
+        "课程、服务、产品、个人 IP、本地商家或知识分享需要一套可验收图文资产"
+      ],
+      "doNotUseWhen": [
+        "用户只要单个标题、封面字、正文润色、评论回复、标签或单个绘画提示词",
+        "任务要求在未获授权时使用真实人物、客户素材、商标、联系方式或其他受限材料",
+        "任务要求该 Skill 直接登录平台、代替用户发布、私信、评论或执行其他外部写入"
+      ],
+      "input": {
+        "type": "object",
+        "properties": {
+          "topic": {
+            "type": "string"
+          },
+          "audience": {
+            "type": "string"
+          },
+          "goal": {
+            "type": "string"
+          },
+          "sourceMaterials": {
+            "type": "array"
+          },
+          "materialUseAuthorization": {
+            "type": "array"
+          },
+          "commercialBoundaries": {
+            "type": "array"
+          },
+          "autoPermission": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "topic",
+          "goal"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "deliveryFormat": "conceptual-human-delivery",
+        "description": "Conceptual sections for a human-readable and asset-backed delivery. The Skill does not provide one strict JSON Adapter for every partial, blocked, or complete host outcome.",
+        "properties": {
+          "status": {
+            "enum": [
+              "partial_pending_mvp_confirmation",
+              "blocked_pending_human_decision",
+              "explicit_auto_permission",
+              "complete"
+            ]
+          },
+          "selectedTitle": {
+            "type": "string"
+          },
+          "titleAlternatives": {
+            "type": "array"
+          },
+          "body": {
+            "type": "string"
+          },
+          "cover": {
+            "type": "object"
+          },
+          "interiorPages": {
+            "type": "array"
+          },
+          "publishingBoundary": {
+            "type": "string"
+          },
+          "missingRealMaterials": {
+            "type": "array"
+          },
+          "evidence": {
+            "type": "array"
+          }
+        },
+        "required": []
+      },
+      "permissions": [
+        "filesystem:read-authorized-materials",
+        "filesystem:write-output-assets",
+        "network:read-content-research",
+        "runtime:generate-images",
+        "runtime:request-human-decision",
+        "runtime:optional-visual-workspace"
+      ],
+      "sideEffects": [
+        "可生成封面、内页图片、工作台和发布包归档文件",
+        "可为内容机会研究读取公开来源，但不会发布、私信、评论或写入平台账号",
+        "可在封面 MVP 获批后批量生成 6 至 8 张内页并消耗图片生成资源"
+      ],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "原始请求没有提供足以改变成品方向的策略、标题封面字、视觉路线或素材授权",
+          "首张封面 MVP 生成后进入封面验收或 6 至 8 张内页批量生产",
+          "拟使用真实人物、客户素材、品牌资产、联系方式或其他非公开材料",
+          "任何发布、私信、评论、上传或其他外部写入动作"
+        ]
+      },
+      "validation": [
+        "scripts/check-chat-output-fixtures.mjs",
+        "scripts/check-page-direction-fixtures.mjs",
+        "scripts/check-narrative-route-fixtures.mjs",
+        "scripts/check-visual-workspace-contract.mjs"
+      ]
+    }
+  ]
+}

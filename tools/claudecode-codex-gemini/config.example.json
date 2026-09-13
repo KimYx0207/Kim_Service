@@ -1,0 +1,14 @@
+{
+  "workspaceRoot": ".",
+  "codex": {
+    "sandbox": "read-only",
+    "timeoutMs": 300000
+  },
+  "gemini": {
+    "sandbox": true,
+    "timeoutMs": 300000
+  },
+  "environment": {
+    "forwardProxy": false
+  }
+}

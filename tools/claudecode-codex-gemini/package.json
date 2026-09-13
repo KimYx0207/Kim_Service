@@ -1,0 +1,17 @@
+{
+  "name": "@kim-service/claudecode-codex-gemini",
+  "version": "1.0.0-kim-service.1",
+  "private": true,
+  "type": "module",
+  "description": "Hardened local MCP bridge and Claude host assets for Codex and Gemini CLIs",
+  "license": "MIT",
+  "bin": {
+    "kim-ccg": "./cli.mjs"
+  },
+  "scripts": {
+    "test": "node --test tests/*.test.mjs"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

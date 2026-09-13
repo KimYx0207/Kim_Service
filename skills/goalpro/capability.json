@@ -1,0 +1,151 @@
+{
+  "schemaVersion": 1,
+  "id": "goalpro",
+  "componentType": "skill",
+  "componentVersion": "0.1.3",
+  "entrypoint": "SKILL.md",
+  "capabilities": [
+    {
+      "id": "goalpro-goal-prompt",
+      "summary": "Create the Goal Prompt half of GoalPro's default two-prompt delivery without executing the target task.",
+      "useWhen": [
+        "The user asks to write, improve, or repair a goal, task prompt, or execution contract.",
+        "A task needs explicit scope, evidence, stop conditions, and verification instructions before another actor executes it."
+      ],
+      "doNotUseWhen": [
+        "The user wants product or business decision analysis rather than a prompt artifact; use Kim Decision instead.",
+        "The request is to select components, route work, coordinate cross-component state, execute the task, perform research, or make the final acceptance decision."
+      ],
+      "input": {
+        "type": "object",
+        "properties": {
+          "request": {
+            "type": "string",
+            "minLength": 1
+          },
+          "providedContext": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "request"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "deliveryFormat": "conceptual-human-delivery",
+        "description": "Conceptual structure for a human-readable Goal Prompt. This prompt-only Skill has no Adapter that guarantees a strict JSON envelope.",
+        "properties": {
+          "artifactType": {
+            "enum": [
+              "goal-prompt",
+              "draft-goal",
+              "research-plan"
+            ]
+          },
+          "content": {
+            "type": "string",
+            "minLength": 1
+          },
+          "evidenceStatus": {
+            "enum": [
+              "sufficient",
+              "insufficient"
+            ]
+          },
+          "executionAuthorized": {
+            "const": false
+          }
+        },
+        "required": [
+          "content"
+        ]
+      },
+      "permissions": [
+        "read-only access to explicitly scoped context",
+        "read-only public research when current facts are required to write an evidence-bounded prompt and the host provides a research tool"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": false,
+        "when": []
+      },
+      "validation": [
+        "tests/behavior.test.mjs",
+        "tests/boundary.test.mjs"
+      ]
+    },
+    {
+      "id": "goalpro-loop-prompt",
+      "summary": "Create the Loop Prompt half of GoalPro's default two-prompt delivery, or a Loop Prompt requested on its own.",
+      "useWhen": [
+        "GoalPro is producing its default Goal Prompt plus Loop Prompt delivery.",
+        "The user explicitly asks for a Loop Prompt on its own and provides the previous result or Next LOOP packet."
+      ],
+      "doNotUseWhen": [
+        "The user is asking GoalPro to run the loop, schedule automation, route components, execute fixes, or accept the final result."
+      ],
+      "input": {
+        "type": "object",
+        "properties": {
+          "request": {
+            "type": "string",
+            "minLength": 1
+          },
+          "continuationNeed": {
+            "enum": [
+              "default-goalpro-delivery",
+              "explicit-loop-request"
+            ]
+          },
+          "previousResult": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "request",
+          "continuationNeed"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "deliveryFormat": "conceptual-human-delivery",
+        "description": "Conceptual structure for a human-readable Loop Prompt. This prompt-only Skill has no Adapter that guarantees a strict JSON envelope.",
+        "properties": {
+          "artifactType": {
+            "const": "loop-prompt"
+          },
+          "content": {
+            "type": "string",
+            "minLength": 1
+          },
+          "continuationNeed": {
+            "enum": [
+              "default-goalpro-delivery",
+              "explicit-loop-request"
+            ]
+          },
+          "executionAuthorized": {
+            "const": false
+          }
+        },
+        "required": [
+          "content"
+        ]
+      },
+      "permissions": [],
+      "sideEffects": [],
+      "humanGate": {
+        "required": false,
+        "when": []
+      },
+      "validation": [
+        "tests/behavior.test.mjs",
+        "tests/boundary.test.mjs"
+      ]
+    }
+  ]
+}

@@ -1,31 +1,44 @@
 # Changelog
 
-Kim Service uses one repository-level two-part public version (`V<major>.<minor>`) and one GitHub Release for the aggregated Hook and Skill collection. Component CHANGELOG files record component provenance; this file is the release-note authority.
+Kim Service uses one repository-level two-part public version (`V<major>.<minor>`) and one GitHub Release for the professional-capability dependency repository. Component CHANGELOG files record component provenance; this file is the release-note authority.
 
-## Unreleased - 2026-07-17
+## Unreleased - 2026-08-09
 
 ### Affected components
 
-- HookPrompt documentation.
+- Repository capability discovery and release gates.
+- HookPrompt, Find Skill, GoalPro, Kim Decision, and Semgrep Skill.
+- Claude Code - Codex - Gemini Tool.
 
 ### User-visible changes
 
 - Added Chinese and English guidance explaining that `{}` is the expected skip result for short text without a clear task.
 - Added a positive PowerShell verification command that passes a real task as `UserPromptSubmit` JSON through standard input.
 - Clarified that positional arguments such as `node user-prompt-submit.js "test"` do not exercise the HookPrompt input protocol.
+- Added package-level Capability contracts and deterministic automatic discovery for Hook, Skill, Tool, Agent, and App package types.
+- Generated the root catalog, Capability index, content hashes, and validation plan from package contracts instead of requiring duplicate manual registration.
+- Added the hardened Claude Code - Codex - Gemini MCP/CLI bridge as a Tool, with project-scoped transactional installation and explicit human gates.
+- Unified the Tool license under MIT by repository-owner decision while preserving the pinned upstream conflict as historical provenance.
+- Made HookPrompt logging opt-in and metadata-only, with bounded rotation and temporary-directory containment.
+- Made Semgrep installation dry-run-first, receipt-backed, transactional, and offline by default.
 
 ### Breaking changes and migration
 
-- No user-facing breaking changes.
+- No silent compatibility alias was added for the Find Skill canonical name correction; consumers must use the package's documented current name.
 
 ### Verification
 
 - HookPrompt tests passed 32/32.
 - The course task sentence returned `hookSpecificOutput` and `additionalContext` through the documented PowerShell route.
+- Automatic discovery found 10 components and 25 Capabilities; catalog freshness and repository security gates passed.
+- All 23 declared component validation files exited successfully; this does not replace Promotion Evidence.
+- The Claude Code - Codex - Gemini Tool passed 29/29 tests, including no-shell local CLI version probes without model invocation.
+- The bundled Semgrep rules detected the vulnerable fixture and did not flag the safe fixture.
 
 ### Source revisions
 
 - HookPrompt: `83299e7094937f8d0179ff60d304c1c5a25a5740`.
+- Claude Code - Codex - Gemini pinned upstream: `fce3202fc48d98173d8756f8002809cefb28fca5`; Kim Service adaptation remains `pending-local` until promotion and release provenance are finalized.
 
 ## V1.1 - 2026-07-15
 

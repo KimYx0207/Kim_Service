@@ -1,0 +1,27 @@
+rules:
+  - id: generic-hardcoded-secret
+    message: Potential hardcoded credential. Move secrets to an approved secret store and rotate exposed values.
+    severity: ERROR
+    languages: [generic]
+    pattern-regex: '(?i)(api[_-]?key|client[_-]?secret|access[_-]?token|password)\s*[:=]\s*["''][A-Za-z0-9_./+=-]{8,}["'']'
+    metadata:
+      category: security
+      technology: [secrets]
+
+  - id: python-subprocess-shell-true
+    message: subprocess with shell=True can permit command injection. Prefer an argument list and shell=False.
+    severity: ERROR
+    languages: [python]
+    pattern: subprocess.$FUNC(..., shell=True, ...)
+    metadata:
+      category: security
+      technology: [python]
+
+  - id: javascript-eval
+    message: eval executes code from a string. Replace it with a data parser or a fixed dispatch table.
+    severity: WARNING
+    languages: [javascript, typescript]
+    pattern: eval(...)
+    metadata:
+      category: security
+      technology: [javascript, typescript]

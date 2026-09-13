@@ -1,0 +1,191 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/KimYx0207/Kim_Service/schemas/capability.schema.json",
+  "title": "Kim Service component capability contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "id",
+    "componentType",
+    "componentVersion",
+    "entrypoint",
+    "capabilities"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "id": {
+      "$ref": "#/$defs/id"
+    },
+    "componentType": {
+      "enum": [
+        "hook",
+        "skill",
+        "agent",
+        "app",
+        "tool"
+      ]
+    },
+    "componentVersion": {
+      "type": "string",
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[A-Za-z-][0-9A-Za-z-]*))*))?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$"
+    },
+    "entrypoint": {
+      "$ref": "#/$defs/relativeFile"
+    },
+    "capabilities": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/capability"
+      }
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?=[\\s\\S]*\\S)[\\s\\S]+$"
+    },
+    "nonEmptyStringArray": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/nonEmptyString"
+      }
+    },
+    "stringArray": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/nonEmptyString"
+      }
+    },
+    "relativeFile": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?=[\\s\\S]*\\S)(?![A-Za-z]:)(?![/\\\\])(?!.*(?:^|[/\\\\])\\.{1,2}(?:[/\\\\]|$))(?!.*[/\\\\]{2})[^/\\\\]+(?:[/\\\\][^/\\\\]+)*$"
+    },
+    "ioSchema": {
+      "type": "object",
+      "required": [
+        "type",
+        "required"
+      ],
+      "properties": {
+        "type": {
+          "const": "object"
+        },
+        "required": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "humanGate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required",
+        "when"
+      ],
+      "properties": {
+        "required": {
+          "type": "boolean"
+        },
+        "when": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "required": {
+                "const": true
+              }
+            },
+            "required": [
+              "required"
+            ]
+          },
+          "then": {
+            "properties": {
+              "when": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "capability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "summary",
+        "useWhen",
+        "doNotUseWhen",
+        "input",
+        "output",
+        "permissions",
+        "sideEffects",
+        "humanGate",
+        "validation"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "summary": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "useWhen": {
+          "$ref": "#/$defs/nonEmptyStringArray"
+        },
+        "doNotUseWhen": {
+          "$ref": "#/$defs/nonEmptyStringArray"
+        },
+        "input": {
+          "$ref": "#/$defs/ioSchema"
+        },
+        "output": {
+          "$ref": "#/$defs/ioSchema"
+        },
+        "permissions": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "sideEffects": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "humanGate": {
+          "$ref": "#/$defs/humanGate"
+        },
+        "validation": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/relativeFile"
+          }
+        }
+      }
+    }
+  }
+}

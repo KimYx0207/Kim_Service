@@ -1,0 +1,176 @@
+{
+  "schemaVersion": 1,
+  "id": "kim-decision",
+  "componentType": "skill",
+  "componentVersion": "0.0.0+imported.fbbe41c",
+  "entrypoint": "SKILL.md",
+  "capabilities": [
+    {
+      "id": "kim-decision-analysis",
+      "summary": "Analyze a product, business, content, pricing, scope, or strategy choice and return an evidence-bounded decision or evidence request.",
+      "useWhen": [
+        "The user needs a product, business, content, pricing, scope, monetization, or strategy decision.",
+        "A choice needs a verdict, evidence state, smallest useful next action, and pass or kill signal."
+      ],
+      "doNotUseWhen": [
+        "The requested artifact is a Goal Prompt or Loop Prompt; use GoalPro instead.",
+        "The request is to select or route components, coordinate a cross-component state machine, execute the recommendation, or claim final acceptance."
+      ],
+      "input": {
+        "type": "object",
+        "properties": {
+          "decisionQuestion": {
+            "type": "string",
+            "minLength": 1
+          },
+          "context": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "constraints": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "decisionQuestion"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "deliveryFormat": "conceptual-human-delivery",
+        "description": "Conceptual sections for the host model's human-readable decision analysis. This prompt-only Skill has no Adapter that guarantees a strict JSON envelope.",
+        "properties": {
+          "artifactType": {
+            "const": "decision-analysis"
+          },
+          "status": {
+            "enum": [
+              "decision-ready",
+              "evidence-required"
+            ]
+          },
+          "verdict": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "evidence": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "confirmed": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "assumptions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "gaps": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "confirmed",
+              "assumptions",
+              "gaps"
+            ]
+          },
+          "nextAction": {
+            "type": "string",
+            "minLength": 1
+          },
+          "passSignal": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executionAuthorized": {
+            "const": false
+          },
+          "finalAcceptanceClaimed": {
+            "const": false
+          }
+        },
+        "required": [
+          "evidence",
+          "nextAction",
+          "passSignal"
+        ],
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "decision-ready"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "verdict": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "evidence-required"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "verdict": {
+                  "type": "null"
+                },
+                "evidence": {
+                  "properties": {
+                    "gaps": {
+                      "minItems": 1
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "permissions": [
+        "read-only access to explicitly scoped evidence",
+        "read-only public research when current facts are decision-critical and the host provides a research tool"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": false,
+        "when": []
+      },
+      "validation": [
+        "tests/behavior.test.mjs",
+        "tests/boundary.test.mjs"
+      ]
+    }
+  ]
+}
