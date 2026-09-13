@@ -44,7 +44,7 @@ Kim Service uses one repository-level two-part public version (`V<major>.<minor>
 
 - HookPrompt: `83299e7094937f8d0179ff60d304c1c5a25a5740`.
 - Claude Code - Codex - Gemini pinned upstream: `fce3202fc48d98173d8756f8002809cefb28fca5`.
-- The Kim Service Tool adaptation and fifteen Agent packs are content-matched to source commit `01dbd38683d9bc8fb8cb393eff787fd279f9a058` by the catalog generator. Source provenance does not promote runtime or model capability claims.
+- The Kim Service Tool adaptation and fifteen Agent packs are content-matched to source commit `56d8781cce65903d9f367cfb5c5dd6dc9a678912` by the catalog generator. Source provenance does not promote runtime or model capability claims.
 - Preserved remote README badge revisions through `d218f4b50cb9015004492a321669112183dc37c5`.
 
 ## V1.1 - 2026-07-15
