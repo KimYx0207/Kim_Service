@@ -572,7 +572,7 @@
       "snapshot": "committed-component-tree",
       "version": "1.0.0-kim-service.1",
       "contractSha256": "a5c633d21f8ff0a8c34bf2f1665591a2f40a7d97538db0f0ba03a7ef9b2aa459",
-      "contentSha256": "b08827410643495d6043cdce836ba013dceb1a09105a8714380f69532b9370c1",
+      "contentSha256": "88e1211b094ed701da53b32daf0f11a582ee1cf031761a3d94a5f88b92c4799a",
       "required": [
         "capability.json",
         "cli.mjs",
