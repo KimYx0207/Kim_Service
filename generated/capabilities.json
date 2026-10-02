@@ -439,12 +439,12 @@
       ]
     },
     {
-      "componentContentSha256": "f2f5fd6907384b073a163a060c20cd84e695a60b6afd737c6a0211263de4cea3",
+      "componentContentSha256": "87daf815b0bf88052401c443fa9f505081ab5bd638e497e94b4b66d64c2f0399",
       "componentId": "concept-tutor",
       "componentPath": "agents/concept-tutor",
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contractSha256": "636d8e3bbe0a4beb2ed3f2213dd8fc1b8579a71be61799d21abd0f9be9171bde",
+      "componentVersion": "0.1.1",
+      "contractSha256": "d18e86e5ac9b168ab3462f526933d54379cd7b6bcdfafafaf7d940dc836d17df",
       "doNotUseWhen": [
         "整节课教案交给 lesson-planner。",
         "批量出题交给 exercise-designer。",
@@ -621,12 +621,12 @@
       ]
     },
     {
-      "componentContentSha256": "2f6435c3652b599228d46d1be367d0dd2b871db3bc754f3f6b418b2dd37e43e7",
+      "componentContentSha256": "75ee6f85b6b6da14d01f950dbd1110ca2364406bb0b03d4eb7c1a70d7194664b",
       "componentId": "exercise-designer",
       "componentPath": "agents/exercise-designer",
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contractSha256": "ccda4df854314c735721749d49fb4e586f422d9e6dda5ca1acccccf647e5ec64",
+      "componentVersion": "0.1.1",
+      "contractSha256": "d00f4ce46b2476e90ecee30eef98aff6b79cb40a9e7f4bea92860ecad5acdc88",
       "doNotUseWhen": [
         "单题理解困难交给 concept-tutor。",
         "课堂整体安排交给 lesson-planner。",
@@ -1151,12 +1151,12 @@
       ]
     },
     {
-      "componentContentSha256": "ac165affd966857e97ba6cf1078cd24acba0037238481fad65c70481c95a3558",
+      "componentContentSha256": "c956d9e95ae47388e45f620e2bf4dc43287532390c8e959c6a6ceac8515d3d7c",
       "componentId": "interview-coach",
       "componentPath": "agents/interview-coach",
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contractSha256": "4d97d45e3fa2afa9a6242036a71e06cc120de4eec3349814f5063aed41e2fa86",
+      "componentVersion": "0.2.0",
+      "contractSha256": "732d8629cc914fabc14944a3ad9b706b9448ad9fa8138de746f6b5b024ae9ade",
       "doNotUseWhen": [
         "简历内容修改交给 resume-editor。",
         "日常工作沟通交给 workplace-writer。",
@@ -1202,15 +1202,18 @@
             "type": "array"
           },
           "followUp": {
-            "description": "下一题或追问：针对本轮缺项提出一题追问，等待用户回答后继续反馈",
-            "type": "string"
+            "description": "下一题或追问：模拟时可按缺项追问；改稿资料足够时为 null，无需新增问题或等待回答；后续练习仅作可选建议",
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "practiceTask": {
             "description": "练习动作：给出可以重复练习的具体动作及自查标准，时长仅为练习目标",
             "type": "string"
           },
           "question": {
-            "description": "本轮问题：一次提出一个与目标岗位相关的面试题，并说明要练的能力",
+            "description": "本轮问题：模拟时提出一个相关面试题；改稿时复述用户已有问题或注明未提供原题，不新增面试题",
             "type": "string"
           },
           "revisedAnswer": {
@@ -1231,7 +1234,7 @@
         "filesystem:read-user-materials"
       ],
       "sideEffects": [],
-      "summary": "面试练习：围绕岗位要求逐轮练习表达。根据回答追问细节，用明确标准指出哪里没有说明白，再帮助重组真实经历；不提供虚构故事让求职者背诵。",
+      "summary": "面试练习：围绕岗位要求模拟面试或修改已有回答。模拟逐轮反馈，改稿直接交付真实材料的重组结果，不自动开始下一轮提问；不编造成功经历。",
       "useWhen": [
         "用户说「陪我练一次面试」",
         "用户说「这个面试问题我不知道怎么答」",
@@ -1513,12 +1516,12 @@
       ]
     },
     {
-      "componentContentSha256": "e48c8aa2a4bc4360ece9124986a1a56ec55311dcd0003d62ea792d9cdb9a54b6",
+      "componentContentSha256": "3d7862145ef3e36fe4f72cc91489e918aea136ef74212cc2ce335c62c2e19cf0",
       "componentId": "lesson-planner",
       "componentPath": "agents/lesson-planner",
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contractSha256": "b8bd598f8575f9c8d11129c6c7d173852ac29b52b17cfba1369dc2f72c55f2f6",
+      "componentVersion": "0.1.1",
+      "contractSha256": "56974894a42fadd74861eda35e858de2c8cc0b7c87253ffc8f9298d5bb4b5c5d",
       "doNotUseWhen": [
         "单题讲解交给 concept-tutor。",
         "成套原创练习与答案交给 exercise-designer。",
@@ -2901,12 +2904,12 @@
       ]
     },
     {
-      "componentContentSha256": "b7f944d06a3666a285379664cfae00e6be8b1d3487686229587bd670b10c93f9",
+      "componentContentSha256": "a96d108759d90baca2804c4e46fcb4b5169f243c8751a26f21d23c5bb66cd7ca",
       "componentId": "script-writer",
       "componentPath": "agents/script-writer",
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contractSha256": "1320a8a34cdd89c412947c064f8a1a15762062eeb6975ff07767870c6378ce04",
+      "componentVersion": "0.2.0",
+      "contractSha256": "1f797ffb4fdab36435029881aab9e66c48ad1216bea1fc9932e4aed96bac1009",
       "doNotUseWhen": [
         "用户还没定选题，只说「帮我写点东西」：改用 topic-planner",
         "用户只要标题、封面文字或封面版式：改用 headline-cover-optimizer",
@@ -3018,6 +3021,7 @@
                 },
                 "status": {
                   "enum": [
+                    "用户提供",
                     "用户亲历",
                     "用户观察",
                     "待核实",
@@ -3034,7 +3038,7 @@
             "type": "array"
           },
           "content": {
-            "description": "口播 / 分镜为分段表格，图文正文与公众号文章为分段正文",
+            "description": "口播或分镜为分段表格（array）；图文正文与公众号文章为分段正文（string），不强制使用短视频骨架",
             "items": {
               "properties": {
                 "note": {
@@ -3055,7 +3059,10 @@
               },
               "type": "object"
             },
-            "type": "array"
+            "type": [
+              "array",
+              "string"
+            ]
           },
           "ending": {
             "items": {
@@ -3068,7 +3075,7 @@
             "const": false
           },
           "fullVoiceover": {
-            "description": "口播类形式必给，附字数与时长估算",
+            "description": "仅口播或含口播的分镜提供全文、字数与时长估算；纯正文省略",
             "type": "string"
           },
           "hooks": {
@@ -3083,6 +3090,7 @@
             "type": "string"
           },
           "shotList": {
+            "description": "仅需要拍摄时提供镜头和素材；纯正文无需拍摄时省略",
             "items": {
               "type": "string"
             },
@@ -3102,7 +3110,7 @@
         "filesystem:read-user-materials"
       ],
       "sideEffects": [],
-      "summary": "把已定选题与角度写成可直接开口念或直接发布的口播脚本、分镜表或图文正文，含 3 个开头钩子、结尾互动、拍摄清单和说法核对表；不编造功效与数据。",
+      "summary": "把已定选题与角度写成口播脚本、分镜表或图文正文，按形式组织内容，含 3 个开头候选、结尾与说法核对表；仅拍摄类内容提供拍摄清单，不编造功效、数据或个人使用经历。",
       "useWhen": [
         "用户说「帮我写脚本」「口播稿」「分镜表」「这条视频怎么讲」",
         "用户说「帮我写小红书正文」「公众号文章」「视频文案」",
@@ -3833,12 +3841,12 @@
       ]
     },
     {
-      "componentContentSha256": "a5f9de1b67bd6ad157b65a2d0d239c3c9d5f7051a473be787f7a9ed6e8eeec85",
+      "componentContentSha256": "0840f364052097fe4e9699b69e8ca14796b31763ad1c6919959324413fcd2942",
       "componentId": "xiaohongshu-skill",
       "componentPath": "skills/xiaohongshu-skill",
       "componentType": "skill",
-      "componentVersion": "1.0.0",
-      "contractSha256": "efb0cf8325ffac1ee351618cc15e55cf5a7bc8ffce41ba5094ab6567642c28a5",
+      "componentVersion": "1.0.1",
+      "contractSha256": "ab0202c5d30267f6e7b7c4628fbdb55854a595cff6fdb678aaf70d9f715de3d3",
       "doNotUseWhen": [
         "用户只要单个标题、封面字、正文润色、评论回复、标签或单个绘画提示词",
         "任务要求在未获授权时使用真实人物、客户素材、商标、联系方式或其他受限材料",
@@ -3948,7 +3956,8 @@
         "scripts/check-chat-output-fixtures.mjs",
         "scripts/check-page-direction-fixtures.mjs",
         "scripts/check-narrative-route-fixtures.mjs",
-        "scripts/check-visual-workspace-contract.mjs"
+        "scripts/check-visual-workspace-contract.mjs",
+        "scripts/check-decision-route-contract.mjs"
       ]
     }
   ],
@@ -3960,9 +3969,9 @@
         "concept-tutor-assist"
       ],
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contentSha256": "f2f5fd6907384b073a163a060c20cd84e695a60b6afd737c6a0211263de4cea3",
-      "contractSha256": "636d8e3bbe0a4beb2ed3f2213dd8fc1b8579a71be61799d21abd0f9be9171bde",
+      "componentVersion": "0.1.1",
+      "contentSha256": "87daf815b0bf88052401c443fa9f505081ab5bd638e497e94b4b66d64c2f0399",
+      "contractSha256": "d18e86e5ac9b168ab3462f526933d54379cd7b6bcdfafafaf7d940dc836d17df",
       "entrypoint": "AGENT.md",
       "id": "concept-tutor",
       "path": "agents/concept-tutor",
@@ -3990,9 +3999,9 @@
         "exercise-designer-assist"
       ],
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contentSha256": "2f6435c3652b599228d46d1be367d0dd2b871db3bc754f3f6b418b2dd37e43e7",
-      "contractSha256": "ccda4df854314c735721749d49fb4e586f422d9e6dda5ca1acccccf647e5ec64",
+      "componentVersion": "0.1.1",
+      "contentSha256": "75ee6f85b6b6da14d01f950dbd1110ca2364406bb0b03d4eb7c1a70d7194664b",
+      "contractSha256": "d00f4ce46b2476e90ecee30eef98aff6b79cb40a9e7f4bea92860ecad5acdc88",
       "entrypoint": "AGENT.md",
       "id": "exercise-designer",
       "path": "agents/exercise-designer",
@@ -4020,9 +4029,9 @@
         "interview-coach-assist"
       ],
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contentSha256": "ac165affd966857e97ba6cf1078cd24acba0037238481fad65c70481c95a3558",
-      "contractSha256": "4d97d45e3fa2afa9a6242036a71e06cc120de4eec3349814f5063aed41e2fa86",
+      "componentVersion": "0.2.0",
+      "contentSha256": "c956d9e95ae47388e45f620e2bf4dc43287532390c8e959c6a6ceac8515d3d7c",
+      "contractSha256": "732d8629cc914fabc14944a3ad9b706b9448ad9fa8138de746f6b5b024ae9ade",
       "entrypoint": "AGENT.md",
       "id": "interview-coach",
       "path": "agents/interview-coach",
@@ -4050,9 +4059,9 @@
         "lesson-planner-assist"
       ],
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contentSha256": "e48c8aa2a4bc4360ece9124986a1a56ec55311dcd0003d62ea792d9cdb9a54b6",
-      "contractSha256": "b8bd598f8575f9c8d11129c6c7d173852ac29b52b17cfba1369dc2f72c55f2f6",
+      "componentVersion": "0.1.1",
+      "contentSha256": "3d7862145ef3e36fe4f72cc91489e918aea136ef74212cc2ce335c62c2e19cf0",
+      "contractSha256": "56974894a42fadd74861eda35e858de2c8cc0b7c87253ffc8f9298d5bb4b5c5d",
       "entrypoint": "AGENT.md",
       "id": "lesson-planner",
       "path": "agents/lesson-planner",
@@ -4110,9 +4119,9 @@
         "script-writer-write-script"
       ],
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contentSha256": "b7f944d06a3666a285379664cfae00e6be8b1d3487686229587bd670b10c93f9",
-      "contractSha256": "1320a8a34cdd89c412947c064f8a1a15762062eeb6975ff07767870c6378ce04",
+      "componentVersion": "0.2.0",
+      "contentSha256": "a96d108759d90baca2804c4e46fcb4b5169f243c8751a26f21d23c5bb66cd7ca",
+      "contractSha256": "1f797ffb4fdab36435029881aab9e66c48ad1216bea1fc9932e4aed96bac1009",
       "entrypoint": "AGENT.md",
       "id": "script-writer",
       "path": "agents/script-writer",
@@ -4327,14 +4336,15 @@
         "xiaohongshu-create-visual-package"
       ],
       "componentType": "skill",
-      "componentVersion": "1.0.0",
-      "contentSha256": "a5f9de1b67bd6ad157b65a2d0d239c3c9d5f7051a473be787f7a9ed6e8eeec85",
-      "contractSha256": "efb0cf8325ffac1ee351618cc15e55cf5a7bc8ffce41ba5094ab6567642c28a5",
+      "componentVersion": "1.0.1",
+      "contentSha256": "0840f364052097fe4e9699b69e8ca14796b31763ad1c6919959324413fcd2942",
+      "contractSha256": "ab0202c5d30267f6e7b7c4628fbdb55854a595cff6fdb678aaf70d9f715de3d3",
       "entrypoint": "SKILL.md",
       "id": "xiaohongshu-skill",
       "path": "skills/xiaohongshu-skill",
       "validation": [
         "scripts/check-chat-output-fixtures.mjs",
+        "scripts/check-decision-route-contract.mjs",
         "scripts/check-narrative-route-fixtures.mjs",
         "scripts/check-page-direction-fixtures.mjs",
         "scripts/check-visual-workspace-contract.mjs"
