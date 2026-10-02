@@ -386,9 +386,9 @@
       "source": "https://github.com/KimYx0207/GoalPro",
       "revision": "39adc8db765e0e4ad4df8d4ce02e7059fed69f26",
       "snapshot": "self-contained-public-package;monorepo-install-doc-adapter",
-      "version": "0.1.3",
-      "contractSha256": "6920555d7b546b9cb3e6ee919de6b019498f4a2c03f99e7f01570fd33e85f7dd",
-      "contentSha256": "46dc06a5ead74f714d6e51939aa7847b175366c24b8096060abe17de883c3d01",
+      "version": "0.1.4",
+      "contractSha256": "f751073dee0579e7d2c8790335edcbd9ecea6c9ed3f03fd1e5182569a88cd37b",
+      "contentSha256": "446f1c9fbd09289d13f435e721318663296979fa23a4e718db5777e16abf47a6",
       "required": [
         "SKILL.md",
         "references/examples.md",
@@ -399,11 +399,13 @@
         "NOTICE",
         "capability.json",
         "tests/behavior.test.mjs",
-        "tests/boundary.test.mjs"
+        "tests/boundary.test.mjs",
+        "tests/governance.test.mjs"
       ],
       "validation": [
         "node tests/behavior.test.mjs",
-        "node tests/boundary.test.mjs"
+        "node tests/boundary.test.mjs",
+        "node tests/governance.test.mjs"
       ]
     },
     {

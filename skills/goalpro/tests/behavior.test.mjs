@@ -29,11 +29,11 @@ test('contract identifies the proven GoalPro component version and entrypoint', 
   assert.equal(contract.schemaVersion, 1);
   assert.equal(contract.id, 'goalpro');
   assert.equal(contract.componentType, 'skill');
-  assert.equal(contract.componentVersion, '0.1.3'); // Proven by this component's CHANGELOG, not the collection version.
+  assert.equal(contract.componentVersion, '0.1.4'); // Proven by this component's CHANGELOG, not the collection version.
   assert.equal(contract.entrypoint, 'SKILL.md');
 });
 
-test('default delivery contains a valid Goal Prompt and Loop Prompt contract', () => {
+test('finite delivery supports Goal Prompt and evidence-qualified optional Loop', () => {
   const goal = capability('goalpro-goal-prompt');
   assertConceptualOutput(goal.output, {
     artifactType: 'goal-prompt',
@@ -45,11 +45,11 @@ test('default delivery contains a valid Goal Prompt and Loop Prompt contract', (
   assertConceptualOutput(loop.output, {
     artifactType: 'loop-prompt',
     content: '时间参数:\n手动：贴入上一轮结果后继续',
-    continuationNeed: 'default-goalpro-delivery',
+    continuationNeed: 'post-delivery-evidence',
     executionAuthorized: false
   });
-  assert.match(skill, /默认输出两段：`Goal Prompt` 用于启动执行，`Loop Prompt`/);
-  assert.match(skill, /新版默认生成两段提示词：`Goal Prompt` 和 `Loop Prompt`/);
+  assert.match(skill, /默认一次性交付只输出 `Goal Prompt`/);
+  assert.match(skill, /复杂、多文件、需要多个 checkpoint、一次执行内反复验证，不自动构成/);
 });
 
 test('insufficient evidence yields a draft or research plan rather than invented certainty', () => {
@@ -60,7 +60,7 @@ test('insufficient evidence yields a draft or research plan rather than invented
     evidenceStatus: 'insufficient',
     executionAuthorized: false
   });
-  assert.match(skill, /不足输出 `Draft Goal \+ Draft Loop` 或 `Research Plan`/);
+  assert.match(skill, /不足输出 `Draft Goal` 或 `Research Plan`/);
 });
 
 test('Loop Prompt remains a separate non-executing artifact', () => {
@@ -71,7 +71,20 @@ test('Loop Prompt remains a separate non-executing artifact', () => {
     continuationNeed: 'explicit-loop-request',
     executionAuthorized: false
   });
-  assert.match(loop.useWhen.join('\n'), /default Goal Prompt plus Loop Prompt/i);
+  assert.match(loop.useWhen.join('\n'), /post-delivery evidence/i);
   assert.match(loop.doNotUseWhen.join('\n'), /run the loop|execute fixes/i);
   assert.match(skill, /Loop 只是交付后可粘贴的继续进化提示词，不授权当前回合执行/);
+});
+
+test('Loop eligibility no longer accepts an unconditional default reason', () => {
+  const loop = capability('goalpro-loop-prompt');
+  const reasons = ['explicit-loop-request', 'post-delivery-evidence'];
+  assert.deepEqual(loop.input.properties.continuationNeed.enum, reasons);
+  assert.deepEqual(loop.output.properties.continuationNeed.enum, reasons);
+  assert.ok(loop.input.required.includes('continuationNeed'));
+  assert.match(loop.doNotUseWhen.join('\n'), /finite delivery/);
+  assert.throws(() => assertConceptualOutput(loop.output, {
+    artifactType: 'loop-prompt', content: 'Not eligible',
+    continuationNeed: 'default-goalpro-delivery', executionAuthorized: false
+  }), /enum/);
 });

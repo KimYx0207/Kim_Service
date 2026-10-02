@@ -18,8 +18,14 @@ Goal Prompt:
 Goal:
 实现用户登录。
 
-Intent:
-让已有用户安全进入受保护区域，同时不破坏项目现有认证体系。
+User-stated intent:
+做一个登录功能。
+
+AI-inferred potential intent:
+推断，尚未确认：让已有用户安全进入受保护区域，同时不破坏项目现有认证体系。
+
+Value judgments requiring confirmation:
+若项目没有既有认证方案，session/token 选型和本轮是否包含注册需要确认；已有明确方案则沿用。
 
 Strategic outcome:
 项目获得一条可维护的基础认证路径，后续权限、账户和审计能力能复用它。
@@ -55,46 +61,6 @@ Final report:
 改动文件、行为变化、验证结果、剩余风险，并展示一个登录成功/失败路径的样例片段，方便用户判断是否通过。
 ```
 
-Loop Prompt:
-
-```markdown
-时间参数:
-请自行填写 LOOP 时间，如“每天早上 09:00”；如果只想手动继续，填写“手动：贴入上一轮报告、验证输出或 Next LOOP packet 后继续”。
-
-Loop mission:
-持续推进“已有用户安全进入受保护区域”这个目标；每轮只关闭最影响登录闭环的差距，直到登录能力达到可验收状态。
-
-Loop state:
-继承原始登录目标、当前轮次、已关闭验证证据、开放风险、下一轮焦点和暂停原因；不要每轮重新定义登录范围。
-
-Previous result to inspect:
-上一轮最终报告、diff、认证相关测试输出、手动登录记录、错误日志、用户反馈。
-
-Review evidence:
-区分“测试通过”“手动登录成功”“安全边界已检查”和“只在报告中声称完成”。不要把没有证据的完成声明当成完成。
-
-Gap diagnosis:
-按安全阻塞、核心登录失败、受保护区域进入失败、错误处理不清、体验细节排序剩余差距。
-
-Cycle action:
-只修复本轮最高价值差距；不扩展注册、找回密码、OAuth 或角色系统，除非上一轮结果证明它们是当前登录闭环的阻塞。
-
-Verification delta:
-补齐上一轮缺失的最小验证，并说明本轮新增证据如何关闭剩余差距。
-
-Loop guardrails:
-最多连续 3 个 LOOP 周期；若连续 2 轮仍无法关闭登录阻塞、同一安全风险重复出现、验证不可运行，或需要认证选型/数据模型/安全策略判断，则 Pause。
-
-Continuation protocol:
-每轮结束判定 `Done`、`Continue` 或 `Pause`。若登录闭环仍有未关闭且可继续处理的差距，必须输出下一轮 `Next LOOP packet`；如果认证选型、数据模型或安全策略需要产品判断，暂停问用户。
-
-Stop / escalate conditions:
-需要新增认证存储、改密码策略、接入第三方身份服务、处理真实用户数据、发布上线或变更安全边界时暂停。
-
-Next LOOP packet:
-包含原始登录目标、当前轮次、已关闭证据、开放差距、时间参数、下一轮焦点、要读取的材料、暂停条件和本轮新增验证。
-```
-
 ## 战略研究请求
 
 输入：
@@ -103,7 +69,7 @@ Next LOOP packet:
 搜索全网，帮我写一个高质量 goalpro Skill，要支持 Codex 和 Claude Code，必须能分析真实意图，并生成后续 Agent 能执行好的 goal。
 ```
 
-合格输出必须先声明研究门槛：
+以下研究内容是提示词中的取证要求，不是已完成检索的证据。研究设计本身不自动触发交付后 Loop：
 
 ```markdown
 Research required:
@@ -119,7 +85,7 @@ Subquestions:
 4. X / 社区实践有哪些短循环信号，需要哪些交叉验证？
 5. 哪些证据会推翻“默认聊天输出、输出后停止、显式才写文件或执行”的路线？
 
-Evidence Map 摘要:
+Evidence Map 待验证:
 - Source type: official
   Claim: Codex goal 要写成完成契约，包含结果、约束和可验证 done-when。
   Decision impact: 写入 `Decision standard` 和 `Verification`。
@@ -139,14 +105,24 @@ Counterevidence:
 - 如果用户只是要一个提示词，写文件会降低用户体验。
 
 Confidence:
-medium-high。官方文档和本地项目证据支持核心规则；社区信号只作为失败模式和实践趋势，不单独决定标准。
+low。此处只是取证要求；未获得本轮来源与验证前，不能声称研究完成或以候选观点定最终规则。
 
-Research-backed Goal Prompt:
+```
+
+Draft Goal Prompt:
+
+```markdown
 Goal:
-重建 goalpro Skill，使它先放大真实意图和战略标准，再生成 Codex / Claude Code 可执行、可验证、可暂停的 Goal Prompt，并附带交付后继续进化用的 Loop Prompt；没有执行授权时停止。
+重建 goalpro Skill，使它先放大真实意图和战略标准，再生成 Codex / Claude Code 可执行、可验证、可暂停的 Goal Prompt，只在真实迭代需求成立时附带 Loop Prompt；没有执行授权时停止。
 
-Intent:
-解决 agent 接到模糊任务后跑偏、过度计划、假完成的问题；不是追求短提示词，而是追求战略判断正确。
+User-stated intent:
+全网研究后写出支持 Codex 和 Claude Code 的高质量 goalpro Skill，明确意图和可执行目标。
+
+AI-inferred potential intent:
+推断，尚未确认：解决 agent 接到模糊任务后跑偏、过度计划、假完成的问题；不是追求短提示词，而是追求战略判断正确。
+
+Value judgments requiring confirmation:
+哪些失败模式最重要、研究应覆盖哪些宿主尚需依据；不能把模型自己的优先级当成用户已批准标准。
 
 Strategic outcome:
 用户能把高风险、模糊、长期或研究型任务交给 agent 前，先得到一份能约束执行、验收和暂停条件的任务契约。
@@ -158,47 +134,10 @@ Evidence standard:
 战略任务必须先 fetch 权威来源和反证；普通项目任务必须先读会改变路线的本地材料；最终报告必须区分未验证、结构检查、本地验证、线上验证和人工验收。
 
 Execution policy:
-默认只输出 fenced `markdown` Goal Prompt + Loop Prompt；不要继续改文件、运行命令或提交。只有用户明确授权执行时，才把生成的 goal 交给后续 agent 执行。
+本次研究设计为有限任务，默认只输出 fenced `markdown` Goal Prompt；不要继续改文件、运行命令或提交。只有用户明确授权执行时，才把生成的 goal 交给后续 agent 执行。
 
 Stop conditions:
 来源互相冲突且影响核心规则；关键证据缺失；研究没有改变 Goal / Loop 字段；用户没有授权执行但上下文开始要求继续做事。
-
-Loop Prompt:
-时间参数:
-请自行填写 LOOP 时间，如“每周一 09:00”；如果只想手动继续，填写“手动：贴入上一轮改造结果、验证证据或 Next LOOP packet 后继续”。
-
-Loop mission:
-持续推进 goalpro Skill，使它稳定地从模糊人类意图产出交付级 Goal Prompt，并附带可持续收敛的 Loop Prompt。
-
-Loop state:
-继承原始改造目标、当前轮次、已验证规则、未关闭差距、镜像状态、模糊意图自测结果和下一轮焦点。
-
-Previous result to inspect:
-最终报告、README diff、`.agents` 和 `.claude` skill diff、source-rules / examples diff、镜像一致性检查、模糊意图自测输出。
-
-Review evidence:
-区分文案声明、静态 diff、镜像一致性、prompt-only 边界验证、模糊意图实测和交付级产品可执行性证据。
-
-Gap diagnosis:
-优先找三类差距：是否仍只输出单一 Goal Contract；Loop 是否没有绑定上一轮证据；模糊输入是否仍无法导向交付级产品。
-
-Cycle action:
-本轮只改会影响 Goal / Loop 可执行性、意图对齐、prompt-only 边界、持续 LOOP 或镜像一致性的最高价值差距；不要为了显得完整新增 agent、hook 或无关流程。
-
-Verification delta:
-补跑镜像 hash、关键字段搜索、至少一个模糊人类意图样例，并说明本轮比上一轮多证明了什么。
-
-Loop guardrails:
-最多连续 3 个 LOOP 周期；若连续 2 轮仍无法让模糊意图样例产出合格 Goal + Loop、实机验证受模型缓存影响无法判断，或修改开始扩大到无关机制，则 Pause。
-
-Continuation protocol:
-每轮结束判定 `Done`、`Continue` 或 `Pause`。若仍有会影响交付级 Goal / Loop 的差距，输出下一轮 `Next LOOP packet`；如果实测受运行环境、模型缓存或用户偏好影响无法判断，暂停说明证据边界。
-
-Stop / escalate conditions:
-需要改变 prompt-only 边界、创建新 agent/hook、修改安装路径、提交发布或依赖未验证运行时时暂停。
-
-Next LOOP packet:
-包含原始改造目标、当前轮次、已关闭证据、开放差距、时间参数、下一轮焦点、要读取的文件、验证入口和暂停条件。
 ```
 
 ## 大改或重构请求
@@ -215,8 +154,14 @@ Next LOOP packet:
 Goal:
 重构订单模块中影响维护性的核心路径，并保持现有业务行为不变。
 
-Intent:
-用户真正要的是降低订单模块后续修改成本，不是追求大面积改写。
+User-stated intent:
+重构订单模块，当前结构太乱。
+
+AI-inferred potential intent:
+推断，尚未确认：可能希望降低订单模块后续修改成本，不是追求大面积改写。
+
+Value judgments requiring confirmation:
+小范围整理还是更大架构调整、是否允许改变公共接口；若影响修复路线，先确认。
 
 Strategic outcome:
 订单模块的职责边界、调用关系和验证入口变清楚，后续改需求能更快定位影响面。
@@ -276,14 +221,20 @@ Stop conditions:
 Goal:
 优化项目，提高质量。
 
-Intent:
-用户想让项目更好。
+User-stated intent:
+优化当前项目；尚未点明具体问题。
+
+AI-inferred potential intent:
+推断，尚未确认：用户想让项目更好。
+
+Value judgments requiring confirmation:
+优化指性能、体验还是维护性尚不明确，不能由“优化”两个字推断优先级。
 ```
 
 合格输出必须补齐：
 
 - 用户点名项目或当前工作区；如果没有目标对象，先问或写明默认假设。
-- `Intent` 说明用户真正不满的是可维护性、体验、性能、文档、交付可信度，还是 Agent 已经跑偏。
+- 分开记录三类意图；不要仅凭“优化”断言用户不满的是可维护性、体验、性能、文档、交付可信度，还是 Agent 已经跑偏。
 - `Strategic outcome` 说明完成后局面怎么变，而不是只说“更好”。
 - `Decision standard` 能区分该优先小修、重构、研究、清理还是只写 goal。
 - `Context to read first` 只列会改变判断的材料。
@@ -300,14 +251,20 @@ Intent:
 输出位置必须是聊天窗口，不创建文件：
 
 ````markdown
-下面是可直接复制的 Goal Prompt：
+Goal Prompt:
 
 ```markdown
 Goal:
 优化 GoalPro 的 `goal` Skill，使它更稳定地把模糊、战略性、多步骤或证据不足的请求转成可执行、可验证、可暂停的 Goal Contract。
 
-Intent:
-用户要的是一份能直接复制给 Codex 或 Claude Code 的目标提示词，不是项目文件。默认在聊天窗口输出，除非用户明确要求保存或提交。
+User-stated intent:
+用这套 Skill 准备优化当前 Skill 的目标提示词。
+
+AI-inferred potential intent:
+推断，尚未确认：用户要的是一份能直接复制给 Codex 或 Claude Code 的目标提示词，不是项目文件。默认在聊天窗口输出，除非用户明确要求保存或提交。
+
+Value judgments requiring confirmation:
+先减少误执行还是先改进意图识别，需要既有验收依据或用户确认，不能静默排序。
 
 Strategic outcome:
 后续优化能围绕意图完成度、成败标准、证据标准、输出位置和验证规则推进，而不是凭感觉改文案。
@@ -321,48 +278,6 @@ Execution policy:
 Verification:
 用户能直接复制这段提示词使用；提示词包含目标、意图、标准、执行策略和验证；输出后停止，不继续优化文件本身。
 ```
-
-下面是交付后继续进化用的 Loop Prompt：
-
-```markdown
-时间参数:
-请自行填写 LOOP 时间，如“每天早上 09:00”；如果只想手动继续，填写“手动：贴入上一轮输出、反馈或 Next LOOP packet 后继续”。
-
-Loop mission:
-持续推进 GoalPro 输出质量，使它稳定地把模糊请求转成可执行、可验证、可暂停的 Goal Prompt，并附带可持续循环的 Loop Prompt。
-
-Loop state:
-继承上一轮输出、用户反馈、已关闭证据、开放差距、下一轮焦点和执行授权边界。
-
-Previous result to inspect:
-上一轮最终回复、生成的 Goal Prompt、Loop Prompt、用户反馈和任何验证证据。
-
-Review evidence:
-检查提示词是否只停在聊天输出、是否没有创建文件、是否能直接复制、是否有清楚的验收和暂停条件。
-
-Gap diagnosis:
-找出仍会导致执行者跑偏、过度规划、假完成或误把 GoalPro 当执行器的差距。
-
-Cycle action:
-本轮只调整提示词契约和输出形状中最高价值的差距；没有用户授权时，不改项目文件、不运行命令、不提交。
-
-Verification delta:
-用一个新的模糊请求样例验证输出是否仍能保持 Goal + Loop 双提示词。
-
-Loop guardrails:
-最多连续 3 个 LOOP 周期；若连续 2 轮仍出现执行越权、输出缺字段或 meta 包装污染，暂停重写上游 Goal 而不是继续局部修。
-
-Continuation protocol:
-每轮结束判定 `Done`、`Continue` 或 `Pause`。若仍有会导致跑偏或假完成的差距，输出下一轮 `Next LOOP packet`；如果用户意图不清到会改变输出位置或执行授权，暂停问用户。
-
-Stop / escalate conditions:
-用户要求保存/执行/提交、输出位置改变、权限边界改变或需要真实项目验证时暂停。
-
-Next LOOP packet:
-说明本轮收敛了哪些差距、还剩哪些风险、时间参数、下一轮焦点、要检查的输出和停止条件。
-```
-
-按 `时间参数` 使用 LOOP 继续进化；如果要定时或后台自动跑，需要单独授权自动化设置。
 ````
 
 ## 文件加聊天双输出
@@ -370,65 +285,12 @@ Next LOOP packet:
 输入：
 
 ```text
-把这个目标保存到 docs/goals/optimize-goal-skill.md，也在聊天里给我一份可复制版本。
+把刚才确认的目标保存到 docs/goals/optimize-goal-skill.md，也在聊天里给我一份可复制版本。
 ```
 
-输出必须同时满足：
+只保存用户已确认的那份 Goal Prompt，并在聊天中给出同一份内容及实际路径；保存授权不意味着开始执行目标，也不意味着必须补一段 Loop。只有真实写入并回读成功后，才能报告文件已保存。若原提示词没有 Loop，文件和聊天都不新增 Loop。
 
-- 写入用户指定文件，或使用 `docs/goals/<topic>.md`。
-- 聊天窗口同步输出同一份 Goal Prompt + Loop Prompt fenced `markdown` 代码块。
-- 最后说明文件路径。
-
-````markdown
-已写入：`docs/goals/optimize-goal-skill.md`
-
-聊天窗口可复制版本：
-
-Goal Prompt:
-
-```markdown
-Goal:
-[完整 Goal Contract 内容]
-
-Intent:
-[完整 Intent 内容]
-
-Verification:
-[完整 Verification 内容]
-```
-
-Loop Prompt:
-
-```markdown
-时间参数:
-[请自行填写 LOOP 时间，如“每天早上 09:00”；如果只想手动继续，填写“手动：贴入上一轮结果或 Next LOOP packet 后继续”]
-
-Loop mission:
-[完整 Loop mission 内容]
-
-Loop state:
-[完整 Loop state 内容]
-
-Previous result to inspect:
-[完整 Previous result to inspect 内容]
-
-Loop guardrails:
-[完整 Loop guardrails 内容]
-
-Stop / escalate conditions:
-[完整 Stop / escalate conditions 内容]
-
-Continuation protocol:
-[完整 Continuation protocol 内容]
-
-Next LOOP packet:
-[完整 Next LOOP packet 内容]
-```
-
-按 `时间参数` 使用 LOOP 继续进化；如果要定时或后台自动跑，需要单独授权自动化设置。
-````
-
-## 模糊产品请求 + LOOP 示例
+## 模糊产品请求（一次性交付）
 
 输入：
 
@@ -436,7 +298,7 @@ Next LOOP packet:
 帮我做个网站
 ```
 
-合格输出仍然是两段指令提示词：`Goal Prompt` 负责启动执行，`Loop Prompt` 负责交付后继续进化。它要主动把“网站”放大成交付级产品，而不是只生成页面草稿：
+这是有限的网站首版交付，默认只有 Goal Prompt。页面复杂或可以继续优化不自动产生 Loop：
 
 ````markdown
 Goal Prompt:
@@ -445,8 +307,14 @@ Goal Prompt:
 Goal:
 做出一个可本地运行、可截图验收、适配桌面和移动端的网站首版；如果用户没有给品牌、行业或内容，先用最小可逆默认假设交付一个可替换内容的真实页面。
 
-Intent:
-用户表面上要“网站”，真实意图通常是想看到一个能拿来展示、评估或继续迭代的成品，而不是空模板、组件堆叠或营销话术。
+User-stated intent:
+做一个网站。
+
+AI-inferred potential intent:
+推断，尚未确认：根据请求推测用户要“网站”，真实意图通常是想看到一个能拿来展示、评估或继续迭代的成品，而不是空模板、组件堆叠或营销话术。
+
+Value judgments requiring confirmation:
+网站受众、主要用途与首版范围尚未明确；可逆展示假设应标注，不预设营销转化最重要。
 
 Strategic outcome:
 交付后用户能打开页面、看到清晰主题、主要内容、关键行动入口和基础响应式体验，并能基于真实截图继续提出修改。
@@ -481,48 +349,6 @@ Stop conditions:
 Final report:
 用短报告说明默认假设、交付内容、验证证据、未做事项和下一步建议，并展示一个首屏/移动端/按钮状态的验收样例片段，让用户能判断网站是否过关。
 ```
-
-Loop Prompt:
-
-```markdown
-时间参数:
-请自行填写 LOOP 时间，如“每天早上 09:00 检查网站反馈”；如果只想手动继续，填写“手动：贴入上一轮截图、URL、反馈或 Next LOOP packet 后继续”。
-
-Loop mission:
-在网站首版交付后，用截图、URL、构建输出和用户反馈做复盘；每轮只关闭一个最影响“能展示、能判断、能继续改”的差距。
-
-Loop state:
-继承原始网站目标、当前轮次、已完成页面、已通过验证、开放差距、用户反馈、默认假设和下一轮焦点。
-
-Previous result to inspect:
-上一轮最终报告、本地 URL、桌面/移动截图、构建/检查输出、页面 diff、用户反馈和未解决假设。
-
-Review evidence:
-检查页面是否真实可打开、首屏是否表达明确主题、移动端是否无重叠、按钮是否可理解、截图是否证明结果，而不是只看“已完成”文字。
-
-Gap diagnosis:
-按阻塞访问、布局破损、意图不清、内容空泛、视觉粗糙、验证缺失排序剩余差距。
-
-Cycle action:
-本轮只修复影响网站首版判断的最高价值差距，例如打不开、移动端乱、首屏看不懂、按钮不清楚或截图证据缺失；不要扩展登录、支付、后台、部署或复杂增长功能。若用户反馈改变行业/品牌/功能方向，先重写 Goal 再执行。
-
-Verification delta:
-补充上一轮缺失的运行、截图、构建或视口验证，并说明本轮新增证据关闭了哪些差距。
-
-Loop guardrails:
-最多连续 3 个 LOOP 周期；若连续 2 轮仍无法打开页面、截图/构建验证不可得、用户方向冲突或开放差距不减少，则 Pause。
-
-Continuation protocol:
-每轮结束判定 `Done`、`Continue` 或 `Pause`。若网站仍有影响交付级首版的开放差距，必须输出下一轮 `Next LOOP packet`；如果没有可运行环境、截图工具失败或用户方向冲突，暂停说明证据边界。
-
-Stop / escalate conditions:
-需要线上发布、第三方账号、真实品牌授权、付费素材、个人数据或不可逆改动时暂停。
-
-Next LOOP packet:
-包含原始网站目标、当前轮次、已关闭差距、开放差距、时间参数、下一轮焦点、要读取的截图/URL/diff/反馈、验证 delta 和暂停条件。
-```
-
-按 `时间参数` 使用 LOOP 继续进化；如果要定时或后台自动跑，需要单独授权自动化设置。
 ````
 
 ## 平台自动化产品请求完整案例
@@ -530,10 +356,10 @@ Next LOOP packet:
 输入：
 
 ```text
-我需要小红书自动发布器
+我需要小红书自动发布器。交付后请继续根据我提供的真实发布结果和失败记录复盘。
 ```
 
-合格输出仍然是两段指令提示词：`Goal Prompt` 负责把“自动发布器”拆成安全、合规、可验收的产品目标，`Loop Prompt` 负责让交付结果按时间参数继续进化；不要输出第三段 workflow，也不要直接承诺绕过平台限制自动发帖：
+这里因用户另外明确要求交付后的持续复盘而生成 Goal + Loop；仅“开发自动发布器”五个字并不授权持续执行或真实发帖：
 
 ````markdown
 Goal Prompt:
@@ -542,8 +368,14 @@ Goal Prompt:
 Goal:
 做出一个合规优先的小红书内容发布辅助器 MVP：支持内容草稿、图片/视频素材、发布时间计划、发布前检查、人工确认发布或官方能力发布，并保留发布记录和失败原因。
 
-Intent:
-用户表面上要“小红书自动发布器”，真实意图通常是减少重复发布操作、统一管理内容日历、降低漏发/错发风险，而不是冒着账号风控风险做一个不可控的黑盒发帖机器人。
+User-stated intent:
+开发小红书自动发布器；另明确要求交付后按实际发布结果持续复盘。
+
+AI-inferred potential intent:
+推断，尚未确认：根据请求推测用户要“小红书自动发布器”，真实意图通常是减少重复发布操作、统一管理内容日历、降低漏发/错发风险，而不是冒着账号风控风险做一个不可控的黑盒发帖机器人。
+
+Value judgments requiring confirmation:
+可接受的人工确认程度、目标账号和平台权限需明确；开发产品不等于批准真实发帖。
 
 Strategic outcome:
 交付后用户能把一批小红书内容从“散落文案和素材”变成可检查、可排期、可追踪的发布队列；如果平台允许官方发布能力，则走官方能力；如果不允许，则提供半自动发布辅助和人工确认流程，避免账号安全和合规风险。
@@ -552,7 +384,7 @@ Decision standard:
 账号安全与平台规则 > 内容发布闭环 > 可追踪状态 > 自动化程度 > 界面 polish。不能为了“自动”绕过登录、验证码、风控、平台规则或用户确认。
 
 Workflow lens:
-这类需求按重复 workflow 处理，但输出形态仍是 Goal Prompt + Loop Prompt。每轮从“新增草稿/到达检查时间/用户触发发布准备”开始，经过内容检查、风险提示、排期、发布前人工确认、状态记录和失败复盘；队列状态表是 source of truth。Checkpoint 要尽量后移到发布前，先把决策 Brief 准备好，再让用户做一次关键确认。
+产品内部工作流与 GoalPro 的交付后循环分开判断；此例因明确持续复盘请求才交付 Goal + Loop。每轮从“新增草稿/到达检查时间/用户触发发布准备”开始，经过内容检查、风险提示、排期、发布前人工确认、状态记录和失败复盘；队列状态表是 source of truth。Checkpoint 要尽量后移到发布前，先把决策 Brief 准备好，再让用户做一次关键确认。
 
 Evidence standard:
 先核对项目技术栈、现有账号/内容/素材数据结构、目标发布流程，以及小红书官方开放平台/创作中心/平台规则中与发布、授权、内容管理相关的当前能力；完成后提供本地可运行入口、草稿到发布队列的演示数据、发布前检查样例、失败/暂停状态样例和安全边界说明。
@@ -662,8 +494,14 @@ Brief 示例：内容 A 已通过检查，建议动作：确认发布；证据�
 /goal
 把项目从 JavaScript 迁移到 TypeScript。
 
-Intent:
-提升项目长期可维护性和类型安全，同时保持现有用户行为不变。
+User-stated intent:
+将项目从 JavaScript 迁移到 TypeScript。
+
+AI-inferred potential intent:
+推断，尚未确认：提升项目长期可维护性和类型安全，同时保持现有用户行为不变。
+
+Value judgments requiring confirmation:
+迁移严格程度和兼容范围若未确认，先列为待确认；不得为追求类型覆盖率擅自改变行为。
 
 Strategic outcome:
 项目拥有可持续演进的类型基础，后续功能开发能更早暴露接口和数据错误。
@@ -695,44 +533,81 @@ Pause if:
 - 验证无法运行。
 ```
 
-交付后 Loop Prompt：
+## 长期目标：代理证据与重审
+
+输入：
+
+```text
+根据这个月的 Git 提交判断研发时间花在哪里，以后拿到新的工时记录时继续帮我复盘。
+```
+
+这是明确要求以交付后新记录持续复盘的例子；提交数据不足以直接得出时间占比。
+
+Goal Prompt:
+
+```markdown
+Goal:
+形成可校正的研发投入判断，用足够覆盖实际工作的证据识别主要投入方向。
+
+User-stated intent:
+根据本月 Git 提交分析研发时间去向，并在提供新工时记录后继续复盘。
+
+AI-inferred potential intent:
+推测用户想改进资源分配；尚未明确，不直接给某类工作设定更高优先级。
+
+Value judgments requiring confirmation:
+是否按耗时、产出价值或风险评估投入，需要用户决定；不能用提交数替用户选择评价标准。
+
+Goal / Plan / Output:
+Goal 是判断投入并可被证据校正；Plan 是核对提交、补充工时、比较覆盖范围；Output 是分析表。表生成不代表投入判断已经成立。
+
+Evidence standard:
+Direct evidence: 经用户核对、覆盖指定时期的实际工时记录；当前尚未提供。
+Proxy evidence: Git 提交时间与变更记录，只能证明仓库可见的代码活动。
+Proxy target: 实际研发时间投入。
+Coverage gap: 未覆盖设计讨论、阅读、线下排障、未提交工作，也无法从提交次数推得持续时间。
+Confidence: low；先报告仓库活动分布，不将其写成完整时间占比。
+Counterevidence: 新工时记录可能显示低提交频率的工作占用更多时间。
+
+Revalidation trigger:
+用户提供覆盖该时期的新工时记录、发现未纳入的工作类别，或两种证据得出相反排序时，先暂停旧投入结论，重审目标标准及证据覆盖，再由用户确认是否修订判断。
+
+Execution policy:
+这里只生成提示词；读取私有记录、保存文件、创建自动化或调整资源分配均不由此获得授权。
+
+Verification:
+分别展示已有证据支持的结论、未覆盖部分和不能得出的结论；不同证据冲突时保留冲突，不用填完表格代替判断成立。
+```
+
+Loop Prompt:
 
 ```markdown
 时间参数:
-请自行填写 LOOP 时间，如“每天晚上 22:00”；如果只想手动继续，填写“手动：贴入上一轮最终报告、build/test 输出或 Next LOOP packet 后继续”。
+手动：用户提供新的工时记录后；未创建后台调度。
 
 Loop mission:
-持续推进 TypeScript 迁移，直到项目获得可维护的类型基础，并且行为兼容、验证可信。
+用新增直接证据复核本月投入判断，不为保持连续性而维护已被推翻的结论。
 
 Loop state:
-继承原始迁移目标、当前轮次、已迁移范围、已通过验证、开放类型差距、剩余 any、下一轮切片和暂停风险。
+继承已确认目标、待确认价值标准、已有证据范围、覆盖缺口与当前信心；不静默重写原 Goal。
 
 Previous result to inspect:
-最终报告、tsconfig、迁移 diff、build/test 输出、显式 any 列表、用户反馈。
+上一轮活动分布、覆盖说明、新工时记录及用户对评价标准的确认。
 
 Review evidence:
-区分 strict 编译通过、测试通过、显式 any 合理性说明和未验证声明。
-
-Gap diagnosis:
-优先关闭编译失败、行为回归、无说明 any、未迁移入口和验证缺口。
+先检查 Revalidation trigger。若新增证据推翻目标前提，先报告 Pause 和需要重审的目标，不继续按旧计划循环。
 
 Cycle action:
-不扩大到功能重写；每轮只处理最高价值且能验证的一组类型差距。
+只更新新增证据覆盖的判断；证据未新增时不制造一轮空跑。
 
 Verification delta:
-说明本轮比上一轮多通过了哪些编译、测试或类型覆盖证据。
+说明本轮补足或仍缺少的覆盖范围，以及哪些结论被保持、修订或撤回。
 
 Loop guardrails:
-最多连续 3 个 LOOP 周期；若连续 2 轮仍无法减少编译错误/显式 any/验证缺口，或需要依赖升级、行为改动、架构迁移，则 Pause。
+没有新证据、需要未获授权的数据或评价标准尚未确认时 Pause；目标证据足够且没有继续需求时 Done。
 
 Continuation protocol:
-每轮结束判定 `Done`、`Continue` 或 `Pause`。若仍有未关闭且可验证的类型差距，输出下一轮 `Next LOOP packet`；依赖升级、行为改动或验证不可运行时暂停。
-
-Stop / escalate conditions:
-需要升级依赖、改变公共 API、修改运行时行为、放宽 strict 策略或验证命令不可运行时暂停。
-
-Next LOOP packet:
-列出原始迁移目标、当前轮次、已关闭差距、剩余 any、时间参数、下一轮切片、要读取的文件、验证命令和暂停条件。
+Continue 时附 Next LOOP packet，列明下一次需要的具体证据；不因生成该包而执行任务或创建自动化。
 ```
 
 ## Claude Code 任务提示词示例
@@ -748,4 +623,4 @@ Next LOOP packet:
 [用户请求]
 ```
 
-交付后提醒：按 `时间参数` 把执行结果和 Loop Prompt 一起发给 Agent 继续进化；后续每轮用上轮产出的 `Next LOOP packet` 接着跑。若要定时或后台自动跑，需要单独授权自动化设置。
+只有满足 Loop 需求判断门时才附带交付后循环提示词；生成提示词、执行目标和创建后台自动化分别需要对应授权。
