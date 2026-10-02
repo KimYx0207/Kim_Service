@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "lesson-planner",
   "componentType": "agent",
-  "componentVersion": "0.1.0",
+  "componentVersion": "0.1.1",
   "entrypoint": "AGENT.md",
   "capabilities": [
     {

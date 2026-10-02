@@ -2,12 +2,12 @@
   "schemaVersion": 1,
   "id": "script-writer",
   "componentType": "agent",
-  "componentVersion": "0.1.0",
+  "componentVersion": "0.2.0",
   "entrypoint": "AGENT.md",
   "capabilities": [
     {
       "id": "script-writer-write-script",
-      "summary": "把已定选题与角度写成可直接开口念或直接发布的口播脚本、分镜表或图文正文，含 3 个开头钩子、结尾互动、拍摄清单和说法核对表；不编造功效与数据。",
+      "summary": "把已定选题与角度写成口播脚本、分镜表或图文正文，按形式组织内容，含 3 个开头候选、结尾与说法核对表；仅拍摄类内容提供拍摄清单，不编造功效、数据或个人使用经历。",
       "useWhen": [
         "用户说「帮我写脚本」「口播稿」「分镜表」「这条视频怎么讲」",
         "用户说「帮我写小红书正文」「公众号文章」「视频文案」",
@@ -111,8 +111,11 @@
             }
           },
           "content": {
-            "description": "口播 / 分镜为分段表格，图文正文与公众号文章为分段正文",
-            "type": "array",
+            "description": "口播或分镜为分段表格（array）；图文正文与公众号文章为分段正文（string），不强制使用短视频骨架",
+            "type": [
+              "array",
+              "string"
+            ],
             "items": {
               "type": "object",
               "properties": {
@@ -136,7 +139,7 @@
           },
           "fullVoiceover": {
             "type": "string",
-            "description": "口播类形式必给，附字数与时长估算"
+            "description": "仅口播或含口播的分镜提供全文、字数与时长估算；纯正文省略"
           },
           "ending": {
             "type": "array",
@@ -149,7 +152,8 @@
             "type": "array",
             "items": {
               "type": "string"
-            }
+            },
+            "description": "仅需要拍摄时提供镜头和素材；纯正文无需拍摄时省略"
           },
           "claimsCheck": {
             "type": "array",
@@ -164,6 +168,7 @@
                 },
                 "status": {
                   "enum": [
+                    "用户提供",
                     "用户亲历",
                     "用户观察",
                     "待核实",

@@ -2,11 +2,37 @@
 
 Kim Service uses one repository-level two-part public version (`V<major>.<minor>`) and one GitHub Release for the professional-capability dependency repository. Component CHANGELOG files record component provenance; this file is the release-note authority.
 
-## Unreleased
+## V1.3 - 2026-10-02
 
-- GoalPro: make finite requests produce only Goal Prompt, separate stated/inferred intent and unconfirmed value judgments, and add Goal/Plan/Output boundaries plus evidence-driven goal revalidation.
-- Synchronize GoalPro examples, capability contract, tests, and generated catalog/index hashes. Existing default two-prompt consumers must request Loop explicitly or identify post-delivery evidence that determines the next action.
-- No release tag, repository VERSION change, runtime execution permission, or automatic scheduling is included.
+### Affected components
+
+- Existing lesson-planner, concept-tutor and exercise-designer handoff and execution-evidence guidance.
+- Interview Coach, Script Writer and Xiaohongshu prompt boundaries.
+- Previously merged GoalPro finite-task behavior, Agent Teams Playbook safe installation, and cross-platform repository CI.
+
+### User-visible changes
+
+- Clarify existing role handoffs: deliver facts, assumptions, sources, missing information and self-check results; let the caller select neighboring roles and tools without repeating requirement governance.
+- Remove forced interview practice from answer rewriting, prevent invented first-person product evidence, and align Xiaohongshu pending-decision and image-fallback rules with its authoritative contract.
+- Document selective professional-method references and their source attribution. Role instructions and converted files do not prove native Agent loading or a real MCP/tool binding; examples do not create new product requirements.
+- GoalPro finite tasks return Goal Prompt; Loop requires an explicit request or evidence-driven continuing need. Existing Skill/Tool packages now benefit from the safe playbook installer and Windows/macOS/Linux CI merged after V1.2.
+
+### Breaking changes and migration
+
+- Existing education role IDs, triggers, input/output keys and read-only permissions remain. Interview rewrites may return no follow-up question instead of forcing another turn.
+- Script Writer accepts a string for article content in addition to its existing array form, and adds the claim status `用户提供` (user-provided). Consumers with strict type or enum assumptions should accept these additive values; provided information is not independently verified or firsthand experience.
+- Consumers expecting GoalPro's former automatic pair of prompts must explicitly request Loop. External publication, paid APIs, registry publication and business-system writes are not part of this release.
+
+### Verification
+
+- Release acceptance uses every root regression and declared component check, real scoped interview-rewrite and article-writing deliveries, dependency contract discovery, independent review, exact-head PR CI and main CI.
+- Structural discovery and task-specific model delivery have separate evidence. Fifteen Agent packages retain needs_probe for native loading; no live-certified claim is made. The observed Meta-theory CLI freshness failure is reported to its owner, not relabeled as passed.
+
+### Source revisions
+
+- The baseline is main c583d868 after PRs #3 and #4. The generated catalog binds the Agent packages to the actual source commit through committed-component-tree provenance. Existing canonical-direct-sync source records retain their origin; local Skill changes are recorded in their component changelogs and current Git history.
+- Professional-method reference: agency-agents-zh@811e51c370f26ec4f37ca277b4368b4ff895741f; its inventory distinguishes 213 translated and 64 original roles. Source links and MIT attribution remain in docs/method-absorption.md; no complete upstream role package is imported.
+- Canonical contracts remain package-level capability.json; catalog.json and generated/capabilities.json are deterministic projections. Meta_Kim continues to own intent, selection, orchestration and final acceptance. Its current read-only consumer handles Agents; non-Agent migration is not claimed complete.
 
 ## V1.2 - 2026-09-14
 

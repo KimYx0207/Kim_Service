@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "xiaohongshu-skill",
   "componentType": "skill",
-  "componentVersion": "1.0.0",
+  "componentVersion": "1.0.1",
   "entrypoint": "SKILL.md",
   "capabilities": [
     {
@@ -114,7 +114,8 @@
         "scripts/check-chat-output-fixtures.mjs",
         "scripts/check-page-direction-fixtures.mjs",
         "scripts/check-narrative-route-fixtures.mjs",
-        "scripts/check-visual-workspace-contract.mjs"
+        "scripts/check-visual-workspace-contract.mjs",
+        "scripts/check-decision-route-contract.mjs"
       ]
     }
   ]
