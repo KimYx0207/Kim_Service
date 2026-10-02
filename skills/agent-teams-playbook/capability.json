@@ -91,7 +91,8 @@
         ]
       },
       "validation": [
-        "tests/runtime-contracts.test.mjs"
+        "tests/runtime-contracts.test.mjs",
+        "tests/test_installer.py"
       ]
     }
   ]

@@ -7,6 +7,16 @@
 
 set -e
 
+# Same-filesystem stage -> backup -> rename, following semgrep-skill/install.py.
+# Backups preserve the entire previous install, including user additions.
+TX_STAGE=""
+TX_BACKUP=""
+TX_TARGET=""
+TX_LOCK=""
+TX_OLD_MOVED=0
+TX_PROMOTED=0
+TX_COMMITTED=0
+
 VERSION="V4.8.0"
 SKILL_NAME="agent-teams-playbook"
 GITHUB_REPO="KimYx0207/Kim_Service"
@@ -67,11 +77,13 @@ OPTIONS:
 DESCRIPTION:
     Installs the agent-teams-playbook Skill by:
     1. Detecting your operating system
-    2. Creating the installation directory
+    2. Validating the destination and creating a sibling staging directory
     3. Copying the target runtime skill package from the local checkout
        or downloading them from GitHub with --from-github
-    4. Verifying the installation
-    5. Optionally enabling Claude Code fork mode
+    4. Verifying all staged files before replacing the installation
+    5. Optionally enabling Claude Code fork mode before promotion
+       Existing installs require confirmation and are retained in a sibling backup.
+       Each --target all destination is an independent transaction.
 
 EXAMPLES:
     ./install.sh                         # Install for Claude Code
@@ -125,10 +137,10 @@ done
 
 target_dir() {
     case "$1" in
-        claude) echo "${CLAUDE_SKILLS_DIR}/${SKILL_NAME}" ;;
-        codex) echo "${CODEX_SKILLS_DIR}/${SKILL_NAME}" ;;
-        openclaw) echo "${OPENCLAW_SKILLS_DIR}/${SKILL_NAME}" ;;
-        cursor) echo "${CURSOR_SKILLS_DIR}/${SKILL_NAME}" ;;
+        claude) echo "${CLAUDE_SKILLS_DIR%/}/${SKILL_NAME}" ;;
+        codex) echo "${CODEX_SKILLS_DIR%/}/${SKILL_NAME}" ;;
+        openclaw) echo "${OPENCLAW_SKILLS_DIR%/}/${SKILL_NAME}" ;;
+        cursor) echo "${CURSOR_SKILLS_DIR%/}/${SKILL_NAME}" ;;
         *)
             print_error "Unsupported target: $1" >&2
             print_error "Supported targets: claude, codex, openclaw, cursor, all" >&2
@@ -166,31 +178,120 @@ detect_os() {
     echo
 }
 
-# Feature 2: Directory Creation
-create_directory() {
+# Do not follow symlinks or accept ambiguous/over-broad destination paths.
+validate_target() {
     local install_dir="$1"
-    print_header "Step 2: Creating Installation Directory"
-
-    print_info "Target directory: ${install_dir}"
-
-    if [ -d "${install_dir}" ]; then
-        print_warning "Directory already exists!"
-        echo
-        read -p "Do you want to overwrite the existing installation? (y/N): " -n 1 -r
-        echo
-
-        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-            print_error "Installation aborted by user"
-            exit 1
-        fi
-
-        print_info "Removing existing directory..."
-        rm -rf "${install_dir}"
+    local cursor="$install_dir"
+    case "$install_dir" in
+        /*) ;;
+        *) print_error "Skills root must be an absolute path"; return 1 ;;
+    esac
+    case "$install_dir" in
+        *'/../'*|*'/./'*|*'//'*|*$'\n'*|*$'\r'*)
+            print_error "Unsafe destination path: $install_dir"; return 1 ;;
+    esac
+    if [ "${install_dir%/*}" = "" ] || [ "${install_dir%/*}" = "/" ]; then
+        print_error "Refusing to install directly at the filesystem root"; return 1
     fi
+    while [ -n "$cursor" ] && [ "$cursor" != "/" ]; do
+        if [ -L "$cursor" ]; then
+            print_error "Destination must not contain a symlink: $cursor"; return 1
+        fi
+        if [ -e "$cursor" ] && [ ! -d "$cursor" ]; then
+            print_error "Destination component is not a directory: $cursor"; return 1
+        fi
+        cursor="${cursor%/*}"
+    done
+}
 
-    mkdir -p "${install_dir}"
-    print_success "Directory created successfully"
-    echo
+cleanup_transaction() {
+    local status=$?
+    trap - EXIT HUP INT TERM
+    if [ "$status" -ne 0 ] && [ "$TX_COMMITTED" = 0 ]; then
+        # Move a failed promotion back to the private stage, never delete a live
+        # destination. If recovery fails, retain every directory for inspection.
+        if [ "$TX_PROMOTED" = 1 ] && [ -e "$TX_TARGET" ] && [ ! -e "$TX_STAGE" ]; then
+            if mv "$TX_TARGET" "$TX_STAGE"; then
+                TX_PROMOTED=0
+            else
+                print_error "Recovery blocked; preserve target $TX_TARGET and backup $TX_BACKUP" >&2
+                TX_STAGE=""
+            fi
+        fi
+        if [ "$TX_OLD_MOVED" = 1 ] && [ ! -e "$TX_TARGET" ] && [ ! -L "$TX_TARGET" ]; then
+            if mv "$TX_BACKUP/previous" "$TX_TARGET"; then
+                print_warning "Previous installation restored after failure" >&2
+                TX_OLD_MOVED=0
+            else
+                print_error "Restore failed; previous installation is safe at $TX_BACKUP/previous" >&2
+            fi
+        fi
+    fi
+    if [ -n "$TX_STAGE" ] && [ -d "$TX_STAGE" ]; then
+        rm -rf "$TX_STAGE"
+    fi
+    if [ -n "$TX_BACKUP" ]; then
+        rmdir "$TX_BACKUP" 2>/dev/null || true
+    fi
+    if [ -n "$TX_LOCK" ]; then
+        rmdir "$TX_LOCK" 2>/dev/null || true
+    fi
+    exit "$status"
+}
+
+begin_transaction() {
+    local install_dir="$1"
+    validate_target "$install_dir"
+    local parent="${install_dir%/*}"
+    mkdir -p "$parent"
+    # mkdir is also a portable, per-destination concurrent-installer lock.
+    local lock="$parent/.${SKILL_NAME}.install-lock"
+    if ! mkdir "$lock"; then
+        print_error "Another install or interrupted transaction holds $lock"; return 1
+    fi
+    TX_LOCK="$lock"
+    TX_TARGET="$install_dir"
+    TX_COMMITTED=0
+    trap cleanup_transaction EXIT
+    trap 'exit 129' HUP
+    trap 'exit 130' INT
+    trap 'exit 143' TERM
+    TX_STAGE=$(mktemp -d "$parent/.${SKILL_NAME}.stage.XXXXXX")
+    print_info "Preparing complete package in $TX_STAGE"
+}
+
+promote_transaction() {
+    validate_target "$TX_TARGET"
+    if [ -d "$TX_TARGET" ]; then
+        print_warning "Existing user changes/additions will be kept only in the backup, not merged into the new active install."
+        local reply=""
+        read -r -p "Replace it and keep a backup? (y/N): " reply || true
+        echo
+        if [[ ! $reply =~ ^[Yy]$ ]]; then
+            print_error "Installation aborted; existing files are unchanged"; return 1
+        fi
+        TX_BACKUP=$(mktemp -d "${TX_TARGET%/*}/.${SKILL_NAME}.backup.XXXXXX")
+        # Arm recovery before rename so a signal immediately after mv is safe.
+        TX_OLD_MOVED=1
+        mv "$TX_TARGET" "$TX_BACKUP/previous"
+    fi
+    TX_PROMOTED=1
+    mv "$TX_STAGE" "$TX_TARGET"
+    verify_installation "$TX_TARGET"
+    # One state assignment commits the verified target, including signal handling.
+    TX_COMMITTED=1
+    if [ -n "$TX_BACKUP" ]; then
+        print_info "Previous installation (including user changes): $TX_BACKUP/previous"
+    fi
+    # Commit only after the final verification. No backup is removed on success.
+    TX_OLD_MOVED=0
+    TX_PROMOTED=0
+    TX_STAGE=""
+    TX_BACKUP=""
+    TX_TARGET=""
+    rmdir "$TX_LOCK"
+    TX_LOCK=""
+    trap - EXIT HUP INT TERM
 }
 
 package_subdir_for_target() {
@@ -221,7 +322,7 @@ copy_local_files() {
 
         print_info "Copying ${file}..."
 
-        if [ ! -f "${source}" ]; then
+        if [ ! -f "${source}" ] || [ -L "${source}" ]; then
             print_error "Local source file not found: ${source}"
             exit 1
         fi
@@ -300,7 +401,7 @@ verify_installation() {
     for file in "${files[@]}"; do
         local filepath="${install_dir}/${file}"
 
-        if [ ! -f "${filepath}" ]; then
+        if [ ! -f "${filepath}" ] || [ -L "${filepath}" ]; then
             print_error "${file} does not exist"
             all_valid=false
         elif [ ! -s "${filepath}" ]; then
@@ -314,6 +415,13 @@ verify_installation() {
     done
 
     echo
+
+    if [ -f "${install_dir}/SKILL.md" ] &&
+       { [ "$(head -n 1 "${install_dir}/SKILL.md")" != "---" ] ||
+         ! grep -q '^name: agent-teams-playbook$' "${install_dir}/SKILL.md"; }; then
+        print_error "SKILL.md is not an agent-teams-playbook package"
+        all_valid=false
+    fi
 
     if [ "$all_valid" = true ]; then
         print_success "All files verified successfully!"
@@ -342,7 +450,8 @@ configure_fork_mode() {
     print_info "This prevents context pollution but increases token usage."
     echo
 
-    read -p "Do you want to enable fork mode? (y/N): " -n 1 -r
+    REPLY=""
+    read -p "Do you want to enable fork mode? (y/N): " -r || true
     echo
     echo
 
@@ -410,21 +519,17 @@ main() {
         install_dir=$(target_dir "${target}") || exit 1
 
         print_header "Installing for ${target}"
-        create_directory "${install_dir}"
-
+        begin_transaction "${install_dir}"
         if [ "${INSTALL_SOURCE}" = "github" ]; then
-            download_files "${install_dir}" "${target}"
+            download_files "$TX_STAGE" "${target}"
         else
-            copy_local_files "${install_dir}" "${target}"
+            copy_local_files "$TX_STAGE" "${target}"
         fi
-
-        if verify_installation "${install_dir}"; then
-            configure_fork_mode "${install_dir}" "${target}"
-            installed_locations+=("${target}: ${install_dir}")
-        else
-            print_error "Installation failed during verification for ${target}"
-            exit 1
-        fi
+        verify_installation "$TX_STAGE"
+        configure_fork_mode "$TX_STAGE" "${target}"
+        verify_installation "$TX_STAGE"
+        promote_transaction
+        installed_locations+=("${target}: ${install_dir}")
     done
 
     print_header "Installation Complete!"

@@ -1,12 +1,12 @@
 {
   "capabilities": [
     {
-      "componentContentSha256": "f0b708b715d9a617397f3cc0ba597af51916f9b70fc34086467d17b15ea8fe14",
+      "componentContentSha256": "d52591bd1b0fc6db60058a77fed677fcf5f27bd1299b8d28227c3fd16b4c4106",
       "componentId": "agent-teams-playbook",
       "componentPath": "skills/agent-teams-playbook",
       "componentType": "skill",
       "componentVersion": "4.8.0",
-      "contractSha256": "c3424584767282a7e0275a224e2bc45230149327f8d6c8109263ce8b15ac9d2c",
+      "contractSha256": "04fa72e71ef67fc55f0058e162ed8050308ab963258066858b18257dbaeb549c",
       "doNotUseWhen": [
         "单 Agent 可以直接完成的一次性问答或单文件小改动",
         "宿主没有真实的子 Agent 能力且任务也不值得采用分阶段降级流程",
@@ -93,7 +93,8 @@
         "复杂交付需要角色分工、阶段计划、失败处理和主线程最终验收"
       ],
       "validation": [
-        "tests/runtime-contracts.test.mjs"
+        "tests/runtime-contracts.test.mjs",
+        "tests/test_installer.py"
       ]
     },
     {
@@ -343,7 +344,7 @@
       ]
     },
     {
-      "componentContentSha256": "b08827410643495d6043cdce836ba013dceb1a09105a8714380f69532b9370c1",
+      "componentContentSha256": "88e1211b094ed701da53b32daf0f11a582ee1cf031761a3d94a5f88b92c4799a",
       "componentId": "claudecode-codex-gemini",
       "componentPath": "tools/claudecode-codex-gemini",
       "componentType": "tool",
@@ -391,7 +392,7 @@
       ]
     },
     {
-      "componentContentSha256": "b08827410643495d6043cdce836ba013dceb1a09105a8714380f69532b9370c1",
+      "componentContentSha256": "88e1211b094ed701da53b32daf0f11a582ee1cf031761a3d94a5f88b92c4799a",
       "componentId": "claudecode-codex-gemini",
       "componentPath": "tools/claudecode-codex-gemini",
       "componentType": "tool",
@@ -1100,7 +1101,7 @@
       ]
     },
     {
-      "componentContentSha256": "b08827410643495d6043cdce836ba013dceb1a09105a8714380f69532b9370c1",
+      "componentContentSha256": "88e1211b094ed701da53b32daf0f11a582ee1cf031761a3d94a5f88b92c4799a",
       "componentId": "claudecode-codex-gemini",
       "componentPath": "tools/claudecode-codex-gemini",
       "componentType": "tool",
@@ -2757,7 +2758,7 @@
       ]
     },
     {
-      "componentContentSha256": "b08827410643495d6043cdce836ba013dceb1a09105a8714380f69532b9370c1",
+      "componentContentSha256": "88e1211b094ed701da53b32daf0f11a582ee1cf031761a3d94a5f88b92c4799a",
       "componentId": "claudecode-codex-gemini",
       "componentPath": "tools/claudecode-codex-gemini",
       "componentType": "tool",
@@ -4201,13 +4202,14 @@
       ],
       "componentType": "skill",
       "componentVersion": "4.8.0",
-      "contentSha256": "f0b708b715d9a617397f3cc0ba597af51916f9b70fc34086467d17b15ea8fe14",
-      "contractSha256": "c3424584767282a7e0275a224e2bc45230149327f8d6c8109263ce8b15ac9d2c",
+      "contentSha256": "d52591bd1b0fc6db60058a77fed677fcf5f27bd1299b8d28227c3fd16b4c4106",
+      "contractSha256": "04fa72e71ef67fc55f0058e162ed8050308ab963258066858b18257dbaeb549c",
       "entrypoint": "SKILL.md",
       "id": "agent-teams-playbook",
       "path": "skills/agent-teams-playbook",
       "validation": [
-        "tests/runtime-contracts.test.mjs"
+        "tests/runtime-contracts.test.mjs",
+        "tests/test_installer.py"
       ]
     },
     {
@@ -4347,7 +4349,7 @@
       ],
       "componentType": "tool",
       "componentVersion": "1.0.0-kim-service.1",
-      "contentSha256": "b08827410643495d6043cdce836ba013dceb1a09105a8714380f69532b9370c1",
+      "contentSha256": "88e1211b094ed701da53b32daf0f11a582ee1cf031761a3d94a5f88b92c4799a",
       "contractSha256": "a5c633d21f8ff0a8c34bf2f1665591a2f40a7d97538db0f0ba03a7ef9b2aa459",
       "entrypoint": "cli.mjs",
       "id": "claudecode-codex-gemini",

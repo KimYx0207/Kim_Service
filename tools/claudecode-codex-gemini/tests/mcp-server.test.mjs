@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { EventEmitter } from 'node:events';
-import { mkdtemp, mkdir, readFile, writeFile } from 'node:fs/promises';
+import { mkdtemp, mkdir, readFile, realpath, rm, symlink, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
@@ -26,7 +26,28 @@ test('Codex adapter defaults to read-only, passes prompt on stdin, and uses cons
   assert.equal(invocation.engine, 'codex');
   assert.deepEqual(invocation.args, ['exec', '--skip-git-repo-check', '--sandbox', 'read-only', '-']);
   assert.equal(invocation.input, 'review this');
-  assert.equal(invocation.cwd, path.join(root, 'nested'));
+  assert.equal(invocation.cwd, await realpath(path.join(root, 'nested')));
+});
+
+test('workspace aliases resolve canonically while linked cwd escapes are rejected', async (t) => {
+  const parent = await mkdtemp(path.join(tmpdir(), 'kim-ccg-alias-'));
+  t.after(() => rm(parent, { recursive: true, force: true }));
+  const root = path.join(parent, 'workspace');
+  const outside = path.join(parent, 'outside');
+  const alias = path.join(parent, 'alias');
+  await mkdir(path.join(root, 'nested'), { recursive: true });
+  await mkdir(outside);
+  const linkType = process.platform === 'win32' ? 'junction' : 'dir';
+  await symlink(root, alias, linkType);
+  await symlink(outside, path.join(root, 'escape'), linkType);
+  let invocation;
+  const adapter = createCodexAdapter({ workspaceRoot: alias, runner: async (value) => {
+    invocation = value;
+    return { stdout: 'ok', stderr: '' };
+  } });
+  await adapter.call({ prompt: 'review', cwd: 'nested' });
+  assert.equal(invocation.cwd, await realpath(path.join(root, 'nested')));
+  await assert.rejects(() => adapter.call({ prompt: 'review', cwd: 'escape' }), /outside/);
 });
 
 test('Codex adapter rejects unknown arguments and uncontained cwd', async () => {
@@ -187,8 +208,8 @@ test('Windows resolver ignores shim text and selects only the fixed contained np
   await writeFile(entry, 'console.log("ok")\n');
   const launch = await resolveCliLaunch('codex', { platform: 'win32', env: { PATH: root } });
   assert.equal(launch.command, process.execPath);
-  assert.equal(launch.entry, entry);
-  assert.deepEqual(launch.argsPrefix, [entry]);
+  assert.equal(launch.entry, await realpath(entry));
+  assert.deepEqual(launch.argsPrefix, [await realpath(entry)]);
 });
 
 test('installed Windows npm CLI entries can execute version probes without a shell', {

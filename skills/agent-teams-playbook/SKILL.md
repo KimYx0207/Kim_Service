@@ -1,13 +1,14 @@
 ---
 name: agent-teams-playbook
-version: "4.8.0"
+metadata:
+  version: "4.8.0"
 description: |
-  Cross-runtime Agent Teams orchestration playbook for Claude Code, Codex, OpenClaw, and Cursor. This skill should be used when the user asks to "create agent teams", "use agent swarm", "setup multi-agent collaboration", "orchestrate agents", "coordinate parallel agents", "organize team collaboration", "build agent teams", "implement swarm orchestration", "setup multi-agent system", "coordinate agent collaboration", or needs guidance on adaptive team formation, quality gates, skill discovery, task distribution, team coordination strategies, or Agent Teams best practices. 或者当用户说"多agent"、"agent协作"、"agent编排"、"并行agent"、"分工协作"、"拉团队"、"拉个团队"、"多代理协作"、"swarm编排"、"agent团队"时也应使用此技能。Note: "swarm/蜂群" is a generic industry term; Claude Code's official concept is "Agent Teams"; Codex, OpenClaw, and Cursor should map this playbook to their native or host-provided agent capabilities without deleting any workflow stage.
+  Cross-runtime playbook for multi-agent collaboration, agent teams, swarm orchestration, parallel task distribution, capability discovery, and quality gates on Claude Code, Codex, OpenClaw, and Cursor. Use for 多agent、agent协作、agent编排、并行agent、分工协作、拉团队、多代理协作 or complex work needing independent roles and review. Map the six-stage workflow to the active host's actual capabilities; report sequential degradation when parallel agents are unavailable.
 ---
 
 # Agent Teams 编排手册
 
-作为 Agent Teams 协调器，你的职责包括：明确每个角色的职责边界、把控执行过程、对最终产品质量负责。
+本 Skill 为调用方提供多 Agent 分工、执行和质量检查建议。宿主协调器负责角色边界、过程与最终交付；在 Meta_Kim 中，Router、跨组件状态机和最终验收仍由 Meta_Kim 负责，本包不接管这些职责。
 
 > **核心理解（铁律）**：Agent Teams 是"并行处理 + 结果汇总"模式，不是扩大单个 agent 的上下文窗口。每个 teammate 是独立的执行单元，拥有独立上下文，可以并行处理大量信息，但最终需要将结果汇总压缩后返回主会话。
 
@@ -20,17 +21,47 @@ description: |
 | 抽象动作 | Claude Code | Codex | OpenClaw | Cursor |
 |------|------|------|------|------|
 | 调用 Skill | `Skill(skill="name", args="...")` 或 slash skill | 读取并遵循本地 skill 指令；只有宿主暴露 skill 工具时才称为"调用" | 读取并遵循 `openclaw/skills` 或全局 skill；按 OpenClaw 当前工具执行 | 读取并遵循 `.cursor/skills` 或全局 skill；按 Cursor 当前 agent 能力执行 |
-| 启动独立 Subagent | 使用宿主当前暴露的 `Agent` / `Task`，至少携带必填 `prompt`，并按当前 schema 提供 `subagent_type`、`description`/`name` 和边界 | 使用顶层 `spawn_agent(task_name, message, fork_turns)` | workspace / agent 调度能力；不可用则主线程分阶段执行 | background agent / agent mode；不可用则主线程分阶段执行 |
-| 组建 Agent Team | 宿主暴露时使用 `TeamCreate` + `Agent` / `Task(team_name)` | 同一轮并发调用多个顶层 `spawn_agent`，由主线程汇总；不伪装共享团队总线 | team / workspace 能力存在时使用；否则多个任务或主线程 | background agents / team-like workflow 存在时使用；否则多个任务或主线程 |
+| 启动独立 Subagent | 使用宿主当前暴露的 `Agent` / `Task`，至少携带必填 `prompt`，并按当前 schema 提供 `subagent_type`、`description`/`name` 和边界 | 使用当前宿主暴露的原生 spawn schema（见下方 profiles） | workspace / agent 调度能力；不可用则主线程分阶段执行 | background agent / agent mode；不可用则主线程分阶段执行 |
+| 组建 Agent Team | 宿主暴露时使用 `TeamCreate` + `Agent` / `Task(team_name)` | 同一轮并发调用多个宿主原生 spawn 调用，由主线程汇总；不伪装共享团队总线 | team / workspace 能力存在时使用；否则多个任务或主线程 | background agents / team-like workflow 存在时使用；否则多个任务或主线程 |
 | 成员通信/进度 | `SendMessage` 或 Agent/Task result | 子任务结果回报；只有宿主暴露 agent I/O 时才中途通信 | 平台消息/日志；不可用时用阶段性文本汇报 | IDE/agent 日志；不可用时用阶段性文本汇报 |
 | 规划文件 | `planning-with-files` skill | 若本地 skill/tool 存在则使用；否则使用内联计划或平台计划工具 | 若本地 planning skill 存在则使用；否则维护可见计划记录 | 若本地 planning skill 存在则使用；否则维护可见计划记录 |
 
 **平台适配底线**：
 1. 写计划时使用抽象动作名；执行时使用当前平台真实工具名。
 2. Claude Code 使用宿主当前暴露的 `Agent` / `Task`；只有宿主确实暴露 `TeamCreate` / `SendMessage` 时才承诺共享团队语义。不要把 Codex 参数复制到 Claude Code。
-3. Codex 只有实际调用顶层 `spawn_agent(task_name, message, fork_turns)` 才代表启动后台 Agent。不要传 `agent_type` / `fork_context`，不要回退到旧的 namespaced spawn API。
+3. Codex 以当前宿主实际暴露的工具 schema 和权限为准，再选择匹配的 profile；不能只凭产品名或版本猜参数。只有工具调用成功且有返回的 Agent 标识，才报告已启动。
 4. OpenClaw/Cursor 的 team 能力可能来自项目插件、workspace 或 IDE 能力；先探测，再承诺。
 5. 若平台不支持真正并行或团队通信，明确降级为"主线程分阶段执行"，但仍执行阶段0-5的治理流程。
+
+## Codex 宿主 profiles（薄适配）
+
+当前宿主 schema 优先于以下已知示例。先读取工具名、必填字段、可选字段、返回标识、并发与通信权限；只提交当前 schema 允许的字段。宿主未暴露工具时不要猜名字，也不要为适配自行实现执行引擎。`agent_type`、`model`、`reasoning_effort` 可能受 feature flags 隐藏；即便暴露，也要遵循宿主的选择/继承规则，不自动覆盖。
+
+- **codex-v1**：已知上游 namespace 为 `multi_agent_v1.spawn_agent`，任务用 `message` 或 `items`，历史继承用布尔 `fork_context`；`agent_type` 仅在当前 schema 暴露并允许选择时可用。
+- **codex-v2**：已知上游顶层 `spawn_agent` 必填 `task_name` 和 `message`，历史继承用字符串 `fork_turns`（`none`、`all` 或正整数字符串）；不能向它传 V1 的 `fork_context`。
+- **codex-v2-limited**：工具名和必填字段同 V2，但宿主可隐藏 `agent_type`、`model`、`reasoning_effort`；不能照搬其他 profile 的可选字段。
+- **no-capability**：没有可用 spawn，或权限不允许并发时，明确采用主线程分阶段执行，仍保留阶段0-5；不得报告真实并行、团队通信或子 Agent 成功。通信工具也必须单独探测。
+
+以下最小调用样例只展示静态协议，不承诺真实宿主已实测。测试夹具验证文档与已知 schema 的一致性；新的宿主 schema 有差异时，以现场发现为准并记录差异。
+
+<!-- contract: codex-v1 -->
+```json
+{"tool":"multi_agent_v1.spawn_agent","arguments":{"message":"Review the bounded task and return evidence.","fork_context":false}}
+```
+<!-- contract: codex-v2 -->
+```json
+{"tool":"spawn_agent","arguments":{"task_name":"review_task","message":"Review the bounded task and return evidence.","fork_turns":"none"}}
+```
+<!-- contract: codex-v2-limited -->
+```json
+{"tool":"spawn_agent","arguments":{"task_name":"review_task","message":"Review the bounded task and return evidence."}}
+```
+<!-- contract: no-capability -->
+```json
+{"tool":null,"arguments":null,"mode":"sequential","parallel":false}
+```
+
+参考：[OpenAI Codex schema 快照](https://github.com/openai/codex/blob/ca466061d64f0b44f416135c7fd06aa7af850bbc/codex-rs/core/src/tools/handlers/multi_agents_spec.rs)（2026-10-02 核验，V1/V2 与字段开关并存）；[Agent Skills 格式规范](https://agentskills.io/specification)（自定义版本放在 `metadata.version`，包事实以 `capability.json` 为准）。
 
 ## 适用 vs 不适用
 
@@ -81,8 +112,8 @@ description: |
 
 | 模式 | 通信方式 | 适用场景 | Claude Code 启动方式 | Codex 启动方式 | OpenClaw / Cursor 启动方式 |
 |------|---------|---------|---------|---------|---------|
-| Subagent | 子agent → 主协调器单向汇报 | 并行独立任务 | 宿主当前的 `Agent` / `Task` | 顶层 `spawn_agent(task_name, message, fork_turns)` | 平台 agent/background/workspace 能力；不可用则主线程分阶段执行 |
-| Agent Team | 成员间可双向通信(SendMessage) | 需要协作的复杂任务 | `TeamCreate` + `Agent` / `Task(team_name)`（仅宿主暴露时） | 多个顶层 `spawn_agent` + 主线程协调；仅在宿主暴露 agent I/O 时中途交互 | 平台 team/workspace/background-agent 能力；没有则降级 |
+| Subagent | 子agent → 主协调器单向汇报 | 并行独立任务 | 宿主当前的 `Agent` / `Task` | 当前宿主原生 spawn schema | 平台 agent/background/workspace 能力；不可用则主线程分阶段执行 |
+| Agent Team | 成员间可双向通信(SendMessage) | 需要协作的复杂任务 | `TeamCreate` + `Agent` / `Task(team_name)`（仅宿主暴露时） | 多个宿主原生 spawn 调用 + 主线程协调；仅在宿主暴露 agent I/O 时中途交互 | 平台 team/workspace/background-agent 能力；没有则降级 |
 
 选择原则：任务间无依赖用Subagent（简单高效），任务间需要协调用Agent Team（功能更强但成本更高）。如果当前平台没有真正的 team bus，只能称为"多个独立 subagent + 主线程汇总"，不能伪装成成员间双向协作。
 
@@ -140,7 +171,7 @@ Skill(skill="planning-with-files")
 
 1. **本地多类型能力扫描**：读取当前运行时可见的 Agents、Skills、Tools、Commands、MCP 和 capability index。只要已有专业 provider 覆盖子任务，就绑定该 provider 并停止搜索。
 2. **外部能力搜索（仅真实缺口时）**：只有本地所有相关 provider 都无法覆盖，而且该能力值得复用或安装时，才调用 `find-skills` 或平台等价搜索。安装仍需用户/宿主授权。
-3. **运行时原生绑定**：Claude Code 将选中的 owner 绑定到 `Agent` / `Task`；Codex 将它写入 bounded `message`，再调用顶层 `spawn_agent(task_name, message, fork_turns)`。
+3. **运行时原生绑定**：Claude Code 将选中的 owner 绑定到 `Agent` / `Task`；Codex 将它写入 bounded `message`，再按当前宿主原生 spawn schema 调用。
 4. **最后降级**：只有宿主 Agent surface 缺失、权限阻断，或完整发现后仍无可用 owner，才允许进入显式 degraded mode。通用临时 Subagent 仅在项目策略允许时使用；主线程分阶段执行只用于明确降级，不能冒充正常编排。
 
 > **铁律**：找不到“完全匹配的 Skill”不等于能力失败。已有 Agent、Tool、Command 或 MCP 能完成任务时，不得继续外部搜索，也不得称为回退。`find-skills` 没有安装结果时，也不能把随后成功的原生 Agent 调用标成 fallback。
@@ -158,7 +189,7 @@ Skill(skill="planning-with-files")
 ### 阶段3：并行执行
 
 - **Skill任务**：用当前平台的 Skill 调用机制调用本地已安装的skill；Claude Code 示例：`Skill(skill="skill-name", args="任务描述")`
-- **Agent任务**：使用当前平台原生 subagent 工具；Claude Code 使用宿主暴露的 `Agent` / `Task`，Codex 使用顶层 `spawn_agent(task_name, message, fork_turns)`
+- **Agent任务**：使用当前平台原生 subagent 工具；Claude Code 使用宿主暴露的 `Agent` / `Task`，Codex 使用当前宿主暴露的原生 spawn schema（见下方 profiles）
 - 混合编排时skill和subagent可并行运行；平台不支持并行时按阶段顺序执行并说明降级
 - 每个agent/skill完成后汇报：`✅ [角色名] 完成: [一句话结果]`
 - 遇到问题时给用户选项，而不是自己默默选一个
