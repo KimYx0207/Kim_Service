@@ -340,7 +340,7 @@
       "snapshot": "preserved-agent-teams-history-base;self-contained-component-snapshot",
       "version": "4.8.0",
       "contractSha256": "04fa72e71ef67fc55f0058e162ed8050308ab963258066858b18257dbaeb549c",
-      "contentSha256": "38f3df0f010321dee52a70c9ac923d398dc026a91314e67ba35fe06cf561276b",
+      "contentSha256": "d52591bd1b0fc6db60058a77fed677fcf5f27bd1299b8d28227c3fd16b4c4106",
       "required": [
         "SKILL.md",
         "README.md",

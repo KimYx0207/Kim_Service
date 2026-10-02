@@ -205,6 +205,29 @@ class InstallerTests(unittest.TestCase):
                     self.assert_old()
                     self.assert_clean()
 
+    def test_signal_at_commit_boundary_keeps_a_complete_active_install(self):
+        self.existing()
+        original = self.script.read_text()
+        marker = "    TX_COMMITTED=1\n"
+        self.assertEqual(original.count(marker), 1)
+        # Instrument only this temporary test copy, at deterministic boundaries.
+        for phase in ["before", "after"]:
+            with self.subTest(phase=phase):
+                signal = '    kill -TERM "$$"\n'
+                replacement = signal + marker if phase == "before" else marker + signal
+                self.script.write_text(original.replace(marker, replacement))
+                result = self.run_install()
+                self.assertNotEqual(result.returncode, 0)
+                if phase == "before":
+                    self.assert_old()
+                else:
+                    self.assertEqual((self.target / "SKILL.md").read_bytes(), (self.package / "SKILL.md").read_bytes())
+                    backups = list(self.skills.glob(f".{NAME}.backup.*/previous"))
+                    self.assertEqual(len(backups), 1)
+                    self.assertEqual((backups[0] / "SKILL.md").read_bytes(), self.old)
+                    self.assertTrue((backups[0] / "personal-notes.txt").exists())
+                self.assert_clean()
+
     def test_two_real_processes_cannot_replace_or_unlock_each_other(self):
         self.existing()
         ready, release = self.root / "ready", self.root / "release"

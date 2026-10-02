@@ -15,6 +15,7 @@ TX_TARGET=""
 TX_LOCK=""
 TX_OLD_MOVED=0
 TX_PROMOTED=0
+TX_COMMITTED=0
 
 VERSION="V4.8.0"
 SKILL_NAME="agent-teams-playbook"
@@ -206,7 +207,7 @@ validate_target() {
 cleanup_transaction() {
     local status=$?
     trap - EXIT HUP INT TERM
-    if [ "$status" -ne 0 ]; then
+    if [ "$status" -ne 0 ] && [ "$TX_COMMITTED" = 0 ]; then
         # Move a failed promotion back to the private stage, never delete a live
         # destination. If recovery fails, retain every directory for inspection.
         if [ "$TX_PROMOTED" = 1 ] && [ -e "$TX_TARGET" ] && [ ! -e "$TX_STAGE" ]; then
@@ -250,6 +251,7 @@ begin_transaction() {
     fi
     TX_LOCK="$lock"
     TX_TARGET="$install_dir"
+    TX_COMMITTED=0
     trap cleanup_transaction EXIT
     trap 'exit 129' HUP
     trap 'exit 130' INT
@@ -276,6 +278,8 @@ promote_transaction() {
     TX_PROMOTED=1
     mv "$TX_STAGE" "$TX_TARGET"
     verify_installation "$TX_TARGET"
+    # One state assignment commits the verified target, including signal handling.
+    TX_COMMITTED=1
     if [ -n "$TX_BACKUP" ]; then
         print_info "Previous installation (including user changes): $TX_BACKUP/previous"
     fi
