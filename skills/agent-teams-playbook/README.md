@@ -46,7 +46,7 @@
 
 ## 概述
 
-`agent-teams-playbook` 是一个跨运行时 Skill，用于生成可执行的多代理（Agent Teams）编排策略，兼容 Claude Code、Codex、OpenClaw、Cursor 四个平台。
+`agent-teams-playbook` 是一个跨运行时 Skill，用于生成可执行的多代理（Agent Teams）编排策略，面向 Claude Code、Codex、OpenClaw、Cursor 四个平台；实际执行能力以当前宿主暴露的 schema 与权限为准。
 
 > **核心理解**："swarm/蜂群"是通用行业说法，Claude Code的官方概念是 **Agent Teams**。其他运行时不一定有同名工具，但可以用各自的 subagent/background-agent/workspace 能力实现同一套"并行外脑 + 汇总压缩"编排合同。Agent Teams **不是**"单脑扩容"——并行读取/处理的总量可以很大，但回到主会话仍需总结压缩。
 
@@ -95,6 +95,14 @@ chmod +x scripts/install.sh
 # 从 GitHub main 下载安装，而不是复制当前本地 checkout
 ./scripts/install.sh --target all --from-github
 ```
+
+### 安装安全与恢复
+
+Bash 安装器在 Linux/macOS 运行；Windows 使用 Git Bash/WSL 的 POSIX 绝对路径，不声称原生 PowerShell 安装。环境变量只决定明确选择的目标根目录；相对路径、`..` 和符号链接目标会被拒绝。
+
+安装先在目标同盘的隐藏 staging 目录准备并校验 `SKILL.md` 与 `README.md`，再询问是否覆盖。回答 `y` 后按 Enter；默认或 EOF 都保留原安装。成功覆盖会把整个旧目录（包括用户修改和额外文件）保留在输出的 `.agent-teams-playbook.backup.*/previous`，用户修改和额外文件只保存在备份中，不会自动合并到新启用目录，也不会自动删除备份。失败下载、缺文件、替换或最终校验失败会自动恢复旧目录。Claude fork 选项也在 staging 内修改。
+
+需要恢复成功安装前的版本时，先停止使用该目录，把当前安装重命名保存，再把输出的 `previous` 目录移动回原安装路径；检查内容后自行决定是否清理其他副本。每个目录重命名在同一文件系统内进行；两个 rename 之间存在短暂空窗，并非整组操作的原子交换。`--target all` 按目标独立提交，后面的失败不撤销前面已成功的安装。断电/强制 kill 无法保证自动回滚；先检查保留的 stage/backup 和 `.agent-teams-playbook.install-lock`，确认无安装进程后再恢复和清锁，不要盲删。目标父目录须由可信用户控制；路径校验不能抵抗恶意进程在校验后替换父目录的竞态。
 
 ### 方式二：手动安装
 
@@ -145,10 +153,16 @@ cp README.md ~/.cursor/skills/agent-teams-playbook/
 帮我拉一个 agent team 来审查这个重构方案
 ```
 
+## 宿主合同与验证边界
+
+`capability.json` 是包版本和验证入口的事实源，`SKILL.md` 使用 `metadata.version`。以当前宿主 schema 为准：codex-v1 使用 `multi_agent_v1.spawn_agent` / `fork_context`，codex-v2 使用 `spawn_agent` / `fork_turns`；可选字段受 feature flags 控制，无可用能力时主线程分阶段执行。具体 profiles 与静态样例见 [SKILL.md](SKILL.md)。
+
+本包提供分工与检查建议，不接管 Meta_Kim 的 Router、跨组件状态机或最终验收。`tests/runtime-contracts.test.mjs` 是静态合同检查，`tests/test_installer.py` 是隔离目录内的离线安装行为测试；都不等于真实模型或宿主多 Agent 行为实测。
+
 ## 核心设计原则
 
 1. 先目标，后组织结构——任务不清晰时先澄清，不急着组队
-2. 队伍规模由任务复杂度决定，并行Agent建议不超过5个
+2. 队伍规模由任务 DAG、文件冲突边界与宿主并发能力共同决定
 3. 能力解析命中即停止：本地 Agent/Skill/Tool/Command/MCP 有合适 provider 时直接使用；仅真实能力缺口才外部搜索；仅真实宿主/权限缺口才降级
 4. 平台适配：先用抽象动作描述编排，再映射到当前平台的原生工具
 5. 模型分工：只在平台支持模型选择时指定模型；不支持时不要写死
@@ -163,7 +177,7 @@ cp README.md ~/.cursor/skills/agent-teams-playbook/
 
 | Skill                         | 用途                                                              | 调用阶段              |
 | ----------------------------- | ----------------------------------------------------------------- | --------------------- |
-| **planning-with-files** | Manus风格文件规划系统，创建task_plan.md、findings.md、progress.md | 阶段0（所有场景必经） |
+| **planning-with-files** | Manus风格文件规划系统，创建task_plan.md、findings.md、progress.md | 阶段0（规划必经，具体 Skill 可替换） |
 | **find-skills**         | 本地多类型 provider 均无法覆盖时，搜索可复用外部skill              | 阶段1（仅真实能力缺口） |
 
 **降级原则**：缺少某个精确 Skill 不等于降级。已有 Agent、Tool、Command 或 MCP 能完成任务时直接绑定并停止搜索；只有宿主 Agent surface 缺失、权限阻断，或完整发现后仍无 owner 时才标记 degraded。
@@ -192,8 +206,8 @@ cp README.md ~/.cursor/skills/agent-teams-playbook/
 
 | 模式       | 通信方式                      | 适用场景           | Claude Code | Codex | OpenClaw / Cursor |
 | ---------- | ----------------------------- | ------------------ | ----------- | ----- | ----------------- |
-| Subagent   | 子agent → 主协调器单向汇报   | 并行独立任务       | 宿主当前的 `Agent` / `Task` | 顶层 `spawn_agent(task_name, message, fork_turns)` | 平台 agent/background 能力 |
-| Agent Team | 成员间可双向通信              | 需要协作的复杂任务 | `TeamCreate` + `Agent` / `Task(team_name)`（仅宿主暴露时） | 同一轮并发多个顶层 `spawn_agent` + 主线程协调；仅在宿主暴露 agent I/O 时中途交互 | 平台 team/workspace 能力；没有则降级 |
+| Subagent   | 子agent → 主协调器单向汇报   | 并行独立任务       | 宿主当前的 `Agent` / `Task` | 当前宿主原生 spawn schema | 平台 agent/background 能力 |
+| Agent Team | 成员间可双向通信              | 需要协作的复杂任务 | `TeamCreate` + `Agent` / `Task(team_name)`（仅宿主暴露时） | 同一轮并发多个宿主原生 spawn 调用 + 主线程协调；仅在宿主暴露 agent I/O 时中途交互 | 平台 team/workspace 能力；没有则降级 |
 
 ## Agent → Skill 委派
 
@@ -219,7 +233,7 @@ cp README.md ~/.cursor/skills/agent-teams-playbook/
 
 ### Pattern 3：团队成员调用（Team Member Skill Call）
 
-通过当前平台团队能力组建团队，成员在协作过程中按需调用 Skill。适合长期运行、需要成员间协调的复杂任务。Claude Code 仅在宿主暴露时使用 `TeamCreate`；Codex 使用顶层 `spawn_agent` 加主线程协调；OpenClaw/Cursor 使用各自 team/workspace/background-agent 能力，不可用时降级。
+通过当前平台团队能力组建团队，成员在协作过程中按需调用 Skill。适合长期运行、需要成员间协调的复杂任务。Claude Code 仅在宿主暴露时使用 `TeamCreate`；Codex 使用当前宿主的 spawn 工具 加主线程协调；OpenClaw/Cursor 使用各自 team/workspace/background-agent 能力，不可用时降级。
 
 ```
 协调器 → team/subagents → 分配任务 → member → Skill/tool 或内联执行 → 汇报
@@ -259,7 +273,7 @@ agent-teams-playbook/
 | 平台 | 支持级别 | 说明 |
 | ---- | -------- | ---- |
 | Claude Code | 原生 | 使用宿主当前暴露的 `Agent` / `Task` 与 `Skill`；`TeamCreate` / `SendMessage` 仅在宿主真实暴露时使用，不接收 Codex 参数 |
-| Codex | 原生适配 | 使用顶层 `spawn_agent(task_name, message, fork_turns)`；不传 `agent_type` / `fork_context`，不回退旧 namespaced API；没有真正 `TeamCreate` 总线 |
+| Codex | 原生适配 | 宿主 schema 优先；按 V1/V2 和字段开关选择最小参数，不默认存在 `TeamCreate` 总线 |
 | OpenClaw | 适配 | 使用 OpenClaw workspace/team/skill 能力；能力缺失时降级为分阶段执行 |
 | Cursor | 适配 | 使用 Cursor agent/background-agent 和 `.cursor/skills`；能力缺失时降级为分阶段执行 |
 

@@ -1,12 +1,12 @@
 {
   "capabilities": [
     {
-      "componentContentSha256": "f0b708b715d9a617397f3cc0ba597af51916f9b70fc34086467d17b15ea8fe14",
+      "componentContentSha256": "38f3df0f010321dee52a70c9ac923d398dc026a91314e67ba35fe06cf561276b",
       "componentId": "agent-teams-playbook",
       "componentPath": "skills/agent-teams-playbook",
       "componentType": "skill",
       "componentVersion": "4.8.0",
-      "contractSha256": "c3424584767282a7e0275a224e2bc45230149327f8d6c8109263ce8b15ac9d2c",
+      "contractSha256": "04fa72e71ef67fc55f0058e162ed8050308ab963258066858b18257dbaeb549c",
       "doNotUseWhen": [
         "单 Agent 可以直接完成的一次性问答或单文件小改动",
         "宿主没有真实的子 Agent 能力且任务也不值得采用分阶段降级流程",
@@ -93,7 +93,8 @@
         "复杂交付需要角色分工、阶段计划、失败处理和主线程最终验收"
       ],
       "validation": [
-        "tests/runtime-contracts.test.mjs"
+        "tests/runtime-contracts.test.mjs",
+        "tests/test_installer.py"
       ]
     },
     {
@@ -4201,13 +4202,14 @@
       ],
       "componentType": "skill",
       "componentVersion": "4.8.0",
-      "contentSha256": "f0b708b715d9a617397f3cc0ba597af51916f9b70fc34086467d17b15ea8fe14",
-      "contractSha256": "c3424584767282a7e0275a224e2bc45230149327f8d6c8109263ce8b15ac9d2c",
+      "contentSha256": "38f3df0f010321dee52a70c9ac923d398dc026a91314e67ba35fe06cf561276b",
+      "contractSha256": "04fa72e71ef67fc55f0058e162ed8050308ab963258066858b18257dbaeb549c",
       "entrypoint": "SKILL.md",
       "id": "agent-teams-playbook",
       "path": "skills/agent-teams-playbook",
       "validation": [
-        "tests/runtime-contracts.test.mjs"
+        "tests/runtime-contracts.test.mjs",
+        "tests/test_installer.py"
       ]
     },
     {

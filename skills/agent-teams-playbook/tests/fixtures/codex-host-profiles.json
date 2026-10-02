@@ -1,0 +1,90 @@
+[
+  {
+    "id": "codex-v1",
+    "tool": "multi_agent_v1.spawn_agent",
+    "properties": {
+      "message": "string",
+      "agent_type": "string",
+      "model": "string",
+      "reasoning_effort": "string",
+      "items": "array",
+      "fork_context": "boolean"
+    },
+    "required": [],
+    "example": {
+      "tool": "multi_agent_v1.spawn_agent",
+      "arguments": {
+        "message": "Review the bounded task and return evidence.",
+        "fork_context": false
+      }
+    },
+    "evidence": "static-schema-projection; not live-host or model verification",
+    "source": "https://github.com/openai/codex/blob/ca466061d64f0b44f416135c7fd06aa7af850bbc/codex-rs/core/src/tools/handlers/multi_agents_spec.rs",
+    "observedAt": "2026-10-02"
+  },
+  {
+    "id": "codex-v2",
+    "tool": "spawn_agent",
+    "properties": {
+      "message": "string",
+      "agent_type": "string",
+      "model": "string",
+      "reasoning_effort": "string",
+      "task_name": "string",
+      "fork_turns": "string"
+    },
+    "required": [
+      "task_name",
+      "message"
+    ],
+    "example": {
+      "tool": "spawn_agent",
+      "arguments": {
+        "task_name": "review_task",
+        "message": "Review the bounded task and return evidence.",
+        "fork_turns": "none"
+      }
+    },
+    "evidence": "static-schema-projection; not live-host or model verification",
+    "source": "https://github.com/openai/codex/blob/ca466061d64f0b44f416135c7fd06aa7af850bbc/codex-rs/core/src/tools/handlers/multi_agents_spec.rs",
+    "observedAt": "2026-10-02"
+  },
+  {
+    "id": "codex-v2-limited",
+    "tool": "spawn_agent",
+    "properties": {
+      "task_name": "string",
+      "message": "string",
+      "fork_turns": "string"
+    },
+    "required": [
+      "task_name",
+      "message"
+    ],
+    "example": {
+      "tool": "spawn_agent",
+      "arguments": {
+        "task_name": "review_task",
+        "message": "Review the bounded task and return evidence."
+      }
+    },
+    "evidence": "static-schema-projection; not live-host or model verification",
+    "source": "https://github.com/openai/codex/blob/ca466061d64f0b44f416135c7fd06aa7af850bbc/codex-rs/core/src/tools/handlers/multi_agents_spec.rs",
+    "observedAt": "2026-10-02"
+  },
+  {
+    "id": "no-capability",
+    "tool": null,
+    "properties": {},
+    "required": [],
+    "example": {
+      "tool": null,
+      "arguments": null,
+      "mode": "sequential",
+      "parallel": false
+    },
+    "evidence": "static-schema-projection; not live-host or model verification",
+    "source": "https://github.com/openai/codex/blob/ca466061d64f0b44f416135c7fd06aa7af850bbc/codex-rs/core/src/tools/handlers/multi_agents_spec.rs",
+    "observedAt": "2026-10-02"
+  }
+]

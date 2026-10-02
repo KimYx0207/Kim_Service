@@ -339,8 +339,8 @@
       "revision": "753ff43bd9b1f9aee4d184c4f21e7f494af5a79f",
       "snapshot": "preserved-agent-teams-history-base;self-contained-component-snapshot",
       "version": "4.8.0",
-      "contractSha256": "c3424584767282a7e0275a224e2bc45230149327f8d6c8109263ce8b15ac9d2c",
-      "contentSha256": "f0b708b715d9a617397f3cc0ba597af51916f9b70fc34086467d17b15ea8fe14",
+      "contractSha256": "04fa72e71ef67fc55f0058e162ed8050308ab963258066858b18257dbaeb549c",
+      "contentSha256": "38f3df0f010321dee52a70c9ac923d398dc026a91314e67ba35fe06cf561276b",
       "required": [
         "SKILL.md",
         "README.md",
@@ -349,10 +349,12 @@
         "CHANGELOG.md",
         "NOTICE",
         "tests/runtime-contracts.test.mjs",
-        "capability.json"
+        "capability.json",
+        "tests/test_installer.py"
       ],
       "validation": [
-        "node tests/runtime-contracts.test.mjs"
+        "node tests/runtime-contracts.test.mjs",
+        "python tests/test_installer.py"
       ]
     },
     {
