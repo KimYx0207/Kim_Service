@@ -2,6 +2,12 @@
 
 Kim Service uses one repository-level two-part public version (`V<major>.<minor>`) and one GitHub Release for the professional-capability dependency repository. Component CHANGELOG files record component provenance; this file is the release-note authority.
 
+## Unreleased
+
+- GoalPro: make finite requests produce only Goal Prompt, separate stated/inferred intent and unconfirmed value judgments, and add Goal/Plan/Output boundaries plus evidence-driven goal revalidation.
+- Synchronize GoalPro examples, capability contract, tests, and generated catalog/index hashes. Existing default two-prompt consumers must request Loop explicitly or identify post-delivery evidence that determines the next action.
+- No release tag, repository VERSION change, runtime execution permission, or automatic scheduling is included.
+
 ## V1.2 - 2026-09-14
 
 ### Affected components

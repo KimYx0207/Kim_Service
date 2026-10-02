@@ -723,12 +723,12 @@
       ]
     },
     {
-      "componentContentSha256": "46dc06a5ead74f714d6e51939aa7847b175366c24b8096060abe17de883c3d01",
+      "componentContentSha256": "446f1c9fbd09289d13f435e721318663296979fa23a4e718db5777e16abf47a6",
       "componentId": "goalpro",
       "componentPath": "skills/goalpro",
       "componentType": "skill",
-      "componentVersion": "0.1.3",
-      "contractSha256": "6920555d7b546b9cb3e6ee919de6b019498f4a2c03f99e7f01570fd33e85f7dd",
+      "componentVersion": "0.1.4",
+      "contractSha256": "f751073dee0579e7d2c8790335edcbd9ecea6c9ed3f03fd1e5182569a88cd37b",
       "doNotUseWhen": [
         "The user wants product or business decision analysis rather than a prompt artifact; use Kim Decision instead.",
         "The request is to select components, route work, coordinate cross-component state, execute the task, perform research, or make the final acceptance decision."
@@ -792,25 +792,28 @@
         "read-only public research when current facts are required to write an evidence-bounded prompt and the host provides a research tool"
       ],
       "sideEffects": [],
-      "summary": "Create the Goal Prompt half of GoalPro's default two-prompt delivery without executing the target task.",
+      "summary": "Create a bounded Goal Prompt with separated intent, goal/plan/output boundaries, and evidence conditions without executing the target task.",
       "useWhen": [
         "The user asks to write, improve, or repair a goal, task prompt, or execution contract.",
-        "A task needs explicit scope, evidence, stop conditions, and verification instructions before another actor executes it."
+        "A task needs explicit scope, evidence, stop conditions, and verification instructions before another actor executes it.",
+        "A long-term goal needs proxy-evidence coverage gaps and conditions for revalidating the goal itself."
       ],
       "validation": [
         "tests/behavior.test.mjs",
-        "tests/boundary.test.mjs"
+        "tests/boundary.test.mjs",
+        "tests/governance.test.mjs"
       ]
     },
     {
-      "componentContentSha256": "46dc06a5ead74f714d6e51939aa7847b175366c24b8096060abe17de883c3d01",
+      "componentContentSha256": "446f1c9fbd09289d13f435e721318663296979fa23a4e718db5777e16abf47a6",
       "componentId": "goalpro",
       "componentPath": "skills/goalpro",
       "componentType": "skill",
-      "componentVersion": "0.1.3",
-      "contractSha256": "6920555d7b546b9cb3e6ee919de6b019498f4a2c03f99e7f01570fd33e85f7dd",
+      "componentVersion": "0.1.4",
+      "contractSha256": "f751073dee0579e7d2c8790335edcbd9ecea6c9ed3f03fd1e5182569a88cd37b",
       "doNotUseWhen": [
-        "The user is asking GoalPro to run the loop, schedule automation, route components, execute fixes, or accept the final result."
+        "The user is asking GoalPro to run the loop, schedule automation, route components, execute fixes, or accept the final result.",
+        "The task is a finite delivery; complexity, multiple files, or repeated checks within that delivery alone do not require a Loop Prompt."
       ],
       "entrypoint": "SKILL.md",
       "humanGate": {
@@ -822,8 +825,8 @@
         "properties": {
           "continuationNeed": {
             "enum": [
-              "default-goalpro-delivery",
-              "explicit-loop-request"
+              "explicit-loop-request",
+              "post-delivery-evidence"
             ]
           },
           "previousResult": {
@@ -853,8 +856,8 @@
           },
           "continuationNeed": {
             "enum": [
-              "default-goalpro-delivery",
-              "explicit-loop-request"
+              "explicit-loop-request",
+              "post-delivery-evidence"
             ]
           },
           "executionAuthorized": {
@@ -868,14 +871,15 @@
       },
       "permissions": [],
       "sideEffects": [],
-      "summary": "Create the Loop Prompt half of GoalPro's default two-prompt delivery, or a Loop Prompt requested on its own.",
+      "summary": "Create a Loop Prompt only for an explicit loop request or when post-delivery evidence determines a subsequent action.",
       "useWhen": [
-        "GoalPro is producing its default Goal Prompt plus Loop Prompt delivery.",
-        "The user explicitly asks for a Loop Prompt on its own and provides the previous result or Next LOOP packet."
+        "The user explicitly requests continued iteration or a Loop Prompt; a Loop-only request requires the previous result or Next LOOP packet.",
+        "Observable post-delivery evidence has a defined trigger and will determine the next action."
       ],
       "validation": [
         "tests/behavior.test.mjs",
-        "tests/boundary.test.mjs"
+        "tests/boundary.test.mjs",
+        "tests/governance.test.mjs"
       ]
     },
     {
@@ -4229,15 +4233,16 @@
         "goalpro-loop-prompt"
       ],
       "componentType": "skill",
-      "componentVersion": "0.1.3",
-      "contentSha256": "46dc06a5ead74f714d6e51939aa7847b175366c24b8096060abe17de883c3d01",
-      "contractSha256": "6920555d7b546b9cb3e6ee919de6b019498f4a2c03f99e7f01570fd33e85f7dd",
+      "componentVersion": "0.1.4",
+      "contentSha256": "446f1c9fbd09289d13f435e721318663296979fa23a4e718db5777e16abf47a6",
+      "contractSha256": "f751073dee0579e7d2c8790335edcbd9ecea6c9ed3f03fd1e5182569a88cd37b",
       "entrypoint": "SKILL.md",
       "id": "goalpro",
       "path": "skills/goalpro",
       "validation": [
         "tests/behavior.test.mjs",
-        "tests/boundary.test.mjs"
+        "tests/boundary.test.mjs",
+        "tests/governance.test.mjs"
       ]
     },
     {

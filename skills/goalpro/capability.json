@@ -2,15 +2,16 @@
   "schemaVersion": 1,
   "id": "goalpro",
   "componentType": "skill",
-  "componentVersion": "0.1.3",
+  "componentVersion": "0.1.4",
   "entrypoint": "SKILL.md",
   "capabilities": [
     {
       "id": "goalpro-goal-prompt",
-      "summary": "Create the Goal Prompt half of GoalPro's default two-prompt delivery without executing the target task.",
+      "summary": "Create a bounded Goal Prompt with separated intent, goal/plan/output boundaries, and evidence conditions without executing the target task.",
       "useWhen": [
         "The user asks to write, improve, or repair a goal, task prompt, or execution contract.",
-        "A task needs explicit scope, evidence, stop conditions, and verification instructions before another actor executes it."
+        "A task needs explicit scope, evidence, stop conditions, and verification instructions before another actor executes it.",
+        "A long-term goal needs proxy-evidence coverage gaps and conditions for revalidating the goal itself."
       ],
       "doNotUseWhen": [
         "The user wants product or business decision analysis rather than a prompt artifact; use Kim Decision instead.",
@@ -75,18 +76,20 @@
       },
       "validation": [
         "tests/behavior.test.mjs",
-        "tests/boundary.test.mjs"
+        "tests/boundary.test.mjs",
+        "tests/governance.test.mjs"
       ]
     },
     {
       "id": "goalpro-loop-prompt",
-      "summary": "Create the Loop Prompt half of GoalPro's default two-prompt delivery, or a Loop Prompt requested on its own.",
+      "summary": "Create a Loop Prompt only for an explicit loop request or when post-delivery evidence determines a subsequent action.",
       "useWhen": [
-        "GoalPro is producing its default Goal Prompt plus Loop Prompt delivery.",
-        "The user explicitly asks for a Loop Prompt on its own and provides the previous result or Next LOOP packet."
+        "The user explicitly requests continued iteration or a Loop Prompt; a Loop-only request requires the previous result or Next LOOP packet.",
+        "Observable post-delivery evidence has a defined trigger and will determine the next action."
       ],
       "doNotUseWhen": [
-        "The user is asking GoalPro to run the loop, schedule automation, route components, execute fixes, or accept the final result."
+        "The user is asking GoalPro to run the loop, schedule automation, route components, execute fixes, or accept the final result.",
+        "The task is a finite delivery; complexity, multiple files, or repeated checks within that delivery alone do not require a Loop Prompt."
       ],
       "input": {
         "type": "object",
@@ -97,8 +100,8 @@
           },
           "continuationNeed": {
             "enum": [
-              "default-goalpro-delivery",
-              "explicit-loop-request"
+              "explicit-loop-request",
+              "post-delivery-evidence"
             ]
           },
           "previousResult": {
@@ -124,8 +127,8 @@
           },
           "continuationNeed": {
             "enum": [
-              "default-goalpro-delivery",
-              "explicit-loop-request"
+              "explicit-loop-request",
+              "post-delivery-evidence"
             ]
           },
           "executionAuthorized": {
@@ -144,7 +147,8 @@
       },
       "validation": [
         "tests/behavior.test.mjs",
-        "tests/boundary.test.mjs"
+        "tests/boundary.test.mjs",
+        "tests/governance.test.mjs"
       ]
     }
   ]

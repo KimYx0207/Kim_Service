@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.1.4 - Unreleased
+
+### Changed
+
+- Make one-shot requests return only `Goal Prompt`; append `Loop Prompt` only when the user explicitly requests iteration or post-delivery evidence will determine another cycle.
+- Split intent into `User-stated intent`, `AI-inferred potential intent`, and `Value judgments requiring confirmation`.
+- Keep research, workflow, repair, and automation guidance inside the applicable prompt instead of adding default explanatory output.
+- Separate Goal, Plan, and Output; require proxy target, coverage gap, confidence, counterevidence, and long-term goal revalidation triggers.
+- Synchronize finite-task examples, explicit-loop examples, capability contracts, tests, and generated catalog hashes. Replace the old `default-goalpro-delivery` reason with `post-delivery-evidence`; explicit Loop-only requests remain supported.
+- This is an unreleased repository fix for Kim_Service PR #1 and GoalPro Issue #1, not a claim that the earlier local integration or an upstream release was published.
+
+### Benefits
+
+- Reduces unnecessary output and avoids turning finite tasks into artificial recurring workflows.
+- Makes AI inference auditable and prevents inferred motives or value choices from being presented as user-confirmed intent.
+- Preserves the existing evidence-bound Loop protocol for tasks that genuinely need continued iteration.
+
 ## Kim Service V1.0 - 2026-07-15
 
 - Imported `KimYx0207/GoalPro` revision `39adc8db765e0e4ad4df8d4ce02e7059fed69f26` as a self-contained Kim Service component.
