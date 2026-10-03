@@ -514,7 +514,7 @@
       "snapshot": "tracked-head;monorepo-install-doc-adapter",
       "version": "1.1.0",
       "contractSha256": "492e46ce701b1594df4a4de6ae89ae260ec84f934267c3549aa3b75ce1881fd1",
-      "contentSha256": "ceb154540f46147ef7923388dae429f1fa40c58cb3889c6f1332c11d9fc40f0d",
+      "contentSha256": "6f69e8ebb24a72f695c01161f8abee33d44bc41df6e5660f66c29ececf23cef3",
       "required": [
         "SKILL.md",
         "README.md",
