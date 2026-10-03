@@ -28,7 +28,7 @@ python "<skill-dir>/scripts/scan.py" --input-json -
 
 只选可见 py/js/jsx/ts/tsx；隐藏文件/目录及 node_modules、__pycache__、venv、vendor 不在覆盖内。拒绝链接或重解析点；最多512个选中文件、每个1MiB。运行/输出安全上限集中在 scripts/scan.py，业务调用不能放宽。
 
-版本探测和扫描都关闭 metrics/version check，隔离设置、日志及缓存，采用最小子进程环境，不继承 token、proxy、调用者 PYTHONPATH 或自定义 Semgrep 配置。为已安装 Python runtime 可保留 Windows APPDATA 与计算出的 user-site 路径。networkUsed:false 依据这些执行约束，不代表网络抓包或系统级断网证明；filesModified:false 指目标源码不被修改，临时运行文件在目标外清理。要求可信现有安装和稳定文件系统，不提供恶意 binary 或并发路径替换隔离保证。
+版本探测和扫描都关闭 metrics/version check，隔离设置、日志及缓存，采用最小子进程环境，不继承 token、proxy、调用者 PYTHONPATH 或自定义 Semgrep 配置。为已安装 Python runtime 可保留 Windows APPDATA 与计算出的 user base/site；后者使隔离 APPDATA 时仍能初始化已安装的 pywin32 等运行依赖。networkUsed:false 依据这些执行约束，不代表网络抓包或系统级断网证明；filesModified:false 指目标源码不被修改，临时运行文件在目标外清理。要求可信现有安装和稳定文件系统，不提供恶意 binary 或并发路径替换隔离保证。
 
 修复建议仅为文本。扫描、安装 Skill、安装 Semgrep、修改源码是不同权限。
 

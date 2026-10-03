@@ -14,6 +14,7 @@ Kim Service uses one repository-level two-part public version (`V<major>.<minor>
 - Script Writer now turns specified source materials into a complete draft for a concrete reader and angle, separating source facts, provided user stance and author analysis. Selectively adapted content-creation methods retain their pinned MIT attribution, existing role and channel boundaries.
 - Semgrep Skill has one real Python JSON entry for the installed local CLI: explicit authorized root/target, two non-secret bundled rules extracted before scanning, actual runtime versions and source/effective rule hashes, sanitized findings and honest completion/failure states.
 - Skill installation now carries the runnable entry and package contract with its existing receipt/rollback mechanism. Replaced the old direct three-rule/current-project-default guidance, so instructions and executable scope agree.
+- Nested host profile isolation still initializes the existing trusted Python user runtime needed by the Windows CLI; no package installation or caller Python configuration forwarding is added.
 
 ### Breaking changes and migration
 

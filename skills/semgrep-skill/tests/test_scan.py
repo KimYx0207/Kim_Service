@@ -79,6 +79,18 @@ class ScanTests(unittest.TestCase):
         self.assertEqual(env["SEMGREP_ENABLE_VERSION_CHECK"], "0")
         self.assertEqual(env["SEMGREP_SETTINGS_FILE"], str(self.root / "settings.yml"))
 
+    def test_isolated_profile_keeps_only_the_computed_installed_runtime_base(self) -> None:
+        with tempfile.TemporaryDirectory() as runtime:
+            base = Path(runtime).resolve()
+            user_site = base / "lib" / "site-packages"
+            (user_site / "semgrep").mkdir(parents=True)
+            (user_site / "semgrep" / "__init__.py").write_text("# synthetic bootstrap marker\n", encoding="utf-8")
+            with patch.object(scan.site, "getusersitepackages", return_value=str(user_site)), patch.object(scan.site, "getuserbase", return_value=str(base)), patch.dict(os.environ, {"PYTHONUSERBASE": "untrusted", "PYTHONNOUSERSITE": "1"}):
+                env = scan.child_environment(Path("/trusted/bin/semgrep"), self.root, self.root)
+            self.assertEqual(env["PYTHONUSERBASE"], str(base))
+            self.assertEqual(env["PYTHONPATH"], str(user_site))
+            self.assertNotIn("PYTHONNOUSERSITE", env)
+
     def mock_run(self, response: dict, code: int = 0) -> tuple[dict, list]:
         commands = []
         def invoke(command, scratch, env):

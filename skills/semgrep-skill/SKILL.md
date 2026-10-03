@@ -25,7 +25,7 @@ index selects the package; it does not contain or grant the invocation.
 - Both the version probe and scan use `--metrics off`, `--disable-version-check`,
   isolated settings/log/cache paths, and a minimal subprocess environment.
   Caller tokens, proxies and custom Semgrep configuration are not inherited.
-  Windows APPDATA and a computed installed Python user-site path may be retained
+  Windows APPDATA and a computed installed Python user base/site may be retained
   solely to locate the existing host runtime; caller PYTHONPATH is not inherited.
 - Do not use `--config auto`, registry URLs, Semgrep Cloud, login or uploads.
 - Do not use `--autofix`, write reports, install Semgrep or fetch rules. The

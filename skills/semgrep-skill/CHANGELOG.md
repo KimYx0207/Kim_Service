@@ -7,6 +7,7 @@ This component is released with the repository-level Kim Service version and tag
 - Added a fixed stdin/stdout JSON local CLI invocation on the existing scan capability, with explicit authorized root and target, runtime versions and source/effective rule hashes.
 - Extract two non-secret rules before executing the installed CLI; never run the bundled credential rule or return source excerpts through this route.
 - Isolate subprocess settings/environment, enforce path and resource bounds, verify selected-file coverage, and distinguish completion, partial execution, invalid input, unavailable runtime and failure.
+- Preserve the computed trusted installed Python user base/site bootstrap when an upstream host isolates APPDATA; caller Python configuration is not inherited.
 - Project capability.json and scripts/scan.py with receipted Skill installations; retain dry-run and rollback behavior.
 - Replace the former direct scan/default-current-project guidance with the sole wrapper entry. Real behavior tests scan synthetic fixtures only.
 

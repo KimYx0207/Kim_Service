@@ -181,8 +181,15 @@ def child_environment(binary: Path, scratch: Path, root: Path | None = None) -> 
     user_site = Path(site.getusersitepackages())
     if (user_site / "semgrep" / "__init__.py").is_file():
         user_site = user_site.resolve(strict=True)
+        user_base = Path(site.getuserbase()).resolve(strict=True)
         if user_site.is_relative_to(PACKAGE) or (root is not None and user_site.is_relative_to(root)):
             raise ScanError("unavailable", "semgrep_runtime", "A trusted host Python installation outside the scan workspace is required.")
+        if user_base.is_relative_to(PACKAGE) or (root is not None and user_base.is_relative_to(root)):
+            raise ScanError("unavailable", "semgrep_runtime", "A trusted host Python installation outside the scan workspace is required.")
+        # Let Python process this installed site's .pth bootstrap (e.g. pywin32),
+        # even when an upstream caller isolates APPDATA. PYTHONPATH alone only
+        # adds a directory; it does not initialize installed runtime dependencies.
+        env["PYTHONUSERBASE"] = str(user_base)
         env["PYTHONPATH"] = str(user_site)
     return env
 
