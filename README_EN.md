@@ -22,6 +22,8 @@ The component table is not duplicated manually in this README. Root automation d
 2. Follow the package `entrypoint`; common entrypoints are `README.md` for Hooks and Tools, `SKILL.md` for Skills, or `AGENT.md` for Agents.
 3. Follow the project instructions to install it for a project or your personal environment.
 
+Use the selected component directory in Kim_Service as the current installation source. The `source` and `revision` fields in `catalog.json` record import provenance, not the latest installation address. Included packages do not require cloning their former standalone repositories. If the same capability is already present locally, check its source and version before reusing or upgrading one entrypoint to avoid duplicate installations.
+
 Each project includes its own usage guide, license, attribution, and change history. See [GitHub Releases](https://github.com/KimYx0207/Kim_Service/releases) for the latest collection release and [CHANGELOG.md](CHANGELOG.md) for the current update notes.
 
 ## Contact and support

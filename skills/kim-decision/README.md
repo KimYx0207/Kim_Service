@@ -11,7 +11,7 @@
 <p>
   <a href="https://github.com/KimYx0207/Kim_Service"><img alt="Runtime" src="https://img.shields.io/badge/runtime-Claude%20Code%20%7C%20Codex-111827"/></a>
   <a href="https://github.com/KimYx0207/Kim_Service"><img alt="Skill" src="https://img.shields.io/badge/type-Agent%20Skill-7c3aed"/></a>
-  <a href="https://github.com/KimYx0207/Kim_Service"><img alt="Stars" src="https://img.shields.io/github/stars/KimYx0207/Kim_Decision?style=flat&logo=github"/></a>
+  <a href="https://github.com/KimYx0207/Kim_Service"><img alt="Stars" src="https://img.shields.io/github/stars/KimYx0207/Kim_Service?style=flat&logo=github"/></a>
   <a href="https://github.com/KimYx0207/Kim_Service"><img alt="License" src="https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-green"/></a>
 </p>
 
@@ -31,7 +31,7 @@ Most AI skills tell the model *what style to use*. KIM asks a different question
 
 | Item | Value |
 |------|-------|
-| GitHub repository | [KimYx0207/Kim_Decision](https://github.com/KimYx0207/Kim_Decision) |
+| GitHub repository | [KimYx0207/Kim_Service](https://github.com/KimYx0207/Kim_Service/tree/main/skills/kim-decision) |
 | Local development path | This component directory in the cloned repository |
 | Runtime targets | Claude Code and Codex |
 | Claude Code package | Install this component into `.claude/skills/kim-decision/` |
@@ -40,6 +40,8 @@ Most AI skills tell the model *what style to use*. KIM asks a different question
 | Common trigger words | `KIM`, `Kim`, `laojin`, `老金`, `问问老金` |
 | License | MIT OR Apache-2.0 |
 | Changelog | [CHANGELOG.md](CHANGELOG.md) |
+
+The former [KimYx0207/Kim_Decision](https://github.com/KimYx0207/Kim_Decision) repository is retained as historical provenance. Current installation, maintenance, and collection releases use `skills/kim-decision/` in Kim_Service.
 
 This component directory is the public package for the KIM decision protocol. `SKILL.md` and `references/` are the runtime core; `docs/zh-CN/` contains the Chinese reference materials.
 

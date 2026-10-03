@@ -22,6 +22,8 @@
 2. 按包内 `entrypoint` 阅读入口；常见入口为 Hook/Tool 的 `README.md`、Skill 的 `SKILL.md` 或 Agent 的 `AGENT.md`。
 3. 按项目说明安装到你的项目或个人环境中。
 
+当前安装源是 Kim_Service 中选中的组件目录。`catalog.json` 的 `source` 与 `revision` 记录导入来源，不能当作最新安装地址；已收录的能力包不需要再克隆旧独立仓库。若本地已有相同能力，先核对来源和版本，再选择复用或升级一个入口，避免重复安装。
+
 每个项目都带有自己的使用说明、许可证、归属和更新记录。合集的最新版本请查看 [GitHub Releases](https://github.com/KimYx0207/Kim_Service/releases)，本次更新内容见 [CHANGELOG.md](CHANGELOG.md)。
 
 ## 联系与支持

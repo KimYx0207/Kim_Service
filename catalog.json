@@ -334,7 +334,7 @@
       "snapshot": "tracked-head-with-privacy-fix",
       "version": "1.2.11",
       "contractSha256": "870987b9ccf6f92b3dad39bf2a9bcb60d068aaeaf2b3fa68d70848f50991c4b4",
-      "contentSha256": "b9f243feae09dc60327deede768f51fc2e42dafc45e14e67ef34f03e0d8d0bee",
+      "contentSha256": "dd38cc340e84ac2b39baaefa60a332cfd8e4f7f2667641886434e2c1a2d60137",
       "required": [
         "README.md",
         "README_EN.md",
@@ -359,7 +359,7 @@
       "snapshot": "preserved-agent-teams-history-base;self-contained-component-snapshot",
       "version": "4.8.0",
       "contractSha256": "04fa72e71ef67fc55f0058e162ed8050308ab963258066858b18257dbaeb549c",
-      "contentSha256": "d52591bd1b0fc6db60058a77fed677fcf5f27bd1299b8d28227c3fd16b4c4106",
+      "contentSha256": "33ac6b4197101a7f6a822ad5504346efff0b56586b83b18d47ba3c58211b2f74",
       "required": [
         "SKILL.md",
         "README.md",
@@ -438,7 +438,7 @@
       "snapshot": "self-contained-public-package-with-privacy-and-monorepo-install-doc-adapter",
       "version": "0.0.0+imported.fbbe41c",
       "contractSha256": "e5b0c96576781f5f674ca68500e813520e40a392085663563e023e55daeef12e",
-      "contentSha256": "c38b0e1b309483fc49d5e43a6bc1aec3712c5babebab40ea31e620b864e38234",
+      "contentSha256": "3a3e5e229f7bb0cf060e6c09394955aeeebeeca37a4251534542450d4396cdff",
       "required": [
         "SKILL.md",
         "references/method.md",
