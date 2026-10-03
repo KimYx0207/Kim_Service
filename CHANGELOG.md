@@ -2,6 +2,39 @@
 
 Kim Service uses one repository-level two-part public version (`V<major>.<minor>`) and one GitHub Release for the professional-capability dependency repository. Component CHANGELOG files record component provenance; this file is the release-note authority.
 
+## V1.4 - 2026-10-03
+
+### Affected components
+
+- Existing Script Writer 0.3.0 and Semgrep Skill 1.1.0.
+- Existing package-contract schema and discovery validation for optional local invocation metadata; catalog and index remain deterministic projections.
+
+### User-visible changes
+
+- Script Writer now turns specified source materials into a complete draft for a concrete reader and angle, separating source facts, provided user stance and author analysis. Selectively adapted content-creation methods retain their pinned MIT attribution, existing role and channel boundaries.
+- Semgrep Skill has one real Python JSON entry for the installed local CLI: explicit authorized root/target, two non-secret bundled rules extracted before scanning, actual runtime versions and source/effective rule hashes, sanitized findings and honest completion/failure states.
+- Skill installation now carries the runnable entry and package contract with its existing receipt/rollback mechanism. Replaced the old direct three-rule/current-project-default guidance, so instructions and executable scope agree.
+- Nested host profile isolation still initializes the existing trusted Python user runtime needed by the Windows CLI; no package installation or caller Python configuration forwarding is added.
+
+### Breaking changes and migration
+
+- Script Writer's existing required inputs and output keys remain; audience is optional. No new role or business product is added.
+- Structured Semgrep callers must provide schemaVersion:1, workspaceRoot and target. Use scripts/scan.py instead of direct commands from older Skill instructions. This capability does not run the bundled credential rule or return matched source.
+- Optional invocation remains in the full package capability.json; the index does not copy it or grant execution permission. Consumers verify the selected package and read its current contract before checking host support and authorization.
+- Safety bounds and trusted-host/stable-filesystem assumptions are documented in the Skill. networkUsed:false reflects local configuration, opt-outs and environment isolation, not OS network containment or packet capture. A finding is not an execution failure; incomplete scans never mean clean.
+
+### Verification
+
+- Actual scoped model delivery produced complete prose from synthetic sources without invented firsthand experience; native custom Agent loading remains unprobed.
+- Installed Semgrep 1.168.0 on Python 3.14.6 executed the synthetic Python/JavaScript fixtures through the wrapper. Protocol and installation checks include secret-rule exclusion, environment isolation, source hashes, incomplete coverage, live output limits and Windows timeout cleanup. Windows directory-symlink cases explicitly skip when the host lacks that privilege.
+- Release acceptance requires all root and declared component checks, independent review, exact-head PR CI, main CI and joint Meta compatibility. Local model/tool evidence does not certify every native host or complete the remaining non-Agent migration.
+
+### Source revisions
+
+- Baseline main 2524c6f792b870e0983b7a3a4ff0afda76708d76 (released V1.3). Existing canonical-direct-sync records retain their origins; component changes are recorded in package changelogs and current Git history. Generated Agent provenance binds the committed component tree.
+- Content-method source: agency-agents-zh marketing-content-creator at 811e51c370f26ec4f37ca277b4368b4ff895741f; original English copyright 2025 Michael Sitarzewski and Chinese translation/localization copyright 2026 jnMetaCode remain in the package MIT license and NOTICE.
+- Meta_Kim retains intent, host-native decisions, orchestration and final acceptance. This finite method/tool implementation does not claim the full original absorption request, native Agent certification or all non-Agent consumers complete.
+
 ## V1.3 - 2026-10-02
 
 ### Affected components

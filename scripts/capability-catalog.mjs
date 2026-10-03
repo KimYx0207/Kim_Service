@@ -95,6 +95,16 @@ function assertHumanGate(value, label) {
   assertStringArray(value.when, `${label}.when`, { minItems: value.required ? 1 : 0 });
 }
 
+function assertInvocation(value, label) {
+  assertObject(value, label);
+  assertExactKeys(value, ['schemaVersion', 'type', 'runtime', 'entrypoint', 'argv', 'inputTransport', 'outputTransport', 'shell'], label);
+  assert(value.schemaVersion === 1 && value.type === 'local_cli' && value.runtime === 'python', `${label} must describe a version-1 local Python CLI`);
+  assertRelativeFileSyntax(value.entrypoint, `${label}.entrypoint`);
+  assert(value.entrypoint.endsWith('.py'), `${label}.entrypoint must be a Python file`);
+  assert(Array.isArray(value.argv) && value.argv.length === 2 && value.argv[0] === '--input-json' && value.argv[1] === '-', `${label}.argv must be the fixed stdin JSON invocation`);
+  assert(value.inputTransport === 'stdin_json' && value.outputTransport === 'stdout_json' && value.shell === false, `${label} must use JSON transports without a shell`);
+}
+
 function validateContract(contract, label) {
   assertObject(contract, label);
   assertExactKeys(contract, [
@@ -113,7 +123,7 @@ function validateContract(contract, label) {
     assertObject(capability, capabilityLabel);
     assertExactKeys(capability, [
       'id', 'summary', 'useWhen', 'doNotUseWhen', 'input', 'output',
-      'permissions', 'sideEffects', 'humanGate', 'validation'
+      'permissions', 'sideEffects', 'humanGate', 'validation', 'invocation'
     ], capabilityLabel);
     assertId(capability.id, `${capabilityLabel}.id`);
     assert(typeof capability.summary === 'string' && NON_EMPTY_TEXT_PATTERN.test(capability.summary), `${capabilityLabel}.summary must be a non-empty string`);
@@ -124,6 +134,7 @@ function validateContract(contract, label) {
     assertStringArray(capability.permissions, `${capabilityLabel}.permissions`);
     assertStringArray(capability.sideEffects, `${capabilityLabel}.sideEffects`);
     assertHumanGate(capability.humanGate, `${capabilityLabel}.humanGate`);
+    if (Object.hasOwn(capability, 'invocation')) assertInvocation(capability.invocation, `${capabilityLabel}.invocation`);
     assertStringArray(capability.validation, `${capabilityLabel}.validation`, { minItems: 1 });
     capability.validation.forEach((item, validationIndex) => {
       assertRelativeFileSyntax(item, `${capabilityLabel}.validation[${validationIndex}]`);
@@ -229,6 +240,9 @@ export function discoverComponents(rootPath) {
       for (const capability of contract.capabilities) {
         assert(!capabilityIds.has(capability.id), `Duplicate capability id: ${capability.id}`);
         capabilityIds.add(capability.id);
+        if (capability.invocation) {
+          safeRelativeFile(componentRoot, capability.invocation.entrypoint, `${capability.id}.invocation.entrypoint`);
+        }
         capabilityValidation.set(
           capability.id,
           capability.validation.map((item, index) => safeRelativeFile(componentRoot, item, `${capability.id}.validation[${index}]`))

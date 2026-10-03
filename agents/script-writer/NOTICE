@@ -1,9 +1,22 @@
 script-writer
 Copyright 2026 KimYx0207
+Copyright (c) 2025 Michael Sitarzewski (original English version)
+Copyright (c) 2026 jnMetaCode (Chinese translation and localization)
 
 script-writer 是由 KimYx0207 创建的自媒体脚本与文案写作 agent，
 作为 Kim Service 行业 agent 能力包的一部分发布，用于把已定选题写成
 能直接开口念、直接开拍或直接发布的口播脚本、分镜表和图文正文。
+
+专业方法适配来源：
+https://github.com/jnMetaCode/agency-agents-zh/blob/811e51c370f26ec4f37ca277b4368b4ff895741f/marketing/marketing-content-creator.md
+固定修订：811e51c370f26ec4f37ca277b4368b4ff895741f
+上游许可证：同一修订的 LICENSE（MIT）。
+
+本组件在原有工作步骤中适配受众需求、材料内的内容缺口、内部大纲到正文、
+有依据的个人观点和渠道表达；教程/建议型内容可采用问题到分析、方案和实操的推进。
+来源事实、用户立场与作者分析分别记录；不继承上游的标题职责、跨平台发布、
+内容日历、增长指标或长期记忆。本组件新增示例使用明确标注的合成材料，
+不代表真实产品、用户成果、模型调用或运行时验证。
 
 推荐署名：
 script-writer by KimYx0207

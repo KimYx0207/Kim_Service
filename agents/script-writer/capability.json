@@ -2,17 +2,18 @@
   "schemaVersion": 1,
   "id": "script-writer",
   "componentType": "agent",
-  "componentVersion": "0.2.0",
+  "componentVersion": "0.3.0",
   "entrypoint": "AGENT.md",
   "capabilities": [
     {
       "id": "script-writer-write-script",
-      "summary": "把已定选题与角度写成口播脚本、分镜表或图文正文，按形式组织内容，含 3 个开头候选、结尾与说法核对表；仅拍摄类内容提供拍摄清单，不编造功效、数据或个人使用经历。",
+      "summary": "从已定选题与来源材料，结合具体读者和明确用户立场写成完整口播、分镜或正文；内部大纲服务成品，按渠道调整表达，保留开头、结尾和说法核对，不编造数据或亲历。",
       "useWhen": [
         "用户说「帮我写脚本」「口播稿」「分镜表」「这条视频怎么讲」",
         "用户说「帮我写小红书正文」「公众号文章」「视频文案」",
         "用户已有选题和角度（自己定的或来自 topic-planner），要变成能拍能发的稿子",
-        "用户有草稿，想改得更口语、更紧凑，或改成另一个时长"
+        "用户有草稿，想改得更口语、更紧凑，或改成另一个时长",
+        "用户已有选题和来源文章、说明材料，想结合明确个人立场写成完整正文"
       ],
       "doNotUseWhen": [
         "用户还没定选题，只说「帮我写点东西」：改用 topic-planner",
@@ -46,14 +47,14 @@
           },
           "persona": {
             "type": "string",
-            "description": "人设与口头禅；缺省按朴素口语"
+            "description": "口气、人设与用户明确表达的立场；未给口气时用朴素表达，未给立场时不替用户表态"
           },
           "materials": {
             "type": "array",
             "items": {
               "type": "string"
             },
-            "description": "手上能拍的素材"
+            "description": "用户指定的来源文章、产品说明、草稿、证据或可拍素材；应保留出处、日期与适用限制"
           },
           "product": {
             "type": "object",
@@ -87,7 +88,11 @@
             "items": {
               "type": "string"
             },
-            "description": "用户提供的草稿或素材清单文件"
+            "description": "用户明确提供或指定的来源文档、草稿、证据与素材清单文件"
+          },
+          "audience": {
+            "type": "string",
+            "description": "可选：具体读者、所在场景及其需要解决的问题；未提供时从已有材料作保守假设并标注"
           }
         },
         "required": [
@@ -97,7 +102,7 @@
       "output": {
         "type": "object",
         "deliveryFormat": "conceptual-human-delivery",
-        "description": "面向用户的中文交付，字段与 AGENT.md「我会给你什么」一致；每个数字、功效、结论都在 claimsCheck 里有来源与状态。",
+        "description": "面向用户的中文成品，保留现有字段；claimsCheck.source 区分来源事实与明确用户立场，作者推断或建议写入 assumptions，既有来源状态不表示已核验或用户亲历。",
         "properties": {
           "oneLiner": {
             "type": "string",
@@ -164,7 +169,8 @@
                   "type": "string"
                 },
                 "source": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "材料出处及来源事实/用户立场的归属；不能把作者推断写成来源作者结论"
                 },
                 "status": {
                   "enum": [
@@ -186,7 +192,8 @@
             "type": "array",
             "items": {
               "type": "string"
-            }
+            },
+            "description": "未确认前提及作者分析或写作建议；与来源事实、用户明确立场分开，不冒充用户观点"
           },
           "executionAuthorized": {
             "const": false

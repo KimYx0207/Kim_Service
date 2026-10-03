@@ -21,9 +21,9 @@ from typing import Any
 
 
 COMPONENT_ID = "semgrep-skill"
-COMPONENT_VERSION = "1.0.0"
+COMPONENT_VERSION = "1.1.0"
 RECEIPT_NAME = ".semgrep-skill-receipt.json"
-SOURCE_FILES = ("SKILL.md", "rules/local-security.yml")
+SOURCE_FILES = ("SKILL.md", "capability.json", "scripts/scan.py", "rules/local-security.yml")
 BACKUP_DIR_NAME = ".semgrep-skill-backups"
 
 

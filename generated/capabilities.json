@@ -98,12 +98,12 @@
       ]
     },
     {
-      "componentContentSha256": "b9e5e7ab1c4cbac1d30332d1ea70ba9972e0f13f7e8199d9c85acd0a36ef630d",
+      "componentContentSha256": "0d03157099ae15db900bb762be2e0e6c4cd8203d266ceb31c2e87b06b217fb28",
       "componentId": "semgrep-skill",
       "componentPath": "skills/semgrep-skill",
       "componentType": "skill",
-      "componentVersion": "1.0.0",
-      "contractSha256": "e2d8ce75a50ca03892a67a845073f7b46654904612c4fa7478203d6f506ba368",
+      "componentVersion": "1.1.0",
+      "contractSha256": "492e46ce701b1594df4a4de6ae89ae260ec84f934267c3549aa3b75ce1881fd1",
       "doNotUseWhen": [
         "The target contains unknown, modified, linked, or unreceipted content.",
         "The caller has not approved the write or expects Semgrep, remote rules, or the legacy code-security directory to be changed."
@@ -182,12 +182,12 @@
       ]
     },
     {
-      "componentContentSha256": "b9e5e7ab1c4cbac1d30332d1ea70ba9972e0f13f7e8199d9c85acd0a36ef630d",
+      "componentContentSha256": "0d03157099ae15db900bb762be2e0e6c4cd8203d266ceb31c2e87b06b217fb28",
       "componentId": "semgrep-skill",
       "componentPath": "skills/semgrep-skill",
       "componentType": "skill",
-      "componentVersion": "1.0.0",
-      "contractSha256": "e2d8ce75a50ca03892a67a845073f7b46654904612c4fa7478203d6f506ba368",
+      "componentVersion": "1.1.0",
+      "contractSha256": "492e46ce701b1594df4a4de6ae89ae260ec84f934267c3549aa3b75ce1881fd1",
       "doNotUseWhen": [
         "The current or previous installation is missing, modified, linked, unknown, or unreceipted.",
         "The caller has not approved replacing the current projection."
@@ -1616,16 +1616,18 @@
       ]
     },
     {
-      "componentContentSha256": "b9e5e7ab1c4cbac1d30332d1ea70ba9972e0f13f7e8199d9c85acd0a36ef630d",
+      "componentContentSha256": "0d03157099ae15db900bb762be2e0e6c4cd8203d266ceb31c2e87b06b217fb28",
       "componentId": "semgrep-skill",
       "componentPath": "skills/semgrep-skill",
       "componentType": "skill",
-      "componentVersion": "1.0.0",
-      "contractSha256": "e2d8ce75a50ca03892a67a845073f7b46654904612c4fa7478203d6f506ba368",
+      "componentVersion": "1.1.0",
+      "contractSha256": "492e46ce701b1594df4a4de6ae89ae260ec84f934267c3549aa3b75ce1881fd1",
       "doNotUseWhen": [
         "Remote Semgrep Registry rules, Semgrep Cloud, login, upload, or network access are required.",
         "The requested outcome includes automatic remediation or source-file writes.",
-        "Semgrep is not already installed and executable."
+        "Semgrep is not already installed and executable.",
+        "Credential-pattern scanning or returning source excerpts is required.",
+        "The target contains links, more than 512 eligible files, or eligible files over 1 MiB."
       ],
       "entrypoint": "SKILL.md",
       "humanGate": {
@@ -1634,37 +1636,207 @@
       },
       "id": "local-security-scan",
       "input": {
+        "additionalProperties": false,
         "properties": {
           "rules": {
             "const": "rules/local-security.yml"
           },
+          "schemaVersion": {
+            "const": 1
+          },
           "target": {
+            "description": "Existing directory contained by workspaceRoot; no implicit current-directory target.",
+            "type": "string"
+          },
+          "workspaceRoot": {
+            "description": "Explicit absolute authorized local directory; no drive root, network paths or links.",
             "type": "string"
           }
         },
         "required": [
+          "schemaVersion",
+          "workspaceRoot",
           "target"
         ],
         "type": "object"
       },
       "output": {
+        "additionalProperties": false,
         "properties": {
           "completed": {
             "type": "boolean"
+          },
+          "componentVersion": {
+            "const": "1.1.0"
+          },
+          "errors": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "code",
+                "message"
+              ],
+              "type": "object"
+            },
+            "type": "array"
           },
           "filesModified": {
             "const": false
           },
           "findings": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "checkId": {
+                  "type": "string"
+                },
+                "end": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "col": {
+                      "minimum": 1,
+                      "type": "integer"
+                    },
+                    "line": {
+                      "minimum": 1,
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "line",
+                    "col"
+                  ],
+                  "type": "object"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "path": {
+                  "type": "string"
+                },
+                "severity": {
+                  "enum": [
+                    "INFO",
+                    "WARNING",
+                    "ERROR"
+                  ]
+                },
+                "start": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "col": {
+                      "minimum": 1,
+                      "type": "integer"
+                    },
+                    "line": {
+                      "minimum": 1,
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "line",
+                    "col"
+                  ],
+                  "type": "object"
+                }
+              },
+              "required": [
+                "checkId",
+                "path",
+                "start",
+                "end",
+                "severity",
+                "message"
+              ],
+              "type": "object"
+            },
             "type": "array"
           },
           "networkUsed": {
             "const": false
+          },
+          "rules": {
+            "additionalProperties": false,
+            "properties": {
+              "effectiveSha256": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "includedRuleIds": {
+                "const": [
+                  "python-subprocess-shell-true",
+                  "javascript-eval"
+                ]
+              },
+              "source": {
+                "const": "canonical:skills/semgrep-skill/rules/local-security.yml"
+              },
+              "sourceSha256": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "source",
+              "sourceSha256",
+              "effectiveSha256",
+              "includedRuleIds"
+            ],
+            "type": "object"
+          },
+          "runtime": {
+            "additionalProperties": false,
+            "properties": {
+              "pythonVersion": {
+                "type": "string"
+              },
+              "semgrepVersion": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "pythonVersion",
+              "semgrepVersion"
+            ],
+            "type": "object"
+          },
+          "schemaVersion": {
+            "const": 1
+          },
+          "status": {
+            "enum": [
+              "completed",
+              "partial",
+              "invalid_input",
+              "unavailable",
+              "failed"
+            ]
           }
         },
         "required": [
+          "schemaVersion",
+          "componentVersion",
+          "status",
           "completed",
           "findings",
+          "errors",
+          "runtime",
+          "rules",
           "networkUsed",
           "filesModified"
         ],
@@ -1675,13 +1847,14 @@
         "Execute an already-installed local Semgrep binary."
       ],
       "sideEffects": [],
-      "summary": "Scan an explicitly selected local source tree with bundled Semgrep static-analysis and secret-pattern rules without uploading code or modifying findings.",
+      "summary": "Run the installed local Semgrep CLI on an explicitly authorized local directory with two bundled non-secret rules and a sanitized JSON result; no remote configuration or source changes.",
       "useWhen": [
-        "A local project needs a read-only baseline scan for bundled vulnerability and secret patterns.",
-        "The caller accepts that a clean result covers only the bundled local rules."
+        "An explicitly authorized directory needs a read-only baseline for Python shell=True or JavaScript/TypeScript eval patterns.",
+        "The caller accepts bounded coverage and distinguishes findings from completion."
       ],
       "validation": [
-        "tests/test_behavior.py"
+        "tests/test_behavior.py",
+        "tests/test_scan.py"
       ]
     },
     {
@@ -2405,12 +2578,12 @@
       ]
     },
     {
-      "componentContentSha256": "b9e5e7ab1c4cbac1d30332d1ea70ba9972e0f13f7e8199d9c85acd0a36ef630d",
+      "componentContentSha256": "0d03157099ae15db900bb762be2e0e6c4cd8203d266ceb31c2e87b06b217fb28",
       "componentId": "semgrep-skill",
       "componentPath": "skills/semgrep-skill",
       "componentType": "skill",
-      "componentVersion": "1.0.0",
-      "contractSha256": "e2d8ce75a50ca03892a67a845073f7b46654904612c4fa7478203d6f506ba368",
+      "componentVersion": "1.1.0",
+      "contractSha256": "492e46ce701b1594df4a4de6ae89ae260ec84f934267c3549aa3b75ce1881fd1",
       "doNotUseWhen": [
         "The target contains unknown, modified, linked, or unreceipted content.",
         "The caller expects the preview to write files, install Semgrep, download rules, or overwrite the legacy code-security directory."
@@ -2904,12 +3077,12 @@
       ]
     },
     {
-      "componentContentSha256": "a96d108759d90baca2804c4e46fcb4b5169f243c8751a26f21d23c5bb66cd7ca",
+      "componentContentSha256": "705f23bd193861c3b547c4dffc9b71428799bd7e46f9417e7f9f3603117e7031",
       "componentId": "script-writer",
       "componentPath": "agents/script-writer",
       "componentType": "agent",
-      "componentVersion": "0.2.0",
-      "contractSha256": "1f797ffb4fdab36435029881aab9e66c48ad1216bea1fc9932e4aed96bac1009",
+      "componentVersion": "0.3.0",
+      "contractSha256": "94d184bbb16496dfb858fdc2305681c400417ec96f026c21aaf17d43641a8fa5",
       "doNotUseWhen": [
         "用户还没定选题，只说「帮我写点东西」：改用 topic-planner",
         "用户只要标题、封面文字或封面版式：改用 headline-cover-optimizer",
@@ -2929,6 +3102,10 @@
       "id": "script-writer-write-script",
       "input": {
         "properties": {
+          "audience": {
+            "description": "可选：具体读者、所在场景及其需要解决的问题；未提供时从已有材料作保守假设并标注",
+            "type": "string"
+          },
           "format": {
             "enum": [
               "口播",
@@ -2942,14 +3119,14 @@
             "type": "string"
           },
           "materialFiles": {
-            "description": "用户提供的草稿或素材清单文件",
+            "description": "用户明确提供或指定的来源文档、草稿、证据与素材清单文件",
             "items": {
               "type": "string"
             },
             "type": "array"
           },
           "materials": {
-            "description": "手上能拍的素材",
+            "description": "用户指定的来源文章、产品说明、草稿、证据或可拍素材；应保留出处、日期与适用限制",
             "items": {
               "type": "string"
             },
@@ -2968,7 +3145,7 @@
             "type": "array"
           },
           "persona": {
-            "description": "人设与口头禅；缺省按朴素口语",
+            "description": "口气、人设与用户明确表达的立场；未给口气时用朴素表达，未给立场时不替用户表态",
             "type": "string"
           },
           "platform": {
@@ -3002,9 +3179,10 @@
       },
       "output": {
         "deliveryFormat": "conceptual-human-delivery",
-        "description": "面向用户的中文交付，字段与 AGENT.md「我会给你什么」一致；每个数字、功效、结论都在 claimsCheck 里有来源与状态。",
+        "description": "面向用户的中文成品，保留现有字段；claimsCheck.source 区分来源事实与明确用户立场，作者推断或建议写入 assumptions，既有来源状态不表示已核验或用户亲历。",
         "properties": {
           "assumptions": {
+            "description": "未确认前提及作者分析或写作建议；与来源事实、用户明确立场分开，不冒充用户观点",
             "items": {
               "type": "string"
             },
@@ -3017,6 +3195,7 @@
                   "type": "string"
                 },
                 "source": {
+                  "description": "材料出处及来源事实/用户立场的归属；不能把作者推断写成来源作者结论",
                   "type": "string"
                 },
                 "status": {
@@ -3110,12 +3289,13 @@
         "filesystem:read-user-materials"
       ],
       "sideEffects": [],
-      "summary": "把已定选题与角度写成口播脚本、分镜表或图文正文，按形式组织内容，含 3 个开头候选、结尾与说法核对表；仅拍摄类内容提供拍摄清单，不编造功效、数据或个人使用经历。",
+      "summary": "从已定选题与来源材料，结合具体读者和明确用户立场写成完整口播、分镜或正文；内部大纲服务成品，按渠道调整表达，保留开头、结尾和说法核对，不编造数据或亲历。",
       "useWhen": [
         "用户说「帮我写脚本」「口播稿」「分镜表」「这条视频怎么讲」",
         "用户说「帮我写小红书正文」「公众号文章」「视频文案」",
         "用户已有选题和角度（自己定的或来自 topic-planner），要变成能拍能发的稿子",
-        "用户有草稿，想改得更口语、更紧凑，或改成另一个时长"
+        "用户有草稿，想改得更口语、更紧凑，或改成另一个时长",
+        "用户已有选题和来源文章、说明材料，想结合明确个人立场写成完整正文"
       ],
       "validation": [
         "tests/contract.test.mjs"
@@ -4119,9 +4299,9 @@
         "script-writer-write-script"
       ],
       "componentType": "agent",
-      "componentVersion": "0.2.0",
-      "contentSha256": "a96d108759d90baca2804c4e46fcb4b5169f243c8751a26f21d23c5bb66cd7ca",
-      "contractSha256": "1f797ffb4fdab36435029881aab9e66c48ad1216bea1fc9932e4aed96bac1009",
+      "componentVersion": "0.3.0",
+      "contentSha256": "705f23bd193861c3b547c4dffc9b71428799bd7e46f9417e7f9f3603117e7031",
+      "contractSha256": "94d184bbb16496dfb858fdc2305681c400417ec96f026c21aaf17d43641a8fa5",
       "entrypoint": "AGENT.md",
       "id": "script-writer",
       "path": "agents/script-writer",
@@ -4320,15 +4500,16 @@
         "preview-skill-projection-change"
       ],
       "componentType": "skill",
-      "componentVersion": "1.0.0",
-      "contentSha256": "b9e5e7ab1c4cbac1d30332d1ea70ba9972e0f13f7e8199d9c85acd0a36ef630d",
-      "contractSha256": "e2d8ce75a50ca03892a67a845073f7b46654904612c4fa7478203d6f506ba368",
+      "componentVersion": "1.1.0",
+      "contentSha256": "0d03157099ae15db900bb762be2e0e6c4cd8203d266ceb31c2e87b06b217fb28",
+      "contractSha256": "492e46ce701b1594df4a4de6ae89ae260ec84f934267c3549aa3b75ce1881fd1",
       "entrypoint": "SKILL.md",
       "id": "semgrep-skill",
       "path": "skills/semgrep-skill",
       "validation": [
         "tests/test_behavior.py",
-        "tests/test_installer.py"
+        "tests/test_installer.py",
+        "tests/test_scan.py"
       ]
     },
     {

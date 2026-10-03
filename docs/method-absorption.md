@@ -23,9 +23,19 @@ Kim Service 使用第三方角色库中的领域方法，保留自己的包边�
 
 参考不代表已经安装、调用或验证。这些外部库的版本和宿主支持在真正使用时重新核实；未知、待授权和不可用状态显式保留。
 
+## V1.4 已实施的两条有限链
+
+现有 `script-writer` 0.3.0 选择性适配固定提交的 [内容创作方法](https://github.com/jnMetaCode/agency-agents-zh/blob/811e51c370f26ec4f37ca277b4368b4ff895741f/marketing/marketing-content-creator.md)：读来源材料，定位具体读者和材料内缺口，分开来源事实、明确用户立场与作者推断，内部列大纲后交完整正文，按渠道与长度调整。沿用现有角色、输入输出和交稿边界；不把原来源的人设、永久记忆、增长目标、固定三种格式或自动发布导入。对应 MIT 许可与两项原版权保留在包内 LICENSE/NOTICE。
+
+现有 `semgrep-skill` 1.1.0 将 `local-security-scan` 绑定到真实已安装 CLI；[包合同](../skills/semgrep-skill/capability.json) 的可选 invocation 定义固定 Python stdin/stdout JSON 路径。显式授权目录、两条非密钥规则、版本与配置 hash、扫描覆盖和失败状态均由 [唯一执行入口](../skills/semgrep-skill/scripts/scan.py) 实现。旧文档里的裸 CLI 和默认当前项目入口已替换，安装投影携带合同和执行入口。未加新工具包、业务产品、调度器或根治理系统。
+
+这是两条限定任务的实现范围，不代表全部外部方法吸收完成。原生 Agent 宿主加载与 Meta 的跨项目治理链仍需分别核实；本机夹具扫描和模型交稿不能代替它们。
+
 ## 工具绑定与冲突处理
 
 以 [Agent 包契约](agent-pack-contract.md) 为准。`capability.json` 定义输入、输出、权限、副作用及组件版本；`catalog.json` 和 `generated/capabilities.json` 自动派生。实际工具使用同时核对当前宿主可调用接口、包内命令和输入版本；没有工具时只返回材料内可完成部分及缺口。
+
+根 schema 保持版本 1，仅接受严格可选的本地 Python JSON invocation；现有生成索引不透传该字段。调用方先按索引选择并验证包 hash，再读取包合同，核宿主 Python/CLI 与授权后执行；不能把方法 instructions、索引命中或该字段本身当作工具授权。Meta 继续拥有意图与宿主原生决策，Kim 只提供专业方法与执行契约。
 
 专业角色只交当前领域成果。第三方角色中的总指挥、人设记忆、全量安装、强制多轮问答、自动发送和循环迭代不会变成本包权限。角色自查在交付前进行一次；只有真实缺项或失败需要返工，不按轮数反复让用户确认。Meta_Kim 负责需求对齐、选人、顺序、权限及最终验收。
 

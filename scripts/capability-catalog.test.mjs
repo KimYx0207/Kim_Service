@@ -102,6 +102,22 @@ test('build output is byte-for-byte deterministic', (t) => {
   assert.match(first, /"contractSha256": "[0-9a-f]{64}"/);
 });
 
+test('optional local invocation is validated in the package and omitted from the index', (t) => {
+  const root = temporaryRepository(t);
+  const { componentRoot, contract } = addComponent(root, 'skills', 'local-scan');
+  fs.mkdirSync(path.join(componentRoot, 'scripts'));
+  fs.writeFileSync(path.join(componentRoot, 'scripts', 'scan.py'), 'print("synthetic")\n');
+  const invocation = { schemaVersion: 1, type: 'local_cli', runtime: 'python', entrypoint: 'scripts/scan.py', argv: ['--input-json', '-'], inputTransport: 'stdin_json', outputTransport: 'stdout_json', shell: false };
+  contract.capabilities[0].invocation = invocation;
+  rewriteContract(componentRoot, contract);
+  assert.equal(Object.hasOwn(buildCapabilityIndex(root).capabilities[0], 'invocation'), false);
+  for (const change of [{ shell: true }, { entrypoint: '../outside.py' }, { entrypoint: 'scripts/missing.py' }, { argv: ['--autofix'] }, { executable: 'arbitrary' }]) {
+    contract.capabilities[0].invocation = { ...invocation, ...change };
+    rewriteContract(componentRoot, contract);
+    assert.throws(() => discoverComponents(root), /invocation/);
+  }
+});
+
 test('rejects duplicate component ids across component groups', (t) => {
   const root = temporaryRepository(t);
   addComponent(root, 'skills', 'shared', { capabilityId: 'shared-skill' });

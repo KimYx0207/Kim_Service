@@ -2,34 +2,35 @@
 
 # Semgrep Local Security Scan Skill
 
-This Claude Code Skill runs static-analysis and secret-pattern checks with rules bundled in the component. Its default behavior is read-only and offline: it does not upload code, fetch remote rules, or apply fixes.
+Component **1.1.0** wraps an already-installed trusted local Semgrep CLI. Require an explicitly authorized absolute workspaceRoot and a directory target within it. No default current-project scan.
 
-[![GitHub stars](https://img.shields.io/github/stars/KimYx0207/Kim_Service?style=social)](https://github.com/KimYx0207/Kim_Service)
-[![GitHub forks](https://img.shields.io/github/forks/KimYx0207/Kim_Service?style=social)](https://github.com/KimYx0207/Kim_Service)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/KimYx0207/Kim_Service)
-[![Version](https://img.shields.io/badge/Claude_Code-2.1.39-green.svg)](https://github.com/KimYx0207/Kim_Service)
+## Invocation and result
+
+Read package capability.json after existing discovery/hash verification. The generated index selects the package and does not copy invocation or grant execution permission.
+
+```json
+{"schemaVersion":1,"workspaceRoot":"/authorized/project","target":"src"}
+```
+
+Send this object via stdin to the sole entry:
+
+```bash
+python "<skill-dir>/scripts/scan.py" --input-json -
+```
+
+Equivalent named arguments: --workspace-root <absolute-root> --target <directory>; optional rules is fixed to rules/local-security.yml. No Semgrep passthrough flags or executable override.
+
+The wrapper extracts two non-secret rules before scanning: Python subprocess shell=True and JavaScript/TypeScript eval. It reports original/effective hashes. The legacy credential rule remains as provenance and is not executed by this capability. Results contain local rule messages, IDs, relative paths and spans; no source, metavariables or raw stderr.
+
+completed means every selected file was confirmed scanned; findings still exit 0. partial, invalid_input, unavailable and failed exit 2 with completed:false. Unavailable stays unavailable; no automatic installation. A clean pattern result is not a security audit.
 
 ## Boundary
 
-The current local baseline detects only:
+Only visible py/js/jsx/ts/tsx files are selected. Hidden entries and node_modules, __pycache__, venv and vendor are excluded. Links/reparse points are refused. Safety bounds are centralized in scan.py: 512 eligible files, 1 MiB each, 60 seconds per invocation and 8 MiB per output stream checked while running.
 
-- credential-like literals assigned to common secret names;
-- Python `subprocess(..., shell=True)`;
-- JavaScript / TypeScript `eval(...)`.
+Both runtime probe and scan disable metrics/version checks, isolate settings/log/cache files and use a minimal environment. Caller tokens, proxies, PYTHONPATH and custom Semgrep configuration are not inherited. Windows APPDATA and a computed installed Python user base/site may locate and initialize trusted runtime dependencies such as pywin32 even with an isolated upstream profile. networkUsed:false reflects these execution controls, not OS network isolation or packet capture. filesModified:false refers to source files; ephemeral runtime files are outside the target and cleaned. A trusted installation and stable filesystem are required; hostile binaries/concurrent path replacement are outside this wrapper's boundary.
 
-A clean result is not a comprehensive security audit. The default workflow does not use `--config auto`, `p/*`, the Semgrep Registry, Semgrep Cloud, login, uploads, or rule downloads.
-
-Semgrep must already be installed by the user. The component installer installs the Skill projection only and never invokes `pip` or another package manager.
-
-## Usage
-
-Ask Claude Code to run `semgrep-skill` locally. The Skill resolves its own installation directory and executes:
-
-```bash
-semgrep scan --config "<skill-dir>/rules/local-security.yml" --metrics off --disable-version-check --json "<target>"
-```
-
-Reports contain rule, path, line, severity, and redacted context. Remediation is advisory text only; changing source code is a separately authorized task.
+Scan authorization, Skill installation, Semgrep installation and source remediation are separate actions. Remediation is advisory only.
 
 ## Safe installer
 
@@ -61,7 +62,7 @@ The catalog and component directory use `semgrep-skill`; frontmatter now uses th
 python -m unittest discover -s tests -p "test_*.py" -v
 ```
 
-The behavior test executes the bundled rules when Semgrep is available. Installer tests cover dry-run behavior, actual-hash receipts, unknown-content refusal, upgrade rollback, and receipt-write transaction rollback.
+The behavior test executes the actual wrapper and installed CLI on synthetic fixtures only; an unavailable CLI is explicitly skipped, never claimed tested. Protocol tests cover containment, environment isolation, secret-rule exclusion, incomplete scans and sanitized failures. Installer tests verify the projected contract/entry in addition to transaction rollback.
 
 ## Provenance and license
 

@@ -1,80 +1,85 @@
 ---
 name: semgrep-skill
-description: "Runs offline Semgrep static-analysis and secret-pattern scans with bundled local rules. Use for local security scanning, vulnerability pattern checks, or leaked-secret checks. Never downloads rules, uploads code, installs packages, or modifies findings automatically."
-version: "1.0.0"
+description: "Runs the installed local Semgrep CLI through a bounded JSON wrapper with two bundled non-secret rules. Requires an explicit authorized workspaceRoot and target. No remote rules, uploads, installs, source excerpts or automatic fixes."
+version: "1.1.0"
 context: fork
 ---
 
 # Local Semgrep security scan
 
-Use the bundled `rules/local-security.yml` file to scan source code locally. The
-default workflow is read-only, offline, and does not apply fixes.
+Use only `<skill-dir>/scripts/scan.py`, where `<skill-dir>` contains this file.
+The package `capability.json` defines the input, result and optional invocation.
+Read it after the caller verifies the discovered package hash. The generated
+index selects the package; it does not contain or grant the invocation.
 
 ## Safety contract
 
-- Treat the directory containing this `SKILL.md` as `<skill-dir>`.
-- Scan only the target explicitly requested by the user. Default to the current
-  project when no narrower target was requested.
-- Use only `<skill-dir>/rules/local-security.yml` by default.
-- Pass `--metrics off` and `--disable-version-check`.
-- Do not use `--config auto`, `p/*`, registry URLs, remote URLs, Semgrep Cloud,
-  login, CI upload, or any other network-backed rules or service.
-- Do not use `--autofix`, edit source files, install packages, or write a report
-  file unless the user separately authorizes that action.
-- Do not print matched secret values. Report the rule, path, line, severity, and
-  a redacted explanation.
+- Require the user's explicit authorized absolute local `workspaceRoot` and a
+  directory `target` inside it. Never default to the current project or drive.
+- The wrapper accepts only `rules/local-security.yml`, extracts just
+  `python-subprocess-shell-true` and `javascript-eval` into temporary configuration
+  before scanning, and records both hashes. The bundled legacy secret-pattern
+  rule is not executed by this route; credential checks are outside this capability.
+- It executes an already-installed trusted host CLI with an argv array and
+  `shell:false`. Never execute files from the scan target as programs.
+- Both the version probe and scan use `--metrics off`, `--disable-version-check`,
+  isolated settings/log/cache paths, and a minimal subprocess environment.
+  Caller tokens, proxies and custom Semgrep configuration are not inherited.
+  Windows APPDATA and a computed installed Python user base/site may be retained
+  solely to locate the existing host runtime; caller PYTHONPATH is not inherited.
+- Do not use `--config auto`, registry URLs, Semgrep Cloud, login or uploads.
+- Do not use `--autofix`, write reports, install Semgrep or fetch rules. The
+  installer installs the Skill projection only and requires separate write approval.
+- stdout contains rule IDs, workspace-relative paths, spans, severity and bundled
+  rule messages. Raw source, metavariables and raw CLI diagnostics are withheld.
 
-## Runtime check
+## Invoke and interpret
 
-Check for an existing Semgrep executable:
+From any working directory, pass one UTF-8 JSON object over stdin:
 
-```bash
-semgrep --version
+```json
+{"schemaVersion":1,"workspaceRoot":"<authorized-absolute-local-root>","target":"<directory-within-root>"}
 ```
 
-If it is unavailable or cannot start, stop and report the exact failure. You may
-suggest a platform-appropriate installation command, but must not execute `pip`,
-`pipx`, `brew`, a package manager, or a downloaded installer without explicit
-human approval.
-
-## Default local scan
-
-Resolve `<skill-dir>` to the installed Skill directory, then run:
-
 ```bash
-semgrep scan --config "<skill-dir>/rules/local-security.yml" --metrics off --disable-version-check --json "<target>"
+python "<skill-dir>/scripts/scan.py" --input-json -
 ```
 
-The bundled rules currently detect a small, explicit baseline:
+Equivalent named arguments are `--workspace-root <absolute-root> --target
+<directory>`, optionally `--rules rules/local-security.yml`. There are no extra
+Semgrep flags, executable overrides or JSON-file paths. Do not separately run a
+bare `semgrep --version`: the wrapper performs its own isolated runtime check.
 
-- credential-like literals assigned to common secret names;
-- Python `subprocess` calls using `shell=True`;
-- JavaScript/TypeScript `eval(...)` calls.
+Return the wrapper result, not a promise to scan later. `completed` means every
+selected file was confirmed scanned, not that findings were empty or security
+was certified. `completed` exits 0 even with findings. `partial`, `invalid_input`,
+`unavailable` and `failed` exit 2 and keep `completed:false`. An unavailable tool
+must stay unavailable; no installation is attempted. Missing files or errors
+must never be labeled clean. Remediation remains advisory text.
 
-This is not a comprehensive security audit. A clean result means only that these
-local rules found no matches.
+## Coverage and trust boundary
 
-## Reporting
+Only visible `.py`, `.js`, `.jsx`, `.ts`, `.tsx` files are selected. Hidden
+directories/files, node_modules, __pycache__, venv and vendor are excluded.
+Links/reparse points are rejected. Narrow targets to at most 512 eligible files,
+each at most 1 MiB; do not select a target containing the host temporary directory.
+Each subprocess has a 60-second limit; output is checked
+while running against an 8 MiB limit per stream. These are safety bounds in
+`scripts/scan.py`, not caller-adjustable business parameters.
 
-Return:
-
-1. Semgrep version and the exact local rules path.
-2. Scanned target and whether the command completed successfully.
-3. Findings grouped by severity, with file and line but no secret values.
-4. False-positive caveats and manual remediation suggestions.
-5. Explicit confirmation that no code was uploaded, no remote rules were used,
-   and no source files were modified.
-
-Suggested fixes are advisory text only. Any source-code change is a separate
-task requiring the user's authorization.
+`networkUsed:false` describes the enforced local configuration, metrics/version
+opt-outs and environment isolation; it is not OS network isolation or a packet
+capture certificate. `filesModified:false` means no source edits: temporary
+configuration, settings and logs are outside the target and cleaned afterward.
+Use a trusted host installation and stable filesystem; this is not a sandbox for
+malicious binaries or concurrent path replacement. Findings cover two patterns
+only; omitted file types and excluded directories were not audited.
 
 ## Installing this Skill
 
-The repository includes `install.ps1`, `install.sh`, and
-`scripts/install.py`. Installation is dry-run by default, requires an explicit
-`project` or `user` scope, and requires `--apply` to write. Those installers copy
-this Skill and its bundled rules only; they never install Semgrep.
-
-The former frontmatter name and install directory, `code-security`, are legacy
-identifiers. New installations use `semgrep-skill`. Existing legacy directories
-are not overwritten or removed automatically.
+`install.ps1`, `install.sh` and `scripts/install.py` remain dry-run first, require
+explicit project/user scope, and require `--apply` to write. They project this
+file, `capability.json`, `scripts/scan.py` and the bundled rules with hash receipts
+and rollback. They never install Semgrep or overwrite legacy code-security.
+See README for preview/apply/rollback commands; do not treat scan permission as
+permission to install or change source.
