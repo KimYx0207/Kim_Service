@@ -3758,18 +3758,19 @@
       ]
     },
     {
-      "componentContentSha256": "db3f677b4e7dda2160530c24ee0a863281c1b8f3fd068c2819faee2b505b9bf3",
+      "componentContentSha256": "091d138d202b3e036d621c99d42cceebe5f92eafe97f88855353a71d52f0558e",
       "componentId": "supplier-comparison-analyst",
       "componentPath": "agents/supplier-comparison-analyst",
       "componentType": "agent",
       "componentVersion": "0.1.0",
-      "contractSha256": "35157b565d63a017d96b32b636601e72ed705d0c8f23e87ed9dcd3c7e492f4a6",
+      "contractSha256": "27156051c35ca0a4d856610055bd5835a9dad970b6423fca8f5e7ed442cd09b2",
       "doNotUseWhen": [
         "服务报价、单笔经营利润或固定成本覆盖测算交给 pricing-cost-analyst；经营期间复盘交给 store-performance-analyst。",
         "要求联系供应商、索样、下单、付款、修改真实后台或搜索私人目录。",
         "要求认证供应商、虚构验厂经历、未经核查法规结论、医疗法律金融专业结论或收益质量交期保证。"
       ],
       "entrypoint": "AGENT.md",
+      "helperContract": "calculation-tool.json",
       "humanGate": {
         "required": true,
         "when": [
@@ -4489,8 +4490,8 @@
       ],
       "componentType": "agent",
       "componentVersion": "0.1.0",
-      "contentSha256": "db3f677b4e7dda2160530c24ee0a863281c1b8f3fd068c2819faee2b505b9bf3",
-      "contractSha256": "35157b565d63a017d96b32b636601e72ed705d0c8f23e87ed9dcd3c7e492f4a6",
+      "contentSha256": "091d138d202b3e036d621c99d42cceebe5f92eafe97f88855353a71d52f0558e",
+      "contractSha256": "27156051c35ca0a4d856610055bd5835a9dad970b6423fca8f5e7ed442cd09b2",
       "entrypoint": "AGENT.md",
       "id": "supplier-comparison-analyst",
       "path": "agents/supplier-comparison-analyst",

@@ -41,7 +41,9 @@ function scored() {
 }
 
 test('fixed calculation helper contract stays separate from the read-only agent', () => {
-  const tool = JSON.parse(read('calculation-tool.json'));
+  const capability = JSON.parse(read('capability.json')).capabilities[0];
+  assert.equal(capability.helperContract, 'calculation-tool.json');
+  const tool = JSON.parse(read(capability.helperContract));
   assert.deepEqual(tool, {
     schemaVersion: 1, id: 'supplier-comparison-calculate', componentId: 'supplier-comparison-analyst', toolVersion: '0.1.0',
     invocation: { type: 'local_cli', runtime: 'python', entrypoint: 'scripts/calculate.py', argv: ['--input-json', '-'],
@@ -52,6 +54,7 @@ test('fixed calculation helper contract stays separate from the read-only agent'
   assert.ok(fs.statSync(path.join(root, tool.invocation.entrypoint)).isFile());
   assert.ok(fs.statSync(path.join(root, tool.inputContract)).isFile());
   assert.equal(Object.hasOwn(JSON.parse(read('capability.json')).capabilities[0], 'invocation'), false);
+  assert.match(read('README.md'), /候选报价（quotes 缺失或为空）先合并澄清/);
 });
 
 test('standalone contract, eight sections and minimal readonly permissions', () => {
