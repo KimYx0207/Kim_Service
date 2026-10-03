@@ -137,6 +137,25 @@ test('helper contract references survive discovery without granting agent invoca
   }
 });
 
+test('helper references normalize separators for consumers while retaining raw contract identity', (t) => {
+  const root = temporaryRepository(t);
+  const { componentRoot, contract } = addComponent(root, 'agents', 'reader');
+  fs.mkdirSync(path.join(componentRoot, 'contracts'));
+  fs.writeFileSync(path.join(componentRoot, 'contracts/helper.json'), '{"fixture":true}\n');
+  const hashes = [];
+  for (const reference of ['contracts/helper.json', 'contracts\\helper.json']) {
+    contract.capabilities[0].helperContract = reference;
+    rewriteContract(componentRoot, contract);
+    const index = buildCapabilityIndex(root);
+    const capability = index.capabilities[0];
+    assert.equal(capability.helperContract, 'contracts/helper.json');
+    assert.deepEqual(JSON.parse(fs.readFileSync(path.join(root, capability.componentPath, capability.helperContract))), { fixture: true });
+    assert.equal(discoverComponents(root)[0].contract.capabilities[0].helperContract, reference);
+    hashes.push(capability.contractSha256);
+  }
+  assert.notEqual(hashes[0], hashes[1], 'normalized projection must not rewrite the source contract hash');
+});
+
 test('ordinary catalog and generated index discover the real supplier helper and execute supplied quotes', () => {
   const root = path.resolve(path.dirname(SCRIPT_PATH), '..');
   const catalog = JSON.parse(fs.readFileSync(path.join(root, 'catalog.json')));
