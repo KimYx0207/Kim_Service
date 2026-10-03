@@ -40,6 +40,20 @@ function scored() {
   return input;
 }
 
+test('fixed calculation helper contract stays separate from the read-only agent', () => {
+  const tool = JSON.parse(read('calculation-tool.json'));
+  assert.deepEqual(tool, {
+    schemaVersion: 1, id: 'supplier-comparison-calculate', componentId: 'supplier-comparison-analyst', toolVersion: '0.1.0',
+    invocation: { type: 'local_cli', runtime: 'python', entrypoint: 'scripts/calculate.py', argv: ['--input-json', '-'],
+      inputTransport: 'stdin_json', outputTransport: 'stdout_json', shell: false },
+    requiredMaterials: ['quantity', 'currency', 'specification', 'quotes'], inputContract: 'docs/tool-api.md',
+    sideEffects: [], networkUsed: false, filesModified: false, nativeAgentInvocation: false,
+  });
+  assert.ok(fs.statSync(path.join(root, tool.invocation.entrypoint)).isFile());
+  assert.ok(fs.statSync(path.join(root, tool.inputContract)).isFile());
+  assert.equal(Object.hasOwn(JSON.parse(read('capability.json')).capabilities[0], 'invocation'), false);
+});
+
 test('standalone contract, eight sections and minimal readonly permissions', () => {
   const contract = JSON.parse(read('capability.json'));
   const agent = read(contract.entrypoint);
