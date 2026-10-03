@@ -118,6 +118,48 @@ test('optional local invocation is validated in the package and omitted from the
   }
 });
 
+test('helper contract references survive discovery without granting agent invocation', (t) => {
+  const root = temporaryRepository(t);
+  const { componentRoot, contract } = addComponent(root, 'agents', 'reader');
+  fs.writeFileSync(path.join(componentRoot, 'helper.json'), '{}\n');
+  contract.capabilities[0].helperContract = 'helper.json';
+  rewriteContract(componentRoot, contract);
+  const capability = buildCapabilityIndex(root).capabilities[0];
+  assert.equal(capability.helperContract, 'helper.json');
+  assert.equal(Object.hasOwn(capability, 'invocation'), false);
+  assert.deepEqual(capability.permissions, []);
+  const schema = JSON.parse(fs.readFileSync(SCHEMA_PATH));
+  assert.equal(schema.$defs.capability.properties.helperContract.$ref, '#/$defs/relativeFile');
+  for (const invalid of ['../outside.json', '/absolute.json', 'missing.json', 'index.mjs']) {
+    contract.capabilities[0].helperContract = invalid;
+    rewriteContract(componentRoot, contract);
+    assert.throws(() => buildCapabilityIndex(root), /helperContract/);
+  }
+});
+
+test('ordinary catalog and generated index discover the real supplier helper and execute supplied quotes', () => {
+  const root = path.resolve(path.dirname(SCRIPT_PATH), '..');
+  const catalog = JSON.parse(fs.readFileSync(path.join(root, 'catalog.json')));
+  const generated = JSON.parse(fs.readFileSync(path.join(root, 'generated/capabilities.json')));
+  const indexed = generated.capabilities.find((entry) => entry.id === 'supplier-comparison-analyze');
+  const component = catalog.components.find((entry) => entry.id === indexed.componentId);
+  const contract = JSON.parse(fs.readFileSync(path.join(root, component.path, 'capability.json')));
+  const canonical = contract.capabilities.find((entry) => entry.id === indexed.id);
+  assert.equal(indexed.helperContract, canonical.helperContract);
+  assert.ok(indexed.helperContract, 'ordinary discovery must expose the helper reference');
+  const tool = JSON.parse(fs.readFileSync(path.join(root, component.path, indexed.helperContract)));
+  assert.equal(tool.componentId, component.id);
+  const input = fs.readFileSync(path.join(root, component.path, 'tests/fixtures/normal.json'), 'utf8');
+  const child = spawnSync(process.platform === 'win32' ? 'python' : 'python3',
+    ['-I', '-B', path.join(root, component.path, tool.invocation.entrypoint), ...tool.invocation.argv],
+    { input, encoding: 'utf8', shell: false, timeout: 10000 });
+  assert.ifError(child.error); assert.equal(child.status, 0, child.stderr);
+  const receipt = JSON.parse(child.stdout);
+  assert.equal(receipt.tool, tool.id);
+  assert.deepEqual(receipt.normalizedQuotes.map((quote) => quote.landedTotal), ['335', '275']);
+  assert.equal(receipt.networkUsed, false); assert.equal(receipt.filesModified, false);
+});
+
 test('rejects duplicate component ids across component groups', (t) => {
   const root = temporaryRepository(t);
   addComponent(root, 'skills', 'shared', { capabilityId: 'shared-skill' });

@@ -187,6 +187,11 @@
         },
         "invocation": {
           "$ref": "#/$defs/invocation"
+        },
+        "helperContract": {
+          "$ref": "#/$defs/relativeFile",
+          "pattern": "\\.json$",
+          "description": "Component-relative JSON contract for a separately invoked helper. This reference grants no execution permission to the capability."
         }
       }
     },

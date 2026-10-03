@@ -24,7 +24,7 @@ stdin传schemaVersion1 JSON，stdout返回JSON；completed/partial退出0，inva
 
 完整严格API见 [tool-api.md](docs/tool-api.md)；四类虚构输入与可理解输出见 [examples.md](docs/examples.md)。工具不可用时给材料内定性比较和缺口，不造回执。
 
-调用方可读取 [calculation-tool.json](calculation-tool.json) 绑定这个固定计算器，核对组件与脚本后执行。用户已明确要求材料内核算时，按宿主既有工具权限直接计算；缺权重不重复询问，缺规格、数量或币种才澄清。这个辅助工具合同不扩大 Agent 的 `Read` 权限，也不允许任意命令。
+调用方从 `capability.json` 或生成索引的 `helperContract` 找到 [calculation-tool.json](calculation-tool.json)，核对组件与脚本后执行。用户已明确要求材料内核算时，按宿主既有工具权限直接计算；缺权重不重复询问，缺规格、数量、币种或候选报价（quotes 缺失或为空）先合并澄清必要材料。这个辅助工具合同不扩大 Agent 的 `Read` 权限，也不允许任意命令。
 
 运行 `node tests/contract.test.mjs`：仅Node内置模块加已安装Python；实际spawn本包helper核算。通过证明结构和工具算例，不等于模型交付或nativeAgent实测。
 

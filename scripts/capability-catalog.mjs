@@ -123,7 +123,7 @@ function validateContract(contract, label) {
     assertObject(capability, capabilityLabel);
     assertExactKeys(capability, [
       'id', 'summary', 'useWhen', 'doNotUseWhen', 'input', 'output',
-      'permissions', 'sideEffects', 'humanGate', 'validation', 'invocation'
+      'permissions', 'sideEffects', 'humanGate', 'validation', 'invocation', 'helperContract'
     ], capabilityLabel);
     assertId(capability.id, `${capabilityLabel}.id`);
     assert(typeof capability.summary === 'string' && NON_EMPTY_TEXT_PATTERN.test(capability.summary), `${capabilityLabel}.summary must be a non-empty string`);
@@ -135,6 +135,10 @@ function validateContract(contract, label) {
     assertStringArray(capability.sideEffects, `${capabilityLabel}.sideEffects`);
     assertHumanGate(capability.humanGate, `${capabilityLabel}.humanGate`);
     if (Object.hasOwn(capability, 'invocation')) assertInvocation(capability.invocation, `${capabilityLabel}.invocation`);
+    if (Object.hasOwn(capability, 'helperContract')) {
+      assertRelativeFileSyntax(capability.helperContract, `${capabilityLabel}.helperContract`);
+      assert(capability.helperContract.endsWith('.json'), `${capabilityLabel}.helperContract must reference JSON`);
+    }
     assertStringArray(capability.validation, `${capabilityLabel}.validation`, { minItems: 1 });
     capability.validation.forEach((item, validationIndex) => {
       assertRelativeFileSyntax(item, `${capabilityLabel}.validation[${validationIndex}]`);
@@ -243,6 +247,9 @@ export function discoverComponents(rootPath) {
         if (capability.invocation) {
           safeRelativeFile(componentRoot, capability.invocation.entrypoint, `${capability.id}.invocation.entrypoint`);
         }
+        if (capability.helperContract) {
+          safeRelativeFile(componentRoot, capability.helperContract, `${capability.id}.helperContract`);
+        }
         capabilityValidation.set(
           capability.id,
           capability.validation.map((item, index) => safeRelativeFile(componentRoot, item, `${capability.id}.validation[${index}]`))
@@ -294,6 +301,7 @@ export function buildCapabilityIndex(rootPath) {
       permissions: capability.permissions,
       sideEffects: capability.sideEffects,
       humanGate: capability.humanGate,
+      ...(capability.helperContract ? { helperContract: capability.helperContract } : {}),
       validation: capabilityValidation.get(capability.id),
       componentContentSha256: contentSha256,
       contractSha256
