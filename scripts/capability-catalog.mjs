@@ -241,6 +241,7 @@ export function discoverComponents(rootPath) {
 
       const entrypoint = safeRelativeFile(componentRoot, contract.entrypoint, `${contract.id}.entrypoint`);
       const capabilityValidation = new Map();
+      const helperContracts = new Map();
       for (const capability of contract.capabilities) {
         assert(!capabilityIds.has(capability.id), `Duplicate capability id: ${capability.id}`);
         capabilityIds.add(capability.id);
@@ -248,7 +249,8 @@ export function discoverComponents(rootPath) {
           safeRelativeFile(componentRoot, capability.invocation.entrypoint, `${capability.id}.invocation.entrypoint`);
         }
         if (capability.helperContract) {
-          safeRelativeFile(componentRoot, capability.helperContract, `${capability.id}.helperContract`);
+          helperContracts.set(capability.id,
+            safeRelativeFile(componentRoot, capability.helperContract, `${capability.id}.helperContract`));
         }
         capabilityValidation.set(
           capability.id,
@@ -263,6 +265,7 @@ export function discoverComponents(rootPath) {
         entrypoint,
         validation,
         capabilityValidation,
+        helperContracts,
         contractSha256: sha256(stableJson(contract)),
         contentSha256: componentTreeSha256(componentRoot)
       });
@@ -285,7 +288,7 @@ export function buildCapabilityIndex(rootPath) {
     contentSha256,
     capabilityIds: contract.capabilities.map((item) => item.id).sort(compareText)
   }));
-  const capabilities = discovered.flatMap(({ contract, path: componentPath, entrypoint, capabilityValidation, contractSha256, contentSha256 }) =>
+  const capabilities = discovered.flatMap(({ contract, path: componentPath, entrypoint, capabilityValidation, helperContracts, contractSha256, contentSha256 }) =>
     contract.capabilities.map((capability) => ({
       id: capability.id,
       summary: capability.summary,
@@ -301,7 +304,7 @@ export function buildCapabilityIndex(rootPath) {
       permissions: capability.permissions,
       sideEffects: capability.sideEffects,
       humanGate: capability.humanGate,
-      ...(capability.helperContract ? { helperContract: capability.helperContract } : {}),
+      ...(helperContracts.has(capability.id) ? { helperContract: helperContracts.get(capability.id) } : {}),
       validation: capabilityValidation.get(capability.id),
       componentContentSha256: contentSha256,
       contractSha256
