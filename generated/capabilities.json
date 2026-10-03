@@ -3758,7 +3758,7 @@
       ]
     },
     {
-      "componentContentSha256": "1a4244d4848f714557aafaa738f2d94752ba273bc9ef6810afcc27fdc5a970cd",
+      "componentContentSha256": "4aad55586f298f67858bc5bfeb6242da3154296f4c01a9078abd503403e1a3dc",
       "componentId": "supplier-comparison-analyst",
       "componentPath": "agents/supplier-comparison-analyst",
       "componentType": "agent",
@@ -4489,7 +4489,7 @@
       ],
       "componentType": "agent",
       "componentVersion": "0.1.0",
-      "contentSha256": "1a4244d4848f714557aafaa738f2d94752ba273bc9ef6810afcc27fdc5a970cd",
+      "contentSha256": "4aad55586f298f67858bc5bfeb6242da3154296f4c01a9078abd503403e1a3dc",
       "contractSha256": "35157b565d63a017d96b32b636601e72ed705d0c8f23e87ed9dcd3c7e492f4a6",
       "entrypoint": "AGENT.md",
       "id": "supplier-comparison-analyst",
