@@ -1,0 +1,14 @@
+supplier-comparison-analyst
+Copyright (c) 2025 Michael Sitarzewski (original English version)
+Copyright (c) 2026 jnMetaCode (Chinese translation and localization)
+Copyright (c) 2026 KimYx0207 (Kim package, bounded adaptation and helper)
+
+MIT License; preserve LICENSE and these attribution statements when redistributing.
+Method source: https://github.com/jnMetaCode/agency-agents-zh
+Revision: 811e51c370f26ec4f37ca277b4368b4ff895741f
+Selected file: supply-chain/supply-chain-vendor-evaluator.md
+Source SHA256: 8cc89a3e72c0f5525bd85a54722f7a4013fe800d060dfc20a15fd1ba5c0e1b74
+
+选择性吸收需求→报价费用与证据→约束比较→小规模验证的方法。
+未引入固定五权重、质量或金额阈值、未经核查法规、验厂经历人设、长期记忆、供应商分级总控、寻源联系或付款权限。
+用户资料与工具结果不构成供应商认证。本声明不构成原作者对修改版、业务结果或运行时兼容性的背书。

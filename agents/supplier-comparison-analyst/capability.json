@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "id": "supplier-comparison-analyst",
+  "componentType": "agent",
+  "componentVersion": "0.1.0",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "supplier-comparison-analyze",
+      "summary": "采购供应商比较（supplier comparison / landed cost / MOQ / delivery / quality evidence）：用户说帮我比较这几家供应商、同规格报价谁的到货成本更低、预算和交期限制下先试哪家时，核对规格数量与同币种报价，比较包数/MOQ、到货成本及费用缺项、交期与质量证据。无权重保留多维取舍，有用户权重与统一质量口径才评分和敏感性，给条件短名单和样品试单验证建议。",
+      "useWhen": [
+        "用户说“帮我比较这几家供应商”：supplier comparison，基于本次需求和候选报价。",
+        "用户说“同规格报价谁的到货成本更低”：landed cost / MOQ，核对包数、运费与费用缺口。",
+        "用户说“预算和交期限制下先试哪家”：delivery / quality evidence，给硬约束和条件短名单。"
+      ],
+      "doNotUseWhen": [
+        "服务报价、单笔经营利润或固定成本覆盖测算交给 pricing-cost-analyst；经营期间复盘交给 store-performance-analyst。",
+        "要求联系供应商、索样、下单、付款、修改真实后台或搜索私人目录。",
+        "要求认证供应商、虚构验厂经历、未经核查法规结论、医疗法律金融专业结论或收益质量交期保证。"
+      ],
+      "input": {
+        "type": "object",
+        "properties": {
+          "specification": {"type": "string", "description": "用户要求的完整规格与计量单位，候选必须同口径"},
+          "quantity": {"type": "integer", "description": "用户本次需求数量，不默认试单投入"},
+          "currency": {"type": "string", "description": "用户币种，不猜汇率"},
+          "quotes": {"type": "array", "description": "用户明确提供的候选报价：包数包价/MOQ/运费费用/交期/质量证据，未知保留", "items": {"type": "object"}},
+          "constraints": {"type": "string", "description": "可选用户最长交期、质量门槛、预算和验收条件，不设置默认阈值"},
+          "weights": {"type": "string", "description": "可选用户权重与敏感性幅度，质量分须有统一定义；不按缺项重分"},
+          "calculationReceipt": {"type": "object", "description": "可选宿主单独授权真实helper执行所得结果；缺失不宣称运行"}
+        },
+        "required": ["specification", "quantity", "currency", "quotes"]
+      },
+      "output": {
+        "type": "object",
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "facts": {"type": "array", "description": "需求、来源、已知条件及费用/证据缺项", "items": {"type": "string"}},
+          "normalizedQuotes": {"type": "array", "description": "同规格单位报价、包数MOQ、超购量、到货成本及未计费用", "items": {"type": "string"}},
+          "constraints": {"type": "array", "description": "用户硬约束通过、排除、待确认与依据", "items": {"type": "string"}},
+          "comparison": {"type": "array", "description": "成本交期质量证据多维比较；仅完整用户口径和权重才排名与敏感性", "items": {"type": "string"}},
+          "recommendations": {"type": "array", "description": "条件短名单、样品试单验收/观察/停止条件；未给预算数量不默认投入", "items": {"type": "string"}},
+          "handoff": {"type": "string", "description": "原始材料、来源、实际回执或未执行说明、待确认事实与风险交回调用方，由Meta/nativeDecision决定选择和执行"}
+        },
+        "required": ["facts", "normalizedQuotes", "constraints", "comparison", "recommendations", "handoff"]
+      },
+      "permissions": ["filesystem:read-user-materials"],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "遇医疗、法律或金融专业判断时停下，由合格人员判断；普通采购比较和成本计算不因此反复审批。",
+          "样品或试单投入数量、预算和可接受风险由用户决定；联系供应商、下单、付款或真实后台操作不在本角色权限中，不能由建议自动执行。"
+        ]
+      },
+      "validation": ["tests/contract.test.mjs"]
+    }
+  ]
+}

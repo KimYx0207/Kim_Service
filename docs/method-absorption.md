@@ -33,10 +33,14 @@ Kim Service 使用第三方角色库中的领域方法，保留自己的包边�
 
 ## 工具绑定与冲突处理
 
+V1.5 继续限定为电商复盘与采购比较。现有 `store-performance-analyst` 选择性使用同一固定来源的[国内电商方法](https://github.com/jnMetaCode/agency-agents-zh/blob/811e51c370f26ec4f37ca277b4368b4ff895741f/marketing/marketing-china-ecommerce-operator.md)：按 SKU/渠道检查口径，分开收入、退款、成本、广告归因与可证实的变化，再交少量可观察的行动。新 `supplier-comparison-analyst` 使用[供应商评估方法](https://github.com/jnMetaCode/agency-agents-zh/blob/811e51c370f26ec4f37ca277b4368b4ff895741f/supply-chain/supply-chain-vendor-evaluator.md)：同规格报价、起订量、到货总成本、交期与质量证据、用户权重及敏感性。固定业绩数字、评分权重、虚构验厂记忆、自动投放/采购和未核法律规定都不导入。许可归属保留在两包内。
+
+两个包各自带独立 stdlib Python 核算 helper，沿已用的固定 `--input-json -` 输入方式由当前宿主授权运行，结果再交领域角色。helper 的输入与 JSON 回执在包内说明；实际执行必须另外记录。它们不是新 Skill、治理系统或 Agent 原生工具声明，不放入角色的 `invocation` 字段，不让目录选中自动变成执行许可。无工具的材料内交付保留未知，不能伪称核算脚本已运行。
+
 以 [Agent 包契约](agent-pack-contract.md) 为准。`capability.json` 定义输入、输出、权限、副作用及组件版本；`catalog.json` 和 `generated/capabilities.json` 自动派生。实际工具使用同时核对当前宿主可调用接口、包内命令和输入版本；没有工具时只返回材料内可完成部分及缺口。
 
 根 schema 保持版本 1，仅接受严格可选的本地 Python JSON invocation；现有生成索引不透传该字段。调用方先按索引选择并验证包 hash，再读取包合同，核宿主 Python/CLI 与授权后执行；不能把方法 instructions、索引命中或该字段本身当作工具授权。Meta 继续拥有意图与宿主原生决策，Kim 只提供专业方法与执行契约。
 
 专业角色只交当前领域成果。第三方角色中的总指挥、人设记忆、全量安装、强制多轮问答、自动发送和循环迭代不会变成本包权限。角色自查在交付前进行一次；只有真实缺项或失败需要返工，不按轮数反复让用户确认。Meta_Kim 负责需求对齐、选人、顺序、权限及最终验收。
 
-真实工具返回值只证明对应动作，不证明模型加载了任何原生 Agent 或取得用户未观察的业务效果。15 个专业角色的原生宿主加载继续保持 `needs_probe`；限定任务的模型交付可单独记录，仅凭结构检查或某个任务通过不得改成全包绿色。
+真实工具返回值只证明对应动作，不证明模型加载了任何原生 Agent 或取得用户未观察的业务效果。现有专业角色的原生宿主加载继续保持 `needs_probe`；限定任务的模型交付可单独记录，仅凭结构检查或某个任务通过不得改成全包绿色。

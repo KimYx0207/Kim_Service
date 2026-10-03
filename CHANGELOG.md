@@ -2,6 +2,38 @@
 
 Kim Service uses one repository-level two-part public version (`V<major>.<minor>`) and one GitHub Release for the professional-capability dependency repository. Component CHANGELOG files record component provenance; this file is the release-note authority.
 
+## V1.5 - 2026-10-03
+
+### Affected components
+
+- Existing Store Performance Analyst 0.2.0 and new Supplier Comparison Analyst 0.1.0.
+- Existing industry directory and package-method documentation; discovery contracts and governance ownership remain unchanged.
+
+### User-visible changes
+
+- Ecommerce review now checks period/SKU/channel comparability, separates refunds and cost gaps, explains supported changes, and proposes bounded actions against the user's constraints.
+- Supplier comparison normalizes same-spec quotes and minimum orders, exposes landed-cost and delivery/quality gaps, and compares user-selected weights and trade-offs before suggesting a trial.
+- Each package includes a standalone local Python calculation helper for explicitly provided JSON data. Calculations, material-only delivery and unavailable-tool limitations are distinguished; a selected Agent never silently gains execution permissions.
+
+### Breaking changes and migration
+
+- Store Performance Analyst retains its capability ID, required metrics input and five existing output keys. Structured materials and actual calculation receipts are optional additions.
+- Existing pricing, product-copy and customer-service boundaries remain; procurement comparison does not place orders, contact suppliers or make certification claims.
+- Weights, thresholds and investment limits come from task inputs. Missing costs/evidence are unknown; incompatible periods/specifications/currencies are not silently compared.
+- The helpers use fixed stdin/stdout JSON under separately authorized host execution. They do not certify native Agent loading or become a new orchestrator, registry or Skill.
+
+### Verification
+
+- Business acceptance uses synthetic material for normal, missing-field, conflicting-definition and unavailable-tool cases. Actual helper execution and scoped model delivery are recorded separately from static package checks.
+- Release acceptance requires the existing root and component checks, independent review, actual Meta owner-contract selection and useful delivered results, exact-head PR CI, merged-main CI and a fresh remote-tag clone.
+- Native runtime states and explicit platform skips retain their actual evidence boundary; broader non-Agent migration is not claimed complete.
+
+### Source revisions
+
+- Baseline released main c56b43ae24e9bd75be69b71e28c1adcc46ef09da (V1.4). Current committed component trees are bound by the existing provenance generator.
+- Selective methods: agency-agents-zh at 811e51c370f26ec4f37ca277b4368b4ff895741f, China ecommerce operator and supplier evaluator. Pinned MIT authorship remains in each package LICENSE/NOTICE.
+- Meta_Kim retains intent, host-native decisions, orchestration, permission checks and final acceptance.
+
 ## V1.4 - 2026-10-03
 
 ### Affected components

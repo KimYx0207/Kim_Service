@@ -3641,12 +3641,12 @@
       ]
     },
     {
-      "componentContentSha256": "97f32cc33f561c3c049e57d6ad18aef8329ced29a0856c52f19fdc15caf6bb3a",
+      "componentContentSha256": "14138af2cd916a2adfb4d2aa31cf23d7e4989be2209dc243a062b3778859c211",
       "componentId": "store-performance-analyst",
       "componentPath": "agents/store-performance-analyst",
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contractSha256": "2e26c8320f7a39555b314e8e324ba96704248186d3826255302b68e60e6e7740",
+      "componentVersion": "0.2.0",
+      "contractSha256": "cbd5dbd5b5c64b6a5fb919d113bb0c02bb1adea2c8ebc8aa39085413d1d229c1",
       "doNotUseWhen": [
         "商品文案交给 product-listing-writer。",
         "单个顾客的沟通交给 customer-service-writer。",
@@ -3656,24 +3656,38 @@
       "humanGate": {
         "required": true,
         "when": [
-          "分母为零时写不适用，退款和成本缺失时不算利润；医疗、法律、金融投资结论超出本包，遇到时停下。",
           "涉及医疗诊断、法律胜诉或金融投资收益等专业结论时停下，由具备资质的人员判断；涉及发布、对外发送或付款时须由用户另行授权。"
         ]
       },
       "id": "store-performance-analyst-assist",
       "input": {
         "properties": {
+          "calculationReceipt": {
+            "description": "宿主单独授权执行本包helper得到的真实stdout，核对tool/version/status及输入对应关系；不可由样例伪造",
+            "type": "object"
+          },
           "comparison": {
             "description": "对比范围：可比的上一周期、商品或活动",
             "type": "string"
           },
+          "decisionConstraints": {
+            "description": "用户给出的观察天数、投入上限、继续与停止指标；未给时不自定业绩门槛",
+            "type": "object"
+          },
           "definitions": {
             "description": "统计口径：去重方式、退款是否扣除、归因窗口和缺失值",
-            "type": "string"
+            "type": [
+              "string",
+              "object"
+            ]
           },
           "metrics": {
             "description": "原始数据：日期、曝光、访客、支付订单、收入、广告费及数据出处",
             "type": "string"
+          },
+          "table": {
+            "description": "可选结构化period/sku/channel指标行；不替代必填metrics文字材料",
+            "type": "array"
           }
         },
         "required": [
@@ -3733,11 +3747,141 @@
         "filesystem:read-user-materials"
       ],
       "sideEffects": [],
-      "summary": "店铺数据复盘：从商家提供的数据找出值得先检查的经营环节。统一口径后计算漏斗与变化，将可观察的相关性和待验证的原因分开，给小规模验证方案；不凭两周数据宣布算法规律。",
+      "summary": "店铺数据复盘：按SKU/渠道核口径，拆可比期间漏斗与收入变化，区分退款净收入、所列成本贡献和广告归因，交低成本核查及用户约束下的停止条件。",
       "useWhen": [
         "用户说「店铺有浏览但没订单怎么查」",
         "用户说「帮我复盘这周店铺数据」",
         "用户说「活动花了钱但效果不清楚」"
+      ],
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "4aad55586f298f67858bc5bfeb6242da3154296f4c01a9078abd503403e1a3dc",
+      "componentId": "supplier-comparison-analyst",
+      "componentPath": "agents/supplier-comparison-analyst",
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contractSha256": "35157b565d63a017d96b32b636601e72ed705d0c8f23e87ed9dcd3c7e492f4a6",
+      "doNotUseWhen": [
+        "服务报价、单笔经营利润或固定成本覆盖测算交给 pricing-cost-analyst；经营期间复盘交给 store-performance-analyst。",
+        "要求联系供应商、索样、下单、付款、修改真实后台或搜索私人目录。",
+        "要求认证供应商、虚构验厂经历、未经核查法规结论、医疗法律金融专业结论或收益质量交期保证。"
+      ],
+      "entrypoint": "AGENT.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "遇医疗、法律或金融专业判断时停下，由合格人员判断；普通采购比较和成本计算不因此反复审批。",
+          "样品或试单投入数量、预算和可接受风险由用户决定；联系供应商、下单、付款或真实后台操作不在本角色权限中，不能由建议自动执行。"
+        ]
+      },
+      "id": "supplier-comparison-analyze",
+      "input": {
+        "properties": {
+          "calculationReceipt": {
+            "description": "可选宿主单独授权真实helper执行所得结果；缺失不宣称运行",
+            "type": "object"
+          },
+          "constraints": {
+            "description": "可选用户最长交期、质量门槛、预算和验收条件，不设置默认阈值",
+            "type": "string"
+          },
+          "currency": {
+            "description": "用户币种，不猜汇率",
+            "type": "string"
+          },
+          "quantity": {
+            "description": "用户本次需求数量，不默认试单投入",
+            "type": "integer"
+          },
+          "quotes": {
+            "description": "用户明确提供的候选报价：包数包价/MOQ/运费费用/交期/质量证据，未知保留",
+            "items": {
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "specification": {
+            "description": "用户要求的完整规格与计量单位，候选必须同口径",
+            "type": "string"
+          },
+          "weights": {
+            "description": "可选用户权重与敏感性幅度，质量分须有统一定义；不按缺项重分",
+            "type": "string"
+          }
+        },
+        "required": [
+          "specification",
+          "quantity",
+          "currency",
+          "quotes"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "comparison": {
+            "description": "成本交期质量证据多维比较；仅完整用户口径和权重才排名与敏感性",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "constraints": {
+            "description": "用户硬约束通过、排除、待确认与依据",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "facts": {
+            "description": "需求、来源、已知条件及费用/证据缺项",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "handoff": {
+            "description": "原始材料、来源、实际回执或未执行说明、待确认事实与风险交回调用方，由Meta/nativeDecision决定选择和执行",
+            "type": "string"
+          },
+          "normalizedQuotes": {
+            "description": "同规格单位报价、包数MOQ、超购量、到货成本及未计费用",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "recommendations": {
+            "description": "条件短名单、样品试单验收/观察/停止条件；未给预算数量不默认投入",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "facts",
+          "normalizedQuotes",
+          "constraints",
+          "comparison",
+          "recommendations",
+          "handoff"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "采购供应商比较（supplier comparison / landed cost / MOQ / delivery / quality evidence）：用户说帮我比较这几家供应商、同规格报价谁的到货成本更低、预算和交期限制下先试哪家时，核对规格数量与同币种报价，比较包数/MOQ、到货成本及费用缺项、交期与质量证据。无权重保留多维取舍，有用户权重与统一质量口径才评分和敏感性，给条件短名单和样品试单验证建议。",
+      "useWhen": [
+        "用户说“帮我比较这几家供应商”：supplier comparison，基于本次需求和候选报价。",
+        "用户说“同规格报价谁的到货成本更低”：landed cost / MOQ，核对包数、运费与费用缺口。",
+        "用户说“预算和交期限制下先试哪家”：delivery / quality evidence，给硬约束和条件短名单。"
       ],
       "validation": [
         "tests/contract.test.mjs"
@@ -4141,8 +4285,8 @@
       ]
     }
   ],
-  "capabilityCount": 40,
-  "componentCount": 25,
+  "capabilityCount": 41,
+  "componentCount": 26,
   "components": [
     {
       "capabilityIds": [
@@ -4329,12 +4473,27 @@
         "store-performance-analyst-assist"
       ],
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contentSha256": "97f32cc33f561c3c049e57d6ad18aef8329ced29a0856c52f19fdc15caf6bb3a",
-      "contractSha256": "2e26c8320f7a39555b314e8e324ba96704248186d3826255302b68e60e6e7740",
+      "componentVersion": "0.2.0",
+      "contentSha256": "14138af2cd916a2adfb4d2aa31cf23d7e4989be2209dc243a062b3778859c211",
+      "contractSha256": "cbd5dbd5b5c64b6a5fb919d113bb0c02bb1adea2c8ebc8aa39085413d1d229c1",
       "entrypoint": "AGENT.md",
       "id": "store-performance-analyst",
       "path": "agents/store-performance-analyst",
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "supplier-comparison-analyze"
+      ],
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contentSha256": "4aad55586f298f67858bc5bfeb6242da3154296f4c01a9078abd503403e1a3dc",
+      "contractSha256": "35157b565d63a017d96b32b636601e72ed705d0c8f23e87ed9dcd3c7e492f4a6",
+      "entrypoint": "AGENT.md",
+      "id": "supplier-comparison-analyst",
+      "path": "agents/supplier-comparison-analyst",
       "validation": [
         "tests/contract.test.mjs"
       ]
