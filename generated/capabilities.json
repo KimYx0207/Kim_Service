@@ -98,7 +98,7 @@
       ]
     },
     {
-      "componentContentSha256": "6f69e8ebb24a72f695c01161f8abee33d44bc41df6e5660f66c29ececf23cef3",
+      "componentContentSha256": "0d03157099ae15db900bb762be2e0e6c4cd8203d266ceb31c2e87b06b217fb28",
       "componentId": "semgrep-skill",
       "componentPath": "skills/semgrep-skill",
       "componentType": "skill",
@@ -182,7 +182,7 @@
       ]
     },
     {
-      "componentContentSha256": "6f69e8ebb24a72f695c01161f8abee33d44bc41df6e5660f66c29ececf23cef3",
+      "componentContentSha256": "0d03157099ae15db900bb762be2e0e6c4cd8203d266ceb31c2e87b06b217fb28",
       "componentId": "semgrep-skill",
       "componentPath": "skills/semgrep-skill",
       "componentType": "skill",
@@ -1616,7 +1616,7 @@
       ]
     },
     {
-      "componentContentSha256": "6f69e8ebb24a72f695c01161f8abee33d44bc41df6e5660f66c29ececf23cef3",
+      "componentContentSha256": "0d03157099ae15db900bb762be2e0e6c4cd8203d266ceb31c2e87b06b217fb28",
       "componentId": "semgrep-skill",
       "componentPath": "skills/semgrep-skill",
       "componentType": "skill",
@@ -2578,7 +2578,7 @@
       ]
     },
     {
-      "componentContentSha256": "6f69e8ebb24a72f695c01161f8abee33d44bc41df6e5660f66c29ececf23cef3",
+      "componentContentSha256": "0d03157099ae15db900bb762be2e0e6c4cd8203d266ceb31c2e87b06b217fb28",
       "componentId": "semgrep-skill",
       "componentPath": "skills/semgrep-skill",
       "componentType": "skill",
@@ -4501,7 +4501,7 @@
       ],
       "componentType": "skill",
       "componentVersion": "1.1.0",
-      "contentSha256": "6f69e8ebb24a72f695c01161f8abee33d44bc41df6e5660f66c29ececf23cef3",
+      "contentSha256": "0d03157099ae15db900bb762be2e0e6c4cd8203d266ceb31c2e87b06b217fb28",
       "contractSha256": "492e46ce701b1594df4a4de6ae89ae260ec84f934267c3549aa3b75ce1881fd1",
       "entrypoint": "SKILL.md",
       "id": "semgrep-skill",
