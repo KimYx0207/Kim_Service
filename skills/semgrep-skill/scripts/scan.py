@@ -269,7 +269,9 @@ def scan(data: dict) -> dict:
         binary = executable(root)
         source, effective, messages = effective_rules()
         output["rules"].update(sourceSha256=hashlib.sha256(source).hexdigest(), effectiveSha256=hashlib.sha256(effective).hexdigest())
-        with tempfile.TemporaryDirectory(prefix="semgrep-skill-scan-") as temporary:
+        # Keep scratch names short: Windows Semgrep's OCaml socketpair can
+        # exceed its native path bound under an already nested host TEMP.
+        with tempfile.TemporaryDirectory(prefix="sg-") as temporary:
             scratch = Path(temporary)
             env = child_environment(binary, scratch, root)
             code, version = invoke([str(binary), "--version", "--metrics", "off", "--disable-version-check"], scratch, env)
