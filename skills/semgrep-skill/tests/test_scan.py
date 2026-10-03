@@ -66,8 +66,10 @@ class ScanTests(unittest.TestCase):
             invocation.assert_not_called()
 
     def test_child_environment_drops_host_tokens_proxies_and_custom_config(self) -> None:
-        polluted = {"SEMGREP_APP_TOKEN": "synthetic-token", "SEMGREP_SETTINGS_FILE": "user-settings",
-                    "HTTP_PROXY": "http://example.invalid", "PYTHONPATH": "untrusted", "AWS_SECRET_ACCESS_KEY": "synthetic"}
+        # Explicit fake placeholders exercise environment stripping without
+        # resembling deployable credentials or changing the repository scanner.
+        polluted = {"SEMGREP_APP_TOKEN": "dummy-token", "SEMGREP_SETTINGS_FILE": "user-settings",
+                    "HTTP_PROXY": "http://example.invalid", "PYTHONPATH": "untrusted", "AWS_SECRET_ACCESS_KEY": "dummy-key"}
         with patch.dict(os.environ, polluted):
             env = scan.child_environment(Path("/trusted/bin/semgrep"), self.root)
         for key in ("SEMGREP_APP_TOKEN", "HTTP_PROXY", "AWS_SECRET_ACCESS_KEY"):

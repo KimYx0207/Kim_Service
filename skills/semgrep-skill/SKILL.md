@@ -62,8 +62,8 @@ must never be labeled clean. Remediation remains advisory text.
 Only visible `.py`, `.js`, `.jsx`, `.ts`, `.tsx` files are selected. Hidden
 directories/files, node_modules, __pycache__, venv and vendor are excluded.
 Links/reparse points are rejected. Narrow targets to at most 512 eligible files,
-and do not select a target containing the host temporary directory.
-each at most 1 MiB. Each subprocess has a 60-second limit; output is checked
+each at most 1 MiB; do not select a target containing the host temporary directory.
+Each subprocess has a 60-second limit; output is checked
 while running against an 8 MiB limit per stream. These are safety bounds in
 `scripts/scan.py`, not caller-adjustable business parameters.
 
