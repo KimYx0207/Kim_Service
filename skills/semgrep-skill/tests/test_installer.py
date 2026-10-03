@@ -28,7 +28,7 @@ class InstallerTests(unittest.TestCase):
         self.source = self.temp / "component"
         (self.source / "scripts").mkdir(parents=True)
         (self.source / "rules").mkdir()
-        for relative in ("SKILL.md", "rules/local-security.yml", "scripts/install.py"):
+        for relative in ("SKILL.md", "capability.json", "rules/local-security.yml", "scripts/install.py", "scripts/scan.py"):
             destination = self.source / relative
             destination.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(ROOT / relative, destination)
@@ -83,6 +83,11 @@ class InstallerTests(unittest.TestCase):
         self.assertEqual(result["targetHash"], receipt["targetHash"])
         self.assertEqual(receipt["target"], str(self.target))
         self.assertEqual(receipt["scope"], "project")
+        self.assertEqual(receipt["componentVersion"], "1.1.0")
+        self.assertTrue((self.target / "scripts" / "scan.py").is_file())
+        completed = subprocess.run([sys.executable, str(self.target / "scripts" / "scan.py"), "--input-json", "-"], input="{}", capture_output=True, text=True)
+        self.assertEqual(completed.returncode, 2)
+        self.assertEqual(json.loads(completed.stdout)["status"], "invalid_input")
         for item in receipt["files"]:
             self.assertEqual(item["sha256"], sha256(self.target / item["path"]))
         self.assertNotIn("code-security", str(self.target))

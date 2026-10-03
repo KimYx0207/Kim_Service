@@ -2,40 +2,35 @@
 
 # Semgrep 本地安全扫描 Skill
 
-这是一个使用随组件发布的本地 Semgrep 规则进行静态分析和密钥模式检查的 Claude Code Skill。默认行为是只读、离线、不上传代码、不自动修复。
+这是现有 Semgrep Skill 的结构化本地调用入口。组件版本 **1.1.0**；宿主必须已安装可信 Semgrep，调用者必须提供已授权的绝对 `workspaceRoot` 与其内的目录 `target`。入口不默认扫描当前项目。
 
-[![GitHub stars](https://img.shields.io/github/stars/KimYx0207/Kim_Service?style=social)](https://github.com/KimYx0207/Kim_Service)
-[![GitHub forks](https://img.shields.io/github/forks/KimYx0207/Kim_Service?style=social)](https://github.com/KimYx0207/Kim_Service)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/KimYx0207/Kim_Service)
-[![Version](https://img.shields.io/badge/Claude_Code-2.1.39-green.svg)](https://github.com/KimYx0207/Kim_Service)
+## 使用与结果
 
-## 能力边界
+`capability.json` 是输入输出与 invocation 的权威合同。宿主从现有索引选中包并核 hash 后，再读取包合同；生成索引不透传 invocation，也不自动授权执行。
 
-当前本地规则只检查：
-
-- 常见变量名后的疑似硬编码凭据；
-- Python `subprocess(..., shell=True)`；
-- JavaScript / TypeScript `eval(...)`。
-
-扫描通过只代表这些本地规则没有命中，不等于完整安全审计。默认不使用 `--config auto`、`p/*`、Semgrep Registry 或 Semgrep Cloud，也不会登录、上传、下载规则或写入被扫描项目。
-
-Semgrep 必须已经由用户自行安装。组件安装器只安装 Skill，不会运行 `pip` 或其他包管理器。
-
-## 使用
-
-在 Claude Code 中说：
-
-```text
-用 semgrep-skill 本地扫描这个项目
+```json
+{"schemaVersion":1,"workspaceRoot":"C:\\authorized\\project","target":"src"}
 ```
 
-Skill 会解析自己的安装目录，并使用：
+将该对象通过标准输入送给唯一入口：
 
 ```bash
-semgrep scan --config "<skill-dir>/rules/local-security.yml" --metrics off --disable-version-check --json "<target>"
+python "<skill-dir>/scripts/scan.py" --input-json -
 ```
 
-结果只报告规则、文件、行号、严重程度和脱敏说明。修复建议只是文字建议；修改源码属于另一项需要授权的任务。
+也可显式使用 `--workspace-root <absolute-root> --target <directory>`；可选 rules 只能是 `rules/local-security.yml`。不接受额外 Semgrep flags、远程配置、执行文件选择或隐含目标。
+
+运行前从原规则文件提取两条非密钥规则：Python shell=True 与 JavaScript/TypeScript eval，记录原始和有效配置 SHA-256。旧密钥规则保留来源，不被这个能力执行。仅报告规则、相对路径、位置、严重程度及本地规则说明；不输出源码、匹配值或 raw stderr。
+
+`completed` 表示选中文件都完成扫描，发现问题仍退出0；其他状态 `partial/invalid_input/unavailable/failed` 均返回 completed:false 并退出2。未安装工具明确 unavailable，不代装。无命中不等于完整安全审计。
+
+## 边界
+
+只选可见 py/js/jsx/ts/tsx；隐藏文件/目录及 node_modules、__pycache__、venv、vendor 不在覆盖内。拒绝链接或重解析点；最多512个选中文件、每个1MiB。运行/输出安全上限集中在 scripts/scan.py，业务调用不能放宽。
+
+版本探测和扫描都关闭 metrics/version check，隔离设置、日志及缓存，采用最小子进程环境，不继承 token、proxy、调用者 PYTHONPATH 或自定义 Semgrep 配置。为已安装 Python runtime 可保留 Windows APPDATA 与计算出的 user-site 路径。networkUsed:false 依据这些执行约束，不代表网络抓包或系统级断网证明；filesModified:false 指目标源码不被修改，临时运行文件在目标外清理。要求可信现有安装和稳定文件系统，不提供恶意 binary 或并发路径替换隔离保证。
+
+修复建议仅为文本。扫描、安装 Skill、安装 Semgrep、修改源码是不同权限。
 
 ## 安装器安全模型
 
@@ -87,7 +82,7 @@ macOS / Linux 使用相同参数名：
 python -m unittest discover -s tests -p "test_*.py" -v
 ```
 
-行为测试会在 Semgrep 可执行时运行真实本地规则扫描；未安装时明确跳过该用例。安装器测试覆盖 dry-run、实际 hash receipt、未知内容拒绝、升级回滚和 receipt 失败事务恢复。
+行为测试只用合成夹具调用真实包装器与已安装 Semgrep；未安装时明确 skip，不能记成实测通过。协议测试覆盖越界/链接、环境隔离、密钥规则排除、漏扫、失败和输出脱敏；安装器测试验证投影带合同与可运行入口，并保留事务检查。
 
 ## 来源与许可证
 

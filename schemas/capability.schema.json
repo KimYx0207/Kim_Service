@@ -184,6 +184,59 @@
           "items": {
             "$ref": "#/$defs/relativeFile"
           }
+        },
+        "invocation": {
+          "$ref": "#/$defs/invocation"
+        }
+      }
+    },
+    "invocation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "type",
+        "runtime",
+        "entrypoint",
+        "argv",
+        "inputTransport",
+        "outputTransport",
+        "shell"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "type": {
+          "const": "local_cli"
+        },
+        "runtime": {
+          "const": "python"
+        },
+        "entrypoint": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/relativeFile"
+            },
+            {
+              "pattern": "\\.py$"
+            }
+          ]
+        },
+        "argv": {
+          "const": [
+            "--input-json",
+            "-"
+          ]
+        },
+        "inputTransport": {
+          "const": "stdin_json"
+        },
+        "outputTransport": {
+          "const": "stdout_json"
+        },
+        "shell": {
+          "const": false
         }
       }
     }

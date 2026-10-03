@@ -2,37 +2,228 @@
   "schemaVersion": 1,
   "id": "semgrep-skill",
   "componentType": "skill",
-  "componentVersion": "1.0.0",
+  "componentVersion": "1.1.0",
   "entrypoint": "SKILL.md",
   "capabilities": [
     {
       "id": "local-security-scan",
-      "summary": "Scan an explicitly selected local source tree with bundled Semgrep static-analysis and secret-pattern rules without uploading code or modifying findings.",
+      "summary": "Run the installed local Semgrep CLI on an explicitly authorized local directory with two bundled non-secret rules and a sanitized JSON result; no remote configuration or source changes.",
       "useWhen": [
-        "A local project needs a read-only baseline scan for bundled vulnerability and secret patterns.",
-        "The caller accepts that a clean result covers only the bundled local rules."
+        "An explicitly authorized directory needs a read-only baseline for Python shell=True or JavaScript/TypeScript eval patterns.",
+        "The caller accepts bounded coverage and distinguishes findings from completion."
       ],
       "doNotUseWhen": [
         "Remote Semgrep Registry rules, Semgrep Cloud, login, upload, or network access are required.",
         "The requested outcome includes automatic remediation or source-file writes.",
-        "Semgrep is not already installed and executable."
+        "Semgrep is not already installed and executable.",
+        "Credential-pattern scanning or returning source excerpts is required.",
+        "The target contains links, more than 512 eligible files, or eligible files over 1 MiB."
       ],
       "input": {
         "type": "object",
-        "required": ["target"],
+        "additionalProperties": false,
+        "required": [
+          "schemaVersion",
+          "workspaceRoot",
+          "target"
+        ],
         "properties": {
-          "target": {"type": "string"},
-          "rules": {"const": "rules/local-security.yml"}
+          "schemaVersion": {
+            "const": 1
+          },
+          "workspaceRoot": {
+            "type": "string",
+            "description": "Explicit absolute authorized local directory; no drive root, network paths or links."
+          },
+          "target": {
+            "type": "string",
+            "description": "Existing directory contained by workspaceRoot; no implicit current-directory target."
+          },
+          "rules": {
+            "const": "rules/local-security.yml"
+          }
         }
       },
       "output": {
         "type": "object",
-        "required": ["completed", "findings", "networkUsed", "filesModified"],
+        "additionalProperties": false,
+        "required": [
+          "schemaVersion",
+          "componentVersion",
+          "status",
+          "completed",
+          "findings",
+          "errors",
+          "runtime",
+          "rules",
+          "networkUsed",
+          "filesModified"
+        ],
         "properties": {
-          "completed": {"type": "boolean"},
-          "findings": {"type": "array"},
-          "networkUsed": {"const": false},
-          "filesModified": {"const": false}
+          "schemaVersion": {
+            "const": 1
+          },
+          "componentVersion": {
+            "const": "1.1.0"
+          },
+          "status": {
+            "enum": [
+              "completed",
+              "partial",
+              "invalid_input",
+              "unavailable",
+              "failed"
+            ]
+          },
+          "completed": {
+            "type": "boolean"
+          },
+          "findings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "checkId",
+                "path",
+                "start",
+                "end",
+                "severity",
+                "message"
+              ],
+              "properties": {
+                "checkId": {
+                  "type": "string"
+                },
+                "path": {
+                  "type": "string"
+                },
+                "start": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "line",
+                    "col"
+                  ],
+                  "properties": {
+                    "line": {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    "col": {
+                      "type": "integer",
+                      "minimum": 1
+                    }
+                  }
+                },
+                "end": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "line",
+                    "col"
+                  ],
+                  "properties": {
+                    "line": {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    "col": {
+                      "type": "integer",
+                      "minimum": 1
+                    }
+                  }
+                },
+                "severity": {
+                  "enum": [
+                    "INFO",
+                    "WARNING",
+                    "ERROR"
+                  ]
+                },
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "code",
+                "message"
+              ],
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "runtime": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "pythonVersion",
+              "semgrepVersion"
+            ],
+            "properties": {
+              "pythonVersion": {
+                "type": "string"
+              },
+              "semgrepVersion": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          },
+          "rules": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "source",
+              "sourceSha256",
+              "effectiveSha256",
+              "includedRuleIds"
+            ],
+            "properties": {
+              "source": {
+                "const": "canonical:skills/semgrep-skill/rules/local-security.yml"
+              },
+              "sourceSha256": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "effectiveSha256": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "includedRuleIds": {
+                "const": [
+                  "python-subprocess-shell-true",
+                  "javascript-eval"
+                ]
+              }
+            }
+          },
+          "networkUsed": {
+            "const": false
+          },
+          "filesModified": {
+            "const": false
+          }
         }
       },
       "permissions": [
@@ -45,8 +236,22 @@
         "when": []
       },
       "validation": [
-        "tests/test_behavior.py"
-      ]
+        "tests/test_behavior.py",
+        "tests/test_scan.py"
+      ],
+      "invocation": {
+        "schemaVersion": 1,
+        "type": "local_cli",
+        "runtime": "python",
+        "entrypoint": "scripts/scan.py",
+        "argv": [
+          "--input-json",
+          "-"
+        ],
+        "inputTransport": "stdin_json",
+        "outputTransport": "stdout_json",
+        "shell": false
+      }
     },
     {
       "id": "preview-skill-projection-change",
@@ -60,22 +265,51 @@
       ],
       "input": {
         "type": "object",
-        "required": ["scope"],
+        "required": [
+          "scope"
+        ],
         "properties": {
-          "scope": {"enum": ["project", "user"]},
-          "projectRoot": {"type": "string"},
-          "rollback": {"type": "boolean"},
-          "apply": {"const": false}
+          "scope": {
+            "enum": [
+              "project",
+              "user"
+            ]
+          },
+          "projectRoot": {
+            "type": "string"
+          },
+          "rollback": {
+            "type": "boolean"
+          },
+          "apply": {
+            "const": false
+          }
         }
       },
       "output": {
         "type": "object",
-        "required": ["ok", "action", "mode", "target"],
+        "required": [
+          "ok",
+          "action",
+          "mode",
+          "target"
+        ],
         "properties": {
-          "ok": {"type": "boolean"},
-          "action": {"enum": ["install", "rollback"]},
-          "mode": {"const": "dry-run"},
-          "target": {"type": "string"}
+          "ok": {
+            "type": "boolean"
+          },
+          "action": {
+            "enum": [
+              "install",
+              "rollback"
+            ]
+          },
+          "mode": {
+            "const": "dry-run"
+          },
+          "target": {
+            "type": "string"
+          }
         }
       },
       "permissions": [
@@ -102,22 +336,50 @@
       ],
       "input": {
         "type": "object",
-        "required": ["scope", "apply"],
+        "required": [
+          "scope",
+          "apply"
+        ],
         "properties": {
-          "scope": {"enum": ["project", "user"]},
-          "projectRoot": {"type": "string"},
-          "apply": {"const": true}
+          "scope": {
+            "enum": [
+              "project",
+              "user"
+            ]
+          },
+          "projectRoot": {
+            "type": "string"
+          },
+          "apply": {
+            "const": true
+          }
         }
       },
       "output": {
         "type": "object",
-        "required": ["ok", "action", "mode", "target", "targetHash"],
+        "required": [
+          "ok",
+          "action",
+          "mode",
+          "target",
+          "targetHash"
+        ],
         "properties": {
-          "ok": {"type": "boolean"},
-          "action": {"const": "install"},
-          "mode": {"const": "apply"},
-          "target": {"type": "string"},
-          "targetHash": {"type": "string"}
+          "ok": {
+            "type": "boolean"
+          },
+          "action": {
+            "const": "install"
+          },
+          "mode": {
+            "const": "apply"
+          },
+          "target": {
+            "type": "string"
+          },
+          "targetHash": {
+            "type": "string"
+          }
         }
       },
       "permissions": [
@@ -151,23 +413,54 @@
       ],
       "input": {
         "type": "object",
-        "required": ["scope", "apply", "rollback"],
+        "required": [
+          "scope",
+          "apply",
+          "rollback"
+        ],
         "properties": {
-          "scope": {"enum": ["project", "user"]},
-          "projectRoot": {"type": "string"},
-          "apply": {"const": true},
-          "rollback": {"const": true}
+          "scope": {
+            "enum": [
+              "project",
+              "user"
+            ]
+          },
+          "projectRoot": {
+            "type": "string"
+          },
+          "apply": {
+            "const": true
+          },
+          "rollback": {
+            "const": true
+          }
         }
       },
       "output": {
         "type": "object",
-        "required": ["ok", "action", "mode", "target", "targetHash"],
+        "required": [
+          "ok",
+          "action",
+          "mode",
+          "target",
+          "targetHash"
+        ],
         "properties": {
-          "ok": {"type": "boolean"},
-          "action": {"const": "rollback"},
-          "mode": {"const": "apply"},
-          "target": {"type": "string"},
-          "targetHash": {"type": "string"}
+          "ok": {
+            "type": "boolean"
+          },
+          "action": {
+            "const": "rollback"
+          },
+          "mode": {
+            "const": "apply"
+          },
+          "target": {
+            "type": "string"
+          },
+          "targetHash": {
+            "type": "string"
+          }
         }
       },
       "permissions": [

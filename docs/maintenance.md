@@ -15,6 +15,8 @@
 - `scripts/catalog-automation.mjs`：确定性生成或检查 catalog 与 Capability 索引。
 - `scripts/release-contract.mjs`：校验版本与变更记录合同。
 
+包合同的可选 `capabilities[].invocation` 目前仅支持版本1的本地 Python CLI、固定 `--input-json -`、stdin/stdout JSON 和 `shell:false`。入口须为包内真实 Python 文件；schema 与发现脚本共同校验。生成索引仍保持既有投影字段，不复制 invocation；调用方核包 hash 后读取完整包合同，并另核宿主和执行授权。该可选字段不证明工具已安装，也不构成执行许可。
+
 ## 本地验证
 
     node scripts/catalog-automation.mjs build
