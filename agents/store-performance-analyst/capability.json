@@ -2,12 +2,12 @@
   "schemaVersion": 1,
   "id": "store-performance-analyst",
   "componentType": "agent",
-  "componentVersion": "0.1.0",
+  "componentVersion": "0.2.0",
   "entrypoint": "AGENT.md",
   "capabilities": [
     {
       "id": "store-performance-analyst-assist",
-      "summary": "店铺数据复盘：从商家提供的数据找出值得先检查的经营环节。统一口径后计算漏斗与变化，将可观察的相关性和待验证的原因分开，给小规模验证方案；不凭两周数据宣布算法规律。",
+      "summary": "店铺数据复盘：按SKU/渠道核口径，拆可比期间漏斗与收入变化，区分退款净收入、所列成本贡献和广告归因，交低成本核查及用户约束下的停止条件。",
       "useWhen": [
         "用户说「店铺有浏览但没订单怎么查」",
         "用户说「帮我复盘这周店铺数据」",
@@ -30,8 +30,23 @@
             "description": "对比范围：可比的上一周期、商品或活动"
           },
           "definitions": {
-            "type": "string",
+            "type": [
+              "string",
+              "object"
+            ],
             "description": "统计口径：去重方式、退款是否扣除、归因窗口和缺失值"
+          },
+          "table": {
+            "description": "可选结构化period/sku/channel指标行；不替代必填metrics文字材料",
+            "type": "array"
+          },
+          "decisionConstraints": {
+            "description": "用户给出的观察天数、投入上限、继续与停止指标；未给时不自定业绩门槛",
+            "type": "object"
+          },
+          "calculationReceipt": {
+            "description": "宿主单独授权执行本包helper得到的真实stdout，核对tool/version/status及输入对应关系；不可由样例伪造",
+            "type": "object"
           }
         },
         "required": [
@@ -93,7 +108,6 @@
       "humanGate": {
         "required": true,
         "when": [
-          "分母为零时写不适用，退款和成本缺失时不算利润；医疗、法律、金融投资结论超出本包，遇到时停下。",
           "涉及医疗诊断、法律胜诉或金融投资收益等专业结论时停下，由具备资质的人员判断；涉及发布、对外发送或付款时须由用户另行授权。"
         ]
       },

@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "quantity": 120,
+  "currency": "CNY",
+  "specification": "white M paper bag / piece",
+  "weights": {"cost": "1", "delivery": "1", "quality": "0"},
+  "quotes": [
+    {"supplierId": "A", "specification": "white M paper bag / piece", "currency": "CNY", "packSize": 10, "packPrice": "20", "minimumPacks": 15, "freight": "30", "otherFees": "5", "leadDays": 7, "qualityEvidence": "Synthetic unverified sample photograph."},
+    {"supplierId": "B", "specification": "white L paper bag / piece", "currency": "USD", "packSize": 20, "packPrice": "45", "minimumPacks": 6, "freight": "0", "otherFees": "5", "leadDays": 5, "qualityEvidence": "Synthetic unverified sample photograph."}
+  ]
+}

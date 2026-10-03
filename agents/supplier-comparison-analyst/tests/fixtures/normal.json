@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "quantity": 120,
+  "currency": "CNY",
+  "specification": "white M paper bag / piece",
+  "maxLeadDays": 8,
+  "quotes": [
+    {
+      "supplierId": "A",
+      "specification": "white M paper bag / piece",
+      "currency": "CNY",
+      "packSize": 10,
+      "packPrice": "20",
+      "minimumPacks": 15,
+      "freight": "30",
+      "otherFees": "5",
+      "leadDays": 7,
+      "qualityEvidence": "Synthetic unverified sample photograph; no load test."
+    },
+    {
+      "supplierId": "B",
+      "specification": "white M paper bag / piece",
+      "currency": "CNY",
+      "packSize": 20,
+      "packPrice": "45",
+      "minimumPacks": 6,
+      "freight": "0",
+      "otherFees": "5",
+      "leadDays": 5,
+      "qualityEvidence": "Synthetic unverified sample photograph; no load test."
+    }
+  ]
+}

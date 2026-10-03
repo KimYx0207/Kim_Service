@@ -14,10 +14,11 @@ const groups = {
   ecommerce: ['product-listing-writer', 'customer-service-writer', 'store-performance-analyst'],
   career: ['resume-editor', 'interview-coach', 'workplace-writer'],
   education: ['lesson-planner', 'concept-tutor', 'exercise-designer'],
-  business: ['side-business-evaluator', 'launch-planner', 'pricing-cost-analyst']
+  business: ['side-business-evaluator', 'launch-planner', 'pricing-cost-analyst'],
+  procurement: ['supplier-comparison-analyst']
 };
 
-test('the agreed five industries expose fifteen bounded agent contracts', () => {
+test('the agreed industry scopes expose sixteen bounded agent contracts', () => {
   const index = buildCapabilityIndex(root);
   const agents = index.components.filter((component) => component.componentType === 'agent');
   assert.deepEqual(agents.map((component) => component.id).sort(), Object.values(groups).flat().sort());

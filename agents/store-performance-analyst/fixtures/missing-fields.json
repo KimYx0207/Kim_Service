@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "definitions": {"currency":"CNY","periodDays":7,"visitorBasis":"SKU-channel unique per period","orderBasis":"paid orders","refundBasis":"paid-order cohort","adAttributionWindow":"unknown attribution; all orders"},
+  "comparison": {"baselinePeriod":"previous","currentPeriod":"current"},
+  "rows": [
+    {"period":"previous","sku":"SKU-A","channel":"organic","impressions":2000,"visitors":100,"paidOrders":8,"grossRevenue":480},
+    {"period":"current","sku":"SKU-A","channel":"organic","impressions":2000,"visitors":100,"paidOrders":4,"grossRevenue":240,"adSpend":60}
+  ]
+}

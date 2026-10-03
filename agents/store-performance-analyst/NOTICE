@@ -1,4 +1,12 @@
 store-performance-analyst
-Copyright 2026 KimYx0207
+Copyright (c) 2025 Michael Sitarzewski (original English version)
+Copyright (c) 2026 jnMetaCode (Chinese translation and localization)
+Copyright (c) 2026 KimYx0207 (Kim Service adaptations and calculator)
 
-Kim Service 自有行业能力，采用 MIT License。再分发须保留 LICENSE 中的版权与许可声明。本 NOTICE 不构成对修改版或实际业务结果的背书。
+MIT License: redistribution must retain LICENSE and these attribution notices.
+方法参考：https://github.com/jnMetaCode/agency-agents-zh/blob/811e51c370f26ec4f37ca277b4368b4ff895741f/marketing/marketing-china-ecommerce-operator.md
+固定revision：811e51c370f26ec4f37ca277b4368b4ff895741f
+源文件SHA256：e06351b302a7ffb86fafdd0c4afd23111c0a238424ed7ebee99a7ce60ba4745c
+只吸收SKU/渠道分层、漏斗与成本口径、净收入/利润意识和归因区分；计算器为Kim实现。
+不导入固定ROAS、增长或业绩阈值、操盘人设/亲历、后台/自动投放、长期记忆或治理权限。
+来源方法和虚构样例不是已发生的客户结果、真实调用证据或修改版背书。

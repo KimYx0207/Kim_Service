@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "definitions": {"byPeriod": {
+    "previous":{"currency":"CNY","periodDays":7,"visitorBasis":"SKU-channel unique per period","orderBasis":"paid orders","refundBasis":"paid-order cohort","adAttributionWindow":"none"},
+    "current":{"currency":"CNY","periodDays":7,"visitorBasis":"daily unique summed","orderBasis":"paid orders","refundBasis":"refund occurrence period","adAttributionWindow":"none"}
+  }},
+  "comparison": {"baselinePeriod":"previous","currentPeriod":"current"},
+  "rows": [
+    {"period":"previous","sku":"SKU-A","channel":"organic","impressions":2000,"visitors":100,"paidOrders":8,"grossRevenue":480,"refundAmount":30,"adSpend":0,"goodsCost":200,"fulfilmentCost":40,"platformFees":10},
+    {"period":"current","sku":"SKU-A","channel":"organic","impressions":2000,"visitors":120,"paidOrders":4,"grossRevenue":240,"refundAmount":20,"adSpend":0,"goodsCost":100,"fulfilmentCost":20,"platformFees":5}
+  ]
+}
