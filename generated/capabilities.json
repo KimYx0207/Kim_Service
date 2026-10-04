@@ -3641,18 +3641,19 @@
       ]
     },
     {
-      "componentContentSha256": "14138af2cd916a2adfb4d2aa31cf23d7e4989be2209dc243a062b3778859c211",
+      "componentContentSha256": "0aef867cac79d7fb06d9070f4c276d30f4ebe24bfb24989f7e962c2bb6bb7b51",
       "componentId": "store-performance-analyst",
       "componentPath": "agents/store-performance-analyst",
       "componentType": "agent",
       "componentVersion": "0.2.0",
-      "contractSha256": "cbd5dbd5b5c64b6a5fb919d113bb0c02bb1adea2c8ebc8aa39085413d1d229c1",
+      "contractSha256": "ac442bf3dbeea4930f3df8256c651601f45deafbf5d59d6a97c344c0227bc2c7",
       "doNotUseWhen": [
         "商品文案交给 product-listing-writer。",
         "单个顾客的沟通交给 customer-service-writer。",
         "不登录后台、调广告预算或保证增长收益。"
       ],
       "entrypoint": "AGENT.md",
+      "helperContract": "calculation-tool.json",
       "humanGate": {
         "required": true,
         "when": [
@@ -4475,8 +4476,8 @@
       ],
       "componentType": "agent",
       "componentVersion": "0.2.0",
-      "contentSha256": "14138af2cd916a2adfb4d2aa31cf23d7e4989be2209dc243a062b3778859c211",
-      "contractSha256": "cbd5dbd5b5c64b6a5fb919d113bb0c02bb1adea2c8ebc8aa39085413d1d229c1",
+      "contentSha256": "0aef867cac79d7fb06d9070f4c276d30f4ebe24bfb24989f7e962c2bb6bb7b51",
+      "contractSha256": "ac442bf3dbeea4930f3df8256c651601f45deafbf5d59d6a97c344c0227bc2c7",
       "entrypoint": "AGENT.md",
       "id": "store-performance-analyst",
       "path": "agents/store-performance-analyst",
