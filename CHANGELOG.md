@@ -2,6 +2,38 @@
 
 Kim Service uses one repository-level two-part public version (`V<major>.<minor>`) and one GitHub Release for the professional-capability dependency repository. Component CHANGELOG files record component provenance; this file is the release-note authority.
 
+## V1.6 - 2026-10-04
+
+### Affected components
+
+- Existing Supplier Comparison Analyst 0.1.0 and Store Performance Analyst 0.2.0, their fixed calculation-helper contracts, and the shared capability catalog.
+- Current installation-source guidance for the consolidated collection. Existing component versions, licenses and professional-role boundaries are preserved.
+
+### User-visible changes
+
+- Capability discovery now exposes each selected analyst's real helper contract. Consumers can read the verified package contract and call its existing local Python entrypoint with fixed stdin/stdout JSON.
+- Procurement callers receive an explicit required-material list including supplier quotes. Store callers receive the actual rows contract and its 64 KiB input limit. The two different result formats remain distinct.
+- Helper references are validated as package-relative JSON paths and projected consistently into the catalog. Contract discovery grants no execution permission and does not turn a read-only Agent into an unrestricted tool runner.
+- Installation guidance uses the selected Kim_Service component directory and distinguishes current installation sources from historical standalone-repository provenance.
+
+### Breaking changes and migration
+
+- Existing capability IDs, Agent output contracts and Python calculation implementations are unchanged. Consumers may use the optional helperContract reference after verifying the selected component; the descriptor does not authorize arbitrary commands.
+- Structured callers still provide their actual materials. Missing costs remain unknown, incompatible definitions remain non-comparable, and supplier comparison does not contact suppliers, place orders or authorize payments.
+- Native Agent loading remains needs_probe. Meta_Kim continues to own intent, orchestration, runtime selection, permissions and final acceptance.
+
+### Verification
+
+- The calculation-discovery implementation passed 67 root regressions, all 43 declared validation entrypoints across 26 components, and independent contract/catalog review. Existing platform-specific skips remain explicit.
+- Meta's formal entrypoint executed the real helpers for synthetic procurement and store-review cases. The current dot model consumed the complete professional methods and actual receipts and delivered conditional supplier advice and a five-part store review. This evidence does not certify the product's autonomous native model chain or real business outcomes.
+- Release acceptance requires exact-head and merged-main CI on Linux, macOS and Windows, a clean-main release check, the annotated version tag and fresh remote-tag verification. Those publication results are recorded in the GitHub Release.
+
+### Source revisions
+
+- Previous release: V1.5 at 92b8d0c464b476ae8dcc99b405a0c604e39bc3f4. Integrated calculator-discovery source: d83b52488e28c1c9b1c6ef3e89d5a58b3ce67ee3, including PRs #8 through #11.
+- Generated committed-component-tree provenance points to reviewed source commit 4f2853ee48a9dd1a87002922f86276d6315528af. Existing external and canonical direct-sync origins remain unchanged.
+- This release adds no model SDK, scheduler, role roster, credentials or private requirements document. It does not claim the broader capability migration or all native runtimes complete.
+
 ## V1.5 - 2026-10-03
 
 ### Affected components
