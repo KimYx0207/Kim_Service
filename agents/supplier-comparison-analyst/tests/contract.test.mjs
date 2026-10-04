@@ -87,7 +87,7 @@ test('standalone contract, eight sections and minimal readonly permissions', () 
     for (const field of shape.required) assert.ok(Object.hasOwn(shape.properties, field));
   }
   assert.equal(cap.output.deliveryFormat, 'conceptual-human-delivery');
-  assert.deepEqual(cap.validation, ['tests/contract.test.mjs']);
+  assert.deepEqual(cap.validation, ['tests/contract.test.mjs', 'tests/delivery.test.mjs']);
   for (const file of ['README.md', 'LICENSE', 'NOTICE', 'CHANGELOG.md', 'docs/tool-api.md', 'docs/examples.md']) assert.ok(fs.statSync(path.join(root, file)).isFile());
   for (const attribution of ['2025 Michael Sitarzewski', '2026 jnMetaCode', '2026 KimYx0207']) assert.ok(read('LICENSE').includes(attribution));
   assert.ok(read('NOTICE').includes('811e51c370f26ec4f37ca277b4368b4ff895741f'));

@@ -123,7 +123,7 @@ function validateContract(contract, label) {
     assertObject(capability, capabilityLabel);
     assertExactKeys(capability, [
       'id', 'summary', 'useWhen', 'doNotUseWhen', 'input', 'output',
-      'permissions', 'sideEffects', 'humanGate', 'validation', 'invocation', 'helperContract'
+      'permissions', 'sideEffects', 'humanGate', 'validation', 'invocation', 'helperContract', 'deliveryContract'
     ], capabilityLabel);
     assertId(capability.id, `${capabilityLabel}.id`);
     assert(typeof capability.summary === 'string' && NON_EMPTY_TEXT_PATTERN.test(capability.summary), `${capabilityLabel}.summary must be a non-empty string`);
@@ -135,9 +135,10 @@ function validateContract(contract, label) {
     assertStringArray(capability.sideEffects, `${capabilityLabel}.sideEffects`);
     assertHumanGate(capability.humanGate, `${capabilityLabel}.humanGate`);
     if (Object.hasOwn(capability, 'invocation')) assertInvocation(capability.invocation, `${capabilityLabel}.invocation`);
-    if (Object.hasOwn(capability, 'helperContract')) {
-      assertRelativeFileSyntax(capability.helperContract, `${capabilityLabel}.helperContract`);
-      assert(capability.helperContract.endsWith('.json'), `${capabilityLabel}.helperContract must reference JSON`);
+    for (const field of ['helperContract', 'deliveryContract']) {
+      if (!Object.hasOwn(capability, field)) continue;
+      assertRelativeFileSyntax(capability[field], `${capabilityLabel}.${field}`);
+      assert(capability[field].endsWith('.json'), `${capabilityLabel}.${field} must reference JSON`);
     }
     assertStringArray(capability.validation, `${capabilityLabel}.validation`, { minItems: 1 });
     capability.validation.forEach((item, validationIndex) => {
@@ -242,6 +243,7 @@ export function discoverComponents(rootPath) {
       const entrypoint = safeRelativeFile(componentRoot, contract.entrypoint, `${contract.id}.entrypoint`);
       const capabilityValidation = new Map();
       const helperContracts = new Map();
+      const deliveryContracts = new Map();
       for (const capability of contract.capabilities) {
         assert(!capabilityIds.has(capability.id), `Duplicate capability id: ${capability.id}`);
         capabilityIds.add(capability.id);
@@ -251,6 +253,10 @@ export function discoverComponents(rootPath) {
         if (capability.helperContract) {
           helperContracts.set(capability.id,
             safeRelativeFile(componentRoot, capability.helperContract, `${capability.id}.helperContract`));
+        }
+        if (capability.deliveryContract) {
+          deliveryContracts.set(capability.id,
+            safeRelativeFile(componentRoot, capability.deliveryContract, `${capability.id}.deliveryContract`));
         }
         capabilityValidation.set(
           capability.id,
@@ -266,6 +272,7 @@ export function discoverComponents(rootPath) {
         validation,
         capabilityValidation,
         helperContracts,
+        deliveryContracts,
         contractSha256: sha256(stableJson(contract)),
         contentSha256: componentTreeSha256(componentRoot)
       });
@@ -288,7 +295,7 @@ export function buildCapabilityIndex(rootPath) {
     contentSha256,
     capabilityIds: contract.capabilities.map((item) => item.id).sort(compareText)
   }));
-  const capabilities = discovered.flatMap(({ contract, path: componentPath, entrypoint, capabilityValidation, helperContracts, contractSha256, contentSha256 }) =>
+  const capabilities = discovered.flatMap(({ contract, path: componentPath, entrypoint, capabilityValidation, helperContracts, deliveryContracts, contractSha256, contentSha256 }) =>
     contract.capabilities.map((capability) => ({
       id: capability.id,
       summary: capability.summary,
@@ -305,6 +312,7 @@ export function buildCapabilityIndex(rootPath) {
       sideEffects: capability.sideEffects,
       humanGate: capability.humanGate,
       ...(helperContracts.has(capability.id) ? { helperContract: helperContracts.get(capability.id) } : {}),
+      ...(deliveryContracts.has(capability.id) ? { deliveryContract: deliveryContracts.get(capability.id) } : {}),
       validation: capabilityValidation.get(capability.id),
       componentContentSha256: contentSha256,
       contractSha256

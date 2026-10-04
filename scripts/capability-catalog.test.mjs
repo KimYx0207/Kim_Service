@@ -137,6 +137,31 @@ test('helper contract references survive discovery without granting agent invoca
   }
 });
 
+test('optional component delivery references survive discovery with the same safe-path boundary', (t) => {
+  const root = temporaryRepository(t);
+  const { componentRoot, contract } = addComponent(root, 'agents', 'reader');
+  assert.equal(Object.hasOwn(buildCapabilityIndex(root).capabilities[0], 'deliveryContract'), false);
+  fs.mkdirSync(path.join(componentRoot, 'contracts'));
+  fs.writeFileSync(path.join(componentRoot, 'contracts/delivery.json'), '{"protocol":"calculation-delivery-v1"}\n');
+  const schema = JSON.parse(fs.readFileSync(SCHEMA_PATH));
+  assert.equal(schema.$defs.capability.properties.deliveryContract.$ref, '#/$defs/relativeFile');
+  for (const reference of ['contracts/delivery.json', 'contracts\\delivery.json']) {
+    contract.capabilities[0].deliveryContract = reference;
+    rewriteContract(componentRoot, contract);
+    const capability = buildCapabilityIndex(root).capabilities[0];
+    assert.equal(capability.deliveryContract, 'contracts/delivery.json');
+    assert.equal(Object.hasOwn(capability, 'invocation'), false);
+    assert.deepEqual(capability.permissions, []);
+    assert.deepEqual(capability.sideEffects, []);
+    assert.equal(discoverComponents(root)[0].contract.capabilities[0].deliveryContract, reference);
+  }
+  for (const invalid of ['../outside.json', '/absolute.json', 'missing.json', 'index.mjs', true]) {
+    contract.capabilities[0].deliveryContract = invalid;
+    rewriteContract(componentRoot, contract);
+    assert.throws(() => buildCapabilityIndex(root), /deliveryContract/);
+  }
+});
+
 test('helper references normalize separators for consumers while retaining raw contract identity', (t) => {
   const root = temporaryRepository(t);
   const { componentRoot, contract } = addComponent(root, 'agents', 'reader');

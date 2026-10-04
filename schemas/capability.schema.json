@@ -192,6 +192,11 @@
           "$ref": "#/$defs/relativeFile",
           "pattern": "\\.json$",
           "description": "Component-relative JSON contract for a separately invoked helper. This reference grants no execution permission to the capability."
+        },
+        "deliveryContract": {
+          "$ref": "#/$defs/relativeFile",
+          "pattern": "\\.json$",
+          "description": "Optional component-owned delivery protocol descriptor. This reference grants no execution permission to the capability."
         }
       }
     },

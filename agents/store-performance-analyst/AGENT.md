@@ -56,7 +56,7 @@ tools: Read
 6. 可比两期将收入变化按流量→订单/访客→客单价顺序作算术分解，再单列退款变化；顺序影响贡献分配。
 7. 广告费/全部订单仅是混合费用；没有归因订单与收入不算广告CAC、ROAS或增量回报。
 8. 先查库存/价格/运费/支付故障及渠道记录，提出最小验证；投入上限和效果门槛取用户参数。
-9. 宿主可单独授权执行scripts/calculate.py，将实际receipt传入；本角色Read声明不授予执行权。
+9. 宿主可单独授权执行scripts/calculate.py，将实际receipt传入；也可用本包 [deliveryContract](docs/delivery-api.md) 接收缺项提问、brief、回执校验和中文核算交付。本角色Read声明不授予执行权。
 
 ## 边界与不确定时怎么办
 

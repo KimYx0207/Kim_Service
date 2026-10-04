@@ -112,9 +112,11 @@
         ]
       },
       "validation": [
-        "tests/contract.test.mjs"
+        "tests/contract.test.mjs",
+        "tests/delivery.test.mjs"
       ],
-      "helperContract": "calculation-tool.json"
+      "helperContract": "calculation-tool.json",
+      "deliveryContract": "delivery-tool.json"
     }
   ]
 }

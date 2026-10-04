@@ -257,15 +257,17 @@
       "revision": "4f2853ee48a9dd1a87002922f86276d6315528af",
       "snapshot": "committed-component-tree",
       "version": "0.2.0",
-      "contractSha256": "ac442bf3dbeea4930f3df8256c651601f45deafbf5d59d6a97c344c0227bc2c7",
-      "contentSha256": "0aef867cac79d7fb06d9070f4c276d30f4ebe24bfb24989f7e962c2bb6bb7b51",
+      "contractSha256": "c27941ad6e4e9de87670cc0aaedbc87c7081b20fddfd63751eb04b199f44103b",
+      "contentSha256": "a72fd059cc0b6fdb6cbe611dbafdee4b593b4227f4d82362051b99a80fbd5b9b",
       "required": [
         "AGENT.md",
         "capability.json",
-        "tests/contract.test.mjs"
+        "tests/contract.test.mjs",
+        "tests/delivery.test.mjs"
       ],
       "validation": [
-        "node tests/contract.test.mjs"
+        "node tests/contract.test.mjs",
+        "node tests/delivery.test.mjs"
       ]
     },
     {
@@ -276,15 +278,17 @@
       "revision": "4f2853ee48a9dd1a87002922f86276d6315528af",
       "snapshot": "committed-component-tree",
       "version": "0.1.0",
-      "contractSha256": "27156051c35ca0a4d856610055bd5835a9dad970b6423fca8f5e7ed442cd09b2",
-      "contentSha256": "091d138d202b3e036d621c99d42cceebe5f92eafe97f88855353a71d52f0558e",
+      "contractSha256": "55ad094a8cf46c3035a331b33b56361b43d7929b5015e23303ffdddc6e284d10",
+      "contentSha256": "e0d8676df8f94188f68c3e491cae3a16bd4608bfd911e167c111aecf60e7c7e9",
       "required": [
         "AGENT.md",
         "capability.json",
-        "tests/contract.test.mjs"
+        "tests/contract.test.mjs",
+        "tests/delivery.test.mjs"
       ],
       "validation": [
-        "node tests/contract.test.mjs"
+        "node tests/contract.test.mjs",
+        "node tests/delivery.test.mjs"
       ]
     },
     {

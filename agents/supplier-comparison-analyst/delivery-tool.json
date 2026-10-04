@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "protocol": "calculation-delivery-v1",
+  "invocation": {
+    "type": "local_cli",
+    "runtime": "python",
+    "entrypoint": "scripts/deliver.py",
+    "argv": [
+      "--input-json",
+      "-"
+    ],
+    "inputTransport": "stdin_json",
+    "outputTransport": "stdout_json",
+    "shell": false
+  },
+  "files": [
+    "scripts/deliver.py",
+    "scripts/calculate.py"
+  ],
+  "maxInputBytes": 262144,
+  "sideEffects": [],
+  "networkUsed": false,
+  "filesModified": false
+}
