@@ -149,7 +149,16 @@ def calculate_receipt(materials):
 
 def invalid_receipt(error):
     receipt = calculator.base("invalid_input")
-    receipt["quality"]["issues"] = [{"code": str(error) if isinstance(error, calculator.InputError) else "invalid_json_or_value"}]
+    # Preserve the original calculator's public errors, not adapter-only names.
+    adapter_codes = {"nonfinite_number": "nonfinite_number",
+                     "calculation_materials_size_limit": "input_size",
+                     "materials_must_be_object": "root_shape"}
+    code = "invalid_json_or_value"
+    if isinstance(error, calculator.InputError):
+        code = str(error)
+    elif isinstance(error, DeliveryError):
+        code = adapter_codes.get(str(error), code)
+    receipt["quality"]["issues"] = [{"code": code}]
     receipt["limitations"] = ["Input rejected; no raw input is echoed."]
     return receipt
 

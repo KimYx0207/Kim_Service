@@ -125,10 +125,25 @@ test('strict inner parsing rejects duplicate keys before missing preflight and p
     assert.equal(output.status, 'invalid_input');
     assert.equal(output.calculationPerformed, true);
     assert.equal(output.receipt.status, 'invalid_input');
+    assert.deepEqual(output.receipt, invoke(inputJson, 'calculate.py'), 'rejected receipt matches the original calculator');
     assert.equal(output.handoff.status, 'blocked');
     assert.deepEqual(output.missing, []);
     assert.deepEqual(output.questions, []);
   }
+});
+
+test('nonfinite and oversized UTF-8 inputs retain actionable original error codes', () => {
+  for (const raw of ['{"quantity":NaN}', '{"quantity":Infinity}', '{"quantity":-Infinity}',
+    '{"quotes":[{"packPrice":NaN}]}']) {
+    const output = run(raw);
+    assert.deepEqual(output.receipt, invoke(raw, 'calculate.py'));
+    assert.equal(output.receipt.quality.issues[0].code, 'nonfinite_number');
+  }
+  const oversized = JSON.stringify({ specification: '纸'.repeat(Math.ceil(MAX_BYTES / 3)) });
+  assert.ok(Buffer.byteLength(oversized) > MAX_BYTES);
+  const output = run(oversized);
+  assert.deepEqual(output.receipt, invoke(oversized, 'calculate.py'));
+  assert.equal(output.receipt.quality.issues[0].code, 'input_size');
 });
 
 test('fixed CLI and bounded envelope reject malformed shapes without raw input or traces', () => {
