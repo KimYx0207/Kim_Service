@@ -9,6 +9,8 @@
 
 本包附独立Python标准库计算helper（版本0.2.0），宿主单独授权调用并传入实际receipt。无文件/网络/子进程/安装操作。
 固定入口：`python scripts/calculate.py --input-json -`，stdin输入UTF-8 JSON，stdout一行JSON。建议`PYTHONDONTWRITEBYTECODE=1`。
+机器入口见[calculation-tool.json](calculation-tool.json)，由既有`helperContract`发现；宿主另核固定入口和已审脚本，不扩张角色执行权限。
+缺少或空`rows`时先合并问期间、SKU、渠道和明确指标行；`schemaVersion`是宿主输入协议，不向用户追问内部版本。
 输入最大65536字节：`schemaVersion:1`，`rows`1–200行，每行必须有`period/sku/channel`，同三键不得重复。
 可选数字：`impressions/visitors/paidOrders/grossRevenue/refundAmount/adSpend/goodsCost/fulfilmentCost/platformFees`。
 数量必须整数；所有数字非负、不含bool/NaN/Infinity，最大1e18，最多6位小数；缺失或null表示未知，不能传数字字符串。

@@ -113,7 +113,8 @@
       },
       "validation": [
         "tests/contract.test.mjs"
-      ]
+      ],
+      "helperContract": "calculation-tool.json"
     }
   ]
 }
