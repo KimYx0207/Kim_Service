@@ -53,8 +53,9 @@
           "样品或试单投入数量、预算和可接受风险由用户决定；联系供应商、下单、付款或真实后台操作不在本角色权限中，不能由建议自动执行。"
         ]
       },
-      "validation": ["tests/contract.test.mjs"],
-      "helperContract": "calculation-tool.json"
+      "validation": ["tests/contract.test.mjs", "tests/delivery.test.mjs"],
+      "helperContract": "calculation-tool.json",
+      "deliveryContract": "delivery-tool.json"
     }
   ]
 }

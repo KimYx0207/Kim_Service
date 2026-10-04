@@ -28,4 +28,6 @@ stdin传schemaVersion1 JSON，stdout返回JSON；completed/partial退出0，inva
 
 运行 `node tests/contract.test.mjs`：仅Node内置模块加已安装Python；实际spawn本包helper核算。通过证明结构和工具算例，不等于模型交付或nativeAgent实测。
 
+可选 [delivery-tool.json](delivery-tool.json) 由 `deliveryContract` 发现，固定 `scripts/deliver.py --input-json -` 接收 `{task,inputJson}`；本组件负责缺项提问、brief、回执校验和中文交付，宿主保留路由授权与通用来源核验。完整 [交付协议](docs/delivery-api.md) 与 `node tests/delivery.test.mjs`；原计算器 CLI 不变。
+
 许可证：[MIT](LICENSE)；来源及选择性吸收边界见 [NOTICE](NOTICE)。组件版本0.1.0。

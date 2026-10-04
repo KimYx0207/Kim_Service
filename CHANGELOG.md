@@ -2,6 +2,33 @@
 
 Kim Service uses one repository-level two-part public version (`V<major>.<minor>`) and one GitHub Release for the professional-capability dependency repository. Component CHANGELOG files record component provenance; this file is the release-note authority.
 
+## V1.7 - 2026-10-04
+
+### Affected components
+
+- Existing Supplier Comparison Analyst 0.1.0 and Store Performance Analyst 0.2.0, with optional reviewed delivery descriptors and the shared capability catalog.
+
+### User-visible changes
+
+- Professional material questions, result validation, issue summaries, readable reports and supplier-definition clarification now belong to their Service components. Meta can invoke them through a generic reviewed delivery interface instead of knowing business fields.
+- Fixed Python delivery adapters preserve exact raw calculator receipts, including unknown costs, conflicting definitions and rejected-input error codes (nonfinite_number, input_size and root_shape). Receipt bytes are carried with an integrity digest.
+
+### Breaking changes and migration
+
+- Original calculation-tool.json contracts, calculate.py implementations, --input-json - CLI, capability IDs, role versions and read-only permissions are unchanged.
+- deliveryContract is optional for existing consumers. Meta 3.5.0 uses the reviewed delivery interface; earlier Service packages remain discoverable but do not silently gain that capability. Discovery never authorizes arbitrary commands, supplier contact, ordering, payments or business writes.
+
+### Verification
+
+- All 68 root regressions and 45 declared validation files across 26 components passed locally, including 18 professional-delivery tests. Existing Windows-specific skips remain explicit on Linux.
+- Thirty-six Meta/Service integration tests passed with real Python calculation, MCP transport and formal task handoff; independent review covered receipt parity, duplicate keys, Unicode, source integrity and bounded input/output. These are not native model-chain acceptance or real business results.
+- Exact-head and merged-main CI, clean-main release readiness and remote annotated-tag verification are required before publication and recorded in the Release.
+
+### Source revisions
+
+- Previous release V1.6: 593bbb34bffd888d4b5f7bd8d8e4f30dc25dc2a9.
+- Reviewed delivery implementation and committed-component-tree provenance: ae38c0e2806c2350459bfdf771c9cb29a5a076a5. External and canonical direct-sync origins remain unchanged.
+
 ## V1.6 - 2026-10-04
 
 ### Affected components

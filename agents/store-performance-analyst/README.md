@@ -29,4 +29,6 @@
 整个目录可独立复制；运行`node tests/contract.test.mjs`检查合同并实际调用Python helper。无Python将明确失败，不伪装通过。
 角色仍接受必填文字`metrics`；可选`table/definitions/decisionConstraints/calculationReceipt`，helper有自己的薄JSON接口，capability不新增invocation。
 
+可选 [delivery-tool.json](delivery-tool.json) 由 `deliveryContract` 发现，固定 `scripts/deliver.py --input-json -` 接收 `{task,inputJson}`；本组件负责缺项提问、brief、回执校验和中文交付，宿主保留路由授权与通用来源核验。完整 [交付协议](docs/delivery-api.md) 与 `node tests/delivery.test.mjs`；原计算器 CLI 不变。
+
 许可证：[MIT](LICENSE)。固定来源及选择性吸收边界见[NOTICE](NOTICE)。

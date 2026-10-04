@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- 新增可选 calculation-delivery-v1 入口：业务提问、brief、领域回执校验、问题提取和中文核算交付归本组件所有。
+- 复用原计算器，保留原 CLI、helperContract、版本与只读权限；新增固定协议、缺项和负向测试。
+
 ## 0.1.0
 
 - 新增采购供应商比较只读专业角色与稳定能力 supplier-comparison-analyze。
