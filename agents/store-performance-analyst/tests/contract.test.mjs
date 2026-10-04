@@ -6,6 +6,23 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+test('fixed calculation helper contract is discoverable without expanding agent permissions', () => {
+  const capability = JSON.parse(fs.readFileSync(path.join(root, 'capability.json'), 'utf8')).capabilities[0];
+  assert.equal(capability.helperContract, 'calculation-tool.json');
+  const tool = JSON.parse(fs.readFileSync(path.join(root, capability.helperContract), 'utf8'));
+  assert.deepEqual(tool, {
+    schemaVersion: 1, id: 'store-performance-calculator', componentId: 'store-performance-analyst', toolVersion: '0.2.0',
+    invocation: { type: 'local_cli', runtime: 'python', entrypoint: 'scripts/calculate.py', argv: ['--input-json', '-'],
+      inputTransport: 'stdin_json', outputTransport: 'stdout_json', shell: false },
+    requiredMaterials: ['rows'], maxInputBytes: 65536, inputContract: 'docs/examples.md',
+    sideEffects: [], networkUsed: false, filesModified: false, nativeAgentInvocation: false,
+  });
+  assert.ok(fs.statSync(path.join(root, tool.invocation.entrypoint)).isFile());
+  assert.ok(fs.statSync(path.join(root, tool.inputContract)).isFile());
+  assert.equal(Object.hasOwn(capability, 'invocation'), false);
+  assert.match(fs.readFileSync(path.join(root, 'README.md'), 'utf8'), /缺少或空`rows`/);
+});
+
 test('standalone agent has a bounded, readable contract', () => {
   const contract = JSON.parse(fs.readFileSync(path.join(root, 'capability.json'), 'utf8'));
   const agent = fs.readFileSync(path.join(root, contract.entrypoint), 'utf8');

@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "id": "store-performance-calculator",
+  "componentId": "store-performance-analyst",
+  "toolVersion": "0.2.0",
+  "invocation": {
+    "type": "local_cli",
+    "runtime": "python",
+    "entrypoint": "scripts/calculate.py",
+    "argv": ["--input-json", "-"],
+    "inputTransport": "stdin_json",
+    "outputTransport": "stdout_json",
+    "shell": false
+  },
+  "requiredMaterials": ["rows"],
+  "maxInputBytes": 65536,
+  "inputContract": "docs/examples.md",
+  "sideEffects": [],
+  "networkUsed": false,
+  "filesModified": false,
+  "nativeAgentInvocation": false
+}

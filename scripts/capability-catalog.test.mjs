@@ -179,6 +179,32 @@ test('ordinary catalog and generated index discover the real supplier helper and
   assert.equal(receipt.networkUsed, false); assert.equal(receipt.filesModified, false);
 });
 
+test('ordinary catalog and generated index discover the existing store helper and calculate supplied rows', () => {
+  const root = path.resolve(path.dirname(SCRIPT_PATH), '..');
+  const catalog = JSON.parse(fs.readFileSync(path.join(root, 'catalog.json')));
+  const generated = JSON.parse(fs.readFileSync(path.join(root, 'generated/capabilities.json')));
+  const indexed = generated.capabilities.find((entry) => entry.id === 'store-performance-analyst-assist');
+  const component = catalog.components.find((entry) => entry.id === indexed.componentId);
+  const capability = JSON.parse(fs.readFileSync(path.join(root, component.path, 'capability.json'))).capabilities[0];
+  assert.equal(indexed.helperContract, capability.helperContract);
+  assert.equal(indexed.helperContract, 'calculation-tool.json');
+  assert.equal(Object.hasOwn(indexed, 'invocation'), false);
+  assert.deepEqual(indexed.input.required, ['metrics']);
+  assert.deepEqual(indexed.permissions, ['filesystem:read-user-materials']);
+  assert.deepEqual(indexed.sideEffects, []);
+  const tool = JSON.parse(fs.readFileSync(path.join(root, component.path, indexed.helperContract)));
+  assert.equal(tool.componentId, component.id);
+  const input = fs.readFileSync(path.join(root, component.path, 'fixtures/normal.json'), 'utf8');
+  const child = spawnSync(process.platform === 'win32' ? 'python' : 'python3',
+    ['-I', '-B', path.join(root, component.path, tool.invocation.entrypoint), ...tool.invocation.argv],
+    { input, encoding: 'utf8', shell: false, timeout: 10000 });
+  assert.ifError(child.error); assert.equal(child.status, 0, child.stderr);
+  const receipt = JSON.parse(child.stdout);
+  assert.equal(receipt.tool, tool.id); assert.equal(receipt.version, tool.toolVersion);
+  assert.deepEqual(receipt.calculationTable.map((row) => row.metrics.netRevenue), ['450', '220']);
+  assert.equal(receipt.networkUsed, false); assert.equal(receipt.filesModified, false);
+});
+
 test('rejects duplicate component ids across component groups', (t) => {
   const root = temporaryRepository(t);
   addComponent(root, 'skills', 'shared', { capabilityId: 'shared-skill' });
