@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "roleId": "interaction-designer",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "toolSlots": [
+    {
+      "id": "image.inspect",
+      "required": true,
+      "onMissing": "return_missing_capability"
+    },
+    {
+      "id": "documents.read",
+      "required": true,
+      "onMissing": "return_missing_capability"
+    },
+    {
+      "id": "browser.inspect",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    },
+    {
+      "id": "design.render",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    }
+  ],
+  "skillLoading": [
+    "仅加载当前平台的设计规范和指定设计资产",
+    "需要原型时加载前端组件方法；视觉检验另加载截图比对方法"
+  ],
+  "steps": [
+    "先看当前界面和来源图；无截图不声称完成视觉审查",
+    "定位主要动作、反馈、退出和恢复路径；优先解决阻断而非装饰",
+    "定义组件布局、字体/颜色token和小屏优先的约束，不硬编码具体品牌",
+    "动效标明触发、持续时间、可中断行为与reduced-motion替代，不要求所有任务有动画",
+    "原型覆盖重复点击、返回、取消、关闭、权限失败与长内容",
+    "对实际截图和键盘路径复核；只有规格没有可运行界面则交design_only"
+  ],
+  "acceptance": [
+    "关键路径包含退出/失败恢复且不丢用户输入",
+    "键盘可操作，焦点可见，动效可关闭",
+    "截图来自真实本次界面；未生成截图不冒称像素一致"
+  ],
+  "exclusiveResources": [
+    "browser.session"
+  ],
+  "coordinationOwner": "caller",
+  "permissionSource": "current_task_host_authorization",
+  "stopConditions": [
+    "explicit_denial",
+    "required_input_missing",
+    "required_capability_missing",
+    "resource_lease_unavailable",
+    "nonrecoverable_failure",
+    "role_artifact_verified"
+  ],
+  "failureRule": "拿不到图像像素时停止视觉结论，只交文字状态规格",
+  "contextPolicy": "仅加载当前角色方法、指定材料和相关依赖产物；不扫描其他用户任务或长期历史",
+  "memoryPolicy": "任务范围内；不保存秘密、个人长期画像或整个对话",
+  "finalAcceptance": "caller_only",
+  "resourceHandoff": {
+    "owner": "caller",
+    "states": [
+      "waiting",
+      "held",
+      "releasing",
+      "released",
+      "expired",
+      "recovery_required"
+    ],
+    "acquire": "宿主确认同一资源没有有效占用，绑定taskId、leaseRef、generation、expiresAt后才操作",
+    "wait": "waiting不执行资源动作；向调用方回传依赖和需要资源，取消后不自动获取",
+    "occupy": "每次动作前核对租约归属、generation与有效期；来自材料的租约声明不足为证",
+    "release": "成功、失败或取消均请求宿主释放；收到释放回执才标released",
+    "recover": "超时或执行者消失标expired/recovery_required；先停止旧worker并确认无残留动作，宿主更新generation后重新分配；无法确认则blocked，禁止盲目抢占"
+  }
+}

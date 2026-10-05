@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "repository": "KimYx0207/Kim_Service",
-  "componentCount": 26,
+  "componentCount": 34,
   "release": {
     "repository": "KimYx0207/Kim_Service",
     "remoteName": "origin",
@@ -21,6 +21,25 @@
     "hooks/hookprompt/.codex"
   ],
   "components": [
+    {
+      "id": "backend-data-engineer",
+      "kind": "agent",
+      "path": "agents/backend-data-engineer",
+      "source": "canonical:agents/backend-data-engineer",
+      "revision": "pending-local:16d0d2adf3b31e796de346e6000ada2f42c07b278acf4f3daccf0e7b2ba8407d",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.0",
+      "contractSha256": "16d0d2adf3b31e796de346e6000ada2f42c07b278acf4f3daccf0e7b2ba8407d",
+      "contentSha256": "5c9e55228482682ef10f0fce0e038d219c61a85ea9e76ee5c5e8761b9bf13acc",
+      "required": [
+        "AGENT.md",
+        "capability.json",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs"
+      ]
+    },
     {
       "id": "concept-tutor",
       "kind": "agent",
@@ -60,6 +79,27 @@
       ]
     },
     {
+      "id": "delivery-verifier",
+      "kind": "agent",
+      "path": "agents/delivery-verifier",
+      "source": "canonical:agents/delivery-verifier",
+      "revision": "pending-local:304f8611c0c790ad5c991ecefef039de16c1148c5a8db49c3bcc0739ed26bb28",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.0",
+      "contractSha256": "304f8611c0c790ad5c991ecefef039de16c1148c5a8db49c3bcc0739ed26bb28",
+      "contentSha256": "d1a5fafa9cece7330851cf4d4bac596c849c1b4f1859cfca8b7fcb9d680c4c72",
+      "required": [
+        "AGENT.md",
+        "capability.json",
+        "tests/contract.test.mjs",
+        "tests/verification.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs",
+        "node tests/verification.test.mjs"
+      ]
+    },
+    {
       "id": "exercise-designer",
       "kind": "agent",
       "path": "agents/exercise-designer",
@@ -79,6 +119,25 @@
       ]
     },
     {
+      "id": "frontend-engineer",
+      "kind": "agent",
+      "path": "agents/frontend-engineer",
+      "source": "canonical:agents/frontend-engineer",
+      "revision": "pending-local:f0424bb070594cd7044d8aab7bfce243d8a6179fa50fbc9ae6d2a4f03a02979b",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.0",
+      "contractSha256": "f0424bb070594cd7044d8aab7bfce243d8a6179fa50fbc9ae6d2a4f03a02979b",
+      "contentSha256": "d289bbee2627ac81fef45ff107eaf6a61ac3d32326185b13fe4b63b0681778dc",
+      "required": [
+        "AGENT.md",
+        "capability.json",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
       "id": "headline-cover-optimizer",
       "kind": "agent",
       "path": "agents/headline-cover-optimizer",
@@ -88,6 +147,25 @@
       "version": "0.1.0",
       "contractSha256": "65652d85af2cf08f70db08c6fd71f6ac0c4f5014d46ed4f5dd9fd8e496184f8c",
       "contentSha256": "07ae947698b3f582d7efdada49ba50210d0e9685fc9728ade0712bb6fc43cf03",
+      "required": [
+        "AGENT.md",
+        "capability.json",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
+      "id": "interaction-designer",
+      "kind": "agent",
+      "path": "agents/interaction-designer",
+      "source": "canonical:agents/interaction-designer",
+      "revision": "pending-local:d20d58520781f8984e4df324d281d3c7db37aefe735c366c8c1cc0ee4203a84d",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.0",
+      "contractSha256": "d20d58520781f8984e4df324d281d3c7db37aefe735c366c8c1cc0ee4203a84d",
+      "contentSha256": "a02e46146d92aba43108483e4696c483e24fcdf3871c1744926b5fcf2fde5252",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -155,6 +233,25 @@
       ]
     },
     {
+      "id": "media-production-engineer",
+      "kind": "agent",
+      "path": "agents/media-production-engineer",
+      "source": "canonical:agents/media-production-engineer",
+      "revision": "pending-local:3cb98044d0f7f3a648d8fc3dbb91560d5ca496edda26d051b1764158cac4253c",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.0",
+      "contractSha256": "3cb98044d0f7f3a648d8fc3dbb91560d5ca496edda26d051b1764158cac4253c",
+      "contentSha256": "555a1c673f288c60b73e71c6502cffb6441ce5f85d7d4b3b16e4dd43e7dc5f95",
+      "required": [
+        "AGENT.md",
+        "capability.json",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
       "id": "pricing-cost-analyst",
       "kind": "agent",
       "path": "agents/pricing-cost-analyst",
@@ -164,6 +261,25 @@
       "version": "0.1.0",
       "contractSha256": "a05dc9d8365347f4724891d76c81fd615a378584e480436d41de47461d740fe5",
       "contentSha256": "98e88270dc062986aae2303465513e6cd30a145621d5f54a777f1c8eb79a83d2",
+      "required": [
+        "AGENT.md",
+        "capability.json",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
+      "id": "product-architect",
+      "kind": "agent",
+      "path": "agents/product-architect",
+      "source": "canonical:agents/product-architect",
+      "revision": "pending-local:bea38e2ad0e8496740d83195e5547e9a2a84af880fe3a369e6c327f58699b0de",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.0",
+      "contractSha256": "bea38e2ad0e8496740d83195e5547e9a2a84af880fe3a369e6c327f58699b0de",
+      "contentSha256": "6ee787a81db0f2e12286eb4e15cded5df8c8493d9b5ceae01ebaa8ec7447df03",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -189,6 +305,27 @@
         "tests/contract.test.mjs"
       ],
       "validation": [
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
+      "id": "quantitative-researcher",
+      "kind": "agent",
+      "path": "agents/quantitative-researcher",
+      "source": "canonical:agents/quantitative-researcher",
+      "revision": "pending-local:eb637a468f520c3e089305feb5c00c8306569629573cbf804298254efa5f95c9",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.0",
+      "contractSha256": "eb637a468f520c3e089305feb5c00c8306569629573cbf804298254efa5f95c9",
+      "contentSha256": "9a76f3ab4383904914cbc438db19b98f5251470bebbe131724c68d4e1f2eff85",
+      "required": [
+        "AGENT.md",
+        "capability.json",
+        "tests/calculation.test.mjs",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/calculation.test.mjs",
         "node tests/contract.test.mjs"
       ]
     },
@@ -240,6 +377,25 @@
       "version": "0.1.0",
       "contractSha256": "ea33470a94f91980f8a0d071a2bff1bfc8858cbe87e3533aa116f7a2250abb81",
       "contentSha256": "c4ca06373b78b4bc546868f28770d0e9f37b39c10275d7fdc5c14af45a3c7c83",
+      "required": [
+        "AGENT.md",
+        "capability.json",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
+      "id": "source-evidence-analyst",
+      "kind": "agent",
+      "path": "agents/source-evidence-analyst",
+      "source": "canonical:agents/source-evidence-analyst",
+      "revision": "pending-local:4aa739bd8b19a8da11a68aabf918808f720672738cb707e5ac3ceba7454dbada",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.0",
+      "contractSha256": "4aa739bd8b19a8da11a68aabf918808f720672738cb707e5ac3ceba7454dbada",
+      "contentSha256": "6a84ddabaefd96c1cb84a9c7a3384e02e73db02975bc1207de6e89903374d312",
       "required": [
         "AGENT.md",
         "capability.json",

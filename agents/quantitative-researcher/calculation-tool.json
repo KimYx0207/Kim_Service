@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "protocol": "supplied-return-arithmetic-v1",
+  "invocation": {
+    "runtime": "node",
+    "entrypoint": "scripts/calculate.mjs",
+    "argv": [
+      "--input-json",
+      "-"
+    ],
+    "inputTransport": "canonical_stdin_json",
+    "outputTransport": "stdout_json",
+    "shell": false
+  },
+  "maxInputBytes": 2000000,
+  "files": [
+    "scripts/calculate.mjs"
+  ],
+  "sideEffects": [],
+  "networkUsed": false,
+  "filesModified": false,
+  "automaticInvocation": false,
+  "runtimeStatus": "requires_host_binding"
+}

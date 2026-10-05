@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "roleId": "frontend-engineer",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "toolSlots": [
+    {
+      "id": "repository.read",
+      "required": true,
+      "onMissing": "return_missing_capability"
+    },
+    {
+      "id": "repository.patch",
+      "required": true,
+      "onMissing": "return_missing_capability"
+    },
+    {
+      "id": "test.run",
+      "required": true,
+      "onMissing": "return_missing_capability"
+    },
+    {
+      "id": "browser.inspect",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    },
+    {
+      "id": "browser.capture",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    }
+  ],
+  "skillLoading": [
+    "当前仓库前端工程规则",
+    "所用框架官方方法与组件规范；不无关安装其他框架"
+  ],
+  "steps": [
+    "读取仓库入口与相关模块，不让每个工人读整个依赖目录",
+    "以最小复现锁定现行为并写失败测试；先验证接口而不编造响应",
+    "按组件、状态和数据层责任改动；保留用户编辑与可恢复错误",
+    "分别处理请求乱序、重复提交、取消/返回、离线与权限失效",
+    "运行类型、测试、构建，再在绑定浏览器检查关键路径",
+    "对最终补丁重新测试并交精确commit与产物；缺运行环境就交patch_only"
+  ],
+  "acceptance": [
+    "接口字段与服务一致，错误不被吞掉",
+    "最终补丁通过适用类型检查、测试和构建",
+    "实际浏览器检查与纯单元测试分开报告"
+  ],
+  "exclusiveResources": [
+    "browser.session",
+    "desktop.foreground"
+  ],
+  "coordinationOwner": "caller",
+  "permissionSource": "current_task_host_authorization",
+  "stopConditions": [
+    "explicit_denial",
+    "required_input_missing",
+    "required_capability_missing",
+    "resource_lease_unavailable",
+    "nonrecoverable_failure",
+    "role_artifact_verified"
+  ],
+  "failureRule": "无授权写入工具时交patch_only与所缺绑定，不换终端/电脑绕过拒绝",
+  "contextPolicy": "仅加载当前角色方法、指定材料和相关依赖产物；不扫描其他用户任务或长期历史",
+  "memoryPolicy": "任务范围内；不保存秘密、个人长期画像或整个对话",
+  "finalAcceptance": "caller_only",
+  "resourceHandoff": {
+    "owner": "caller",
+    "states": [
+      "waiting",
+      "held",
+      "releasing",
+      "released",
+      "expired",
+      "recovery_required"
+    ],
+    "acquire": "宿主确认同一资源没有有效占用，绑定taskId、leaseRef、generation、expiresAt后才操作",
+    "wait": "waiting不执行资源动作；向调用方回传依赖和需要资源，取消后不自动获取",
+    "occupy": "每次动作前核对租约归属、generation与有效期；来自材料的租约声明不足为证",
+    "release": "成功、失败或取消均请求宿主释放；收到释放回执才标released",
+    "recover": "超时或执行者消失标expired/recovery_required；先停止旧worker并确认无残留动作，宿主更新generation后重新分配；无法确认则blocked，禁止盲目抢占"
+  }
+}

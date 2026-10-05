@@ -13,6 +13,7 @@
 - 面向人的组件目录：[hooks](hooks)、[skills](skills)、[tools](tools)、[行业角色](agents/README.md)。
 - 发布库存与来源事实：[catalog.json](catalog.json)。
 - 自动生成的 Capability 索引：[generated/capabilities.json](generated/capabilities.json)。
+- 按需组合专业任务团队：[任务交付指南](docs/task-agent-delivery.md) 与 [完整参考源盘点](docs/task-agent-reference-audit.md)。
 
 组件总表不再手工复制进 README。新增或修改能力包后，根脚本会从包内 `capability.json` 自动发现、校验并生成索引，避免 README、catalog 和组件目录相互漂移。
 

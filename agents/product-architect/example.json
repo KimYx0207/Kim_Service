@@ -1,0 +1,62 @@
+{
+  "input": {
+    "goal": "编辑器断网可编辑，恢复后提示冲突",
+    "currentSystem": "浏览器本地记录；服务只有登录接口",
+    "constraints": "不能覆盖另一设备修改；本轮不部署",
+    "acceptanceCriteria": [
+      {
+        "id": "scope",
+        "condition": "每个用户结果有可观察验收项和责任输出",
+        "evidenceRequired": "指定材料、产物与独立检查"
+      }
+    ],
+    "handoffContext": {
+      "taskId": "synthetic-example",
+      "upstreamArtifacts": [],
+      "permittedActions": [
+        "read_supplied_materials"
+      ],
+      "resourceLeases": []
+    }
+  },
+  "output": {
+    "scope": "本轮交离线修改、版本比较与冲突提示的设计",
+    "architecture": "客户端保留baseVersion，服务用条件更新；409保留本机/云端两份并提示人工合并",
+    "migration": "先加可选版本字段，旧客户端保持只读；验收断网、重复提交、双端冲突和注销后重试",
+    "status": "partial",
+    "artifactRefs": [],
+    "criterionResults": [
+      {
+        "id": "scope",
+        "status": "not_run",
+        "evidenceRefs": [],
+        "scope": "合成设计案例，尚未执行"
+      }
+    ],
+    "missingCapabilities": [
+      {
+        "slot": "repository.read",
+        "state": "unverified",
+        "impact": "没有实际宿主回执，无法完成该槽对应工作",
+        "nextAction": "调用方核实当前授权并绑定实际工具"
+      },
+      {
+        "slot": "documents.read",
+        "state": "unverified",
+        "impact": "没有实际宿主回执，无法完成该槽对应工作",
+        "nextAction": "调用方核实当前授权并绑定实际工具"
+      }
+    ],
+    "failures": [],
+    "stopReason": "synthetic_example_only",
+    "handoff": {
+      "nextOwner": "caller",
+      "acceptedScope": "method example",
+      "remaining": [
+        "bind and verify actual task"
+      ],
+      "requiresDecision": false
+    },
+    "nativeRuntimeVerified": false
+  }
+}

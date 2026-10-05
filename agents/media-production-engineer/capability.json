@@ -1,0 +1,397 @@
+{
+  "schemaVersion": 1,
+  "id": "media-production-engineer",
+  "componentType": "agent",
+  "componentVersion": "0.1.0",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "media-production-engineer-deliver",
+      "summary": "将授权素材与输出规格转成可复现图像、音视频或数字人制作流程及实测产物",
+      "useWhen": [
+        "生成或修订媒体工作流、镜头与动效",
+        "需要横竖版、封面、字幕和音视频导出",
+        "需要检查帧率、时长、分辨率、音轨与实际渲染效果"
+      ],
+      "doNotUseWhen": [
+        "只要正文：使用 script-writer",
+        "缺素材授权或真人声音肖像许可：交调用方",
+        "未授权付费渲染、安装节点或绕过写入限制：停"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "assets": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "获准素材、来源、用途与肖像/声音许可"
+          },
+          "outputSpec": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "尺寸、比例、时长范围、帧率、格式、字幕和音频要求"
+          },
+          "workflow": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "现有工作流、模型/节点版本及运行环境"
+          },
+          "runtimeBindings": {
+            "type": "array",
+            "description": "宿主对本次任务实际工具的绑定；需求不等于权限。未知/拒绝必须保留",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "slot": {
+                  "type": "string"
+                },
+                "tool": {
+                  "type": "string"
+                },
+                "version": {
+                  "type": "string"
+                },
+                "state": {
+                  "enum": [
+                    "available",
+                    "missing",
+                    "denied",
+                    "unverified"
+                  ]
+                },
+                "scope": {
+                  "type": "string"
+                },
+                "authorizationRef": {
+                  "type": "string"
+                },
+                "receiptRef": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "slot",
+                "state",
+                "scope"
+              ]
+            }
+          },
+          "acceptanceCriteria": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "condition": {
+                  "type": "string"
+                },
+                "evidenceRequired": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "condition",
+                "evidenceRequired"
+              ]
+            }
+          },
+          "handoffContext": {
+            "type": "object",
+            "description": "只给本角色相关材料与依赖产物；控制权保留调用方",
+            "properties": {
+              "taskId": {
+                "type": "string"
+              },
+              "upstreamArtifacts": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "permittedActions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "resourceLeases": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "resource": {
+                      "type": "string"
+                    },
+                    "ownerTaskId": {
+                      "type": "string"
+                    },
+                    "leaseRef": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "resource",
+                    "ownerTaskId",
+                    "leaseRef"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "taskId",
+              "upstreamArtifacts",
+              "permittedActions",
+              "resourceLeases"
+            ]
+          }
+        },
+        "required": [
+          "assets",
+          "outputSpec",
+          "workflow",
+          "acceptanceCriteria",
+          "handoffContext"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "deliveryFormat": "conceptual-human-delivery",
+        "description": "以下字段可用清晰正文交付；机器回执须另经helper验证。completed只限列明角色产物，不是最终用户结果或上线许可。",
+        "properties": {
+          "workflowPackage": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "参数化工作流、素材映射与依赖清单"
+          },
+          "mediaArtifacts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "导出文件及hash；无执行时为空"
+          },
+          "qualityEvidence": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "探测回执、抽帧/听检、横竖版与失败记录"
+          },
+          "status": {
+            "enum": [
+              "completed",
+              "partial",
+              "needs_input",
+              "blocked"
+            ]
+          },
+          "artifactRefs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "ref": {
+                  "type": "string"
+                },
+                "sha256": {
+                  "type": "string"
+                },
+                "kind": {
+                  "type": "string"
+                },
+                "evidenceLevel": {
+                  "enum": [
+                    "design",
+                    "fixture",
+                    "local_execution",
+                    "host_execution",
+                    "external_verified"
+                  ]
+                }
+              },
+              "required": [
+                "ref",
+                "kind",
+                "evidenceLevel"
+              ]
+            }
+          },
+          "criterionResults": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "status": {
+                  "enum": [
+                    "pass",
+                    "fail",
+                    "not_run",
+                    "blocked"
+                  ]
+                },
+                "evidenceRefs": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "scope": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "status",
+                "evidenceRefs",
+                "scope"
+              ]
+            }
+          },
+          "missingCapabilities": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "slot": {
+                  "type": "string"
+                },
+                "state": {
+                  "enum": [
+                    "missing",
+                    "denied",
+                    "unverified"
+                  ]
+                },
+                "impact": {
+                  "type": "string"
+                },
+                "nextAction": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "slot",
+                "state",
+                "impact",
+                "nextAction"
+              ]
+            }
+          },
+          "failures": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "action": {
+                  "type": "string"
+                },
+                "target": {
+                  "type": "string"
+                },
+                "retryable": {
+                  "type": "boolean"
+                },
+                "evidenceRef": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "code",
+                "action",
+                "target",
+                "retryable"
+              ]
+            }
+          },
+          "stopReason": {
+            "type": "string"
+          },
+          "handoff": {
+            "type": "object",
+            "properties": {
+              "nextOwner": {
+                "type": "string"
+              },
+              "acceptedScope": {
+                "type": "string"
+              },
+              "remaining": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "requiresDecision": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "nextOwner",
+              "acceptedScope",
+              "remaining",
+              "requiresDecision"
+            ]
+          },
+          "nativeRuntimeVerified": {
+            "const": false,
+            "description": "包静态合同或本地helper检查不会升级原生宿主加载；真实探测由调用方另外保存"
+          }
+        },
+        "required": [
+          "workflowPackage",
+          "mediaArtifacts",
+          "qualityEvidence",
+          "status",
+          "artifactRefs",
+          "criterionResults",
+          "missingCapabilities",
+          "failures",
+          "stopReason",
+          "handoff",
+          "nativeRuntimeVerified"
+        ]
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "涉及医疗、法律、金融高影响结论或行动，停下交调用方按适用权限处理",
+          "新的发布、生产变更、付费执行、敏感数据传输或持久访问由调用方确认；普通已授权可逆工作不重复确认",
+          "任何明确拒绝均停止该目标，不切换工具、路由或Agent绕过"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

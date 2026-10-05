@@ -1,0 +1,68 @@
+{
+  "input": {
+    "scope": "给冲突面板加取消操作",
+    "interfaceContract": "409含serverVersion，不允许静默覆盖",
+    "interactionSpec": "取消回编辑并保留本机正文",
+    "acceptanceCriteria": [
+      {
+        "id": "scope",
+        "condition": "接口字段与服务一致，错误不被吞掉",
+        "evidenceRequired": "指定材料、产物与独立检查"
+      }
+    ],
+    "handoffContext": {
+      "taskId": "synthetic-example",
+      "upstreamArtifacts": [],
+      "permittedActions": [
+        "read_supplied_materials"
+      ],
+      "resourceLeases": []
+    }
+  },
+  "output": {
+    "patch": "拟交ConflictPanel与对应测试补丁；尚未执行写入",
+    "behaviorEvidence": "needs_binding：未提供仓库写入与测试工具，不能声称测试通过",
+    "handoffNotes": "验收取消/返回/二次进入保留本机正文；不触碰服务接口",
+    "status": "partial",
+    "artifactRefs": [],
+    "criterionResults": [
+      {
+        "id": "scope",
+        "status": "not_run",
+        "evidenceRefs": [],
+        "scope": "合成设计案例，尚未执行"
+      }
+    ],
+    "missingCapabilities": [
+      {
+        "slot": "repository.read",
+        "state": "unverified",
+        "impact": "没有实际宿主回执，无法完成该槽对应工作",
+        "nextAction": "调用方核实当前授权并绑定实际工具"
+      },
+      {
+        "slot": "repository.patch",
+        "state": "unverified",
+        "impact": "没有实际宿主回执，无法完成该槽对应工作",
+        "nextAction": "调用方核实当前授权并绑定实际工具"
+      },
+      {
+        "slot": "test.run",
+        "state": "unverified",
+        "impact": "没有实际宿主回执，无法完成该槽对应工作",
+        "nextAction": "调用方核实当前授权并绑定实际工具"
+      }
+    ],
+    "failures": [],
+    "stopReason": "synthetic_example_only",
+    "handoff": {
+      "nextOwner": "caller",
+      "acceptedScope": "method example",
+      "remaining": [
+        "bind and verify actual task"
+      ],
+      "requiresDecision": false
+    },
+    "nativeRuntimeVerified": false
+  }
+}

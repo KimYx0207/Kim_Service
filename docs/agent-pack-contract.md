@@ -73,3 +73,7 @@ node scripts/check-repository.mjs
 真实调用记录只证明该次动作及实际产物，不能升级其他角色的 needs_probe，也不能把计划、示例或静态检查当作已经执行。调用方选择角色顺序、工具权限和最终接受结果；沿现有包契约接入，不新增并行治理或 provider 注册系统。
 
 电商复盘与供应商比较包的 `scripts/calculate.py` 是可选的本地核算工具，不是 Agent 本体。它们只计算显式 JSON 数值，不读文件、联网或操作业务系统。宿主分别授权固定 Python 调用，核对包与脚本版本/哈希，并把实际回执作为角色材料；`Read` 不因此获得任意命令执行权限。角色没有 Python 工具时按材料交定性比较、缺项和待核算部分，不编造运行记录。工具可用、角色合同被选中与原生 Agent 加载是三个独立事实。
+
+## 按任务绑定的专业方法
+
+工程、媒体、研究与来源角色保留默认只读 Agent 权限，`method.json` 说明由当前宿主绑定的工具槽、领域步骤、验收与停止条件。它不是新 provider 或调度器，不授予工具操作权。跨角色组合、资源等待/占用/释放/失效恢复和最终接受仍属调用方。详见 [任务交付指南](task-agent-delivery.md)。`delivery-verifier` 的 Node 回执验证及 `quantitative-researcher` 的 Node 算术 helper 均为显式固定命令绑定，不自动进入现有 Python delivery 协议；Windows 不支持本包安全打开标志时明确 blocked，不降级为不安全读取。

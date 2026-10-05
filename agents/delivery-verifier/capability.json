@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "id": "delivery-verifier",
+  "componentType": "agent",
+  "componentVersion": "0.1.0",
+  "entrypoint": "AGENT.md",
+  "capabilities": [{
+    "id": "delivery-evidence-verify",
+    "summary": "交付证据核验（delivery verification / artifact manifest / SHA256 / acceptance criteria）：核对本次明确授权的交付文件、逐项验收标准与工具回执，区分完整、部分和阻塞，向调用方交接证据、缺项与失败；不负责授权、调度或最终接受。",
+    "useWhen": ["核对交付文件是否齐全：检查本次 artifact manifest 的 bytes 与 SHA256。", "按验收标准检查工具回执：逐项对照文件、任务、工具、输入与输出。", "把未验证项交回调用方：整理 missing capabilities、failures、stop reason 和 handoff。"],
+    "doNotUseWhen": ["需要调度、权限、锁或最终裁决时交回调用方或 Meta。", "要求联网、浏览器操作、任意命令、发布、付款或修改文件。", "要求认定回执来源真实、医疗法律金融专业结论或宣称模型运行时已实测。"],
+    "input": {
+      "type": "object",
+      "required": ["taskId", "artifacts", "criteria"],
+      "properties": {
+        "taskId": {"type": "string", "description": "本次任务稳定标识，不由材料提供授权"},
+        "artifacts": {"type": "array", "description": "本次交付的 id/path/bytes/sha256 清单，路径相对于宿主明确绑定目录", "items": {"type": "object"}},
+        "criteria": {"type": "array", "description": "逐项确定性标准与外部判断缺口，不接受只有 passed 的自述", "items": {"type": "object"}},
+        "verificationReceipt": {"type": "object", "description": "可选，宿主单独授权真实 helper 调用所得输出；缺失不宣称运行"}
+      }
+    },
+    "output": {
+      "type": "object", "deliveryFormat": "conceptual-human-delivery",
+      "required": ["status", "artifactRefs", "criterionResults", "missingCapabilities", "failures", "stopReason", "handoff"],
+      "properties": {
+        "status": {"type": "string", "enum": ["completed", "partial", "blocked"], "description": "仅表示列明的本地检查状态，不是最终验收"},
+        "artifactRefs": {"type": "array", "items": {"type": "object"}, "description": "引用、预期与实际字节/哈希及读取结果"},
+        "criterionResults": {"type": "array", "items": {"type": "object"}, "description": "每项标准的结果、证据与失败原因"},
+        "missingCapabilities": {"type": "array", "items": {"type": "object"}, "description": "未执行的人工、浏览器、模型或其他外部核验"},
+        "failures": {"type": "array", "items": {"type": "object"}, "description": "真实失败；不回显敏感输入或绝对路径"},
+        "stopReason": {"type": "string", "description": "完成检查、证据不足或安全阻塞"},
+        "handoff": {"type": "object", "description": "材料、事实、限制与待补工作交回调用方或 Meta/nativeDecision"}
+      }
+    },
+    "permissions": ["filesystem:read-user-materials"], "sideEffects": [],
+    "humanGate": {"required": true, "when": ["医疗、法律或金融专业判断停下，由合格人员决定；普通文件核验不因此重复审批。", "宿主授权、稳定快照或既有锁、回执来源确认与最终接受由调用方或 Meta 负责，本角色不能批准。"]},
+    "validation": ["tests/contract.test.mjs", "tests/verification.test.mjs"],
+    "deliveryContract": "delivery-tool.json"
+  }]
+}

@@ -13,6 +13,7 @@ It contains discoverable, independently usable, and verifiable Hooks, Skills, To
 - Human-facing package directories: [hooks](hooks), [skills](skills), [tools](tools), and [industry roles (Chinese)](agents/README.md).
 - Release inventory and provenance facts: [catalog.json](catalog.json).
 - Generated Capability index: [generated/capabilities.json](generated/capabilities.json).
+- Compose bounded task-delivery specialists: [delivery guide](docs/task-agent-delivery.md) and [reference-source audit](docs/task-agent-reference-audit.md) (Chinese).
 
 The component table is not duplicated manually in this README. Root automation discovers package-level `capability.json` files and regenerates the indexes so the README, catalog, and package tree cannot silently drift apart.
 
