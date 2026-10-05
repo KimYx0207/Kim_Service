@@ -1248,12 +1248,12 @@
       ]
     },
     {
-      "componentContentSha256": "d289bbee2627ac81fef45ff107eaf6a61ac3d32326185b13fe4b63b0681778dc",
+      "componentContentSha256": "8a5c151f80e55b5693fd9d443d10df786c22e40c3466b36d5891505d214d4dd2",
       "componentId": "frontend-engineer",
       "componentPath": "agents/frontend-engineer",
       "componentType": "agent",
       "componentVersion": "0.1.0",
-      "contractSha256": "f0424bb070594cd7044d8aab7bfce243d8a6179fa50fbc9ae6d2a4f03a02979b",
+      "contractSha256": "a55049458cfe876d07024fe3961dbba34bb07a886d89cd29b021c5dd4d5696c0",
       "doNotUseWhen": [
         "未明确产品范围：交 product-architect",
         "更改服务认证和数据库：交 backend-data-engineer",
@@ -1636,7 +1636,8 @@
       "useWhen": [
         "有明确前端缺陷和复现步骤",
         "按已定设计实现页面、编辑器或工作台",
-        "需要前端状态、离线或同步冲突处理"
+        "需要前端状态、离线或同步冲突处理",
+        "修复工作台执行状态，区分业务阶段与实时执行并展示来源缺失"
       ],
       "validation": [
         "tests/contract.test.mjs"
@@ -5084,12 +5085,12 @@
       ]
     },
     {
-      "componentContentSha256": "9a76f3ab4383904914cbc438db19b98f5251470bebbe131724c68d4e1f2eff85",
+      "componentContentSha256": "0ec8ec6ed9232c39d7a2fd2dab5a872183f3010e5ca890b034cc1e33b82f9def",
       "componentId": "quantitative-researcher",
       "componentPath": "agents/quantitative-researcher",
       "componentType": "agent",
       "componentVersion": "0.1.0",
-      "contractSha256": "eb637a468f520c3e089305feb5c00c8306569629573cbf804298254efa5f95c9",
+      "contractSha256": "b6c5e7cc4233853f0d04f06aee4dd1e9e2d9e652f1feb6a80322872404f3a5ba",
       "doNotUseWhen": [
         "代下单、转账或交易账户操作：交用户本人",
         "要求保证收益或捏造历史数据：拒绝",
@@ -5473,7 +5474,9 @@
       "useWhen": [
         "检查策略回测方法和数据偏差",
         "核验收益、成本、回撤与样本外结果",
-        "打包可复现研究与验收材料"
+        "打包可复现研究与验收材料",
+        "检查历史股票资格、历史ST、退市和行业的时点偏差",
+        "修复历史股票资格未来信息泄漏，核对历史选股与当前快照的区别"
       ],
       "validation": [
         "tests/contract.test.mjs",
@@ -7272,8 +7275,8 @@
       ],
       "componentType": "agent",
       "componentVersion": "0.1.0",
-      "contentSha256": "d289bbee2627ac81fef45ff107eaf6a61ac3d32326185b13fe4b63b0681778dc",
-      "contractSha256": "f0424bb070594cd7044d8aab7bfce243d8a6179fa50fbc9ae6d2a4f03a02979b",
+      "contentSha256": "8a5c151f80e55b5693fd9d443d10df786c22e40c3466b36d5891505d214d4dd2",
+      "contractSha256": "a55049458cfe876d07024fe3961dbba34bb07a886d89cd29b021c5dd4d5696c0",
       "entrypoint": "AGENT.md",
       "id": "frontend-engineer",
       "path": "agents/frontend-engineer",
@@ -7422,8 +7425,8 @@
       ],
       "componentType": "agent",
       "componentVersion": "0.1.0",
-      "contentSha256": "9a76f3ab4383904914cbc438db19b98f5251470bebbe131724c68d4e1f2eff85",
-      "contractSha256": "eb637a468f520c3e089305feb5c00c8306569629573cbf804298254efa5f95c9",
+      "contentSha256": "0ec8ec6ed9232c39d7a2fd2dab5a872183f3010e5ca890b034cc1e33b82f9def",
+      "contractSha256": "b6c5e7cc4233853f0d04f06aee4dd1e9e2d9e652f1feb6a80322872404f3a5ba",
       "entrypoint": "AGENT.md",
       "id": "quantitative-researcher",
       "path": "agents/quantitative-researcher",
