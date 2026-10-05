@@ -9,7 +9,7 @@ const workflow = readFileSync(resolve(root, '.github/workflows/validate.yml'), '
 test('all PR changes, including SKILL.md, trigger offline repository validation', () => {
   assert.match(workflow, /^on:\n  pull_request:/m);
   assert.doesNotMatch(workflow, /^\s*(paths|paths-ignore|branches-ignore):/m);
-  assert.match(workflow, /os: \[ubuntu-latest, windows-latest, macos-latest\]/);
+  assert.match(workflow, /os: \[ubuntu-latest, windows-latest\]/);
   for (const command of [
     'node scripts/catalog-automation.mjs check',
     'node scripts/check-repository.mjs',

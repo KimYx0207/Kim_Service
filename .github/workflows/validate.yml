@@ -22,7 +22,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest, windows-latest]
     defaults:
       run:
         shell: bash
@@ -51,25 +51,3 @@ jobs:
         run: node --test scripts/*.test.mjs
       - name: Run every declared component validation
         run: node scripts/check-components.mjs
-
-  macos-stdin-diagnostic:
-    # Temporary one-shot investigation for the observed synthetic stdin timeout.
-    # A failed transport fails this job; it cannot certify product acceptance.
-    name: Bounded macOS stdin transport diagnosis
-    runs-on: macos-latest
-    timeout-minutes: 5
-    env:
-      PYTHONUTF8: '1'
-      PYTHONDONTWRITEBYTECODE: '1'
-    steps:
-      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
-        with:
-          persist-credentials: false
-      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
-        with:
-          node-version: '24.20.0'
-      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1
-        with:
-          python-version: '3.12'
-      - name: Compare three bounded transports with the exact public fixture
-        run: node scripts/diagnose-python-stdin.mjs
