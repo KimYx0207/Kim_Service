@@ -40,9 +40,13 @@ test('each industry component can run its declared check outside the repository'
       try {
         const standalone = path.join(temporaryRoot, component.id);
         fs.cpSync(path.join(root, component.path), standalone, { recursive: true });
+        const validationEnv = { ...process.env };
+        // Nested test files are independent CLI validations, not children of
+        // Node's binary test-runner protocol. Keep failure diagnostics readable.
+        delete validationEnv.NODE_TEST_CONTEXT;
         for (const validation of component.validation) {
           const result = spawnSync(process.execPath, [path.join(standalone, validation)], {
-            cwd: standalone, encoding: 'utf8', shell: false
+            cwd: standalone, encoding: 'utf8', shell: false, env: validationEnv
           });
           assert.ifError(result.error);
           assert.equal(result.status, 0, `${component.id}: ${result.stdout}\n${result.stderr}`);

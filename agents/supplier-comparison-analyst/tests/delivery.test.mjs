@@ -5,20 +5,67 @@ import path from 'node:path';
 import test from 'node:test';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { performance } from 'node:perf_hooks';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const python = process.platform === 'win32' ? 'python' : 'python3';
 const task = '只核算本次材料，不执行任何业务操作';
 const read = (name) => fs.readFileSync(path.join(root, name), 'utf8');
+// Test harness only. Keep every failure terminal; never retry or change the
+// production host's process policy to compensate for a slow CI machine.
+function testTimeout(value) {
+  if (value === undefined) return 30000;
+  assert.match(value, /^[0-9]+$/, 'test timeout must be integer milliseconds');
+  const milliseconds = Number(value);
+  assert(Number.isSafeInteger(milliseconds) && milliseconds >= 10000 && milliseconds <= 60000,
+    'test timeout must be between 10000 and 60000 milliseconds');
+  return milliseconds;
+}
+const processTimeout = testTimeout(process.env.KIM_SERVICE_TEST_PROCESS_TIMEOUT_MS);
+function checkedSpawn(args, options, label) {
+  const started = performance.now();
+  const child = spawnSync(python, args, { ...options, timeout: processTimeout, shell: false });
+  const diagnostic = JSON.stringify({ label, elapsedMs: Math.round(performance.now() - started),
+    timeoutMs: processTimeout, errorCode: child.error?.code ?? null,
+    status: child.status, signal: child.signal,
+    inputBytes: Buffer.byteLength(options.input ?? ''),
+    inputSha256: createHash('sha256').update(options.input ?? '').digest('hex'),
+    stdoutBytes: Buffer.byteLength(child.stdout ?? ''), stderrBytes: Buffer.byteLength(child.stderr ?? '') });
+  assertProcessFinished(child, diagnostic);
+  return { child, diagnostic };
+}
+function assertProcessFinished(child, diagnostic) {
+  assert.equal(child.error, undefined, diagnostic);
+  assert.equal(child.signal, null, diagnostic);
+}
+test('process timeouts and signals remain hard failures without retries', () => {
+  assert.throws(() => assertProcessFinished({ error: { code: 'ETIMEDOUT' }, signal: 'SIGTERM' }, 'timeout'), /timeout/);
+  assert.throws(() => assertProcessFinished({ error: undefined, signal: 'SIGTERM' }, 'signal'), /signal/);
+  assert.doesNotThrow(() => assertProcessFinished({ error: undefined, signal: null }, 'finished'));
+});
+test('test process budget has a finite default and rejects malformed or unbounded overrides', () => {
+  assert.equal(testTimeout(undefined), 30000);
+  assert.equal(testTimeout('10000'), 10000);
+  assert.equal(testTimeout('60000'), 60000);
+  for (const value of ['0', '9999', '60001', 'Infinity', '1e4', '-1', '', ' 30000']) assert.throws(() => testTimeout(value));
+});
+test('Python test interpreter starts in isolation before delivery cases', (t) => {
+  const { child, diagnostic } = checkedSpawn(['-I', '-B', '-c', 'import sys; print(sys.version.split()[0])'],
+    { encoding: 'utf8', cwd: root }, 'python-startup-preflight');
+  t.diagnostic(diagnostic);
+  assert.equal(child.status, 0, diagnostic);
+  assert.equal(child.stderr, '', diagnostic);
+  assert.match(child.stdout.trim(), /^3\.\d+\.\d+$/);
+});
+
 function invoke(input, script = 'deliver.py', args = ['--input-json', '-']) {
-  const child = spawnSync(python, ['-I', '-B', path.join(root, 'scripts', script), ...args], {
+  const { child, diagnostic } = checkedSpawn(['-I', '-B', path.join(root, 'scripts', script), ...args], {
     input: typeof input === 'string' ? input : JSON.stringify(input), encoding: 'utf8',
-    timeout: 10000, maxBuffer: 4 * 1024 * 1024, cwd: root, shell: false,
-  });
-  assert.ifError(child.error);
-  assert.equal(child.stderr, '');
+    maxBuffer: 4 * 1024 * 1024, cwd: root,
+  }, `${script}:${args.join(' ')}`);
+  assert.equal(child.stderr, '', diagnostic);
   const output = JSON.parse(child.stdout);
-  assert.equal(child.status, output.status === 'invalid_input' ? 2 : 0);
+  assert.equal(child.status, output.status === 'invalid_input' ? 2 : 0, diagnostic);
   return output;
 }
 function run(materials, request = task) {
@@ -59,11 +106,10 @@ for mutation in json.loads(sys.argv[2]):
         continue
     raise AssertionError('accepted invalid domain receipt: ' + mutation)
 print('validated')`;
-  const child = spawnSync(python, ['-I', '-B', '-c', code, path.join(root, 'scripts/deliver.py'), JSON.stringify(mutations)], {
-    input: JSON.stringify(fixture('normal')), encoding: 'utf8', shell: false, timeout: 10000,
-  });
-  assert.ifError(child.error);
-  assert.equal(child.status, 0, child.stderr);
+  const { child, diagnostic } = checkedSpawn(['-I', '-B', '-c', code, path.join(root, 'scripts/deliver.py'), JSON.stringify(mutations)], {
+    input: JSON.stringify(fixture('normal')), encoding: 'utf8',
+  }, 'domain-receipt-mutations');
+  assert.equal(child.status, 0, diagnostic);
   assert.equal(child.stdout.trim(), 'validated');
 }
 
