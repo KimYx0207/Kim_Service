@@ -18,6 +18,14 @@ Kim Service uses one repository-level two-part public version (`V<major>.<minor>
 - Original calculation-tool.json contracts, calculate.py implementations, --input-json - CLI, capability IDs, role versions and read-only permissions are unchanged.
 - deliveryContract is optional for existing consumers. Meta 3.5.0 uses the reviewed delivery interface; earlier Service packages remain discoverable but do not silently gain that capability. Discovery never authorizes arbitrary commands, supplier contact, ordering, payments or business writes.
 
+### Verification
+
+- Historical checks and their acceptance limits remain in the [V1.7 testing record](./docs/verification-history.md#v17---2026-10-04). This documentation move does not rerun checks or certify native model-chain acceptance or real business results.
+
+### Source revisions
+
+- Previous-release and reviewed-implementation revisions remain in the [V1.7 source record](./docs/verification-history.md#v17---2026-10-04). Existing external and canonical direct-sync origins are unchanged.
+
 ## V1.6 - 2026-10-04
 
 ### Affected components
