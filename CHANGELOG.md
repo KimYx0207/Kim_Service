@@ -1,6 +1,6 @@
 # Changelog
 
-Kim Service uses one repository-level two-part public version (`V<major>.<minor>`) and one GitHub Release for the professional-capability dependency repository. Component CHANGELOG files record component provenance; this file is the release-note authority.
+Kim Service uses one repository-level two-part public version (`V<major>.<minor>`) and one GitHub Release for the professional-capability dependency repository. Component CHANGELOG files record component provenance; this file is the release-note authority. Historical verification and source notes are kept in the [testing record](./docs/verification-history.md).
 
 ## V1.7 - 2026-10-04
 
@@ -17,17 +17,6 @@ Kim Service uses one repository-level two-part public version (`V<major>.<minor>
 
 - Original calculation-tool.json contracts, calculate.py implementations, --input-json - CLI, capability IDs, role versions and read-only permissions are unchanged.
 - deliveryContract is optional for existing consumers. Meta 3.5.0 uses the reviewed delivery interface; earlier Service packages remain discoverable but do not silently gain that capability. Discovery never authorizes arbitrary commands, supplier contact, ordering, payments or business writes.
-
-### Verification
-
-- All 68 root regressions and 45 declared validation files across 26 components passed locally, including 18 professional-delivery tests. Existing Windows-specific skips remain explicit on Linux.
-- Thirty-six Meta/Service integration tests passed with real Python calculation, MCP transport and formal task handoff; independent review covered receipt parity, duplicate keys, Unicode, source integrity and bounded input/output. These are not native model-chain acceptance or real business results.
-- Exact-head and merged-main CI, clean-main release readiness and remote annotated-tag verification are required before publication and recorded in the Release.
-
-### Source revisions
-
-- Previous release V1.6: 593bbb34bffd888d4b5f7bd8d8e4f30dc25dc2a9.
-- Reviewed delivery implementation and committed-component-tree provenance: ae38c0e2806c2350459bfdf771c9cb29a5a076a5. External and canonical direct-sync origins remain unchanged.
 
 ## V1.6 - 2026-10-04
 
@@ -48,18 +37,6 @@ Kim Service uses one repository-level two-part public version (`V<major>.<minor>
 - Existing capability IDs, Agent output contracts and Python calculation implementations are unchanged. Consumers may use the optional helperContract reference after verifying the selected component; the descriptor does not authorize arbitrary commands.
 - Structured callers still provide their actual materials. Missing costs remain unknown, incompatible definitions remain non-comparable, and supplier comparison does not contact suppliers, place orders or authorize payments.
 - Native Agent loading remains needs_probe. Meta_Kim continues to own intent, orchestration, runtime selection, permissions and final acceptance.
-
-### Verification
-
-- The calculation-discovery implementation passed 67 root regressions, all 43 declared validation entrypoints across 26 components, and independent contract/catalog review. Existing platform-specific skips remain explicit.
-- Meta's formal entrypoint executed the real helpers for synthetic procurement and store-review cases. The current dot model consumed the complete professional methods and actual receipts and delivered conditional supplier advice and a five-part store review. This evidence does not certify the product's autonomous native model chain or real business outcomes.
-- Release acceptance requires exact-head and merged-main CI on Linux, macOS and Windows, a clean-main release check, the annotated version tag and fresh remote-tag verification. Those publication results are recorded in the GitHub Release.
-
-### Source revisions
-
-- Previous release: V1.5 at 92b8d0c464b476ae8dcc99b405a0c604e39bc3f4. Integrated calculator-discovery source: d83b52488e28c1c9b1c6ef3e89d5a58b3ce67ee3, including PRs #8 through #11.
-- Generated committed-component-tree provenance points to reviewed source commit 4f2853ee48a9dd1a87002922f86276d6315528af. Existing external and canonical direct-sync origins remain unchanged.
-- This release adds no model SDK, scheduler, role roster, credentials or private requirements document. It does not claim the broader capability migration or all native runtimes complete.
 
 ## V1.5 - 2026-10-03
 
