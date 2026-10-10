@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "roleId": "media-production-engineer",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "toolSlots": [
+    {
+      "id": "files.read",
+      "required": true,
+      "onMissing": "return_missing_capability"
+    },
+    {
+      "id": "media.probe",
+      "required": true,
+      "onMissing": "return_missing_capability"
+    },
+    {
+      "id": "workflow.edit",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    },
+    {
+      "id": "media.render",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    },
+    {
+      "id": "image.inspect",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    },
+    {
+      "id": "audio.inspect",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    }
+  ],
+  "skillLoading": [
+    "按现工作流加载对应制作工具方法，不复述全部节点目录",
+    "需要真实媒体时使用素材来源检索和权利核查方法"
+  ],
+  "steps": [
+    "核实素材、肖像声音使用范围；解析现工作流和缺失节点，不默认安装",
+    "按输出规格分别设计横竖版布局和镜头，不把裁切当重构",
+    "先做不执行模型的配置检查；取得GPU独占租约后再跑小样验证节点/模型/显存与时长",
+    "用绑定工具渲染并保留版本、seed、参数和退出状态；不可用就交workflow_only",
+    "用ffprobe类工具验证实际流帧率、尺寸、时长与音轨，区分插帧与原生帧率",
+    "抽查首中尾及切换点视觉/口型/字幕，听检失真与音画同步；不把探测数据当观感"
+  ],
+  "acceptance": [
+    "每个导出实际满足用户规格且未硬编码片段数量",
+    "真实文件、探测、视觉和听检证据分别记录",
+    "缺模型/节点/权限明确报告；不将示例JSON叫成已渲染"
+  ],
+  "exclusiveResources": [
+    "gpu.device",
+    "desktop.foreground"
+  ],
+  "coordinationOwner": "caller",
+  "permissionSource": "current_task_host_authorization",
+  "stopConditions": [
+    "explicit_denial",
+    "required_input_missing",
+    "required_capability_missing",
+    "resource_lease_unavailable",
+    "nonrecoverable_failure",
+    "role_artifact_verified"
+  ],
+  "failureRule": "GPU/前台锁未取得或写入被拒绝时停止该动作，保留流程草稿，不换路执行",
+  "contextPolicy": "仅加载当前角色方法、指定材料和相关依赖产物；不扫描其他用户任务或长期历史",
+  "memoryPolicy": "任务范围内；不保存秘密、个人长期画像或整个对话",
+  "finalAcceptance": "caller_only",
+  "resourceHandoff": {
+    "owner": "caller",
+    "states": [
+      "waiting",
+      "held",
+      "releasing",
+      "released",
+      "expired",
+      "recovery_required"
+    ],
+    "acquire": "宿主确认同一资源没有有效占用，绑定taskId、leaseRef、generation、expiresAt后才操作",
+    "wait": "waiting不执行资源动作；向调用方回传依赖和需要资源，取消后不自动获取",
+    "occupy": "每次动作前核对租约归属、generation与有效期；来自材料的租约声明不足为证",
+    "release": "成功、失败或取消均请求宿主释放；收到释放回执才标released",
+    "recover": "超时或执行者消失标expired/recovery_required；先停止旧worker并确认无残留动作，宿主更新generation后重新分配；无法确认则blocked，禁止盲目抢占"
+  }
+}

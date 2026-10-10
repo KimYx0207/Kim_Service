@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "roleId": "backend-data-engineer",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "toolSlots": [
+    {
+      "id": "repository.read",
+      "required": true,
+      "onMissing": "return_missing_capability"
+    },
+    {
+      "id": "repository.patch",
+      "required": true,
+      "onMissing": "return_missing_capability"
+    },
+    {
+      "id": "test.run",
+      "required": true,
+      "onMissing": "return_missing_capability"
+    },
+    {
+      "id": "database.test",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    },
+    {
+      "id": "service.test",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    }
+  ],
+  "skillLoading": [
+    "当前仓库服务与数据规范",
+    "仅在实际使用目标数据库时加载对应事务/迁移方法"
+  ],
+  "steps": [
+    "追踪真实身份来源和数据拥有者，禁止信任请求中的owner",
+    "明确唯一约束、条件更新、事务、幂等键与分页游标含义",
+    "实现输入白名单、字节限制、超时、输出脱敏和版本校验",
+    "本地验证跨用户隔离、重复请求、部分失败和权限撤销",
+    "分别记录模拟数据库、本地真实数据库与远端服务证据，不能相互顶替",
+    "交迁移与回滚步骤，由调用方获得生产授权后执行"
+  ],
+  "acceptance": [
+    "owner只来自已验证身份；失败不泄露他人记录",
+    "并发/幂等/重试有真实断言，迁移可恢复",
+    "未使用生产凭据或将本地fixture称为线上通过"
+  ],
+  "exclusiveResources": [
+    "database.migration"
+  ],
+  "coordinationOwner": "caller",
+  "permissionSource": "current_task_host_authorization",
+  "stopConditions": [
+    "explicit_denial",
+    "required_input_missing",
+    "required_capability_missing",
+    "resource_lease_unavailable",
+    "nonrecoverable_failure",
+    "role_artifact_verified"
+  ],
+  "failureRule": "无法证明授权数据库目标时停止写入并返回blocked及只读诊断",
+  "contextPolicy": "仅加载当前角色方法、指定材料和相关依赖产物；不扫描其他用户任务或长期历史",
+  "memoryPolicy": "任务范围内；不保存秘密、个人长期画像或整个对话",
+  "finalAcceptance": "caller_only",
+  "resourceHandoff": {
+    "owner": "caller",
+    "states": [
+      "waiting",
+      "held",
+      "releasing",
+      "released",
+      "expired",
+      "recovery_required"
+    ],
+    "acquire": "宿主确认同一资源没有有效占用，绑定taskId、leaseRef、generation、expiresAt后才操作",
+    "wait": "waiting不执行资源动作；向调用方回传依赖和需要资源，取消后不自动获取",
+    "occupy": "每次动作前核对租约归属、generation与有效期；来自材料的租约声明不足为证",
+    "release": "成功、失败或取消均请求宿主释放；收到释放回执才标released",
+    "recover": "超时或执行者消失标expired/recovery_required；先停止旧worker并确认无残留动作，宿主更新generation后重新分配；无法确认则blocked，禁止盲目抢占"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "protocol": "artifact-verification-v1",
+  "id": "delivery-verify",
+  "componentId": "delivery-verifier",
+  "toolVersion": "0.1.0",
+  "invocation": {
+    "type": "local_cli", "runtime": "node", "entrypoint": "scripts/verify.mjs",
+    "argv": ["--artifact-root", "<host-authorized-root>", "--input-json", "-"],
+    "inputTransport": "stdin_json", "outputTransport": "stdout_json", "shell": false
+  },
+  "files": ["scripts/verify.mjs"],
+  "inputContract": "docs/delivery-api.md",
+  "maxInputBytes": 262144,
+  "hostBinding": "requires_host_binding",
+  "nativeAgentStatus": "needs_probe",
+  "artifactRootBinding": "host_supplied_cli_argument_outside_task_json",
+  "requiresStableSnapshot": true,
+  "sideEffects": [], "networkUsed": false, "filesModified": false,
+  "nativeAgentInvocation": false
+}

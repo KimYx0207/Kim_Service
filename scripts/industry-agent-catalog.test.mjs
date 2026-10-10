@@ -15,10 +15,11 @@ const groups = {
   career: ['resume-editor', 'interview-coach', 'workplace-writer'],
   education: ['lesson-planner', 'concept-tutor', 'exercise-designer'],
   business: ['side-business-evaluator', 'launch-planner', 'pricing-cost-analyst'],
-  procurement: ['supplier-comparison-analyst']
+  procurement: ['supplier-comparison-analyst'],
+  delivery: ['product-architect', 'interaction-designer', 'frontend-engineer', 'backend-data-engineer', 'media-production-engineer', 'quantitative-researcher', 'source-evidence-analyst', 'delivery-verifier']
 };
 
-test('the agreed industry scopes expose sixteen bounded agent contracts', () => {
+test('the agreed scopes expose bounded industry and task-delivery agent contracts', () => {
   const index = buildCapabilityIndex(root);
   const agents = index.components.filter((component) => component.componentType === 'agent');
   assert.deepEqual(agents.map((component) => component.id).sort(), Object.values(groups).flat().sort());
@@ -39,9 +40,13 @@ test('each industry component can run its declared check outside the repository'
       try {
         const standalone = path.join(temporaryRoot, component.id);
         fs.cpSync(path.join(root, component.path), standalone, { recursive: true });
+        const validationEnv = { ...process.env };
+        // Nested test files are independent CLI validations, not children of
+        // Node's binary test-runner protocol. Keep failure diagnostics readable.
+        delete validationEnv.NODE_TEST_CONTEXT;
         for (const validation of component.validation) {
           const result = spawnSync(process.execPath, [path.join(standalone, validation)], {
-            cwd: standalone, encoding: 'utf8', shell: false
+            cwd: standalone, encoding: 'utf8', shell: false, env: validationEnv
           });
           assert.ifError(result.error);
           assert.equal(result.status, 0, `${component.id}: ${result.stdout}\n${result.stderr}`);

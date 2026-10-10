@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "roleId": "quantitative-researcher",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "toolSlots": [
+    {
+      "id": "files.read",
+      "required": true,
+      "onMissing": "return_missing_capability"
+    },
+    {
+      "id": "calculation.run",
+      "required": true,
+      "onMissing": "return_missing_capability"
+    },
+    {
+      "id": "dataset.read",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    }
+  ],
+  "skillLoading": [
+    "数据质量与回测方法；按所用工具加载最小计算规范",
+    "涉及真实金融规则时核对当前一手资料"
+  ],
+  "steps": [
+    "检查重复/缺失时间、幸存者偏差、复权、退市及信号可用时点",
+    "先盘点已有收益/分红/手续费/批次实现，复用其真实计算与测试；核对观察指标是否仍用未计分红的单位净值，以及研究结果是否接入真实成本和持有批次路径",
+    "在跑结果前固定样本切分、基准、交易规则与费用假设",
+    "信号使用过去数据；执行明确滞后；拒绝未来信息与测试集调参",
+    "按真实成本计算净值与回撤，记录失败策略而不只展示最优",
+    "做样本外、成本及参数敏感性；样本太短就缩小结论",
+    "交数据与代码来源、版本、复现入口和局限，不出自动交易指令"
+  ],
+  "acceptance": [
+    "信号时点早于执行，训练测试无泄漏",
+    "费用与回撤口径可复算，基准区间相同",
+    "结果仅解释给定样本，不保证收益，不接交易接口",
+    "历史股票资格、ST/停牌/退市和行业必须按当时时点判定；禁止用当前is_active等快照过滤历史选股",
+    "有分红或多批持仓时，研究结果、账户成本、应收分红与观察指标口径一致；独立算例不能替代实际账户链路"
+  ],
+  "exclusiveResources": [],
+  "coordinationOwner": "caller",
+  "permissionSource": "current_task_host_authorization",
+  "stopConditions": [
+    "explicit_denial",
+    "required_input_missing",
+    "required_capability_missing",
+    "resource_lease_unavailable",
+    "nonrecoverable_failure",
+    "role_artifact_verified"
+  ],
+  "failureRule": "缺数据可用时点或费用时交partial并列缺项，不填零冒称净收益",
+  "contextPolicy": "仅加载当前角色方法、指定材料和相关依赖产物；不扫描其他用户任务或长期历史",
+  "memoryPolicy": "任务范围内；不保存秘密、个人长期画像或整个对话",
+  "finalAcceptance": "caller_only",
+  "resourceHandoff": {
+    "owner": "caller",
+    "states": [
+      "waiting",
+      "held",
+      "releasing",
+      "released",
+      "expired",
+      "recovery_required"
+    ],
+    "acquire": "宿主确认同一资源没有有效占用，绑定taskId、leaseRef、generation、expiresAt后才操作",
+    "wait": "waiting不执行资源动作；向调用方回传依赖和需要资源，取消后不自动获取",
+    "occupy": "每次动作前核对租约归属、generation与有效期；来自材料的租约声明不足为证",
+    "release": "成功、失败或取消均请求宿主释放；收到释放回执才标released",
+    "recover": "超时或执行者消失标expired/recovery_required；先停止旧worker并确认无残留动作，宿主更新generation后重新分配；无法确认则blocked，禁止盲目抢占"
+  }
+}

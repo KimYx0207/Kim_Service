@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "roleId": "product-architect",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "toolSlots": [
+    {
+      "id": "repository.read",
+      "required": true,
+      "onMissing": "return_missing_capability"
+    },
+    {
+      "id": "documents.read",
+      "required": true,
+      "onMissing": "return_missing_capability"
+    },
+    {
+      "id": "diagram.render",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    }
+  ],
+  "skillLoading": [
+    "仅在涉及软件仓库时加载该仓库工程指南",
+    "涉及数据指标时加载数据口径方法，涉及迁移时加载版本迁移指南"
+  ],
+  "steps": [
+    "从现实现和复现证据区分需求、假设、历史残留；不把参考项目功能当需求",
+    "画出当前与目标的数据流，确认数据唯一来源、写入者和权限边界",
+    "提出最小方案与一个可行替代方案，比较运行成本、迁移风险和不确定项",
+    "定义每条状态转移的前置条件、失败恢复、幂等与版本兼容",
+    "按实际依赖提出前端、后端、测试的输入输出；由调用方决定并行顺序",
+    "把架构决策与用户结果逐项对应；对无法现场验证的假设给可执行试验"
+  ],
+  "acceptance": [
+    "每个用户结果有可观察验收项和责任输出",
+    "前后端接口字段、错误状态、权限边界相容",
+    "回滚保留现有用户数据，未用未知数字论证成本"
+  ],
+  "exclusiveResources": [],
+  "coordinationOwner": "caller",
+  "permissionSource": "current_task_host_authorization",
+  "stopConditions": [
+    "explicit_denial",
+    "required_input_missing",
+    "required_capability_missing",
+    "resource_lease_unavailable",
+    "nonrecoverable_failure",
+    "role_artifact_verified"
+  ],
+  "failureRule": "缺服务认证事实时标记needs_input，不把猜测写成可上线方案",
+  "contextPolicy": "仅加载当前角色方法、指定材料和相关依赖产物；不扫描其他用户任务或长期历史",
+  "memoryPolicy": "任务范围内；不保存秘密、个人长期画像或整个对话",
+  "finalAcceptance": "caller_only",
+  "resourceHandoff": {
+    "owner": "caller",
+    "states": [
+      "waiting",
+      "held",
+      "releasing",
+      "released",
+      "expired",
+      "recovery_required"
+    ],
+    "acquire": "宿主确认同一资源没有有效占用，绑定taskId、leaseRef、generation、expiresAt后才操作",
+    "wait": "waiting不执行资源动作；向调用方回传依赖和需要资源，取消后不自动获取",
+    "occupy": "每次动作前核对租约归属、generation与有效期；来自材料的租约声明不足为证",
+    "release": "成功、失败或取消均请求宿主释放；收到释放回执才标released",
+    "recover": "超时或执行者消失标expired/recovery_required；先停止旧worker并确认无残留动作，宿主更新generation后重新分配；无法确认则blocked，禁止盲目抢占"
+  }
+}

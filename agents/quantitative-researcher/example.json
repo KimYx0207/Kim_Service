@@ -1,0 +1,62 @@
+{
+  "input": {
+    "hypothesis": "比较固定持有与带成本日调仓",
+    "dataset": "合成三个周期收益，非真实行情",
+    "method": "初始净值1；收益1%、-2%、3%；单期扣费0.1%",
+    "acceptanceCriteria": [
+      {
+        "id": "scope",
+        "condition": "信号时点早于执行，训练测试无泄漏",
+        "evidenceRequired": "指定材料、产物与独立检查"
+      }
+    ],
+    "handoffContext": {
+      "taskId": "synthetic-example",
+      "upstreamArtifacts": [],
+      "permittedActions": [
+        "read_supplied_materials"
+      ],
+      "resourceLeases": []
+    }
+  },
+  "output": {
+    "research": "仅演示给定收益序列的净值核算，不是策略回测",
+    "results": "逐期净收益率0.009/-0.021/0.029，对应净值1.009、0.987811、1.016457519，最大回撤2.1%；真实结果需运行helper",
+    "reproducibility": "未调用行情或交易API；样本外与信号无泄漏需另行验证",
+    "status": "partial",
+    "artifactRefs": [],
+    "criterionResults": [
+      {
+        "id": "scope",
+        "status": "not_run",
+        "evidenceRefs": [],
+        "scope": "合成设计案例，尚未执行"
+      }
+    ],
+    "missingCapabilities": [
+      {
+        "slot": "files.read",
+        "state": "unverified",
+        "impact": "没有实际宿主回执，无法完成该槽对应工作",
+        "nextAction": "调用方核实当前授权并绑定实际工具"
+      },
+      {
+        "slot": "calculation.run",
+        "state": "unverified",
+        "impact": "没有实际宿主回执，无法完成该槽对应工作",
+        "nextAction": "调用方核实当前授权并绑定实际工具"
+      }
+    ],
+    "failures": [],
+    "stopReason": "synthetic_example_only",
+    "handoff": {
+      "nextOwner": "caller",
+      "acceptedScope": "method example",
+      "remaining": [
+        "bind and verify actual task"
+      ],
+      "requiresDecision": false
+    },
+    "nativeRuntimeVerified": false
+  }
+}

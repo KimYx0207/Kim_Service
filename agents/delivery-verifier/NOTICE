@@ -1,0 +1,11 @@
+delivery-verifier
+Copyright (c) 2026 KimYx0207 (Kim package and bounded verification helper)
+
+MIT License; preserve LICENSE and these attribution statements when redistributing.
+The package layout and role-contract conventions follow existing Kim Service Agent packs.
+The copied MIT license preserves the existing Michael Sitarzewski and jnMetaCode
+attributions; this newly authored verifier is not claimed to be their implementation.
+
+Only local evidence integrity and explicit field consistency are checked.
+No endorsement, authenticity certification, host compatibility, browser execution,
+model behavior, authorization, locking or final acceptance is implied.

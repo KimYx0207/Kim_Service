@@ -1,0 +1,62 @@
+{
+  "input": {
+    "journey": "用户解决同步冲突并返回编辑",
+    "reference": "合成原型：只有一个覆盖按钮",
+    "constraints": "手机优先，允许键盘操作",
+    "acceptanceCriteria": [
+      {
+        "id": "scope",
+        "condition": "关键路径包含退出/失败恢复且不丢用户输入",
+        "evidenceRequired": "指定材料、产物与独立检查"
+      }
+    ],
+    "handoffContext": {
+      "taskId": "synthetic-example",
+      "upstreamArtifacts": [],
+      "permittedActions": [
+        "read_supplied_materials"
+      ],
+      "resourceLeases": []
+    }
+  },
+  "output": {
+    "stateDesign": "冲突页并列本机/云端版本，提供保留副本、合并及取消；取消回编辑且内容不变",
+    "visualSpec": "窄屏上下排列；主按钮为查看差异；焦点进入标题，关闭后回原按钮；reduced-motion无滑动",
+    "reviewEvidence": "design_only；当前没有浏览器回执，待验返回、取消与重复提交",
+    "status": "partial",
+    "artifactRefs": [],
+    "criterionResults": [
+      {
+        "id": "scope",
+        "status": "not_run",
+        "evidenceRefs": [],
+        "scope": "合成设计案例，尚未执行"
+      }
+    ],
+    "missingCapabilities": [
+      {
+        "slot": "image.inspect",
+        "state": "unverified",
+        "impact": "没有实际宿主回执，无法完成该槽对应工作",
+        "nextAction": "调用方核实当前授权并绑定实际工具"
+      },
+      {
+        "slot": "documents.read",
+        "state": "unverified",
+        "impact": "没有实际宿主回执，无法完成该槽对应工作",
+        "nextAction": "调用方核实当前授权并绑定实际工具"
+      }
+    ],
+    "failures": [],
+    "stopReason": "synthetic_example_only",
+    "handoff": {
+      "nextOwner": "caller",
+      "acceptedScope": "method example",
+      "remaining": [
+        "bind and verify actual task"
+      ],
+      "requiresDecision": false
+    },
+    "nativeRuntimeVerified": false
+  }
+}
