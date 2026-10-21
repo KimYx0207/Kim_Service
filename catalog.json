@@ -490,8 +490,8 @@
       "kind": "hook",
       "path": "hooks/hookprompt",
       "source": "canonical:hooks/hookprompt",
-      "revision": "pending-local:V1.8-documentation",
-      "snapshot": "capability-contract-pending-release",
+      "revision": "505940a75ea9e925b6aecaf86ef003c52db00389",
+      "snapshot": "committed-component-tree",
       "priorSources": [
         {
           "source": "https://github.com/KimYx0207/HookPrompt",
