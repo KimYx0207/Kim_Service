@@ -2,6 +2,39 @@
 
 Kim Service uses one repository-level two-part public version (`V<major>.<minor>`) and one GitHub Release for the professional-capability dependency repository. Component CHANGELOG files record component provenance; this file is the release-note authority. Historical verification and source notes are kept in the [testing record](./docs/verification-history.md).
 
+## V1.8 - 2026-10-21
+
+### Affected components
+
+- HookPrompt 1.3.0 and its shared catalog and capability index.
+- Eight professional Agent packs already merged into main: Backend Data Engineer, Delivery Verifier, Frontend Engineer, Interaction Designer, Media Production Engineer, Product Architect, Quantitative Researcher and Source Evidence Analyst, each at 0.1.0. The collection now has 34 components and 49 declared capabilities.
+
+### User-visible changes
+
+- Ordinary task prompts request a brief understanding followed by execution, retaining confirmed goals and decisions instead of requiring a full prompt rewrite every turn. Explicit prompt-writing requests still receive a complete, copyable prompt.
+- HOOKPROMPT_DISPLAY_MODE=full restores the previous three-part display. This choice is independent of HOOKPROMPT_COMPACT_CONTEXT, which controls backstage template length.
+- Hooks start beneath ESM project ancestors. Historical .js entries delegate to the bundled .cjs implementation without changing the module type or behavior of other hooks in a shared directory.
+- The eight Agent packs define professional inputs, outputs, host-tool slots and failure handoffs for design, implementation, research, media and verification work. Their contracts do not automatically install Agents, invoke models or prove runtime-native loading.
+
+### Breaking changes and migration
+
+- HookPrompt's default visible-response instruction is concise; opt into full mode to retain the previous display. Summary, empty and unrecognized display values use the concise default.
+- Carry user-prompt-submit.cjs alongside the historical Claude .js entry when copying hooks. Complete component or directory installation carries both. Claude argv input, Codex stdin input and synchronous CommonJS exports remain compatible.
+- Existing permissions and approval requirements remain. This release operation does not update personal runtime installations. Hook instructions alone do not guarantee the host model's rendered response.
+- Delivery Verifier's safe-open artifact checks remain POSIX-only. Windows rejects those reads rather than accepting unsupported verification; browser/model acceptance and native Agent loading remain unverified.
+
+### Verification
+
+- Local candidate root regressions passed 77/77; all 55 declared validation entrypoints across 34 components exited zero. These contain 34 platform/availability skips: 12 POSIX verifier cases, 19 Bash-installer cases, two Semgrep cases and one installed npm-CLI probe.
+- After the ESM fix, HookPrompt passed 72 entry-compatibility, six privacy and 25 module-boundary checks. Twelve actual extracted-entry calls and eleven Meta-to-Service isolated install/update checks passed without invoking a model or updating personal runtime homes.
+- The extracted 539-file candidate matched every source hash. Independent review checked the ESM closure, stdin/argv behavior, synchronous exports, fail-open output and archive integrity. These local results do not certify cross-platform CI, host-model compliance or user acceptance.
+- Publication additionally requires exact-head and merged-main CI, clean-main release readiness and remote tag/asset readback. The final run IDs and release-asset hashes are recorded in the GitHub Release.
+
+### Source revisions
+
+- Baseline main: e388fd51a48d0bebcb515929be2f4cfda97cdf3c. Existing component licenses and imported historical origins are retained.
+- Current local component changes use their canonical package paths. The existing provenance generator binds committed component bytes to the reviewed implementation revision recorded during release preparation.
+
 ## V1.7 - 2026-10-04
 
 ### Affected components

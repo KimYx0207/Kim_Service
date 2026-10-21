@@ -24,13 +24,11 @@ HookPrompt 是一个面向 Claude Code、Codex 等 Agent 工具的 `UserPromptSu
 - 用户反馈很短，例如“这个不行”“报错了”“帮我看看”，但其实需要诊断或修复。
 - 任务需要清晰边界、成功标准和验证计划，否则容易变成“看起来执行了，但没有真的完成”。
 
-HookPrompt 默认要求模型在首条回复中展示三段式结果：
+HookPrompt 默认在后台整理任务，前台最多一句简短理解，必要约束最多补充三个短点，随后立即执行；需求已清楚或用户要求直接结果时，可以省略前言。
 
-```text
-原始输入 -> 优化后的理解 -> 优化后的完整提示词
-```
+用户明确要优化、改写、生成或展示提示词时，完整、可复制的提示词就是交付物，不能用摘要代替。短确认沿用当前会话已定的目标、范围和决策，不重新输出长篇任务改写。
 
-优化后的完整提示词会使用 role-first、outcome-contract、tagged structure、success criteria 和 verification plan，让后续执行更清楚、更可控。
+后台仍使用 role-first、outcome-contract、tagged structure、success criteria 和 verification plan。需要原来的三段式展示时，可显式切换完整模式。
 
 ## 工作方式
 
@@ -50,7 +48,7 @@ HookPrompt 不会替代模型执行任务。它做的是在任务开始前把意
 
 | 能力 | 说明 |
 |---|---|
-| 结构化优化 | 将普通输入整理成 Context / Task / Format 摘要和完整执行提示词 |
+| 结构化优化 | 后台整理任务，前台最多简短理解后立即执行；提示词交付按需完整输出 |
 | 结果契约 | 明确 goal、scope、success criteria、verification plan 和 stop conditions |
 | 智能过滤 | 跳过纯确认、普通内置命令等无需优化的输入 |
 | 短诊断触发 | 对“这个不行”“报错了”“帮我看看”等短输入仍会触发优化 |
@@ -80,7 +78,9 @@ HookPrompt 不会替代模型执行任务。它做的是在任务开始前把意
 node test-hook.js
 ```
 
-测试脚本会验证短输入过滤、诊断触发、正常需求优化和 Codex JSON 输入提取。
+测试脚本验证短输入过滤、默认简洁与显式完整模式、无效模式回退、提示词交付契约、Codex 输入提取和隐私日志。存在原生 Bash 时，也实际运行 Bash 委派入口。
+
+入口同时覆盖 CommonJS 与 ESM 项目。`.claude/hooks/user-prompt-submit.js` 是兼容入口，必须与相邻 `user-prompt-submit.cjs` 实现一起复制；组件根 `package.json` 只保护完整组件中的本地工具，不需要复制到目标项目或共享 hooks 目录，也不要覆盖目标项目的包类型。
 
 ### 2. 复制到 Claude Code 项目
 
@@ -118,13 +118,13 @@ Copy-Item -Recurse .claude D:\YourProject\
 
 ### 3. 复制到 Codex 项目
 
-把 `.codex` 目录复制到目标项目根目录：
+将 `.codex` 适配器与它依赖的 `.claude` 实现、模板一起放在目标项目根目录；已有配置应合并，不要覆盖：
 
 ```bash
-cp -r .codex /your/project/root/
+cp -r .codex .claude /your/project/root/
 ```
 
-Codex 入口会从标准输入 JSON 中提取 `prompt` 字段，并通过 `hookSpecificOutput.additionalContext` 返回模型可见上下文。
+Codex 入口委派给相邻 `.claude/hooks/user-prompt-submit.cjs`，由共享实现提取标准输入 JSON 的 `prompt` 字段，并通过 `hookSpecificOutput.additionalContext` 返回模型可见上下文。只复制 `.codex` 或漏掉 `.cjs` 不能组成完整安装。Codex 始终读取标准输入；Claude 入口保留已有的命令行参数输入方式。
 
 ## 全局安装
 
@@ -135,6 +135,7 @@ Windows PowerShell：
 ```powershell
 New-Item -ItemType Directory -Force "$env:USERPROFILE\.claude\hooks" | Out-Null
 Copy-Item -Force .claude\hooks\user-prompt-submit.js "$env:USERPROFILE\.claude\hooks\user-prompt-submit.js"
+Copy-Item -Force .claude\hooks\user-prompt-submit.cjs "$env:USERPROFILE\.claude\hooks\user-prompt-submit.cjs"
 Copy-Item -Force .claude\prompt-optimizer-meta.md "$env:USERPROFILE\.claude\prompt-optimizer-meta.md"
 ```
 
@@ -142,7 +143,7 @@ macOS / Linux：
 
 ```bash
 mkdir -p ~/.claude/hooks
-cp .claude/hooks/user-prompt-submit.js ~/.claude/hooks/
+cp .claude/hooks/user-prompt-submit.js .claude/hooks/user-prompt-submit.cjs ~/.claude/hooks/
 cp .claude/hooks/user-prompt-submit.sh ~/.claude/hooks/
 cp .claude/prompt-optimizer-meta.md ~/.claude/
 chmod +x ~/.claude/hooks/*.sh
@@ -170,23 +171,35 @@ chmod +x ~/.claude/hooks/*.sh
 
 ### Codex
 
-把 `.codex/hooks/user-prompt-submit.js` 复制到你的 Codex hook 目录，并在对应 `hooks.json` 中配置 `UserPromptSubmit`。项目级使用时，直接保留本仓库的 `.codex/hooks.json` 即可。
+把 `.codex/hooks/user-prompt-submit.js` 复制到你的 Codex hook 目录，同时按上面的 Claude Code 步骤保留相邻 `.claude` 下的 `.js`、`.cjs` 和模板，并在对应 `hooks.json` 中合并配置 `UserPromptSubmit`。项目级使用时，同样需要两套目录中的这些文件。
 
 ## 配置选项
 
-### 完整体验与紧凑模式
+### 前台展示与后台长度
 
-默认模式会注入完整 meta 模板，保证用户可见回复包含完整三段式：
+两个开关相互独立：
 
-- 原始输入
-- 优化后的理解
-- 优化后的完整提示词
+| 配置 | 行为 |
+|---|---|
+| 未设置或 `HOOKPROMPT_DISPLAY_MODE=summary` | 最多简短理解后立即执行，不复述原始输入或扩写完整提示词；用户要提示词时完整交付 |
+| `HOOKPROMPT_DISPLAY_MODE=full` | 恢复原始输入、优化后的理解、优化后的完整提示词三段式，只在首条可见回复展示一次 |
+| `HOOKPROMPT_COMPACT_CONTEXT=1` | 仅缩短后台注入，不附加共享方法模板；前台仍按所选展示模式输出 |
 
-只有在明确需要更短后台上下文时，才设置：
+空值和未知显示模式回到默认 `summary`。完整模式不改变纯确认、普通命令和内部消息的跳过规则；两个开关都不修改宿主审批、权限或治理阶段。
+
+在启动宿主的环境中显式恢复完整展示（PowerShell）：
+
+```powershell
+$env:HOOKPROMPT_DISPLAY_MODE = "full"
+```
+
+macOS / Linux 可在启动宿主前设置：
 
 ```bash
-HOOKPROMPT_COMPACT_CONTEXT=1
+export HOOKPROMPT_DISPLAY_MODE=full
 ```
+
+取消该环境变量或设为 `summary` 即恢复简洁模式。`HOOKPROMPT_COMPACT_CONTEXT=1` 仍可与任一展示模式组合。
 
 ### 自定义优化规则
 
@@ -205,6 +218,7 @@ HookPrompt/
 ├── .claude/
 │   ├── hooks/
 │   │   ├── user-prompt-submit.js
+│   │   ├── user-prompt-submit.cjs
 │   │   └── user-prompt-submit.sh
 │   ├── prompt-optimizer-meta.md
 │   ├── settings.json
@@ -223,6 +237,7 @@ HookPrompt/
 ├── LICENSE
 ├── README.md
 ├── README_EN.md
+├── package.json
 └── test-hook.js
 ```
 
@@ -234,7 +249,7 @@ HookPrompt/
 node test-hook.js
 ```
 
-建议在修改 Hook 逻辑、过滤规则、Codex 适配或提示词模板后都运行一次。
+建议在修改 Hook 逻辑、过滤规则、Codex 适配或提示词模板后都运行一次。测试会隔离调用环境中的 HookPrompt 模式和 debug 开关，避免影响默认行为用例。
 
 测试通过只代表本地脚本行为符合预期；真实工具内是否展示优化结果，还需要在 Claude Code 或 Codex 会话中实际触发一次确认。
 

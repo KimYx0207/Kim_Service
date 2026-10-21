@@ -2,12 +2,12 @@
   "schemaVersion": 1,
   "id": "hookprompt",
   "componentType": "hook",
-  "componentVersion": "1.2.11",
+  "componentVersion": "1.3.0",
   "entrypoint": ".claude/hooks/user-prompt-submit.js",
   "capabilities": [
     {
       "id": "prompt-enhancement",
-      "summary": "Transforms an eligible UserPromptSubmit prompt into structured additionalContext that asks the host model to clarify the task before executing it.",
+      "summary": "Transforms an eligible UserPromptSubmit prompt into structured additionalContext for concise understanding followed by immediate execution, preserving established conversation decisions.",
       "useWhen": [
         "A user submits a substantive task prompt that benefits from explicit context, task, format, scope, success criteria, and verification guidance.",
         "A short prompt still expresses diagnostic, repair, review, or optimization intent, such as 这个不行 or 报错了."
@@ -81,10 +81,10 @@
     },
     {
       "id": "assistant-display-contract",
-      "summary": "Supplies a first-response display contract for the host model: original input, optimized understanding, complete optimized prompt, then task execution.",
+      "summary": "Supplies a concise first-response contract by default: at most brief understanding then immediate execution. Explicit prompt-writing requests require a complete copyable prompt; HOOKPROMPT_DISPLAY_MODE=full restores the original three-part display independently of backstage compact context.",
       "useWhen": [
         "HookPrompt processes an eligible user prompt and the host supports UserPromptSubmit additionalContext.",
-        "The user should be able to see how the original request was interpreted before the host model continues the real task."
+        "The user needs brief interpretation before execution, a complete prompt as the requested deliverable, or explicitly opts into the original full display."
       ],
       "doNotUseWhen": [
         "The input was filtered and HookPrompt returned an empty object.",
@@ -132,7 +132,7 @@
                 "type": "string"
               }
             },
-            "description": "Eligible UserPromptSubmit additionalContext containing the one-time display instructions and safely fenced original prompt."
+            "description": "Eligible UserPromptSubmit additionalContext containing concise or explicitly full display instructions, complete prompt-delivery guidance, and safely fenced original input. Host-model rendering remains outside the hook's guarantee."
           }
         }
       },
