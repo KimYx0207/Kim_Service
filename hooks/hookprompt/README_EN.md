@@ -24,13 +24,11 @@ It helps with three common failure modes:
 - The user gives short feedback such as "this does not work", "error", or "please check", but the actual intent is diagnosis or repair.
 - The task needs scope, success criteria, and a verification plan before execution, otherwise the Agent may appear busy without proving the user goal is done.
 
-By default, HookPrompt asks the model to start its first visible reply with a three-part structure:
+By default, HookPrompt structures the task backstage. The visible response uses at most one brief sentence of understanding, with up to three short constraints only when needed, then immediately executes. Clear requests or requests for a direct answer can skip the preamble.
 
-```text
-Original input -> Optimized understanding -> Optimized full prompt
-```
+When the user explicitly asks to optimize, rewrite, create, or display a prompt, a complete copyable prompt is the deliverable and must not be replaced by a summary. Short confirmations retain the conversation's established goal, scope, and decisions.
 
-The optimized prompt uses role-first framing, outcome contracts, tagged structure, success criteria, and a verification plan.
+Backstage guidance still uses role-first framing, outcome contracts, tagged structure, success criteria, and a verification plan. The original three-part display remains available through an explicit full mode.
 
 ## How It Works
 
@@ -50,7 +48,7 @@ HookPrompt does not execute the task itself. It clarifies intent, boundaries, ou
 
 | Feature | Description |
 |---|---|
-| Structured optimization | Turns user input into a Context / Task / Format summary and a complete execution prompt |
+| Structured optimization | Structures the task backstage, executes after at most brief understanding, and delivers complete prompts on request |
 | Outcome contract | Adds goal, scope, success criteria, verification plan, and stop conditions |
 | Smart filtering | Skips confirmations and ordinary built-in commands |
 | Short diagnostic trigger | Still optimizes short repair-oriented input |
@@ -80,7 +78,9 @@ Run from the repository root:
 node test-hook.js
 ```
 
-The test script checks short-input filtering, diagnostic triggering, normal request optimization, and Codex JSON input extraction.
+The tests cover filtering, concise and full display modes, invalid-mode fallback, prompt-delivery guidance, Codex extraction, and privacy logging. When native Bash is available, they also execute its delegation entrypoint.
+
+The entrypoints work in CommonJS and ESM projects. Copy the `.claude/hooks/user-prompt-submit.js` compatibility entry together with its adjacent `user-prompt-submit.cjs` implementation. The component-root `package.json` protects local tools inside the complete component; do not copy it over the target project's package or into a shared hooks directory.
 
 ### 2. Copy to a Claude Code Project
 
@@ -118,13 +118,13 @@ The target `.claude/settings.json` should use `UserPromptSubmit`:
 
 ### 3. Copy to a Codex Project
 
-Copy `.codex` into the target project root:
+Place `.codex` together with its shared `.claude` implementation and template in the target project root. Merge existing configuration rather than overwriting it:
 
 ```bash
-cp -r .codex /your/project/root/
+cp -r .codex .claude /your/project/root/
 ```
 
-The Codex adapter extracts the `prompt` field from stdin JSON and returns model-visible context through `hookSpecificOutput.additionalContext`.
+The Codex adapter delegates to the adjacent `.claude/hooks/user-prompt-submit.cjs`. That shared implementation extracts the `prompt` field from stdin JSON and returns model-visible context through `hookSpecificOutput.additionalContext`. Copying `.codex` alone or omitting `.cjs` is incomplete. Codex always reads stdin; the Claude entry retains its existing command-line argument input.
 
 ## Global Installation
 
@@ -135,6 +135,7 @@ Windows PowerShell:
 ```powershell
 New-Item -ItemType Directory -Force "$env:USERPROFILE\.claude\hooks" | Out-Null
 Copy-Item -Force .claude\hooks\user-prompt-submit.js "$env:USERPROFILE\.claude\hooks\user-prompt-submit.js"
+Copy-Item -Force .claude\hooks\user-prompt-submit.cjs "$env:USERPROFILE\.claude\hooks\user-prompt-submit.cjs"
 Copy-Item -Force .claude\prompt-optimizer-meta.md "$env:USERPROFILE\.claude\prompt-optimizer-meta.md"
 ```
 
@@ -142,7 +143,7 @@ macOS / Linux:
 
 ```bash
 mkdir -p ~/.claude/hooks
-cp .claude/hooks/user-prompt-submit.js ~/.claude/hooks/
+cp .claude/hooks/user-prompt-submit.js .claude/hooks/user-prompt-submit.cjs ~/.claude/hooks/
 cp .claude/hooks/user-prompt-submit.sh ~/.claude/hooks/
 cp .claude/prompt-optimizer-meta.md ~/.claude/
 chmod +x ~/.claude/hooks/*.sh
@@ -170,23 +171,35 @@ Then configure `~/.claude/settings.json`. Absolute paths are more reliable for g
 
 ### Codex
 
-Copy `.codex/hooks/user-prompt-submit.js` to your Codex hook directory and configure `UserPromptSubmit` in `hooks.json`. For project-level usage, keep this repository's `.codex/hooks.json`.
+Copy `.codex/hooks/user-prompt-submit.js` to your Codex hook directory, retain the adjacent shared `.claude` `.js`, `.cjs` and template using the Claude Code steps above, and merge `UserPromptSubmit` into `hooks.json`. Project installs need those files from both directories as well.
 
 ## Configuration
 
-### Full Experience and Compact Mode
+### Visible Display and Backstage Context
 
-The default mode injects the full meta template so the visible reply can preserve:
+These settings are independent:
 
-- Original input
-- Optimized understanding
-- Optimized full prompt
+| Setting | Behavior |
+|---|---|
+| Unset or `HOOKPROMPT_DISPLAY_MODE=summary` | At most brief understanding then immediate execution; no repeated original input or expanded prompt, except when a prompt is the requested deliverable |
+| `HOOKPROMPT_DISPLAY_MODE=full` | Restores original input, optimized understanding, and complete optimized prompt once in the first visible response |
+| `HOOKPROMPT_COMPACT_CONTEXT=1` | Omits the shared method template to shorten backstage context; the selected visible display mode still applies |
 
-Use compact mode only when you explicitly need shorter backstage context:
+Empty or unknown display values fall back to `summary`. Full mode still skips confirmations, ordinary commands, and internal messages. Neither setting changes host approvals, permissions, or governance stages.
+
+To restore the original full display in the environment used to launch the host (PowerShell):
+
+```powershell
+$env:HOOKPROMPT_DISPLAY_MODE = "full"
+```
+
+On macOS / Linux:
 
 ```bash
-HOOKPROMPT_COMPACT_CONTEXT=1
+export HOOKPROMPT_DISPLAY_MODE=full
 ```
+
+Unset the variable or set it to `summary` to restore concise display. `HOOKPROMPT_COMPACT_CONTEXT=1` can be combined with either display mode.
 
 ### Customize Optimization Rules
 
@@ -205,6 +218,7 @@ HookPrompt/
 ├── .claude/
 │   ├── hooks/
 │   │   ├── user-prompt-submit.js
+│   │   ├── user-prompt-submit.cjs
 │   │   └── user-prompt-submit.sh
 │   ├── prompt-optimizer-meta.md
 │   ├── settings.json
@@ -223,6 +237,7 @@ HookPrompt/
 ├── LICENSE
 ├── README.md
 ├── README_EN.md
+├── package.json
 └── test-hook.js
 ```
 
@@ -234,7 +249,7 @@ Run:
 node test-hook.js
 ```
 
-Run the tests after changing hook logic, filtering rules, Codex adaptation, or the prompt template.
+Run the tests after changing hook logic, filtering rules, Codex adaptation, or the prompt template. Test processes isolate inherited HookPrompt mode and debug settings so default-mode cases stay deterministic.
 
 Passing tests prove local script behavior. To verify real product behavior, trigger the hook in Claude Code or Codex.
 
@@ -313,7 +328,9 @@ Release history is maintained in [CHANGELOG.md](./CHANGELOG.md). The changelog i
 
 ## Contact
 
-![Contact QR code](docs/images/contact-qr.png)
+<p align="center">
+  <img src="docs/images/contact-qr.png" width="720" alt="Contact QR code">
+</p>
 
 GitHub <a href="https://github.com/KimYx0207">KimYx0207</a> |
 X <a href="https://x.com/KimYx0207">@KimYx0207</a> |

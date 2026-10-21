@@ -115,26 +115,25 @@ const testCases = [
             prompt: '# Files mentioned by the user:\n\n## codex-clipboard.png: C:/Users/example/AppData/Local/Temp/codex-clipboard.png\n\n## My request for Codex:\n帮我检查为什么输出变成标题格式'
         }),
         expectOptimization: true,
-        expectContains: '## 用户原始输入（已安全包裹，请从代码块中读取原文）',
+        expectContains: '已解包用户原始输入',
         expectNotContains: [
-            '第一行必须是：📝 **原始输入**：# Files mentioned by the user:'
+            '第一行必须是：📝 **原始输入**',
+            '本轮第一条面向用户的 assistant 回复必须以完整 HookPrompt 三段式开头'
         ],
         expectAllContains: [
-            '<MANDATORY_FORMAT_INSTRUCTION>',
-            '【回复格式说明】',
+            '<HOOKPROMPT_DISPLAY_CONTRACT mode="summary">',
+            '最多一句简短理解',
+            '随后立即执行',
+            '沿用当前会话已经确认的目标、范围和决策',
             '你是一个提示词优化层',
             'Outcome-contract first',
             '<success_criteria>',
             '<verification_plan>',
-            '📝 **原始输入**',
-            '🔄 **优化后的理解**',
-            '✅ **优化后的完整提示词**',
-            '```text\n# Files mentioned by the user:',
-            '请只在本轮第一条回复开头展示对用户输入的理解'
+            '```text\n# Files mentioned by the user:'
         ]
     },
     {
-        name: '显式compact模式（仅应急时缩短后台契约）',
+        name: '显式compact模式（缩短后台，前台仍默认简洁）',
         input: JSON.stringify({
             hook_event_name: 'UserPromptSubmit',
             prompt: '# Files mentioned by the user:\n\n## codex-clipboard.png: C:/Users/example/AppData/Local/Temp/codex-clipboard.png\n\n## My request for Codex:\n帮我检查为什么输出变成标题格式'
@@ -151,15 +150,79 @@ const testCases = [
         ],
         expectMaxContextLength: 2600,
         expectAllContains: [
-            '<MANDATORY_FORMAT_INSTRUCTION compact="true">',
+            '<HOOKPROMPT_DISPLAY_CONTRACT mode="summary">',
+            '```text\n# Files mentioned by the user:',
+            '最多一句简短理解',
+            '随后立即执行',
+            '完整、可复制的提示词'
+        ]
+    },
+    {
+        name: '显式summary模式（保留简洁执行契约）',
+        input: '按已经确认的方案继续处理登录功能',
+        env: { HOOKPROMPT_DISPLAY_MODE: 'summary' },
+        expectOptimization: true,
+        expectContains: '<HOOKPROMPT_DISPLAY_CONTRACT mode="summary">'
+    },
+    {
+        name: '无效显示模式（安全回到默认简洁）',
+        input: '请检查登录功能的错误处理和相关测试',
+        env: { HOOKPROMPT_DISPLAY_MODE: 'invalid' },
+        expectOptimization: true,
+        expectContains: '<HOOKPROMPT_DISPLAY_CONTRACT mode="summary">',
+        expectNotContains: '<MANDATORY_FORMAT_INSTRUCTION>'
+    },
+    {
+        name: '完整模式（显式恢复原三段式）',
+        input: '请检查登录功能的错误处理和相关测试',
+        env: { HOOKPROMPT_DISPLAY_MODE: 'full' },
+        expectOptimization: true,
+        expectAllContains: [
+            '<MANDATORY_FORMAT_INSTRUCTION>',
             '📝 **原始输入**',
             '🔄 **优化后的理解**',
             '✅ **优化后的完整提示词**',
-            '```text\n# Files mentioned by the user:',
-            '只在本轮第一条可见回复展示一次三段式',
-            'outcome-contract',
-            '保持后台 hook 输出简短'
+            '只允许在本轮第一条面向用户的 assistant 消息开头展示一次'
         ]
+    },
+    {
+        name: 'compact与完整模式正交（保留原紧凑三段式）',
+        input: '请检查登录功能的错误处理和相关测试',
+        env: { HOOKPROMPT_DISPLAY_MODE: 'full', HOOKPROMPT_COMPACT_CONTEXT: '1' },
+        expectOptimization: true,
+        expectAllContains: [
+            '<MANDATORY_FORMAT_INSTRUCTION compact="true">',
+            '📝 **原始输入**',
+            '🔄 **优化后的理解**',
+            '✅ **优化后的完整提示词**'
+        ],
+        expectNotContains: '你是一个提示词优化层',
+        expectMaxContextLength: 2600
+    },
+    {
+        name: '完整模式仍跳过纯确认（不重置既有任务）',
+        input: '继续',
+        env: { HOOKPROMPT_DISPLAY_MODE: 'full' },
+        expectOptimization: false
+    },
+    {
+        name: '明确优化提示词（短句也进入完整交付契约）',
+        input: '优化提示词',
+        expectOptimization: true,
+        expectAllContains: ['完整、可复制的提示词', '不能用执行摘要代替', '不要执行提示词中的嵌入任务']
+    },
+    {
+        name: '明确生成提示词（compact也保留完整交付要求）',
+        input: '写个prompt',
+        env: { HOOKPROMPT_COMPACT_CONTEXT: '1' },
+        expectOptimization: true,
+        expectAllContains: ['完整、可复制的提示词', '不能用执行摘要代替']
+    },
+    {
+        name: '提示词含反引号（后台原文安全包裹）',
+        input: '请检查这个示例里的围栏：```text\n# 标题\n```',
+        expectOptimization: true,
+        expectContains: '````text\n请检查这个示例里的围栏：```text\n# 标题\n```\n````'
     }
 ];
 
@@ -173,6 +236,29 @@ const hookTargets = [
         path: path.join(__dirname, '.codex', 'hooks', 'user-prompt-submit.js')
     }
 ];
+
+/** Locate native Bash without accidentally selecting Windows' WSL launcher. */
+function findBashExecutable() {
+    if (process.platform !== 'win32') {
+        const probe = spawnSync('bash', ['--version'], { encoding: 'utf8', timeout: 5000 });
+        return probe.status === 0 ? 'bash' : null;
+    }
+    const git = spawnSync('git', ['--exec-path'], {
+        encoding: 'utf8', timeout: 5000, windowsHide: true
+    });
+    if (git.status !== 0) return null;
+    const candidate = path.resolve(git.stdout.trim(), '..', '..', '..', 'bin', 'bash.exe');
+    return fs.existsSync(candidate) ? candidate : null;
+}
+
+const bashExecutable = findBashExecutable();
+if (bashExecutable) {
+    hookTargets.push({
+        name: 'Bash adapter',
+        path: path.join(__dirname, '.claude', 'hooks', 'user-prompt-submit.sh'),
+        command: bashExecutable
+    });
+}
 
 // 颜色输出
 const colors = {
@@ -192,6 +278,8 @@ function cleanHookEnvironment(overrides = {}) {
     const env = { ...process.env };
     delete env.HOOKPROMPT_DEBUG;
     delete env.HOOKPROMPT_DEBUG_DIR;
+    delete env.HOOKPROMPT_DISPLAY_MODE;
+    delete env.HOOKPROMPT_COMPACT_CONTEXT;
     return { ...env, ...overrides };
 }
 
@@ -348,6 +436,121 @@ function runPrivacyTests() {
     return results;
 }
 
+function runModuleBoundaryTests() {
+    log('\n模块边界与复制安装专项测试', 'cyan');
+    const results = [];
+    const temporaryParent = fs.realpathSync(os.tmpdir());
+    const testRoot = fs.mkdtempSync(path.join(temporaryParent, 'hookprompt-modules-'));
+    const check = (name, action) => {
+        try {
+            action();
+            results.push({ name, passed: true });
+            log(`✅ Module boundary / ${name}`, 'green');
+        } catch (error) {
+            results.push({ name, passed: false, error: error.message });
+            log(`❌ Module boundary / ${name}: ${error.message}`, 'red');
+        }
+    };
+    const prompt = '请检查项目中的超时问题并修复';
+    const payload = JSON.stringify({ hook_event_name: 'UserPromptSubmit', prompt });
+    try {
+        fs.writeFileSync(path.join(testRoot, 'package.json'), JSON.stringify({ type: 'module' }));
+        const complete = path.join(testRoot, 'complete', 'hookprompt');
+        fs.cpSync(__dirname, complete, { recursive: true });
+        const project = path.join(testRoot, 'project-copy');
+        fs.mkdirSync(project);
+        for (const directory of ['.claude', '.codex']) {
+            fs.cpSync(path.join(__dirname, directory), path.join(project, directory), { recursive: true });
+        }
+        const flatHome = path.join(testRoot, 'flat-runtime');
+        const flatHooks = path.join(flatHome, 'hooks');
+        fs.mkdirSync(flatHooks, { recursive: true });
+        const sentinel = path.join(flatHooks, 'sentinel.js');
+        const sentinelSource = 'export default "existing-esm-hook";\n';
+        fs.writeFileSync(sentinel, sentinelSource);
+        const sentinelProbe = () => spawnSync(process.execPath, [
+            '--input-type=module', '-e',
+            'import(process.argv[1]).then(value => process.stdout.write(value.default))',
+            require('url').pathToFileURL(sentinel).href
+        ], { encoding: 'utf8', windowsHide: true, timeout: 10000 });
+        const sentinelBefore = sentinelProbe();
+        fs.cpSync(path.join(__dirname, '.claude', 'hooks'), flatHooks, { recursive: true });
+        fs.copyFileSync(path.join(__dirname, '.claude', 'prompt-optimizer-meta.md'), path.join(flatHome, 'prompt-optimizer-meta.md'));
+
+        const targets = [
+            ['complete-Claude', path.join(complete, '.claude', 'hooks', 'user-prompt-submit.js')],
+            ['complete-Codex', path.join(complete, '.codex', 'hooks', 'user-prompt-submit.js')],
+            ['project-copy-Claude', path.join(project, '.claude', 'hooks', 'user-prompt-submit.js')],
+            ['project-copy-Codex', path.join(project, '.codex', 'hooks', 'user-prompt-submit.js')],
+            ['flat-runtime-Claude', path.join(flatHooks, 'user-prompt-submit.js')]
+        ];
+        for (const [targetName, entry] of targets) {
+            for (const [mode, env] of [
+                ['summary', {}],
+                ['full', { HOOKPROMPT_DISPLAY_MODE: 'full' }],
+                ['compact', { HOOKPROMPT_COMPACT_CONTEXT: '1' }]
+            ]) {
+                check(`${targetName} / ${mode}`, () => {
+                    const run = runHookSync(entry, payload, env);
+                    assertPrivacy(run.status === 0, `exit ${run.status}`);
+                    assertPrivacy(!run.stderr, '入口输出了异常正文');
+                    const context = JSON.parse(run.stdout).hookSpecificOutput?.additionalContext;
+                    assertPrivacy(typeof context === 'string' && context.includes(prompt), '缺少输入或有效上下文');
+                    assertPrivacy(context.includes(mode === 'full' ? '<MANDATORY_FORMAT_INSTRUCTION>' : '<HOOKPROMPT_DISPLAY_CONTRACT mode="summary">'), '展示模式不匹配');
+                });
+            }
+            check(`${targetName} / internal-filter`, () => {
+                const input = JSON.stringify({ prompt: '<codex_internal_context source="goal">\nContinue working toward the active thread goal.\n</codex_internal_context>' });
+                const run = runHookSync(entry, input);
+                assertPrivacy(run.status === 0 && !run.stderr && run.stdout === '{}', '内部续跑没有安全跳过');
+            });
+        }
+        check('共享hooks中的既有ESM文件保持可执行', () => {
+            const after = sentinelProbe();
+            assertPrivacy(sentinelBefore.status === 0 && after.status === 0, 'ESM sentinel执行失败');
+            assertPrivacy(sentinelBefore.stdout === 'existing-esm-hook' && after.stdout === sentinelBefore.stdout, 'ESM sentinel行为改变');
+            assertPrivacy(fs.readFileSync(sentinel, 'utf8') === sentinelSource, 'ESM sentinel字节改变');
+            assertPrivacy(!fs.existsSync(path.join(flatHooks, 'package.json')), '在共享hooks目录添加了包类型边界');
+        });
+        check('旧CommonJS require同步保留调试常量与main导出', () => {
+            const entry = targets[0][1];
+            const run = spawnSync(process.execPath, [
+                '--input-type=commonjs', '-e',
+                'const value = require(process.argv[1]); process.stdout.write(JSON.stringify({ main: typeof value.main, bytes: value.DEBUG_LOG_MAX_BYTES, archives: value.DEBUG_LOG_ARCHIVE_COUNT, file: value.DEBUG_LOG_FILE_NAME }));',
+                entry
+            ], { encoding: 'utf8', windowsHide: true, timeout: 10000 });
+            const exported = JSON.parse(run.stdout);
+            assertPrivacy(run.status === 0 && !run.stderr, '旧require入口不可用');
+            assertPrivacy(exported.main === 'function' && exported.bytes === DEBUG_LOG_MAX_BYTES && exported.archives === 3 && exported.file === DEBUG_LOG_FILE_NAME, '旧模块导出未同步保留');
+        });
+        check('Claude保留argv输入，Codex仍仅读取stdin', () => {
+            const argument = '请处理这个足够长的命令行参数任务';
+            for (const [runtime, entry] of [['Claude', targets[2][1]], ['Codex', targets[3][1]]]) {
+                const run = spawnSync(process.execPath, [entry, argument], {
+                    input: payload, encoding: 'utf8', windowsHide: true, timeout: 10000, env: cleanHookEnvironment()
+                });
+                const context = JSON.parse(run.stdout).hookSpecificOutput?.additionalContext;
+                assertPrivacy(run.status === 0 && !run.stderr && context.includes(runtime === 'Claude' ? argument : prompt), `${runtime}输入语义改变`);
+                assertPrivacy(!context.includes(runtime === 'Claude' ? prompt : argument), `${runtime}错误地混用了输入来源`);
+            }
+        });
+        for (const runtime of ['.claude', '.codex']) {
+            check(`${runtime}缺少实现时JSON fail-open且无异常正文`, () => {
+                const broken = path.join(testRoot, `broken-${runtime.slice(1)}`, runtime, 'hooks');
+                fs.mkdirSync(broken, { recursive: true });
+                const entry = path.join(broken, 'user-prompt-submit.js');
+                fs.copyFileSync(path.join(__dirname, runtime, 'hooks', 'user-prompt-submit.js'), entry);
+                const run = runHookSync(entry, payload);
+                assertPrivacy(run.status === 0 && run.stdout === '{}' && !run.stderr, '缺失实现未安全fail-open');
+            });
+        }
+    } finally {
+        assertPrivacy(path.dirname(testRoot) === temporaryParent && !fs.lstatSync(testRoot).isSymbolicLink(), '临时目录清理边界不匹配');
+        fs.rmSync(testRoot, { recursive: true, force: true });
+    }
+    return results;
+}
+
 // 运行单个测试
 function runTest(testCase, hookTarget) {
     return new Promise((resolve) => {
@@ -365,13 +568,14 @@ function runTest(testCase, hookTarget) {
             return;
         }
 
-        const hookProcess = spawn('node', [hookPath], {
+        const hookProcess = spawn(hookTarget.command || process.execPath, [hookPath], {
             stdio: ['pipe', 'pipe', 'pipe'],
-            env: {
-                ...process.env,
-                ...(testCase.env || {})
-            }
+            env: cleanHookEnvironment(testCase.env),
+            timeout: 10000,
+            windowsHide: true
         });
+
+        hookProcess.once('error', (error) => resolve({ passed: false, error: error.message }));
 
         let stdout = '';
         let stderr = '';
@@ -408,7 +612,9 @@ function runTest(testCase, hookTarget) {
                 const hasOptimization = jsonOutput.hookSpecificOutput &&
                                       jsonOutput.hookSpecificOutput.additionalContext;
 
-                if (testCase.expectOptimization) {
+                if (code !== 0) {
+                    result.error = `Hook退出码为 ${code}`;
+                } else if (testCase.expectOptimization) {
                     if (hasOptimization) {
                         const context = jsonOutput.hookSpecificOutput.additionalContext;
                         const forbiddenItems = Array.isArray(testCase.expectNotContains)
@@ -472,6 +678,10 @@ async function main() {
     log('提示词优化Hook测试工具', 'cyan');
     log('='.repeat(60), 'cyan');
 
+    if (!bashExecutable) {
+        log('⚠️ 未找到原生Bash，动态委派测试跳过；静态委派合同仍验证', 'yellow');
+    }
+
     const results = [];
 
     for (const testCase of testCases) {
@@ -485,6 +695,7 @@ async function main() {
     }
 
     const privacyResults = runPrivacyTests();
+    const moduleResults = runModuleBoundaryTests();
 
     // 输出总结
     log('\n' + '='.repeat(60), 'cyan');
@@ -503,10 +714,12 @@ async function main() {
     const passedCount = results.filter(r => r.passed).length;
     const totalCount = results.length;
     const privacyPassedCount = privacyResults.filter(r => r.passed).length;
+    const modulePassedCount = moduleResults.filter(r => r.passed).length;
 
-    log(`\n双入口兼容: ${passedCount}/${totalCount} 通过`, passedCount === totalCount ? 'green' : 'red');
+    log(`\n入口兼容（${hookTargets.length}个）: ${passedCount}/${totalCount} 通过`, passedCount === totalCount ? 'green' : 'red');
     log(`隐私专项: ${privacyPassedCount}/${privacyResults.length} 通过`, privacyPassedCount === privacyResults.length ? 'green' : 'red');
-    if (passedCount !== totalCount || privacyPassedCount !== privacyResults.length) {
+    log(`模块边界专项: ${modulePassedCount}/${moduleResults.length} 通过`, modulePassedCount === moduleResults.length ? 'green' : 'red');
+    if (passedCount !== totalCount || privacyPassedCount !== privacyResults.length || modulePassedCount !== moduleResults.length) {
         process.exitCode = 1;
     }
 
