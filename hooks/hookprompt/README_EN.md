@@ -328,7 +328,9 @@ Release history is maintained in [CHANGELOG.md](./CHANGELOG.md). The changelog i
 
 ## Contact
 
-![Contact QR code](docs/images/contact-qr.png)
+<p align="center">
+  <img src="docs/images/contact-qr.png" width="720" alt="Contact QR code">
+</p>
 
 GitHub <a href="https://github.com/KimYx0207">KimYx0207</a> |
 X <a href="https://x.com/KimYx0207">@KimYx0207</a> |

@@ -328,7 +328,9 @@ cat "${TMPDIR:-/tmp}/hookprompt-debug/hook-prompt-optimizer.log"
 
 ## 联系方式
 
-![联系二维码](docs/images/contact-qr.png)
+<p align="center">
+  <img src="docs/images/contact-qr.png" width="720" alt="联系二维码">
+</p>
 
 GitHub <a href="https://github.com/KimYx0207">KimYx0207</a> |
 X <a href="https://x.com/KimYx0207">@KimYx0207</a> |

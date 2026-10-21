@@ -33,7 +33,7 @@ Kim Service uses one repository-level two-part public version (`V<major>.<minor>
 ### Source revisions
 
 - Baseline main: e388fd51a48d0bebcb515929be2f4cfda97cdf3c. Existing component licenses and imported historical origins are retained.
-- Current local component changes use their canonical package paths. The existing provenance generator binds committed component bytes to the reviewed implementation revision recorded during release preparation.
+- Reviewed implementation and committed component-tree provenance for HookPrompt and the eight newly released Agent packs: ce3f4d52a6dc0476ec9183d4e57dd74eef3b299d. Unchanged packages retain their previous valid source revisions; HookPrompt also retains its prior external source in the catalog and component history.
 
 ## V1.7 - 2026-10-04
 

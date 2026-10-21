@@ -268,7 +268,7 @@
       ]
     },
     {
-      "componentContentSha256": "1c70795ba53ea68cccbe9bc213d79f676b75f6bb4650eb83116bdcefb3768156",
+      "componentContentSha256": "70ed01badbf4343be66e2cfd4abb6c4a26a857e425339539020c5d82ced70e62",
       "componentId": "hookprompt",
       "componentPath": "hooks/hookprompt",
       "componentType": "hook",
@@ -4958,7 +4958,7 @@
       ]
     },
     {
-      "componentContentSha256": "1c70795ba53ea68cccbe9bc213d79f676b75f6bb4650eb83116bdcefb3768156",
+      "componentContentSha256": "70ed01badbf4343be66e2cfd4abb6c4a26a857e425339539020c5d82ced70e62",
       "componentId": "hookprompt",
       "componentPath": "hooks/hookprompt",
       "componentType": "hook",
@@ -7564,7 +7564,7 @@
       ],
       "componentType": "hook",
       "componentVersion": "1.3.0",
-      "contentSha256": "1c70795ba53ea68cccbe9bc213d79f676b75f6bb4650eb83116bdcefb3768156",
+      "contentSha256": "70ed01badbf4343be66e2cfd4abb6c4a26a857e425339539020c5d82ced70e62",
       "contractSha256": "6bb178a22db72b04a15f4935629c0f4996be4dbeabcbbb3efcab1fc5edcec32a",
       "entrypoint": ".claude/hooks/user-prompt-submit.js",
       "id": "hookprompt",
