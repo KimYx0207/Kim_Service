@@ -67,3 +67,5 @@ Native Agent 加载、工具执行和最终用户结果是三个独立状态。�
 ### 租约等待、占用、释放与失效恢复
 
 交接状态为 waiting → held → releasing → released；超时或执行者失联进入 expired / recovery_required。租约由宿主分配 taskId、leaseRef、generation 与 expiresAt，执行角色每次操作前必须由宿主确认仍有效。等待不操作资源，取消不自动争抢；收到释放回执才算释放。失效后先停止旧执行者并确认没有残留动作，再由宿主递增 generation 重新分配。若无法确认旧执行者已经停止，任务保持 blocked；不能仅因时间到了就启动第二个浏览器操作或GPU作业。当前组件只声明此交接协议，不宣称实现了跨进程 fencing。
+
+实际应用见 [2026-10-22 维护交付案例](cases/maintenance-handoff-20261022/README.md)：同一真实任务中应用前端工程与工作沟通方法，保留输入、初稿、修订和来源映射；方法应用、工具检查、原生角色加载与最终验收分别记录。
