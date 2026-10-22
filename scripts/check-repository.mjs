@@ -11,6 +11,7 @@ import {
   parsePublicVersion
 } from './release-contract.mjs';
 import { checkCatalogArtifacts } from './catalog-automation.mjs';
+import { checkZcodeRelease } from './check-zcode-release.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CATALOG_PATH = path.join(ROOT, 'catalog.json');
@@ -19,6 +20,7 @@ const RELEASE_MODE = process.argv.includes('--release');
 const errors = [];
 const files = [];
 const directories = [];
+let zcodeReleaseResult = null;
 
 function normalize(relativePath) {
   return relativePath.split(path.sep).join('/');
@@ -122,11 +124,29 @@ function normalizeGitHubRemote(value) {
 }
 
 function checkReleaseReadiness(catalog) {
-  const unknownArguments = process.argv.slice(2).filter((item) => item !== '--release');
-  if (unknownArguments.length) {
-    fail('Unknown release-check arguments: ' + unknownArguments.join(', '));
+  const options = {};
+  const names = { '--zcode-candidate': 'candidateRoot', '--zcode-previous': 'previousRoot' };
+  const args = process.argv.slice(2);
+  for (let index = 0; index < args.length; index += 1) {
+    const argument = args[index];
+    if (argument === '--release') continue;
+    if (argument === '--source-only' || argument === '--zcode-initial') {
+      const key = argument === '--source-only' ? 'sourceOnly' : 'initial';
+      if (options[key]) fail('Duplicate release-check flag');
+      options[key] = true;
+      continue;
+    }
+    const key = names[argument];
+    if (!key || Object.hasOwn(options, key) || !args[index + 1] || args[index + 1].startsWith('--')) {
+      fail('Invalid or duplicate release-check argument');
+      continue;
+    }
+    options[key] = args[++index];
   }
+  if (!RELEASE_MODE && Object.keys(options).length) fail('Publication-check arguments require --release');
   if (!RELEASE_MODE) return;
+  if (options.sourceOnly && (options.candidateRoot || options.previousRoot || options.initial)) fail('--source-only cannot include Zcode asset arguments');
+  if (!options.sourceOnly && !options.candidateRoot) fail('release requires --zcode-candidate or explicit --source-only');
 
   const release = catalog?.release ?? {};
   const versionPath = path.join(ROOT, release.versionFile ?? 'VERSION');
@@ -209,6 +229,11 @@ function checkReleaseReadiness(catalog) {
         fail('VERSION must be greater than existing release tag ' + blockingTag);
       }
     }
+  }
+  if (!options.sourceOnly && options.candidateRoot) {
+    try {
+      zcodeReleaseResult = checkZcodeRelease({ ...options, expectedKimVersion: parsedVersion ? parsedVersion.major + '.' + parsedVersion.minor + '.0' : undefined });
+    } catch (error) { fail(error.message); }
   }
 }
 
@@ -900,5 +925,9 @@ console.log(
 );
 
 if (RELEASE_MODE) {
-  console.log('Kim_Service release readiness passed for ' + fs.readFileSync(path.join(ROOT, 'VERSION'), 'utf8').trim() + '.');
+  console.log('Kim_Service source release readiness passed for ' + fs.readFileSync(path.join(ROOT, 'VERSION'), 'utf8').trim() + '.');
+  if (zcodeReleaseResult) {
+    console.log('Zcode publication input check passed (' + zcodeReleaseResult.mode + '); public baseline and actual consumer update require separate verification.');
+    console.log(JSON.stringify(zcodeReleaseResult));
+  } else console.log('source-only; Zcode assets not checked.');
 }

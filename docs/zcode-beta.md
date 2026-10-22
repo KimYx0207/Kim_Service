@@ -23,6 +23,28 @@ node scripts/build-zcode-marketplace.mjs --meta-root <absolute-meta-checkout> --
 
 同样的输入产生同样的文件和闭包，不使用构建时间戳。哈希表示字节一致性，不能替代来源审查、签名或实际运行验收。脚本仅读取本地源和写新输出；需要宿主提供稳定 checkout 与输出父目录，不能作为恶意并发替换的 OS 沙箱。
 
+## 发布前版本门禁
+
+离线 builder 可以反复准备尚未发布的候选；它不替代发布检查。发布带 Beta 资产的版本前，从上一次真实 GitHub Release 下载已公开的 Beta 包，核对 Release 来源和资产摘要，再解压到独立目录。下列目录均指包含 `marketplace.json` 的内容根，而不是外层 ZIP 解压目录。
+
+```text
+node scripts/check-repository.mjs --release --zcode-candidate <absolute-candidate-content> --zcode-previous <absolute-previous-public-content>
+```
+
+门禁重新读取两个插件目录的实际文件，比较路径、字节数与 SHA256，不信任清单中声明的旧哈希。Skill、Agent、插件 README、sidecar、生成包装或文件增删，只要消费者目录改变，就必须升级对应插件版本；同版本不同内容、版本回退、marketplace 插件条目与 `plugin.json` 版本不一致均拒绝。版本按 SemVer 比较，`1.10.0` 高于 `1.9.0`；构建元数据不能代替版本升级。不增加任意 hash 后缀。Kim 插件仍从合集 `VERSION` 派生，Meta 插件仍从其绑定 source 的 `package.json` 派生；升级实际受影响的版本后重新构建。
+
+插件目录的路径和字节完全相同时，允许同版本重复构建。只有包根 `source-manifest.json` 的 commit/tree 或其他根级 provenance 改变，不要求升级未改变的插件。比较包括插件自身的 `plugin.json` 与 README；不能只比较源 Skill 或源文件清单。
+
+首次公开 Beta 包没有公开基线时，先实际查看该仓库的 GitHub Release 历史，确认确实从未公开过该 Beta 资产，再显式运行：
+
+```text
+node scripts/check-repository.mjs --release --zcode-candidate <absolute-candidate-content> --zcode-initial
+```
+
+没有候选包，或既没有公开基线也未显式选择首次发布，普通 `--release` 均拒绝。私有安装包、未发布候选和自行重建的旧版本不能冒充上一次公开基线。这个检查是离线输入门禁，不会联网证明基线来源或首次发布历史，不会创建 Release，也不证明消费者已更新。维护者仍须记录所用真实 Release/资产来源，发布后再通过官方更新入口核对实际新版本。
+
+只检查输入包、暂不执行源码的干净树发布门禁时，可使用 `node scripts/check-zcode-release.mjs --candidate <absolute-candidate-content> --previous <absolute-previous-public-content>`（首次改为 `--initial`）。只发布源码、不携带 Beta 资产时，使用 `node scripts/check-repository.mjs --release --source-only`；输出明确标记 Beta 资产未检查，该结果不能用于宣称 Beta 可发布。
+
 ## 使用现有正常安装入口
 
 参照 [Zcode 官方插件文档](https://zcode.z.ai/en/docs/plugin)。先核对发布来源和产物清单，将整个目录放到由你保管的长期位置；不要把临时解压目录长期注册为 source。
