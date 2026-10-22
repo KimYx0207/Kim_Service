@@ -6,6 +6,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import test, { before, after } from 'node:test';
 import { AGENTS, SKILLS, ROLES, META_FILES, KIM_FILES, buildMarketplace, safeRelative, sha256 } from './build-zcode-marketplace.mjs';
+import { checkZcodeRelease } from './check-zcode-release.mjs';
 
 let scratch, metaRoot, kimRoot, sequence = 0;
 const git = (root, args) => execFileSync('git', ['-c', 'core.hooksPath=' + path.join(scratch, 'no-hooks'), '-c', 'commit.gpgsign=false', ...args], { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
@@ -213,4 +214,27 @@ test('Windows physical root aliases work without weakening output overlap checks
   const wrongOutput = options().outputRoot;
   assert.throws(() => buildMarketplace({ ...aliased, metaRoot: wrongRoot, outputRoot: wrongOutput }), /repository root/);
   assert(!fs.existsSync(wrongOutput));
+});
+
+test('real builder candidates with changed Skill bytes and unchanged versions are blocked only at publication', () => {
+  const previous = options(); buildMarketplace(previous);
+  const skillPath = path.join(kimRoot, 'skills/goalpro/SKILL.md');
+  const original = fs.readFileSync(skillPath);
+  try {
+    fs.appendFileSync(skillPath, '\nReviewed fixture change without a release version bump.\n');
+    commit(kimRoot);
+    const candidate = options(); buildMarketplace(candidate);
+    for (const directory of [previous.outputRoot, candidate.outputRoot]) {
+      assert.equal(readJson(directory, 'plugins/kim-service-local/.zcode-plugin/plugin.json').version, '1.9.0');
+      assert.equal(readJson(directory, 'marketplace.json').plugins[1].version, '1.9.0');
+    }
+    assert.notEqual(readJson(previous.outputRoot, 'source-manifest.json').kim.commit, readJson(candidate.outputRoot, 'source-manifest.json').kim.commit);
+    assert.throws(() => checkZcodeRelease({ candidateRoot: candidate.outputRoot, previousRoot: previous.outputRoot }), /kim-service-local: consumer payload changed without a newer plugin version/);
+  } finally {
+    fs.writeFileSync(skillPath, original);
+    commit(kimRoot);
+  }
+  const restored = options(); buildMarketplace(restored);
+  assert.notEqual(restored.kimCommit, previous.kimCommit);
+  assert(checkZcodeRelease({ candidateRoot: restored.outputRoot, previousRoot: previous.outputRoot }).plugins.every(plugin => plugin.decision === 'unchanged'));
 });

@@ -31,9 +31,11 @@ CI 仅使用只读权限，不访问模型密钥、不做昂贵模型行为评�
 
 发布 commit 完成后、创建 tag 之前，在干净的 `main` 工作树运行：
 
-    node scripts/check-repository.mjs --release
+    node scripts/check-repository.mjs --release --zcode-candidate <absolute-candidate-content> --zcode-previous <absolute-previous-public-content>
 
-该门禁只证明本地发布就绪。远端 branch、tag、GitHub Release 和远端 tag 全新克隆必须在推送后分别复核。
+带 Zcode Beta 资产时，必须同时检查候选包与上一真实公开包，拒绝插件内容变化但版本不变。首次公开须先核实 GitHub Release 历史，再显式用 `--zcode-initial` 代替 `--zcode-previous`。目录、基线与版本规则见 [Zcode Beta 内容包](zcode-beta.md#发布前版本门禁)。仅发布源码而不携带 Beta 资产时，显式使用 `node scripts/check-repository.mjs --release --source-only`，其输出不证明 Beta 资产已检查。
+
+该门禁只证明本地发布输入通过。离线检查不能验证公开基线或首次发布声明的真实性。远端 branch、tag、GitHub Release、远端 tag 全新克隆以及消费者实际识别新版本，必须分别复核。
 
 新增组件初次发现时保留 `pending-local` 来源状态。组件源码提交后，使用同一个生成器绑定其真实来源：
 
