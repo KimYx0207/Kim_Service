@@ -193,3 +193,24 @@ test('new tracked files in a selected component require an explicit allowlist re
   const opts = options(); assert.throws(() => buildMarketplace(opts), /closure changed/); assert(!fs.existsSync(opts.outputRoot));
   fs.unlinkSync(extra); commit(kimRoot);
 });
+
+test('Windows physical root aliases work without weakening output overlap checks', { skip: process.platform !== 'win32' }, () => {
+  const alias = value => value.replace(/[a-zA-Z]/g, c => c === c.toLowerCase() ? c.toUpperCase() : c.toLowerCase());
+  const opts = options();
+  const aliased = { ...opts, metaRoot: alias(metaRoot), kimRoot: alias(kimRoot), outputRoot: alias(opts.outputRoot) };
+  assert.notEqual(aliased.metaRoot, metaRoot);
+  assert.equal(fs.realpathSync.native(aliased.metaRoot), fs.realpathSync.native(metaRoot));
+  assert.equal(fs.realpathSync.native(aliased.kimRoot), fs.realpathSync.native(kimRoot));
+  assert(!fs.lstatSync(aliased.metaRoot).isSymbolicLink());
+  const result = buildMarketplace(aliased);
+  assert.equal(result.sourceCopies, 175);
+  assert(fs.existsSync(path.join(opts.outputRoot, 'bundle-manifest.json')));
+  assert.equal(readJson(opts.outputRoot, 'source-manifest.json').meta.commit, opts.metaCommit);
+  const overlap = path.join(aliased.metaRoot, 'new-output');
+  assert.throws(() => buildMarketplace({ ...aliased, outputRoot: overlap }), /separate from source roots/);
+  assert(!fs.existsSync(overlap));
+  const wrongRoot = path.join(aliased.metaRoot, 'canonical');
+  const wrongOutput = options().outputRoot;
+  assert.throws(() => buildMarketplace({ ...aliased, metaRoot: wrongRoot, outputRoot: wrongOutput }), /repository root/);
+  assert(!fs.existsSync(wrongOutput));
+});

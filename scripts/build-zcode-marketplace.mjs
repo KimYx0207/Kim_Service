@@ -222,6 +222,14 @@ function noLinks(absolute, file = false) {
   }
 }
 
+/** Resolve filesystem aliases only after rejecting linked input paths. */
+function physicalDirectory(absolute) {
+  noLinks(absolute);
+  const physical = fs.realpathSync.native(path.resolve(absolute));
+  noLinks(physical);
+  return physical;
+}
+
 function overlaps(a, b) {
   const rel = path.relative(a, b);
   return rel === '' || (!rel.startsWith(`..${path.sep}`) && rel !== '..' && !path.isAbsolute(rel));
@@ -254,9 +262,10 @@ function gitReader(root) {
 function sourceSnapshot(root, commit, kind) {
   assert(typeof root === 'string' && path.isAbsolute(root), 'explicit absolute source root required');
   assert(/^[a-f0-9]{40}$/.test(commit ?? ''), 'exact 40-hex source commit required');
-  noLinks(root);
+  root = physicalDirectory(root);
   const git = gitReader(root);
-  assert.equal(path.resolve(git(['rev-parse', '--show-toplevel']).toString().trim()), path.resolve(root), 'source must be repository root');
+  const gitRoot = physicalDirectory(git(['rev-parse', '--show-toplevel']).toString().trim());
+  assert(path.relative(root, gitRoot) === '', 'source must be repository root');
   assert.equal(git(['rev-parse', 'HEAD']).toString().trim(), commit, 'source HEAD mismatch');
   assert(repositoryIdentity(git(['config', '--get', 'remote.origin.url']).toString()) === REPOSITORIES[kind].toLowerCase(), 'source origin mismatch');
   assert.equal(git(['status', '--porcelain=v1', '--untracked-files=all', '--ignore-submodules=all']).length, 0, 'source checkout must be clean');
@@ -313,15 +322,19 @@ const LIMITS_TEXT = 'Beta compatibility content only; not a formal Meta_Kim Zcod
 /** Build only a fresh caller-named directory from exact, clean, explicitly downloaded Git sources. */
 export function buildMarketplace({ metaRoot, metaCommit, kimRoot, kimCommit, outputRoot }) {
   assert(typeof outputRoot === 'string' && path.isAbsolute(outputRoot), 'explicit absolute output required');
-  const output = path.resolve(outputRoot), parent = path.dirname(output);
-  noLinks(parent);
+  const requestedOutput = path.resolve(outputRoot);
+  const parent = physicalDirectory(path.dirname(requestedOutput));
+  const output = path.join(parent, path.basename(requestedOutput));
   assert(!fs.existsSync(output), 'output already exists; existing directories are never merged or replaced');
   try { fs.lstatSync(output); assert.fail('output already exists'); } catch (error) { if (error.code !== 'ENOENT') throw error; }
-  for (const root of [metaRoot, kimRoot]) {
+  const sourceRoots = [metaRoot, kimRoot].map(root => {
     assert(typeof root === 'string' && path.isAbsolute(root), 'explicit absolute source required');
-    assert(!overlaps(path.resolve(root), output) && !overlaps(output, path.resolve(root)), 'output must be separate from source roots');
+    return physicalDirectory(root);
+  });
+  for (const root of sourceRoots) {
+    assert(!overlaps(root, output) && !overlaps(output, root), 'output must be separate from source roots');
   }
-  const meta = sourceSnapshot(metaRoot, metaCommit, 'meta'), kim = sourceSnapshot(kimRoot, kimCommit, 'kim');
+  const meta = sourceSnapshot(sourceRoots[0], metaCommit, 'meta'), kim = sourceSnapshot(sourceRoots[1], kimCommit, 'kim');
   const files = new Map(), copies = [], entrypoints = [];
   const add = (relative, bytes) => { safeRelative(relative); assert(!files.has(relative), 'duplicate output path'); files.set(relative, Buffer.isBuffer(bytes) ? bytes : Buffer.from(bytes)); };
   const copy = (source, sourcePath, destination) => {
