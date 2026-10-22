@@ -1,0 +1,202 @@
+{
+  "schemaVersion": 1,
+  "taskId": "maintenance-handoff-20261022",
+  "kind": "content_source_mapping_not_tool_receipt",
+  "sourceKind": "actual_local_maintenance_task_not_customer_business_outcome",
+  "factsAsOf": "2026-10-22T07:51:04.316Z",
+  "serviceSourceCommit": "9051b5925f80ae58943db5ca32d2261319f6be3b",
+  "method": {
+    "roleId": "workplace-writer",
+    "componentVersion": "0.1.0",
+    "state": "method-applied",
+    "actualHostOwner": "copywriter",
+    "nativeKimAgentLoaded": "unverified",
+    "entrypoint": "agents/workplace-writer/AGENT.md",
+    "entrypointSha256": "0b1e2023736bf08d3c9fd3839b7b23e684a0aa96782a5eda6212a36bb9307cdd"
+  },
+  "sourceArtifacts": [
+    {
+      "id": "provided-input",
+      "sourceRef": "caller-provided:kim-service-case-input.json",
+      "caseCopy": "input.json",
+      "sha256": "f9981d9d65866c23768d6ccb7082917c4b8486cf0a7c5cf1f5328bf343479382"
+    },
+    {
+      "id": "frontend-method-case",
+      "sourceRef": "caller-held:frontend-method-case.md",
+      "sha256": "044310f389979212f145b539b882b0d72e3b40bde9dcd2ce788bbafd4514d2ae",
+      "materialModifiedAt": "2026-10-22T09:13:24.3243640Z",
+      "bytes": 7325,
+      "supersededMaterial": {
+        "sha256": "fb8463d545f26839f4706dc5c58980624e47fb897e9e0517ee6030b190375f76",
+        "materialModifiedAt": "2026-10-22T08:07:20.4121839Z",
+        "state": "historical_not_current_source_match"
+      },
+      "scope": "later_supplement_in_readme_not_revision_facts"
+    },
+    {
+      "id": "frontend-focused",
+      "sourceRef": "caller-held:frontend-focused.log",
+      "sha256": "23d4a6f9e798aed8f70e8db319ffec15851fdf52b0e6283624f72a48cc9dcf23",
+      "observedResult": { "pass": 180, "fail": 0, "skipped": 0 },
+      "scope": "source_behavior_tests_not_browser_acceptance"
+    },
+    {
+      "id": "frontend-service",
+      "sourceRef": "caller-held:frontend-service.log",
+      "sha256": "bdfc2c883a82681ce277348a0f2a587416f1b0460200567a51d0e4889af736d6",
+      "observedResult": { "pass": 79, "fail": 0, "skipped": 0 },
+      "scope": "source_behavior_tests_not_deployment"
+    },
+    {
+      "id": "frontend-revision-chain-after",
+      "sourceRef": "caller-held:frontend-revision-chain-after.log",
+      "sha256": "87000b80df42a9f037ac8cb40d559293a49337be95b33cb7672a895b2d5f96de",
+      "materialModifiedAt": "2026-10-22T08:07:03.9180627Z",
+      "observedResult": { "pass": 7, "fail": 0, "skipped": 0 },
+      "scope": "post_correction_deliverable_file_rerun_overlaps_earlier_test_sets"
+    },
+    {
+      "id": "review-regressions-before",
+      "sourceRef": "caller-held:review-regressions-before.log",
+      "sha256": "a2c53a6cb394526a0d325375f9598e14e57883e69791ca15bbddb5351527d5f2",
+      "materialModifiedAt": "2026-10-22T08:56:40.6703914Z",
+      "bytes": 7355,
+      "observedResult": { "pass": 0, "fail": 7, "skipped": 0, "exitCode": 1 },
+      "scope": "independent_review_counterexamples_before_consumer_correction"
+    },
+    {
+      "id": "review-regressions-after",
+      "sourceRef": "caller-held:review-regressions-after.log",
+      "sha256": "1390e1ddb5239167d19db9909eef8f93957f2db1eb074018f67edbf246c71fed",
+      "materialModifiedAt": "2026-10-22T09:01:32.6802738Z",
+      "bytes": 20410,
+      "observedResult": { "files": 4, "pass": 208, "fail": 0, "skipped": 1, "exitCode": 0 },
+      "skipReason": "file_symlink_fixture_unavailable",
+      "scope": "post_correction_source_rerun_overlaps_other_test_sets"
+    },
+    {
+      "id": "review-invalid-identity-before",
+      "sourceRef": "caller-held:review-invalid-identity-before.log",
+      "sha256": "e77092291ca06545f244523ea3566d8a650ea4790e92080522c683f447d509ae",
+      "materialModifiedAt": "2026-10-22T09:10:37.4447659Z",
+      "bytes": 8137,
+      "observedResult": { "pass": 0, "fail": 7, "skipped": 0, "exitCode": 1 },
+      "scope": "malformed_explicit_identity_counterexamples_before_correction"
+    },
+    {
+      "id": "review-invalid-identity-after",
+      "sourceRef": "caller-held:review-invalid-identity-after.log",
+      "sha256": "f155446ffbbb66be06c6ce4e6b85b85ef2aa2b66a91fbbeca5bf8e234a0a4cdd",
+      "materialModifiedAt": "2026-10-22T09:12:45.7290174Z",
+      "bytes": 16821,
+      "observedResult": { "files": 2, "pass": 173, "fail": 0, "skipped": 0, "exitCode": 0 },
+      "scope": "post_identity_correction_source_rerun_overlaps_other_test_sets"
+    },
+    {
+      "id": "final-tests-receipt",
+      "sourceRef": "caller-held:final-tests-receipt.json",
+      "sha256": "81cdd7e5fa6e9642b7799d503332099ce8d619984586dbba755ecbfbba91802f",
+      "materialModifiedAt": "2026-10-22T09:20:56.5822280Z",
+      "bytes": 3300,
+      "sourceCommit": "6b8d309c08d7e9b71aba4fc342944f0fd8e2ad1f",
+      "startedAt": "2026-10-22T09:20:37.869Z",
+      "finishedAt": "2026-10-22T09:20:56.578Z",
+      "observedResult": { "files": 13, "tests": 400, "pass": 397, "fail": 0, "skipped": 3, "exitCode": 0 },
+      "skipReason": "symlink_fixture_environment_limits",
+      "scope": "source_behavior_regressions_not_browser_model_or_personal_deployment_acceptance"
+    }
+  ],
+  "sourceRecheck": {
+    "reason": "final_engineering_material_updated_after_two_independent_review_corrections",
+    "triggerRef": "caller-provided:kim-engineering-final-source-input.json",
+    "currentSourceIds": ["frontend-method-case", "review-regressions-before", "review-regressions-after", "review-invalid-identity-before", "review-invalid-identity-after", "final-tests-receipt"],
+    "correction": "New revision self-descriptions never establish verified execution; identity conflicts and malformed explicit IDs cannot hide the original finding, unknown child returns stay unconfirmed, file recheck rows remain visible without execution claims, and parent-turn tool attribution requires exact project cwd.",
+    "supersededCorrection": "The earlier known-finding and explicit-response prerequisite fix is retained as history, not as a current sufficient condition for verified execution.",
+    "correctionHistory": [
+      "Earlier chain prerequisite correction had a 7-test file rerun; that verified-branch claim is superseded.",
+      "First independent review reproduced 7 failing counterexamples; the corrected four-file rerun passed 208 with 1 environment skip.",
+      "Malformed explicit identity follow-up reproduced 7 failing counterexamples; the corrected two-file rerun passed 173 with no skips.",
+      "Final source 6b8d309c08d7e9b71aba4fc342944f0fd8e2ad1f ran 400 tests across 13 files: 397 passed, 0 failed, 3 symlink environment skips."
+    ],
+    "testCountPolicy": "Keep historical 180, 79 and 7 results and later 208, 173 and final 400-test reruns separate; their coverage overlaps and must not be added into a cumulative new-code test claim.",
+    "frozenWritingFilesUnchanged": ["input.json", "draft.md", "revision.md"],
+    "newUserFeedbackOnDraft": false,
+    "finalAcceptance": "not_decided"
+  },
+  "sourceFactsUsed": [
+    { "id": "execution", "sourceRef": "input.json#/facts/0", "usedBy": ["draft.md", "revision.md"] },
+    { "id": "recovery", "sourceRef": "input.json#/facts/1", "usedBy": ["draft.md", "revision.md"] },
+    { "id": "tests-native", "sourceRef": "input.json#/facts/2", "usedBy": ["draft.md", "revision.md"] },
+    { "id": "tests-recovery", "sourceRef": "input.json#/facts/3", "usedBy": ["draft.md", "revision.md"] },
+    { "id": "state", "sourceRef": "input.json#/facts/4", "usedBy": ["draft.md", "revision.md"] },
+    { "id": "browser", "sourceRef": "input.json#/facts/5", "usedBy": ["draft.md", "revision.md"] }
+  ],
+  "revisionBasis": {
+    "kind": "prior_user_preferences_not_new_draft_feedback",
+    "sourceRef": "input.json#/userFeedback",
+    "changes": [
+      "Lead with the two existing behavior gaps and user-visible effects.",
+      "Replace internal terms with ordinary language while preserving scope.",
+      "Separate code tests, in-progress work, runtime update and visual acceptance."
+    ],
+    "newUserFeedbackOnDraft": false,
+    "userAcceptedRevision": false
+  },
+  "criterionChecks": [
+    {
+      "id": "readable",
+      "state": "content_self_check_passed",
+      "evidenceRef": "revision.md#可用正文messagedraft",
+      "basis": "The first paragraph names existing behavior gaps without packet, owner or authority terminology."
+    },
+    {
+      "id": "truth",
+      "state": "content_self_check_passed",
+      "evidenceRef": "revision.md#状态核对statustable",
+      "basis": "Completed code tests, ongoing changes, runtime update and visual acceptance stay separate at the frozen time."
+    },
+    {
+      "id": "source-bound",
+      "state": "content_self_check_passed",
+      "evidenceRef": "input.json#/facts",
+      "basis": "The two test counts and three environment skips match supplied facts; no customer outcome or model cost is added."
+    },
+    {
+      "id": "next",
+      "state": "content_self_check_passed",
+      "evidenceRef": "revision.md#需要对方做的事actionrequests",
+      "basis": "The execution coordinator owns merge, verification and runtime readback; no new deadline or external action is promised."
+    },
+    {
+      "id": "revision",
+      "state": "content_self_check_passed",
+      "evidenceRef": "draft.md",
+      "basis": "Initial and revised text are both retained, with the actual prior preference source and no invented new approval."
+    }
+  ],
+  "acceptance": {
+    "contentSelfCheck": "completed",
+    "artifactIntegrityHelper": "not_run_by_writer",
+    "independentContentReview": "pending_caller",
+    "browser": "unverified",
+    "humanFinalAcceptance": "unverified",
+    "nativeKimAgentCompatibility": "unverified",
+    "customerBusinessOutcome": "not_measured",
+    "finalAcceptance": "not_decided"
+  },
+  "publicEvidenceAvailability": {
+    "historicalRawEvidence": "caller_held_not_public",
+    "historicalExecutionReproduced": false,
+    "publicFiles": [
+      "input.json",
+      "draft.md",
+      "revision.md",
+      "mapping.json"
+    ],
+    "publicVerificationRequest": "verification-request.json",
+    "scope": "included_file_integrity_and_declared_json_values_only",
+    "authenticity": "not_verified",
+    "externalAcceptance": "not_decided"
+  }
+}

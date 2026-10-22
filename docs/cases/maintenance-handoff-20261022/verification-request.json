@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "taskId": "maintenance-handoff-public-materials",
+  "artifacts": [
+    {
+      "id": "input",
+      "path": "input.json",
+      "bytes": 3276,
+      "sha256": "f9981d9d65866c23768d6ccb7082917c4b8486cf0a7c5cf1f5328bf343479382"
+    },
+    {
+      "id": "draft",
+      "path": "draft.md",
+      "bytes": 2108,
+      "sha256": "8b7f331c39d04c55bc6adf876bd0b642abb92f617abf49a3a9904be8c9f1210c"
+    },
+    {
+      "id": "revision",
+      "path": "revision.md",
+      "bytes": 2135,
+      "sha256": "db66e95d38941778565e4a33d78c5066aac2c4d9283c398f2d37319e017ddc33"
+    },
+    {
+      "id": "mapping",
+      "path": "mapping.json",
+      "bytes": 10163,
+      "sha256": "3416fbee62fe602d6a5897144d49aae6c310867e917e58dbef4b9d7af9bd8eee"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "integrity-input",
+      "description": "Included public file matches its reviewed manifest.",
+      "type": "artifact_integrity",
+      "artifactId": "input"
+    },
+    {
+      "id": "integrity-draft",
+      "description": "Included public file matches its reviewed manifest.",
+      "type": "artifact_integrity",
+      "artifactId": "draft"
+    },
+    {
+      "id": "integrity-revision",
+      "description": "Included public file matches its reviewed manifest.",
+      "type": "artifact_integrity",
+      "artifactId": "revision"
+    },
+    {
+      "id": "integrity-mapping",
+      "description": "Included public file matches its reviewed manifest.",
+      "type": "artifact_integrity",
+      "artifactId": "mapping"
+    },
+    {
+      "id": "source-kind",
+      "description": "Actual local case is not a customer business outcome.",
+      "type": "json_equals",
+      "artifactId": "input",
+      "pointer": "/sourceKind",
+      "equals": "actual_local_maintenance_task_not_customer_business_outcome"
+    },
+    {
+      "id": "mapping-kind",
+      "description": "The source mapping is not a tool receipt.",
+      "type": "json_equals",
+      "artifactId": "mapping",
+      "pointer": "/kind",
+      "equals": "content_source_mapping_not_tool_receipt"
+    },
+    {
+      "id": "prior-feedback",
+      "description": "No new feedback on the draft was fabricated.",
+      "type": "json_equals",
+      "artifactId": "mapping",
+      "pointer": "/revisionBasis/newUserFeedbackOnDraft",
+      "equals": false
+    },
+    {
+      "id": "not-final-acceptance",
+      "description": "Final acceptance remains with the caller.",
+      "type": "json_equals",
+      "artifactId": "mapping",
+      "pointer": "/acceptance/finalAcceptance",
+      "equals": "not_decided"
+    },
+    {
+      "id": "human",
+      "description": "Human acceptance of the writing is not provided by file consistency checks.",
+      "type": "external_review",
+      "capability": "human-review"
+    },
+    {
+      "id": "browser",
+      "description": "The historical Live visual result is not verified by these files.",
+      "type": "external_review",
+      "capability": "browser-review"
+    }
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "taskId": "maintenance-handoff-20261022",
+  "purpose": "把本次真实维护事实交成读得懂、可核对的进展说明，保留未验证边界",
+  "sourceKind": "actual_local_maintenance_task_not_customer_business_outcome",
+  "observedAt": "2026-10-22T07:51:04.316Z",
+  "serviceSourceCommit": "9051b5925f80ae58943db5ca32d2261319f6be3b",
+  "sources": [
+    {
+      "path": "agents/workplace-writer/AGENT.md",
+      "bytes": 5304,
+      "sha256": "0b1e2023736bf08d3c9fd3839b7b23e684a0aa96782a5eda6212a36bb9307cdd"
+    },
+    {
+      "path": "agents/frontend-engineer/AGENT.md",
+      "bytes": 4844,
+      "sha256": "b1387bf4d1f5246361325f574ad65596af7e50825facca973978217adcba8867"
+    },
+    {
+      "path": "agents/frontend-engineer/method.json",
+      "bytes": 3225,
+      "sha256": "13fe7c62689bc27a2b4b23b405df278c45f0e2b15fe014492b69be5c308b6e79"
+    },
+    {
+      "path": "agents/delivery-verifier/AGENT.md",
+      "bytes": 6536,
+      "sha256": "df777da5f71a656cfd12da8ed701f32e329edb09e905d2f081ae0f7ca097e673"
+    },
+    {
+      "path": "agents/delivery-verifier/scripts/verify.mjs",
+      "bytes": 18398,
+      "sha256": "4f96b2d412810f90bde59cfc32256560a206ad6663a3fa8234b18ebb9e5e6628"
+    }
+  ],
+  "userFeedback": [
+    "你现在在搞啥啊 说人话",
+    "我怎么觉得你说的我现在已经有了呢？"
+  ],
+  "facts": [
+    {
+      "id": "execution",
+      "fact": "修复同一Codex线程turn跨resume段丢失工具和子任务记录；返回数与验收状态分离。",
+      "source": "native-execution-fact-card.md"
+    },
+    {
+      "id": "recovery",
+      "fact": "修复同一规划authority丢失子目录与最新当前/下一步；不跨工作树猜测绑定。",
+      "source": "planning-recovery-final.log"
+    },
+    {
+      "id": "tests-native",
+      "fact": "当前native-reader验证22通过、0失败、1符号链接环境跳过。",
+      "source": "native-execution.log"
+    },
+    {
+      "id": "tests-recovery",
+      "fact": "当前planning验证42通过、0失败、2符号链接环境跳过；junction实际测试通过。",
+      "source": "planning-recovery-final.log"
+    },
+    {
+      "id": "state",
+      "fact": "截至此输入快照，UI/反馈与轻问题误激活修复仍进行中；新一轮代码尚未更新已运行Live，未正式发布。",
+      "source": "current host task status"
+    },
+    {
+      "id": "browser",
+      "fact": "真实浏览器画面受现有安全拒绝限制，未验证；不以源码测试替代。",
+      "source": "user task safety boundary"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "readable",
+      "criterion": "先说明用户会感到的变化，避免packet/owner等内部术语堆叠"
+    },
+    {
+      "id": "truth",
+      "criterion": "逐条区分完成、进行中、尚未验证，不把计划、测试和发布混同"
+    },
+    {
+      "id": "source-bound",
+      "criterion": "所有数字和已做动作必须引用本次facts，不编造客户/收益/节省时间"
+    },
+    {
+      "id": "next",
+      "criterion": "给明确下一步；没有对外发送或额外模型调用"
+    },
+    {
+      "id": "revision",
+      "criterion": "保留初稿，依据真实用户反馈修订一次，并逐项复核"
+    }
+  ]
+}
