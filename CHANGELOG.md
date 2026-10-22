@@ -2,6 +2,36 @@
 
 Kim Service uses one repository-level two-part public version (`V<major>.<minor>`) and one GitHub Release for the professional-capability dependency repository. Component CHANGELOG files record component provenance; this file is the release-note authority. Historical verification and source notes are kept in the [testing record](./docs/verification-history.md).
 
+## V1.9 - 2026-10-22
+
+### Affected components
+
+- Public maintenance-delivery case materials, their fixed manifest and thin entrypoint to the existing Delivery Verifier 0.1.0.
+- A standalone Zcode Beta compatibility-content builder and usage guide. Existing Agent, Skill and Hook component versions and capability contracts are unchanged.
+
+### User-visible changes
+
+- The case retains its actual input, initial draft, revision and source mapping, with clear historical timestamps and unavailable private-evidence references. A portable public manifest can be checked with the existing read-only verifier; missing human/browser acceptance remains unverified.
+- A local builder produces the selected nine Meta governance entries, complete meta-theory, five Kim skills and two complete professional role components from explicitly downloaded, exact clean Git sources. It records source commits, file hashes, retained licenses and an output closure. No downloaded source program is executed.
+- The Beta marketplace retains the existing meta-kim-local, kim-service-local and kim-local-reviewed identifiers for normal plugin updates. The Kim content plugin metadata is 1.9.0. This adds a reproducible content-distribution route, not new professional roles or a formal Meta_Kim runtime.
+
+### Breaking changes and migration
+
+- No existing component entrypoint or personal runtime is changed by this release. The builder refuses an existing output directory rather than overwriting user content, and never downloads, installs or registers anything.
+- Supply explicit absolute source roots and exact commit IDs. Both sources must be clean Git checkouts of the named repositories; source/output symlinks, changed selected file closures and unsafe paths are rejected. A fresh output directory must be separate from both sources.
+- HookPrompt has no native Zcode adapter and remains deferred. Hooks, MCP, Commands and automatic script execution are not registered. Native Agent invocation, host tool binding and user acceptance remain separate checks.
+- The existing Delivery Verifier safe-open contract remains POSIX-only. Windows returns blocked; POSIX public-case checks remain partial while external reviews are missing. Public consistency checks do not authenticate the caller-held historical logs.
+
+### Verification
+
+- Local development checks passed 13/13 focused builder/public-case tests on Windows, with no skips. A fake credential-bearing origin CLI regression failed before the safe-error repair and passed afterward. Catalog freshness and the repository check passed with the existing 34 components and 49 capabilities. The actual public-case CLI returned blocked/exit 2 with safe_open_unavailable; the POSIX helper branch is not claimed locally verified.
+- Publication requires the normal generated-catalog/repository/root/component checks, exact-head and merged-main Ubuntu/Windows CI, clean-main release readiness, exact Git-tree archive validation and remote tag/asset readback.
+
+### Source revisions
+
+- Previous public release: V1.8 at 19aafbf2ddcb834e190e48106af4a3aab0e353ff. Case source: c282e0be731c0b3510196bec429cb90ebfe76a25, integrated with the released main at 5855dbc44de4af6af353145b558e060b70d90dbf.
+- Historical case inputs still identify their actual 9051b5925f80ae58943db5ca32d2261319f6be3b component source. Existing component provenance and licenses are retained. Each generated Beta asset separately records the exact public Meta/Kim source commits used to build it; a local installation receipt is not substituted for release provenance.
+
 ## V1.8 - 2026-10-21
 
 ### Affected components

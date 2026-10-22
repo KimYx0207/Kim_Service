@@ -42,3 +42,19 @@
 ## 验证边界
 
 本文是本地维护交付案例，未声称客户效率、收入、模型成本或业务收益。写作成品已做事实与口径自查；文件字节与 SHA256 核验待调用方绑定稳定快照后运行既有 `delivery-verifier`。本案例写作执行者没有运行该 helper，也没有生成回执。最终接受由调用方决定，浏览器与用户验收保持未验证。
+
+## 从公共材料复核
+
+`input.json`、`draft.md`、`revision.md` 保持原始冻结字节。`mapping.json` 明确哪些历史来源由调用方私下保管；这些日志没有公开，读者不能用它们重跑历史测试。本节新增的检查只针对仓库中实际包含的材料，不重现过去的模型或工程执行。
+
+在支持安全只读打开的 POSIX Node 22+ 上，从完整的 Kim_Service 仓库运行：
+
+```sh
+node docs/cases/maintenance-handoff-20261022/verify.mjs
+```
+
+入口只把固定的 [verification-request.json](verification-request.json) 和当前案例目录交给原有 `agents/delivery-verifier/scripts/verify.mjs`。清单固定列出四份材料的 bytes/SHA256，并检查来源类型、内容映射类型、无新反馈与最终未接受状态；不会从当前文件重新生成预期哈希，也不执行输入 JSON 里的命令。
+
+POSIX 上文件和字段匹配时，人工与浏览器审查仍未完成，预期结果为 `partial`、退出码 1；这表示本地材料可以核对且外部验收仍缺失。Windows 按原有安全打开限制返回 `blocked`、退出码 2，不能把它解释为核验成功。缺文件或内容漂移由原 helper 报失败，不会悄悄更新清单。
+
+此入口没有生成或认证那九份历史私有证据，也不将 hash 当作签名。用户最终接受、原生 Agent 调用和当前安装/Live 状态仍需各自的实际证据。维护者只有在有意修改公开材料并重新审查后，才能更新清单。

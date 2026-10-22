@@ -184,5 +184,19 @@
     "nativeKimAgentCompatibility": "unverified",
     "customerBusinessOutcome": "not_measured",
     "finalAcceptance": "not_decided"
+  },
+  "publicEvidenceAvailability": {
+    "historicalRawEvidence": "caller_held_not_public",
+    "historicalExecutionReproduced": false,
+    "publicFiles": [
+      "input.json",
+      "draft.md",
+      "revision.md",
+      "mapping.json"
+    ],
+    "publicVerificationRequest": "verification-request.json",
+    "scope": "included_file_integrity_and_declared_json_values_only",
+    "authenticity": "not_verified",
+    "externalAcceptance": "not_decided"
   }
 }
