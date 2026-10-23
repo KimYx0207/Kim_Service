@@ -25,7 +25,7 @@ function fixture(kind, files) {
       const id = file.startsWith('canonical/') ? path.basename(file, '.md') : file.split('/')[1];
       text = `---\nname: ${id}\ndescription: Fixture role.\n---\n# Fixture\n`;
     } else if (file.endsWith('SKILL.md')) text = `---\nname: ${file.split('/').at(-2)}\ndescription: Fixture skill.\n---\n# Fixture\n`;
-    else if (file === 'agents/frontend-engineer/method.json') text = '{"roleId":"frontend-engineer"}\n';
+    else if (file.startsWith('agents/') && file.endsWith('/method.json')) text = JSON.stringify({ roleId: file.split('/')[1] }) + '\n';
     else if (file.endsWith('.gitattributes')) text = '*.md text eol=lf\n';
     const target = path.join(root, file);
     fs.mkdirSync(path.dirname(target), { recursive: true });
@@ -54,8 +54,9 @@ test('fresh deterministic bundle copies exact committed payloads, licenses and o
   const first = options(), second = options();
   const a = buildMarketplace(first), b = buildMarketplace(second);
   assert.equal(a.closureSha256, b.closureSha256);
-  assert.equal(a.sourceCopies, 175);
-  assert.equal(a.agentEntrypoints, 11);
+  assert.equal(a.sourceCopies, 195);
+  assert.equal(a.agentEntrypoints, 13);
+  assert.equal(a.derivedEntrypoints, 2);
   assert.equal(a.skillRoots, 6);
   assert.equal(a.installed, false);
   assert.equal(a.nativeInvocation, false);
@@ -72,7 +73,17 @@ test('fresh deterministic bundle copies exact committed payloads, licenses and o
     assert.equal(sha256(bytes), row.sha256);
   }
   assert.deepEqual(walk(path.join(first.outputRoot, 'plugins/meta-kim-local/agents')).sort(), AGENTS.map(id => id + '.md').sort());
-  assert.deepEqual(walk(path.join(first.outputRoot, 'plugins/kim-service-local/agents')).sort(), ['frontend-engineer.md', 'method.json', 'workplace-writer.md']);
+  assert.deepEqual(walk(path.join(first.outputRoot, 'plugins/kim-service-local/agents')).sort(), [...ROLES.map(id => id + '.md'), 'method.json'].sort());
+  for (const row of manifest.derivedEntrypoints) {
+    const bytes = fs.readFileSync(path.join(first.outputRoot, row.destination));
+    const original = execFileSync('git', ['cat-file', 'blob', row.sourceGitBlob], { cwd: kimRoot });
+    assert(bytes.subarray(0, original.length).equals(original));
+    assert.equal(sha256(bytes), row.sha256);
+    assert.equal(bytes.length, row.bytes);
+    assert.match(bytes.toString(), /never use agents\/method.json/);
+    assert.equal(JSON.parse(fs.readFileSync(path.join(first.outputRoot, row.methodPath))).roleId, row.sourcePath.split('/')[1]);
+    assert(!manifest.files.some(source => source.destination === row.destination), 'derived entry must not claim byte-identical Git copy');
+  }
   for (const id of ROLES) for (const file of ['AGENT.md', 'LICENSE', 'NOTICE', 'capability.json']) assert(fs.existsSync(path.join(first.outputRoot, 'plugins/kim-service-local/components/agents', id, file)));
   assert.deepEqual(readJson(first.outputRoot, 'plugins/kim-service-local/agents/method.json'), readJson(first.outputRoot, 'plugins/kim-service-local/components/agents/frontend-engineer/method.json'));
   for (const id of SKILLS) assert(fs.existsSync(path.join(first.outputRoot, 'plugins/kim-service-local/skills', id, 'SKILL.md')));
@@ -204,7 +215,7 @@ test('Windows physical root aliases work without weakening output overlap checks
   assert.equal(fs.realpathSync.native(aliased.kimRoot), fs.realpathSync.native(kimRoot));
   assert(!fs.lstatSync(aliased.metaRoot).isSymbolicLink());
   const result = buildMarketplace(aliased);
-  assert.equal(result.sourceCopies, 175);
+  assert.equal(result.sourceCopies, 195);
   assert(fs.existsSync(path.join(opts.outputRoot, 'bundle-manifest.json')));
   assert.equal(readJson(opts.outputRoot, 'source-manifest.json').meta.commit, opts.metaCommit);
   const overlap = path.join(aliased.metaRoot, 'new-output');

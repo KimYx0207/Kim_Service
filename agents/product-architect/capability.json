@@ -2,14 +2,14 @@
   "schemaVersion": 1,
   "id": "product-architect",
   "componentType": "agent",
-  "componentVersion": "0.1.0",
+  "componentVersion": "0.2.0",
   "entrypoint": "AGENT.md",
   "capabilities": [
     {
       "id": "product-architect-deliver",
-      "summary": "将目标、现状和约束转成可实现的范围、组件边界与迁移决策",
+      "summary": "先探索需求和关键取舍，再形成完整产品设计，最后拆可演示的交付切片",
       "useWhen": [
-        "需求已经明确，要拆成可交付版本",
+        "目标还笼统，需要依据现状给出建议、替代方案和关键取舍",
         "跨前后端或多个系统，需要接口与迁移方案",
         "旧实现与新目标冲突，需要明确取舍"
       ],
@@ -28,7 +28,7 @@
               "object",
               "array"
             ],
-            "description": "用户确认的结果与非目标"
+            "description": "用户目标、已定范围和非目标；未确定方向保留为待决定项"
           },
           "currentSystem": {
             "type": [
@@ -36,7 +36,7 @@
               "object",
               "array"
             ],
-            "description": "已有组件、接口、数据责任与来源"
+            "description": "已知现状、来源和未知项；允许尚无软件系统，不要求编造组件"
           },
           "constraints": {
             "type": [
@@ -45,6 +45,15 @@
               "array"
             ],
             "description": "权限、时间、兼容、成本和不能变的边界"
+          },
+          "phase": {
+            "type": "string",
+            "enum": ["requirements_exploration", "complete_design", "delivery_slicing"],
+            "description": "调用方当前阶段；关键选择未定不能跳到完整设计或任务拆分"
+          },
+          "settledDecisions": {
+            "type": ["string", "object", "array"],
+            "description": "调用方已有选择、依据和来源；不重复访谈，缺少关键选择交回调用方"
           },
           "runtimeBindings": {
             "type": "array",
@@ -90,6 +99,7 @@
           "acceptanceCriteria": {
             "type": "array",
             "minItems": 1,
+            "description": "当前阶段的角色产出标准。requirements_exploration只验建议依据、取舍和关键问题依赖，不要求已定的最终产品验收；后续阶段采用已定产品标准。",
             "items": {
               "type": "object",
               "properties": {
@@ -196,6 +206,18 @@
               "array"
             ],
             "description": "兼容、分批迁移、回滚与验收标准"
+          },
+          "exploration": {
+            "type": ["string", "object", "array"],
+            "description": "事实与假设、领域术语冲突、待决定项的id/依赖/选项/推荐/取舍/依据，以及回答后更新的当前问题"
+          },
+          "experienceDesign": {
+            "type": ["string", "object", "array"],
+            "description": "关键选择明确后的完整用户动机、操作反馈、规则、资源、结果与失败恢复；未知保留影响、责任和验证方法"
+          },
+          "deliverySlices": {
+            "type": ["string", "object", "array"],
+            "description": "完整设计确定后的可演示用户结果切片；每项有输入版本、产物、真实阻塞依赖和演示验收，不是岗位清单"
           },
           "status": {
             "enum": [

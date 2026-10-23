@@ -2071,12 +2071,12 @@
       ]
     },
     {
-      "componentContentSha256": "31faf00524fde6049125bd055e7c3090915eaaa47e72071573520ef4c6540e56",
+      "componentContentSha256": "adc139bdd9fba5dd41ae27695fc1463cb5491ae69177a6253c49bc70edaffa6a",
       "componentId": "interaction-designer",
       "componentPath": "agents/interaction-designer",
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contractSha256": "d20d58520781f8984e4df324d281d3c7db37aefe735c366c8c1cc0ee4203a84d",
+      "componentVersion": "0.2.0",
+      "contractSha256": "57e89cfd67d7481af794f61a0894842e829a646ed2764dd491b3dc0f685c544e",
       "doNotUseWhen": [
         "需要改后端权限：交 backend-data-engineer",
         "纯代码实现：交 frontend-engineer",
@@ -2231,6 +2231,14 @@
               "type": "object"
             },
             "type": "array"
+          },
+          "settledDecisions": {
+            "description": "调用方已定的需求选择与依据；会改变方向的选择未定时返回影响，不另开访谈",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
           }
         },
         "required": [
@@ -2310,6 +2318,22 @@
               "type": "object"
             },
             "type": "array"
+          },
+          "deliverySlices": {
+            "description": "完整设计后的可演示切片、输入版本、产物、真实依赖与验收；探索稿保留未知、影响、责任和低成本验证",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "experienceDesign": {
+            "description": "动机到动作、反馈、规则、结果的映射；开始、使用、完成、继续退出、失败恢复和必要资源",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
           },
           "failures": {
             "items": {
@@ -4463,12 +4487,12 @@
       ]
     },
     {
-      "componentContentSha256": "9af9c7c4545976fb3a2a17e85534e0892bef1cfdcb580af52169e053e0c3fcfc",
+      "componentContentSha256": "dccd1fc768a686b86fa1e689b56004a88473a0d17b4d4ff108f4b9d97aaaf7eb",
       "componentId": "product-architect",
       "componentPath": "agents/product-architect",
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contractSha256": "bea38e2ad0e8496740d83195e5547e9a2a84af880fe3a369e6c327f58699b0de",
+      "componentVersion": "0.2.0",
+      "contractSha256": "9a0923721d0eb4738dd74fbdb4c8eac044363f83a2920900b81b1daa199d1ebc",
       "doNotUseWhen": [
         "只要短文改稿：使用 script-writer",
         "只要界面视觉：交 interaction-designer",
@@ -4488,6 +4512,7 @@
         "additionalProperties": false,
         "properties": {
           "acceptanceCriteria": {
+            "description": "当前阶段的角色产出标准。requirements_exploration只验建议依据、取舍和关键问题依赖，不要求已定的最终产品验收；后续阶段采用已定产品标准。",
             "items": {
               "properties": {
                 "condition": {
@@ -4519,7 +4544,7 @@
             ]
           },
           "currentSystem": {
-            "description": "已有组件、接口、数据责任与来源",
+            "description": "已知现状、来源和未知项；允许尚无软件系统，不要求编造组件",
             "type": [
               "string",
               "object",
@@ -4527,7 +4552,7 @@
             ]
           },
           "goal": {
-            "description": "用户确认的结果与非目标",
+            "description": "用户目标、已定范围和非目标；未确定方向保留为待决定项",
             "type": [
               "string",
               "object",
@@ -4583,6 +4608,15 @@
             ],
             "type": "object"
           },
+          "phase": {
+            "description": "调用方当前阶段；关键选择未定不能跳到完整设计或任务拆分",
+            "enum": [
+              "requirements_exploration",
+              "complete_design",
+              "delivery_slicing"
+            ],
+            "type": "string"
+          },
           "runtimeBindings": {
             "description": "宿主对本次任务实际工具的绑定；需求不等于权限。未知/拒绝必须保留",
             "items": {
@@ -4623,6 +4657,14 @@
               "type": "object"
             },
             "type": "array"
+          },
+          "settledDecisions": {
+            "description": "调用方已有选择、依据和来源；不重复访谈，缺少关键选择交回调用方",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
           }
         },
         "required": [
@@ -4710,6 +4752,30 @@
               "type": "object"
             },
             "type": "array"
+          },
+          "deliverySlices": {
+            "description": "完整设计确定后的可演示用户结果切片；每项有输入版本、产物、真实阻塞依赖和演示验收，不是岗位清单",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "experienceDesign": {
+            "description": "关键选择明确后的完整用户动机、操作反馈、规则、资源、结果与失败恢复；未知保留影响、责任和验证方法",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "exploration": {
+            "description": "事实与假设、领域术语冲突、待决定项的id/依赖/选项/推荐/取舍/依据，以及回答后更新的当前问题",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
           },
           "failures": {
             "items": {
@@ -4847,9 +4913,9 @@
         "filesystem:read-user-materials"
       ],
       "sideEffects": [],
-      "summary": "将目标、现状和约束转成可实现的范围、组件边界与迁移决策",
+      "summary": "先探索需求和关键取舍，再形成完整产品设计，最后拆可演示的交付切片",
       "useWhen": [
-        "需求已经明确，要拆成可交付版本",
+        "目标还笼统，需要依据现状给出建议、替代方案和关键取舍",
         "跨前后端或多个系统，需要接口与迁移方案",
         "旧实现与新目标冲突，需要明确取舍"
       ],
@@ -7304,9 +7370,9 @@
         "interaction-designer-deliver"
       ],
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contentSha256": "31faf00524fde6049125bd055e7c3090915eaaa47e72071573520ef4c6540e56",
-      "contractSha256": "d20d58520781f8984e4df324d281d3c7db37aefe735c366c8c1cc0ee4203a84d",
+      "componentVersion": "0.2.0",
+      "contentSha256": "adc139bdd9fba5dd41ae27695fc1463cb5491ae69177a6253c49bc70edaffa6a",
+      "contractSha256": "57e89cfd67d7481af794f61a0894842e829a646ed2764dd491b3dc0f685c544e",
       "entrypoint": "AGENT.md",
       "id": "interaction-designer",
       "path": "agents/interaction-designer",
@@ -7394,9 +7460,9 @@
         "product-architect-deliver"
       ],
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contentSha256": "9af9c7c4545976fb3a2a17e85534e0892bef1cfdcb580af52169e053e0c3fcfc",
-      "contractSha256": "bea38e2ad0e8496740d83195e5547e9a2a84af880fe3a369e6c327f58699b0de",
+      "componentVersion": "0.2.0",
+      "contentSha256": "dccd1fc768a686b86fa1e689b56004a88473a0d17b4d4ff108f4b9d97aaaf7eb",
+      "contractSha256": "9a0923721d0eb4738dd74fbdb4c8eac044363f83a2920900b81b1daa199d1ebc",
       "entrypoint": "AGENT.md",
       "id": "product-architect",
       "path": "agents/product-architect",

@@ -2,6 +2,35 @@
 
 Kim Service uses one repository-level two-part public version (`V<major>.<minor>`) and one GitHub Release for the professional-capability dependency repository. Component CHANGELOG files record component provenance; this file is the release-note authority. Historical verification and source notes are kept in the [testing record](./docs/verification-history.md).
 
+## V1.10 - 2026-10-23
+
+### Affected components
+
+- Product Architect and Interaction Designer 0.2.0, their professional methods, research provenance and generated capability catalog.
+- The existing Zcode Beta content builder now includes both complete design-role components alongside the two existing roles. The Kim plugin version is 1.10.0.
+
+### User-visible changes
+
+- Requirements exploration starts from a vague goal and known facts. The Product Architect proposes evidence-based alternatives and tradeoffs, keeps settled decisions and asks only dependency-ready material questions before writing a complete design.
+- Interaction design connects user motivation, actions, feedback, rules, outcomes and recovery. Complete designs become demonstrable delivery slices with actual input/output dependencies and acceptance evidence.
+- Zcode users receive the two updated design roles, their method files, examples, contracts and licenses through the existing marketplace and plugin IDs. Explicit per-role resource bindings prevent reading the frontend role's method.json by mistake.
+
+### Breaking changes and migration
+
+- No new tools, hooks, MCP registrations, model provider settings or permissions are added. Existing role inputs remain compatible; requirements-stage acceptance does not demand a finished product design.
+- Update the existing kim-service-local plugin through the normal marketplace refresh and plugin update commands. Source copies remain exact Git bytes; generated design-role entries are separately identified in source-manifest.json.
+- Native model execution and final business acceptance are not inferred from packaging or CLI installation. Existing platform-specific component validation limits remain.
+
+### Verification
+
+- Publication requires fresh root regressions, all declared component checks, catalog freshness, Ubuntu/Windows PR and merged-main CI, the content/version release gate against the actual previous public bundle, and exact Git-tree archive readback.
+- Official Zcode isolated consumer verification must install the public 1.9.0 baseline, update through the official CLI to this release and read back the new role entries and method files. The final results and asset hashes are recorded in the GitHub Release.
+
+### Source revisions
+
+- Previous public release: V1.9 at bf199848d4d970598343af5e6b490dffc5a432ca. Design method implementation: 6ef99f51a39014f096195494e2306bad8775ed11.
+- Reference provenance stays in each component's PROVENANCE.md. The source archive and each Beta bundle record their exact release commits separately; local installation evidence does not substitute for source provenance.
+
 ## V1.9 - 2026-10-22
 
 ### Affected components
