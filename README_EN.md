@@ -8,6 +8,10 @@
 
 It contains discoverable, independently usable, and verifiable Hooks, Skills, Tools, and professional Agents, with the same package convention reserved for future qualified Apps. Kim Service does not act as a cross-component Router, task state machine, or final acceptance brain.
 
+Current release: [V1.10](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.10). Product Architect and Interaction Designer are both at **0.2.0**: explore requirements with recommendations and trade-offs, then turn settled requirements into complete designs and demonstrable tasks. See [CHANGELOG.md](CHANGELOG.md) for the changes.
+
+Zcode users can follow the [Beta content-bundle guide (Chinese)](docs/zcode-beta.md) to refresh the existing marketplace and use the normal plugin update entrypoint. The compatibility bundle includes complete professional components and methods; installation does not establish native Agent loading, model performance or final business acceptance.
+
 ## What's included
 
 - Human-facing package directories: [hooks](hooks), [skills](skills), [tools](tools), and [industry roles (Chinese)](agents/README.md).

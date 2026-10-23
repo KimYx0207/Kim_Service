@@ -8,6 +8,10 @@
 
 这里收录可发现、可单独使用、可验证的 Hook、Skill、Tool 与专业 Agent，并为未来合格的 App 保留同一包规范。每个能力包解决一个明确问题；Kim Service 不承担跨组件 Router、任务状态机或最终验收大脑。
 
+当前发布：[V1.10](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.10)。产品架构与交互设计角色均更新至 **0.2.0**：先探索需求、提供建议与取舍，再把已定需求形成完整设计和可演示任务。具体变更见 [CHANGELOG.md（英文）](CHANGELOG.md)。
+
+Zcode 用户可按 [Beta 内容包指南](docs/zcode-beta.md) 刷新既有 marketplace，再通过正常插件更新入口升级。兼容包包含完整专业组件与方法；安装成功不代表原生 Agent 加载、模型表现或最终业务验收已经通过。
+
 ## 收录内容
 
 - 面向人的组件目录：[hooks](hooks)、[skills](skills)、[tools](tools)、[行业角色](agents/README.md)。
