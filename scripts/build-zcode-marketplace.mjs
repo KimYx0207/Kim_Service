@@ -8,7 +8,8 @@ import { pathToFileURL } from 'node:url';
 
 export const AGENTS = Object.freeze(['meta-artisan', 'meta-chrysalis', 'meta-conductor', 'meta-genesis', 'meta-librarian', 'meta-prism', 'meta-scout', 'meta-sentinel', 'meta-warden']);
 export const SKILLS = Object.freeze(['agent-teams-playbook', 'find-skill', 'goalpro', 'kim-decision', 'meta-skill-creator']);
-export const ROLES = Object.freeze(['frontend-engineer', 'workplace-writer']);
+export const ROLES = Object.freeze(['frontend-engineer', 'workplace-writer', 'product-architect', 'interaction-designer']);
+export const BOUND_METHOD_ROLES = Object.freeze(['product-architect', 'interaction-designer']);
 export const MARKETPLACE = 'kim-local-reviewed';
 // Exact reviewed content selection. New files require a reviewed builder change.
 export const META_FILES = Object.freeze([
@@ -61,6 +62,26 @@ export const KIM_FILES = Object.freeze([
   "agents/workplace-writer/README.md",
   "agents/workplace-writer/capability.json",
   "agents/workplace-writer/tests/contract.test.mjs",
+  "agents/product-architect/AGENT.md",
+  "agents/product-architect/CHANGELOG.md",
+  "agents/product-architect/LICENSE",
+  "agents/product-architect/NOTICE",
+  "agents/product-architect/PROVENANCE.md",
+  "agents/product-architect/README.md",
+  "agents/product-architect/capability.json",
+  "agents/product-architect/example.json",
+  "agents/product-architect/method.json",
+  "agents/product-architect/tests/contract.test.mjs",
+  "agents/interaction-designer/AGENT.md",
+  "agents/interaction-designer/CHANGELOG.md",
+  "agents/interaction-designer/LICENSE",
+  "agents/interaction-designer/NOTICE",
+  "agents/interaction-designer/PROVENANCE.md",
+  "agents/interaction-designer/README.md",
+  "agents/interaction-designer/capability.json",
+  "agents/interaction-designer/example.json",
+  "agents/interaction-designer/method.json",
+  "agents/interaction-designer/tests/contract.test.mjs",
   "skills/agent-teams-playbook/.gitattributes",
   "skills/agent-teams-playbook/.gitignore",
   "skills/agent-teams-playbook/CHANGELOG.md",
@@ -335,7 +356,7 @@ export function buildMarketplace({ metaRoot, metaCommit, kimRoot, kimCommit, out
     assert(!overlaps(root, output) && !overlaps(output, root), 'output must be separate from source roots');
   }
   const meta = sourceSnapshot(sourceRoots[0], metaCommit, 'meta'), kim = sourceSnapshot(sourceRoots[1], kimCommit, 'kim');
-  const files = new Map(), copies = [], entrypoints = [];
+  const files = new Map(), copies = [], entrypoints = [], derivedEntrypoints = [];
   const add = (relative, bytes) => { safeRelative(relative); assert(!files.has(relative), 'duplicate output path'); files.set(relative, Buffer.isBuffer(bytes) ? bytes : Buffer.from(bytes)); };
   const copy = (source, sourcePath, destination) => {
     const bytes = source.files.get(sourcePath);
@@ -359,15 +380,23 @@ export function buildMarketplace({ metaRoot, metaCommit, kimRoot, kimCommit, out
   for (const id of ROLES) {
     const sourcePath = `agents/${id}/AGENT.md`;
     frontmatter(kim.files.get(sourcePath), id);
-    copy(kim, sourcePath, `plugins/kim-service-local/agents/${id}.md`);
+    const destination = `plugins/kim-service-local/agents/${id}.md`;
+    if (BOUND_METHOD_ROLES.includes(id)) {
+      const methodPath = `agents/${id}/method.json`;
+      assert.equal(JSON.parse(kim.files.get(methodPath)).roleId, id, 'design method role mismatch');
+      const binding = `\n\n## Zcode package resource binding\n\nThis generated entry retains the original role instructions above. For this role, method.json means ../components/agents/${id}/method.json relative to this entry file; never use agents/method.json, which belongs to frontend-engineer. The complete original component, contracts, examples and licenses are in ../components/agents/${id}/. Load only relevant resources through the existing authorized Read tool. This binding adds no tools or permissions.\n`;
+      const bytes = Buffer.concat([kim.files.get(sourcePath), Buffer.from(binding)]);
+      add(destination, bytes);
+      derivedEntrypoints.push({ source: 'kim', sourcePath, sourceGitBlob: kim.entries.find(row => row.path === sourcePath).blob, destination, transform: 'append_explicit_component_method_binding_v1', methodPath: `plugins/kim-service-local/components/${methodPath}`, bytes: bytes.length, sha256: sha256(bytes) });
+    } else copy(kim, sourcePath, destination);
     entrypoints.push({ plugin: 'kim-service-local', name: id, qualifiedName: `kim-service-local:${id}`, path: `agents/${id}.md` });
   }
   assert.equal(JSON.parse(kim.files.get('agents/frontend-engineer/method.json')).roleId, 'frontend-engineer', 'frontend method role mismatch');
   copy(kim, 'agents/frontend-engineer/method.json', 'plugins/kim-service-local/agents/method.json');
-  assert.equal(copies.length, 175, 'reviewed source copy count changed');
+  assert.equal(copies.length, 195, 'reviewed source copy count changed');
   const manifests = [
     { name: 'meta-kim-local', version: meta.version, description: 'Nine canonical governance agents and complete meta-theory; Beta content.', license: 'Apache-2.0', agents: './agents', skills: './skills' },
-    { name: 'kim-service-local', version: kim.version.slice(1) + '.0', description: 'Five complete skills and two professional role components; Beta content.', license: 'MIT', agents: './agents', skills: './skills' }
+    { name: 'kim-service-local', version: kim.version.slice(1) + '.0', description: 'Five complete skills and four professional role components; Beta content.', license: 'MIT', agents: './agents', skills: './skills' }
   ];
   for (const manifest of manifests) {
     add(`plugins/${manifest.name}/.zcode-plugin/plugin.json`, jsonBytes(manifest));
@@ -378,8 +407,8 @@ export function buildMarketplace({ metaRoot, metaCommit, kimRoot, kimCommit, out
   add('source-manifest.json', jsonBytes({ schemaVersion: 1, kind: 'beta_compatibility_content_not_runtime_certification',
     meta: meta.metadata, kim: kim.metadata, officialPluginDocs: 'https://zcode.z.ai/en/docs/plugin',
     policy: { sourceBytes: 'committed_git_blobs', symlinks: 'rejected', hooks: 'not_registered', mcp: 'not_registered', commands: 'not_registered', hookPrompt: 'deferred_no_native_zcode_adapter', formalMetaZcodeProjection: false, installation: 'not_performed', nativeInvocation: 'not_performed' },
-    entrypoints, files: copies }));
-  add('README.md', `# Zcode Beta compatibility content\n\n${LIMITS_TEXT}\n\nMarketplace: ${MARKETPLACE}. Source copies: 175; Agent entrypoints: 11; Skill roots: 6. No third-party loader code, vendor path, credentials or personal installation receipt is included. See source-manifest.json, bundle-manifest.json and each component LICENSE/NOTICE. Official format documentation: https://zcode.z.ai/en/docs/plugin\n\nAfter checking hashes, keep this complete directory at a persistent location you own. Review with the official Zcode plugins validate command before registering it. Normal commands:\n\n    zcode plugins validate <persistent-marketplace-directory>\n    zcode plugins marketplace add <persistent-marketplace-directory> --scope user\n    zcode plugins install meta-kim-local@${MARKETPLACE} -s user\n    zcode plugins install kim-service-local@${MARKETPLACE} -s user\n    zcode plugins list --json\n\nThese are user actions, not actions performed by the builder. Preserve unrelated plugins/capabilities. For existing entries use the normal marketplace refresh and plugins update route. Confirm actual enabled content and qualified names separately; successful install is not native model/Agent acceptance.\n`);
+    entrypoints, files: copies, derivedEntrypoints }));
+  add('README.md', `# Zcode Beta compatibility content\n\n${LIMITS_TEXT}\n\nMarketplace: ${MARKETPLACE}. Source copies: 195; Generated design-role entrypoints: 2; Agent entrypoints: 13; Skill roots: 6. No third-party loader code, vendor path, credentials or personal installation receipt is included. See source-manifest.json, bundle-manifest.json and each component LICENSE/NOTICE. Official format documentation: https://zcode.z.ai/en/docs/plugin\n\nAfter checking hashes, keep this complete directory at a persistent location you own. Review with the official Zcode plugins validate command before registering it. Normal commands:\n\n    zcode plugins validate <persistent-marketplace-directory>\n    zcode plugins marketplace add <persistent-marketplace-directory> --scope user\n    zcode plugins install meta-kim-local@${MARKETPLACE} -s user\n    zcode plugins install kim-service-local@${MARKETPLACE} -s user\n    zcode plugins list --json\n\nThese are user actions, not actions performed by the builder. Preserve unrelated plugins/capabilities. For existing entries use the normal marketplace refresh and plugins update route. Confirm actual enabled content and qualified names separately; successful install is not native model/Agent acceptance.\n`);
   const closure = [...files].map(([relative, bytes]) => ({ path: relative, bytes: bytes.length, sha256: sha256(bytes) })).sort((a, b) => a.path < b.path ? -1 : a.path > b.path ? 1 : 0);
   assert(closure.reduce((n, row) => n + row.bytes, 0) <= MAX_BYTES, 'bundle size bound exceeded');
   const closureSha256 = sha256(jsonBytes(closure));
@@ -397,7 +426,7 @@ export function buildMarketplace({ metaRoot, metaCommit, kimRoot, kimCommit, out
     fs.writeFileSync(target, bytes, { flag: 'wx' });
   }
   fs.writeFileSync(path.join(output, 'bundle-manifest.json'), bundleManifest, { flag: 'wx' });
-  return { closureSha256, manifestSha256: sha256(bundleManifest), files: files.size + 1, sourceCopies: copies.length, agentEntrypoints: 11, skillRoots: 6, installed: false, nativeInvocation: false };
+  return { closureSha256, manifestSha256: sha256(bundleManifest), files: files.size + 1, sourceCopies: copies.length, derivedEntrypoints: derivedEntrypoints.length, agentEntrypoints: entrypoints.length, skillRoots: 6, installed: false, nativeInvocation: false };
 }
 
 function parseArguments(args) {
