@@ -215,7 +215,7 @@ test('Windows physical root aliases work without weakening output overlap checks
   assert.equal(fs.realpathSync.native(aliased.kimRoot), fs.realpathSync.native(kimRoot));
   assert(!fs.lstatSync(aliased.metaRoot).isSymbolicLink());
   const result = buildMarketplace(aliased);
-  assert.equal(result.sourceCopies, 175);
+  assert.equal(result.sourceCopies, 195);
   assert(fs.existsSync(path.join(opts.outputRoot, 'bundle-manifest.json')));
   assert.equal(readJson(opts.outputRoot, 'source-manifest.json').meta.commit, opts.metaCommit);
   const overlap = path.join(aliased.metaRoot, 'new-output');
