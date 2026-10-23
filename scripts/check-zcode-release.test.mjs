@@ -148,6 +148,8 @@ test('normal release gate checks Beta payloads and source-only checks are explic
   const git = args => execFileSync('git', ['-c', 'core.hooksPath=' + path.join(scratch, 'no-hooks'), '-c', 'commit.gpgsign=false', ...args], { cwd: checkout, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
   // The public tree is portable; a Windows worktree's .git pointer is not a Linux Git repository.
   fs.cpSync(root, checkout, { recursive: true, filter: source => path.relative(root, source).split(path.sep)[0] !== '.git' });
+  // Keep this synthetic release aligned with its 1.9.0 bundle fixtures as the real repository advances.
+  fs.writeFileSync(path.join(checkout, 'VERSION'), 'V1.9\n');
   git(['-c', 'init.templateDir=', 'init', '-q', '-b', 'main']);
   git(['remote', 'add', 'origin', 'https://github.com/KimYx0207/Kim_Service.git']);
   git(['config', 'user.name', 'Fixture']);
