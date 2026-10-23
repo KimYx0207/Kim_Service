@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "interaction-designer",
   "componentType": "agent",
-  "componentVersion": "0.1.0",
+  "componentVersion": "0.2.0",
   "entrypoint": "AGENT.md",
   "capabilities": [
     {
@@ -45,6 +45,10 @@
               "array"
             ],
             "description": "平台、尺寸、无障碍与品牌边界"
+          },
+          "settledDecisions": {
+            "type": ["string", "object", "array"],
+            "description": "调用方已定的需求选择与依据；会改变方向的选择未定时返回影响，不另开访谈"
           },
           "runtimeBindings": {
             "type": "array",
@@ -196,6 +200,14 @@
               "array"
             ],
             "description": "逐状态截图/录屏对应的问题与待验项"
+          },
+          "experienceDesign": {
+            "type": ["string", "object", "array"],
+            "description": "动机到动作、反馈、规则、结果的映射；开始、使用、完成、继续退出、失败恢复和必要资源"
+          },
+          "deliverySlices": {
+            "type": ["string", "object", "array"],
+            "description": "完整设计后的可演示切片、输入版本、产物、真实依赖与验收；探索稿保留未知、影响、责任和低成本验证"
           },
           "status": {
             "enum": [
