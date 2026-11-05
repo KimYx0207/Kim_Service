@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "repository": "KimYx0207/Kim_Service",
-  "componentCount": 34,
+  "componentCount": 35,
   "release": {
     "repository": "KimYx0207/Kim_Service",
     "remoteName": "origin",
@@ -623,6 +623,31 @@
       "validation": [
         "node tests/behavior.test.mjs",
         "node tests/boundary.test.mjs"
+      ]
+    },
+    {
+      "id": "kim-sticker-pack",
+      "kind": "skill",
+      "path": "skills/kim-sticker-pack",
+      "source": "canonical:skills/kim-sticker-pack",
+      "revision": "7d4ebd512372c5f8b9564b88acbacc5c4553d6a4",
+      "snapshot": "committed-component-tree",
+      "version": "0.2.0",
+      "contractSha256": "7680d82c138480319cf0b0d7bd00923975e4adecd3241861ba95948998e5c0dd",
+      "contentSha256": "2952f97aae3164ba64f73de4bbfae420ebdb2ad79fcb6c2645904e6dda625a89",
+      "required": [
+        "capability.json",
+        "CHANGELOG.md",
+        "evals/test_finish_frames.py",
+        "evals/test_install_skill.py",
+        "LICENSE",
+        "NOTICE",
+        "README.md",
+        "SKILL.md"
+      ],
+      "validation": [
+        "python evals/test_finish_frames.py",
+        "python evals/test_install_skill.py"
       ]
     },
     {

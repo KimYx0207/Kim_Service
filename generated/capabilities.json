@@ -2758,6 +2758,98 @@
       ]
     },
     {
+      "componentContentSha256": "2952f97aae3164ba64f73de4bbfae420ebdb2ad79fcb6c2645904e6dda625a89",
+      "componentId": "kim-sticker-pack",
+      "componentPath": "skills/kim-sticker-pack",
+      "componentType": "skill",
+      "componentVersion": "0.2.0",
+      "contractSha256": "7680d82c138480319cf0b0d7bd00923975e4adecd3241861ba95948998e5c0dd",
+      "doNotUseWhen": [
+        "The task requires this helper to generate natural character motion, rigging, interpolation or identity repair.",
+        "The task is automatic publishing, rights clearance, sale or platform certification."
+      ],
+      "entrypoint": "SKILL.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "Confirm the chosen character reference before motion production and actual samples before batching.",
+          "Obtain required authorization before external sharing, paid generation, publication or sale."
+        ]
+      },
+      "id": "kim-sticker-pack-produce",
+      "input": {
+        "properties": {
+          "brief": {
+            "type": "string"
+          },
+          "characterReference": {
+            "type": "string"
+          },
+          "rightsRecord": {
+            "type": "object"
+          },
+          "sourceFrames": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "brief"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "deliveryFormat": "conceptual-human-delivery",
+        "description": "Stage-dependent human-readable design and delivery summary. The finishing helper emits files and a technical report, not a strict API for the whole creative workflow.",
+        "properties": {
+          "approvalState": {
+            "type": "string"
+          },
+          "artifacts": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "limitations": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "stage": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "stage",
+          "artifacts",
+          "limitations",
+          "approvalState"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "Read task-scoped reference material and user-provided artwork.",
+        "Write new local output files to an approved destination.",
+        "Use image or video services only under the applicable data-sharing and payment authorization."
+      ],
+      "sideEffects": [
+        "Creates local PNG, GIF, HTML and JSON outputs, copies source frames and supplied manifest/rights records."
+      ],
+      "summary": "Plan a character-sticker workflow with explicit character and sample approvals, then finish supplied transparent motion frames with authored timing and captions.",
+      "useWhen": [
+        "The user requests character-based animated chat stickers and can review character references and actual samples.",
+        "The user supplies existing registered transparent motion frames for bounded local compositing."
+      ],
+      "validation": [
+        "evals/test_finish_frames.py",
+        "evals/test_install_skill.py"
+      ]
+    },
+    {
       "componentContentSha256": "d66b6531f7d30e39d4fcafdeaf673d0727dbda7a8a3d6aa1809401a38f6a169f",
       "componentId": "launch-planner",
       "componentPath": "agents/launch-planner",
@@ -7256,8 +7348,8 @@
       ]
     }
   ],
-  "capabilityCount": 49,
-  "componentCount": 34,
+  "capabilityCount": 50,
+  "componentCount": 35,
   "components": [
     {
       "capabilityIds": [
@@ -7704,6 +7796,22 @@
       "validation": [
         "tests/behavior.test.mjs",
         "tests/boundary.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "kim-sticker-pack-produce"
+      ],
+      "componentType": "skill",
+      "componentVersion": "0.2.0",
+      "contentSha256": "2952f97aae3164ba64f73de4bbfae420ebdb2ad79fcb6c2645904e6dda625a89",
+      "contractSha256": "7680d82c138480319cf0b0d7bd00923975e4adecd3241861ba95948998e5c0dd",
+      "entrypoint": "SKILL.md",
+      "id": "kim-sticker-pack",
+      "path": "skills/kim-sticker-pack",
+      "validation": [
+        "evals/test_finish_frames.py",
+        "evals/test_install_skill.py"
       ]
     },
     {
