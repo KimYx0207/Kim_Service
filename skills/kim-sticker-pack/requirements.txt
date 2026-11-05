@@ -1,0 +1,2 @@
+Pillow>=10,<14
+fonttools>=4,<5

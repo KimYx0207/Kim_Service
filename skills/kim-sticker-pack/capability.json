@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "id": "kim-sticker-pack",
+  "componentType": "skill",
+  "componentVersion": "0.2.0",
+  "entrypoint": "SKILL.md",
+  "capabilities": [
+    {
+      "id": "kim-sticker-pack-produce",
+      "summary": "Plan a character-sticker workflow with explicit character and sample approvals, then finish supplied transparent motion frames with authored timing and captions.",
+      "useWhen": [
+        "The user requests character-based animated chat stickers and can review character references and actual samples.",
+        "The user supplies existing registered transparent motion frames for bounded local compositing."
+      ],
+      "doNotUseWhen": [
+        "The task requires this helper to generate natural character motion, rigging, interpolation or identity repair.",
+        "The task is automatic publishing, rights clearance, sale or platform certification."
+      ],
+      "input": {
+        "type": "object",
+        "properties": {
+          "brief": {
+            "type": "string"
+          },
+          "characterReference": {
+            "type": "string"
+          },
+          "sourceFrames": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "rightsRecord": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "brief"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "deliveryFormat": "conceptual-human-delivery",
+        "description": "Stage-dependent human-readable design and delivery summary. The finishing helper emits files and a technical report, not a strict API for the whole creative workflow.",
+        "properties": {
+          "stage": {
+            "type": "string"
+          },
+          "artifacts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "limitations": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "approvalState": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "stage",
+          "artifacts",
+          "limitations",
+          "approvalState"
+        ]
+      },
+      "permissions": [
+        "Read task-scoped reference material and user-provided artwork.",
+        "Write new local output files to an approved destination.",
+        "Use image or video services only under the applicable data-sharing and payment authorization."
+      ],
+      "sideEffects": [
+        "Creates local PNG, GIF, HTML and JSON outputs, copies source frames and supplied manifest/rights records."
+      ],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "Confirm the chosen character reference before motion production and actual samples before batching.",
+          "Obtain required authorization before external sharing, paid generation, publication or sale."
+        ]
+      },
+      "validation": [
+        "evals/test_finish_frames.py",
+        "evals/test_install_skill.py"
+      ]
+    }
+  ]
+}

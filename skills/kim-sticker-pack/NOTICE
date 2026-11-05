@@ -1,0 +1,13 @@
+kim-sticker-pack
+Copyright (c) 2026 KimYx0207
+
+Independently implemented character-sticker production workflow and local frame-finishing helper.
+The pixel-gif-sticker-pack concept was a functional reference. This package does not vendor
+its source, prompts, character artwork or fonts, and claims no affiliation.
+
+Code and documentation use the included MIT License. Pillow and fontTools are separately
+licensed external dependencies. Input/output artwork and fonts have independent rights;
+code licensing and a rights.json declaration do not grant character or font clearance.
+No example character artwork, production output, third-party character or font is bundled.
+Tests generate original geometric glyphs in a temporary directory only; those glyphs
+are not readable Chinese and do not establish real-font rendering quality.

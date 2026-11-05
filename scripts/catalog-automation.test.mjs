@@ -74,7 +74,7 @@ test('build preserves existing release provenance and derives component fields',
   assert.match(catalog.components[0].contractSha256, /^[0-9a-f]{64}$/);
   assert.deepEqual(catalog.components[0].validation, ['node tests/check.mjs']);
   assert.deepEqual(catalog.components[0].required, [
-    'README.md', 'capability.json', 'SKILL.md', 'tests/check.mjs'
+    'README.md', 'capability.json', 'CHANGELOG.md', 'LICENSE', 'NOTICE', 'SKILL.md', 'tests/check.mjs'
   ]);
   assert.equal(fs.existsSync(path.join(root, GENERATED_CAPABILITIES_RELATIVE_PATH)), true);
 });
@@ -168,6 +168,10 @@ test('explicit provenance finalization binds exact committed bytes and preserves
   const before = fs.readFileSync(path.join(root, 'catalog.json'));
   buildCatalogArtifacts(root, { provenanceRevision: commit });
   assert.deepEqual(fs.readFileSync(path.join(root, 'catalog.json')), before);
+  fs.writeFileSync(path.join(root, 'unrelated.txt'), 'unrelated repository change\n');
+  const unrelatedCommit = commitFixture(root);
+  const unchanged = buildCatalogArtifacts(root, { provenanceRevision: unrelatedCommit });
+  assert.equal(unchanged.catalog.components.find((item) => item.id === 'new-tool').revision, commit);
   fs.appendFileSync(path.join(root, 'tools/new-tool/SKILL.md'), 'next source revision\n');
   assert.throws(() => buildCatalogArtifacts(root, { provenanceRevision: commit }), /differs from provenance commit/);
   const nextCommit = commitFixture(root);
@@ -193,3 +197,30 @@ for (const change of ['edited', 'untracked', 'missing-from-commit']) {
     }
   });
 }
+
+test('new skill automatically registers its mandatory public package files', (t) => {
+  const root = temporaryRepository(t);
+  addComponent(root, 'skills', 'old-skill');
+  addComponent(root, 'skills', 'new-skill');
+  const { catalog } = buildCatalogArtifacts(root);
+  const skill = catalog.components.find((component) => component.id === 'new-skill');
+  for (const file of ['SKILL.md', 'README.md', 'LICENSE', 'CHANGELOG.md', 'NOTICE']) {
+    assert.ok(skill.required.includes(file), `missing mandatory skill file: ${file}`);
+  }
+  assert.match(skill.revision, /^pending-local:/);
+  assert.doesNotThrow(() => checkCatalogArtifacts(root));
+});
+
+test('scoped provenance binds only the named component and rejects invalid scope', (t) => {
+  const root = temporaryRepository(t);
+  addComponent(root, 'skills', 'old-skill');
+  addComponent(root, 'tools', 'new-tool');
+  addComponent(root, 'tools', 'other-tool');
+  const before = buildCatalogArtifacts(root).catalog.components.find((item) => item.id === 'other-tool');
+  const commit = commitFixture(root);
+  const { catalog } = buildCatalogArtifacts(root, { provenanceRevision: commit, provenanceComponent: 'new-tool' });
+  assert.equal(catalog.components.find((item) => item.id === 'new-tool').revision, commit);
+  assert.deepEqual(catalog.components.find((item) => item.id === 'other-tool'), before);
+  assert.throws(() => buildCatalogArtifacts(root, { provenanceComponent: 'new-tool' }), /requires provenanceRevision/);
+  assert.throws(() => buildCatalogArtifacts(root, { provenanceRevision: commit, provenanceComponent: 'missing' }), /Unknown provenance component/);
+});

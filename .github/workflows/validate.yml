@@ -43,6 +43,12 @@ jobs:
         uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
         with:
           python-version: '3.12'
+      - name: Install sticker regression dependencies
+        run: python -m pip install -r skills/kim-sticker-pack/requirements.txt
+      - name: Verify sticker logic without system CJK fonts
+        env:
+          STICKER_TEST_SYNTHETIC: '1'
+        run: python skills/kim-sticker-pack/evals/test_finish_frames.py
       - name: Check generated catalog freshness
         run: node scripts/catalog-automation.mjs check
       - name: Check repository boundaries
