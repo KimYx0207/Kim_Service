@@ -23,6 +23,8 @@ Zcode 用户可按 [Beta 内容包指南](docs/zcode-beta.md) 刷新既有 marke
 
 ## 怎么使用
 
+先打开[「从你要做的事开始」中文入口](docs/start.html)，按关键词查看输入、交付和使用说明，并复制任务请求。克隆或下载完整仓库后，直接用浏览器打开 `docs/start.html` 即可离线浏览；GitHub 文件页只显示源码。此入口不安装或运行能力。
+
 1. 从自动索引或对应类型目录选择能力包。
 2. 按包内 `entrypoint` 阅读入口；常见入口为 Hook/Tool 的 `README.md`、Skill 的 `SKILL.md` 或 Agent 的 `AGENT.md`。
 3. 按项目说明安装到你的项目或个人环境中。

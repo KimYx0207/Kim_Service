@@ -23,6 +23,8 @@ The component table is not duplicated manually in this README. Root automation d
 
 ## How to use
 
+Start with the [task-oriented catalog (Chinese)](docs/start.html) to filter by keyword, inspect inputs and deliverables, open usage instructions, and copy a task request. After cloning or downloading the complete repository, open `docs/start.html` directly in a browser for offline browsing; GitHub's file view shows source code. This page does not install or execute capabilities.
+
 1. Choose a package from the generated index or its type directory.
 2. Follow the package `entrypoint`; common entrypoints are `README.md` for Hooks and Tools, `SKILL.md` for Skills, or `AGENT.md` for Agents.
 3. Follow the project instructions to install it for a project or your personal environment.

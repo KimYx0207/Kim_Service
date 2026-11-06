@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="从你要做的事开始，查看 Kim Service 的能力、输入、交付与使用入口。支持离线关键词筛选。">
+  <title>从你要做的事开始 · Kim Service</title>
+  <style>/* PAGE_STYLE */</style>
+</head>
+<body>
+  <a class="skip" href="#catalog">跳到能力目录</a>
+  <header class="site-header wrap">
+    <a class="brand" href="#"><span class="brand-mark" aria-hidden="true">K<span>·</span></span><span>Kim Service<small>老金的专业能力库</small></span></a>
+    <a class="repo-link" href="https://github.com/KimYx0207/Kim_Service" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+  </header>
+  <main class="wrap">
+    <section class="hero" aria-labelledby="hero-title">
+      <div>
+        <p class="eyebrow"><span aria-hidden="true"></span>让具体的事，有合适的帮手</p>
+        <h1 id="hero-title">从你要做的事<br><span>开始。</span></h1>
+        <p class="intro">找到合适的能力，准备必要的材料，<br class="desktop-break">把请求交给你正在使用的 Agent。</p>
+        <p class="inventory" id="inventory"></p>
+      </div>
+      <aside class="how-it-works" aria-label="使用步骤">
+        <div class="aside-heading"><span>从想法到下一步</span><span aria-hidden="true">↗</span></div>
+        <ol>
+          <li><span class="step-number">01</span><div><strong>找到要做的事</strong><p>用熟悉的关键词筛选能力。</p></div></li>
+          <li><span class="step-number">02</span><div><strong>看清要给什么、能交什么</strong><p>对照输入、交付与适用范围。</p></div></li>
+          <li><span class="step-number">03</span><div><strong>复制请求，接着做</strong><p>在已克隆仓库的 Agent 环境中使用。</p></div></li>
+        </ol>
+        <p class="aside-note">这里帮你找入口。实际执行取决于对应包、宿主工具与本次授权。</p>
+      </aside>
+    </section>
+    <section id="catalog" class="catalog" aria-labelledby="catalog-title">
+      <div class="section-heading"><h2 id="catalog-title">今天，你想完成什么？</h2><span>本地关键词筛选</span></div>
+      <label for="search" class="sr-only">搜索任务、交付内容或能力名称</label>
+      <div class="search-box"><span aria-hidden="true" class="search-icon">⌕</span><input id="search" type="search" placeholder="例如：表情包、产品设计、视频、简历" autocomplete="off"><button id="clear-search" type="button" hidden aria-label="清空搜索">清空</button><kbd aria-hidden="true">/</kbd></div>
+      <div class="suggestions" aria-label="试试这些关键词"><span>试试</span><button type="button" data-query="小红书">小红书</button><button type="button" data-query="表情包">表情包</button><button type="button" data-query="产品设计">产品设计</button><button type="button" data-query="视频">视频</button><button type="button" data-query="简历">简历</button><button type="button" data-query="店铺">店铺</button><button type="button" data-query="开发">开发</button></div>
+      <div class="results-toolbar"><div id="types" class="type-filters" role="group" aria-label="按能力包类型筛选"></div><p id="result-count" class="result-count" role="status" aria-live="polite"></p></div>
+      <div id="cards" class="cards"></div>
+      <div id="empty" class="empty" hidden><span aria-hidden="true">↗</span><h3>换个关键词试试</h3><p>可以搜你想要的结果，例如「封面」「成本」「字幕」。<br>这里按现有说明筛选，不会自动推荐或调用能力。</p><button id="reset" type="button" class="primary">查看全部能力</button></div>
+      <noscript><p class="no-script">此目录需要启用 JavaScript 才能筛选。你也可以打开 <a href="../README.md">README</a> 或 <a href="../agents/README.md">专业角色目录</a>。</p></noscript>
+    </section>
+    <section class="usage-note" aria-labelledby="usage-title"><div><p class="eyebrow">使用前，知道这两件事</p><h2 id="usage-title">能力包有方法，<br>执行还需要你的环境。</h2></div><div><p>专业方法包提供角色方法与交付约定，Skill 提供任务流程，工具与 Hook 按各自说明接入。打开页面或复制请求，都不会安装或运行它们。</p><p>页面展示的是包内声明。示例、测试文件与实际运行记录各有用途；看到示例或测试入口，不代表你的任务已通过验收。</p><a href="../README.md">阅读完整使用说明 <span aria-hidden="true">↗</span></a></div></section>
+  </main>
+  <footer class="wrap"><span>Kim Service <span class="footer-dot">·</span> 独立能力，按需使用</span><span>来自包内 capability.json <span class="footer-dot">·</span> 可离线浏览</span></footer>
+  <dialog id="detail" aria-labelledby="detail-title"><div class="dialog-top"><p id="detail-type" class="eyebrow"></p><button id="close-detail" type="button" class="close-button" aria-label="关闭能力详情">×</button></div><div id="detail-content"></div></dialog>
+  <script id="capability-data" type="application/json">/* PAGE_DATA */</script>
+  <script>/* PAGE_SCRIPT */</script>
+</body>
+</html>

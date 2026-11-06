@@ -51,6 +51,8 @@ jobs:
         run: python skills/kim-sticker-pack/evals/test_finish_frames.py
       - name: Check generated catalog freshness
         run: node scripts/catalog-automation.mjs check
+      - name: Check task catalog page freshness
+        run: node scripts/start-page.mjs check
       - name: Check repository boundaries
         run: node scripts/check-repository.mjs
       - name: Run every root regression file
