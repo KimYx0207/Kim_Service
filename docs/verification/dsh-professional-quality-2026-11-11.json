@@ -67,7 +67,12 @@
       "committedComponentTrees": 45,
       "sourceCommit": "c4dcec8a7fefaae6fdc0934d4de30fe2b2d7fc91",
       "exactComponentBytesChecked": true,
-      "ancestorChecks": "passed"
+      "ancestorChecks": "passed",
+      "followUpCommands": [
+        "node scripts/catalog-automation.mjs build --provenance-revision 302c9896590103564eb0cce2b349e530b83d5026 --provenance-component supplier-comparison-analyst",
+        "node scripts/catalog-automation.mjs build --provenance-revision 302c9896590103564eb0cce2b349e530b83d5026 --provenance-component store-performance-analyst"
+      ],
+      "followUpSourceCommit": "302c9896590103564eb0cce2b349e530b83d5026"
     },
     "physicalTempFixtures": {
       "command": "node --test scripts/build-dsh-package.test.mjs scripts/build-zcode-marketplace.test.mjs scripts/public-maintenance-case.test.mjs",
@@ -85,6 +90,27 @@
       "windows": "passed",
       "macos": "18 root fixture failures: the system /var alias was rejected before the intended assertions",
       "followUp": "Resolve only the fixture temporary root to its physical path; latest PR checks record the corrected cross-platform outcome."
+    },
+    "asyncStdin": {
+      "command": "node --test agents/supplier-comparison-analyst/tests/delivery.test.mjs agents/store-performance-analyst/tests/delivery.test.mjs",
+      "tests": 25,
+      "pass": 25,
+      "fail": 0,
+      "skip": 0,
+      "scope": "Explicit asynchronous stdin EOF, real UTF-8 byte/hash fidelity, timeout and maxBuffer rejection; all existing calculation and invalid_input assertions retained. Supplier 30000 ms and store 10000 ms budgets are unchanged."
+    },
+    "secondHostedRun": {
+      "url": "https://github.com/KimYx0207/Kim_Service/actions/runs/42914347832",
+      "head": "d637ee67ba90c1a563bfab28e41e22e822b772d0",
+      "ubuntu": "passed",
+      "windows": "passed",
+      "macos": "The 18 physical-temp failures were resolved; one nested supplier stdin subprocess timed out at 30 seconds before producing output.",
+      "followUp": "Use async execFile with explicit stdin.end in the two delivery test harnesses, retaining the pipe protocol and all bounds. This record does not establish the exact Node/libuv/macOS root cause."
+    },
+    "stdinResearch": {
+      "source": "https://github.com/nodejs/node/issues/67280",
+      "status": "Open external report on Node 22.21.1, not a maintainer-confirmed cause for this Node 24 failure.",
+      "adoption": "Preserve bounded Python reads, use explicit asynchronous stdin completion, retain hard failures, and verify on hosted macOS."
     }
   },
   "pairedTrial": {
@@ -105,7 +131,7 @@
     "servicePackage": {
       "componentCount": 51,
       "skillCount": 52,
-      "fileCount": 2719,
+      "fileCount": 2720,
       "closureVerified": true,
       "nativeModelCalls": 0
     }
@@ -150,16 +176,25 @@
     "service-physical-temp-regression.log": {
       "sha256": "99b3e848b75f24a532ee9519958c1a41831c174e104eda80fb6749cc447bb155",
       "bytes": 2739
+    },
+    "service-async-stdin-regression.log": {
+      "sha256": "abe6681f2482a5ff45827e00040a1cf96564d25d0dbb1a2e62660e07b61818f7",
+      "bytes": 2969
+    },
+    "service-root-async-final.log": {
+      "sha256": "73481d2ccdcbe4f3bac6e4fb9537f57a9f920c65e9fd5b3aa2a15a4099481389",
+      "bytes": 13096
     }
   },
   "protectedAssets": "Root contact/payment footer bytes and 3 original QR assets unchanged; new Skill README references the same canonical assets.",
-  "sourceCommit": "c4dcec8a7fefaae6fdc0934d4de30fe2b2d7fc91",
-  "sourceTree": "979830c46d3fb6b9f417205358301c03fb56b5a5",
+  "sourceCommit": "302c9896590103564eb0cce2b349e530b83d5026",
+  "sourceTree": "730a3a2d27dc664c297c06942605ab51ab420d24",
   "recoveryFixes": [
     "Shared contact/payment images preserved at source-relative paths in DSh.",
     "ZCode discovers every canonical professional component and retains complete committed knowledge and quality contracts.",
     "Meta ZCode loaders resolve full canonical methods, machine contracts and 12 public configuration resources from source/.",
     "Pending component provenance bound to the real remote source commit after byte and ancestry checks.",
-    "macOS test fixtures resolve the OS temporary root physically; linked source/output rejection and evidence safe-open rules remain unchanged."
+    "macOS test fixtures resolve the OS temporary root physically; linked source/output rejection and evidence safe-open rules remain unchanged.",
+    "The supplier and store test hosts explicitly finish asynchronous stdin while preserving their original deadlines, output limits, invalid_input receipts and signal/stream failure rules."
   ]
 }
