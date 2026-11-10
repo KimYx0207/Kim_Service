@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/** Deterministic native DSh Skills from the canonical capability catalogue. */
+/** Deterministic native DSH Skills from the canonical capability catalogue. */
 import fs from 'node:fs';
 import path from 'node:path';
 import { createHash, randomUUID } from 'node:crypto';
@@ -23,7 +23,7 @@ function assertPlainChain(file, missing = false) {
     let stat;
     try { stat = fs.lstatSync(current); }
     catch (error) { if (missing && error.code === 'ENOENT') return absolute; throw error; }
-    if (stat.isSymbolicLink()) throw new Error(`DSh package paths must not contain links or junctions: ${current}`);
+    if (stat.isSymbolicLink()) throw new Error(`DSH package paths must not contain links or junctions: ${current}`);
   }
   return absolute;
 }
@@ -35,10 +35,10 @@ function tree(root) {
     for (const entry of fs.readdirSync(dir, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name, 'en'))) {
       const item = path.join(dir, entry.name);
       const stat = fs.lstatSync(item);
-      if (stat.isSymbolicLink()) throw new Error(`DSh source has a link or junction: ${item}`);
+      if (stat.isSymbolicLink()) throw new Error(`DSH source has a link or junction: ${item}`);
       if (stat.isDirectory()) walk(item);
       else if (stat.isFile()) result.push(item);
-      else throw new Error(`DSh source is not a regular file: ${item}`);
+      else throw new Error(`DSH source is not a regular file: ${item}`);
     }
   };
   walk(root);
@@ -46,11 +46,11 @@ function tree(root) {
 }
 
 function addResource(files, file, bytes) {
-  if (files.has(file)) throw new Error(`Duplicate DSh resource: ${file}`);
+  if (files.has(file)) throw new Error(`Duplicate DSH resource: ${file}`);
   files.set(file, bytes);
   if (!READABLE_RESOURCE.test(file)) return;
   const text = bytes.toString('utf8');
-  if (!Buffer.from(text).equals(bytes)) throw new Error(`DSh readable method resource is not valid UTF-8: ${file}`);
+  if (!Buffer.from(text).equals(bytes)) throw new Error(`DSH readable method resource is not valid UTF-8: ${file}`);
   const parts = [];
   let rest = text;
   do {
@@ -80,7 +80,7 @@ function addResource(files, file, bytes) {
     }
   }
   const indexBytes = Buffer.from(json(index));
-  if (indexBytes.toString('utf8').length > 5000) throw new Error(`DSh readable index needs a smaller resource: ${file}`);
+  if (indexBytes.toString('utf8').length > 5000) throw new Error(`DSH readable index needs a smaller resource: ${file}`);
   files.set(`${file}.dsh-parts/index.json`, indexBytes);
 }
 
@@ -90,10 +90,10 @@ function skillName(id) {
 }
 
 function skill(files, name, description, body) {
-  if (!/^[a-z][a-z0-9-]{0,63}$/u.test(name)) throw new Error(`Invalid native DSh skill name: ${name}`);
-  if (body.length > PART_LIMIT) throw new Error(`DSh entry exceeds ${PART_LIMIT} characters: ${name}`);
+  if (!/^[a-z][a-z0-9-]{0,63}$/u.test(name)) throw new Error(`Invalid native DSH skill name: ${name}`);
+  if (body.length > PART_LIMIT) throw new Error(`DSH entry exceeds ${PART_LIMIT} characters: ${name}`);
   const target = `skills/${name}/SKILL.md`;
-  if (files.has(target)) throw new Error(`Duplicate native DSh skill name: ${name}`);
+  if (files.has(target)) throw new Error(`Duplicate native DSH skill name: ${name}`);
   files.set(target, Buffer.from(`---\nname: ${name}\ndescription: ${JSON.stringify(description)}\n---\n${body.trim()}\n`));
 }
 
@@ -107,7 +107,7 @@ export function buildDshFiles(root = ROOT) {
   for (const component of components) {
     const { contract, path: componentPath, entrypoint, contentSha256 } = component;
     const name = skillName(contract.id);
-    if (names.has(name)) throw new Error(`DSh skill name collision: ${name}`);
+    if (names.has(name)) throw new Error(`DSH skill name collision: ${name}`);
     names.add(name);
     const copied = [];
     for (const file of tree(path.join(sourceRoot, componentPath))) {
@@ -116,10 +116,10 @@ export function buildDshFiles(root = ROOT) {
       copied.push({ relativePath: portable(path.relative(path.join(sourceRoot, componentPath), file)), contents: bytes });
       addResource(files, `skills/kim-service/source/${rel}`, bytes);
     }
-    if (componentFilesSha256(copied) !== contentSha256) throw new Error(`Canonical component changed during DSh build: ${contract.id}`);
+    if (componentFilesSha256(copied) !== contentSha256) throw new Error(`Canonical component changed during DSH build: ${contract.id}`);
     const primary = `skills/kim-service/source/${componentPath}/${entrypoint}`;
     const parts = files.get(`${primary}.dsh-parts/index.json`);
-    if (!parts) throw new Error(`DSh component entrypoint must be Markdown: ${entrypoint}`);
+    if (!parts) throw new Error(`DSH component entrypoint must be Markdown: ${entrypoint}`);
     const index = JSON.parse(parts);
     const original = path.posix.relative(`skills/${name}`, primary);
     const contractRef = path.posix.relative(`skills/${name}`, `skills/kim-service/source/${componentPath}/capability.json`);
@@ -160,7 +160,7 @@ export function buildDshFiles(root = ROOT) {
     }
   }
   addResource(files, 'skills/kim-service/catalog.json', Buffer.from(json({ schemaVersion: 1, components: catalog })));
-  skill(files, 'kim-service', 'Find Kim_Service professional methods for software, product/design, research, commerce, workplace, education and content work; inspect contracts and load the selected complete method before delivery.', `# Kim_Service professional methods\n\nRead \`catalog.json.dsh-parts/index.json\`, its index pages and relevant bounded catalogue parts; match the actual request to the declared capability contracts. The catalogue contains ${components.length} dynamically discovered canonical agent/skill components. Search or read bounded portions of the catalogue; do not load every method for one task. Each entry names a native DSh skill, its method manifest and the complete capability contract.\n\nLoad the selected native skill with DSh's actual skill tool, then read every primary-method part and relevant references before acting. Use the original source directory as the base for links. All selected components retain their full resource trees under \`source/agents\` and \`source/skills\`; root and component licenses/notices remain present. Catalogue presence is not permission or proof of expertise.\n\nDo not create a durable governance owner from a business method. Meta_Kim's nine governance roles stay separate. A DSh subagent inherits the current preset unless the host explicitly configures another; this package does not define custom presets, hard Hooks, model credentials or executable MCP services. Bind those actual capabilities through the host and preserve missing/denied states. Review real outputs against the method's criterion-level evidence, not the number of installed files.\n`);
+  skill(files, 'kim-service', 'Find Kim_Service professional methods for software, product/design, research, commerce, workplace, education and content work; inspect contracts and load the selected complete method before delivery.', `# Kim_Service professional methods\n\nRead \`catalog.json.dsh-parts/index.json\`, its index pages and relevant bounded catalogue parts; match the actual request to the declared capability contracts. The catalogue contains ${components.length} dynamically discovered canonical agent/skill components. Search or read bounded portions of the catalogue; do not load every method for one task. Each entry names a native DSH skill, its method manifest and the complete capability contract.\n\nLoad the selected native skill with DSH's actual skill tool, then read every primary-method part and relevant references before acting. Use the original source directory as the base for links. All selected components retain their full resource trees under \`source/agents\` and \`source/skills\`; root and component licenses/notices remain present. Catalogue presence is not permission or proof of expertise.\n\nDo not create a durable governance owner from a business method. Meta_Kim's nine governance roles stay separate. A DSH subagent inherits the current preset unless the host explicitly configures another; this package does not define custom presets, hard Hooks, model credentials or executable MCP services. Bind those actual capabilities through the host and preserve missing/denied states. Review real outputs against the method's criterion-level evidence, not the number of installed files.\n`);
   const inventoryPath = 'skills/kim-service/projection.json';
   files.set(inventoryPath, Buffer.from(json({ schemaVersion: 1, kind: 'kim-service-dsh-content-index', expectedPaths: [...files.keys(), inventoryPath].sort() })));
   const manifest = {
@@ -181,14 +181,14 @@ export function writeDshPackage({ root = ROOT, output, check = false } = {}) {
   const expected = new Map([...files, ['dsh-package.json', Buffer.from(json(manifest))]]);
   if (check) {
     const actual = tree(destination).map((file) => portable(path.relative(destination, file))).sort();
-    if (json(actual) !== json([...expected.keys()].sort())) throw new Error('DSh package file closure differs from current source');
-    for (const [file, bytes] of expected) if (!fs.readFileSync(path.join(destination, file)).equals(bytes)) throw new Error(`DSh package is stale or changed: ${file}`);
+    if (json(actual) !== json([...expected.keys()].sort())) throw new Error('DSH package file closure differs from current source');
+    for (const [file, bytes] of expected) if (!fs.readFileSync(path.join(destination, file)).equals(bytes)) throw new Error(`DSH package is stale or changed: ${file}`);
     return { status: 'verified_package', output: destination, componentCount: manifest.componentCount, skillCount: manifest.skillCount, fileCount: expected.size, nativeExecutionVerified: false };
   }
   if (fs.existsSync(destination)) throw new Error('Output already exists; use --check or choose a fresh directory. Existing files are never removed by this builder.');
   const parent = path.dirname(destination);
   assertPlainChain(parent);
-  if (!fs.statSync(parent).isDirectory()) throw new Error('DSh output parent must be an existing directory');
+  if (!fs.statSync(parent).isDirectory()) throw new Error('DSH output parent must be an existing directory');
   const stage = path.join(parent, `.kim-service-dsh-${randomUUID()}`);
   fs.mkdirSync(stage);
   try {
@@ -201,7 +201,7 @@ export function writeDshPackage({ root = ROOT, output, check = false } = {}) {
 }
 
 export function runCli(argv = process.argv.slice(2)) {
-  if (!argv.length || argv.includes('--help')) { console.log('node scripts/build-dsh-package.mjs --output /absolute/fresh/directory [--root PATH] [--check]\nBuild native DSh Skills from all declared canonical agents and skills; preserve complete methods/resources and licenses. No installation or model call.'); return; }
+  if (!argv.length || argv.includes('--help')) { console.log('node scripts/build-dsh-package.mjs --output /absolute/fresh/directory [--root PATH] [--check]\nBuild native DSH Skills from all declared canonical agents and skills; preserve complete methods/resources and licenses. No installation or model call.'); return; }
   const options = {};
   for (let index = 0; index < argv.length; index += 1) {
     if (argv[index] === '--check') options.check = true;

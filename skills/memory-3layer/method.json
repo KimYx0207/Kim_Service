@@ -547,7 +547,7 @@
             "id": "selected-platform-acceptance",
             "field": "selected_platform",
             "criterion": "选中路线与真实能力/配置一致，降级必须透明。",
-            "rejectWhen": "DSh等新宿主被冒标Codex原生Hook。",
+            "rejectWhen": "DSH等新宿主被冒标Codex原生Hook。",
             "verificationMethod": "artifact_inspection",
             "evidenceRequired": [
               "实际适配器选择"

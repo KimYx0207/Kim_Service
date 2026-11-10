@@ -1,7 +1,7 @@
 {
   "capabilities": [
     {
-      "componentContentSha256": "202f783e3634c542643392639a6753c120e5d7dba09309ad1e4835445b9ce394",
+      "componentContentSha256": "8882f5668e5d0b9daf51f6c2e4fa23262b74d5e8e55dde18337bc5b9a68b78f4",
       "componentId": "agent-teams-playbook",
       "componentPath": "skills/agent-teams-playbook",
       "componentType": "skill",
@@ -5953,7 +5953,7 @@
       ]
     },
     {
-      "componentContentSha256": "50121809887665287a1d7f3cdf05a756176b6fa29bc4dd1798e7b86cc0670f38",
+      "componentContentSha256": "135c96a8a07345f459de34b6f6fb1fdbc00bded414ec2fc4b9a8ba6deadbae03",
       "componentId": "memory-3layer",
       "componentPath": "skills/memory-3layer",
       "componentType": "skill",
@@ -6084,7 +6084,7 @@
       ]
     },
     {
-      "componentContentSha256": "50121809887665287a1d7f3cdf05a756176b6fa29bc4dd1798e7b86cc0670f38",
+      "componentContentSha256": "135c96a8a07345f459de34b6f6fb1fdbc00bded414ec2fc4b9a8ba6deadbae03",
       "componentId": "memory-3layer",
       "componentPath": "skills/memory-3layer",
       "componentType": "skill",
@@ -6173,7 +6173,7 @@
       ]
     },
     {
-      "componentContentSha256": "50121809887665287a1d7f3cdf05a756176b6fa29bc4dd1798e7b86cc0670f38",
+      "componentContentSha256": "135c96a8a07345f459de34b6f6fb1fdbc00bded414ec2fc4b9a8ba6deadbae03",
       "componentId": "memory-3layer",
       "componentPath": "skills/memory-3layer",
       "componentType": "skill",
@@ -6306,7 +6306,7 @@
       ]
     },
     {
-      "componentContentSha256": "50121809887665287a1d7f3cdf05a756176b6fa29bc4dd1798e7b86cc0670f38",
+      "componentContentSha256": "135c96a8a07345f459de34b6f6fb1fdbc00bded414ec2fc4b9a8ba6deadbae03",
       "componentId": "memory-3layer",
       "componentPath": "skills/memory-3layer",
       "componentType": "skill",
@@ -6391,7 +6391,7 @@
       ]
     },
     {
-      "componentContentSha256": "50121809887665287a1d7f3cdf05a756176b6fa29bc4dd1798e7b86cc0670f38",
+      "componentContentSha256": "135c96a8a07345f459de34b6f6fb1fdbc00bded414ec2fc4b9a8ba6deadbae03",
       "componentId": "memory-3layer",
       "componentPath": "skills/memory-3layer",
       "componentType": "skill",
@@ -11841,7 +11841,7 @@
       ],
       "componentType": "skill",
       "componentVersion": "4.9.0",
-      "contentSha256": "202f783e3634c542643392639a6753c120e5d7dba09309ad1e4835445b9ce394",
+      "contentSha256": "8882f5668e5d0b9daf51f6c2e4fa23262b74d5e8e55dde18337bc5b9a68b78f4",
       "contractSha256": "e40c5522ada30a0c7d6cdb9a959461fb513b46614291177a7d556951cedbd6d3",
       "entrypoint": "SKILL.md",
       "id": "agent-teams-playbook",
@@ -11973,7 +11973,7 @@
       ],
       "componentType": "skill",
       "componentVersion": "1.1.0",
-      "contentSha256": "50121809887665287a1d7f3cdf05a756176b6fa29bc4dd1798e7b86cc0670f38",
+      "contentSha256": "135c96a8a07345f459de34b6f6fb1fdbc00bded414ec2fc4b9a8ba6deadbae03",
       "contractSha256": "e901a72392311679ebd717d56a67ba74ea7f90c3f03020fa966d8032baf3f6e5",
       "entrypoint": "SKILL.md",
       "id": "memory-3layer",

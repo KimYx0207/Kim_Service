@@ -68,7 +68,7 @@ Kim Service 是老金（KimYx0207）维护的专业能力库。每个 Agent、Sk
 
 这些包采用可移植内容与显式合同。**Codex、Claude Code、Cursor、Gemini CLI、ZCode 的路径、工具和 Hook 由各宿主或 Meta_Kim 适配层处理。** ZCode 构建会从当前能力目录发现全部专业 Agent 与 Skill，并带上每个包的完整方法、资料、样例和许可。更新路径见 [ZCode 指南](docs/zcode-beta.md)。
 
-### 用在 DSh（DeepSeek Harness）
+### 用在 DSH（DeepSeek Harness）
 
 在本仓库构建原生 Skills，再通过 Meta_Kim 安装：
 
@@ -79,7 +79,7 @@ meta-kim dsh check
 dsh --profile meta-kim
 ```
 
-输出目录须尚不存在。DSh 本身要求 Node >=24.9.0；本适配核对 `0.2.2-rc.1`。包内保留完整方法、参考、验证脚本和许可证，较长正文分段读取。实际子 Agent 继承宿主当前 preset，专业角色以 Skill 装入。更新、项目安装与能力边界见 [DSh 使用指南](docs/dsh.md)。原生配置、Skill 加载和 MCP 连接与模型业务表现分别验收。
+输出目录须尚不存在。DSH 本身要求 Node >=24.9.0；本适配核对 `0.2.2-rc.1`。包内保留完整方法、参考、验证脚本和许可证，较长正文分段读取。实际子 Agent 继承宿主当前 preset，专业角色以 Skill 装入。更新、项目安装与能力边界见 [DSH 使用指南](docs/dsh.md)。原生配置、Skill 加载和 MCP 连接与模型业务表现分别验收。
 
 ## 维护与目录
 
