@@ -11,7 +11,7 @@ import { checkComponentMethod } from './check-agent-pack.mjs';
 export const AGENTS = Object.freeze(['meta-artisan', 'meta-chrysalis', 'meta-conductor', 'meta-genesis', 'meta-librarian', 'meta-prism', 'meta-scout', 'meta-sentinel', 'meta-warden']);
 export const MARKETPLACE = 'kim-local-reviewed';
 // Public repository facts referenced by meta-theory, aligned with Meta_Kim's
-// DSh projection. This bounded selection excludes private/local config state.
+// DSH projection. This bounded selection excludes private/local config state.
 export const META_RESOURCE_FILES = Object.freeze([
   'canonical/runtime-assets/dsh/host-contract.json',
   'config/runtime-capability-matrix.json',

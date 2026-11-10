@@ -68,7 +68,7 @@ Released baseline: [V1.10](https://github.com/KimYx0207/Kim_Service/releases/tag
 
 **Codex, Claude Code, Cursor, Gemini CLI and ZCode paths, tools and Hooks belong to their hosts or the Meta_Kim adapter.** The ZCode content update path is in the [Beta guide](docs/zcode-beta.md).
 
-### Use with DSh (DeepSeek Harness)
+### Use with DSH (DeepSeek Harness)
 
 Build native Skills from this repository, then install through Meta_Kim:
 
@@ -79,7 +79,7 @@ meta-kim dsh check
 dsh --profile meta-kim
 ```
 
-Choose an output directory that does not yet exist. DSh requires Node >=24.9.0; this adapter is reviewed against `0.2.2-rc.1`. Complete methods, resources, validation scripts and licenses remain included; long Markdown is read in lossless parts. Actual subagents inherit the current host preset and load professional roles as Skills. See [DSh usage](docs/dsh.md) for updates, project scope and boundaries. Native configuration, Skill loading, MCP connectivity and model task quality have separate evidence.
+Choose an output directory that does not yet exist. DSH requires Node >=24.9.0; this adapter is reviewed against `0.2.2-rc.1`. Complete methods, resources, validation scripts and licenses remain included; long Markdown is read in lossless parts. Actual subagents inherit the current host preset and load professional roles as Skills. See [DSH usage](docs/dsh.md) for updates, project scope and boundaries. Native configuration, Skill loading, MCP connectivity and model task quality have separate evidence.
 
 ## Maintain and explore
 
