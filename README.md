@@ -8,6 +8,8 @@
 
 Kim Service 是老金（KimYx0207）维护的专业能力库。每个 Agent、Skill、Hook 或 Tool 解决一个明确问题，带有入口、方法、输入输出约定、示例和验证方式。你可以单独使用，也可以由 [Meta_Kim](https://github.com/KimYx0207/Meta_Kim) 发现和调用。
 
+**Meta_Kim 管整件事怎么往前走，Kim Service 提供每项工作需要的专业方法。** 例如，前端包要说明页面出错后怎么恢复；库存包要找出哪一天会缺货；成本包要让每一步计算都能复算。
+
 ## 先从你要做的事开始
 
 > “我有一个报名产品的想法。请先帮我比较系统方案，再细化用户流程、异常状态、前后端接口和验收。沿用当前项目已经合适的技术，不要只列岗位名字。”
@@ -29,16 +31,20 @@ Kim Service 是老金（KimYx0207）维护的专业能力库。每个 Agent、Sk
 | --- | --- |
 | `AGENT.md` / `SKILL.md` / `README.md` | 入口、适用任务、执行方法与边界 |
 | `capability.json` | 可发现的能力、输入、输出、权限和副作用约定 |
-| `method.json`（24 个 Agent 均提供；其他类型按包提供） | 领域步骤、工具需求、交接方式；`expertise` 绑定诊断、决策与现有输入输出 |
+| `method.json`（所有专业 Agent 与 Skill 均提供） | 领域步骤、工具需求、交接方式；`expertise` 绑定诊断、决策与现有输入输出 |
 | `references/`（按需） | 实际专业资料；由 `knowledgeAssets` 声明适用范围和来源 |
 | `example.json` / `AGENT.md` 内示例 | 按包提供的完整示例；示例数据与真实回执分开 |
 | `evals/professional-cases.json`（Agent） | 合成正例、失败反例与评审依据；不是模型运行结果 |
 | `tests/`、`scripts/`（按包提供） | 组件检查或范围明确的确定性工具 |
 | `PROVENANCE.md`、`LICENSE` | 资料来源、改造边界与许可证 |
 
-24 个 Agent 都有领域知识、诊断问题、条件决策、输入解释、输出检查、工具边界与正反案例。内容覆盖软件设计与开发、来源与量化研究、媒体制作、交付核验、内容、电商、采购、教育、求职职场和副业分析。已有的具体方法和确定性工具继续保留；新增资料是原创组织，采用与未采用的参考原则记录在各包来源文件中。
+专业包覆盖软件、产品、研究、内容、电商、采购、教育和职场；这次继续扩展经营财务、销售运营、用户研究、数据质量、应用安全、库存供应、制造质量、系统工程、招聘、碳核算、医疗运营和农业水量分析。另有实验分析、指标口径、SOP、需求追踪、建筑信息核验与游戏试玩等可组合 Skill。具体覆盖范围以[自动能力目录](generated/capabilities.json)为准，角色边界写在每个包里。
 
-选中的资料会随 Meta_Kim 工单进入实际执行上下文，并校验来源文件的完整字节。合同检查能发现错误类型、缺项、悬空引用或不安全资源路径，不能判断文字建议是否专业。48 个合成案例目前是评审材料，专业效果均为 `not_evaluated`；这不构成“所有行业专家已验证”的声明，高影响专业结论仍须相应人工审核。
+每包都要讲清领域知识、如何诊断、怎样选择、完整交付长什么样、哪些错误必须拒收。比如库存不能只看期末总量，成本不能混用月份与年份，安全扫描不能替代真实漏洞验证，课程不能只交活动清单。旧包的可用方法和工具保留，失实的通用规则修正；详细来源和采用范围见[本轮研究记录](docs/research/professional-expansion-2026-11-11.md)。
+
+选中的 Agent 资料会随 Meta_Kim 工单进入实际执行上下文，并校验完整字节。Skill 入口显式链接对应方法与资料。每项输出有通过条件、拒收条件、验证方法、所需证据和是否阻断；关键错误不能靠其他项得分抵消。自报“通过”不会替代独立核验。
+
+合成正反例用于解释标准，保持 `not_evaluated`；结构检查只能证明合同和文件一致。实际专业效果须以当前任务产物评审。本轮的检查、独立试题和未测范围见[验证记录](docs/verification/dsh-professional-quality-2026-11-11.md)。
 
 ## 与 Meta_Kim 的关系
 
@@ -58,9 +64,22 @@ Kim Service 是老金（KimYx0207）维护的专业能力库。每个 Agent、Sk
 
 当前组件安装源就是 **Kim_Service 内选中的目录**。`catalog.json` 的 `source` / `revision` 记录历史来源，不是要求重新克隆旧独立仓库。已有同类能力先核对来源与版本，复用或升级一个入口。
 
-已发布基线：[V1.10](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.10)。当前 [Unreleased](CHANGELOG.md#unreleased) 扩展全部 24 个 Agent 的专业知识合同：产品架构、交互设计和脚本文案为 0.4.0；前端、后端数据、店铺复盘和面试练习为 0.3.0；其余 Agent 为 0.2.0。具体变化见各包 CHANGELOG，尚未作为新 Release 发布。
+已发布基线：[V1.10](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.10)。[Unreleased](CHANGELOG.md#unreleased) 与各包 CHANGELOG 记录这次源码变化和组件版本；尚未作为新的合集 Release 发布。
 
-这些包采用可移植内容与显式合同。**Codex、Claude Code、Cursor、Gemini CLI、ZCode 的安装路径、工具和 Hook 约定由各宿主或 Meta_Kim 适配层处理。** 包被复制或成功安装，不等于原生 Agent 加载、真实模型表现或业务验收通过。ZCode 内容包的既有更新路径见 [Beta 指南](docs/zcode-beta.md)。
+这些包采用可移植内容与显式合同。**Codex、Claude Code、Cursor、Gemini CLI、ZCode 的路径、工具和 Hook 由各宿主或 Meta_Kim 适配层处理。** ZCode 构建会从当前能力目录发现全部专业 Agent 与 Skill，并带上每个包的完整方法、资料、样例和许可。更新路径见 [ZCode 指南](docs/zcode-beta.md)。
+
+### 用在 DSh（DeepSeek Harness）
+
+在本仓库构建原生 Skills，再通过 Meta_Kim 安装：
+
+```sh
+node scripts/build-dsh-package.mjs --output /path/to/kim-service-dsh
+meta-kim dsh install --service-package /path/to/kim-service-dsh
+meta-kim dsh check
+dsh --profile meta-kim
+```
+
+输出目录须尚不存在。DSh 本身要求 Node >=24.9.0；本适配核对 `0.2.2-rc.1`。包内保留完整方法、参考、验证脚本和许可证，较长正文分段读取。实际子 Agent 继承宿主当前 preset，专业角色以 Skill 装入。更新、项目安装与能力边界见 [DSh 使用指南](docs/dsh.md)。原生配置、Skill 加载和 MCP 连接与模型业务表现分别验收。
 
 ## 维护与目录
 
@@ -75,7 +94,7 @@ node scripts/check-repository.mjs
 node --test scripts/*.test.mjs
 ```
 
-深入阅读：[任务交付指南](docs/task-agent-delivery.md) · [能力包约定](docs/agent-pack-contract.md) · [专家资料作者指南](docs/expert-package-authoring.md) · [24 角色差距与来源审计](docs/expertise-coverage-2026-11-10.md) · [变更记录](CHANGELOG.md)。
+深入阅读：[任务交付指南](docs/task-agent-delivery.md) · [能力包约定](docs/agent-pack-contract.md) · [专家资料作者指南](docs/expert-package-authoring.md) · [上一轮角色审计](docs/expertise-coverage-2026-11-10.md) · [变更记录](CHANGELOG.md)。
 
 ## 联系与支持
 

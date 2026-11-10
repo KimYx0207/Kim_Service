@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "goalpro",
   "componentType": "skill",
-  "componentVersion": "0.1.4",
+  "componentVersion": "0.1.5",
   "entrypoint": "SKILL.md",
   "capabilities": [
     {

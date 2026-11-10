@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "semgrep-skill",
   "componentType": "skill",
-  "componentVersion": "1.1.0",
+  "componentVersion": "1.2.0",
   "entrypoint": "SKILL.md",
   "capabilities": [
     {
@@ -64,7 +64,7 @@
             "const": 1
           },
           "componentVersion": {
-            "const": "1.1.0"
+            "const": "1.2.0"
           },
           "status": {
             "enum": [

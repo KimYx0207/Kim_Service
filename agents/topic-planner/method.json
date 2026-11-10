@@ -13,7 +13,8 @@
   ],
   "skillLoading": [
     "先读取本角色 knowledgeAssets 中的包内专业方法；来源记录不等于当前任务联网，案例不是实际运行证据。",
-    "读取本角色 knowledgeAssets；只在当前任务实际需要时读取用户指定的项目/平台规范，缺来源不假称已读取。"
+    "读取本角色 knowledgeAssets；只在当前任务实际需要时读取用户指定的项目/平台规范，缺来源不假称已读取。",
+    "读取本包 references/worked-delivery.md 的完整产物与专业反例；按当前输入迁移，不把合成答案当本次事实或验收记录"
   ],
   "steps": [
     "先读取包内专业方法与现有 AGENT.md，绑定当前输入、目标和材料范围；来源引用不等于当前任务联网。",
@@ -50,6 +51,19 @@
         "kim-decision",
         "goalpro"
       ]
+    },
+    {
+      "id": "topic-planner-worked-delivery",
+      "path": "references/worked-delivery.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "youtube-analytics",
+        "youtube-ctr",
+        "kim-decision",
+        "goalpro"
+      ]
     }
   ],
   "expertise": {
@@ -60,7 +74,8 @@
       "小样本时提供待验证组合，不保证流量"
     ],
     "knowledgeAssetIds": [
-      "topic-planner-core"
+      "topic-planner-core",
+      "topic-planner-worked-delivery"
     ],
     "diagnosticSequence": [
       {
@@ -125,22 +140,54 @@
           {
             "field": "diagnosis",
             "criterion": "区分已知瓶颈、假设和缺少的数据。",
-            "rejectWhen": "凭粉丝数量推断平台限流。"
+            "rejectWhen": "凭粉丝数量推断平台限流。",
+            "id": "topic-planner-diagnosis",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "当前输入中与 diagnosis 对应的事实、约束及缺口",
+              "实际 diagnosis 产物与所声明通过条件的逐项对照",
+              "对本字段拒收条件的检查结果与未验证范围"
+            ],
+            "blocking": true
           },
           {
             "field": "topics",
-            "criterion": "每题有人群、情境、明确承诺与素材方案。",
-            "rejectWhen": "只有泛主题或无法兑现的结果承诺。"
+            "criterion": "每个题目有具体读者任务、可兑现承诺、当前材料和可执行制作方案，组合能区分不同需求。",
+            "rejectWhen": "只有热点词/标题列表，没有证据或承诺超出材料。",
+            "id": "topic-planner-topics",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "选题卡",
+              "可用资料及缺口",
+              "制作成本"
+            ],
+            "blocking": true
           },
           {
             "field": "schedule",
-            "criterion": "排期符合真实素材、时间和用户频率。",
-            "rejectWhen": "为凑频率编造经历或自动安排发布。"
+            "criterion": "制作、核查、发布及反馈时间在真实容量内，依赖材料与截止条件明确。",
+            "rejectWhen": "排期超预算或未知素材按已到位安排。",
+            "id": "topic-planner-schedule",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "逐项工时合计",
+              "可用容量",
+              "依赖状态"
+            ],
+            "blocking": true
           },
           {
             "field": "reviewRule",
-            "criterion": "说明看哪类可比信号、何时证据足以改变下一轮。",
-            "rejectWhen": "以统一播放阈值评判不同形式或样本量。"
+            "criterion": "复盘预定指标口径和窗口，区分流量构成与内容效果，聚合比率按分子分母重算。",
+            "rejectWhen": "简单平均百分比或由前后变化直接断言因果。",
+            "id": "topic-planner-review-rule",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "指标定义",
+              "样本/流量分层",
+              "后续调整条件"
+            ],
+            "blocking": true
           }
         ]
       }

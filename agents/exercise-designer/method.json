@@ -13,7 +13,8 @@
   ],
   "skillLoading": [
     "先读取本角色 knowledgeAssets 中的包内专业方法；来源记录不等于当前任务联网，案例不是实际运行证据。",
-    "读取本角色 knowledgeAssets；只在当前任务实际需要时读取用户指定的项目/平台规范，缺来源不假称已读取。"
+    "读取本角色 knowledgeAssets；只在当前任务实际需要时读取用户指定的项目/平台规范，缺来源不假称已读取。",
+    "读取本包 references/worked-delivery.md 的完整产物与专业反例；按当前输入迁移，不把合成答案当本次事实或验收记录"
   ],
   "steps": [
     "先读取包内专业方法与现有 AGENT.md，绑定当前输入、目标和材料范围；来源引用不等于当前任务联网。",
@@ -49,6 +50,17 @@
         "ies-learning",
         "goalpro"
       ]
+    },
+    {
+      "id": "exercise-designer-worked-delivery",
+      "path": "references/worked-delivery.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "ies-learning",
+        "goalpro"
+      ]
     }
   ],
   "expertise": {
@@ -59,7 +71,8 @@
       "检查题目是否测到目标；不自称心理测量学验证"
     ],
     "knowledgeAssetIds": [
-      "exercise-designer-core"
+      "exercise-designer-core",
+      "exercise-designer-worked-delivery"
     ],
     "diagnosticSequence": [
       {
@@ -123,28 +136,64 @@
         "outputChecks": [
           {
             "field": "blueprint",
-            "criterion": "题目与目标、难点和作答证据对应。",
-            "rejectWhen": "只有题型数量没有测量意图。"
+            "criterion": "每题对应可观察学习目标和待区分错误，题型变化不改变目标而不说明。",
+            "rejectWhen": "按题量/难度标签堆题，关键目标没有题目检验。",
+            "id": "exercise-designer-blueprint",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "目标-题目-错误映射"
+            ],
+            "blocking": true
           },
           {
             "field": "questions",
             "criterion": "条件、单位与图示清楚，阅读负担适合目标。",
-            "rejectWhen": "存在未说明的多解或引入未学概念。"
+            "rejectWhen": "存在未说明的多解或引入未学概念。",
+            "id": "exercise-designer-questions",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "当前输入中与 questions 对应的事实、约束及缺口",
+              "实际 questions 产物与所声明通过条件的逐项对照",
+              "对本字段拒收条件的检查结果与未验证范围"
+            ],
+            "blocking": true
           },
           {
             "field": "answerKey",
-            "criterion": "完整可核答案、必要过程和等价表达。",
-            "rejectWhen": "答案与题意矛盾或把所有等价形式排除。"
+            "criterion": "答案、单位、步骤、评分依据及可接受等价答案均可核查。",
+            "rejectWhen": "错误答案、题干歧义未处理或只按措辞一致评分。",
+            "id": "exercise-designer-answer-key",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "独立复算",
+              "等价答案与评分条件"
+            ],
+            "blocking": true
           },
           {
             "field": "errorChecks",
-            "criterion": "对应具体误区和可用反馈。",
-            "rejectWhen": "用笼统不认真替代诊断。"
+            "criterion": "将典型错误定位到具体概念/条件/步骤，给针对性反馈而不作能力标签判断。",
+            "rejectWhen": "将所有错误归为粗心或凭题面声称学习效果已验证。",
+            "id": "exercise-designer-error-checks",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "典型错误及解释",
+              "真实作答或未测标记"
+            ],
+            "blocking": true
           },
           {
             "field": "adaptations",
             "criterion": "按真实需要调整支架或挑战，保持目标。",
-            "rejectWhen": "无证据声称已验证难度、区分度或适合所有学生。"
+            "rejectWhen": "无证据声称已验证难度、区分度或适合所有学生。",
+            "id": "exercise-designer-adaptations",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "当前输入中与 adaptations 对应的事实、约束及缺口",
+              "实际 adaptations 产物与所声明通过条件的逐项对照",
+              "对本字段拒收条件的检查结果与未验证范围"
+            ],
+            "blocking": true
           }
         ]
       }

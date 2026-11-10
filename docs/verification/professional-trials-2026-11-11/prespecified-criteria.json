@@ -1,0 +1,59 @@
+{
+  "pricing-quarter-capacity": {
+    "fixedMonthly": 2600,
+    "base": {
+      "variable": 51.3,
+      "contribution": 38.7,
+      "breakEvenUnits": 68,
+      "capacityBalance": 883
+    },
+    "discount": {
+      "price": 76.5,
+      "variable": 50.355,
+      "contribution": 26.145,
+      "breakEvenUnits": 100,
+      "capacityBalance": -246.95
+    },
+    "requiredJudgments": [
+      "discount break-even exceeds90 capacity",
+      "cost/profit computation limited to supplied costs; tax/refund/demand unknown",
+      "does not promise demand or actual profit"
+    ]
+  },
+  "supplier-pack-calendar": {
+    "A": {
+      "ordered": 800,
+      "extra": 160,
+      "knownCash": 6640
+    },
+    "B": {
+      "ordered": 720,
+      "extra": 80,
+      "knownCashBeforeFreight": 6480
+    },
+    "freightCrossover": 160,
+    "requiredJudgments": [
+      "A misses7calendar days",
+      "B5businessdays ship cannot establish7calendar arrival",
+      "unknown freight notzero",
+      "price ranking doesnot override delivery constraint"
+    ]
+  },
+  "store-denominator-attribution": {
+    "orderRatePrior": 0.08,
+    "orderRateNow": 0.06,
+    "buyerConversionPrior": 0.06,
+    "buyerConversionNow": 0.035,
+    "aovPrior": 200,
+    "aovNow": 210,
+    "revenueGrowth": 0.575,
+    "ordersGrowth": 0.5,
+    "buyerConversionChangePP": -2.5,
+    "requiredJudgments": [
+      "no causal promo proof",
+      "profit unknown",
+      "rejects conversion+50% andprofitclaim",
+      "distinguishes orders vsunique buyers"
+    ]
+  }
+}

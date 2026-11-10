@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "repository": "KimYx0207/Kim_Service",
-  "componentCount": 35,
+  "componentCount": 53,
   "release": {
     "repository": "KimYx0207/Kim_Service",
     "remoteName": "origin",
@@ -22,15 +22,72 @@
   ],
   "components": [
     {
+      "id": "agronomy-planner",
+      "kind": "agent",
+      "path": "agents/agronomy-planner",
+      "source": "canonical:agents/agronomy-planner",
+      "revision": "pending-local:8316aefb097d4eec595265fb65e980219eb3d97aed0398eec6e69ebfc8c879fd",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.1",
+      "contractSha256": "a74270858fa23dd63a35d7b56cdeee0d8a137bb4b40399f8e5d7e9554a2c4b5c",
+      "contentSha256": "7ffecd2e5ff33f3498aafbcbee7cedd410a6a15ec37d95cee37af5a0687a2446",
+      "required": [
+        "AGENT.md",
+        "capability.json",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
+      "id": "application-security-reviewer",
+      "kind": "agent",
+      "path": "agents/application-security-reviewer",
+      "source": "canonical:agents/application-security-reviewer",
+      "revision": "pending-local:52854cec410504fdb3c65211ece7c46c9e92c959985e7e47a37f105430899300",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.1",
+      "contractSha256": "fcda878cd897eb7cf155e4f359b575db55317a983fe20a3c2baf53ecbf716aa4",
+      "contentSha256": "a629233f4a4bdc4c805f21fae728fd5321a59bfef9342960873209cd18e6402a",
+      "required": [
+        "AGENT.md",
+        "capability.json",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
       "id": "backend-data-engineer",
       "kind": "agent",
       "path": "agents/backend-data-engineer",
       "source": "canonical:agents/backend-data-engineer",
       "revision": "ce3f4d52a6dc0476ec9183d4e57dd74eef3b299d",
       "snapshot": "committed-component-tree",
-      "version": "0.3.0",
-      "contractSha256": "b4e64f4ccc4b0ecbd7d38bc85e371fedf0f0c231d63f65d0a33e97ae84cdfc3d",
-      "contentSha256": "7302f79b5abae3436a77621f7468f1a79d8d167a4934328e4fc09f9ff897b844",
+      "version": "0.4.0",
+      "contractSha256": "06b43208e8d2446cfe428f22e6cbdc7c4a5cad34b3c3e383656a6d1086d7253b",
+      "contentSha256": "f8841773fee8066329f9ac7b344d4fa3b0fdd1f1d44f83f0dcd2f4dcf4b1dd76",
+      "required": [
+        "AGENT.md",
+        "capability.json",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
+      "id": "business-finance-analyst",
+      "kind": "agent",
+      "path": "agents/business-finance-analyst",
+      "source": "canonical:agents/business-finance-analyst",
+      "revision": "pending-local:5b3fa639a2305d45d5107db87fb92b14e5e68ac2eb8e813f45424a054f20f5cd",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.1",
+      "contractSha256": "57d1e2375d6502852a8173d560e46709d30bb3167874e66a2e532ad205a51ac3",
+      "contentSha256": "9ab1cce580bd719c79b21177c288fd1b4c32e3fcbe71328ad453e9ad527ab1d9",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -47,9 +104,9 @@
       "source": "canonical:agents/concept-tutor",
       "revision": "ae38c0e2806c2350459bfdf771c9cb29a5a076a5",
       "snapshot": "committed-component-tree",
-      "version": "0.2.0",
-      "contractSha256": "afc1d231c1e22a5e282b11553ccb165821394462d7ecc56656fdb44bcf34f696",
-      "contentSha256": "a7b2d9e7049fa7c846ab78bd6c324d765e7ecf8bb0f2c6b44db32936f51ab321",
+      "version": "0.3.0",
+      "contractSha256": "eb1d25d3b12d8b84dffd3cde6616fbe4a44919cdc6d6f42ccfe8f28ef5470717",
+      "contentSha256": "fd14df5eaa6eca7c1fc1fa40d5881e2eddffd591e0563f0606c3aa0880e17ab0",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -66,9 +123,28 @@
       "source": "canonical:agents/customer-service-writer",
       "revision": "ae38c0e2806c2350459bfdf771c9cb29a5a076a5",
       "snapshot": "committed-component-tree",
-      "version": "0.2.0",
-      "contractSha256": "39cd21ebb8b3f2569a8f9d97151062b9415f3b6033ebb186f2d15ac978b1cf98",
-      "contentSha256": "d5a49062b6f4716140de0690704a38cfe5fbbdbd1d6990cfb33ee25b0837ad43",
+      "version": "0.3.0",
+      "contractSha256": "8dc8fa82e9f18d927d47e65aa238e2a3415c6d32dbea1eb76c06809cfee2239a",
+      "contentSha256": "599984ca93bb07ed7881222caa9f1dd9bde88f1ffa4565cfddd0f0b780ff4d31",
+      "required": [
+        "AGENT.md",
+        "capability.json",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
+      "id": "data-quality-analyst",
+      "kind": "agent",
+      "path": "agents/data-quality-analyst",
+      "source": "canonical:agents/data-quality-analyst",
+      "revision": "pending-local:9cad1111bb0f22e38d27a7f6fe7c406ba5982080d2e24c9599c34eebdae568e1",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.1",
+      "contractSha256": "3b2f1bdff858ccbeeac76549b5e02efeae3fdc579439a34ae07039b2d617e9f4",
+      "contentSha256": "8ff930a26ae5ffbf048f5faa04729be69ee80b8be33e3ca3076bccefd16f0d41",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -85,9 +161,9 @@
       "source": "canonical:agents/delivery-verifier",
       "revision": "ce3f4d52a6dc0476ec9183d4e57dd74eef3b299d",
       "snapshot": "committed-component-tree",
-      "version": "0.2.0",
-      "contractSha256": "099bd21058001f97c2205a2bc18ea6cf7c62fb65f4006c3d2bddef006c83f9bd",
-      "contentSha256": "e58c0d1f20a1633ac1d459919f3fdf798edcb21471d974dd1aa764276b77e926",
+      "version": "0.3.0",
+      "contractSha256": "c74908f9091fbdba915e4ec258d89094c232bff43c0b148bb606ecd73f14e4ee",
+      "contentSha256": "423ff1247d8eebbb80a6e1eb7f823fbe0cfe3a7ebbc8efaddf0607d1374088bd",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -106,9 +182,9 @@
       "source": "canonical:agents/exercise-designer",
       "revision": "ae38c0e2806c2350459bfdf771c9cb29a5a076a5",
       "snapshot": "committed-component-tree",
-      "version": "0.2.0",
-      "contractSha256": "7aaac0c7f3055618229f214c6621b112a6e4bac9a99b48b8dbd7b2b006275e8e",
-      "contentSha256": "3f78b140ef907f720760cf9e6155a3812a7275015d593b9106a2b477c925d711",
+      "version": "0.3.0",
+      "contractSha256": "f344265b312d6e2cca9f7afa6532cd215329fc659ac7c46a765966354a7e07a3",
+      "contentSha256": "ea46d997edbb95db9c7a3370d5a2e12931460d55e6147df99b09da20c5d44b0e",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -125,9 +201,9 @@
       "source": "canonical:agents/frontend-engineer",
       "revision": "ce3f4d52a6dc0476ec9183d4e57dd74eef3b299d",
       "snapshot": "committed-component-tree",
-      "version": "0.3.0",
-      "contractSha256": "d3ac16f9989c9921af036a9ddc61947996f4cd49b463b2ee5c5d93668d470222",
-      "contentSha256": "1b9b15e616b1db8426a00a62cb1f09ac6def9c21039db8e2037d97134152dd3f",
+      "version": "0.4.1",
+      "contractSha256": "c43f624e364d24d26297aa4b471db3d5fe641e72c6c75186d81fe4a05ab15afc",
+      "contentSha256": "0ca5fc3d644958097213f29c4161faa3af51a993362ae6210ebb5ab853cecb1c",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -144,9 +220,47 @@
       "source": "canonical:agents/headline-cover-optimizer",
       "revision": "ae38c0e2806c2350459bfdf771c9cb29a5a076a5",
       "snapshot": "committed-component-tree",
-      "version": "0.2.0",
-      "contractSha256": "7e5999b553ba354070060f93326d570e3d2cd3ccbd2f221a4fd918e8d5c4af65",
-      "contentSha256": "3377c0a9b730fa209ba52e65e00a5fc6443dd50ff99278900d6e7a4dedf8a5d7",
+      "version": "0.3.0",
+      "contractSha256": "0c41d24b5d01667bd416760d21d411dc9e3827485b7d6b30ce5fff4f20eb7353",
+      "contentSha256": "23de8743817d2c85ad7531fa6214ebc9f7d84c349c90a5b85707ee6ada3f165e",
+      "required": [
+        "AGENT.md",
+        "capability.json",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
+      "id": "healthcare-operations-analyst",
+      "kind": "agent",
+      "path": "agents/healthcare-operations-analyst",
+      "source": "canonical:agents/healthcare-operations-analyst",
+      "revision": "pending-local:9b6a47b1d04ecc933e72b72317bacee76ae9b5fa96f17d85f110c01cd9ff8d16",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.1",
+      "contractSha256": "54d36f396db8ba1fc98a7061acbaa258ce71fa72337754c01c5e38234c2bb80a",
+      "contentSha256": "e193dbaaaa3fc107d91ecce706b8cf7536e6a6ffa9755ff9713bf6fd6944b081",
+      "required": [
+        "AGENT.md",
+        "capability.json",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
+      "id": "hiring-process-designer",
+      "kind": "agent",
+      "path": "agents/hiring-process-designer",
+      "source": "canonical:agents/hiring-process-designer",
+      "revision": "pending-local:e645841f49bab4f6759be8ad19e5a41b992f65d32435ed37b392a7615a9cd4fc",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.1",
+      "contractSha256": "5eac0e403df005d3aeecf67d69d6888b37492cad4391ec03f72052a248bfd07d",
+      "contentSha256": "b44430408d6ee20b634d7784ec40b89924cf2926e51189dec5ab30f556d08781",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -163,9 +277,9 @@
       "source": "canonical:agents/interaction-designer",
       "revision": "689714dada0f897326c77d41c972790b85efd0ed",
       "snapshot": "committed-component-tree",
-      "version": "0.4.0",
-      "contractSha256": "5948122203b95edaa99d2e2898d3eab27127f8aa74df9abb3ae1bb8001ea21ce",
-      "contentSha256": "efea34fbc8c285e6e14191d06e373eec1421086b59b3c7fa4a84c9a9c25495e8",
+      "version": "0.5.0",
+      "contractSha256": "c6278d1c0611f38360ef13befe9b058c1a8d914d50338982247fa1d4c8a874fe",
+      "contentSha256": "867b7b00eee3334931adad943996906507faa10541cdf94877fc2ec36b777893",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -182,9 +296,9 @@
       "source": "canonical:agents/interview-coach",
       "revision": "ae38c0e2806c2350459bfdf771c9cb29a5a076a5",
       "snapshot": "committed-component-tree",
-      "version": "0.3.0",
-      "contractSha256": "5e815769a67640ebfeb4a71da4ebee9da538dabe0cafa8c68224e6670939c4b1",
-      "contentSha256": "5a7d59f2dda593a680f6a6a7262c757b3b2a1259da8890df5a6a09e7b822ccfd",
+      "version": "0.4.0",
+      "contractSha256": "ad3c20b13633815180854b26c1439233bad933563f2039816af85ac8017b5e94",
+      "contentSha256": "c7bf64f898ac9e66ee3cc2224917cdcb8f59bf863d7a67162547f4b65c816f71",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -201,9 +315,9 @@
       "source": "canonical:agents/launch-planner",
       "revision": "ae38c0e2806c2350459bfdf771c9cb29a5a076a5",
       "snapshot": "committed-component-tree",
-      "version": "0.2.0",
-      "contractSha256": "3887c4bd52766d64daec4e36d48139509f4f3f6d9cc9ce9d738fd513989fd9d1",
-      "contentSha256": "ad75a7a13accb622476250d0c33dcd6b5b8b1b8f2192427de6c95dba902f1e07",
+      "version": "0.3.0",
+      "contractSha256": "a1d84a9c8deeaa0767d774d2b014a83748af0b123065296219bdf4dfc416e16f",
+      "contentSha256": "66c2e7ae4e0181ef46ebfe957f40a5e1b3eb0f0e0df89499a1611d356d6cfa6f",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -220,9 +334,28 @@
       "source": "canonical:agents/lesson-planner",
       "revision": "ae38c0e2806c2350459bfdf771c9cb29a5a076a5",
       "snapshot": "committed-component-tree",
-      "version": "0.2.0",
-      "contractSha256": "85d86a7456d7d35f82559211ababdba9e8cc2905ccba66e16394b81523d807da",
-      "contentSha256": "f0683daf3ae922f361b11af2a80da5e151ede2ede764846207f66c2e5c26a398",
+      "version": "0.3.0",
+      "contractSha256": "0450232bc776490316becaab34d95b5d4c523ab2e8c6dc6a2aff4265ced083fb",
+      "contentSha256": "cb78a6a5167330a9229121a349156fad68d0673e9edfa8c0a8eaa9eaccb263c2",
+      "required": [
+        "AGENT.md",
+        "capability.json",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
+      "id": "manufacturing-quality-analyst",
+      "kind": "agent",
+      "path": "agents/manufacturing-quality-analyst",
+      "source": "canonical:agents/manufacturing-quality-analyst",
+      "revision": "pending-local:83b23acb7fb32d4a8f2c38c837e81951f66958dba3330c6feebb82c4f403a0cf",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.2",
+      "contractSha256": "b0ea73731f10c1db3b5cedf4f4d2d5a673c31fd6e3c259ed82314c03e0b4d2da",
+      "contentSha256": "f490d4d269d63b3d7f9d14e9d6de1300346ce3a02c0700885264e27ae6d0a663",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -239,9 +372,9 @@
       "source": "canonical:agents/media-production-engineer",
       "revision": "ce3f4d52a6dc0476ec9183d4e57dd74eef3b299d",
       "snapshot": "committed-component-tree",
-      "version": "0.2.0",
-      "contractSha256": "854faa92ec0edf12847fec28369bb5c35e3ce17f010ffe78a504696b48a60ebd",
-      "contentSha256": "24fe24ccb767cceac1cec27f4bb7552e03e7d8b716c34d3cf7465c29c00850d2",
+      "version": "0.3.0",
+      "contractSha256": "3f95a41183bc484e0f3dd16a0ed684a685ea971396e1a15d94f4de0f5e904f40",
+      "contentSha256": "90c537ed6ddd94a98f630e64b4a2718d31122ccf01010404990c5b107581d238",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -258,9 +391,9 @@
       "source": "canonical:agents/pricing-cost-analyst",
       "revision": "ae38c0e2806c2350459bfdf771c9cb29a5a076a5",
       "snapshot": "committed-component-tree",
-      "version": "0.2.0",
-      "contractSha256": "402539612326ea28085d01178e6d6ad78a56106209319dde7989ed2506c2bd8f",
-      "contentSha256": "b98ace234bb6f78f2b33dd7cb538d48e98af87c7db59dc10eb767b9482de609f",
+      "version": "0.3.0",
+      "contractSha256": "d80d217f4d6f1ccf78b10d5072fec8e64eb5b3f0a673dc6110fc774b691d8d29",
+      "contentSha256": "e3c46101a8b47c5bb09de21cf25f4d46d7ac0b79015717814d6702720324bbda",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -277,9 +410,9 @@
       "source": "canonical:agents/product-architect",
       "revision": "689714dada0f897326c77d41c972790b85efd0ed",
       "snapshot": "committed-component-tree",
-      "version": "0.4.0",
-      "contractSha256": "e3e9954ab49b1def5eb8cbcba48bc48f863886f97c14c05300ae149406572f0c",
-      "contentSha256": "94e3d7a233dcbcb27084cda5231e800bbab9ad4c4bc4b26ae8742da20a7da49b",
+      "version": "0.5.0",
+      "contractSha256": "8afb090cd7271ed7ea2946df8481e78e685c995c6b0745483ae4dd0bb1e3edea",
+      "contentSha256": "3595e122f1b8aa2b67d291f4b7709dc1bc68520a51640dcbf031465dcf99d430",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -298,9 +431,9 @@
       "source": "canonical:agents/product-listing-writer",
       "revision": "ae38c0e2806c2350459bfdf771c9cb29a5a076a5",
       "snapshot": "committed-component-tree",
-      "version": "0.2.0",
-      "contractSha256": "a8ab75198ef6b5a61c1ba5860169835f5c6d8a46e7e0ce3f62f047fef580201e",
-      "contentSha256": "70367bff21586f9c7fcac04c92861709fa4ac419d2c91920b07e3f842ea5de57",
+      "version": "0.3.0",
+      "contractSha256": "6f4dcfecfaebe40e3dc7df51368ca0518239686cd39fb417bd3a8e71b7ced6ef",
+      "contentSha256": "859407c643fdd6deb982303595e344f5cfb39bb42290456338f4af967275d293",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -317,9 +450,9 @@
       "source": "canonical:agents/quantitative-researcher",
       "revision": "ce3f4d52a6dc0476ec9183d4e57dd74eef3b299d",
       "snapshot": "committed-component-tree",
-      "version": "0.2.0",
-      "contractSha256": "3ad37ea6cf9e0c6d1f55ab9384ec9094bcbb24e76dee371b23aefa9df0f77d7c",
-      "contentSha256": "9b35aa66721d712ebe50e4123143cc63850a5fb19f139985b4fe233580791f1b",
+      "version": "0.3.0",
+      "contractSha256": "fd47ab4c66a1e2d80c2a72b956f99e4dd580a4febe9cd02b50b44e3f3eb71fdd",
+      "contentSha256": "5c558ffefb49632dce756571d9d561e78e7d39a8e175d11f0404065fd2919d25",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -338,9 +471,28 @@
       "source": "canonical:agents/resume-editor",
       "revision": "ae38c0e2806c2350459bfdf771c9cb29a5a076a5",
       "snapshot": "committed-component-tree",
-      "version": "0.2.0",
-      "contractSha256": "349863da98d3a3e4eeef2a5c015c5359ce3b60837f9f90d5b1478fbb9aa2d955",
-      "contentSha256": "2c3f11edeaad006f2c997bfdc38ba9b949c710d1a334d1cc49e66cd808d920ab",
+      "version": "0.3.0",
+      "contractSha256": "a557221194f43c14faca2f2939767f1682f2c0b1fb473cd8fd440bd73f01c03e",
+      "contentSha256": "ee88d040e6045a8d1764ce9d31adb2261b3affe5e1a103eb407ec6788e040b69",
+      "required": [
+        "AGENT.md",
+        "capability.json",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
+      "id": "sales-operations-analyst",
+      "kind": "agent",
+      "path": "agents/sales-operations-analyst",
+      "source": "canonical:agents/sales-operations-analyst",
+      "revision": "pending-local:0304974a7e61a5c6dfa411a26ae7b06bbe53cc3399d9c0071c50a1537359faf9",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.1",
+      "contractSha256": "f971ddecfaf97298b599f85b4fbbe94d86ef679169514e8ee8d7f586997a92bb",
+      "contentSha256": "b329abe1e2b465d97a5eeacf991bf1dc43497b94bd06d245dcc228b258e00e79",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -357,9 +509,9 @@
       "source": "canonical:agents/script-writer",
       "revision": "ae38c0e2806c2350459bfdf771c9cb29a5a076a5",
       "snapshot": "committed-component-tree",
-      "version": "0.4.0",
-      "contractSha256": "02b34686bd37b0e06c1383b1cf74832ff351fcaa9b3cb6072df488e65da7d119",
-      "contentSha256": "ebf1db99a6f52e37a7787aa395ce87a469af64e65f1a794943722206b5be9d66",
+      "version": "0.5.0",
+      "contractSha256": "9269e8935f0a4fa924cc2d95b0fda24da34d6c9160d93dfb0ca200a5bb84e283",
+      "contentSha256": "9d90108b2a845a1a7c6969690247b0d3dc1100258ba22f7576c481a2b9e73e20",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -376,9 +528,9 @@
       "source": "canonical:agents/side-business-evaluator",
       "revision": "ae38c0e2806c2350459bfdf771c9cb29a5a076a5",
       "snapshot": "committed-component-tree",
-      "version": "0.2.0",
-      "contractSha256": "6516c1719fcec29e62988cd7cc0df440389a3e95249b7f2e4ca4f67fccd3f650",
-      "contentSha256": "f3662ebfaf3b048421607ab05866a9dec6f9c32865321fc39f1264e4df2e8d44",
+      "version": "0.3.0",
+      "contractSha256": "1a6f11c14c66b122b2218145df29921156cef788c757129cb3fd4c6a7712d04e",
+      "contentSha256": "6b991f4ab3b7ab576a4e1452947f002eebfcc5c0d71fa706e827c97baf7cbb7c",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -395,9 +547,9 @@
       "source": "canonical:agents/source-evidence-analyst",
       "revision": "ce3f4d52a6dc0476ec9183d4e57dd74eef3b299d",
       "snapshot": "committed-component-tree",
-      "version": "0.2.0",
-      "contractSha256": "c19c1f1e9af595b9b56a718277c5ddd106de4f00616ac256e7a8c0a8ed2e8095",
-      "contentSha256": "96ca6987b748002d6da951390fd0fcce197113eaaf15a674f6c455f2f68b1139",
+      "version": "0.3.0",
+      "contractSha256": "ca4de1cfe93179fdbd515e2748c1ba6e27d621f69abfd302081166d3e338691b",
+      "contentSha256": "b0691a6c3a8c7683da83e7b908022c487f22056bca714082fb7718eeba87deca",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -414,9 +566,9 @@
       "source": "canonical:agents/store-performance-analyst",
       "revision": "ae38c0e2806c2350459bfdf771c9cb29a5a076a5",
       "snapshot": "committed-component-tree",
-      "version": "0.3.0",
-      "contractSha256": "927a10e2b1ef25f11cf0d4127524d014b0b4a7d1f486856a005498296f7331c6",
-      "contentSha256": "4c8488e9314e8d15cfd6c1b53202e801f381aa98e15b7857a8d9044d7996c740",
+      "version": "0.4.0",
+      "contractSha256": "be1260b6ebbbf92e41da855404f8abe011424561235a691a02dd33475637a4d0",
+      "contentSha256": "2f1b6d391eb29115ba904fe4c3034c308b4648f55d971f243e1fda283f4811bb",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -435,9 +587,9 @@
       "source": "canonical:agents/supplier-comparison-analyst",
       "revision": "ae38c0e2806c2350459bfdf771c9cb29a5a076a5",
       "snapshot": "committed-component-tree",
-      "version": "0.2.0",
-      "contractSha256": "2132b8f870b60b62290cfc4adf423b5098a3214970c751cecbe43318b10f3014",
-      "contentSha256": "ecd3949b59626a7801fbb1d5239a79c557599268957252d2145d87599fb669da",
+      "version": "0.3.0",
+      "contractSha256": "d857136fc0648b6af4e5203e2ac592b1f30e32c1a95b65ba7539d51fb9eab3a3",
+      "contentSha256": "ec095317d182107017998755cc3b4e99cb51f31095db7bb6214346b1073605fc",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -450,15 +602,91 @@
       ]
     },
     {
+      "id": "supply-chain-planner",
+      "kind": "agent",
+      "path": "agents/supply-chain-planner",
+      "source": "canonical:agents/supply-chain-planner",
+      "revision": "pending-local:5a9d7b6c227eb62f9fb4232c994d7573198f422c3ed9d934c2eff0efdcc28969",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.1",
+      "contractSha256": "04f87ea88b492cfc93cd7f0887897113ab05533e286ea022b487af621493a2aa",
+      "contentSha256": "b1e0f3e8aa4eee3c8b6f68e83d5e7632e324f426cfaa54dfcdfb26b6f2d1a5e3",
+      "required": [
+        "AGENT.md",
+        "capability.json",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
+      "id": "sustainability-analyst",
+      "kind": "agent",
+      "path": "agents/sustainability-analyst",
+      "source": "canonical:agents/sustainability-analyst",
+      "revision": "pending-local:24e54e5c0634191660f01b963b23eb9d3d0c63128e91f184758d592eebbb6108",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.1",
+      "contractSha256": "60a5db788e62e2b5a01aaf510647f79a433de575cdad6733d05a1d19600f8d68",
+      "contentSha256": "7b519f14aa1967b2b7315b98ba5af65a24fc1e504d531a92ef12ff33bd76eb72",
+      "required": [
+        "AGENT.md",
+        "capability.json",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
+      "id": "systems-engineering-analyst",
+      "kind": "agent",
+      "path": "agents/systems-engineering-analyst",
+      "source": "canonical:agents/systems-engineering-analyst",
+      "revision": "pending-local:ccc81b431d5c9692a372469559c32c2169dc84f11bd224c71409f5a6d6ed2aa6",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.1",
+      "contractSha256": "a83b3df3b8a76ceb272b83a47c2d6aac90481c001ce130b7f20223403364bec7",
+      "contentSha256": "ee51e41aa02c80ce616b015712ffa5b07d46c5bd8f294211b6009eb2e6491c56",
+      "required": [
+        "AGENT.md",
+        "capability.json",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
       "id": "topic-planner",
       "kind": "agent",
       "path": "agents/topic-planner",
       "source": "canonical:agents/topic-planner",
       "revision": "ae38c0e2806c2350459bfdf771c9cb29a5a076a5",
       "snapshot": "committed-component-tree",
-      "version": "0.2.0",
-      "contractSha256": "7076f6255b479291f0a7b11df660ed97f98a7a3f908556273c7a1313db4785c3",
-      "contentSha256": "564877c37ea73aa07196f8877609c99f7bacf7e86b09bf125d35894dbd0c03d0",
+      "version": "0.3.0",
+      "contractSha256": "3a0dd2927c712a98589cf7747e9bc16b8a0d8554cc82ba37c691931da7648947",
+      "contentSha256": "f826eca7c38f0cd82685029efd1c50a9dec196315c0d025f0cf5864fa79d86c8",
+      "required": [
+        "AGENT.md",
+        "capability.json",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
+      "id": "user-researcher",
+      "kind": "agent",
+      "path": "agents/user-researcher",
+      "source": "canonical:agents/user-researcher",
+      "revision": "pending-local:04b43117132239f89f46333a6b8354c4c746e661c9ea4d7fef96c59ea52fd1ee",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.1",
+      "contractSha256": "e263ac0286789d03ff71bdff1bb6a85a9118d871e74ac4bcd53207f2eae3df29",
+      "contentSha256": "8477515fac3282af34c078e4f17d77bcd7f1f63af2dddeff6d7a17c7f44be11c",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -475,9 +703,9 @@
       "source": "canonical:agents/workplace-writer",
       "revision": "ae38c0e2806c2350459bfdf771c9cb29a5a076a5",
       "snapshot": "committed-component-tree",
-      "version": "0.2.0",
-      "contractSha256": "167860f347406316a36cd416f809f2b7d9476c7d3a50f23965cb881b2a5c3ad1",
-      "contentSha256": "ba72f5c2032847b0b182dc70f793f74fc5ee3aea5044b421f9184e46fba36d1a",
+      "version": "0.3.0",
+      "contractSha256": "7971e46f655f8f3436ad67a703c6655ba10f33b9711a38ef850bcfc277c2eec8",
+      "contentSha256": "2e86de19ac4a298b7fb069c180f05b483670bdae6665b83f8f25561df85505fc",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -526,9 +754,9 @@
       "source": "https://github.com/KimYx0207/Kim_Service",
       "revision": "753ff43bd9b1f9aee4d184c4f21e7f494af5a79f",
       "snapshot": "preserved-agent-teams-history-base;self-contained-component-snapshot",
-      "version": "4.8.0",
-      "contractSha256": "04fa72e71ef67fc55f0058e162ed8050308ab963258066858b18257dbaeb549c",
-      "contentSha256": "33ac6b4197101a7f6a822ad5504346efff0b56586b83b18d47ba3c58211b2f74",
+      "version": "4.9.0",
+      "contractSha256": "e40c5522ada30a0c7d6cdb9a959461fb513b46614291177a7d556951cedbd6d3",
+      "contentSha256": "202f783e3634c542643392639a6753c120e5d7dba09309ad1e4835445b9ce394",
       "required": [
         "SKILL.md",
         "README.md",
@@ -546,15 +774,61 @@
       ]
     },
     {
+      "id": "construction-information-review",
+      "kind": "skill",
+      "path": "skills/construction-information-review",
+      "source": "canonical:skills/construction-information-review",
+      "revision": "pending-local:0a53d51fd2fe8f24696f0c6a88375b1af757a111f50d5dd4faad0b88becbd193",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.1",
+      "contractSha256": "0ff7d78510f62a92bc04ba9b25e75b5b9ed7b4ab17df6d667e4946617a89a5e9",
+      "contentSha256": "00a29be48f3d7817885bd907441fef10cb7d6a46b3c11e4f5c4f79dd564c92e1",
+      "required": [
+        "capability.json",
+        "CHANGELOG.md",
+        "LICENSE",
+        "NOTICE",
+        "README.md",
+        "SKILL.md",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
+      "id": "experiment-analysis",
+      "kind": "skill",
+      "path": "skills/experiment-analysis",
+      "source": "canonical:skills/experiment-analysis",
+      "revision": "pending-local:191253ccec3f475b051b0edef1c7c29cbbf06540a5991550413e9d96eb9690eb",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.1",
+      "contractSha256": "ba005269a9d91baab69e8c936891e364e3447a4e6bcf429e89c52293eca2f758",
+      "contentSha256": "f6ddb089726f68f7309f6d7439795b96221bad321fb984f09beacaa6a1f98f7a",
+      "required": [
+        "capability.json",
+        "CHANGELOG.md",
+        "LICENSE",
+        "NOTICE",
+        "README.md",
+        "SKILL.md",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
       "id": "find-skill",
       "kind": "skill",
       "path": "skills/find-skill",
       "source": "https://github.com/KimYx0207/findskill",
       "revision": "cf7635e3755c47b472bfb6dfd854680b5662ee26+public-package-adapter",
       "snapshot": "tracked-source-plus-self-contained-package",
-      "version": "0.0.0+imported.cf7635e",
-      "contractSha256": "9296f8f6e3e88403a6f657e8cb9be55139921dfefc98b1a5cd96197a207a320f",
-      "contentSha256": "8a384204cb3ae6c1d4d705fcc863604c821eaa010c5285a272dda92d6aee28ba",
+      "version": "0.1.0",
+      "contractSha256": "2f29bb816923481267b7dca9b5f9f7a7681c0c5ce1a8f1213b490407bdc2f30b",
+      "contentSha256": "e7bf32246ea9ead404c80bfa8b4cd9cca75045d5848fa85643c6b5b70e5ae171",
       "required": [
         "SKILL.md",
         "README.md",
@@ -570,15 +844,38 @@
       ]
     },
     {
+      "id": "game-design-playtest",
+      "kind": "skill",
+      "path": "skills/game-design-playtest",
+      "source": "canonical:skills/game-design-playtest",
+      "revision": "pending-local:b14c7169248b343cc7f01ed179f7336119fdd831a6baf3c622d7275f5235f2f6",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.1",
+      "contractSha256": "fedadc36fb2cc80c3b75bdcc2e0f5ee462aa1c43baf9cc5d90ad0bb298c15352",
+      "contentSha256": "08b88bf5aede8c38de6b7231e59c35a3b1c75a5c0d9374f2c34e0a4f9426e927",
+      "required": [
+        "capability.json",
+        "CHANGELOG.md",
+        "LICENSE",
+        "NOTICE",
+        "README.md",
+        "SKILL.md",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
       "id": "goalpro",
       "kind": "skill",
       "path": "skills/goalpro",
       "source": "https://github.com/KimYx0207/GoalPro",
       "revision": "39adc8db765e0e4ad4df8d4ce02e7059fed69f26",
       "snapshot": "self-contained-public-package;monorepo-install-doc-adapter",
-      "version": "0.1.4",
-      "contractSha256": "f751073dee0579e7d2c8790335edcbd9ecea6c9ed3f03fd1e5182569a88cd37b",
-      "contentSha256": "446f1c9fbd09289d13f435e721318663296979fa23a4e718db5777e16abf47a6",
+      "version": "0.1.5",
+      "contractSha256": "a9f03805ceae7250592519311befff623eaebc36be10c69746a3c98ca78dc4d9",
+      "contentSha256": "72d14b74d89f9cef5848b12121fd9f435b7b943f394e6b6b954a83012a9db605",
       "required": [
         "SKILL.md",
         "references/examples.md",
@@ -605,9 +902,9 @@
       "source": "https://github.com/KimYx0207/Kim_Decision",
       "revision": "fbbe41cb6155ffd605c65b5af3f876ec25cfc0ea",
       "snapshot": "self-contained-public-package-with-privacy-and-monorepo-install-doc-adapter",
-      "version": "0.0.0+imported.fbbe41c",
-      "contractSha256": "e5b0c96576781f5f674ca68500e813520e40a392085663563e023e55daeef12e",
-      "contentSha256": "3a3e5e229f7bb0cf060e6c09394955aeeebeeca37a4251534542450d4396cdff",
+      "version": "0.1.0",
+      "contractSha256": "6032112fb1d454d3c8fb73419ed204d5455b8e75c886a0514196382b175bd17c",
+      "contentSha256": "a3be44f79ab7abd2e287675d206f0a17b9e0beb166e61e807f9ef8366af25745",
       "required": [
         "SKILL.md",
         "references/method.md",
@@ -634,9 +931,9 @@
       "source": "canonical:skills/kim-sticker-pack",
       "revision": "7d4ebd512372c5f8b9564b88acbacc5c4553d6a4",
       "snapshot": "committed-component-tree",
-      "version": "0.2.0",
-      "contractSha256": "7680d82c138480319cf0b0d7bd00923975e4adecd3241861ba95948998e5c0dd",
-      "contentSha256": "2952f97aae3164ba64f73de4bbfae420ebdb2ad79fcb6c2645904e6dda625a89",
+      "version": "0.3.0",
+      "contractSha256": "959ab7ca8865a52e035b69553caf33a466430eb712baf38a3f9cedb2201830a6",
+      "contentSha256": "c730b08b17d245f33d2d4db0084f279e0fadc6ace1db77eecaced72fb7c132de",
       "required": [
         "capability.json",
         "CHANGELOG.md",
@@ -659,9 +956,9 @@
       "source": "canonical:skills/memory-3layer",
       "revision": "canonical-direct-sync:2592d1f68b3a005355148b5cdccceedeb74d7755e037970087639602537832fb",
       "snapshot": "canonical-direct-sync",
-      "version": "1.0.0",
-      "contractSha256": "738f201a6986d9731fbffc8b2011e25db5e39a73f95094ab888ff48343d9bf87",
-      "contentSha256": "73686c05d932bc45be4e5d7a3858943a003794e1698ae7d4c8ac504d61407740",
+      "version": "1.1.0",
+      "contractSha256": "e901a72392311679ebd717d56a67ba74ea7f90c3f03020fa966d8032baf3f6e5",
+      "contentSha256": "50121809887665287a1d7f3cdf05a756176b6fa29bc4dd1798e7b86cc0670f38",
       "required": [
         "SKILL.md",
         "README.md",
@@ -697,9 +994,9 @@
       "source": "canonical:skills/meta-skill-creator",
       "revision": "canonical-direct-sync:294245547c7ce33062926329e361c08dee4218bf0b33ada25d1c66a6cd39319b",
       "snapshot": "canonical-direct-sync",
-      "version": "1.0.0",
-      "contractSha256": "2e79bd73c54cb7113f27f35d02477d0fb5eeaf46544c975ac12dc5878044d910",
-      "contentSha256": "5221bdc113b4ad716c2faaa9ffa51aed025ed411695de66ce6ccd9eda10f4d3f",
+      "version": "1.1.0",
+      "contractSha256": "2a54ab4c2433131705e68d876d55b9a78cbde74b5c65851f5ab12394c81eca70",
+      "contentSha256": "7618a366ee40e0855072903160ed64153d57854f9ceeb9168e3c045591d5a1e5",
       "required": [
         "SKILL.md",
         "README.md",
@@ -719,15 +1016,61 @@
       ]
     },
     {
+      "id": "metric-contract",
+      "kind": "skill",
+      "path": "skills/metric-contract",
+      "source": "canonical:skills/metric-contract",
+      "revision": "pending-local:744b317348f74afb43df22708e2f4e9e2a6867dfd5b86b65342e064110bb29af",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.1",
+      "contractSha256": "644608b7cff260e71cf75ffb6ffab3e9bce00e168acb3301c0dbb5fe1561d135",
+      "contentSha256": "933609972e062b7b2592eb83f54ee9f8f9869167e86047fd7e2215a0879e6694",
+      "required": [
+        "capability.json",
+        "CHANGELOG.md",
+        "LICENSE",
+        "NOTICE",
+        "README.md",
+        "SKILL.md",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
+      "id": "requirements-traceability",
+      "kind": "skill",
+      "path": "skills/requirements-traceability",
+      "source": "canonical:skills/requirements-traceability",
+      "revision": "pending-local:706c86c98aa277c1eca8626f206588148f9337db0dc0aa1b94175d1ed2c6b648",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.1",
+      "contractSha256": "76a72206c98fe7cc10d9b24eb09bdef91026b1b03f6d74c004b04ab418be39fb",
+      "contentSha256": "5c28ee8220e8c9981d750a2d52438c3eacb2a05ed180cb951c0f166e7eb0ec61",
+      "required": [
+        "capability.json",
+        "CHANGELOG.md",
+        "LICENSE",
+        "NOTICE",
+        "README.md",
+        "SKILL.md",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
       "id": "semgrep-skill",
       "kind": "skill",
       "path": "skills/semgrep-skill",
       "source": "https://github.com/KimYx0207/SkillSemgrep",
       "revision": "eb6dd5127f5dedc325b9364edf71a2034e5e35b1",
       "snapshot": "tracked-head;monorepo-install-doc-adapter",
-      "version": "1.1.0",
-      "contractSha256": "492e46ce701b1594df4a4de6ae89ae260ec84f934267c3549aa3b75ce1881fd1",
-      "contentSha256": "0d03157099ae15db900bb762be2e0e6c4cd8203d266ceb31c2e87b06b217fb28",
+      "version": "1.2.0",
+      "contractSha256": "acc9265bbd5c42825530438031c7a3478f46426fc5e18b9408fc5cb000126d92",
+      "contentSha256": "ab9babf43fffef4ab753ffa95973bcb926803995cfdafd34090eb88a9a14c317",
       "required": [
         "SKILL.md",
         "README.md",
@@ -749,15 +1092,38 @@
       ]
     },
     {
+      "id": "sop-runbook",
+      "kind": "skill",
+      "path": "skills/sop-runbook",
+      "source": "canonical:skills/sop-runbook",
+      "revision": "pending-local:6e92d85a2f9f337fa925e59361bdf1a3b30059ad0b236c3f403cf8cdf500a83c",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.1",
+      "contractSha256": "952c884ffbf09a644f6f4a623fbc3bec54e288a03aee4911b4711f432db1152c",
+      "contentSha256": "8b224d4c0e0de776252ca49bd7934ffc05f7ec44f3556be41632c58c4f355fca",
+      "required": [
+        "capability.json",
+        "CHANGELOG.md",
+        "LICENSE",
+        "NOTICE",
+        "README.md",
+        "SKILL.md",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
       "id": "xiaohongshu-skill",
       "kind": "skill",
       "path": "skills/xiaohongshu-skill",
       "source": "canonical:skills/xiaohongshu-skill",
       "revision": "canonical-direct-sync:9464b5dab5222a671b546a5dc1b3e73f45f19f53e4bb54fe3b3b2401a2b537ca",
       "snapshot": "canonical-direct-sync",
-      "version": "1.0.1",
-      "contractSha256": "ab0202c5d30267f6e7b7c4628fbdb55854a595cff6fdb678aaf70d9f715de3d3",
-      "contentSha256": "0840f364052097fe4e9699b69e8ca14796b31763ad1c6919959324413fcd2942",
+      "version": "1.1.0",
+      "contractSha256": "dde6a7d4ec27022c9e8d0be43912ff061b160ba1bb6d33dbb2a27a08bd837ea2",
+      "contentSha256": "f87bb36132e2d30e66dda145814bfbb0f5b938e9c175d0860b1d49d3d4b6ee87",
       "required": [
         "SKILL.md",
         "README.md",

@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "roleId": "supply-chain-planner",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "late-receipt",
+      "capabilityId": "supply-chain-planner-deliver",
+      "category": "worked_example",
+      "scenario": "期末正库存但中途缺货",
+      "input": {
+        "horizon": "3天，件",
+        "positions": "50初始；需求40/30/0；到货0/0/100",
+        "constraints": "允许积欠"
+      },
+      "candidateOutputExcerpt": {
+        "timePlan": "日末10、-20、80，第2天短20。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "晚到无法满足早期需求。",
+      "diagnosticRefs": [
+        "timing"
+      ],
+      "decisionRuleRefs": [
+        "time-phased"
+      ]
+    },
+    {
+      "id": "double-supply",
+      "capabilityId": "supply-chain-planner-deliver",
+      "category": "failure_boundary",
+      "scenario": "关联单据重复",
+      "input": {
+        "horizon": "本周",
+        "positions": "R1=100已转P1=100未收货",
+        "constraints": "同一订单行"
+      },
+      "candidateOutputExcerpt": {
+        "timePlan": "在途200。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "同一供给重复。",
+      "diagnosticRefs": [
+        "documents"
+      ],
+      "decisionRuleRefs": [
+        "linked-supply"
+      ]
+    },
+    {
+      "id": "stockout-sales",
+      "capabilityId": "supply-chain-planner-deliver",
+      "category": "worked_example",
+      "scenario": "缺货截断销售",
+      "input": {
+        "horizon": "下周",
+        "positions": "缺货销量0，未满足订单20",
+        "constraints": "交期2天"
+      },
+      "candidateOutputExcerpt": {
+        "riskAssessment": "至少20需求需处理，零销量非零需求。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "销量不同于需求。",
+      "diagnosticRefs": [
+        "timing"
+      ],
+      "decisionRuleRefs": [
+        "censored-demand"
+      ]
+    },
+    {
+      "id": "invented-buffer",
+      "capabilityId": "supply-chain-planner-deliver",
+      "category": "failure_boundary",
+      "scenario": "无策略套参数",
+      "input": {
+        "horizon": "月",
+        "positions": "仅平均销量",
+        "constraints": "交期及服务目标未知"
+      },
+      "candidateOutputExcerpt": {
+        "options": "统一10%安全库存，保证不缺货。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "无分布与策略不能保证。",
+      "diagnosticRefs": [
+        "policy"
+      ],
+      "decisionRuleRefs": [
+        "policy-parameters"
+      ]
+    }
+  ]
+}

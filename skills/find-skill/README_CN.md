@@ -24,19 +24,19 @@
 
 ## 问题
 
-在 Windows 上，Claude Code 使用的 Bash/Git Bash 环境无法正确处理 `npx skills` 命令——命令执行后没有任何输出。
+部分 Windows 的 shell、Node 和 CLI 组合曾出现无输出。先核实当前环境、退出码与网络，不能据此断言所有 Git Bash 都不支持。
 
 ```bash
-# ❌ 在 Windows 的 Claude Code 中没有输出
+# 先观察当前环境的真实输出与退出码
 npx skills find "react"
 ```
 
 ## 解决方案
 
-这个 fork 修改了 SKILL.md，让 Claude Code 使用 PowerShell 来运行 skills 命令：
+本包保留 PowerShell 作为当前 shell 实际失败后的兼容路线：
 
 ```bash
-# ✅ 在 Windows 上正常工作
+# 可尝试的兼容路线，仍需在本机确认
 powershell -Command "npx skills find 'react'"
 ```
 
@@ -90,26 +90,26 @@ findskill/
 
 ## 主要特性
 
-1. **Windows 兼容性** - 所有命令使用 PowerShell 而非 Bash
+1. **Windows 兼容性** - 实际遇到 shell 问题时可用 PowerShell，不假设所有 Bash 都失败
 2. **双语支持** - 中英文说明
 3. **中文关键词对照** - 内置搜索关键词翻译表
 4. **故障排除** - 常见问题与解决方案
 
 ## 已知限制
 
-1. **搜索只支持英文关键词** - 中文查询需要 AI 翻译
+1. **搜索覆盖存在差异** - 可增加相关英文翻译查询；中文空结果不证明只支持英文
 2. **触发依赖语义** - 同样的话有时候触发，有时候不触发。加上 "skill" 这个词更容易触发。
 3. **Windows 优化** - macOS/Linux 用户建议使用原版
 
 ## 三个大坑
 
-### 坑1：搜索只支持英文
+### 坑1：把一次空结果当作能力不存在
 
 ```bash
-# ❌ 中文搜索没有结果
+# 本次中文查询应先确认执行完成
 npx skills find 数据分析
 
-# ✅ 用英文关键词
+# 可增加英文近义词扩展召回
 powershell -Command "npx skills find 'data analysis'"
 ```
 
@@ -145,13 +145,13 @@ powershell -Command "npx skills find 'data analysis'"
 ## 常见问题
 
 **Q：搜索没有结果？**
-A：用英文关键词，中文搜索不支持。
+A：先确认查询成功完成，再尝试相关英文翻译；超时或不可解析输出应报告搜索失败，不说能力不存在。
 
 **Q：Windows 上没有输出？**
-A：用这个 Windows 版本替换原版。
+A：检查当前 Node/npx、CLI 帮助和网络；当前 shell 失败时尝试 PowerShell 并保留失败原因。
 
 **Q：怎么验证安装成功？**
-A：项目级运行 `powershell -Command "npx skills list"`，用户级运行 `powershell -Command "npx skills list -g"`；在已批准的范围看到 `find-skill` 即成功。
+A：先列出已批准作用域，再回读实际目标入口和所有引用资源，核对审查过的来源版本。列表出现只证明发现，宿主触发与业务效果需另行实际观察。
 
 ## 致谢
 

@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.4.1 (2026-11-11)
+
+- 增加真实入口、状态隔离、异步断言与mock范围的行为证据要求，防止模拟保存冒充实际持久化。
+- 按实际风险选择验证，避免为实现细节和低影响内容改动机械扩充测试；新增原创接受/拒绝案例。
+
+## 0.4.0 (2026-11-11)
+
+- 增加完整实务交付、专业错误反例和跨情境处理，保持原有专业知识可按需装入。
+- 每项输出增加稳定检查ID、验证方法、所需证据和阻断规则；作者样例与实际效果分开。
+
+
 ## 0.3.0 - 2026-11-10
 
 - Add contract-bound expertise: domain diagnostics, decision rules, input guidance, output checks and professional review boundaries.

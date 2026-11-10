@@ -14,3 +14,12 @@ Living pages have no immutable upstream revision; the inspection date is recorde
 | goalpro | [Kim Service goalpro](https://github.com/KimYx0207/Kim_Service/blob/7e0cc4b10c855a24960aac0ea3bd62c4e4bf7e57/skills/goalpro/SKILL.md); 7e0cc4b10c855a24960aac0ea3bd62c4e4bf7e57 | 区分明示意图、推断、代理证据和真实目标 | 不把Goal/Loop提示词工作流迁移成角色状态机 | Existing MIT or MIT OR Apache-2.0 LICENSE/NOTICE retained; method principles only |
 
 The local knowledge asset is tied to the complete component content hash in the catalog. Its bytes and method metadata are rechecked by a consuming host; content integrity is distinct from professional accuracy. `evals/professional-cases.json` contains authored examples, not execution receipts or an expert certification.
+
+## Professional expansion 0.3.0
+
+Inspected 2026-11-11. Existing notices and source records remain. The following principles inform original templates and cases, not imported implementations or professional certification.
+
+| sourceRef | Primary source and version | Adopted | Not adopted | Rights / use |
+| --- | --- | --- | --- | --- |
+| cochrane-search | [Cochrane searching and selecting studies](https://www.cochrane.org/authors/handbooks-and-manuals/handbook/current/chapter-04); chapter updated March2025; handbook6.5.1 cited by source; inspected 2026-11-11 | 检索可复现、预先纳排、区分研究与报告、保留缺全文与排除原因。 | 不声称搜索引擎检索等同完整Cochrane系统综述。 | Cochrane copyright; original review workflow |
+| prisma-report | [PRISMA2020](https://www.prisma-statement.org/prisma-2020); 2020 reporting guideline; inspected 2026-11-11 | 公开检索筛选流程、排除与报告范围。 | 不将报告清单通过等同研究质量或临床结论。 | PRISMA rights; link and original traceability table |

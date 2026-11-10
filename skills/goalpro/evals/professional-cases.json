@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 1,
+  "roleId": "goalpro",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "goalpro-goal-prompt-worked",
+      "capabilityId": "goalpro-goal-prompt",
+      "category": "worked_example",
+      "scenario": "用户要求一个范围明确的空状态改动提示词。",
+      "input": {
+        "request": "给我一个 Goal Prompt，只改订单空状态文案和已有创建链接，不改排序权限。"
+      },
+      "candidateOutputExcerpt": {
+        "artifactType": "goal-prompt",
+        "content": "Goal: 修复现有订单列表空状态。User-stated intent: 无订单时能看懂下一步，只改空状态文案和链接。AI-inferred potential intent: 推断希望减少迷路，未确认转化目标。Value judgments requiring confirmation: 无；沿用已有样式。Decision standard: 无订单时显示准确说明且创建链接可达，不改排序/权限。Evidence standard: 读取列表组件与现有路由；用零订单和有订单两条路径检查。Scope: 空状态。Non-goals: 新功能或部署。Execution policy: 本段是给后续已授权执行者的提示词。Verification: 零订单有说明和可用链接，有订单仍显示原列表。Stop conditions: 链接需要新增路由或越权。Final report: 给实际截图和两条路径结果。",
+        "evidenceStatus": "sufficient",
+        "executionAuthorized": false
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "作者构造的合格报告形状，保留本场景的实际范围与未观察边界；重点核验：取证足够时为 goal-prompt；关键依据未取得则 draft-goal 或 research-plan。",
+      "diagnosticRefs": [
+        "intent",
+        "falsifiable",
+        "continuation"
+      ],
+      "decisionRuleRefs": [
+        "evidence-fit",
+        "prompt-only",
+        "bounded-loop"
+      ]
+    },
+    {
+      "id": "goalpro-goal-prompt-counterexample",
+      "capabilityId": "goalpro-goal-prompt",
+      "category": "failure_boundary",
+      "scenario": "用户要求一个范围明确的空状态改动提示词。",
+      "input": {
+        "request": "给我一个 Goal Prompt，只改订单空状态文案和已有创建链接，不改排序权限。"
+      },
+      "candidateOutputExcerpt": {
+        "artifactType": "goal-prompt",
+        "content": "全面重构订单模块，新增登录并自动持续优化。",
+        "evidenceStatus": "sufficient",
+        "executionAuthorized": false
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "扩大为重构和新权限流程，验收没有原请求对应行为。",
+      "diagnosticRefs": [
+        "intent",
+        "falsifiable",
+        "continuation"
+      ],
+      "decisionRuleRefs": [
+        "evidence-fit",
+        "prompt-only",
+        "bounded-loop"
+      ]
+    },
+    {
+      "id": "goalpro-loop-prompt-worked",
+      "capabilityId": "goalpro-loop-prompt",
+      "category": "worked_example",
+      "scenario": "已有明确重复单反例，用户只要手动续作提示词。",
+      "input": {
+        "request": "针对导入器重复订单缺陷写手动 LOOP，不实际执行。",
+        "continuationNeed": "explicit-loop-request",
+        "previousResult": "第1轮正常导入通过，重复单会重复写入；有失败样本和 diff。"
+      },
+      "candidateOutputExcerpt": {
+        "artifactType": "loop-prompt",
+        "content": "时间参数: 手动，上一轮错误报告出现后继续。Loop mission: 让导入器拒绝重复订单且保留原数据。Loop state: 第2轮，正确订单已通过，重复单缺陷开放。Previous result to inspect: 上轮 diff 与重复单失败样本。Cycle action: 只修重复标识比较。Verification delta: 同一批重放不重复写入，原记录不变。Loop guardrails: 只改导入模块；无新证据或相同失败重复时 Pause，请求具体新输入；不发布。Continuation protocol: Done=全部约定样本通过；Continue=有新的可验证差距且在预算内；Pause=证据/权限不足。Next LOOP packet: 原目标、轮次、已验证样本、开放差距、下一轮输入、时间参数、停止条件。",
+        "continuationNeed": "explicit-loop-request",
+        "executionAuthorized": false
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "作者构造的合格报告形状，保留本场景的实际范围与未观察边界；重点核验：只输出 loop-prompt，不生成新执行器或额外 Workflow Prompt。",
+      "diagnosticRefs": [
+        "intent",
+        "falsifiable",
+        "continuation"
+      ],
+      "decisionRuleRefs": [
+        "evidence-fit",
+        "prompt-only",
+        "bounded-loop"
+      ]
+    },
+    {
+      "id": "goalpro-loop-prompt-counterexample",
+      "capabilityId": "goalpro-loop-prompt",
+      "category": "failure_boundary",
+      "scenario": "已有明确重复单反例，用户只要手动续作提示词。",
+      "input": {
+        "request": "针对导入器重复订单缺陷写手动 LOOP，不实际执行。",
+        "continuationNeed": "explicit-loop-request",
+        "previousResult": "第1轮正常导入通过，重复单会重复写入；有失败样本和 diff。"
+      },
+      "candidateOutputExcerpt": {
+        "artifactType": "loop-prompt",
+        "content": "每天无限优化所有模块，完成后自动发布。",
+        "continuationNeed": "explicit-loop-request",
+        "executionAuthorized": false
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "范围、触发和发布边界改变，未绑定上轮证据且无停止条件。",
+      "diagnosticRefs": [
+        "intent",
+        "falsifiable",
+        "continuation"
+      ],
+      "decisionRuleRefs": [
+        "evidence-fit",
+        "prompt-only",
+        "bounded-loop"
+      ]
+    }
+  ]
+}

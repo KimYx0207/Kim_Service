@@ -6,6 +6,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import test, { after } from 'node:test';
 import { checkZcodeRelease } from './check-zcode-release.mjs';
+import { buildCatalogArtifacts } from './catalog-automation.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const scratch = fs.realpathSync.native(fs.mkdtempSync(path.join(os.tmpdir(), 'kim-zcode-release-check-')));
@@ -155,9 +156,36 @@ test('normal release gate checks Beta payloads and source-only checks are explic
   git(['config', 'user.name', 'Fixture']);
   git(['config', 'user.email', 'fixture@example.invalid']);
   for (const filename of ['check-repository.mjs', 'check-zcode-release.mjs']) fs.copyFileSync(path.join(root, 'scripts', filename), path.join(checkout, 'scripts', filename));
+  // Exercise the real draft -> committed-source transition independently of
+  // whether the development checkout currently contains pending components.
+  const fixtureCatalogPath = path.join(checkout, 'catalog.json');
+  const fixtureCatalog = JSON.parse(fs.readFileSync(fixtureCatalogPath, 'utf8'));
+  const localComponent = fixtureCatalog.components.find(component => component.source === `canonical:${component.path}`);
+  assert.ok(localComponent, 'fixture needs a local canonical component');
+  localComponent.revision = `pending-local:${localComponent.contractSha256}`;
+  localComponent.snapshot = 'capability-contract-pending-release';
+  json(fixtureCatalogPath, fixtureCatalog);
+  buildCatalogArtifacts(checkout);
   git(['add', '--all']);
   git(['commit', '--allow-empty', '-qm', 'fixture release gate']);
   const run = args => spawnSync(process.execPath, [path.join(checkout, 'scripts/check-repository.mjs'), '--release', ...args], { cwd: checkout, encoding: 'utf8', timeout: 30000 });
+  const pending = run(['--source-only']);
+  assert.equal(pending.status, 1, 'a committed checkout with pending provenance is not release ready');
+  assert.match(pending.stderr, /Release readiness requires finalized component provenance/);
+  const sourceCommit = git(['rev-parse', 'HEAD']).trim();
+  const pendingIds = JSON.parse(fs.readFileSync(fixtureCatalogPath, 'utf8')).components
+    .filter(component => component.snapshot === 'capability-contract-pending-release' || String(component.revision).startsWith('pending-local:'))
+    .map(component => component.id);
+  for (const componentId of pendingIds) {
+    // Only finalize fixture-owned pending sources. Historical source commits
+    // from the copied portable tree do not belong to this new Git history.
+    const { catalog } = buildCatalogArtifacts(checkout, { provenanceRevision: sourceCommit, provenanceComponent: componentId });
+    const finalized = catalog.components.find(component => component.id === componentId);
+    assert.equal(finalized.revision, sourceCommit);
+    assert.equal(finalized.snapshot, 'committed-component-tree');
+  }
+  git(['add', 'catalog.json', 'generated/capabilities.json']);
+  git(['commit', '-qm', 'fixture binds source provenance']);
   const missing = run([]);
   assert.equal(missing.status, 1);
   assert.match(missing.stderr, /release requires --zcode-candidate or explicit --source-only/);
@@ -180,4 +208,21 @@ test('normal release gate checks Beta payloads and source-only checks are explic
   const sourceOnly = run(['--source-only']);
   assert.equal(sourceOnly.status, 0, sourceOnly.stderr);
   assert.match(sourceOnly.stdout, /source-only; Zcode assets not checked/);
+  // Existing embedded QR copies remain supported only while their bytes match
+  // the protected root source; stale or substituted payment images must fail.
+  const releasedCatalog = JSON.parse(fs.readFileSync(fixtureCatalogPath, 'utf8'));
+  const protectedAsset = releasedCatalog.assets[0];
+  const embedded = releasedCatalog.components.find(component => component.kind === 'skill' &&
+    component.source === `canonical:${component.path}` && fs.existsSync(path.join(checkout, component.path, protectedAsset.path)));
+  assert.ok(embedded, 'fixture needs an existing embedded public asset');
+  const embeddedPath = path.join(checkout, embedded.path, protectedAsset.path);
+  const originalAsset = fs.readFileSync(embeddedPath);
+  try {
+    fs.appendFileSync(embeddedPath, '\nchanged-public-asset');
+    const drifted = run(['--source-only']);
+    assert.equal(drifted.status, 1);
+    assert.match(drifted.stderr, /README public asset hash drift/);
+  } finally {
+    fs.writeFileSync(embeddedPath, originalAsset);
+  }
 });

@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "roleId": "systems-engineering-analyst",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "vague-requirement",
+      "capabilityId": "systems-engineering-analyst-deliver",
+      "category": "worked_example",
+      "scenario": "模糊速度要求",
+      "input": {
+        "mission": "草稿快速保存",
+        "architecture": "前后端",
+        "requirements": "必须快"
+      },
+      "candidateOutputExcerpt": {
+        "requirementSet": "保存场景已知，延迟指标/阈值待来源方确认。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "不发明门槛。",
+      "diagnosticRefs": [
+        "testability"
+      ],
+      "decisionRuleRefs": [
+        "observable"
+      ]
+    },
+    {
+      "id": "plan-as-pass",
+      "capabilityId": "systems-engineering-analyst-deliver",
+      "category": "failure_boundary",
+      "scenario": "仅有计划",
+      "input": {
+        "mission": "断网保留草稿",
+        "architecture": "本地存储",
+        "requirements": "V1计划重开比较"
+      },
+      "candidateOutputExcerpt": {
+        "verificationMatrix": "V1已通过，项目可接受。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "计划不是执行证据。",
+      "diagnosticRefs": [
+        "evidence"
+      ],
+      "decisionRuleRefs": [
+        "verification-validation"
+      ]
+    },
+    {
+      "id": "changed-scope",
+      "capabilityId": "systems-engineering-analyst-deliver",
+      "category": "worked_example",
+      "scenario": "跨设备需求变更",
+      "input": {
+        "mission": "跨设备恢复",
+        "architecture": "原本地存储",
+        "requirements": "旧R1通过，新R2需同步"
+      },
+      "candidateOutputExcerpt": {
+        "changeImpact": "旧本地证据仅支持旧范围；同步及身份验证待做。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "版本证据范围匹配。",
+      "diagnosticRefs": [
+        "evidence"
+      ],
+      "decisionRuleRefs": [
+        "version-invalidation"
+      ]
+    },
+    {
+      "id": "global-stop",
+      "capabilityId": "systems-engineering-analyst-deliver",
+      "category": "failure_boundary",
+      "scenario": "单接口待人确认",
+      "input": {
+        "mission": "多模块交付",
+        "architecture": "A依赖审批，B独立",
+        "requirements": "A接口待定，B要求已确定"
+      },
+      "candidateOutputExcerpt": {
+        "changeImpact": "全项目停止，B也不能继续。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "受阻范围应局部呈现给调用方。",
+      "diagnosticRefs": [
+        "interfaces"
+      ],
+      "decisionRuleRefs": [
+        "local-block"
+      ]
+    }
+  ]
+}

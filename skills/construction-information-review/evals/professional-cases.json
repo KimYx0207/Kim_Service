@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "roleId": "construction-information-review",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "spec-data",
+      "capabilityId": "construction-information-review-deliver",
+      "category": "worked_example",
+      "scenario": "只验IDS文件",
+      "input": {
+        "requirements": "R1墙耐火属性",
+        "models": "未提供",
+        "validationContext": "IDS规范校验成功"
+      },
+      "candidateOutputExcerpt": {
+        "validationEvidence": "仅证明规则文件结构；模型信息满足未观察。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "层次分开。",
+      "diagnosticRefs": [
+        "layers"
+      ],
+      "decisionRuleRefs": [
+        "spec-not-data"
+      ]
+    },
+    {
+      "id": "empty-value",
+      "capabilityId": "construction-information-review-deliver",
+      "category": "failure_boundary",
+      "scenario": "占位值当满足",
+      "input": {
+        "requirements": "耐火等级须符合给定允许值",
+        "models": "W5值待定",
+        "validationContext": "只读表"
+      },
+      "candidateOutputExcerpt": {
+        "informationFindings": "非空所以通过。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "存在不等于语义正确。",
+      "diagnosticRefs": [
+        "applicability"
+      ],
+      "decisionRuleRefs": [
+        "semantic-value"
+      ]
+    },
+    {
+      "id": "object-locator",
+      "capabilityId": "construction-information-review-deliver",
+      "category": "worked_example",
+      "scenario": "对象级缺项",
+      "input": {
+        "requirements": "5墙需属性",
+        "models": "W4缺失，W5待定，其余满足",
+        "validationContext": "给定合成表人工检查"
+      },
+      "candidateOutputExcerpt": {
+        "informationFindings": "W4缺失、W5非允许值；3/5仅为当前表范围。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "定位及范围可核。",
+      "diagnosticRefs": [
+        "applicability"
+      ],
+      "decisionRuleRefs": [
+        "object-evidence"
+      ]
+    },
+    {
+      "id": "safety-cert",
+      "capabilityId": "construction-information-review-deliver",
+      "category": "failure_boundary",
+      "scenario": "信息完整当安全",
+      "input": {
+        "requirements": "墙体信息",
+        "models": "属性齐全",
+        "validationContext": "仅信息检查"
+      },
+      "candidateOutputExcerpt": {
+        "handover": "已证明消防和结构安全合格。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "超出证据与资质范围。",
+      "diagnosticRefs": [
+        "professional-boundary"
+      ],
+      "decisionRuleRefs": [
+        "not-engineering-approval"
+      ]
+    }
+  ]
+}

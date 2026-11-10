@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-11",
+  "timezone": "Asia/Shanghai",
+  "scope": "source iteration, not a published collection Release",
+  "baselineCommit": "34ff5ef2361214cdd36cddbdcb67c5dece64ad04",
+  "inventory": {
+    "agents": 36,
+    "skills": 15,
+    "hooks": 1,
+    "tools": 1,
+    "capabilities": 68,
+    "professionalMethods": 51,
+    "outputChecks": 404,
+    "authoredSyntheticCases": 181
+  },
+  "qualityBoundary": "Counts and structural contracts do not establish industry expertise or professional effect. Cases remain not_evaluated.",
+  "verification": {
+    "rootTests": {
+      "command": "node --test scripts/*.test.mjs",
+      "tests": 150,
+      "pass": 149,
+      "fail": 0,
+      "skip": 1
+    },
+    "components": {
+      "command": "node scripts/check-components.mjs",
+      "components": 53,
+      "validationFiles": 76,
+      "exitCode": 0
+    },
+    "catalog": {
+      "command": "node scripts/catalog-automation.mjs check",
+      "exitCode": 0
+    },
+    "startPage": {
+      "command": "node scripts/start-page.mjs check",
+      "exitCode": 0
+    },
+    "repository": {
+      "command": "node scripts/check-repository.mjs",
+      "exitCode": 0
+    },
+    "independentRecomputation": {
+      "artifact": "professional-boundary-recomputation-2026-11-11.json",
+      "scope": "Authored arithmetic and SQLite NULL/predicate examples, not model or business evaluation",
+      "exitCode": 0
+    },
+    "qualityRegressions": {
+      "command": "node --test scripts/check-agent-pack.test.mjs agents/manufacturing-quality-analyst/tests/contract.test.mjs",
+      "tests": 26,
+      "pass": 26,
+      "fail": 0,
+      "scope": "Value-based uniqueness, per-capability positive/rejection coverage and method budgets; not professional effect certification"
+    }
+  },
+  "pairedTrial": {
+    "path": "professional-trials-2026-11-11/README.md",
+    "tasksPerCondition": 3,
+    "attemptsPerCondition": 1,
+    "baselineStandardsPass": 37,
+    "withMethodsStandardsPass": 37,
+    "observedAccuracyDifferencePercentagePoints": 0,
+    "professionalEffect": "not_evaluated"
+  },
+  "dsh": {
+    "officialVersion": "0.2.2-rc.1",
+    "builderBehaviorTests": 7,
+    "evidenceLocation": "https://github.com/KimYx0207/Meta_Kim/blob/main/docs/verification/dsh-native-host-20261111.json",
+    "nativeModelCalls": 0,
+    "modelBusinessAcceptance": "not_evaluated"
+  },
+  "localLogs": {
+    "service-root-clean-rerun-20261111.log": {
+      "sha256": "b425dfa8a132781c16a547e3f02f9d8533b65ab8c26c00aa786ba51058bd7c6b",
+      "bytes": 12284
+    },
+    "service-components-clean-rerun-20261111.log": {
+      "sha256": "2d3c5998a2e367d9fb9d6c61c1c830bf726a7e9091634e0ef9eeacefe5359b5a",
+      "bytes": 135890
+    },
+    "service-release-fixture-final-20261111.log": {
+      "sha256": "fa02678fdf05b8e0c9e9479b68d54c4c4679827bf26c0b3e800b0e18b44912b4",
+      "bytes": 1299
+    },
+    "service-root-final.log": {
+      "sha256": "c5ec9084bc2d66ff2807fff9b3c8d09f65e13112100b259621a02aafc553a9d9",
+      "bytes": 12612
+    },
+    "service-components-final.log": {
+      "sha256": "eb18c54018d567dc41739c1663fc1b4f19b6eb24d626dcf2e2f3ae187f72e2f1",
+      "bytes": 135893
+    },
+    "service-quality-contracts-20261111.log": {
+      "sha256": "8fec0d4b55de1f29e8d0b8d332c114e6a6560d6abb6aacb897e253e3fae2517e",
+      "bytes": 2338
+    }
+  },
+  "protectedAssets": "Root contact/payment footer bytes and 3 original QR assets unchanged; new Skill README references the same canonical assets."
+}

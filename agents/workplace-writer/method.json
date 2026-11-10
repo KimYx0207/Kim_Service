@@ -13,7 +13,8 @@
   ],
   "skillLoading": [
     "先读取本角色 knowledgeAssets 中的包内专业方法；来源记录不等于当前任务联网，案例不是实际运行证据。",
-    "读取本角色 knowledgeAssets；只在当前任务实际需要时读取用户指定的项目/平台规范，缺来源不假称已读取。"
+    "读取本角色 knowledgeAssets；只在当前任务实际需要时读取用户指定的项目/平台规范，缺来源不假称已读取。",
+    "读取本包 references/worked-delivery.md 的完整产物与专业反例；按当前输入迁移，不把合成答案当本次事实或验收记录"
   ],
   "steps": [
     "先读取包内专业方法与现有 AGENT.md，绑定当前输入、目标和材料范围；来源引用不等于当前任务联网。",
@@ -49,6 +50,17 @@
         "plain-language",
         "goalpro"
       ]
+    },
+    {
+      "id": "workplace-writer-worked-delivery",
+      "path": "references/worked-delivery.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "plain-language",
+        "goalpro"
+      ]
     }
   ],
   "expertise": {
@@ -59,7 +71,8 @@
       "明确需要谁做什么，不替用户作未授权承诺"
     ],
     "knowledgeAssetIds": [
-      "workplace-writer-core"
+      "workplace-writer-core",
+      "workplace-writer-worked-delivery"
     ],
     "diagnosticSequence": [
       {
@@ -123,28 +136,66 @@
         "outputChecks": [
           {
             "field": "messageDraft",
-            "criterion": "读者能看懂现状、影响和所需动作。",
-            "rejectWhen": "用长背景掩盖关键请求或夸大状态。"
+            "criterion": "读者能识别当前结论、影响与下一步；事实、建议和未确认承诺区分清楚。",
+            "rejectWhen": "改写时扩大小范围进度、隐瞒阻塞或承诺未经确认的日期。",
+            "id": "workplace-writer-message-draft",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "原事实",
+              "消息主结论与事实映射"
+            ],
+            "blocking": true
           },
           {
             "field": "statusTable",
-            "criterion": "事实、预计与待确认分开。",
-            "rejectWhen": "把已提交当已批准。"
+            "criterion": "状态按实际范围与证据列出，完成/等待/未知不混淆。",
+            "rejectWhen": "以已完成项数推算未经定义的整体完成率。",
+            "id": "workplace-writer-status-table",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "状态口径",
+              "逐项证据与依赖"
+            ],
+            "blocking": true
           },
           {
             "field": "actionRequests",
-            "criterion": "动作对象、负责人/待定与时点明确。",
-            "rejectWhen": "替他人承诺不属于其确认的动作。"
+            "criterion": "请求有决定事项、合适接收者、影响和已知期限，缺失字段明确待补。",
+            "rejectWhen": "泛泛请知悉或编造期限/责任人。",
+            "id": "workplace-writer-action-requests",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "决定清单",
+              "接收者与影响",
+              "期限依据"
+            ],
+            "blocking": true
           },
           {
             "field": "unknowns",
             "criterion": "缺口说明影响哪一项决定。",
-            "rejectWhen": "把事实未知伪装成泛泛风险提示。"
+            "rejectWhen": "把事实未知伪装成泛泛风险提示。",
+            "id": "workplace-writer-unknowns",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "当前输入中与 unknowns 对应的事实、约束及缺口",
+              "实际 unknowns 产物与所声明通过条件的逐项对照",
+              "对本字段拒收条件的检查结果与未验证范围"
+            ],
+            "blocking": true
           },
           {
             "field": "toneNotes",
             "criterion": "解释语气选择如何服务目的而不改事实。",
-            "rejectWhen": "为好听删掉对方做决定所需的限制。"
+            "rejectWhen": "为好听删掉对方做决定所需的限制。",
+            "id": "workplace-writer-tone-notes",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "当前输入中与 toneNotes 对应的事实、约束及缺口",
+              "实际 toneNotes 产物与所声明通过条件的逐项对照",
+              "对本字段拒收条件的检查结果与未验证范围"
+            ],
+            "blocking": false
           }
         ]
       }

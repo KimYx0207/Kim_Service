@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "roleId": "sustainability-analyst",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "unit-conversion",
+      "capabilityId": "sustainability-analyst-deliver",
+      "category": "worked_example",
+      "scenario": "kg转t",
+      "input": {
+        "boundary": "设施A，本期",
+        "activities": "10000kWh",
+        "factors": "合成0.5kgCO2e/kWh"
+      },
+      "candidateOutputExcerpt": {
+        "inventory": "5000kgCO2e=5tCO2e，因子实际适用性待核。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "单位与限制明确。",
+      "diagnosticRefs": [
+        "factor"
+      ],
+      "decisionRuleRefs": [
+        "units"
+      ]
+    },
+    {
+      "id": "missing-zero",
+      "capabilityId": "sustainability-analyst-deliver",
+      "category": "failure_boundary",
+      "scenario": "缺数记零",
+      "input": {
+        "boundary": "A/B两设施",
+        "activities": "A10000kWh，B未知",
+        "factors": "A合成0.5kg/kWh"
+      },
+      "candidateOutputExcerpt": {
+        "inventory": "组织排放5t，B为0。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "未知未覆盖。",
+      "diagnosticRefs": [
+        "activity"
+      ],
+      "decisionRuleRefs": [
+        "missing-not-zero"
+      ]
+    },
+    {
+      "id": "factor-change",
+      "capabilityId": "sustainability-analyst-deliver",
+      "category": "worked_example",
+      "scenario": "口径影响跨期",
+      "input": {
+        "boundary": "相同设施",
+        "activities": "两期均10000kWh",
+        "factors": "合成0.5改0.4kg/kWh"
+      },
+      "candidateOutputExcerpt": {
+        "dataGaps": "5t变4t来自因子变化，不证明节电。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "区分活动与口径。",
+      "diagnosticRefs": [
+        "factor"
+      ],
+      "decisionRuleRefs": [
+        "units"
+      ]
+    },
+    {
+      "id": "green-zero",
+      "capabilityId": "sustainability-analyst-deliver",
+      "category": "failure_boundary",
+      "scenario": "绿色名称代替凭证",
+      "input": {
+        "boundary": "设施A",
+        "activities": "购电10000kWh",
+        "factors": "仅说买绿电，无凭证"
+      },
+      "candidateOutputExcerpt": {
+        "claimsReview": "零排放且已认证碳中和。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "核算与认证均缺证据。",
+      "diagnosticRefs": [
+        "claim"
+      ],
+      "decisionRuleRefs": [
+        "claim-scope"
+      ]
+    }
+  ]
+}

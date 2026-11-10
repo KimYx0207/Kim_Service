@@ -13,7 +13,8 @@
   ],
   "skillLoading": [
     "先读取本角色 knowledgeAssets 中的包内专业方法；来源记录不等于当前任务联网，案例不是实际运行证据。",
-    "读取本角色 knowledgeAssets；只在当前任务实际需要时读取用户指定的项目/平台规范，缺来源不假称已读取。"
+    "读取本角色 knowledgeAssets；只在当前任务实际需要时读取用户指定的项目/平台规范，缺来源不假称已读取。",
+    "读取本包 references/worked-delivery.md 的完整产物与专业反例；按当前输入迁移，不把合成答案当本次事实或验收记录"
   ],
   "steps": [
     "先读取包内专业方法与现有 AGENT.md，绑定当前输入、目标和材料范围；来源引用不等于当前任务联网。",
@@ -50,6 +51,18 @@
         "plain-language",
         "goalpro"
       ]
+    },
+    {
+      "id": "resume-editor-worked-delivery",
+      "path": "references/worked-delivery.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "careeronestop-resume",
+        "plain-language",
+        "goalpro"
+      ]
     }
   ],
   "expertise": {
@@ -60,7 +73,8 @@
       "不编经历、资格、成果或保证招聘系统排名"
     ],
     "knowledgeAssetIds": [
-      "resume-editor-core"
+      "resume-editor-core",
+      "resume-editor-worked-delivery"
     ],
     "diagnosticSequence": [
       {
@@ -124,28 +138,65 @@
         "outputChecks": [
           {
             "field": "matchMap",
-            "criterion": "岗位要求与证据、迁移能力和缺口逐项对应。",
-            "rejectWhen": "无岗位材料却给精确匹配分数。"
+            "criterion": "每项岗位要求对应真实经历或明确缺口，区分直接经验与可迁移经验。",
+            "rejectWhen": "关键词匹配冒充能力证据。",
+            "id": "resume-editor-match-map",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "岗位原要求",
+              "事实-要求对应表"
+            ],
+            "blocking": true
           },
           {
             "field": "revisedResume",
-            "criterion": "事实不扩大，语句具体，责任和时间一致。",
-            "rejectWhen": "新增职位、资格、个人贡献或未证实数字。"
+            "criterion": "职位、动作、数字、时间和个人贡献均可回溯用户材料，格式在实际导出中可读。",
+            "rejectWhen": "新造业绩数字、责任、资历或把参与改成主导。",
+            "id": "resume-editor-revised-resume",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "原事实与改文差异",
+              "实际导出检查"
+            ],
+            "blocking": true
           },
           {
             "field": "evidenceGaps",
             "criterion": "指出哪些词句/数字需要何种补证。",
-            "rejectWhen": "把待确认内容悄悄写成确定事实。"
+            "rejectWhen": "把待确认内容悄悄写成确定事实。",
+            "id": "resume-editor-evidence-gaps",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "当前输入中与 evidenceGaps 对应的事实、约束及缺口",
+              "实际 evidenceGaps 产物与所声明通过条件的逐项对照",
+              "对本字段拒收条件的检查结果与未验证范围"
+            ],
+            "blocking": true
           },
           {
             "field": "editNotes",
             "criterion": "说明实质改动及保留限制。",
-            "rejectWhen": "只报告更专业却不解释事实边界。"
+            "rejectWhen": "只报告更专业却不解释事实边界。",
+            "id": "resume-editor-edit-notes",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "当前输入中与 editNotes 对应的事实、约束及缺口",
+              "实际 editNotes 产物与所声明通过条件的逐项对照",
+              "对本字段拒收条件的检查结果与未验证范围"
+            ],
+            "blocking": false
           },
           {
             "field": "privacyCheck",
-            "criterion": "指出不必要信息和可公开范围。",
-            "rejectWhen": "主动添加敏感信息或推断受保护特征。"
+            "criterion": "检查联系信息准确性与必要性，避免无授权披露证件、客户秘密或第三方个人信息。",
+            "rejectWhen": "擅自删除用户要求保留的联系方式，或加入不必要敏感信息。",
+            "id": "resume-editor-privacy-check",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "保留/脱敏清单",
+              "用户提供的披露要求"
+            ],
+            "blocking": true
           }
         ]
       }

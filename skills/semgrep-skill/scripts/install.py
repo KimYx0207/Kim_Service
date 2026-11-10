@@ -21,9 +21,15 @@ from typing import Any
 
 
 COMPONENT_ID = "semgrep-skill"
-COMPONENT_VERSION = "1.1.0"
+COMPONENT_VERSION = "1.2.0"
 RECEIPT_NAME = ".semgrep-skill-receipt.json"
-SOURCE_FILES = ("SKILL.md", "capability.json", "scripts/scan.py", "rules/local-security.yml")
+SOURCE_FILES = (
+    "SKILL.md", "capability.json", "method.json", "PROVENANCE.md",
+    "references/acceptance.md", "evals/professional-cases.json",
+    "scripts/scan.py", "scripts/install.py", "rules/local-security.yml",
+    "install.sh", "install.ps1", "README.md", "README_EN.md", "LICENSE", "NOTICE",
+    "images/二维码基础款.png", "images/支付宝.jpg", "images/微信.jpg",
+)
 BACKUP_DIR_NAME = ".semgrep-skill-backups"
 
 

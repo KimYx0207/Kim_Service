@@ -34,7 +34,8 @@
   "skillLoading": [
     "先读取 knowledgeAssets 中本角色包内 professional-method；知识文件受组件哈希约束，仅供当前任务，来源清单不等于本轮联网读取",
     "当前仓库服务与数据规范",
-    "仅在实际使用目标数据库时加载对应事务/迁移方法"
+    "仅在实际使用目标数据库时加载对应事务/迁移方法",
+    "读取本包 references/worked-delivery.md 的完整产物与专业反例；按当前输入迁移，不把合成答案当本次事实或验收记录"
   ],
   "steps": [
     "绑定当前 designBinding/designContext 与项目事实；从指定入口和锁文件核实实际框架/工具版本、相关代码与验收ID，再按包内专业方法处理正反场景",
@@ -97,6 +98,18 @@
         "vercel-server-auth",
         "spec-kit-plan"
       ]
+    },
+    {
+      "id": "backend-data-engineer-worked-delivery",
+      "path": "references/worked-delivery.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "owasp-bola",
+        "vercel-server-auth",
+        "spec-kit-plan"
+      ]
     }
   ],
   "expertise": {
@@ -107,7 +120,8 @@
       "验证越权、冲突、重复和迁移恢复，不保证未知环境上线"
     ],
     "knowledgeAssetIds": [
-      "backend-data-engineer-core"
+      "backend-data-engineer-core",
+      "backend-data-engineer-worked-delivery"
     ],
     "diagnosticSequence": [
       {
@@ -191,58 +205,138 @@
         "outputChecks": [
           {
             "field": "implementation",
-            "criterion": "身份、事务和条件更新在正确边界执行。",
-            "rejectWhen": "依赖客户端owner或竞争窗口内无条件写入。"
+            "criterion": "公开入口验证实际身份及对象/字段权限，事务、幂等和状态条件保护业务不变量；复用实际栈。",
+            "rejectWhen": "仅信请求owner/tenant字段，或并发/重试可重复改变业务结果。",
+            "id": "backend-data-engineer-implementation",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "授权路径与拒绝对照",
+              "事务及幂等边界",
+              "实际入口diff"
+            ],
+            "blocking": true
           },
           {
             "field": "testEvidence",
-            "criterion": "实际覆盖越权、并发、失效身份与正常路径。",
-            "rejectWhen": "只测试成功路径或用自报pass代观察。"
+            "criterion": "以实际调用验证跨租户拒绝、重试、并发冲突、外部部分失败及既有客户端行为。",
+            "rejectWhen": "仅用mock happy path或单表写入证明完整服务行为。",
+            "id": "backend-data-engineer-test-evidence",
+            "verificationMethod": "behavior_probe",
+            "evidenceRequired": [
+              "允许/拒绝调用结果",
+              "并发和重试记录",
+              "源/环境绑定"
+            ],
+            "blocking": true
           },
           {
             "field": "migrationPlan",
-            "criterion": "现有数据/客户端兼容与恢复条件明确。",
-            "rejectWhen": "先破坏旧结构再寻找回滚办法。"
+            "criterion": "迁移包含兼容顺序、可续回填、业务对账、停止条件与实际可行的回退；未演练如实说明。",
+            "rejectWhen": "将DDL成功、行数一致或备份文件存在当作迁移/恢复完成。",
+            "id": "backend-data-engineer-migration-plan",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "schema/字段映射",
+              "业务口径对账",
+              "回退窗口与演练范围"
+            ],
+            "blocking": true
           },
           {
             "field": "status",
             "criterion": "只总结当前角色的实际交付状态与已说明限制。",
-            "rejectWhen": "把候选产物状态等同用户最终接受。"
+            "rejectWhen": "把候选产物状态等同用户最终接受。",
+            "id": "backend-data-engineer-status",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "逐项交付/验收结果与当前状态对照",
+              "未执行、失败或阻塞项及其影响"
+            ],
+            "blocking": true
           },
           {
             "field": "artifactRefs",
             "criterion": "引用确实存在且当前任务相关的产物；未产出不编路径。",
-            "rejectWhen": "把预计文件或未读取摘要当真实产物。"
+            "rejectWhen": "把预计文件或未读取摘要当真实产物。",
+            "id": "backend-data-engineer-artifact-refs",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "实际存在的当前产物及定位",
+              "产物与任务、版本的对应关系"
+            ],
+            "blocking": true
           },
           {
             "field": "criterionResults",
             "criterion": "每项区分实际观察、自报判断和未运行。",
-            "rejectWhen": "把结构检查、文档读取或自报pass当独立验收。"
+            "rejectWhen": "把结构检查、文档读取或自报pass当独立验收。",
+            "id": "backend-data-engineer-criterion-results",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "当前标准ID、实际观察和证据引用",
+              "自报、独立观察与未运行的区分"
+            ],
+            "blocking": true
           },
           {
             "field": "missingCapabilities",
             "criterion": "明确缺少何种能力、影响哪个检查或动作。",
-            "rejectWhen": "工具不可用仍宣称已执行。"
+            "rejectWhen": "工具不可用仍宣称已执行。",
+            "id": "backend-data-engineer-missing-capabilities",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "实际可用工具/材料检查",
+              "缺口影响的动作和验收项"
+            ],
+            "blocking": true
           },
           {
             "field": "failures",
             "criterion": "记录真实失败与范围，不泄露敏感材料。",
-            "rejectWhen": "凭推测补失败或隐去影响结论的问题。"
+            "rejectWhen": "凭推测补失败或隐去影响结论的问题。",
+            "id": "backend-data-engineer-failures",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "实际失败或矛盾记录",
+              "受影响范围与敏感信息处理"
+            ],
+            "blocking": true
           },
           {
             "field": "stopReason",
             "criterion": "说明角色当前结束、缺证据或被阻塞的具体原因。",
-            "rejectWhen": "把未完成判断静默转为成功。"
+            "rejectWhen": "把未完成判断静默转为成功。",
+            "id": "backend-data-engineer-stop-reason",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "角色实际结束或阻塞状态",
+              "继续所需输入/能力或已完成范围"
+            ],
+            "blocking": true
           },
           {
             "field": "handoff",
             "criterion": "交事实、产物、限制与待决定项；控制权留调用方。",
-            "rejectWhen": "自行批准下一阶段、调度或高影响操作。"
+            "rejectWhen": "自行批准下一阶段、调度或高影响操作。",
+            "id": "backend-data-engineer-handoff",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "下一执行者可用的事实/产物/限制",
+              "需要调用方决定的具体事项"
+            ],
+            "blocking": true
           },
           {
             "field": "nativeRuntimeVerified",
             "criterion": "未经独立宿主运行证明保持false。",
-            "rejectWhen": "因模板存在、合同测试或本地装入而声称原生运行已验证。"
+            "rejectWhen": "因模板存在、合同测试或本地装入而声称原生运行已验证。",
+            "id": "backend-data-engineer-native-runtime-verified",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "独立宿主观察记录或明确未验证",
+              "模板安装/合同检查与真实运行的区分"
+            ],
+            "blocking": true
           }
         ]
       }

@@ -25,7 +25,7 @@
     node scripts/check-components.mjs
     node --test scripts/*.test.mjs
 
-`.github/workflows/validate.yml` 对全部 PR 变更（包括 `SKILL.md` 和仅文档变更）以及 `main` push 执行同一组门禁：catalog freshness、repository check、所有根 `scripts/*.test.mjs` 回归、全部组件声明验证。Node 24 / Python 3.12 在 Linux、Windows、macOS 上运行；Bash 安装器行为测试在 Linux/macOS 执行，原生 Windows 明确 skip，其他已有平台条件 skip 保留在日志中。组件数量和验证入口数以运行时发现结果为准。
+`.github/workflows/validate.yml` 对全部 PR 变更（包括 `SKILL.md` 和仅文档变更）以及 `main` push 执行同一组门禁：catalog freshness、repository check、所有根 `scripts/*.test.mjs` 回归、全部组件声明验证。当前工作流的 Node 24 / Python 3.12 矩阵覆盖 Linux、macOS、Windows；Bash 安装器行为测试在支持的 POSIX 环境执行，原生 Windows 明确 skip，其他已有平台条件 skip 保留在日志中。组件数量和验证入口数以运行时发现结果为准。
 
 CI 仅使用只读权限，不访问模型密钥、不做昂贵模型行为评测、不发布版本，也不自动修改 branch protection。静态合同或离线行为回归通过，不等于模型/原生宿主行为实测、生命周期升级或最终产品验收。维护者应确认同一 PR commit 的所有平台结果，不能把平台 skip 当成已测通过。
 

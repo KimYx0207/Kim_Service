@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 1,
+  "roleId": "business-finance-analyst",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "cash-bridge",
+      "capabilityId": "business-finance-analyst-deliver",
+      "category": "worked_example",
+      "scenario": "计划付款不能当已付，未来收入不能当已收",
+      "input": {
+        "period": "本月，CNY",
+        "records": {
+          "opening": 10000,
+          "received": 5000,
+          "plannedPayment": 20000,
+          "receivable": 80000
+        },
+        "question": "付款之前是否存在缺口？"
+      },
+      "candidateOutputExcerpt": {
+        "cashBridge": [
+          "现有现金15000，付款若先发生短缺5000，应收未计入已收。"
+        ]
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "区分存量、已发生流量和未来计划。",
+      "diagnosticRefs": [
+        "cash",
+        "liquidity"
+      ],
+      "decisionRuleRefs": [
+        "cash-not-profit",
+        "scenario-boundary"
+      ]
+    },
+    {
+      "id": "profit-cash-confusion",
+      "capabilityId": "business-finance-analyst-deliver",
+      "category": "failure_boundary",
+      "scenario": "有应收但无回款证明",
+      "input": {
+        "period": "本月，CNY",
+        "records": {
+          "opening": 10000,
+          "uncollectedInvoices": 80000
+        },
+        "question": "现在能否支付50000？"
+      },
+      "candidateOutputExcerpt": {
+        "cashBridge": "有90000元可立即支付。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "未收发票不能增加现金。",
+      "diagnosticRefs": [
+        "cash"
+      ],
+      "decisionRuleRefs": [
+        "cash-not-profit"
+      ]
+    },
+    {
+      "id": "quarterly-unit",
+      "capabilityId": "business-finance-analyst-deliver",
+      "category": "worked_example",
+      "scenario": "季度支出不能错误换月",
+      "input": {
+        "period": "1—3月，CNY",
+        "records": {
+          "quarterlyRent": 9000,
+          "coverageMonths": 3
+        },
+        "question": "月均租金是多少？"
+      },
+      "candidateOutputExcerpt": {
+        "varianceAnalysis": "9000÷3=3000元/月，未据月均数推断实际付款日。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "用实际覆盖月数和单位核对公式。",
+      "diagnosticRefs": [
+        "basis"
+      ],
+      "decisionRuleRefs": [
+        "period-units"
+      ]
+    },
+    {
+      "id": "unknown-date",
+      "capabilityId": "business-finance-analyst-deliver",
+      "category": "failure_boundary",
+      "scenario": "未来到账日未知",
+      "input": {
+        "period": "未来4周，CNY",
+        "records": {
+          "cash": 5000,
+          "receivable": 10000,
+          "duePayment": 8000
+        },
+        "question": "下周是否能付款？"
+      },
+      "candidateOutputExcerpt": {
+        "scenarios": "肯定能付，因为有应收。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "缺日期且应收不保证到账。",
+      "diagnosticRefs": [
+        "liquidity"
+      ],
+      "decisionRuleRefs": [
+        "scenario-boundary"
+      ]
+    }
+  ]
+}

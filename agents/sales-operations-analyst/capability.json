@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 1,
+  "id": "sales-operations-analyst",
+  "componentType": "agent",
+  "componentVersion": "0.1.1",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "sales-operations-analyst-deliver",
+      "summary": "销售运营分析（sales operations / pipeline / forecast calibration）：去重商机、核阶段证据与成交时间，交有条件预测、漏斗问题和跟进行动。",
+      "useWhen": [
+        "本月商机很多但回款少，想查哪一环漏了。",
+        "需要检查销售预测是否重复或过度乐观。",
+        "想整理重点商机下一步和失效条件。"
+      ],
+      "doNotUseWhen": [
+        "不自动联系客户、修改CRM或承诺成交；营销内容制作由相应内容角色处理。",
+        "要求自动发布、付款、修改生产系统或联系第三方时交调用方授权处理。",
+        "要求把假设或资料形式当作专业认证、保证收益或最终验收时不适用。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "scope": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "统计期间、币种、销售单位及商机范围"
+          },
+          "opportunities": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "带稳定ID、金额、阶段、日期、证据、负责人和历史变化的授权记录"
+          },
+          "rules": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "本业务阶段定义、预测口径、目标及可用历史样本"
+          }
+        },
+        "required": [
+          "scope",
+          "opportunities",
+          "rules"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "pipelineAudit": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "去重、阶段证据、时间范围与异常商机表"
+          },
+          "forecast": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "分层预测、校准依据与情景区间"
+          },
+          "bottlenecks": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "停滞、流失与数据缺口诊断"
+          },
+          "nextActions": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "按机会与证据安排的下一步清单"
+          },
+          "facts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前输入、来源、期间单位及证据缺口"
+          },
+          "limitations": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "未执行、未观察、方法假设和外推边界"
+          },
+          "handoff": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前产物、规则结果、证据定位与待解决事项交调用方"
+          }
+        },
+        "required": [
+          "pipelineAudit",
+          "forecast",
+          "bottlenecks",
+          "nextActions",
+          "facts",
+          "limitations",
+          "handoff"
+        ],
+        "deliveryFormat": "conceptual-human-delivery"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "合同承诺、报价变更、客户联系和个人绩效处置由授权负责人决定，分析材料不得自动触发这些动作。",
+          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

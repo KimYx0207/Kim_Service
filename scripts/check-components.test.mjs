@@ -73,6 +73,18 @@ test('runs discovered validation files with shell false', (t) => {
   assert.deepEqual(calls[0].args, [path.join(root, 'tools', 'runner-test', 'tests', 'check.mjs')]);
 });
 
+test('an authored non-Agent method must meet professional standards before declared validation can run', (t) => {
+  const root = temporaryRepository(t);
+  const componentRoot = addComponent(root);
+  fs.writeFileSync(path.join(componentRoot, 'method.json'), JSON.stringify({ schemaVersion: 1, roleId: 'runner-test',
+    protocol: 'host-bound-task-method-v1', runtimeStatus: 'needs_probe', automaticInvocation: false,
+    steps: ['Inspect the input'], acceptance: ['Review the actual result'], coordinationOwner: 'caller', finalAcceptance: 'caller_only' }));
+  let spawned = false;
+  assert.throws(() => runComponentChecks(root, { log: () => {}, spawn: () => { spawned = true; return { status: 0 }; } }),
+    /professional method is invalid: .*require expertise/);
+  assert.equal(spawned, false);
+});
+
 test('rejects validation extensions outside the allowlist before spawn', (t) => {
   const root = temporaryRepository(t);
   addComponent(root, 'tests/check.sh');

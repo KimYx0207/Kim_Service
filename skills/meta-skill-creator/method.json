@@ -1,0 +1,345 @@
+{
+  "schemaVersion": 1,
+  "roleId": "meta-skill-creator",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "steps": [
+    "从用户最终结果、重复工作和真实失败建立Skill Contract，先检查已有能力再决定是否技能化。",
+    "取证明确领域对象、约束、例外和判断方法，选择适合产物的工具，保留准确数据与编辑需求。",
+    "入口只放路由和执行边界，专业知识按任务链接到references，确定性重复操作复用脚本。",
+    "运行前冻结可观察通过/拒收标准；正例、近似反例、失败与未知场景用实际产物比较。",
+    "遵循既有分层评估和闭环机制，准确报告证据层级；人审和原生发生性不能由作者自造。"
+  ],
+  "acceptance": [
+    "按当前能力的outputChecks逐项记录实际证据、拒收原因和未观察项。",
+    "任何blocking项失败或缺证据，不能用其他评分抵消；作者自查不代替独立验收。",
+    "只报告本轮真实完成的产物、动作和范围；当前宿主最终验收权保持不变。"
+  ],
+  "coordinationOwner": "caller",
+  "finalAcceptance": "caller_only",
+  "knowledgeAssets": [
+    {
+      "id": "meta-skill-creator-acceptance",
+      "path": "references/acceptance.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "existing-package",
+        "agent-skills",
+        "agent-evals",
+        "anthropic-grader"
+      ]
+    },
+    {
+      "id": "meta-skill-creator-evaluation-method",
+      "path": "references/evaluation-method.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "existing-package"
+      ]
+    },
+    {
+      "id": "meta-skill-creator-closed-loop-governance",
+      "path": "references/closed-loop-governance.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "existing-package"
+      ]
+    }
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "用真实失败和交付证据重建可触发、可复用、可评估的技能包",
+    "scope": [
+      "从真实重复工作流创建或重构可复用 Skill 包，并补齐触发、边界、渐进加载、资产和验证合同。",
+      "评估 Skill 的触发、结构、基线、闭环和运行证据，输出分层结论与 Promotion 建议而非最终决定。"
+    ],
+    "knowledgeAssetIds": [
+      "meta-skill-creator-acceptance",
+      "meta-skill-creator-evaluation-method",
+      "meta-skill-creator-closed-loop-governance"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "value",
+        "question": "新增Skill解决哪一个重复失败？",
+        "evidenceRequired": [
+          "用户结果与原流程产物",
+          "真实失败或已有能力缺口"
+        ],
+        "whenMissing": "保留候选，先取证而非批量造角色。"
+      },
+      {
+        "id": "medium",
+        "question": "用户要的是图片、精确数据图、可编辑文档还是原生界面？",
+        "evidenceRequired": [
+          "最终使用/编辑需求",
+          "当前工具能力与来源数据"
+        ],
+        "whenMissing": "选可行且保持语义的路线，不统一转图片。"
+      },
+      {
+        "id": "evaluation",
+        "question": "什么实际产物可区分改进与退化？",
+        "evidenceRequired": [
+          "同任务可比基线",
+          "冻结判据、反例与独立观察"
+        ],
+        "whenMissing": "只报已证层级，不写改进百分比。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "artifact-first",
+        "when": "选择制作工具",
+        "action": "先由输出类型和精度/编辑要求选原生路线；栅格创意图再走Image2/宿主生图",
+        "avoid": "把可编辑表格、统计图和精确SVG当生图降级产物。"
+      },
+      {
+        "id": "critical-blocker",
+        "when": "某必需业务条件失败或缺证据",
+        "action": "保留未通过并修对应方法/实现，其他高分不能抵消",
+        "avoid": "用文件数、行数或综合分证明专业质量。"
+      },
+      {
+        "id": "frozen-comparison",
+        "when": "宣称技能改善效果",
+        "action": "固定任务/版本/判据，取得实际对照与相关范围内的独立审核",
+        "avoid": "把作者写好的例子、pending模板或旧日志算实测。"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "meta-skill-create-refactor",
+        "inputGuidance": [
+          {
+            "field": "workflowEvidence",
+            "interpretation": "真实重复工作、失败、已有脚本和用户最终结果证据。",
+            "onMissing": "先做最小取证；缺证据只能给候选设计。"
+          },
+          {
+            "field": "targetSkillPath",
+            "interpretation": "已确认的目标Skill及现有实现。",
+            "onMissing": "先定位，不建立同名平行包。"
+          },
+          {
+            "field": "successCriteria",
+            "interpretation": "能被具体产物或行为证伪的用户标准。",
+            "onMissing": "把空泛质量词转成行为草案并标待确认。"
+          },
+          {
+            "field": "hosts",
+            "interpretation": "要支持的实际宿主及其加载/工具差异。",
+            "onMissing": "只声明已检查或待探测，不凭名称等同兼容。"
+          },
+          {
+            "field": "constraints",
+            "interpretation": "调用、安装、发布、时间与修改范围边界。",
+            "onMissing": "沿用现有授权，不推定额外执行权。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "package-decision-acceptance",
+            "field": "packageDecision",
+            "criterion": "说明技能化是否比现有流程更有价值，复用/修改/不造新包的选择有失败证据支持。",
+            "rejectWhen": "只是任务听起来复杂就新建多层Agent、Hook和MCP。",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "实际重复任务与失败模式",
+              "已有能力差距"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "changed-files-acceptance",
+            "field": "changedFiles",
+            "criterion": "每个新增或改动文件服务具体失败/知识/产物需求，现有有用脚本和许可证保持。",
+            "rejectWhen": "只堆模板、重复状态源、虚构工具或删除成熟方法。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "实际diff",
+              "文件到失败模式映射"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "trigger-boundary-acceptance",
+            "field": "triggerBoundary",
+            "criterion": "正例、近似反例、信息不足与排除范围能区分，不抢相邻任务。",
+            "rejectWhen": "description包办一切或把关键词命中视为正确触发。",
+            "verificationMethod": "behavior_probe",
+            "evidenceRequired": [
+              "新会话触发观察或待运行样本",
+              "邻近任务反例"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "progressive-loading-acceptance",
+            "field": "progressiveLoading",
+            "criterion": "入口明确何时读取哪些专业资料，引用在源包和安装投影均存在，工具选择服从实际交付类型。",
+            "rejectWhen": "专业资料孤立未被读取、文档/数据图默认转生图或依赖未安装工具。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "入口读取规则",
+              "安装后链接闭包",
+              "产物类型与路线理由"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "validation-plan-acceptance",
+            "field": "validationPlan",
+            "criterion": "先冻结任务适用的通过/拒绝标准，再用真实任务结果和相关反例验证；结构校验与业务评估分开。",
+            "rejectWhen": "只有字段、行数、词数、样本数量或作者自评分。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "冻结标准",
+              "实际输出与任务证据计划"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "remaining-gaps-acceptance",
+            "field": "remainingGaps",
+            "criterion": "未运行、未知领域、未获许可和未覆盖宿主逐项保留，不以计划当通过。",
+            "rejectWhen": "未实测就称专家级/全行业/全宿主。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "证据缺口",
+              "下一项最低成本验证"
+            ],
+            "blocking": true
+          }
+        ]
+      },
+      {
+        "capabilityId": "meta-skill-evaluate",
+        "inputGuidance": [
+          {
+            "field": "skillPath",
+            "interpretation": "要评估的具体版本与文件集合。",
+            "onMissing": "先固定版本，不混用新内容和旧结果。"
+          },
+          {
+            "field": "evaluationLayer",
+            "interpretation": "core/conditional/release 对应现有评估层，按任务风险和发布目标选。",
+            "onMissing": "不能跨过当前缺失的证据层。"
+          },
+          {
+            "field": "baselineEvidence",
+            "interpretation": "相同任务、条件可比的无技能或旧版本结果。",
+            "onMissing": "标baseline未完成，不能编造提升率。"
+          },
+          {
+            "field": "acceptanceEvidence",
+            "interpretation": "真实产物、工具日志、独立宿主/人审与引用。",
+            "onMissing": "只报告结构和待验证项。"
+          },
+          {
+            "field": "rubric",
+            "interpretation": "运行前冻结的任务判据与阻断项；分数仅比较非阻断维度。",
+            "onMissing": "先制定，不能看答案后改规则。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "status-acceptance",
+            "field": "status",
+            "criterion": "精确反映结构、产物、运行与人工各层证据，pending不能变pass。",
+            "rejectWhen": "准备器生成目录或哈希一致就宣布验收通过。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "实际层级证据",
+              "现有检查器结果"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "findings-acceptance",
+            "field": "findings",
+            "criterion": "每条关联输入、实际输出片段、标准与原因；正反例和未观察项都保留。",
+            "rejectWhen": "只有平均分、空泛建议或评估者提前看到预期后自证。",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "原始任务与实际产物",
+              "逐条件证据与反例"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "evidence-level-acceptance",
+            "field": "evidenceLevel",
+            "criterion": "区分structure/contract/artifact/runtime/human，能证到哪一层就说到哪一层。",
+            "rejectWhen": "本地自写attestation、作者期望或旧run当新宿主发生性。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "版本/输入/输出哈希绑定",
+              "独立事件与审核来源"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "promotion-recommendation-acceptance",
+            "field": "promotionRecommendation",
+            "criterion": "建议基于已达到且与任务相关的必要条件，关键失败不能被其他高分抵消。",
+            "rejectWhen": "评分高就覆盖错数据、丢授权或缺最终产物。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "冻结rubric与阻断项",
+              "比较限制"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "promotion-decision-acceptance",
+            "field": "promotionDecision",
+            "criterion": "保持 requires-human-owner，由有权限的人决定发布或升级。",
+            "rejectWhen": "生成建议即自批ready。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "决策主体与实际批准"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "remaining-gaps-acceptance",
+            "field": "remainingGaps",
+            "criterion": "未测能力、重复性、外部变量与失效范围具体列出并给最小验证动作。",
+            "rejectWhen": "声称所有行业通用或把单例成功外推稳定质量。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "覆盖矩阵",
+              "未观察范围与可复现下一步"
+            ],
+            "blocking": true
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "当前任务明确要求人工判断的方向、版本或最终验收。",
+        "超出已有授权的不可逆执行、发布、付费或范围变化。",
+        "领域关键事实冲突或必需证据缺失，且会改变用户结果。"
+      ],
+      "prohibitedClaims": [
+        "合同或样例校验通过证明专业业务效果。",
+        "工具名、计划、模板、作者自报或旧运行结果证明本轮实际完成。",
+        "尚未观察的宿主加载、独立审核或用户批准已经发生。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
+}

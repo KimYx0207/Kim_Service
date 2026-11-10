@@ -1,0 +1,212 @@
+{
+  "schemaVersion": 1,
+  "roleId": "agent-teams-playbook",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "steps": [
+    "从用户目标拆出可观察的交付条件，读取当前宿主可见工具和已有专业能力，不用团队人数代表任务复杂度。",
+    "将任务写为带依赖原因、输入版本、产物、负责人与验收者的工单；写同一文件、独占浏览器或数据库迁移时声明冲突。",
+    "只分发前置产物和权限已就绪的任务；某节点等待人工只暂停它及依赖者，独立任务继续。",
+    "用实际调用回执区分计划、已启动、完成和验收；失败重试前判断原因、幂等性和剩余预算。",
+    "按版本合并实际产物，由独立验收者检查所有必需结果和跨模块接缝，未通过项保留阻断。"
+  ],
+  "acceptance": [
+    "按当前能力的outputChecks逐项记录实际证据、拒收原因和未观察项。",
+    "任何blocking项失败或缺证据，不能用其他评分抵消；作者自查不代替独立验收。",
+    "只报告本轮真实完成的产物、动作和范围；当前宿主最终验收权保持不变。"
+  ],
+  "coordinationOwner": "caller",
+  "finalAcceptance": "caller_only",
+  "knowledgeAssets": [
+    {
+      "id": "agent-teams-playbook-acceptance",
+      "path": "references/acceptance.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "existing-package",
+        "langgraph-interrupts",
+        "agent-skills"
+      ]
+    }
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "按依赖、资源冲突和当前宿主能力组织团队，并验收完整合并结果",
+    "scope": [
+      "为复杂任务设计并执行跨宿主的多 Agent 分工、并行协作、结果汇总与质量闸门。"
+    ],
+    "knowledgeAssetIds": [
+      "agent-teams-playbook-acceptance"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "dependency",
+        "question": "A 的验收等待到底阻塞哪些节点？",
+        "evidenceRequired": [
+          "任务依赖表及每条边的产物理由",
+          "待审产物版本和要求人工判断的事项"
+        ],
+        "whenMissing": "依赖未知时先查共享接口和读写范围，不因同一阶段让所有任务停下。"
+      },
+      {
+        "id": "capability",
+        "question": "当前宿主真实能启动、等待和恢复哪些执行单元？",
+        "evidenceRequired": [
+          "当前工具 schema 与权限",
+          "实际调用返回标识或不可用观察"
+        ],
+        "whenMissing": "只承诺已发现表面；无 spawn 时明确顺序执行，不虚构子 Agent。"
+      },
+      {
+        "id": "integration",
+        "question": "合并产物是否满足全部必需条件？",
+        "evidenceRequired": [
+          "任务产物及版本",
+          "接口/UX/数据一致性检查记录"
+        ],
+        "whenMissing": "完成子任务不等于合并通过；缺少任一必需产物就保留交付缺口。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "ready-set",
+        "when": "存在无依赖且资源不冲突的任务",
+        "action": "在宿主容量内继续这些任务，保留等待节点的恢复条件",
+        "avoid": "全局停机等待某一个审批，或跳过审批直接继续其下游。"
+      },
+      {
+        "id": "single-writer",
+        "when": "多个任务需修改同一资源",
+        "action": "拆读写边界或由宿主建立隔离与单一合并者",
+        "avoid": "并发覆盖、复制调度状态或把新目录当隔离证明。"
+      },
+      {
+        "id": "retry-evidence",
+        "when": "任务失败且准备重试",
+        "action": "先记录失败类、已完成副作用、改变的输入和重试预算",
+        "avoid": "原样无限重试、重放付款/发布，或跳过必需验收。"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "agent-teams-orchestrate",
+        "inputGuidance": [
+          {
+            "field": "task",
+            "interpretation": "要交付的用户结果及不可越过的范围。",
+            "onMissing": "先读取已有目标；仅结果无法确定时问一个关键问题。"
+          },
+          {
+            "field": "successCriteria",
+            "interpretation": "最终结果的必需/可选条件及验收者。",
+            "onMissing": "提出可检验草案交宿主绑定，不用人数或文件数代替成功。"
+          },
+          {
+            "field": "constraints",
+            "interpretation": "时间、费用、读写资源、权限和已确认选择。",
+            "onMissing": "标明未知预算，遵循当前宿主权限。"
+          },
+          {
+            "field": "hostCapabilities",
+            "interpretation": "本轮实际工具 schema、并发容量及通信能力。",
+            "onMissing": "先发现，缺少则明示顺序降级。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "mode-acceptance",
+            "field": "mode",
+            "criterion": "模式与已发现的 spawn、通信、隔离和容量一致；实际工具缺失时明确 sequential。",
+            "rejectWhen": "只因宿主名称就声称 TeamCreate、共享总线或真实并行。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "本轮工具 schema",
+              "实际调用回执或不可用记录"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "plan-acceptance",
+            "field": "plan",
+            "criterion": "每个任务有产物、依赖理由、资源范围与验收条件；等待节点仅阻塞其依赖闭包。",
+            "rejectWhen": "存在无理由依赖、循环依赖、未定义合并或把独立任务绑在全局人工门上。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "工单依赖表",
+              "等待时的可运行节点计算"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "assignments-acceptance",
+            "field": "assignments",
+            "criterion": "每项工作绑定真实专业能力、文件/资源范围和交接产物，验收者与产物作者可区分。",
+            "rejectWhen": "只给角色名而无专业材料，或多名写者同时覆盖同一资源。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "能力来源与边界",
+              "每项工单的输入版本和资源所有权"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "results-acceptance",
+            "field": "results",
+            "criterion": "产物逐项绑定实际工单、版本和工具返回；保留失败、等待及未运行状态。",
+            "rejectWhen": "把计划、提示词、旧运行结果或口头完成当作本轮已交付。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "当前调用回执",
+              "对应文件、返回文本或哈希"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "verification-acceptance",
+            "field": "verification",
+            "criterion": "全部必需条件和跨模块接缝有实际证据；阻断失败不能被其他成功抵消。",
+            "rejectWhen": "只统计完成数量、通过命令或平均评分就声称整项目完成。",
+            "verificationMethod": "behavior_probe",
+            "evidenceRequired": [
+              "逐条件验收表",
+              "集成行为/接口观察及未覆盖项"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "degradations-acceptance",
+            "field": "degradations",
+            "criterion": "列明缺失能力、采用的可行路线及未证明事项，顺序执行仍完成必要步骤。",
+            "rejectWhen": "工具未调用却称成功，或因降级删掉必需交付。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "缺失能力观察",
+              "降级后的产物与剩余限制"
+            ],
+            "blocking": true
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "当前任务明确要求人工判断的方向、版本或最终验收。",
+        "超出已有授权的不可逆执行、发布、付费或范围变化。",
+        "领域关键事实冲突或必需证据缺失，且会改变用户结果。"
+      ],
+      "prohibitedClaims": [
+        "合同或样例校验通过证明专业业务效果。",
+        "工具名、计划、模板、作者自报或旧运行结果证明本轮实际完成。",
+        "尚未观察的宿主加载、独立审核或用户批准已经发生。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
+}

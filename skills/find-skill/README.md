@@ -24,19 +24,19 @@ A Windows-compatible fork of [vercel-labs/skills find-skills](https://github.com
 
 ## The Problem
 
-On Windows, Claude Code uses a Bash/Git Bash environment that doesn't properly handle `npx skills` commands - they return empty output silently.
+Some Windows shell/Node/CLI combinations have produced empty output. Check the current environment and exit status before deciding the cause; this does not mean every Git Bash setup is unsupported.
 
 ```bash
-# ❌ Returns nothing on Windows in Claude Code
+# Check the observed shell and CLI output first
 npx skills find "react"
 ```
 
 ## The Solution
 
-This fork modifies the SKILL.md to instruct Claude Code to use PowerShell for running skills commands:
+This package retains a PowerShell compatibility route when the observed shell fails:
 
 ```bash
-# ✅ Works on Windows
+# Alternative route; verify it in the current environment
 powershell -Command "npx skills find 'react'"
 ```
 
@@ -90,14 +90,14 @@ findskill/
 
 ## Key Features
 
-1. **Windows Compatibility** - Uses PowerShell instead of Bash for all commands
+1. **Windows Compatibility** - Documents PowerShell as an observed-failure fallback, without assuming every Bash setup fails
 2. **Bilingual Support** - Instructions in both English and Chinese
 3. **Chinese Keyword Reference** - Built-in translation table for search queries
 4. **Troubleshooting Section** - Common issues and solutions
 
 ## Known Limitations
 
-1. **Search only supports English keywords** - Chinese queries need to be translated by AI
+1. **Search coverage varies** - Relevant English translations can broaden discovery; an empty Chinese query does not prove English-only support
 2. **Trigger is semantic** - AI may or may not trigger `find-skill` depending on how you phrase it. Adding "skill" to your request makes it more reliable.
 3. **Windows optimized** - macOS/Linux users should use the original version
 

@@ -6,6 +6,7 @@ import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { buildCapabilityIndex } from './capability-catalog.mjs';
+import { checkComponentMethod } from './check-agent-pack.mjs';
 
 const DEFAULT_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -61,6 +62,12 @@ export function runComponentChecks(rootPath = DEFAULT_ROOT, options = {}) {
   for (const component of index.components) {
     const componentRoot = path.resolve(root, ...component.path.split('/'));
     assert(isInside(root, componentRoot), `Component path escapes repository: ${component.path}`);
+    // Skills may reuse the professional contract without inheriting Agent-only
+    // document formatting. Legacy components without a method stay compatible.
+    if (component.componentType !== 'agent' && fs.existsSync(path.join(componentRoot, 'method.json'))) {
+      const methodErrors = checkComponentMethod(componentRoot);
+      assert(methodErrors.length === 0, `${component.id} professional method is invalid: ${methodErrors.join('; ')}`);
+    }
 
     for (const validationPath of component.validation) {
       const invocation = buildValidationInvocation(componentRoot, validationPath);

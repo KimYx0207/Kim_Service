@@ -1,0 +1,188 @@
+{
+  "schemaVersion": 1,
+  "roleId": "find-skill",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "skill-search-worked",
+      "capabilityId": "skill-search",
+      "category": "worked_example",
+      "scenario": "本地可见 CSV 能力且不允许联网。",
+      "input": {
+        "task": "离线处理授权 CSV，找已有字段缺失检查能力。",
+        "allowNetwork": false
+      },
+      "candidateOutputExcerpt": {
+        "localMatches": [
+          {
+            "id": "csv-check",
+            "source": "project/skills/csv-check/SKILL.md",
+            "fit": "读取 CSV 并给缺失字段报告",
+            "limits": "未观察实际脚本执行"
+          }
+        ],
+        "externalSearchStatus": "not-requested",
+        "candidates": []
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "作者构造的合格报告形状，保留本场景的实际范围与未观察边界；重点核验：先检查当前宿主和仓库实际可见能力，说明匹配任务、必需输入和排除项。",
+      "diagnosticRefs": [
+        "fit",
+        "trust",
+        "installed"
+      ],
+      "decisionRuleRefs": [
+        "local-first",
+        "search-failure",
+        "scope-stability"
+      ]
+    },
+    {
+      "id": "skill-search-counterexample",
+      "capabilityId": "skill-search",
+      "category": "failure_boundary",
+      "scenario": "本地可见 CSV 能力且不允许联网。",
+      "input": {
+        "task": "离线处理授权 CSV，找已有字段缺失检查能力。",
+        "allowNetwork": false
+      },
+      "candidateOutputExcerpt": {
+        "localMatches": [],
+        "externalSearchStatus": "completed",
+        "candidates": [
+          "网络超时，所以任何地方都没有此技能"
+        ]
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "本地能力未检查，外部超时被伪装成完成和不存在。",
+      "diagnosticRefs": [
+        "fit",
+        "trust",
+        "installed"
+      ],
+      "decisionRuleRefs": [
+        "local-first",
+        "search-failure",
+        "scope-stability"
+      ]
+    },
+    {
+      "id": "skill-install-project-worked",
+      "capabilityId": "skill-install-project",
+      "category": "worked_example",
+      "scenario": "已审候选只获 project 作用域安装授权。",
+      "input": {
+        "source": "reviewed-owner/csv-tools@reviewed-revision",
+        "skill": "csv-check",
+        "agent": "codex",
+        "approvedCommand": "npx skills add reviewed-owner/csv-tools@reviewed-revision --skill csv-check -a codex"
+      },
+      "candidateOutputExcerpt": {
+        "status": "installed",
+        "scope": "project",
+        "verification": "合成观察：目标作用域的 SKILL.md 名称、引用脚本与已审版本一致；宿主重新发现未观察。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "作者构造的合格报告形状，保留本场景的实际范围与未观察边界；重点核验：安装成功须由目标作用域中的实际入口、必要资源与当前源版本核对支持；失败保留原作用域。",
+      "diagnosticRefs": [
+        "fit",
+        "trust",
+        "installed"
+      ],
+      "decisionRuleRefs": [
+        "local-first",
+        "search-failure",
+        "scope-stability"
+      ]
+    },
+    {
+      "id": "skill-install-project-counterexample",
+      "capabilityId": "skill-install-project",
+      "category": "failure_boundary",
+      "scenario": "已审候选只获 project 作用域安装授权。",
+      "input": {
+        "source": "reviewed-owner/csv-tools@reviewed-revision",
+        "skill": "csv-check",
+        "agent": "codex",
+        "approvedCommand": "npx skills add reviewed-owner/csv-tools@reviewed-revision --skill csv-check -a codex"
+      },
+      "candidateOutputExcerpt": {
+        "status": "installed",
+        "scope": "project",
+        "verification": "命令输出成功；未看目标，另加 -g 重试。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "没有实际回读，且重试扩大作用域；安装声明不可成立。",
+      "diagnosticRefs": [
+        "fit",
+        "trust",
+        "installed"
+      ],
+      "decisionRuleRefs": [
+        "local-first",
+        "search-failure",
+        "scope-stability"
+      ]
+    },
+    {
+      "id": "skill-install-user-worked",
+      "capabilityId": "skill-install-user",
+      "category": "worked_example",
+      "scenario": "已审候选只获 user 作用域安装授权。",
+      "input": {
+        "source": "reviewed-owner/csv-tools@reviewed-revision",
+        "skill": "csv-check",
+        "agent": "codex",
+        "approvedCommand": "npx skills add reviewed-owner/csv-tools@reviewed-revision --skill csv-check -a codex -g"
+      },
+      "candidateOutputExcerpt": {
+        "status": "installed",
+        "scope": "user",
+        "verification": "合成观察：目标作用域的 SKILL.md 名称、引用脚本与已审版本一致；宿主重新发现未观察。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "作者构造的合格报告形状，保留本场景的实际范围与未观察边界；重点核验：安装成功须由目标作用域中的实际入口、必要资源与当前源版本核对支持；失败保留原作用域。",
+      "diagnosticRefs": [
+        "fit",
+        "trust",
+        "installed"
+      ],
+      "decisionRuleRefs": [
+        "local-first",
+        "search-failure",
+        "scope-stability"
+      ]
+    },
+    {
+      "id": "skill-install-user-counterexample",
+      "capabilityId": "skill-install-user",
+      "category": "failure_boundary",
+      "scenario": "已审候选只获 user 作用域安装授权。",
+      "input": {
+        "source": "reviewed-owner/csv-tools@reviewed-revision",
+        "skill": "csv-check",
+        "agent": "codex",
+        "approvedCommand": "npx skills add reviewed-owner/csv-tools@reviewed-revision --skill csv-check -a codex -g"
+      },
+      "candidateOutputExcerpt": {
+        "status": "installed",
+        "scope": "user",
+        "verification": "命令输出成功；未看目标，另加 -g 重试。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "没有实际回读，且重试扩大作用域；安装声明不可成立。",
+      "diagnosticRefs": [
+        "fit",
+        "trust",
+        "installed"
+      ],
+      "decisionRuleRefs": [
+        "local-first",
+        "search-failure",
+        "scope-stability"
+      ]
+    }
+  ]
+}

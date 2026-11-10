@@ -1,0 +1,166 @@
+{
+  "schemaVersion": 1,
+  "roleId": "manufacturing-quality-analyst",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "conditional-cpk",
+      "capabilityId": "manufacturing-quality-analyst-deliver",
+      "category": "worked_example",
+      "scenario": "有参数但缺稳定性",
+      "input": {
+        "process": "规格90–110",
+        "measurements": "均值102，σ2；时序未知",
+        "decision": "解释能力"
+      },
+      "candidateOutputExcerpt": {
+        "processAssessment": "条件Cp1.667/Cpk1.333，稳定性未证明，不能宣布达标。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "算术与适用性分开。",
+      "diagnosticRefs": [
+        "stability"
+      ],
+      "decisionRuleRefs": [
+        "stable-first"
+      ]
+    },
+    {
+      "id": "drift-pass",
+      "capabilityId": "manufacturing-quality-analyst-deliver",
+      "category": "failure_boundary",
+      "scenario": "在规格内仍漂移",
+      "input": {
+        "process": "规格90–110",
+        "measurements": "连续均值96、99、102、105、108",
+        "decision": "放行"
+      },
+      "candidateOutputExcerpt": {
+        "processAssessment": "全部在规格内，所以过程稳定。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "规格不证明稳定。",
+      "diagnosticRefs": [
+        "stability"
+      ],
+      "decisionRuleRefs": [
+        "stable-first"
+      ]
+    },
+    {
+      "id": "defect-denominator",
+      "capabilityId": "manufacturing-quality-analyst-deliver",
+      "category": "worked_example",
+      "scenario": "多缺陷同件",
+      "input": {
+        "process": "每件可多缺陷",
+        "measurements": "100件，5件各2缺陷",
+        "decision": "算不良率"
+      },
+      "candidateOutputExcerpt": {
+        "processAssessment": "不良件率5%，缺陷数10；机会率需另给机会定义。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "正确分开分母。",
+      "diagnosticRefs": [
+        "denominator"
+      ],
+      "decisionRuleRefs": [
+        "defects-units"
+      ]
+    },
+    {
+      "id": "guess-root-cause",
+      "capabilityId": "manufacturing-quality-analyst-deliver",
+      "category": "failure_boundary",
+      "scenario": "鱼骨猜测当结论",
+      "input": {
+        "process": "表面划伤",
+        "measurements": "供应商变更同时发生",
+        "decision": "纠正"
+      },
+      "candidateOutputExcerpt": {
+        "investigation": "供应商必为根因，永久更换即可。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "关联未排除混杂。",
+      "diagnosticRefs": [
+        "cause"
+      ],
+      "decisionRuleRefs": [
+        "verify-cause"
+      ]
+    },
+    {
+      "id": "rounded-zero-spread",
+      "capabilityId": "manufacturing-quality-analyst-deliver",
+      "category": "worked_example",
+      "scenario": "取整后样本变差为零",
+      "input": {
+        "process": "规格90–110，量具记录精度1",
+        "measurements": "80个独立产品的登记值均为100，登记值样本标准差0；更高精度原记录未知",
+        "decision": "解释能力"
+      },
+      "candidateOutputExcerpt": {
+        "processAssessment": "样本标准差为0，Cp/Cpk的分母为0，暂不计算指数；核量具分辨率、取整和原记录。没有观测到差异不证明过程无变差，也不能承诺全部合格。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "指出实际缺失前提，继续测量调查而不把除零结果当高质量证据。",
+      "diagnosticRefs": [
+        "measurement",
+        "index-inputs"
+      ],
+      "decisionRuleRefs": [
+        "defined-index"
+      ]
+    },
+    {
+      "id": "one-sided-cpu",
+      "capabilityId": "manufacturing-quality-analyst-deliver",
+      "category": "worked_example",
+      "scenario": "只有上限规格",
+      "input": {
+        "process": "上限12，无下限规格",
+        "measurements": "均值10，适用σ0.5，独立样本、过程稳定与近似正态已按题设成立",
+        "decision": "计算相应条件指数"
+      },
+      "candidateOutputExcerpt": {
+        "processAssessment": "仅计算Cpu=(12−10)/(3×0.5)=4/3≈1.333；不补下限算Cp，不据此代替实际客户门槛和放行。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "正确使用单侧公式，保留本题条件范围。",
+      "diagnosticRefs": [
+        "measurement",
+        "index-inputs"
+      ],
+      "decisionRuleRefs": [
+        "defined-index"
+      ]
+    },
+    {
+      "id": "negative-cpk-not-absolute",
+      "capabilityId": "manufacturing-quality-analyst-deliver",
+      "category": "failure_boundary",
+      "scenario": "均值超过上限却掩盖指数符号",
+      "input": {
+        "process": "双侧规格90–110",
+        "measurements": "均值112，适用σ2；本题仅检验条件算术",
+        "decision": "解释指数"
+      },
+      "candidateOutputExcerpt": {
+        "processAssessment": "Cpk=abs(min((110−112)/6,(112−90)/6))≈0.333，过程均值在规格范围内。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "Cpk=min(−2/6,22/6)=−1/3；取绝对值掩盖均值已越过上限，不能声称在规格内。",
+      "diagnosticRefs": [
+        "measurement",
+        "index-inputs"
+      ],
+      "decisionRuleRefs": [
+        "defined-index"
+      ]
+    }
+  ]
+}

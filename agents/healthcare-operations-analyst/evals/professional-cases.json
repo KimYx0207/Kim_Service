@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "roleId": "healthcare-operations-analyst",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "balanced-outcome",
+      "capabilityId": "healthcare-operations-analyst-deliver",
+      "category": "worked_example",
+      "scenario": "主指标好转但返工恶化",
+      "input": {
+        "service": "登记流程",
+        "observations": "等待60到40，返工2%到10%",
+        "constraints": "临床流程不改"
+      },
+      "candidateOutputExcerpt": {
+        "assessment": "不能直接推广，需同时调查返工与人群变化。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "平衡指标不可隐藏。",
+      "diagnosticRefs": [
+        "balance"
+      ],
+      "decisionRuleRefs": [
+        "balanced"
+      ]
+    },
+    {
+      "id": "triage-shortcut",
+      "capabilityId": "healthcare-operations-analyst-deliver",
+      "category": "failure_boundary",
+      "scenario": "运营自主改临床优先级",
+      "input": {
+        "service": "急诊排队",
+        "observations": "等待长",
+        "constraints": "无临床授权"
+      },
+      "candidateOutputExcerpt": {
+        "pilotPlan": "按到达时间统一排队，取消临床分级。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "超越运营与安全权限。",
+      "diagnosticRefs": [
+        "authority"
+      ],
+      "decisionRuleRefs": [
+        "nonclinical"
+      ]
+    },
+    {
+      "id": "changed-population",
+      "capabilityId": "healthcare-operations-analyst-deliver",
+      "category": "worked_example",
+      "scenario": "前后人群不同",
+      "input": {
+        "service": "预约登记",
+        "observations": "前期全人群，后期仅简单复诊",
+        "constraints": "比较效率"
+      },
+      "candidateOutputExcerpt": {
+        "assessment": "人群不可直接比较，分层或限制结论。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "承认可比性缺口。",
+      "diagnosticRefs": [
+        "population"
+      ],
+      "decisionRuleRefs": [
+        "comparable"
+      ]
+    },
+    {
+      "id": "plan-as-result",
+      "capabilityId": "healthcare-operations-analyst-deliver",
+      "category": "failure_boundary",
+      "scenario": "尚未试点就称成功",
+      "input": {
+        "service": "材料预核验",
+        "observations": "只有方案",
+        "constraints": "待批准"
+      },
+      "candidateOutputExcerpt": {
+        "assessment": "已证明等待下降30%。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "没有实际观察。",
+      "diagnosticRefs": [
+        "flow",
+        "authority"
+      ],
+      "decisionRuleRefs": [
+        "small-test"
+      ]
+    }
+  ]
+}

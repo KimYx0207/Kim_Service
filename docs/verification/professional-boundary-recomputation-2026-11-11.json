@@ -1,0 +1,30 @@
+{
+  "scope": "Independent arithmetic recomputation and SQLite NULL/predicate demonstration on authored synthetic inputs; not a dbt/model/business evaluation.",
+  "checks": {
+    "cash_available": 15000,
+    "cash_gap": 5000,
+    "quarterly_to_monthly": "3000",
+    "quantity_variance": 400,
+    "price_variance": 240,
+    "cp": "5/3",
+    "cpk": "4/3",
+    "defective_rate": "1/20",
+    "inventory_positions": [
+      10,
+      -20,
+      80
+    ],
+    "water_net_m3": 500,
+    "water_gross_m3": "625",
+    "carbon_tonnes": "5",
+    "experiment_absolute_pp": "2",
+    "experiment_relative_pct": "20",
+    "buyer_conversion_pct": "15",
+    "sql_null_coverage": {
+      "raw": 2,
+      "relationship_checked": 1,
+      "relationship_failed": 0,
+      "required_failed": 1
+    }
+  }
+}

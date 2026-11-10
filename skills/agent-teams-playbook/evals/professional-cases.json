@@ -1,0 +1,124 @@
+{
+  "schemaVersion": 1,
+  "roleId": "agent-teams-playbook",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "agent-teams-orchestrate-worked",
+      "capabilityId": "agent-teams-orchestrate",
+      "category": "worked_example",
+      "scenario": "一个字段审批等待与两条独立工作支线同时存在。",
+      "input": {
+        "task": "A 审核数据字段，B 检查文案，C 整理可访问性清单；D 用 A 的批准字段实现表单。",
+        "successCriteria": [
+          "D 使用批准字段",
+          "B、C 独立完成",
+          "合并后表单验收"
+        ],
+        "hostCapabilities": {
+          "spawn": "observed",
+          "capacity": 2
+        }
+      },
+      "candidateOutputExcerpt": {
+        "mode": "host_parallel_candidate",
+        "plan": [
+          {
+            "id": "A",
+            "dependsOn": [],
+            "status": "awaiting_human",
+            "artifact": "fields-v2"
+          },
+          {
+            "id": "B",
+            "dependsOn": [],
+            "status": "ready"
+          },
+          {
+            "id": "C",
+            "dependsOn": [],
+            "status": "ready"
+          },
+          {
+            "id": "D",
+            "dependsOn": [
+              "A"
+            ],
+            "status": "waiting"
+          }
+        ],
+        "assignments": [
+          {
+            "task": "B",
+            "scope": "copy.md"
+          },
+          {
+            "task": "C",
+            "scope": "accessibility-checklist.md"
+          }
+        ],
+        "results": [],
+        "verification": [
+          {
+            "criterion": "final-integration",
+            "status": "not_observed"
+          }
+        ],
+        "degradations": []
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "作者构造的合格报告形状，保留本场景的实际范围与未观察边界；重点核验：模式与已发现的 spawn、通信、隔离和容量一致；实际工具缺失时明确 sequential。",
+      "diagnosticRefs": [
+        "dependency",
+        "capability",
+        "integration"
+      ],
+      "decisionRuleRefs": [
+        "ready-set",
+        "single-writer",
+        "retry-evidence"
+      ]
+    },
+    {
+      "id": "agent-teams-orchestrate-counterexample",
+      "capabilityId": "agent-teams-orchestrate",
+      "category": "failure_boundary",
+      "scenario": "一个字段审批等待与两条独立工作支线同时存在。",
+      "input": {
+        "task": "A 审核数据字段，B 检查文案，C 整理可访问性清单；D 用 A 的批准字段实现表单。",
+        "successCriteria": [
+          "D 使用批准字段",
+          "B、C 独立完成",
+          "合并后表单验收"
+        ],
+        "hostCapabilities": {
+          "spawn": "observed",
+          "capacity": 2
+        }
+      },
+      "candidateOutputExcerpt": {
+        "mode": "all-complete",
+        "results": [
+          "A 审批待定，但 B/C/D 一律完成"
+        ],
+        "verification": [
+          "任务数4/4所以通过"
+        ]
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "D 缺批准字段且没有任何当前产物回执；完成计数不能越过依赖或验收。",
+      "diagnosticRefs": [
+        "dependency",
+        "capability",
+        "integration"
+      ],
+      "decisionRuleRefs": [
+        "ready-set",
+        "single-writer",
+        "retry-evidence"
+      ]
+    }
+  ]
+}

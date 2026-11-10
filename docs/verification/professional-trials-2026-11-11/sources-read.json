@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "packageRoot": "../../..",
+  "taskInput": "tasks.json",
+  "packageFilesRead": [
+    "agents/pricing-cost-analyst/AGENT.md",
+    "agents/pricing-cost-analyst/capability.json",
+    "agents/pricing-cost-analyst/method.json",
+    "agents/pricing-cost-analyst/references/professional-method.md",
+    "agents/pricing-cost-analyst/references/worked-delivery.md",
+    "agents/supplier-comparison-analyst/AGENT.md",
+    "agents/supplier-comparison-analyst/capability.json",
+    "agents/supplier-comparison-analyst/method.json",
+    "agents/supplier-comparison-analyst/references/professional-method.md",
+    "agents/supplier-comparison-analyst/references/worked-delivery.md",
+    "agents/store-performance-analyst/AGENT.md",
+    "agents/store-performance-analyst/capability.json",
+    "agents/store-performance-analyst/method.json",
+    "agents/store-performance-analyst/references/professional-method.md",
+    "agents/store-performance-analyst/references/worked-delivery.md"
+  ],
+  "notes": [
+    "相对路径以packageRoot为基准。",
+    "仅记录本次实际读取的包内文件；未将文件中的外部链接记为已读取来源。",
+    "计算使用题目给定数据，并在本地用Decimal与Fraction复算；未联网或调用外部模型/API。"
+  ],
+  "packageFilesSha256": {
+    "agents/pricing-cost-analyst/AGENT.md": "ab0fc62a31cef6ad8148c916833dd304d9137620fed1da7c7244953c3f3f48e2",
+    "agents/pricing-cost-analyst/capability.json": "9fc79ea1a0b90ff7c52ce7ee185cfdc7cb389e878fd458448b686f100f9b62bc",
+    "agents/pricing-cost-analyst/method.json": "0b9e7d13a30b81306979e5615c7a90020bbeec43cbd7a2f96affc182829bfa45",
+    "agents/pricing-cost-analyst/references/professional-method.md": "dc008f86400c2cc3d1638153c524bc4a63d59b4cd2d4d013c5fbe45fd70169d1",
+    "agents/pricing-cost-analyst/references/worked-delivery.md": "8e0b725db4ea4b01db914c44aadecb072fee2cf321cbf2a3b8379294152ef8dc",
+    "agents/supplier-comparison-analyst/AGENT.md": "1da4a12cf18816c7422d5fc06ded31b9332141156f7400aeae262d9175872f98",
+    "agents/supplier-comparison-analyst/capability.json": "9607e3dbd5ceb8cdb8e6d28f3c1b4579c3a8e08f66016121f51e5844aab6ae95",
+    "agents/supplier-comparison-analyst/method.json": "a456e73070f40222d75ecc67a33f02cfe9f1a6c18646b39022550eecfc6b8420",
+    "agents/supplier-comparison-analyst/references/professional-method.md": "864f1a5592336d6da9fca5fa36fc424cc10b2d492b47c873517fe2887e50ba26",
+    "agents/supplier-comparison-analyst/references/worked-delivery.md": "297d46acdc60b5192465efd5a5c55e5adb986b6a911e5618d1c55d0cc4091fd3",
+    "agents/store-performance-analyst/AGENT.md": "8f13db688387170741497f42749ad007a148ae8d7408e5e7d9fab9ca49668987",
+    "agents/store-performance-analyst/capability.json": "845a465d9e0aee8d09e71b4574c288553fe8bf7df4a569612752f2f1d21ce2fc",
+    "agents/store-performance-analyst/method.json": "f526dca205e591a698813b5782e6e15844e2a36502900e09c5e9bfb1d87dfda1",
+    "agents/store-performance-analyst/references/professional-method.md": "b48ded90d2935f5fa6b299f13f2f4ea270d722a50ca9d3e3e1a22cf7fbe13b47",
+    "agents/store-performance-analyst/references/worked-delivery.md": "4c45d419b67d8e855b3f2c3d153538b38f0b16ce2e5010151769f9c3d3df044c"
+  }
+}

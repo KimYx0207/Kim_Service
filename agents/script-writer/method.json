@@ -13,7 +13,8 @@
   ],
   "skillLoading": [
     "先读取本角色 knowledgeAssets 中的包内专业方法；来源记录不等于当前任务联网，案例不是实际运行证据。",
-    "读取本角色 knowledgeAssets；只在当前任务实际需要时读取用户指定的项目/平台规范，缺来源不假称已读取。"
+    "读取本角色 knowledgeAssets；只在当前任务实际需要时读取用户指定的项目/平台规范，缺来源不假称已读取。",
+    "读取本包 references/worked-delivery.md 的完整产物与专业反例；按当前输入迁移，不把合成答案当本次事实或验收记录"
   ],
   "steps": [
     "先读取包内专业方法与现有 AGENT.md，绑定当前输入、目标和材料范围；来源引用不等于当前任务联网。",
@@ -50,6 +51,18 @@
         "kim-decision",
         "goalpro"
       ]
+    },
+    {
+      "id": "script-writer-worked-delivery",
+      "path": "references/worked-delivery.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "plain-language",
+        "kim-decision",
+        "goalpro"
+      ]
     }
   ],
   "expertise": {
@@ -60,7 +73,8 @@
       "区分文章、口播和镜头脚本，保留用户立场与事实边界"
     ],
     "knowledgeAssetIds": [
-      "script-writer-core"
+      "script-writer-core",
+      "script-writer-worked-delivery"
     ],
     "diagnosticSequence": [
       {
@@ -125,27 +139,65 @@
           {
             "field": "oneLiner",
             "criterion": "一行说明稿件为读者解决什么。",
-            "rejectWhen": "泛概念无法对应正文结果。"
+            "rejectWhen": "泛概念无法对应正文结果。",
+            "id": "script-writer-one-liner",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "当前输入中与 oneLiner 对应的事实、约束及缺口",
+              "实际 oneLiner 产物与所声明通过条件的逐项对照",
+              "对本字段拒收条件的检查结果与未验证范围"
+            ],
+            "blocking": true
           },
           {
             "field": "hooks",
             "criterion": "开头选项准确，正文能兑现。",
-            "rejectWhen": "用虚假冲突/数据骗取点击。"
+            "rejectWhen": "用虚假冲突/数据骗取点击。",
+            "id": "script-writer-hooks",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "当前输入中与 hooks 对应的事实、约束及缺口",
+              "实际 hooks 产物与所声明通过条件的逐项对照",
+              "对本字段拒收条件的检查结果与未验证范围"
+            ],
+            "blocking": true
           },
           {
             "field": "content",
-            "criterion": "按形式提供完整文章或可用脚本，事实范围准确。",
-            "rejectWhen": "只交提纲、断裂段落或未标明合成案例。"
+            "criterion": "成稿有完整可读文本与必要画面/字幕对应，主线兑现开场承诺，动作可制作。",
+            "rejectWhen": "仅提纲、含糊指代或无法拍摄的抽象描述冒充完整脚本。",
+            "id": "script-writer-content",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "完整稿",
+              "分镜/文字对应",
+              "读测修改记录"
+            ],
+            "blocking": true
           },
           {
             "field": "ending",
-            "criterion": "结尾连接正文结果与合理下一步。",
-            "rejectWhen": "突然添加不存在的产品承诺或强迫互动。"
+            "criterion": "结尾给与内容一致的具体行动或可理解判断，不另开无支撑话题。",
+            "rejectWhen": "强行升华、额外承诺或行动与正文步骤不一致。",
+            "id": "script-writer-ending",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "主张与收束对应",
+              "读者下一步"
+            ],
+            "blocking": true
           },
           {
             "field": "claimsCheck",
-            "criterion": "列真正需核的声明和对应材料/限制。",
-            "rejectWhen": "把自检清单全部打勾当事实已核实。"
+            "criterion": "外部事实、数字、引用、商业条件与来源对应，合成案例和意见明确区分。",
+            "rejectWhen": "把合成事例当真实经历或加入无依据效果保证。",
+            "id": "script-writer-claims-check",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "声明与来源表",
+              "日期/brief核对"
+            ],
+            "blocking": true
           }
         ]
       }

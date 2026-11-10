@@ -28,7 +28,7 @@
 - 是否从证据推导 surface，而不是从熟悉例子猜。**Surface guessed = Hard Cap**。
 - 是否产出用户可见的最终 artifact。
 - 未知领域是否在尝试证据检索后再返回 `research-needed`（**Unknown Domain Research Test**：先检索后停）。
-- 多模态 skill 是否先探测本地工具、写结构化 brief、并按 route 顺序产出（**Multimodal Tool Route Regression**：Image2/host-native 优先，MCP 降级要证据）。
+- 多模态 skill 是否先按产物的精度、编辑性与用途选择工具、探测能力并写结构化 brief（**Multimodal Tool Route Regression**：只有栅格创意图应用 Image2/host-native 优先与 MCP 降级证据；精确图表、可编辑文件和原生界面走自身主路径）。
 - 是否在没有真实输出证据时硬说 ready。
 
 ### Contract Clarity Gate
@@ -61,6 +61,8 @@
 
 ## 6. Satisfaction 评分（/100）
 
+以下分数是现有工作台的诊断维度，不是跨行业专家认证。运行前按实际任务冻结适用判据与不可抵消的关键项；错误数据、缺少用户最终产物或越过权限均不能由总分抵消。文件数量、入口行数和字数只反映包装成本。纯文字技能不必为了凑资产而新增脚本；相应维度按是否存在真实复用需要解释，不能机械扣分或堆文件。
+
 | 维度 | 分 | 标准 |
 |---|---:|---|
 | User result definition | 8 | user / pressure / final artifact / success criteria |
@@ -78,7 +80,7 @@
 
 权重合计 = 8+13+8+8+8+8+11+8+8+10+7+3 = 100。
 
-Hard Caps：无 Skill Contract ≤59；Goal unclear ≤59；Execution step opaque ≤64；Boundary incomplete ≤64；Deep research ritualized ≤59；无 Domain Research Brief ≤49；research-needed 前未检索 ≤59；surface 瞎猜 ≤64；无 artifact chain ≤64；无 trigger eval ≤69；无 baseline ≤74；无非文档资产 ≤79；无用户最终品 ≤69；声称 ready 无可见测试 ≤84；无闭环决策 ≤79；失败无预防规则 ≤74。
+Hard Caps：无 Skill Contract ≤59；Goal unclear ≤59；Execution step opaque ≤64；Boundary incomplete ≤64；Deep research ritualized ≤59；无 Domain Research Brief ≤49；research-needed 前未检索 ≤59；surface 瞎猜 ≤64；无 artifact chain ≤64；无 trigger eval ≤69；无 baseline ≤74；确有复用需求却缺相应资产 ≤79；无用户最终品 ≤69；声称 ready 无可见测试 ≤84；无闭环决策 ≤79；失败无预防规则 ≤74。上限仅描述本工作台诊断，不允许把一个低于上限的关键失败解释为业务可接受。
 
 ## 7. Acceptance Run（clean-session 验收）
 

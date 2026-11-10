@@ -1,0 +1,669 @@
+{
+  "schemaVersion": 1,
+  "roleId": "memory-3layer",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "steps": [
+    "确认项目根、需要的记忆范围和当前实际宿主，不从持久文件存在推断已进入上下文。",
+    "读取三层文件与有效状态，报告解析错误、预算与截断；默认只读。",
+    "用户确认事实才交受管记录器；完全重复可确定跳过，语义冲突只提出复查。",
+    "长期提升或旧事实失效绑定证据和具体批准，保留历史链，不自动清除未知条目。",
+    "迁移与安装使用既有脚本，核验不覆盖、幂等和配置合并；原生运行另取宿主观察。"
+  ],
+  "acceptance": [
+    "按当前能力的outputChecks逐项记录实际证据、拒收原因和未观察项。",
+    "任何blocking项失败或缺证据，不能用其他评分抵消；作者自查不代替独立验收。",
+    "只报告本轮真实完成的产物、动作和范围；当前宿主最终验收权保持不变。"
+  ],
+  "coordinationOwner": "caller",
+  "finalAcceptance": "caller_only",
+  "knowledgeAssets": [
+    {
+      "id": "memory-3layer-acceptance",
+      "path": "references/acceptance.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "existing-package",
+        "langgraph-memory",
+        "agent-evals"
+      ]
+    },
+    {
+      "id": "memory-3layer-operating-contract",
+      "path": "references/operating-contract.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "existing-package"
+      ]
+    },
+    {
+      "id": "memory-3layer-migration",
+      "path": "references/migration.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "existing-package"
+      ]
+    },
+    {
+      "id": "memory-3layer-runtime-adapters",
+      "path": "references/runtime-adapters.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "existing-package"
+      ]
+    }
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "保持项目隔离、来源、生命周期与上下文预算的三层记忆治理",
+    "scope": [
+      "只读检查三层记忆状态，并按预算加载可追溯的 active 上下文。",
+      "把用户明确确认的事实写入 Layer 1，并向 Layer 2 追加可追溯的每日记录。",
+      "复查冲突与过时条目，并在人工确认后提升 Layer 3 知识或把旧事实标记为 superseded。",
+      "把识别出的旧版 .claude/memory 数据非破坏性复制到 .memory-3layer，并报告冲突与跳过项。",
+      "把三层记忆核心与受支持宿主的 Hook 配置安全接线，并保持现有配置与无关 Hooks。"
+    ],
+    "knowledgeAssetIds": [
+      "memory-3layer-acceptance",
+      "memory-3layer-operating-contract",
+      "memory-3layer-migration",
+      "memory-3layer-runtime-adapters"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "truth",
+        "question": "这是已确认事实、工具转述还是模型假设？",
+        "evidenceRequired": [
+          "原始用户确认",
+          "项目证据路径和日期"
+        ],
+        "whenMissing": "模型推断只进入建议，不写事实。"
+      },
+      {
+        "id": "lifecycle",
+        "question": "哪些事实仍适用于当前项目与阶段？",
+        "evidenceRequired": [
+          "active/superseded状态",
+          "新旧来源与批准版本"
+        ],
+        "whenMissing": "保留冲突，先查证而不按更新时间覆盖。"
+      },
+      {
+        "id": "runtime",
+        "question": "记忆只是存了、手动读了，还是被真实宿主加载？",
+        "evidenceRequired": [
+          "落盘和加载回执",
+          "宿主事件/信任状态观察"
+        ],
+        "whenMissing": "分别标未观察；不要把安装当自动运行。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "confirmed-write",
+        "when": "准备持久化事实",
+        "action": "检查具体用户确认、秘密过滤与项目边界后用受管入口",
+        "avoid": "让普通工具summary/fact/confirmed绕过确认。"
+      },
+      {
+        "id": "preserve-history",
+        "when": "新旧事实冲突或提升长期知识",
+        "action": "证据和批准齐备才更新状态；旧项保留superseded",
+        "avoid": "删除历史、模型自批或新文件自动覆盖。"
+      },
+      {
+        "id": "honest-runtime",
+        "when": "只完成配置或手动脚本",
+        "action": "报告已证范围和not-observed原生状态",
+        "avoid": "从宿主名字或文件存在推断原生Hook可用。"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "memory-3layer-read",
+        "inputGuidance": [
+          {
+            "field": "projectDir",
+            "interpretation": "用户确认的项目根，不从当前模型上下文猜项目。",
+            "onMissing": "先定位授权项目。"
+          },
+          {
+            "field": "memoryDir",
+            "interpretation": "项目内有效记忆目录；覆盖默认时核验路径和隔离。",
+            "onMissing": "用该项目既有配置或默认 .memory-3layer。"
+          },
+          {
+            "field": "contextBudgetChars",
+            "interpretation": "本轮加载字符预算；核心环境范围1000–9800，默认9000。",
+            "onMissing": "说明实际采用的预算；要求更小时需调用方裁剪，不能冒称核心遵守1字符预算。"
+          },
+          {
+            "field": "recentDays",
+            "interpretation": "只加载当前任务所需的近期轨迹窗口。",
+            "onMissing": "遵循核心配置并报告实际范围。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "resolved-root-acceptance",
+            "field": "resolvedRoot",
+            "criterion": "解析后的目录在已授权项目内，与实际读取文件一致。",
+            "rejectWhen": "读取另一项目或把猜测目录作为当前记忆。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "路径解析结果",
+              "被读文件清单"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "context-acceptance",
+            "field": "context",
+            "criterion": "加载 active 事实和相应三层内容；使用实际有效预算，截断显式标记，不把 superseded 恢复为当前事实。",
+            "rejectWhen": "旧事实当现状、超过约定预算却不说明，或把持久化等同已加入本轮上下文。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "实际上下文文本及字符数",
+              "生效预算/截断标记/事实状态"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "statistics-acceptance",
+            "field": "statistics",
+            "criterion": "数量、层级和时间范围来自实际解析文件，统计口径可复算。",
+            "rejectWhen": "总条目数冒充 active 数或计入损坏文件。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "实际文件与解析报告",
+              "active/superseded/invalid 口径"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "invalid-files-acceptance",
+            "field": "invalidFiles",
+            "criterion": "损坏、非法状态和不安全文件逐项报告，不静默覆盖或猜修。",
+            "rejectWhen": "invalid 被丢弃或读操作修改文件。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "原文件摘要/哈希",
+              "解析错误和只读前后对照"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "runtime-evidence-acceptance",
+            "field": "runtimeEvidence",
+            "criterion": "配置、手动加载和宿主原生触发的证据分开；未观察宿主则标 not-observed。",
+            "rejectWhen": "安装成功就声称自动跨会话记忆生效。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "手动调用回执",
+              "独立宿主事件观察或缺失"
+            ],
+            "blocking": true
+          }
+        ]
+      },
+      {
+        "capabilityId": "memory-3layer-append",
+        "inputGuidance": [
+          {
+            "field": "projectDir",
+            "interpretation": "已确认写入的项目。",
+            "onMissing": "不写其他项目。"
+          },
+          {
+            "field": "fact",
+            "interpretation": "用户明确要记住且可复用的具体事实。",
+            "onMissing": "没有事实就不写，模型推测仅列建议。"
+          },
+          {
+            "field": "topic",
+            "interpretation": "稳定主题键，与已有主题合并避免分裂。",
+            "onMissing": "使用记录器规则或先核现有主题。"
+          },
+          {
+            "field": "confirmationSource",
+            "interpretation": "用户原话或等价人类批准的可追溯说明；不是工具回显。",
+            "onMissing": "缺少就返回未写入，已有明确授权可复用。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "success-acceptance",
+            "field": "success",
+            "criterion": "true 表示记录流程完成或合法重复跳过，false 表示未接纳；不能把 true 简化为新增成功。",
+            "rejectWhen": "重复或拒绝时仍说新增已写。",
+            "verificationMethod": "behavior_probe",
+            "evidenceRequired": [
+              "记录器返回",
+              "对应写入/跳过状态"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "memory-root-acceptance",
+            "field": "memory_root",
+            "criterion": "成功时指向实际项目记忆根。",
+            "rejectWhen": "根目录与授权项目不一致。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "已解析路径"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "runtime-acceptance",
+            "field": "runtime",
+            "criterion": "报告实际模式，manual 不冒充宿主原生 Hook。",
+            "rejectWhen": "按宿主名字猜真实触发模式。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "调用入口"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "loaded-acceptance",
+            "field": "loaded",
+            "criterion": "成功报告中层级统计按真实加载口径解释。",
+            "rejectWhen": "数量与文件不符或把未读内容算已加载。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "文件统计与返回"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "written-acceptance",
+            "field": "written",
+            "criterion": "新事实带来源、时间、topic、active 状态并追加轨迹；完全重复不得第二次新增。",
+            "rejectWhen": "长期模型推断直接入库、来源缺失、重复写或直接覆盖冲突。",
+            "verificationMethod": "behavior_probe",
+            "evidenceRequired": [
+              "写入前后差异",
+              "规范化重复输入复跑"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "skipped-acceptance",
+            "field": "skipped",
+            "criterion": "重复、敏感或不可信输入的跳过理由可定位，不泄露原秘密。",
+            "rejectWhen": "丢失跳过项或完整回显敏感原文。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "分类理由",
+              "脱敏后的返回"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "runtime-evidence-acceptance",
+            "field": "runtime_evidence",
+            "criterion": "始终保留记录器不能自证原生运行的 not-observed。",
+            "rejectWhen": "成功写入被升级成原生自动生命周期通过。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "脚本返回",
+              "另列宿主smoke证据"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "event-envelope-present-acceptance",
+            "field": "event_envelope_present",
+            "criterion": "只说明有没有受管事件外壳，不赋予用户批准真实性。",
+            "rejectWhen": "普通工具 summary/fact/confirmed 被当确认。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "事件字段和来源"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "next-acceptance",
+            "field": "next",
+            "criterion": "下一步针对本次实际缺口或复查，不自动提权写长期知识。",
+            "rejectWhen": "建议绕过来源或确认门。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "结果到下一步的关联"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "error-acceptance",
+            "field": "error",
+            "criterion": "失败有具体原因，失败分支不掩盖残留写入；成功无错误时无需此字段。",
+            "rejectWhen": "失败吞掉或拒绝后仍声称已存。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "失败回执",
+              "是否存在写入差异"
+            ],
+            "blocking": true
+          }
+        ]
+      },
+      {
+        "capabilityId": "memory-3layer-govern-long-term",
+        "inputGuidance": [
+          {
+            "field": "projectDir",
+            "interpretation": "待复查的授权项目。",
+            "onMissing": "先确定项目。"
+          },
+          {
+            "field": "reviewScope",
+            "interpretation": "主题、时期或具体冲突，而不是任意清理全部历史。",
+            "onMissing": "以最小受影响范围提出计划。"
+          },
+          {
+            "field": "evidenceRefs",
+            "interpretation": "原事实、新证据和用户确认的可定位出处。",
+            "onMissing": "只给待验证建议，不能改状态。"
+          },
+          {
+            "field": "confirmedChanges",
+            "interpretation": "明确绑定事实ID、版本和动作的批准。",
+            "onMissing": "保持 appliedChanges=[] 并列待确认；复用已有具体批准。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "review-acceptance",
+            "field": "review",
+            "criterion": "区分重复、冲突、过时与稳定经验；语义判断解释证据，不假装核心自动理解。",
+            "rejectWhen": "仅按日期新旧判谁正确。",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "事实ID/来源/状态",
+              "冲突推理及反证"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "proposals-acceptance",
+            "field": "proposals",
+            "criterion": "每条含目标ID、建议动作、理由和受影响知识，长期提升需跨情境证据。",
+            "rejectWhen": "凭一次成功把局部经验提升普遍规则。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "建议差异",
+              "适用范围与证据"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "applied-changes-acceptance",
+            "field": "appliedChanges",
+            "criterion": "仅执行已确认的具体变更，旧事实保留 superseded，实际差异可追踪。",
+            "rejectWhen": "未确认就改长期事实、删除历史或覆盖旧来源。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "确认与目标版本",
+              "实际diff/前后状态"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "pending-confirmation-acceptance",
+            "field": "pendingConfirmation",
+            "criterion": "未获确认、证据冲突或范围变化逐项保留，独立可做的只读复查可继续。",
+            "rejectWhen": "因生成建议便标全部关闭。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "未决项",
+              "需要谁决定什么"
+            ],
+            "blocking": true
+          }
+        ]
+      },
+      {
+        "capabilityId": "memory-3layer-migrate",
+        "inputGuidance": [
+          {
+            "field": "projectDir",
+            "interpretation": "同时包含源与目标的授权项目。",
+            "onMissing": "停止猜路径。"
+          },
+          {
+            "field": "sourceDir",
+            "interpretation": "项目内旧三层记忆源。",
+            "onMissing": "用已核实默认 .claude/memory。"
+          },
+          {
+            "field": "targetDir",
+            "interpretation": "与源不同且不互相嵌套的项目内目标。",
+            "onMissing": "使用默认 .memory-3layer 并先检查冲突。"
+          },
+          {
+            "field": "dryRun",
+            "interpretation": "true 仅预览，false 才是已授权实际复制；输出需说明模式。",
+            "onMissing": "先预览，已有明确迁移授权可执行。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "copied-acceptance",
+            "field": "copied",
+            "criterion": "只列识别且有效的文件；dry-run 表示计划而非落盘，apply 后逐文件核目标内容与源保持不变。",
+            "rejectWhen": "预览当成功迁移、覆盖目标或删除源。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "模式与源目标清单",
+              "实际字节/哈希核对"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "skipped-acceptance",
+            "field": "skipped",
+            "criterion": "已有同名文件、重复或不适用项有明确理由，不默默遗漏。",
+            "rejectWhen": "跳过被说成复制成功。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "逐文件计划与返回"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "conflict-acceptance",
+            "field": "conflict",
+            "criterion": "目标冲突逐项保留，禁止覆盖，完成报告说明未迁移部分。",
+            "rejectWhen": "冲突用最后写入获胜。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "源目标差异",
+              "目标未改证据"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "invalid-acceptance",
+            "field": "invalid",
+            "criterion": "损坏JSON、非法状态、链接或敏感内容不复制，脱敏说明原因。",
+            "rejectWhen": "为了迁移数量自动修复/扩权/泄露。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "校验错误",
+              "未复制证据"
+            ],
+            "blocking": true
+          }
+        ]
+      },
+      {
+        "capabilityId": "memory-3layer-install-runtime",
+        "inputGuidance": [
+          {
+            "field": "projectDir",
+            "interpretation": "明确项目根及项目内配置写入授权。",
+            "onMissing": "先查根和已有配置。"
+          },
+          {
+            "field": "host",
+            "interpretation": "claude-code/codex/manual/both 为当前声明支持的安装路线。",
+            "onMissing": "未知宿主只能说明手动用法，不冒充原生支持。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "success-acceptance",
+            "field": "success",
+            "criterion": "仅表示安装/配置事务完成；失败清楚报告且不声称自动记忆生效。",
+            "rejectWhen": "success=true 被当宿主已信任并执行。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "安装回执与配置回读"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "requested-platform-acceptance",
+            "field": "requested_platform",
+            "criterion": "成功时与用户指定路线一致。",
+            "rejectWhen": "擅自安装到其他平台。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "请求与解析参数"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "selected-platform-acceptance",
+            "field": "selected_platform",
+            "criterion": "选中路线与真实能力/配置一致，降级必须透明。",
+            "rejectWhen": "DSh等新宿主被冒标Codex原生Hook。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "实际适配器选择"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "memory-dir-acceptance",
+            "field": "memory_dir",
+            "criterion": "项目内数据根与现有记忆一致，迁移不是安装的隐含副作用。",
+            "rejectWhen": "另造第二份记忆状态源。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "目录解析",
+              "现有数据未覆盖"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "project-dir-acceptance",
+            "field": "project_dir",
+            "criterion": "回读配置和文件均处于该已确认项目。",
+            "rejectWhen": "改用户全局或其他项目。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "路径清单"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "initialized-acceptance",
+            "field": "initialized",
+            "criterion": "仅在实际创建/初始化时 true，已有数据不重置。",
+            "rejectWhen": "重复安装清空记忆。",
+            "verificationMethod": "behavior_probe",
+            "evidenceRequired": [
+              "安装前后数据哈希"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "gitignore-changed-acceptance",
+            "field": "gitignore_changed",
+            "criterion": "准确反映是否修改，保留原有无关条目。",
+            "rejectWhen": "覆盖整份gitignore或误报未改。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "实际diff"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "adapters-acceptance",
+            "field": "adapters",
+            "criterion": "报告每个适配器配置与原生smoke证据分离；保留原有无关Hooks。",
+            "rejectWhen": "删除用户Hook或把配置存在写成原生触发通过。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "合并前后配置",
+              "外部宿主观察或not-observed"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "manual-acceptance",
+            "field": "manual",
+            "criterion": "手动模式按事实标记；不伪造后台自动生命周期。",
+            "rejectWhen": "manual模式也宣称原生Hook已启动。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "执行路线"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "next-acceptance",
+            "field": "next",
+            "criterion": "指向宿主需完成的信任/真实smoke，或手动入口，不重复要求已有授权。",
+            "rejectWhen": "跳过宿主信任门或无证据宣称完成。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "未观察项和具体下一步"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "error-acceptance",
+            "field": "error",
+            "criterion": "失败有可恢复原因；配置不可安全合并时保留原文件。",
+            "rejectWhen": "失败仍破坏配置或静默退到其他项目。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "错误回执",
+              "失败前后diff"
+            ],
+            "blocking": true
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "当前任务明确要求人工判断的方向、版本或最终验收。",
+        "超出已有授权的不可逆执行、发布、付费或范围变化。",
+        "领域关键事实冲突或必需证据缺失，且会改变用户结果。"
+      ],
+      "prohibitedClaims": [
+        "合同或样例校验通过证明专业业务效果。",
+        "工具名、计划、模板、作者自报或旧运行结果证明本轮实际完成。",
+        "尚未观察的宿主加载、独立审核或用户批准已经发生。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
+}

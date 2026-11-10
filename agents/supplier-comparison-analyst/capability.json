@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "supplier-comparison-analyst",
   "componentType": "agent",
-  "componentVersion": "0.2.0",
+  "componentVersion": "0.3.0",
   "entrypoint": "AGENT.md",
   "capabilities": [
     {
@@ -21,30 +21,101 @@
       "input": {
         "type": "object",
         "properties": {
-          "specification": {"type": "string", "description": "用户要求的完整规格与计量单位，候选必须同口径"},
-          "quantity": {"type": "integer", "description": "用户本次需求数量，不默认试单投入"},
-          "currency": {"type": "string", "description": "用户币种，不猜汇率"},
-          "quotes": {"type": "array", "description": "用户明确提供的候选报价：包数包价/MOQ/运费费用/交期/质量证据，未知保留", "items": {"type": "object"}},
-          "constraints": {"type": "string", "description": "可选用户最长交期、质量门槛、预算和验收条件，不设置默认阈值"},
-          "weights": {"type": "string", "description": "可选用户权重与敏感性幅度，质量分须有统一定义；不按缺项重分"},
-          "calculationReceipt": {"type": "object", "description": "可选宿主单独授权真实helper执行所得结果；缺失不宣称运行"}
+          "specification": {
+            "type": "string",
+            "description": "用户要求的完整规格与计量单位，候选必须同口径"
+          },
+          "quantity": {
+            "type": "integer",
+            "description": "用户本次需求数量，不默认试单投入"
+          },
+          "currency": {
+            "type": "string",
+            "description": "用户币种，不猜汇率"
+          },
+          "quotes": {
+            "type": "array",
+            "description": "用户明确提供的候选报价：包数包价/MOQ/运费费用/交期/质量证据，未知保留",
+            "items": {
+              "type": "object"
+            }
+          },
+          "constraints": {
+            "type": "string",
+            "description": "可选用户最长交期、质量门槛、预算和验收条件，不设置默认阈值"
+          },
+          "weights": {
+            "type": "string",
+            "description": "可选用户权重与敏感性幅度，质量分须有统一定义；不按缺项重分"
+          },
+          "calculationReceipt": {
+            "type": "object",
+            "description": "可选宿主单独授权真实helper执行所得结果；缺失不宣称运行"
+          }
         },
-        "required": ["specification", "quantity", "currency", "quotes"]
+        "required": [
+          "specification",
+          "quantity",
+          "currency",
+          "quotes"
+        ]
       },
       "output": {
         "type": "object",
         "deliveryFormat": "conceptual-human-delivery",
         "properties": {
-          "facts": {"type": "array", "description": "需求、来源、已知条件及费用/证据缺项", "items": {"type": "string"}},
-          "normalizedQuotes": {"type": "array", "description": "同规格单位报价、包数MOQ、超购量、到货成本及未计费用", "items": {"type": "string"}},
-          "constraints": {"type": "array", "description": "用户硬约束通过、排除、待确认与依据", "items": {"type": "string"}},
-          "comparison": {"type": "array", "description": "成本交期质量证据多维比较；仅完整用户口径和权重才排名与敏感性", "items": {"type": "string"}},
-          "recommendations": {"type": "array", "description": "条件短名单、样品试单验收/观察/停止条件；未给预算数量不默认投入", "items": {"type": "string"}},
-          "handoff": {"type": "string", "description": "原始材料、来源、实际回执或未执行说明、待确认事实与风险交回调用方，由Meta/nativeDecision决定选择和执行"}
+          "facts": {
+            "type": "array",
+            "description": "需求、来源、已知条件及费用/证据缺项",
+            "items": {
+              "type": "string"
+            }
+          },
+          "normalizedQuotes": {
+            "type": "array",
+            "description": "同规格单位报价、包数MOQ、超购量、到货成本及未计费用",
+            "items": {
+              "type": "string"
+            }
+          },
+          "constraints": {
+            "type": "array",
+            "description": "用户硬约束通过、排除、待确认与依据",
+            "items": {
+              "type": "string"
+            }
+          },
+          "comparison": {
+            "type": "array",
+            "description": "成本交期质量证据多维比较；仅完整用户口径和权重才排名与敏感性",
+            "items": {
+              "type": "string"
+            }
+          },
+          "recommendations": {
+            "type": "array",
+            "description": "条件短名单、样品试单验收/观察/停止条件；未给预算数量不默认投入",
+            "items": {
+              "type": "string"
+            }
+          },
+          "handoff": {
+            "type": "string",
+            "description": "原始材料、来源、实际回执或未执行说明、待确认事实与风险交回调用方，由Meta/nativeDecision决定选择和执行"
+          }
         },
-        "required": ["facts", "normalizedQuotes", "constraints", "comparison", "recommendations", "handoff"]
+        "required": [
+          "facts",
+          "normalizedQuotes",
+          "constraints",
+          "comparison",
+          "recommendations",
+          "handoff"
+        ]
       },
-      "permissions": ["filesystem:read-user-materials"],
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
       "sideEffects": [],
       "humanGate": {
         "required": true,
@@ -53,7 +124,10 @@
           "样品或试单投入数量、预算和可接受风险由用户决定；联系供应商、下单、付款或真实后台操作不在本角色权限中，不能由建议自动执行。"
         ]
       },
-      "validation": ["tests/contract.test.mjs", "tests/delivery.test.mjs"],
+      "validation": [
+        "tests/contract.test.mjs",
+        "tests/delivery.test.mjs"
+      ],
       "helperContract": "calculation-tool.json",
       "deliveryContract": "delivery-tool.json"
     }

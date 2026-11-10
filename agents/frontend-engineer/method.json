@@ -34,15 +34,16 @@
   "skillLoading": [
     "先读取 knowledgeAssets 中本角色包内 professional-method；知识文件受组件哈希约束，仅供当前任务，来源清单不等于本轮联网读取",
     "当前仓库前端工程规则",
-    "所用框架官方方法与组件规范；不无关安装其他框架"
+    "所用框架官方方法与组件规范；不无关安装其他框架",
+    "读取本包 references/worked-delivery.md 的完整产物与专业反例；按当前输入迁移，不把合成答案当本次事实或验收记录"
   ],
   "steps": [
     "绑定当前 designBinding/designContext 与项目事实；从指定入口和锁文件核实实际框架/工具版本、相关代码与验收ID，再按包内专业方法处理正反场景",
     "读取仓库入口与相关模块，不让每个工人读整个依赖目录",
-    "以最小复现锁定现行为并写失败测试；先验证接口而不编造响应",
+    "对行为缺陷先记录最小复现并选择能区分错误与修复的回归；纯文案/样式等可逆小改核实际展示即可，不为文件存在、实现细节或测试数量另建重复测试",
     "按组件、状态和数据层责任改动；保留用户编辑与可恢复错误",
     "分别处理请求乱序、重复提交、取消/返回、离线与权限失效",
-    "运行类型、测试、构建，再在绑定浏览器检查关键路径",
+    "按当前改动风险运行必要的类型/构建/相关测试，再从真实入口验证受影响用户路径；隔离账户与数据，等待异步断言，记录mock边界、未运行范围及失败轨迹",
     "对最终补丁重新测试并交精确commit与产物；缺运行环境就交patch_only"
   ],
   "acceptance": [
@@ -97,7 +98,24 @@
         "anthropic-frontend",
         "vercel-react",
         "react-effects",
-        "w3c-dialog"
+        "w3c-dialog",
+        "playwright-behavior",
+        "playwright-assertions"
+      ]
+    },
+    {
+      "id": "frontend-engineer-worked-delivery",
+      "path": "references/worked-delivery.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "anthropic-frontend",
+        "vercel-react",
+        "react-effects",
+        "w3c-dialog",
+        "playwright-behavior",
+        "playwright-assertions"
       ]
     }
   ],
@@ -109,7 +127,8 @@
       "用实际输入与失败路径验证，避免仅按编译成功宣称完成"
     ],
     "knowledgeAssetIds": [
-      "frontend-engineer-core"
+      "frontend-engineer-core",
+      "frontend-engineer-worked-delivery"
     ],
     "diagnosticSequence": [
       {
@@ -158,6 +177,12 @@
         "when": "实现涉及异步或交互变化",
         "action": "检验有代表性的实际用户路径和失败分支",
         "avoid": "只验证函数存在或截图生成就宣布交付。"
+      },
+      {
+        "id": "evidence-scope",
+        "when": "以浏览器测试或截图证明完整产品路径",
+        "action": "核真实入口、独立状态和最终用户结果，分开受控响应的前端行为与真实持久化/鉴权证据",
+        "avoid": "固定等待代替条件观察、共享数据污染、mock成功响应冒充后端已保存。"
       }
     ],
     "contractGuidance": [
@@ -193,58 +218,141 @@
         "outputChecks": [
           {
             "field": "patch",
-            "criterion": "改动复用实际版本与组件，状态归属清楚。",
-            "rejectWhen": "另造并行入口或硬编码不明版本API。"
+            "criterion": "实现绑定真实接口/版本及既有组件，状态单一归属，写入具备版本或幂等约束，缺接口时明确阻塞。",
+            "rejectWhen": "无实际入口的孤立组件，或通过删掉错误分支和硬编码响应满足测试。",
+            "id": "frontend-engineer-patch",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "实际diff与入口调用",
+              "接口字段/版本核对",
+              "状态归属说明"
+            ],
+            "blocking": true
           },
           {
             "field": "behaviorEvidence",
-            "criterion": "绑定实际输入、观察与覆盖范围。",
-            "rejectWhen": "把编译/静态类型检查升级为用户路径通过。"
+            "criterion": "记录受影响用户路径与适用失败分支的真实观察，绑定入口、独立数据/会话、最终版本和mock边界；异步条件已等待，未运行范围明确。",
+            "rejectWhen": "只给build、静态截图或自建成功响应；未等待断言、测试互相依赖或前端mock被声称为真实保存。",
+            "id": "frontend-engineer-behavior-evidence",
+            "verificationMethod": "behavior_probe",
+            "evidenceRequired": [
+              "实际操作序列与观察",
+              "关键失败分支",
+              "最终源版本",
+              "真实入口及测试隔离/初始状态",
+              "异步完成条件与断言实际结果",
+              "mock范围、真实集成边界和失败诊断线索"
+            ],
+            "blocking": true
           },
           {
             "field": "handoffNotes",
-            "criterion": "说明接口依赖、未核状态与后续集成。",
-            "rejectWhen": "隐藏运行能力缺失或残留兼容影响。"
+            "criterion": "指出接口依赖、剩余未验证项及升级/回退影响，使下一执行者可以继续。",
+            "rejectWhen": "隐藏当前运行环境缺失，或要求他人重猜关键接口。",
+            "id": "frontend-engineer-handoff-notes",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "接口绑定",
+              "未验证列表",
+              "回退影响"
+            ],
+            "blocking": true
           },
           {
             "field": "status",
             "criterion": "只总结当前角色的实际交付状态与已说明限制。",
-            "rejectWhen": "把候选产物状态等同用户最终接受。"
+            "rejectWhen": "把候选产物状态等同用户最终接受。",
+            "id": "frontend-engineer-status",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "逐项交付/验收结果与当前状态对照",
+              "未执行、失败或阻塞项及其影响"
+            ],
+            "blocking": true
           },
           {
             "field": "artifactRefs",
             "criterion": "引用确实存在且当前任务相关的产物；未产出不编路径。",
-            "rejectWhen": "把预计文件或未读取摘要当真实产物。"
+            "rejectWhen": "把预计文件或未读取摘要当真实产物。",
+            "id": "frontend-engineer-artifact-refs",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "实际存在的当前产物及定位",
+              "产物与任务、版本的对应关系"
+            ],
+            "blocking": true
           },
           {
             "field": "criterionResults",
             "criterion": "每项区分实际观察、自报判断和未运行。",
-            "rejectWhen": "把结构检查、文档读取或自报pass当独立验收。"
+            "rejectWhen": "把结构检查、文档读取或自报pass当独立验收。",
+            "id": "frontend-engineer-criterion-results",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "当前标准ID、实际观察和证据引用",
+              "自报、独立观察与未运行的区分"
+            ],
+            "blocking": true
           },
           {
             "field": "missingCapabilities",
             "criterion": "明确缺少何种能力、影响哪个检查或动作。",
-            "rejectWhen": "工具不可用仍宣称已执行。"
+            "rejectWhen": "工具不可用仍宣称已执行。",
+            "id": "frontend-engineer-missing-capabilities",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "实际可用工具/材料检查",
+              "缺口影响的动作和验收项"
+            ],
+            "blocking": true
           },
           {
             "field": "failures",
             "criterion": "记录真实失败与范围，不泄露敏感材料。",
-            "rejectWhen": "凭推测补失败或隐去影响结论的问题。"
+            "rejectWhen": "凭推测补失败或隐去影响结论的问题。",
+            "id": "frontend-engineer-failures",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "实际失败或矛盾记录",
+              "受影响范围与敏感信息处理"
+            ],
+            "blocking": true
           },
           {
             "field": "stopReason",
             "criterion": "说明角色当前结束、缺证据或被阻塞的具体原因。",
-            "rejectWhen": "把未完成判断静默转为成功。"
+            "rejectWhen": "把未完成判断静默转为成功。",
+            "id": "frontend-engineer-stop-reason",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "角色实际结束或阻塞状态",
+              "继续所需输入/能力或已完成范围"
+            ],
+            "blocking": true
           },
           {
             "field": "handoff",
             "criterion": "交事实、产物、限制与待决定项；控制权留调用方。",
-            "rejectWhen": "自行批准下一阶段、调度或高影响操作。"
+            "rejectWhen": "自行批准下一阶段、调度或高影响操作。",
+            "id": "frontend-engineer-handoff",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "下一执行者可用的事实/产物/限制",
+              "需要调用方决定的具体事项"
+            ],
+            "blocking": true
           },
           {
             "field": "nativeRuntimeVerified",
             "criterion": "未经独立宿主运行证明保持false。",
-            "rejectWhen": "因模板存在、合同测试或本地装入而声称原生运行已验证。"
+            "rejectWhen": "因模板存在、合同测试或本地装入而声称原生运行已验证。",
+            "id": "frontend-engineer-native-runtime-verified",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "独立宿主观察记录或明确未验证",
+              "模板安装/合同检查与真实运行的区分"
+            ],
+            "blocking": true
           }
         ]
       }

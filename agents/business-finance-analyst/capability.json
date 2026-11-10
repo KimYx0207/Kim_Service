@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 1,
+  "id": "business-finance-analyst",
+  "componentType": "agent",
+  "componentVersion": "0.1.1",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "business-finance-analyst-deliver",
+      "summary": "经营财务分析（business finance / cash flow / budget variance）：核对期间、收付与利润口径，交现金桥接、预算差异和有条件经营建议。",
+      "useWhen": [
+        "账面盈利却没现金，想查现金流缺口。",
+        "需要把预算和实际支出差异讲清楚。",
+        "想按收款延期、成本变化比较经营情景。"
+      ],
+      "doNotUseWhen": [
+        "不提供证券买卖建议、税务申报或审计意见；单项商品定价仍可交pricing-cost-analyst。",
+        "要求自动发布、付款、修改生产系统或联系第三方时交调用方授权处理。",
+        "要求把假设或资料形式当作专业认证、保证收益或最终验收时不适用。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "period": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "分析起止日、粒度、币种和计量单位"
+          },
+          "records": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "授权账表、期初余额、实际收付、未收未付及对应凭证"
+          },
+          "question": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前经营决定、预算/产能/现金约束"
+          }
+        },
+        "required": [
+          "period",
+          "records",
+          "question"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "cashBridge": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "期初、收入、支出、内部转账消除及期末余额桥接"
+          },
+          "varianceAnalysis": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "预算与实际差异及价格/数量/时间因素"
+          },
+          "scenarios": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "按明确收付日期的情景与最早资金缺口"
+          },
+          "actions": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "与事实和风险相关的可逆经营动作"
+          },
+          "facts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前输入、来源、期间单位及证据缺口"
+          },
+          "limitations": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "未执行、未观察、方法假设和外推边界"
+          },
+          "handoff": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前产物、规则结果、证据定位与待解决事项交调用方"
+          }
+        },
+        "required": [
+          "cashBridge",
+          "varianceAnalysis",
+          "scenarios",
+          "actions",
+          "facts",
+          "limitations",
+          "handoff"
+        ],
+        "deliveryFormat": "conceptual-human-delivery"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "外部融资、税务处理、法定报表、重大支出与资金调拨由有权限的负责人或合格专业人员决定。",
+          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

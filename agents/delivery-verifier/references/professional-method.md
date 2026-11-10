@@ -53,57 +53,9 @@
 
 保留 scripts/verify.mjs 的有界本地读取、摘要、JSON pointer 和回执绑定功能。按 delivery-tool.json 的真实接口调用；包存在不是授权。无 helper 运行回执时可以人工列核验计划，但不能写程序已验证。
 
-## 正例与反例
+## 案例与完整交付
 
-以下是作者设计的合成片段，不是模型运行记录，也不是完整正式交付；预期判断仍需独立专业复核。
-
-### hash-scope（可接受候选）
-
-同一份文件摘要匹配，但标准还包含可用性审查。
-
-输入：{"taskId":"synthetic-delivery","artifacts":[{"id":"report","path":"report.json","bytes":10,"sha256":"0000000000000000000000000000000000000000000000000000000000000000"}],"criteria":[{"id":"bytes","type":"sha256"},{"id":"usability","type":"external_review"}]}
-
-候选输出片段：
-
-```json
-{
-  "status": "partial",
-  "missingCapabilities": [
-    {
-      "criterionId": "usability",
-      "reason": "未进行用户/可用性审查"
-    }
-  ],
-  "handoff": {
-    "note": "摘要字段仅为合成输入；需要真实文件和调用回执才能确认完整性。"
-  }
-}
-```
-
-判断理由：没有把合成摘要或机械标准提升为最终接受。
-
-### receipt-wrong-task（应拒绝候选）
-
-回执写着成功，但taskId属于别的任务。
-
-输入：{"taskId":"current-task","artifacts":[],"criteria":[{"id":"receipt","type":"receipt_binding"}],"verificationReceipt":{"taskId":"old-task","status":"completed"}}
-
-候选输出片段：
-
-```json
-{
-  "status": "completed",
-  "criterionResults": [
-    {
-      "id": "receipt",
-      "status": "pass",
-      "reason": "回执中有completed"
-    }
-  ]
-}
-```
-
-判断理由：没有核对当前任务身份，旧回执不能支撑当前检查。
+当前任务的完整实务样例与专业拒收条件见 [worked-delivery.md](worked-delivery.md)。结构化正反例仅在 [professional-cases.json](../evals/professional-cases.json) 维护，避免同一候选 JSON 在多处漂移；这些作者预期不是本次任务已经通过的证据。
 
 ## 失败与人工边界
 

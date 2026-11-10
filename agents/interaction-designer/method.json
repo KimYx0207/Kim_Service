@@ -29,7 +29,8 @@
   "skillLoading": [
     "先读取 knowledgeAssets 中本角色包内 professional-method；知识文件受组件哈希约束，仅供当前任务，来源清单不等于本轮联网读取",
     "仅加载当前平台的设计规范和指定设计资产",
-    "需要原型时加载前端组件方法；视觉检验另加载截图比对方法"
+    "需要原型时加载前端组件方法；视觉检验另加载截图比对方法",
+    "读取本包 references/worked-delivery.md 的完整产物与专业反例；按当前输入迁移，不把合成答案当本次事实或验收记录"
   ],
   "steps": [
     "绑定当前 designBinding/designContext 与项目事实；从指定入口和锁文件核实实际框架/工具版本、相关代码与验收ID，再按包内专业方法处理正反场景",
@@ -98,6 +99,19 @@
         "w3c-dialog",
         "spec-kit-spec"
       ]
+    },
+    {
+      "id": "interaction-designer-worked-delivery",
+      "path": "references/worked-delivery.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "domain-modeling",
+        "anthropic-frontend",
+        "w3c-dialog",
+        "spec-kit-spec"
+      ]
     }
   ],
   "expertise": {
@@ -108,7 +122,8 @@
       "检验实际任务路径；视觉描述不等于渲染或用户接受"
     ],
     "knowledgeAssetIds": [
-      "interaction-designer-core"
+      "interaction-designer-core",
+      "interaction-designer-worked-delivery"
     ],
     "diagnosticSequence": [
       {
@@ -192,58 +207,136 @@
         "outputChecks": [
           {
             "field": "stateDesign",
-            "criterion": "关键状态、动作、反馈与恢复相容。",
-            "rejectWhen": "取消/失败清空未保存输入。"
+            "criterion": "主路径与加载、空、权限、提交、冲突、失败、恢复有明确状态和动作；输入及决定不会丢失或跨版本复用。",
+            "rejectWhen": "只画成功画面；失败清空输入或冲突后自动批准新版本。",
+            "id": "interaction-designer-state-design",
+            "verificationMethod": "behavior_probe",
+            "evidenceRequired": [
+              "状态转换表",
+              "实际失败/恢复交互记录"
+            ],
+            "blocking": true
           },
           {
             "field": "visualSpec",
-            "criterion": "层级、间距、文字与变量能实施并解释目的。",
-            "rejectWhen": "堆“高级感”形容词或与现有系统冲突。"
+            "criterion": "视觉规范覆盖实际内容、窄屏/大字、层级、交互反馈及减少动效；复用项目设计约束。",
+            "rejectWhen": "美术形容词替代数值/组件规则，或关键操作在目标视口不可见。",
+            "id": "interaction-designer-visual-spec",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "设计token与组件映射",
+              "目标视口的实际内容样例"
+            ],
+            "blocking": true
           },
           {
             "field": "reviewEvidence",
-            "criterion": "记录实际观察路径和未核范围。",
-            "rejectWhen": "没有浏览器/原型观察却写视觉验收通过。"
+            "criterion": "每条可用性结论给输入方式、环境、序列和实际观察；未测试的辅助技术明确留空。",
+            "rejectWhen": "以静态图片、ARIA属性或设计稿宣称运行交互全部通过。",
+            "id": "interaction-designer-review-evidence",
+            "verificationMethod": "behavior_probe",
+            "evidenceRequired": [
+              "键盘/触摸检查记录",
+              "冲突与恢复观察",
+              "未执行列表"
+            ],
+            "blocking": true
           },
           {
             "field": "status",
             "criterion": "只总结当前角色的实际交付状态与已说明限制。",
-            "rejectWhen": "把候选产物状态等同用户最终接受。"
+            "rejectWhen": "把候选产物状态等同用户最终接受。",
+            "id": "interaction-designer-status",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "逐项交付/验收结果与当前状态对照",
+              "未执行、失败或阻塞项及其影响"
+            ],
+            "blocking": true
           },
           {
             "field": "artifactRefs",
             "criterion": "引用确实存在且当前任务相关的产物；未产出不编路径。",
-            "rejectWhen": "把预计文件或未读取摘要当真实产物。"
+            "rejectWhen": "把预计文件或未读取摘要当真实产物。",
+            "id": "interaction-designer-artifact-refs",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "实际存在的当前产物及定位",
+              "产物与任务、版本的对应关系"
+            ],
+            "blocking": true
           },
           {
             "field": "criterionResults",
             "criterion": "每项区分实际观察、自报判断和未运行。",
-            "rejectWhen": "把结构检查、文档读取或自报pass当独立验收。"
+            "rejectWhen": "把结构检查、文档读取或自报pass当独立验收。",
+            "id": "interaction-designer-criterion-results",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "当前标准ID、实际观察和证据引用",
+              "自报、独立观察与未运行的区分"
+            ],
+            "blocking": true
           },
           {
             "field": "missingCapabilities",
             "criterion": "明确缺少何种能力、影响哪个检查或动作。",
-            "rejectWhen": "工具不可用仍宣称已执行。"
+            "rejectWhen": "工具不可用仍宣称已执行。",
+            "id": "interaction-designer-missing-capabilities",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "实际可用工具/材料检查",
+              "缺口影响的动作和验收项"
+            ],
+            "blocking": true
           },
           {
             "field": "failures",
             "criterion": "记录真实失败与范围，不泄露敏感材料。",
-            "rejectWhen": "凭推测补失败或隐去影响结论的问题。"
+            "rejectWhen": "凭推测补失败或隐去影响结论的问题。",
+            "id": "interaction-designer-failures",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "实际失败或矛盾记录",
+              "受影响范围与敏感信息处理"
+            ],
+            "blocking": true
           },
           {
             "field": "stopReason",
             "criterion": "说明角色当前结束、缺证据或被阻塞的具体原因。",
-            "rejectWhen": "把未完成判断静默转为成功。"
+            "rejectWhen": "把未完成判断静默转为成功。",
+            "id": "interaction-designer-stop-reason",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "角色实际结束或阻塞状态",
+              "继续所需输入/能力或已完成范围"
+            ],
+            "blocking": true
           },
           {
             "field": "handoff",
             "criterion": "交事实、产物、限制与待决定项；控制权留调用方。",
-            "rejectWhen": "自行批准下一阶段、调度或高影响操作。"
+            "rejectWhen": "自行批准下一阶段、调度或高影响操作。",
+            "id": "interaction-designer-handoff",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "下一执行者可用的事实/产物/限制",
+              "需要调用方决定的具体事项"
+            ],
+            "blocking": true
           },
           {
             "field": "nativeRuntimeVerified",
             "criterion": "未经独立宿主运行证明保持false。",
-            "rejectWhen": "因模板存在、合同测试或本地装入而声称原生运行已验证。"
+            "rejectWhen": "因模板存在、合同测试或本地装入而声称原生运行已验证。",
+            "id": "interaction-designer-native-runtime-verified",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "独立宿主观察记录或明确未验证",
+              "模板安装/合同检查与真实运行的区分"
+            ],
+            "blocking": true
           }
         ]
       }

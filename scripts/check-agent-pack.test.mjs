@@ -2,8 +2,13 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import { execFileSync } from 'node:child_process';
 import test from 'node:test';
-import { checkAgentPack, REQUIRED_SECTIONS, METHOD_CONTENT_LIMITS } from './check-agent-pack.mjs';
+import { checkAgentPack as checkPublishedAgentPack, checkComponentMethod, REQUIRED_SECTIONS, METHOD_CONTENT_LIMITS } from './check-agent-pack.mjs';
+
+// Most fixtures below isolate the historic shape contract. Publication uses
+// the strict default; explicit compatibility never certifies complete quality.
+const checkAgentPack = (root) => checkPublishedAgentPack(root, { requireCompleteQuality: false });
 
 function temporaryRoot(t) {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'kim-service-agent-pack-'));
@@ -129,8 +134,10 @@ test('side effects, thin routing lists, and oversized documents are rejected', (
   assert.equal(errorsMatching(checkAgentPack(effects), /sideEffects must be an empty array/).length, 1);
   const thin = writePack(temporaryRoot(t), { pack: contract({ capability: { useWhen: ['用户说「示例一」', '用户说「示例二」'] } }) });
   assert.equal(errorsMatching(checkAgentPack(thin), /useWhen needs at least 3/).length, 1);
-  const oversized = writePack(temporaryRoot(t), { agent: agentDocument({ extraLines: filler(80) }) });
-  assert.equal(errorsMatching(checkAgentPack(oversized), /must have 60-130 lines/).length, 1);
+  const oversized = writePack(temporaryRoot(t), { agent: agentDocument({ extraLines: ['领域知识'.repeat(2000)] }) });
+  assert.equal(errorsMatching(checkAgentPack(oversized), /exceeds entrypoint context budget/).length, 1);
+  const manyLines = writePack(temporaryRoot(t), { agent: agentDocument({ extraLines: filler(80) }) });
+  assert.equal(errorsMatching(checkAgentPack(manyLines), /entrypoint context budget|lines, found/).length, 0);
 });
 
 function writeKnowledge(root) {
@@ -234,6 +241,72 @@ test('an authored rejection case is valid review material, not a professional su
   assert.equal(examples.evaluationStatus, 'not_evaluated');
 });
 
+function completeOutputCheck(check) {
+  return { ...check, id: 'evidence-bounds', verificationMethod: 'source_check',
+    evidenceRequired: ['Original material and the exact supported claim with its observation scope'], blocking: true };
+}
+
+test('publication requires complete quality standards while legacy inspection stays explicitly incomplete', (t) => {
+  const root = writePack(temporaryRoot(t));
+  assert.ok(checkPublishedAgentPack(root).some(error => error.includes('method.json; legacy_incomplete')));
+  const { method, save } = writeExpertise(root);
+  assert.deepEqual(checkAgentPack(root), [], 'An old source can still be inspected without inventing fields');
+  assert.ok(checkPublishedAgentPack(root).some(error => error.includes('legacy_incomplete')));
+  method.expertise.contractGuidance[0].outputChecks = method.expertise.contractGuidance[0].outputChecks.map(completeOutputCheck);
+  save();
+  assert.deepEqual(checkPublishedAgentPack(root), []);
+  assert.equal(method.expertise.evaluation.professionalEffect, 'not_evaluated');
+  delete method.expertise; save();
+  assert.ok(checkPublishedAgentPack(root).some(error => error.includes('require expertise')));
+});
+
+test('compatibility CLI counts an advisory-only contract as legacy incomplete', (t) => {
+  const root = writePack(temporaryRoot(t)); const { method, save } = writeExpertise(root);
+  const guide = method.expertise.contractGuidance[0];
+  guide.outputChecks = [{ ...completeOutputCheck(guide.outputChecks[0]), blocking: false }]; save();
+  const run = () => execFileSync(process.execPath, [path.resolve(import.meta.dirname, 'check-agent-pack.mjs'), '--allow-legacy-quality', root], { encoding: 'utf8' });
+  assert.match(run(), /legacy_incomplete=1; mode=compatibility/);
+  guide.outputChecks[0].blocking = true; save();
+  assert.match(run(), /legacy_incomplete=0; mode=compatibility/);
+});
+
+test('complete standards cannot omit evidence, use unknown verification, duplicate ids or make every condition advisory', (t) => {
+  const root = writePack(temporaryRoot(t)); const { method, save } = writeExpertise(root);
+  const guide = method.expertise.contractGuidance[0];
+  const good = completeOutputCheck(guide.outputChecks[0]);
+  for (const [change, expected] of [
+    [{ evidenceRequired: [] }, /evidenceRequired.*list bounds/],
+    [{ verificationMethod: 'word_count' }, /verificationMethod.*enum/],
+    [{ blocking: false }, /blocking acceptance condition/],
+  ]) {
+    guide.outputChecks = [{ ...good, ...change }]; save();
+    assert.ok(checkPublishedAgentPack(root).some(error => expected.test(error)), String(expected));
+  }
+  guide.outputChecks = [{ ...good }]; delete guide.outputChecks[0].verificationMethod; save();
+  assert.ok(checkAgentPack(root).some(error => error.includes('requires verificationMethod when id')),
+    'A partly upgraded check is malformed even in legacy compatibility mode');
+  const contractPath = path.join(root, 'capability.json');
+  const capability = JSON.parse(fs.readFileSync(contractPath));
+  capability.capabilities[0].output.properties.limitations = { type: 'string' };
+  fs.writeFileSync(contractPath, JSON.stringify(capability));
+  guide.outputChecks = [good, { ...good, field: 'limitations' }]; save();
+  assert.ok(checkPublishedAgentPack(root).some(error => error.includes('outputChecks') && error.includes('ids must be unique')));
+});
+
+test('Skill authoring reuses professional checks without inheriting Agent-only formatting', (t) => {
+  const root = writePack(temporaryRoot(t)); const { method, save } = writeExpertise(root);
+  method.expertise.contractGuidance[0].outputChecks = method.expertise.contractGuidance[0].outputChecks.map(completeOutputCheck); save();
+  const contractPath = path.join(root, 'capability.json');
+  const capability = JSON.parse(fs.readFileSync(contractPath));
+  capability.componentType = 'skill'; capability.entrypoint = 'SKILL.md';
+  fs.writeFileSync(contractPath, JSON.stringify(capability));
+  fs.rmSync(path.join(root, 'AGENT.md'));
+  fs.writeFileSync(path.join(root, 'SKILL.md'), '---\nname: sample-agent\ndescription: Source review.\n---\nRead method.json and references/core.md.\n');
+  assert.deepEqual(checkComponentMethod(root), []);
+  method.expertise.contractGuidance[0].outputChecks[0].evidenceRequired = []; save();
+  assert.ok(checkComponentMethod(root).some(error => error.includes('evidenceRequired')));
+});
+
 test('expertise references are bound to real assets, capability fields and case decisions', (t) => {
   const root = writePack(temporaryRoot(t)); const { method, save, examples, saveCases } = writeExpertise(root);
   method.expertise.knowledgeAssetIds = ['missing-core'];
@@ -253,6 +326,64 @@ test('actual example input and output types are checked without accepting missin
   const errors = checkAgentPack(root);
   assert.ok(errors.some(error => error.includes('input requires request')));
   assert.ok(errors.some(error => error.includes('output excerpt.content must have declared type string')));
+});
+
+test('capability example const and enum compare JSON structures, preserving order and values', (t) => {
+  const root = writePack(temporaryRoot(t)); const { examples, saveCases } = writeExpertise(root);
+  const contractPath = path.join(root, 'capability.json');
+  const capability = JSON.parse(fs.readFileSync(contractPath));
+  const output = capability.capabilities[0].output;
+  output.properties.content = { type: 'array', const: ['rule-a', 'rule-b'] };
+  fs.writeFileSync(contractPath, JSON.stringify(capability));
+  for (const example of examples.cases) example.candidateOutputExcerpt.content = ['rule-a', 'rule-b'];
+  saveCases();
+  assert.deepEqual(checkAgentPack(root), [], 'parsed arrays with equal values satisfy const');
+  examples.cases[0].candidateOutputExcerpt.content = ['rule-b', 'rule-a']; saveCases();
+  assert.ok(checkAgentPack(root).some(error => error.includes('output excerpt.content must equal')));
+  output.properties.content = { type: 'object', enum: [{ mode: 'bounded', rules: ['rule-a'] }] };
+  fs.writeFileSync(contractPath, JSON.stringify(capability));
+  for (const example of examples.cases) example.candidateOutputExcerpt.content = { rules: ['rule-a'], mode: 'bounded' };
+  saveCases();
+  assert.deepEqual(checkAgentPack(root), [], 'object key order is not part of JSON value equality');
+  examples.cases[1].candidateOutputExcerpt.content.rules = ['undeclared-rule']; saveCases();
+  assert.ok(checkAgentPack(root).some(error => error.includes('output excerpt.content must match a declared enum')));
+});
+
+test('uniqueItems rejects equivalent JSON objects and arrays without depending on object identity', (t) => {
+  const root = writePack(temporaryRoot(t)); const { examples, saveCases } = writeExpertise(root);
+  const contractPath = path.join(root, 'capability.json');
+  const capability = JSON.parse(fs.readFileSync(contractPath));
+  capability.capabilities[0].output.properties.content = { type: 'array', uniqueItems: true };
+  fs.writeFileSync(contractPath, JSON.stringify(capability));
+  const saveOutput = (value) => {
+    for (const example of examples.cases) example.candidateOutputExcerpt.content = value;
+    saveCases();
+  };
+  saveOutput([{ id: 'record', result: ['a', 'b'] }, { result: ['a', 'b'], id: 'record' }]);
+  assert.ok(checkAgentPack(root).some(error => error.includes('output excerpt.content must contain unique entries')));
+  saveOutput([['a', 'b'], ['a', 'b']]);
+  assert.ok(checkAgentPack(root).some(error => error.includes('output excerpt.content must contain unique entries')));
+  saveOutput([{ id: 'record', result: ['a', 'b'] }, { result: ['b', 'a'], id: 'record' }, 'record', 1, true, null]);
+  assert.deepEqual(checkAgentPack(root), [], 'array order and JSON value type remain significant');
+});
+
+test('every published capability needs both acceptable and rejection cases of its own', (t) => {
+  const root = writePack(temporaryRoot(t)); const { method, save, examples, saveCases } = writeExpertise(root);
+  const contractPath = path.join(root, 'capability.json');
+  const capability = JSON.parse(fs.readFileSync(contractPath));
+  capability.capabilities.push({ ...structuredClone(capability.capabilities[0]), id: 'sample-agent-second' });
+  fs.writeFileSync(contractPath, JSON.stringify(capability));
+  const guide = method.expertise.contractGuidance[0];
+  guide.outputChecks = guide.outputChecks.map(completeOutputCheck);
+  method.expertise.contractGuidance.push({ ...structuredClone(guide), capabilityId: 'sample-agent-second' });
+  save();
+  assert.ok(checkPublishedAgentPack(root).some(error => error.includes('sample-agent-second') && error.includes('both acceptable and rejected examples')));
+  examples.cases.push({ ...structuredClone(examples.cases[0]), id: 'second-acceptable', capabilityId: 'sample-agent-second' });
+  saveCases();
+  assert.ok(checkPublishedAgentPack(root).some(error => error.includes('sample-agent-second') && error.includes('both acceptable and rejected examples')));
+  examples.cases.push({ ...structuredClone(examples.cases[1]), id: 'second-rejected', capabilityId: 'sample-agent-second' });
+  saveCases();
+  assert.deepEqual(checkPublishedAgentPack(root), []);
 });
 
 test('expertise metadata cannot promote itself to verified quality or add tool authority', (t) => {

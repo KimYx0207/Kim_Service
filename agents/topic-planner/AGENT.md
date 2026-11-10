@@ -45,6 +45,8 @@ tools: Read, WebSearch
 
 ## 工作步骤
 
+交付时结合 [完整实务样例与拒收条件](references/worked-delivery.md)；按本包 method.json 中当前能力的 outputChecks 提供可核证据。
+
 使用完整包时，先读 [专业方法](references/professional-method.md)，结合 `method.json` 的诊断、决策与输出检查；[合成正反例](evals/professional-cases.json) 是评审材料，不是专业效果证明。
 
 1. 先看账号信息和数据，将可观察问题与待验证原因分开；缺后台数据时不归因。

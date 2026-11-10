@@ -86,6 +86,155 @@
         "state-costs",
         "replicate"
       ]
+    },
+    {
+      "id": "historical-active",
+      "capabilityId": "quantitative-researcher-deliver",
+      "category": "failure_boundary",
+      "scenario": "当前存续过滤历史",
+      "input": {
+        "hypothesis": "评价历史选股",
+        "dataset": "仅今天is_active=true股票，历史退市对象删除",
+        "method": "声称覆盖完整历史市场",
+        "acceptanceCriteria": [
+          {
+            "id": "scope",
+            "condition": "信号时点早于执行，训练测试无泄漏",
+            "evidenceRequired": "指定材料、产物与独立检查"
+          }
+        ],
+        "handoffContext": {
+          "taskId": "synthetic-example",
+          "upstreamArtifacts": [],
+          "permittedActions": [
+            "read_supplied_materials"
+          ],
+          "resourceLeases": []
+        }
+      },
+      "candidateOutputExcerpt": {
+        "research": "当前快照不影响历史代表性。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "幸存者偏差改变总体。",
+      "diagnosticRefs": [
+        "historical-universe"
+      ],
+      "decisionRuleRefs": [
+        "as-of"
+      ]
+    },
+    {
+      "id": "known-at-time",
+      "capabilityId": "quantitative-researcher-deliver",
+      "category": "worked_example",
+      "scenario": "发布时点不同于所属期",
+      "input": {
+        "hypothesis": "3月按财报信号",
+        "dataset": "3月报告期但4月才公布",
+        "method": "3月执行",
+        "acceptanceCriteria": [
+          {
+            "id": "scope",
+            "condition": "信号时点早于执行，训练测试无泄漏",
+            "evidenceRequired": "指定材料、产物与独立检查"
+          }
+        ],
+        "handoffContext": {
+          "taskId": "synthetic-example",
+          "upstreamArtifacts": [],
+          "permittedActions": [
+            "read_supplied_materials"
+          ],
+          "resourceLeases": []
+        }
+      },
+      "candidateOutputExcerpt": {
+        "research": "4月可获资料不能用于3月决策；相关效果暂不支持。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "信息可用顺序明确。",
+      "diagnosticRefs": [
+        "time-order"
+      ],
+      "decisionRuleRefs": [
+        "separate-fit"
+      ]
+    },
+    {
+      "id": "dividend-double",
+      "capabilityId": "quantitative-researcher-deliver",
+      "category": "failure_boundary",
+      "scenario": "总回报再次加分红",
+      "input": {
+        "hypothesis": "核账户总回报",
+        "dataset": "100期初，98除息价，现金2，已含分红收益0%",
+        "method": "在0%收益上再加2现金",
+        "acceptanceCriteria": [
+          {
+            "id": "scope",
+            "condition": "信号时点早于执行，训练测试无泄漏",
+            "evidenceRequired": "指定材料、产物与独立检查"
+          }
+        ],
+        "handoffContext": {
+          "taskId": "synthetic-example",
+          "upstreamArtifacts": [],
+          "permittedActions": [
+            "read_supplied_materials"
+          ],
+          "resourceLeases": []
+        }
+      },
+      "candidateOutputExcerpt": {
+        "results": "总回报2%，可以重复计分红。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "已含分红时再次加入同一现金。",
+      "diagnosticRefs": [
+        "cash-path"
+      ],
+      "decisionRuleRefs": [
+        "dividend-consistency"
+      ]
+    },
+    {
+      "id": "helper-limited",
+      "capabilityId": "quantitative-researcher-deliver",
+      "category": "worked_example",
+      "scenario": "helper成功的范围",
+      "input": {
+        "hypothesis": "复算给定收益",
+        "dataset": "三个合成周期，完整输入",
+        "method": "calculate实际返回成功但未有行情/信号资料",
+        "acceptanceCriteria": [
+          {
+            "id": "scope",
+            "condition": "信号时点早于执行，训练测试无泄漏",
+            "evidenceRequired": "指定材料、产物与独立检查"
+          }
+        ],
+        "handoffContext": {
+          "taskId": "synthetic-example",
+          "upstreamArtifacts": [],
+          "permittedActions": [
+            "read_supplied_materials"
+          ],
+          "resourceLeases": []
+        }
+      },
+      "candidateOutputExcerpt": {
+        "reproducibility": "该回执仅支持给定收益算术和内部时序；数据真实性、成交与样本外未验证。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "运行成功没有扩大证据。",
+      "diagnosticRefs": [
+        "robustness"
+      ],
+      "decisionRuleRefs": [
+        "replicate",
+        "helper-scope"
+      ]
     }
   ]
 }

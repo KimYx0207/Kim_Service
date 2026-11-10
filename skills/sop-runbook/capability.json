@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 1,
+  "id": "sop-runbook",
+  "componentType": "skill",
+  "componentVersion": "0.1.1",
+  "entrypoint": "SKILL.md",
+  "capabilities": [
+    {
+      "id": "sop-runbook-deliver",
+      "summary": "把重复任务和故障处理写成有前提、分支、回执、恢复与交接的规程 SOP runbook incident response",
+      "useWhen": [
+        "操作文档只有步骤名，新执行者无法可靠照做。",
+        "故障手册缺失败分支、回滚或恢复证据。",
+        "需要把真实执行问题反馈成可复用规程。"
+      ],
+      "doNotUseWhen": [
+        "编写规程不授予生产、付款、发送消息或危险操作权限；演练记录不能冒充真实恢复。",
+        "要求自动发布、付款、修改生产系统或联系第三方时交调用方授权处理。",
+        "要求把假设或资料形式当作专业认证、保证收益或最终验收时不适用。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "task": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "任务目标、触发、范围、执行角色和成功状态"
+          },
+          "currentProcedure": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "现有步骤、系统版本、输入输出、历史故障/演练记录"
+          },
+          "operatingConstraints": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "权限、资源、危险动作、恢复方式和升级责任"
+          }
+        },
+        "required": [
+          "task",
+          "currentProcedure",
+          "operatingConstraints"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "procedure": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "有判断条件的完整规程"
+          },
+          "recovery": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "失败、重试、恢复与升级规则"
+          },
+          "validationRecord": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "实际演练或执行证据"
+          },
+          "maintenance": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "交接和更新依据"
+          },
+          "facts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前输入、来源、期间单位及证据缺口"
+          },
+          "limitations": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "未执行、未观察、方法假设和外推边界"
+          },
+          "handoff": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前产物、规则结果、证据定位与待解决事项交调用方"
+          }
+        },
+        "required": [
+          "procedure",
+          "recovery",
+          "validationRecord",
+          "maintenance",
+          "facts",
+          "limitations",
+          "handoff"
+        ],
+        "deliveryFormat": "conceptual-human-delivery"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "不可逆动作、生产变更和对外通告按本任务已有授权及相应责任流程处理；文档完善与只读核查继续。",
+          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 1,
+  "id": "experiment-analysis",
+  "componentType": "skill",
+  "componentVersion": "0.1.1",
+  "entrypoint": "SKILL.md",
+  "capabilities": [
+    {
+      "id": "experiment-analysis-deliver",
+      "summary": "设计和审查随机实验、分流质量、指标与效果解释 experiment analysis A/B testing randomization SRM",
+      "useWhen": [
+        "设计A/B测试并明确指标、分流和停止规则。",
+        "实验结果好看但怀疑样本、分母或观测周期有问题。",
+        "解释绝对/相对提升、置信区间和是否值得推广。"
+      ],
+      "doNotUseWhen": [
+        "不将观察相关性包装成随机实验，不在无数据时给统计显著或业务收益保证。",
+        "要求自动发布、付款、修改生产系统或联系第三方时交调用方授权处理。",
+        "要求把假设或资料形式当作专业认证、保证收益或最终验收时不适用。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "design": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "问题、假设、分配单位、目标人群、分流、期间和预先决策规则"
+          },
+          "observations": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "按正确单位的分组样本、事件、缺失和曝光记录"
+          },
+          "metrics": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "主要指标、护栏、分母、窗口、实际意义和多重检验计划"
+          }
+        },
+        "required": [
+          "design",
+          "observations",
+          "metrics"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "designReview": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "可检验假设和识别边界"
+          },
+          "integrityReview": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "分流与数据可信度检查"
+          },
+          "effectEstimate": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "绝对/相对效果及不确定性"
+          },
+          "decision": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "效果、护栏与下一步"
+          },
+          "facts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前输入、来源、期间单位及证据缺口"
+          },
+          "limitations": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "未执行、未观察、方法假设和外推边界"
+          },
+          "handoff": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前产物、规则结果、证据定位与待解决事项交调用方"
+          }
+        },
+        "required": [
+          "designReview",
+          "integrityReview",
+          "effectEstimate",
+          "decision",
+          "facts",
+          "limitations",
+          "handoff"
+        ],
+        "deliveryFormat": "conceptual-human-delivery"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "高风险业务变更、患者/学生干预或实质性个人权益影响需相应责任人批准实验与行动。",
+          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

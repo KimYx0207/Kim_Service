@@ -5,6 +5,13 @@ description: 生成完整的小红书/Rednote 图文发布包：先自动研究�
 
 # 小红书图文技能
 
+## 本能力的验收方法
+
+执行前读取 [method.json](method.json) 中当前 capabilityId 的诊断、决策和逐字段 outputChecks，并读取 [任务验收与完整示例](references/acceptance.md)。按本次能力选择相应规则，不用字段齐全、行数或作者自报代替产物质量。缺少 blocking 证据时保留未验收；既有具体授权与宿主最终决定权不变。
+
+专业引用与工具路线继续按下文渐进读取；[来源记录](PROVENANCE.md) 和 [作者正反例](evals/professional-cases.json) 供评审。当前 Meta Skill 发现不会自动注入 method.json，宿主需按此入口读取；未观察到加载或执行时不得宣称生效。
+
+
 用于做一条能被用户直接验收的小红书/Rednote 图文笔记。默认先确认策略和视觉方向，再进入图片生成动作；不要把“图片提示词”当成图片产物，也不要一上来读取所有参考。完整 15 段工作台是归档和校验合同，不是默认聊天最终展示。
 
 ## 核心规则

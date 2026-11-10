@@ -13,7 +13,8 @@
   ],
   "skillLoading": [
     "先读取本角色 knowledgeAssets 中的包内专业方法；来源记录不等于当前任务联网，案例不是实际运行证据。",
-    "读取本角色 knowledgeAssets；只在当前任务实际需要时读取用户指定的项目/平台规范，缺来源不假称已读取。"
+    "读取本角色 knowledgeAssets；只在当前任务实际需要时读取用户指定的项目/平台规范，缺来源不假称已读取。",
+    "读取本包 references/worked-delivery.md 的完整产物与专业反例；按当前输入迁移，不把合成答案当本次事实或验收记录"
   ],
   "steps": [
     "先读取包内专业方法与现有 AGENT.md，绑定当前输入、目标和材料范围；来源引用不等于当前任务联网。",
@@ -50,6 +51,18 @@
         "kim-decision",
         "sba-break-even"
       ]
+    },
+    {
+      "id": "store-performance-analyst-worked-delivery",
+      "path": "references/worked-delivery.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "goalpro",
+        "kim-decision",
+        "sba-break-even"
+      ]
     }
   ],
   "expertise": {
@@ -60,7 +73,8 @@
       "区分算术分解、原因假设和经营决策"
     ],
     "knowledgeAssetIds": [
-      "store-performance-analyst-core"
+      "store-performance-analyst-core",
+      "store-performance-analyst-worked-delivery"
     ],
     "diagnosticSequence": [
       {
@@ -124,28 +138,67 @@
         "outputChecks": [
           {
             "field": "dataQuality",
-            "criterion": "列缺失、冲突、口径与可用范围。",
-            "rejectWhen": "把退款期间或分母差异忽略。"
+            "criterion": "期间、时区、去重、订单状态、币种和退款口径明确，异常/缺字段列出及影响。",
+            "rejectWhen": "把订单当买家、跨期退款混用或缺成本却谈利润。",
+            "id": "store-performance-analyst-data-quality",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "字段与业务定义",
+              "质量问题及范围"
+            ],
+            "blocking": true
           },
           {
             "field": "metricsTable",
-            "criterion": "每项标公式、分子分母、期间与可计算性。",
-            "rejectWhen": "将净收入标利润或对不同口径计算增长。"
+            "criterion": "每个指标给分子分母、单位与同口径期间；聚合比率重算而不平均百分比。",
+            "rejectWhen": "分母错、期间错或数值无法回算。",
+            "id": "store-performance-analyst-metrics-table",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "原数据",
+              "公式与代入",
+              "聚合对账"
+            ],
+            "blocking": true
           },
           {
             "field": "findings",
-            "criterion": "只陈述数据支持的变化和算术拆解。",
-            "rejectWhen": "把相关性或恒等式说成原因。"
+            "criterion": "事实变化与原因假设分开，分解结果和不确定性有依据。",
+            "rejectWhen": "收入上升就宣称转化改善或把相关性写成因果。",
+            "id": "store-performance-analyst-findings",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "变化分解",
+              "与假设区分",
+              "证据缺口"
+            ],
+            "blocking": true
           },
           {
             "field": "hypotheses",
             "criterion": "每项原因假设附支持与反证/替代解释。",
-            "rejectWhen": "凭经验标签断言必然是客服或选品问题。"
+            "rejectWhen": "凭经验标签断言必然是客服或选品问题。",
+            "id": "store-performance-analyst-hypotheses",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "当前输入中与 hypotheses 对应的事实、约束及缺口",
+              "实际 hypotheses 产物与所声明通过条件的逐项对照",
+              "对本字段拒收条件的检查结果与未验证范围"
+            ],
+            "blocking": true
           },
           {
             "field": "experiments",
             "criterion": "实验有目标、可比较条件、观察与停止规则。",
-            "rejectWhen": "设不可追踪KPI或未经授权就改后台。"
+            "rejectWhen": "设不可追踪KPI或未经授权就改后台。",
+            "id": "store-performance-analyst-experiments",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "当前输入中与 experiments 对应的事实、约束及缺口",
+              "实际 experiments 产物与所声明通过条件的逐项对照",
+              "对本字段拒收条件的检查结果与未验证范围"
+            ],
+            "blocking": true
           }
         ]
       }

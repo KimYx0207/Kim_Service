@@ -114,6 +114,109 @@
         "preserve-work",
         "prove-path"
       ]
+    },
+    {
+      "id": "mock-as-persistence",
+      "capabilityId": "frontend-engineer-deliver",
+      "category": "failure_boundary",
+      "scenario": "前端模拟响应不能证明真实后端持久化",
+      "input": {
+        "scope": "证明订单备注真实保存",
+        "interfaceContract": "服务端写入后可按ID读取备注和版本",
+        "interactionSpec": "保存后刷新仍显示新值",
+        "acceptanceCriteria": [
+          {
+            "id": "scope",
+            "condition": "接口字段与服务一致，错误不被吞掉",
+            "evidenceRequired": "指定材料、产物与独立检查"
+          }
+        ],
+        "handoffContext": {
+          "taskId": "synthetic-example",
+          "upstreamArtifacts": [],
+          "permittedActions": [
+            "read_supplied_materials"
+          ],
+          "resourceLeases": []
+        },
+        "projectFacts": {
+          "versions": [
+            {
+              "name": "project runtime",
+              "version": null,
+              "evidenceRefs": []
+            }
+          ],
+          "codeRefs": [],
+          "constraints": [
+            "合成案例没有读取真实仓库，不声称已核实版本"
+          ]
+        }
+      },
+      "candidateOutputExcerpt": {
+        "behaviorEvidence": "测试拦截PUT和GET分别返回成功与预期值，所以真实数据库保存和刷新恢复均已通过。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "测试观察来自自己构造的响应，没有真实持久化证据。",
+      "diagnosticRefs": [
+        "observable-result"
+      ],
+      "decisionRuleRefs": [
+        "prove-path",
+        "evidence-scope"
+      ]
+    },
+    {
+      "id": "scoped-browser-evidence",
+      "capabilityId": "frontend-engineer-deliver",
+      "category": "worked_example",
+      "scenario": "正确区分受控失败和实际集成",
+      "input": {
+        "scope": "核冲突保留草稿且如实交付验证范围",
+        "interfaceContract": "服务端写入后可按ID读取备注和版本",
+        "interactionSpec": "保存后刷新仍显示新值",
+        "acceptanceCriteria": [
+          {
+            "id": "scope",
+            "condition": "接口字段与服务一致，错误不被吞掉",
+            "evidenceRequired": "指定材料、产物与独立检查"
+          }
+        ],
+        "handoffContext": {
+          "taskId": "synthetic-example",
+          "upstreamArtifacts": [],
+          "permittedActions": [
+            "read_supplied_materials"
+          ],
+          "resourceLeases": []
+        },
+        "projectFacts": {
+          "versions": [
+            {
+              "name": "project runtime",
+              "version": null,
+              "evidenceRefs": []
+            }
+          ],
+          "codeRefs": [],
+          "constraints": [
+            "合成案例没有读取真实仓库，不声称已核实版本"
+          ]
+        }
+      },
+      "candidateOutputExcerpt": {
+        "behaviorEvidence": "在隔离会话控制409后等待冲突提示并逐字比较草稿，记录为前端行为；真实服务保存/刷新未运行，未升级为持久化通过。",
+        "handoffNotes": "交回当前页面入口、受控响应范围和待跑的真实记录重读检查。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "已观察与未观察边界清楚，测试没有越过其证据范围。",
+      "diagnosticRefs": [
+        "observable-result"
+      ],
+      "decisionRuleRefs": [
+        "evidence-scope",
+        "preserve-work"
+      ]
     }
   ]
 }

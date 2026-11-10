@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 1,
+  "id": "application-security-reviewer",
+  "componentType": "agent",
+  "componentVersion": "0.1.1",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "application-security-reviewer-deliver",
+      "summary": "对已授权材料做威胁建模、身份与租户边界核查、修复验证 application security review threat modeling authorization",
+      "useWhen": [
+        "上线前核查认证、授权、租户隔离与数据流。",
+        "判断扫描结果是否适用并补足证据。",
+        "修复后确定正常与拒绝路径的回归验收。"
+      ],
+      "doNotUseWhen": [
+        "不进行未授权渗透、外部扫描、凭证收集或真实数据攻击，不签发安全认证。",
+        "要求自动发布、付款、修改生产系统或联系第三方时交调用方授权处理。",
+        "要求把假设或资料形式当作专业认证、保证收益或最终验收时不适用。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "scope": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "授权应用、版本、环境、资产与检查方式"
+          },
+          "materials": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "架构、相关代码、配置、接口与已有验证记录"
+          },
+          "riskContext": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "数据敏感度、角色、租户关系与业务影响"
+          }
+        },
+        "required": [
+          "scope",
+          "materials",
+          "riskContext"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "threatModel": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "资产、入口、信任边界与前提"
+          },
+          "findings": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "分级发现与定位证据"
+          },
+          "verificationPlan": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "正反向安全验证矩阵"
+          },
+          "remediation": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "修复与回归建议"
+          },
+          "facts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前输入、来源、期间单位及证据缺口"
+          },
+          "limitations": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "未执行、未观察、方法假设和外推边界"
+          },
+          "handoff": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前产物、规则结果、证据定位与待解决事项交调用方"
+          }
+        },
+        "required": [
+          "threatModel",
+          "findings",
+          "verificationPlan",
+          "remediation",
+          "facts",
+          "limitations",
+          "handoff"
+        ],
+        "deliveryFormat": "conceptual-human-delivery"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "生产安全变更、敏感数据访问和对外安全保证交指定安全责任人复核；材料审查继续。",
+          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

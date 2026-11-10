@@ -7,6 +7,13 @@ license: MIT
 
 # 三层记忆
 
+## 本能力的验收方法
+
+执行前读取 [method.json](method.json) 中当前 capabilityId 的诊断、决策和逐字段 outputChecks，并读取 [任务验收与完整示例](references/acceptance.md)。按本次能力选择相应规则，不用字段齐全、行数或作者自报代替产物质量。缺少 blocking 证据时保留未验收；既有具体授权与宿主最终决定权不变。
+
+专业引用与工具路线继续按下文渐进读取；[来源记录](PROVENANCE.md) 和 [作者正反例](evals/professional-cases.json) 供评审。当前 Meta Skill 发现不会自动注入 method.json，宿主需按此入口读取；未观察到加载或执行时不得宣称生效。
+
+
 把会影响后续工作的知识保存为可检查、可迁移、可控制生命周期的项目资产。默认数据目录是项目根目录下的 `.memory-3layer/`；`MEMORY_DIR` 可以显式覆盖。
 
 ## 目标合同

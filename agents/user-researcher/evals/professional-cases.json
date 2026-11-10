@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "roleId": "user-researcher",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "assistance-count",
+      "capabilityId": "user-researcher-deliver",
+      "category": "worked_example",
+      "scenario": "主持人提示后完成",
+      "input": {
+        "question": "草稿能否独立找回？",
+        "materials": [
+          "U1独立完成",
+          "U2失败",
+          "U3提示后完成"
+        ],
+        "constraints": "任务不提示按钮位置"
+      },
+      "candidateOutputExcerpt": {
+        "findings": "独立完成1/3，提示后完成另列；仅限这三次记录。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "协助与独立完成分开且不外推。",
+      "diagnosticRefs": [
+        "observation",
+        "sample"
+      ],
+      "decisionRuleRefs": [
+        "sample-boundary",
+        "task-evidence"
+      ]
+    },
+    {
+      "id": "fake-users",
+      "capabilityId": "user-researcher-deliver",
+      "category": "failure_boundary",
+      "scenario": "尚未开展访谈",
+      "input": {
+        "question": "客户为什么流失？",
+        "materials": "无用户材料",
+        "constraints": "只允许设计方案"
+      },
+      "candidateOutputExcerpt": {
+        "evidenceMatrix": [
+          "访谈10名客户，8名说价格太高。"
+        ]
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "没有记录就不能生成经历。",
+      "diagnosticRefs": [
+        "observation"
+      ],
+      "decisionRuleRefs": [
+        "no-fiction"
+      ]
+    },
+    {
+      "id": "feature-not-need",
+      "capabilityId": "user-researcher-deliver",
+      "category": "worked_example",
+      "scenario": "用户提出导出按钮",
+      "input": {
+        "question": "要不要加导出？",
+        "materials": [
+          "用户希望月底把数据给财务"
+        ],
+        "constraints": "尚不知当前交接方式"
+      },
+      "candidateOutputExcerpt": {
+        "decisionTests": "先核财务接收格式、当前交接障碍与频率，再比较导出和共享视图。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "从功能请求回到任务。",
+      "diagnosticRefs": [
+        "decision"
+      ],
+      "decisionRuleRefs": [
+        "behavior-before-solution"
+      ]
+    },
+    {
+      "id": "population-leap",
+      "capabilityId": "user-researcher-deliver",
+      "category": "failure_boundary",
+      "scenario": "粉丝群便利样本",
+      "input": {
+        "question": "所有客户是否喜欢新功能？",
+        "materials": "5名粉丝均赞同",
+        "constraints": "样本只来自粉丝群"
+      },
+      "candidateOutputExcerpt": {
+        "findings": "100%的客户喜欢，可以全面上线。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "样本偏差与发布权限都未解决。",
+      "diagnosticRefs": [
+        "sample",
+        "counterevidence"
+      ],
+      "decisionRuleRefs": [
+        "sample-boundary"
+      ]
+    }
+  ]
+}

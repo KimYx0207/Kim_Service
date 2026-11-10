@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.0 (2026-11-11)
+
+- 增加完整实务交付、专业错误反例和跨情境处理，保持原有专业知识可按需装入。
+- 每项输出增加稳定检查ID、验证方法、所需证据和阻断规则；作者样例与实际效果分开。
+
+
 ## 0.3.0 - 2026-11-10
 
 - Add contract-bound expertise: domain diagnostics, decision rules, input guidance, output checks and professional review boundaries.

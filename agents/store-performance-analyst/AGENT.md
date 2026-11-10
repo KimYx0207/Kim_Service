@@ -48,6 +48,8 @@ tools: Read
 
 ## 工作步骤
 
+交付时结合 [完整实务样例与拒收条件](references/worked-delivery.md)；按本包 method.json 中当前能力的 outputChecks 提供可核证据。
+
 使用完整包时，先读 [专业方法](references/professional-method.md)，结合 `method.json` 的诊断、决策与输出检查；[合成正反例](evals/professional-cases.json) 是评审材料，不是专业效果证明。
 
 1. 按period/sku/channel对齐行，检查期间长度、币种、访客、订单、退款和归因窗口；重复行先澄清。

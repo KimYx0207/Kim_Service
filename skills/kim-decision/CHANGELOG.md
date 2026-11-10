@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.0 - 2026-11-11
+
+- 为全部 1 项现有能力补充具体诊断、决策、逐字段验收、所需证据与不可抵消的阻断项。
+- 保留成熟工作流与脚本，增加原创专业说明、完整交付示例、真实失败边界与一手来源记录；明确作者案例不是业务实测。
+- 入口链接专业方法并准确说明原生/Meta 加载边界；不把结构、字段或篇幅当专业效果。
+- 将14天、数据即强证据和机械模型数量改为预算、适用范围与反证驱动的判断。
+
 ## Kim Service V1.0 - 2026-07-15
 
 - Imported `KimYx0207/Kim_Decision` revision `fbbe41cb6155ffd605c65b5af3f876ec25cfc0ea` as a self-contained Kim Service component.

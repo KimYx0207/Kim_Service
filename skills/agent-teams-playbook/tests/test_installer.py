@@ -4,6 +4,7 @@ Bash behavior runs on Linux/macOS. Native Windows explicitly skips it; the
 cross-platform Node suite still checks the package/host contract on Windows.
 """
 import os
+import json
 from pathlib import Path
 import shlex
 import shutil
@@ -107,6 +108,24 @@ class InstallerTests(unittest.TestCase):
         self.assertEqual((self.target / "SKILL.md").read_bytes(), (self.package / "SKILL.md").read_bytes())
         self.assertEqual(self.run_install().returncode, 0)
         self.assertEqual(len(list(self.skills.glob(f".{NAME}.backup.*/previous"))), 2)
+        self.assert_clean()
+
+    def test_installed_method_and_references_are_readable_with_original_bytes(self):
+        result = self.run_install()
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        method = json.loads((self.target / "method.json").read_text())
+        resources = [asset["path"] for asset in method["knowledgeAssets"]]
+        resources.extend([method["expertise"]["evaluation"]["casesPath"], "PROVENANCE.md", "LICENSE", "NOTICE"])
+        for relative in resources:
+            self.assertEqual((self.target / relative).read_bytes(), (self.package / relative).read_bytes())
+        self.assert_clean()
+
+    def test_missing_professional_reference_preserves_previous_install(self):
+        self.existing()
+        (self.package / "references/acceptance.md").unlink()
+        result = self.run_install()
+        self.assertNotEqual(result.returncode, 0)
+        self.assert_old()
         self.assert_clean()
 
     def test_decline_or_eof_preserves_user_changes(self):

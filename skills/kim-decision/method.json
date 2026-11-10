@@ -1,0 +1,244 @@
+{
+  "schemaVersion": 1,
+  "roleId": "kim-decision",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "steps": [
+    "把决策写成对象、备选方案、时间窗口、成功条件和不能违反的约束，区分建议与执行授权。",
+    "先做证据台账：原始来源、时间、样本或覆盖范围、单位、缺失项，以及它影响哪条判断。",
+    "先排除违反硬约束的方案，再比较可权衡目标；分数与权重只是明确假设的辅助，不掩盖红线。",
+    "对会改变推荐的参数做阈值或敏感性分析；关键依据不足时交付补证据的最小行动。",
+    "设计在真实预算与业务周期内可完成的验证，指定通过、失败、停止和继续条件，保留决定权。"
+  ],
+  "acceptance": [
+    "按当前能力的outputChecks逐项记录实际证据、拒收原因和未观察项。",
+    "任何blocking项失败或缺证据，不能用其他评分抵消；作者自查不代替独立验收。",
+    "只报告本轮真实完成的产物、动作和范围；当前宿主最终验收权保持不变。"
+  ],
+  "coordinationOwner": "caller",
+  "finalAcceptance": "caller_only",
+  "knowledgeAssets": [
+    {
+      "id": "kim-decision-acceptance",
+      "path": "references/acceptance.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "existing-package",
+        "nasa-design",
+        "nasa-verification"
+      ]
+    },
+    {
+      "id": "kim-decision-verification",
+      "path": "references/verification.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "existing-package"
+      ]
+    }
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "根据可追溯证据、硬约束和不确定性完成决策分析与低成本验证设计",
+    "scope": [
+      "Analyze a product, business, content, pricing, scope, or strategy choice and return an evidence-bounded decision or evidence request."
+    ],
+    "knowledgeAssetIds": [
+      "kim-decision-acceptance",
+      "kim-decision-verification"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "decision-frame",
+        "question": "我们真正需要选择什么，而不是泛泛分析什么？",
+        "evidenceRequired": [
+          "明确的选择及可行备选项",
+          "时间窗口、硬约束和目标"
+        ],
+        "whenMissing": "交付需要补齐的具体选择，不擅自设定增长或营收优先。"
+      },
+      {
+        "id": "evidence-scope",
+        "question": "事实究竟支持哪一个结论？",
+        "evidenceRequired": [
+          "来源、日期、分母和样本范围",
+          "观测与因果推断区别"
+        ],
+        "whenMissing": "将对应结论降为假设，并给能区分方案的下一项证据。"
+      },
+      {
+        "id": "sensitivity",
+        "question": "什么新事实会改变建议？",
+        "evidenceRequired": [
+          "关键参数及可接受区间",
+          "硬约束与推荐翻转点"
+        ],
+        "whenMissing": "不输出精确但无依据的评分；说明无法稳定排序的原因。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "hard-constraints",
+        "when": "某方案违反不可交换的约束",
+        "action": "先排除或请求用户改变约束，再比较余下方案",
+        "avoid": "用平均高分抵消权限、合规、成本上限或交期失败。"
+      },
+      {
+        "id": "decision-reversal",
+        "when": "关键缺口可能改变推荐",
+        "action": "保持 evidence-required，先做可证伪的小试验",
+        "avoid": "硬给唯一确定结论或把真实数据自动升格为因果证据。"
+      },
+      {
+        "id": "budgeted-test",
+        "when": "提出 MVP 或验证行动",
+        "action": "按业务反馈周期、资源和用户时限推导范围与判据",
+        "avoid": "机械要求14天、任意阈值或借模型数量制造可信度。"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "kim-decision-analysis",
+        "inputGuidance": [
+          {
+            "field": "decisionQuestion",
+            "interpretation": "当前必须做的选择和决策对象。",
+            "onMissing": "先查上下文，无法确定选择时再问。"
+          },
+          {
+            "field": "context",
+            "interpretation": "业务阶段、现状与时间窗口。",
+            "onMissing": "未知明确标出，不套其他行业阶段。"
+          },
+          {
+            "field": "evidence",
+            "interpretation": "已提供事实与出处、覆盖范围和时间。",
+            "onMissing": "保持证据缺口，不把未经核实的数字列 confirmed。"
+          },
+          {
+            "field": "constraints",
+            "interpretation": "不可违反的限制与可权衡偏好。",
+            "onMissing": "说明暂定假设，路线会变化时请决策者确认。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "artifact-type-acceptance",
+            "field": "artifactType",
+            "criterion": "保持 decision-analysis，建议和执行状态分离。",
+            "rejectWhen": "把分析报告描述为已执行实验、已上线或批准。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "实际交付物和动作边界"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "status-acceptance",
+            "field": "status",
+            "criterion": "decision-ready 仅表示对当前选择有足够依据；关键排序依赖未知时 evidence-required。",
+            "rejectWhen": "关键参数缺失仍称确定成功。",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "备选比较与关键缺口",
+              "可能使结论翻转的事实"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "verdict-acceptance",
+            "field": "verdict",
+            "criterion": "结论指向具体方案、适用条件和主要取舍；依据不足可为 null 或明确暂不选择。",
+            "rejectWhen": "只写“值得做”“全面推进”或隐含未经确认的价值目标。",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "方案表",
+              "约束排除记录与敏感性分析"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "evidence-acceptance",
+            "field": "evidence",
+            "criterion": "confirmed、assumptions、gaps 各有可追溯依据；统计保留分母、时间和适用人群。",
+            "rejectWhen": "把搜索摘要、少数访谈或相关性当普遍事实和因果证明。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "原始材料定位",
+              "单位/样本/时间及推断标记"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "next-action-acceptance",
+            "field": "nextAction",
+            "criterion": "行动能减少会改变选择的不确定性，范围与现实预算、反馈周期相符。",
+            "rejectWhen": "任意14天期限、无对象的继续调研或先执行不可逆承诺。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "待检验假设",
+              "资源、时间、观察方式与退出条件"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "pass-signal-acceptance",
+            "field": "passSignal",
+            "criterion": "通过信号事先定义，含对象、单位、观察窗口及失败处理；阈值说明依据。",
+            "rejectWhen": "挑有利指标、观测后改门槛或用无依据数字充当标准。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "目标到判据的推导",
+              "可区别通过与拒收的样本"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "execution-authorized-acceptance",
+            "field": "executionAuthorized",
+            "criterion": "保持 false，分析不产生执行许可。",
+            "rejectWhen": "因建议积极便直接花费或发布。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "报告动作记录"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "final-acceptance-claimed-acceptance",
+            "field": "finalAcceptanceClaimed",
+            "criterion": "保持 false，交付建议不代替用户接受结果。",
+            "rejectWhen": "自评通过即宣称用户已验收。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "验收主体与待确认项"
+            ],
+            "blocking": true
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "当前任务明确要求人工判断的方向、版本或最终验收。",
+        "超出已有授权的不可逆执行、发布、付费或范围变化。",
+        "领域关键事实冲突或必需证据缺失，且会改变用户结果。"
+      ],
+      "prohibitedClaims": [
+        "合同或样例校验通过证明专业业务效果。",
+        "工具名、计划、模板、作者自报或旧运行结果证明本轮实际完成。",
+        "尚未观察的宿主加载、独立审核或用户批准已经发生。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
+}

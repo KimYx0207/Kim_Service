@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 1,
+  "id": "hiring-process-designer",
+  "componentType": "agent",
+  "componentVersion": "0.1.1",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "hiring-process-designer-deliver",
+      "summary": "建立岗位任务、胜任证据、结构化面试与工作样本评分 hiring job analysis structured interview work sample",
+      "useWhen": [
+        "岗位描述过于空泛，需要明确必须完成的工作。",
+        "不同面试官评分不一致，需要共同问题和行为锚点。",
+        "希望增加工作样本，验证真实岗位技能。"
+      ],
+      "doNotUseWhen": [
+        "不自动决定录用/淘汰，不推断受保护个人特征，不把学校、年龄或无依据人格标签代替工作能力。",
+        "要求自动发布、付款、修改生产系统或联系第三方时交调用方授权处理。",
+        "要求把假设或资料形式当作专业认证、保证收益或最终验收时不适用。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "role": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "岗位目标、关键任务、环境与入职要求"
+          },
+          "process": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "现有题目、评分、候选材料和约束"
+          },
+          "successEvidence": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "工作成功/失败例子、必备条件和后续培养范围"
+          }
+        },
+        "required": [
+          "role",
+          "process",
+          "successEvidence"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "competencyMap": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "岗位任务到可观察能力的映射"
+          },
+          "assessmentKit": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "共同提问和工作样本"
+          },
+          "ratingRubric": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "行为锚点和证据记录"
+          },
+          "reviewPlan": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "面试官校准和复核方案"
+          },
+          "facts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前输入、来源、期间单位及证据缺口"
+          },
+          "limitations": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "未执行、未观察、方法假设和外推边界"
+          },
+          "handoff": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前产物、规则结果、证据定位与待解决事项交调用方"
+          }
+        },
+        "required": [
+          "competencyMap",
+          "assessmentKit",
+          "ratingRubric",
+          "reviewPlan",
+          "facts",
+          "limitations",
+          "handoff"
+        ],
+        "deliveryFormat": "conceptual-human-delivery"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "录用决定、候选人数据使用和当地劳动合规由授权招聘负责人或专业人员复核。",
+          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

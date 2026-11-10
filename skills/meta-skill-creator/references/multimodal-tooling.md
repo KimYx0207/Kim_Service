@@ -14,7 +14,7 @@ Before writing the candidate `SKILL.md`, record:
 - Existing local scripts/assets/templates that already generate or validate the artifact.
 - Cost or approval boundary: which tools require explicit user permission because they may incur cost, publish, deploy, or mutate external state.
 - Output evidence route: file path, visible widget, screenshot, hosted URL, validator output, or native choice confirmation.
-- Fallback order for image skills: Image2 / host-native image generation -> best MCP/plugin route -> local script/render route -> static structure preview.
+- Fallback order for creative raster image skills: Image2 / host-native image generation -> best MCP/plugin route -> local script/render route -> static structure preview. Exact data plots, editable documents/spreadsheets and native UI have their own primary tools; they do not enter this image fallback ladder.
 - Downgrade proof: before using an image MCP, record that Image2 / host-native image generation is unavailable, failed, or was explicitly bypassed by the user.
 
 If this inventory is missing, a multimodal candidate is `evidence-blocked`.
@@ -50,12 +50,14 @@ For image skills, include at least:
 
 ## Route Selection Rule
 
-When the user expects a real visual or media artifact:
+First classify the requested artifact and its accuracy/editability needs. Use plotting tools for exact quantitative figures, document/spreadsheet tools for editable files, and code/vector tools for native UI or precise diagrams. Preserve source data and semantics; these are primary routes, not failed image-generation fallbacks.
 
-1. For image output, use Image2 / host-native image generation first when the host exposes it and the user has permitted generation.
+When the user expects a creative raster image:
+
+1. For creative raster image output, use Image2 / host-native image generation first when the host exposes it and the user has permitted generation.
 2. If Image2 / host-native generation is unavailable, fails, or the user explicitly bypasses it, record that proof before using the best available MCP/plugin generation route.
 3. If generation fails only in text rendering, use a generated image layer plus editable text overlay, and mark it as fallback.
-4. Use SVG/HTML/static previews only as structure previews or final output when that is the user's requested medium.
+4. In this raster route, SVG/HTML/static structure previews are not a substitute for the requested image. Outside this route, vector diagrams, native UI and exact charts may be the correct final artifact from the outset.
 
 Do not run fallback scripts after a native or MCP generation route has already produced the complete artifact, unless the user asks for an editable structure preview.
 

@@ -13,7 +13,8 @@
   ],
   "skillLoading": [
     "先读取本角色 knowledgeAssets 中的包内专业方法；来源记录不等于当前任务联网，案例不是实际运行证据。",
-    "读取本角色 knowledgeAssets；只在当前任务实际需要时读取用户指定的项目/平台规范，缺来源不假称已读取。"
+    "读取本角色 knowledgeAssets；只在当前任务实际需要时读取用户指定的项目/平台规范，缺来源不假称已读取。",
+    "读取本包 references/worked-delivery.md 的完整产物与专业反例；按当前输入迁移，不把合成答案当本次事实或验收记录"
   ],
   "steps": [
     "先读取包内专业方法与现有 AGENT.md，绑定当前输入、目标和材料范围；来源引用不等于当前任务联网。",
@@ -50,6 +51,18 @@
         "kim-decision",
         "goalpro"
       ]
+    },
+    {
+      "id": "side-business-evaluator-worked-delivery",
+      "path": "references/worked-delivery.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "sba-market",
+        "kim-decision",
+        "goalpro"
+      ]
     }
   ],
   "expertise": {
@@ -60,7 +73,8 @@
       "不保证收入，不代用户投资或作高风险专业承诺"
     ],
     "knowledgeAssetIds": [
-      "side-business-evaluator-core"
+      "side-business-evaluator-core",
+      "side-business-evaluator-worked-delivery"
     ],
     "diagnosticSequence": [
       {
@@ -125,27 +139,66 @@
           {
             "field": "assumptions",
             "criterion": "需求、能力与成本假设可被验证或推翻。",
-            "rejectWhen": "把推测写成市场事实。"
+            "rejectWhen": "把推测写成市场事实。",
+            "id": "side-business-evaluator-assumptions",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "当前输入中与 assumptions 对应的事实、约束及缺口",
+              "实际 assumptions 产物与所声明通过条件的逐项对照",
+              "对本字段拒收条件的检查结果与未验证范围"
+            ],
+            "blocking": true
           },
           {
             "field": "comparison",
-            "criterion": "先硬约束，再多维取舍，未知保留。",
-            "rejectWhen": "虚构权重和精确收入来排名。"
+            "criterion": "各候选按同一用户资源、付费者、到达路径、交付成本及风险比较，未知项不填假分。",
+            "rejectWhen": "只比市场热度/规模，或用总分掩盖不可到达/不可交付约束。",
+            "id": "side-business-evaluator-comparison",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "同口径比较表",
+              "资源/渠道证据",
+              "未知项"
+            ],
+            "blocking": true
           },
           {
             "field": "recommendation",
             "criterion": "给条件推荐及为什么符合当前资源。",
-            "rejectWhen": "保证赚多少钱或建议未请求的借贷/辞职。"
+            "rejectWhen": "保证赚多少钱或建议未请求的借贷/辞职。",
+            "id": "side-business-evaluator-recommendation",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "当前输入中与 recommendation 对应的事实、约束及缺口",
+              "实际 recommendation 产物与所声明通过条件的逐项对照",
+              "对本字段拒收条件的检查结果与未验证范围"
+            ],
+            "blocking": true
           },
           {
             "field": "validationPlan",
-            "criterion": "每步有对象、输入、观察和改变决定的信号。",
-            "rejectWhen": "只有学习/注册账号/做品牌等产物活动。"
+            "criterion": "实验针对会改变决定的未知，设明确成本上限、观察与对照，区分赞美和真实行动。",
+            "rejectWhen": "只收喜欢/点赞，或未经验证投入不可逆成本。",
+            "id": "side-business-evaluator-validation-plan",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "实验问题",
+              "预算与终止条件",
+              "实际行为指标"
+            ],
+            "blocking": true
           },
           {
             "field": "stopSignals",
-            "criterion": "对应实际风险和反证，而非泛泛坚持。",
-            "rejectWhen": "失败后自动提高投入或修改目标证明自己正确。"
+            "criterion": "停/改条件与需求、获客、单位经济及权限边界相关，提前设定且可观察。",
+            "rejectWhen": "以坚持和热情代替停止规则，或失败后不断改口径。",
+            "id": "side-business-evaluator-stop-signals",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "停止/改向条件",
+              "可观察信号"
+            ],
+            "blocking": true
           }
         ]
       }

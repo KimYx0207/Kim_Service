@@ -1,0 +1,298 @@
+{
+  "schemaVersion": 1,
+  "roleId": "xiaohongshu-skill",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "steps": [
+    "读取真实意图、受众、材料来源和商业边界，研究与本题相关的内容机会，区分事实、观察和假设。",
+    "把标题承诺映射到正文与逐页任务，先选内容判断再设计视觉；只有图文完整包走此流程。",
+    "按既有决策状态和图片路线制作本轮封面MVP，复用当前明确授权，不把样本许可扩成整套。",
+    "获完整生产许可后生成封面与6–8页内页，逐页检查文字、顺序、画面来源和手机缩略图可读性。",
+    "交付可见图片与可复制发布正文，保留未完成页、真实材料缺口、生成素材标签和发布边界；发布另依实际授权。"
+  ],
+  "acceptance": [
+    "按当前能力的outputChecks逐项记录实际证据、拒收原因和未观察项。",
+    "任何blocking项失败或缺证据，不能用其他评分抵消；作者自查不代替独立验收。",
+    "只报告本轮真实完成的产物、动作和范围；当前宿主最终验收权保持不变。"
+  ],
+  "coordinationOwner": "caller",
+  "finalAcceptance": "caller_only",
+  "knowledgeAssets": [
+    {
+      "id": "xiaohongshu-skill-acceptance",
+      "path": "references/acceptance.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "existing-package",
+        "xhs-official-help",
+        "xhs-trading-content",
+        "wcag-readability"
+      ]
+    },
+    {
+      "id": "xiaohongshu-skill-writing-and-cover-quality",
+      "path": "references/writing-and-cover-quality.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "existing-package"
+      ]
+    },
+    {
+      "id": "xiaohongshu-skill-evaluation-method",
+      "path": "references/evaluation-method.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "existing-package"
+      ]
+    },
+    {
+      "id": "xiaohongshu-skill-platform-risk-boundaries",
+      "path": "references/platform-risk-boundaries.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "existing-package"
+      ]
+    }
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "用可兑现内容、当轮视觉产物与明确许可交付小红书完整图文包",
+    "scope": [
+      "研究内容机会并制作含标题、正文、封面与 6 至 8 张内页的小红书图文发布包，保留视觉确认与发布边界。"
+    ],
+    "knowledgeAssetIds": [
+      "xiaohongshu-skill-acceptance",
+      "xiaohongshu-skill-writing-and-cover-quality",
+      "xiaohongshu-skill-evaluation-method",
+      "xiaohongshu-skill-platform-risk-boundaries"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "promise",
+        "question": "标题让读者期待什么，哪一页实际兑现？",
+        "evidenceRequired": [
+          "选定标题和正文",
+          "逐页任务与内容来源"
+        ],
+        "whenMissing": "缩小承诺或补证据，不用夸张承诺掩盖空内容。"
+      },
+      {
+        "id": "permission",
+        "question": "当前许可覆盖样本、批量还是发布？",
+        "evidenceRequired": [
+          "原始请求/具体选择记录",
+          "被批准版本与范围"
+        ],
+        "whenMissing": "停在准确partial/blocked状态，独立可做内容整理继续。"
+      },
+      {
+        "id": "asset-truth",
+        "question": "哪些图是本轮生成、授权复用或真实材料？",
+        "evidenceRequired": [
+          "本轮工具回执与文件",
+          "真实素材来源与授权、复用决定"
+        ],
+        "whenMissing": "明确生成/示意或缺口，不能把旧图/生成图当本次真实经历。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "promise-delivery",
+        "when": "标题或封面提出方法/效果/经历",
+        "action": "逐项映射到正文和页面证据；没有证据则降低承诺",
+        "avoid": "虚构亲身体验、商业效果、统计或用户选择。"
+      },
+      {
+        "id": "scoped-production",
+        "when": "准备从封面进入批量",
+        "action": "按skill-contract核当前原话与审批，不重复追问已有完整许可",
+        "avoid": "首张许可自动扩大，或已获完整许可却只交文案。"
+      },
+      {
+        "id": "current-assets",
+        "when": "报告已生成或complete",
+        "action": "回读当轮文件与工具证据并逐页验收，旧素材只在明确授权复用时计入",
+        "avoid": "旧outputs目录或提示词冒充图片产物。"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "xiaohongshu-create-visual-package",
+        "inputGuidance": [
+          {
+            "field": "topic",
+            "interpretation": "笔记要解决的具体主题和对象。",
+            "onMissing": "从原意提取；缺关键对象才问。"
+          },
+          {
+            "field": "goal",
+            "interpretation": "信任、搜索/收藏、比较或讨论等可观察任务目的，不替用户追求任意流量。",
+            "onMissing": "给有依据的保守建议，明确未确认。"
+          },
+          {
+            "field": "audience",
+            "interpretation": "具体读者与压力场景。",
+            "onMissing": "先研究/推断并标假设，不编造画像数据。"
+          },
+          {
+            "field": "sourceMaterials",
+            "interpretation": "用户提供或可追溯材料；真实经历与生成示意分开。",
+            "onMissing": "仍可生成示意视觉，但不写成真实体验或数据。"
+          },
+          {
+            "field": "materialUseAuthorization",
+            "interpretation": "人像/品牌/案例/已有图片的适用使用范围。",
+            "onMissing": "未知标缺口，不默认公开授权。"
+          },
+          {
+            "field": "commercialBoundaries",
+            "interpretation": "当前内容类型及承接/交易边界，按本次平台规则核验。",
+            "onMissing": "保守处理可逆草稿；不扩大成销售承诺。"
+          },
+          {
+            "field": "autoPermission",
+            "interpretation": "本次明确自主制作授权，与原始请求一致。",
+            "onMissing": "按既有MVP规则处理，不把false强行改全套许可。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "status-acceptance",
+            "field": "status",
+            "criterion": "状态按真实生产与许可：MVP待审保留partial，全部约定图片与内容完成才complete。",
+            "rejectWhen": "一张封面/提示词就完整交付，或未获批假human_confirmed。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "原始授权记录",
+              "实际页面与未完成清单"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "selected-title-acceptance",
+            "field": "selectedTitle",
+            "criterion": "标题对象、动作/判断与证据一致，可在正文和具体页找到兑现位置。",
+            "rejectWhen": "夸大收益、虚构亲历、标题说四步正文只有泛泛建议。",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "标题到正文/页面映射",
+              "事实与假设来源"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "title-alternatives-acceptance",
+            "field": "titleAlternatives",
+            "criterion": "至少8个候选保持真实承诺且切口有区别；数量达标不代替质量。",
+            "rejectWhen": "同义词重复凑数或候选含无法兑现保证。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "候选对比",
+              "每个标题承诺的内容支撑"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "body-acceptance",
+            "field": "body",
+            "criterion": "可复制正文有具体内容、适用/不适用和必要来源说明，符合选定路线。",
+            "rejectWhen": "模板空话、假经历、虚构效果或公开越界引流。",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "实际正文",
+              "来源与承诺对照"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "cover-acceptance",
+            "field": "cover",
+            "criterion": "封面是本轮实际可见产物或明确授权复用，文字准确、手机缩略图可辨，与确认版本一致。",
+            "rejectWhen": "只给prompt、旧图冒充新图、伪汉字或看不清核心信息。",
+            "verificationMethod": "behavior_probe",
+            "evidenceRequired": [
+              "当轮工具回执/授权复用记录",
+              "实际文件与缩略图观察"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "interior-pages-acceptance",
+            "field": "interiorPages",
+            "criterion": "完整生产时6–8页均有实际图、准确内容和各自页面任务；逐页来源、顺序和缺口明确。",
+            "rejectWhen": "提示词列表代替图片、缺页仍complete、重复图凑数或页面不兑现标题。",
+            "verificationMethod": "behavior_probe",
+            "evidenceRequired": [
+              "实际页面清单与文件",
+              "逐页内容/视觉检查",
+              "当前生成证据"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "publishing-boundary-acceptance",
+            "field": "publishingBoundary",
+            "criterion": "清楚区分草稿/待审/可发布准备与实际发布，保留本题适用的内容与商业边界。",
+            "rejectWhen": "生成完成即公开发布或虚称平台审核通过。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "授权范围",
+              "所查规则的适用类型与日期"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "missing-real-materials-acceptance",
+            "field": "missingRealMaterials",
+            "criterion": "缺真实人像、过程、案例和证明逐项列明；生成示意不可填成真实凭证。",
+            "rejectWhen": "缺材料却用虚构订单/评价/使用经历补齐。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "材料清单",
+              "对应受影响的内容或视觉"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "evidence-acceptance",
+            "field": "evidence",
+            "criterion": "当前内容判断、生成资产和人类决定分别有可追溯记录，未观察项直说。",
+            "rejectWhen": "旧日志、作者预期或工具名充当本轮发生性。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "本轮来源/版本/工具回执",
+              "具体用户决定与产物绑定"
+            ],
+            "blocking": true
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "当前任务明确要求人工判断的方向、版本或最终验收。",
+        "超出已有授权的不可逆执行、发布、付费或范围变化。",
+        "领域关键事实冲突或必需证据缺失，且会改变用户结果。"
+      ],
+      "prohibitedClaims": [
+        "合同或样例校验通过证明专业业务效果。",
+        "工具名、计划、模板、作者自报或旧运行结果证明本轮实际完成。",
+        "尚未观察的宿主加载、独立审核或用户批准已经发生。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
+}

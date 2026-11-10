@@ -5,6 +5,13 @@ description: 先搜索同类经典案例，拆解外形、表情、动作和使�
 
 # 先让角色和动作成立，再做表情包
 
+## 本能力的验收方法
+
+执行前读取 [method.json](method.json) 中当前 capabilityId 的诊断、决策和逐字段 outputChecks，并读取 [任务验收与完整示例](references/acceptance.md)。按本次能力选择相应规则，不用字段齐全、行数或作者自报代替产物质量。缺少 blocking 证据时保留未验收；既有具体授权与宿主最终决定权不变。
+
+专业引用与工具路线继续按下文渐进读取；[来源记录](PROVENANCE.md) 和 [作者正反例](evals/professional-cases.json) 供评审。当前 Meta Skill 发现不会自动注入 method.json，宿主需按此入口读取；未观察到加载或执行时不得宣称生效。
+
+
 为想把自己的角色变成常用聊天表达的创作者，交付身份稳定、动作能读懂、中文字清楚的动态贴纸。第一次必须读取 `references/production.md`，不得直接将图集送入旧版摆动脚本。
 
 ## 开始前：核实宿主工具，不把安装成功当成全流程能力

@@ -27,7 +27,7 @@ test('canonical name matches the directory and capability contract', () => {
   for (const componentDoc of [skill, readme, readmeCn]) {
     assert.ok(!componentDoc.includes('@find-skills'), 'legacy package identifier must not remain in install commands');
   }
-  assert.equal(contract.componentVersion, '0.0.0+imported.cf7635e');
+  assert.equal(contract.componentVersion, '0.1.0');
   assert.match(changelog, /revision `cf7635e3755c47b472bfb6dfd854680b5662ee26`/);
 });
 

@@ -29,7 +29,7 @@ test('contract identifies the proven GoalPro component version and entrypoint', 
   assert.equal(contract.schemaVersion, 1);
   assert.equal(contract.id, 'goalpro');
   assert.equal(contract.componentType, 'skill');
-  assert.equal(contract.componentVersion, '0.1.4'); // Proven by this component's CHANGELOG, not the collection version.
+  assert.equal(contract.componentVersion, '0.1.5'); // Proven by this component's CHANGELOG, not the collection version.
   assert.equal(contract.entrypoint, 'SKILL.md');
 });
 

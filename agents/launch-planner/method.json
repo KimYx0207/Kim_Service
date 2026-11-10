@@ -13,7 +13,8 @@
   ],
   "skillLoading": [
     "先读取本角色 knowledgeAssets 中的包内专业方法；来源记录不等于当前任务联网，案例不是实际运行证据。",
-    "读取本角色 knowledgeAssets；只在当前任务实际需要时读取用户指定的项目/平台规范，缺来源不假称已读取。"
+    "读取本角色 knowledgeAssets；只在当前任务实际需要时读取用户指定的项目/平台规范，缺来源不假称已读取。",
+    "读取本包 references/worked-delivery.md 的完整产物与专业反例；按当前输入迁移，不把合成答案当本次事实或验收记录"
   ],
   "steps": [
     "先读取包内专业方法与现有 AGENT.md，绑定当前输入、目标和材料范围；来源引用不等于当前任务联网。",
@@ -51,6 +52,19 @@
         "agent-teams-boundary",
         "goalpro"
       ]
+    },
+    {
+      "id": "launch-planner-worked-delivery",
+      "path": "references/worked-delivery.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "sba-market",
+        "kim-decision",
+        "agent-teams-boundary",
+        "goalpro"
+      ]
     }
   ],
   "expertise": {
@@ -61,7 +75,8 @@
       "计划是建议，不接管宿主调度、审批或执行状态"
     ],
     "knowledgeAssetIds": [
-      "launch-planner-core"
+      "launch-planner-core",
+      "launch-planner-worked-delivery"
     ],
     "diagnosticSequence": [
       {
@@ -125,28 +140,67 @@
         "outputChecks": [
           {
             "field": "firstDeliverable",
-            "criterion": "明确用户可体验的最小结果和范围。",
-            "rejectWhen": "只有学习/建库等内部动作。"
+            "criterion": "最小交付能验证一个明确客户问题，范围、输入取得与交付标准清楚。",
+            "rejectWhen": "先建平台或扩大功能但无法检验需求。",
+            "id": "launch-planner-first-deliverable",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "客户问题假设",
+              "样例产物/范围",
+              "材料取得条件"
+            ],
+            "blocking": true
           },
           {
             "field": "schedule",
             "criterion": "每项有输入、产物、真实依赖和有限时间。",
-            "rejectWhen": "把前后端等角色天然串行或默认所有工作可并行。"
+            "rejectWhen": "把前后端等角色天然串行或默认所有工作可并行。",
+            "id": "launch-planner-schedule",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "当前输入中与 schedule 对应的事实、约束及缺口",
+              "实际 schedule 产物与所声明通过条件的逐项对照",
+              "对本字段拒收条件的检查结果与未验证范围"
+            ],
+            "blocking": true
           },
           {
             "field": "budget",
-            "criterion": "仅列实际预期支出与上限/待定项。",
-            "rejectWhen": "把用户可用预算自动当必须花光。"
+            "criterion": "各项成本、工时和预留合计在预算/容量内，真实报价与假设区分。",
+            "rejectWhen": "漏人工/售后或把合成报价当已确认采购。",
+            "id": "launch-planner-budget",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "成本合计",
+              "工时容量",
+              "报价依据"
+            ],
+            "blocking": true
           },
           {
             "field": "acceptance",
             "criterion": "条件观察目标结果并包括关键失败场景。",
-            "rejectWhen": "以文件数量、完成步骤或自报通过代验收。"
+            "rejectWhen": "以文件数量、完成步骤或自报通过代验收。",
+            "id": "launch-planner-acceptance",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "当前输入中与 acceptance 对应的事实、约束及缺口",
+              "实际 acceptance 产物与所声明通过条件的逐项对照",
+              "对本字段拒收条件的检查结果与未验证范围"
+            ],
+            "blocking": true
           },
           {
             "field": "nextDecision",
-            "criterion": "根据什么结果继续、改范围或停止。",
-            "rejectWhen": "自动扩大投入或替用户批准发布。"
+            "criterion": "继续/改向/停止条件在观察前定义，并对应需求、盈利或渠道不同原因。",
+            "rejectWhen": "点赞当收入，或失败后修改成功标准。",
+            "id": "launch-planner-next-decision",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "预定决策条件",
+              "实际观察与缺口"
+            ],
+            "blocking": true
           }
         ]
       }
