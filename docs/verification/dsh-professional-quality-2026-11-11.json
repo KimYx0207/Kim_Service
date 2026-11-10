@@ -18,8 +18,8 @@
   "verification": {
     "rootTests": {
       "command": "node --test scripts/*.test.mjs",
-      "tests": 150,
-      "pass": 149,
+      "tests": 154,
+      "pass": 153,
       "fail": 0,
       "skip": 1
     },
@@ -52,6 +52,22 @@
       "pass": 26,
       "fail": 0,
       "scope": "Value-based uniqueness, per-capability positive/rejection coverage and method budgets; not professional effect certification"
+    },
+    "zcodeBuilder": {
+      "command": "node --test scripts/build-zcode-marketplace.test.mjs",
+      "tests": 14,
+      "pass": 13,
+      "fail": 0,
+      "skip": 1,
+      "scope": "Complete committed source trees, role-specific resource binding, public registries, protected images, source and output rejection paths; Windows physical root alias test skipped on Linux."
+    },
+    "provenance": {
+      "command": "node scripts/catalog-automation.mjs build --provenance-revision c4dcec8a7fefaae6fdc0934d4de30fe2b2d7fc91",
+      "pendingComponents": 0,
+      "committedComponentTrees": 45,
+      "sourceCommit": "c4dcec8a7fefaae6fdc0934d4de30fe2b2d7fc91",
+      "exactComponentBytesChecked": true,
+      "ancestorChecks": "passed"
     }
   },
   "pairedTrial": {
@@ -65,10 +81,17 @@
   },
   "dsh": {
     "officialVersion": "0.2.2-rc.1",
-    "builderBehaviorTests": 7,
+    "builderBehaviorTests": 9,
     "evidenceLocation": "https://github.com/KimYx0207/Meta_Kim/blob/main/docs/verification/dsh-native-host-20261111.json",
     "nativeModelCalls": 0,
-    "modelBusinessAcceptance": "not_evaluated"
+    "modelBusinessAcceptance": "not_evaluated",
+    "servicePackage": {
+      "componentCount": 51,
+      "skillCount": 52,
+      "fileCount": 2719,
+      "closureVerified": true,
+      "nativeModelCalls": 0
+    }
   },
   "localLogs": {
     "service-root-clean-rerun-20261111.log": {
@@ -94,7 +117,27 @@
     "service-quality-contracts-20261111.log": {
       "sha256": "8fec0d4b55de1f29e8d0b8d332c114e6a6560d6abb6aacb897e253e3fae2517e",
       "bytes": 2338
+    },
+    "service-root-final154.log": {
+      "sha256": "e83085a78afd298050e113602f4dbc92d9de5066b16491c25496e701938f16f6",
+      "bytes": 13077
+    },
+    "service-components-recovery.log": {
+      "sha256": "b0960cf20e42cea2d945877725f486fc945f5df05ed83c9b475647777e872538",
+      "bytes": 135880
+    },
+    "service-zcode-final.log": {
+      "sha256": "7b38c23d5d516f54197acc663bec555cf4f2f5dac1dd72d0cabe7d1c1f5cfdd6",
+      "bytes": 1539
     }
   },
-  "protectedAssets": "Root contact/payment footer bytes and 3 original QR assets unchanged; new Skill README references the same canonical assets."
+  "protectedAssets": "Root contact/payment footer bytes and 3 original QR assets unchanged; new Skill README references the same canonical assets.",
+  "sourceCommit": "c4dcec8a7fefaae6fdc0934d4de30fe2b2d7fc91",
+  "sourceTree": "979830c46d3fb6b9f417205358301c03fb56b5a5",
+  "recoveryFixes": [
+    "Shared contact/payment images preserved at source-relative paths in DSh.",
+    "ZCode discovers every canonical professional component and retains complete committed knowledge and quality contracts.",
+    "Meta ZCode loaders resolve full canonical methods, machine contracts and 12 public configuration resources from source/.",
+    "Pending component provenance bound to the real remote source commit after byte and ancestry checks."
+  ]
 }
