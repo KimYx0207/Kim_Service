@@ -1,0 +1,1709 @@
+{
+  "schemaVersion": 1,
+  "reviewType": "independent_posthoc_review_of_predeclared_synthetic_paired_trial",
+  "reviewer": "service_depth",
+  "reviewerWasBlindToGroup": false,
+  "scope": {
+    "tasks": 3,
+    "attemptsPerCondition": 1,
+    "conditions": [
+      "baseline",
+      "withMethods"
+    ],
+    "designAsProvided": "current conversation; two separate contexts; one three-task answer per condition",
+    "inputProvenance": "original_synthetic_held_out_tasks as stated in tasks.json",
+    "predeclarationStatus": "Coordinator states prespecified-criteria.json was written before the trial; review checks its contents, not an external timestamp attestation.",
+    "hostOrDshAcceptance": false,
+    "professionalPackageWideCertification": false
+  },
+  "inputs": [
+    {
+      "file": "tasks.json",
+      "sha256": "01539948c821235cabed8a114e767059d99caacba5070226ee01b3ad816fa443",
+      "bytes": 1995
+    },
+    {
+      "file": "prespecified-criteria.json",
+      "sha256": "3be11cb07389f64d58a03c4c926bff0af155419aee2c8c605e4131e37d384733",
+      "bytes": 1513
+    },
+    {
+      "file": "baseline.md",
+      "sha256": "194d3b9388ffd58755048c992cd428221c481d6baa93f941e352cc162bdb7ad2",
+      "bytes": 13879
+    },
+    {
+      "file": "with-methods.md",
+      "sha256": "dc1e40897ce99dd10df4f4e566572223a5b05a6aa09429a3ac13e1e162864453",
+      "bytes": 17203
+    },
+    {
+      "file": "sources-read.json",
+      "sha256": "41cc8077006c401e4277b29a603814863dd07b34e2ef14058d7cfe483ba94329",
+      "bytes": 1375
+    }
+  ],
+  "methodology": [
+    "Read supplied tasks and prewritten grading criteria, then compare both complete raw answers.",
+    "Recomputed every predefined numeric result with exact Fraction arithmetic; manual extraction from each answer is accompanied by exact source excerpts and line positions.",
+    "Checked every predefined judgment separately; a critical failure cannot be offset by other passes.",
+    "Audited additional numerical examples and potentially unsupported explanations; these do not retroactively alter the preregistered score.",
+    "Did not read answer keys from package evals or change source answers, criteria or input files."
+  ],
+  "tasks": [
+    {
+      "taskId": "pricing-quarter-capacity",
+      "component": "pricing-cost-analyst",
+      "baselineStatus": "pass",
+      "withMethodsStatus": "pass",
+      "checks": [
+        {
+          "id": "fixedMonthly",
+          "kind": "numeric",
+          "predefined": true,
+          "unit": "CNY/month",
+          "formula": "7800 / 3",
+          "independentlyRecomputed": 2600,
+          "exactReference": "2600",
+          "prewrittenExpected": 2600,
+          "baseline": {
+            "status": "pass",
+            "observedValue": 2600,
+            "evidence": [
+              {
+                "file": "baseline.md",
+                "section": "2. 月盈亏平衡量与满容量余额",
+                "lineStart": 47,
+                "lineEnd": 47,
+                "excerpt": "\\text{月固定费}=7800\\div3=2600\\text{元}"
+              }
+            ]
+          },
+          "withMethods": {
+            "status": "pass",
+            "observedValue": 2600,
+            "evidence": [
+              {
+                "file": "with-methods.md",
+                "section": "1. 先统一周期与成本口径",
+                "lineStart": 13,
+                "lineEnd": 13,
+                "excerpt": "**月固定费＝7800 ÷ 3＝2600元/月。**"
+              }
+            ]
+          }
+        },
+        {
+          "id": "base.variable",
+          "kind": "numeric",
+          "predefined": true,
+          "unit": "CNY/order",
+          "formula": "22 + 18 + 5 + 90 * 0.07",
+          "independentlyRecomputed": 51.3,
+          "exactReference": "513/10",
+          "prewrittenExpected": 51.3,
+          "baseline": {
+            "status": "pass",
+            "observedValue": 51.3,
+            "evidence": [
+              {
+                "file": "baseline.md",
+                "section": "1. 单位经济",
+                "lineStart": 36,
+                "lineEnd": 36,
+                "excerpt": "| 单位变动成本合计 | 51.300元 | 50.355元 |"
+              }
+            ]
+          },
+          "withMethods": {
+            "status": "pass",
+            "observedValue": 51.3,
+            "evidence": [
+              {
+                "file": "with-methods.md",
+                "section": "2. 单位经济：每单收入还剩多少",
+                "lineStart": 41,
+                "lineEnd": 41,
+                "excerpt": "| 已列变动成本合计，含劳动 | 51.30元 | 50.355元 |"
+              }
+            ]
+          }
+        },
+        {
+          "id": "base.contribution",
+          "kind": "numeric",
+          "predefined": true,
+          "unit": "CNY/order",
+          "formula": "90 - 51.3",
+          "independentlyRecomputed": 38.7,
+          "exactReference": "387/10",
+          "prewrittenExpected": 38.7,
+          "baseline": {
+            "status": "pass",
+            "observedValue": 38.7,
+            "evidence": [
+              {
+                "file": "baseline.md",
+                "section": "1. 单位经济",
+                "lineStart": 37,
+                "lineEnd": 37,
+                "excerpt": "| **单位贡献** | **38.700元** | **26.145元** |"
+              }
+            ]
+          },
+          "withMethods": {
+            "status": "pass",
+            "observedValue": 38.7,
+            "evidence": [
+              {
+                "file": "with-methods.md",
+                "section": "2. 单位经济：每单收入还剩多少",
+                "lineStart": 42,
+                "lineEnd": 42,
+                "excerpt": "| 计入劳动价值的单笔贡献 | **38.70元** | **26.145元** |"
+              }
+            ]
+          }
+        },
+        {
+          "id": "base.breakEvenUnits",
+          "kind": "numeric",
+          "predefined": true,
+          "unit": "orders/month",
+          "formula": "ceil(2600 / 38.7)",
+          "independentlyRecomputed": 68,
+          "exactReference": "68",
+          "prewrittenExpected": 68,
+          "baseline": {
+            "status": "pass",
+            "observedValue": 68,
+            "evidence": [
+              {
+                "file": "baseline.md",
+                "section": "2. 月盈亏平衡量与满容量余额",
+                "lineStart": 61,
+                "lineEnd": 61,
+                "excerpt": "| **实际需要的整数订单量** | **68单/月** | **100单/月** |"
+              }
+            ]
+          },
+          "withMethods": {
+            "status": "pass",
+            "observedValue": 68,
+            "evidence": [
+              {
+                "file": "with-methods.md",
+                "section": "3. 月盈亏平衡量与容量",
+                "lineStart": 55,
+                "lineEnd": 55,
+                "excerpt": "| 计入劳动价值的盈亏平衡量 | ⌈2600 ÷ 38.70⌉＝**68单/月** | ⌈2600 ÷ 26.145⌉＝**100单/月** |"
+              }
+            ]
+          }
+        },
+        {
+          "id": "base.capacityBalance",
+          "kind": "numeric",
+          "predefined": true,
+          "unit": "CNY/month",
+          "formula": "90 * 38.7 - 2600",
+          "independentlyRecomputed": 883,
+          "exactReference": "883",
+          "prewrittenExpected": 883,
+          "baseline": {
+            "status": "pass",
+            "observedValue": 883,
+            "evidence": [
+              {
+                "file": "baseline.md",
+                "section": "2. 月盈亏平衡量与满容量余额",
+                "lineStart": 68,
+                "lineEnd": 68,
+                "excerpt": "| **满容量月余额** | **＋883.00元** | **－246.95元** |"
+              }
+            ]
+          },
+          "withMethods": {
+            "status": "pass",
+            "observedValue": 883,
+            "evidence": [
+              {
+                "file": "with-methods.md",
+                "section": "4. 每月满容量90单时的余额",
+                "lineStart": 69,
+                "lineEnd": 69,
+                "excerpt": "| 计入劳动价值、扣月均固定费后的余额 | **883.00元** | **−246.95元** |"
+              }
+            ]
+          }
+        },
+        {
+          "id": "discount.price",
+          "kind": "numeric",
+          "predefined": true,
+          "unit": "CNY/order",
+          "formula": "90 * 0.85",
+          "independentlyRecomputed": 76.5,
+          "exactReference": "153/2",
+          "prewrittenExpected": 76.5,
+          "baseline": {
+            "status": "pass",
+            "observedValue": 76.5,
+            "evidence": [
+              {
+                "file": "baseline.md",
+                "section": "1. 单位经济",
+                "lineStart": 31,
+                "lineEnd": 31,
+                "excerpt": "| 实际收款单价 | 90.00元 | 76.50元 |"
+              }
+            ]
+          },
+          "withMethods": {
+            "status": "pass",
+            "observedValue": 76.5,
+            "evidence": [
+              {
+                "file": "with-methods.md",
+                "section": "2. 单位经济：每单收入还剩多少",
+                "lineStart": 34,
+                "lineEnd": 34,
+                "excerpt": "| 实际收款单价 | 90.00元 | 90 × 85%＝76.50元 |"
+              }
+            ]
+          }
+        },
+        {
+          "id": "discount.variable",
+          "kind": "numeric",
+          "predefined": true,
+          "unit": "CNY/order",
+          "formula": "22 + 18 + 5 + 76.5 * 0.07",
+          "independentlyRecomputed": 50.355,
+          "exactReference": "10071/200",
+          "prewrittenExpected": 50.355,
+          "baseline": {
+            "status": "pass",
+            "observedValue": 50.355,
+            "evidence": [
+              {
+                "file": "baseline.md",
+                "section": "1. 单位经济",
+                "lineStart": 36,
+                "lineEnd": 36,
+                "excerpt": "| 单位变动成本合计 | 51.300元 | 50.355元 |"
+              }
+            ]
+          },
+          "withMethods": {
+            "status": "pass",
+            "observedValue": 50.355,
+            "evidence": [
+              {
+                "file": "with-methods.md",
+                "section": "2. 单位经济：每单收入还剩多少",
+                "lineStart": 41,
+                "lineEnd": 41,
+                "excerpt": "| 已列变动成本合计，含劳动 | 51.30元 | 50.355元 |"
+              }
+            ]
+          }
+        },
+        {
+          "id": "discount.contribution",
+          "kind": "numeric",
+          "predefined": true,
+          "unit": "CNY/order",
+          "formula": "76.5 - 50.355",
+          "independentlyRecomputed": 26.145,
+          "exactReference": "5229/200",
+          "prewrittenExpected": 26.145,
+          "baseline": {
+            "status": "pass",
+            "observedValue": 26.145,
+            "evidence": [
+              {
+                "file": "baseline.md",
+                "section": "1. 单位经济",
+                "lineStart": 37,
+                "lineEnd": 37,
+                "excerpt": "| **单位贡献** | **38.700元** | **26.145元** |"
+              }
+            ]
+          },
+          "withMethods": {
+            "status": "pass",
+            "observedValue": 26.145,
+            "evidence": [
+              {
+                "file": "with-methods.md",
+                "section": "2. 单位经济：每单收入还剩多少",
+                "lineStart": 42,
+                "lineEnd": 42,
+                "excerpt": "| 计入劳动价值的单笔贡献 | **38.70元** | **26.145元** |"
+              }
+            ]
+          }
+        },
+        {
+          "id": "discount.breakEvenUnits",
+          "kind": "numeric",
+          "predefined": true,
+          "unit": "orders/month",
+          "formula": "ceil(2600 / 26.145)",
+          "independentlyRecomputed": 100,
+          "exactReference": "100",
+          "prewrittenExpected": 100,
+          "baseline": {
+            "status": "pass",
+            "observedValue": 100,
+            "evidence": [
+              {
+                "file": "baseline.md",
+                "section": "2. 月盈亏平衡量与满容量余额",
+                "lineStart": 61,
+                "lineEnd": 61,
+                "excerpt": "| **实际需要的整数订单量** | **68单/月** | **100单/月** |"
+              }
+            ]
+          },
+          "withMethods": {
+            "status": "pass",
+            "observedValue": 100,
+            "evidence": [
+              {
+                "file": "with-methods.md",
+                "section": "3. 月盈亏平衡量与容量",
+                "lineStart": 55,
+                "lineEnd": 55,
+                "excerpt": "| 计入劳动价值的盈亏平衡量 | ⌈2600 ÷ 38.70⌉＝**68单/月** | ⌈2600 ÷ 26.145⌉＝**100单/月** |"
+              }
+            ]
+          }
+        },
+        {
+          "id": "discount.capacityBalance",
+          "kind": "numeric",
+          "predefined": true,
+          "unit": "CNY/month",
+          "formula": "90 * 26.145 - 2600",
+          "independentlyRecomputed": -246.95,
+          "exactReference": "-4939/20",
+          "prewrittenExpected": -246.95,
+          "baseline": {
+            "status": "pass",
+            "observedValue": -246.95,
+            "evidence": [
+              {
+                "file": "baseline.md",
+                "section": "2. 月盈亏平衡量与满容量余额",
+                "lineStart": 68,
+                "lineEnd": 68,
+                "excerpt": "| **满容量月余额** | **＋883.00元** | **－246.95元** |"
+              }
+            ]
+          },
+          "withMethods": {
+            "status": "pass",
+            "observedValue": -246.95,
+            "evidence": [
+              {
+                "file": "with-methods.md",
+                "section": "4. 每月满容量90单时的余额",
+                "lineStart": 69,
+                "lineEnd": 69,
+                "excerpt": "| 计入劳动价值、扣月均固定费后的余额 | **883.00元** | **−246.95元** |"
+              }
+            ]
+          }
+        },
+        {
+          "id": "discount break-even exceeds90 capacity",
+          "kind": "judgment",
+          "predefined": true,
+          "critical": true,
+          "baseline": {
+            "status": "pass",
+            "evidence": [
+              {
+                "file": "baseline.md",
+                "section": "一、原价与八五折的报价分析",
+                "lineStart": 3,
+                "lineEnd": 3,
+                "excerpt": "**按已提供的成本计算，原价90元每月交付68单起可以覆盖成本；八五折后的76.50元需要每月100单才能覆盖成本，超过每月90单的交付上限。** 因此，八五折不能作为目前成本和容量条件下可独立实现收支平衡的常规报价。"
+              }
+            ]
+          },
+          "withMethods": {
+            "status": "pass",
+            "evidence": [
+              {
+                "file": "with-methods.md",
+                "section": "3. 月盈亏平衡量与容量",
+                "lineStart": 56,
+                "lineEnd": 56,
+                "excerpt": "| 与90单/月容量比较 | 含劳动门槛在容量内 | 含劳动门槛超过容量10单 |"
+              }
+            ]
+          },
+          "reviewReason": "两组均把100单与90单容量比较，没有用正单位贡献掩盖满容量亏损。"
+        },
+        {
+          "id": "cost/profit computation limited to supplied costs; tax/refund/demand unknown",
+          "kind": "judgment",
+          "predefined": true,
+          "critical": true,
+          "baseline": {
+            "status": "pass",
+            "evidence": [
+              {
+                "file": "baseline.md",
+                "section": "一、原价与八五折的报价分析",
+                "lineStart": 5,
+                "lineEnd": 5,
+                "excerpt": "以下金额均为人民币。这里的“余额”指扣除题目所列材料、劳动、包装、平台费用和固定费后的余额。劳动已明确估值为18元/单，必须计入成本；税费、获客、退货等没有资料，因此下表不是完整净利润预测，也不代表实际需求能达到满容量。"
+              }
+            ]
+          },
+          "withMethods": {
+            "status": "pass",
+            "evidence": [
+              {
+                "file": "with-methods.md",
+                "section": "一、原价与八五折的报价分析",
+                "lineStart": 7,
+                "lineEnd": 7,
+                "excerpt": "**计入每单18元劳动价值后，原价90元需要每月68单才能覆盖已列成本，在90单容量内；八五折价格为76.50元，需要每月100单，超过容量。满容量时，两种方案的月度经营余额分别为883.00元和−246.95元。** 这些余额尚未纳入未知的税费、获客、退货等项目，不能称为最终净利润。"
+              }
+            ]
+          },
+          "reviewReason": "两组均限定到给定成本，并保留税费、获客、退货与需求缺口。"
+        },
+        {
+          "id": "does not promise demand or actual profit",
+          "kind": "judgment",
+          "predefined": true,
+          "critical": true,
+          "baseline": {
+            "status": "pass",
+            "evidence": [
+              {
+                "file": "baseline.md",
+                "section": "一、原价与八五折的报价分析",
+                "lineStart": 5,
+                "lineEnd": 5,
+                "excerpt": "以下金额均为人民币。这里的“余额”指扣除题目所列材料、劳动、包装、平台费用和固定费后的余额。劳动已明确估值为18元/单，必须计入成本；税费、获客、退货等没有资料，因此下表不是完整净利润预测，也不代表实际需求能达到满容量。"
+              }
+            ]
+          },
+          "withMethods": {
+            "status": "pass",
+            "evidence": [
+              {
+                "file": "with-methods.md",
+                "section": "5. 条件式建议",
+                "lineStart": 89,
+                "lineEnd": 89,
+                "excerpt": "这相当于单量至少增加约48.02%，并且还要受90单上限约束。当前没有需求资料，不能认定打折会带来这种增长。后续报价判断应补充实际成交量、每单劳动及返工、获客支出、退货损失和税费；这些未知项没有被按零处理。"
+              }
+            ]
+          },
+          "reviewReason": "两组只给条件计算；原价可行也附需求与未知费用条件。"
+        }
+      ]
+    },
+    {
+      "taskId": "supplier-pack-calendar",
+      "component": "supplier-comparison-analyst",
+      "baselineStatus": "pass",
+      "withMethodsStatus": "pass",
+      "checks": [
+        {
+          "id": "A.ordered",
+          "kind": "numeric",
+          "predefined": true,
+          "unit": "pieces",
+          "formula": "ceil(max(640,800) / 100) * 100",
+          "independentlyRecomputed": 800,
+          "exactReference": "800",
+          "prewrittenExpected": 800,
+          "baseline": {
+            "status": "pass",
+            "observedValue": 800,
+            "evidence": [
+              {
+                "file": "baseline.md",
+                "section": "1. 实际采购量和已知现金支出",
+                "lineStart": 109,
+                "lineEnd": 109,
+                "excerpt": "| **实际最小采购量** | **800件，8包** | **720件，6包** |"
+              }
+            ]
+          },
+          "withMethods": {
+            "status": "pass",
+            "observedValue": 800,
+            "evidence": [
+              {
+                "file": "with-methods.md",
+                "section": "1. 实际采购数量必须同时满足MOQ和整包要求",
+                "lineStart": 114,
+                "lineEnd": 114,
+                "excerpt": "| 实际采购数量 | **800件** | **720件** |"
+              }
+            ]
+          }
+        },
+        {
+          "id": "A.extra",
+          "kind": "numeric",
+          "predefined": true,
+          "unit": "pieces",
+          "formula": "800 - 640",
+          "independentlyRecomputed": 160,
+          "exactReference": "160",
+          "prewrittenExpected": 160,
+          "baseline": {
+            "status": "pass",
+            "observedValue": 160,
+            "evidence": [
+              {
+                "file": "baseline.md",
+                "section": "1. 实际采购量和已知现金支出",
+                "lineStart": 110,
+                "lineEnd": 110,
+                "excerpt": "| **较需求多购** | **160件** | **80件** |"
+              }
+            ]
+          },
+          "withMethods": {
+            "status": "pass",
+            "observedValue": 160,
+            "evidence": [
+              {
+                "file": "with-methods.md",
+                "section": "1. 实际采购数量必须同时满足MOQ和整包要求",
+                "lineStart": 115,
+                "lineEnd": 115,
+                "excerpt": "| 多购数量 | 800 − 640＝**160件** | 720 − 640＝**80件** |"
+              }
+            ]
+          }
+        },
+        {
+          "id": "A.knownCash",
+          "kind": "numeric",
+          "predefined": true,
+          "unit": "CNY",
+          "formula": "800 * 8 + 240",
+          "independentlyRecomputed": 6640,
+          "exactReference": "6640",
+          "prewrittenExpected": 6640,
+          "baseline": {
+            "status": "pass",
+            "observedValue": 6640,
+            "evidence": [
+              {
+                "file": "baseline.md",
+                "section": "1. 实际采购量和已知现金支出",
+                "lineStart": 113,
+                "lineEnd": 113,
+                "excerpt": "| **已知现金支出及总额表达式** | **6,640元** | **已知货款6,480元；完整支出为6,480＋F元** |"
+              }
+            ]
+          },
+          "withMethods": {
+            "status": "pass",
+            "observedValue": 6640,
+            "evidence": [
+              {
+                "file": "with-methods.md",
+                "section": "1. 实际采购数量必须同时满足MOQ和整包要求",
+                "lineStart": 118,
+                "lineEnd": 118,
+                "excerpt": "| 已知现金支出 | **6640元** | **6480元，另加未知运费F** |"
+              }
+            ]
+          }
+        },
+        {
+          "id": "B.ordered",
+          "kind": "numeric",
+          "predefined": true,
+          "unit": "pieces",
+          "formula": "ceil(max(640,600) / 120) * 120",
+          "independentlyRecomputed": 720,
+          "exactReference": "720",
+          "prewrittenExpected": 720,
+          "baseline": {
+            "status": "pass",
+            "observedValue": 720,
+            "evidence": [
+              {
+                "file": "baseline.md",
+                "section": "1. 实际采购量和已知现金支出",
+                "lineStart": 109,
+                "lineEnd": 109,
+                "excerpt": "| **实际最小采购量** | **800件，8包** | **720件，6包** |"
+              }
+            ]
+          },
+          "withMethods": {
+            "status": "pass",
+            "observedValue": 720,
+            "evidence": [
+              {
+                "file": "with-methods.md",
+                "section": "1. 实际采购数量必须同时满足MOQ和整包要求",
+                "lineStart": 114,
+                "lineEnd": 114,
+                "excerpt": "| 实际采购数量 | **800件** | **720件** |"
+              }
+            ]
+          }
+        },
+        {
+          "id": "B.extra",
+          "kind": "numeric",
+          "predefined": true,
+          "unit": "pieces",
+          "formula": "720 - 640",
+          "independentlyRecomputed": 80,
+          "exactReference": "80",
+          "prewrittenExpected": 80,
+          "baseline": {
+            "status": "pass",
+            "observedValue": 80,
+            "evidence": [
+              {
+                "file": "baseline.md",
+                "section": "1. 实际采购量和已知现金支出",
+                "lineStart": 110,
+                "lineEnd": 110,
+                "excerpt": "| **较需求多购** | **160件** | **80件** |"
+              }
+            ]
+          },
+          "withMethods": {
+            "status": "pass",
+            "observedValue": 80,
+            "evidence": [
+              {
+                "file": "with-methods.md",
+                "section": "1. 实际采购数量必须同时满足MOQ和整包要求",
+                "lineStart": 115,
+                "lineEnd": 115,
+                "excerpt": "| 多购数量 | 800 − 640＝**160件** | 720 − 640＝**80件** |"
+              }
+            ]
+          }
+        },
+        {
+          "id": "B.knownCashBeforeFreight",
+          "kind": "numeric",
+          "predefined": true,
+          "unit": "CNY excluding unknown freight",
+          "formula": "720 * 9",
+          "independentlyRecomputed": 6480,
+          "exactReference": "6480",
+          "prewrittenExpected": 6480,
+          "baseline": {
+            "status": "pass",
+            "observedValue": 6480,
+            "evidence": [
+              {
+                "file": "baseline.md",
+                "section": "1. 实际采购量和已知现金支出",
+                "lineStart": 113,
+                "lineEnd": 113,
+                "excerpt": "| **已知现金支出及总额表达式** | **6,640元** | **已知货款6,480元；完整支出为6,480＋F元** |"
+              }
+            ]
+          },
+          "withMethods": {
+            "status": "pass",
+            "observedValue": 6480,
+            "evidence": [
+              {
+                "file": "with-methods.md",
+                "section": "1. 实际采购数量必须同时满足MOQ和整包要求",
+                "lineStart": 118,
+                "lineEnd": 118,
+                "excerpt": "| 已知现金支出 | **6640元** | **6480元，另加未知运费F** |"
+              }
+            ]
+          }
+        },
+        {
+          "id": "freightCrossover",
+          "kind": "numeric",
+          "predefined": true,
+          "unit": "CNY freight",
+          "formula": "6640 - 6480",
+          "independentlyRecomputed": 160,
+          "exactReference": "160",
+          "prewrittenExpected": 160,
+          "baseline": {
+            "status": "pass",
+            "observedValue": 160,
+            "evidence": [
+              {
+                "file": "baseline.md",
+                "section": "2. 运费改变现金支出比较的阈值",
+                "lineStart": 131,
+                "lineEnd": 131,
+                "excerpt": "**160元是运费阈值，B的运费未知不能按0元处理。** 这里比较的是满足本次数量需求所需的整批现金支出；它没有给剩余库存估价，也没有包含尚未披露的其他费用。"
+              }
+            ]
+          },
+          "withMethods": {
+            "status": "pass",
+            "observedValue": 160,
+            "evidence": [
+              {
+                "file": "with-methods.md",
+                "section": "2. 运费在什么水平会改变现金支出排序",
+                "lineStart": 137,
+                "lineEnd": 137,
+                "excerpt": "因此，**160元是本次总现金支出的运费分界点**。如果后续出现加急费、附加费用或报价变更，需一并重算；不能把B的未报运费当成零。"
+              }
+            ]
+          }
+        },
+        {
+          "id": "A misses7calendar days",
+          "kind": "judgment",
+          "predefined": true,
+          "critical": true,
+          "baseline": {
+            "status": "pass",
+            "evidence": [
+              {
+                "file": "baseline.md",
+                "section": "3. 到货判断",
+                "lineStart": 137,
+                "lineEnd": 137,
+                "excerpt": "| A | 8个自然日到货 | 在相同计时起点下，超过要求1天，现报价不满足要求 |"
+              }
+            ]
+          },
+          "withMethods": {
+            "status": "pass",
+            "evidence": [
+              {
+                "file": "with-methods.md",
+                "section": "3. 交付判断",
+                "lineStart": 145,
+                "lineEnd": 145,
+                "excerpt": "| A | 8个自然日到货 | **按当前报价不满足**，超过要求1个自然日 |"
+              }
+            ]
+          },
+          "reviewReason": "两组均按当前承诺拒绝A的7日到货可行性。"
+        },
+        {
+          "id": "B5businessdays ship cannot establish7calendar arrival",
+          "kind": "judgment",
+          "predefined": true,
+          "critical": true,
+          "baseline": {
+            "status": "pass",
+            "evidence": [
+              {
+                "file": "baseline.md",
+                "section": "3. 到货判断",
+                "lineStart": 138,
+                "lineEnd": 138,
+                "excerpt": "| B | 5个工作日发货 | 无法确认满足：工作日不能直接当作自然日，发货也不等于到货 |"
+              }
+            ]
+          },
+          "withMethods": {
+            "status": "pass",
+            "evidence": [
+              {
+                "file": "with-methods.md",
+                "section": "3. 交付判断",
+                "lineStart": 153,
+                "lineEnd": 153,
+                "excerpt": "因此，既不能声称B已经满足7天要求，也不能仅凭“5个工作日”断定B一定超期。需要把明确的订单生效时间、最晚发货时间和运输时间放在同一日历上核对。"
+              }
+            ]
+          },
+          "reviewReason": "两组分开工作日/自然日与发货/到货；B为未知，不判通过或必然超期。"
+        },
+        {
+          "id": "unknown freight notzero",
+          "kind": "judgment",
+          "predefined": true,
+          "critical": true,
+          "baseline": {
+            "status": "pass",
+            "evidence": [
+              {
+                "file": "baseline.md",
+                "section": "2. 运费改变现金支出比较的阈值",
+                "lineStart": 131,
+                "lineEnd": 131,
+                "excerpt": "**160元是运费阈值，B的运费未知不能按0元处理。** 这里比较的是满足本次数量需求所需的整批现金支出；它没有给剩余库存估价，也没有包含尚未披露的其他费用。"
+              }
+            ]
+          },
+          "withMethods": {
+            "status": "pass",
+            "evidence": [
+              {
+                "file": "with-methods.md",
+                "section": "2. 运费在什么水平会改变现金支出排序",
+                "lineStart": 137,
+                "lineEnd": 137,
+                "excerpt": "因此，**160元是本次总现金支出的运费分界点**。如果后续出现加急费、附加费用或报价变更，需一并重算；不能把B的未报运费当成零。"
+              }
+            ]
+          },
+          "reviewReason": "两组保留F，阈值是条件式比较。"
+        },
+        {
+          "id": "price ranking doesnot override delivery constraint",
+          "kind": "judgment",
+          "predefined": true,
+          "critical": true,
+          "baseline": {
+            "status": "pass",
+            "evidence": [
+              {
+                "file": "baseline.md",
+                "section": "4. 当前可用建议",
+                "lineStart": 148,
+                "lineEnd": 148,
+                "excerpt": "若B运费超过160元，只能说明其整批现金支出高于A现报价，**不能因此改选已知会超期的A**。如果希望保留A，需要另行取得满足7个自然日到货的新方案及完整费用；新报价应重新比较。若两家都无法确认满足期限，应另找可以明确承诺交付的方案，或由需求方重新决定期限。"
+              }
+            ]
+          },
+          "withMethods": {
+            "status": "pass",
+            "evidence": [
+              {
+                "file": "with-methods.md",
+                "section": "2. 运费在什么水平会改变现金支出排序",
+                "lineStart": 139,
+                "lineEnd": 139,
+                "excerpt": "这个阈值只比较支出，不能抵消7个自然日内到货的硬性要求。"
+              }
+            ]
+          },
+          "reviewReason": "两组均不因便宜改选已知超期A，也不直接批准未确认交期B。"
+        }
+      ]
+    },
+    {
+      "taskId": "store-denominator-attribution",
+      "component": "store-performance-analyst",
+      "baselineStatus": "pass",
+      "withMethodsStatus": "pass",
+      "checks": [
+        {
+          "id": "orderRatePrior",
+          "kind": "numeric",
+          "predefined": true,
+          "unit": "fraction",
+          "formula": "80 / 1000",
+          "independentlyRecomputed": 0.08,
+          "exactReference": "2/25",
+          "prewrittenExpected": 0.08,
+          "baseline": {
+            "status": "pass",
+            "observedValue": 0.08,
+            "evidence": [
+              {
+                "file": "baseline.md",
+                "section": "1. 统一指标定义并复算",
+                "lineStart": 172,
+                "lineEnd": 172,
+                "excerpt": "| **订单率** | 80÷1,000＝**8.00%** | 120÷2,000＝**6.00%** | **下降2.00个百分点，相对下降25.00%** |"
+              }
+            ]
+          },
+          "withMethods": {
+            "status": "pass",
+            "observedValue": 0.08,
+            "evidence": [
+              {
+                "file": "with-methods.md",
+                "section": "3. 比率、客单价与分母复算",
+                "lineStart": 197,
+                "lineEnd": 197,
+                "excerpt": "| 订单率＝支付订单 ÷ 访客 | 80 ÷ 1000＝**8%** | 120 ÷ 2000＝**6%** | **下降2个百分点；相对下降25%** |"
+              }
+            ]
+          }
+        },
+        {
+          "id": "orderRateNow",
+          "kind": "numeric",
+          "predefined": true,
+          "unit": "fraction",
+          "formula": "120 / 2000",
+          "independentlyRecomputed": 0.06,
+          "exactReference": "3/50",
+          "prewrittenExpected": 0.06,
+          "baseline": {
+            "status": "pass",
+            "observedValue": 0.06,
+            "evidence": [
+              {
+                "file": "baseline.md",
+                "section": "1. 统一指标定义并复算",
+                "lineStart": 172,
+                "lineEnd": 172,
+                "excerpt": "| **订单率** | 80÷1,000＝**8.00%** | 120÷2,000＝**6.00%** | **下降2.00个百分点，相对下降25.00%** |"
+              }
+            ]
+          },
+          "withMethods": {
+            "status": "pass",
+            "observedValue": 0.06,
+            "evidence": [
+              {
+                "file": "with-methods.md",
+                "section": "3. 比率、客单价与分母复算",
+                "lineStart": 197,
+                "lineEnd": 197,
+                "excerpt": "| 订单率＝支付订单 ÷ 访客 | 80 ÷ 1000＝**8%** | 120 ÷ 2000＝**6%** | **下降2个百分点；相对下降25%** |"
+              }
+            ]
+          }
+        },
+        {
+          "id": "buyerConversionPrior",
+          "kind": "numeric",
+          "predefined": true,
+          "unit": "fraction",
+          "formula": "60 / 1000",
+          "independentlyRecomputed": 0.06,
+          "exactReference": "3/50",
+          "prewrittenExpected": 0.06,
+          "baseline": {
+            "status": "pass",
+            "observedValue": 0.06,
+            "evidence": [
+              {
+                "file": "baseline.md",
+                "section": "1. 统一指标定义并复算",
+                "lineStart": 173,
+                "lineEnd": 173,
+                "excerpt": "| **买家转化率** | 60÷1,000＝**6.00%** | 70÷2,000＝**3.50%** | **下降2.50个百分点，相对下降41.67%** |"
+              }
+            ]
+          },
+          "withMethods": {
+            "status": "pass",
+            "observedValue": 0.06,
+            "evidence": [
+              {
+                "file": "with-methods.md",
+                "section": "3. 比率、客单价与分母复算",
+                "lineStart": 198,
+                "lineEnd": 198,
+                "excerpt": "| 买家转化率＝去重买家 ÷ 访客 | 60 ÷ 1000＝**6%** | 70 ÷ 2000＝**3.5%** | **下降2.5个百分点；相对下降41.67%** |"
+              }
+            ]
+          }
+        },
+        {
+          "id": "buyerConversionNow",
+          "kind": "numeric",
+          "predefined": true,
+          "unit": "fraction",
+          "formula": "70 / 2000",
+          "independentlyRecomputed": 0.035,
+          "exactReference": "7/200",
+          "prewrittenExpected": 0.035,
+          "baseline": {
+            "status": "pass",
+            "observedValue": 0.035,
+            "evidence": [
+              {
+                "file": "baseline.md",
+                "section": "1. 统一指标定义并复算",
+                "lineStart": 173,
+                "lineEnd": 173,
+                "excerpt": "| **买家转化率** | 60÷1,000＝**6.00%** | 70÷2,000＝**3.50%** | **下降2.50个百分点，相对下降41.67%** |"
+              }
+            ]
+          },
+          "withMethods": {
+            "status": "pass",
+            "observedValue": 0.035,
+            "evidence": [
+              {
+                "file": "with-methods.md",
+                "section": "3. 比率、客单价与分母复算",
+                "lineStart": 198,
+                "lineEnd": 198,
+                "excerpt": "| 买家转化率＝去重买家 ÷ 访客 | 60 ÷ 1000＝**6%** | 70 ÷ 2000＝**3.5%** | **下降2.5个百分点；相对下降41.67%** |"
+              }
+            ]
+          }
+        },
+        {
+          "id": "aovPrior",
+          "kind": "numeric",
+          "predefined": true,
+          "unit": "CNY/order",
+          "formula": "16000 / 80",
+          "independentlyRecomputed": 200,
+          "exactReference": "200",
+          "prewrittenExpected": 200,
+          "baseline": {
+            "status": "pass",
+            "observedValue": 200,
+            "evidence": [
+              {
+                "file": "baseline.md",
+                "section": "1. 统一指标定义并复算",
+                "lineStart": 175,
+                "lineEnd": 175,
+                "excerpt": "| **订单口径客单价** | 16,000÷80＝**200元** | 25,200÷120＝**210元** | 增加10元，增长5.00% |"
+              }
+            ]
+          },
+          "withMethods": {
+            "status": "pass",
+            "observedValue": 200,
+            "evidence": [
+              {
+                "file": "with-methods.md",
+                "section": "3. 比率、客单价与分母复算",
+                "lineStart": 199,
+                "lineEnd": 199,
+                "excerpt": "| 按订单计算的客单价＝实收 ÷ 支付订单 | 16000 ÷ 80＝**200元/单** | 25200 ÷ 120＝**210元/单** | **增加10元/单，增长5%** |"
+              }
+            ]
+          }
+        },
+        {
+          "id": "aovNow",
+          "kind": "numeric",
+          "predefined": true,
+          "unit": "CNY/order",
+          "formula": "25200 / 120",
+          "independentlyRecomputed": 210,
+          "exactReference": "210",
+          "prewrittenExpected": 210,
+          "baseline": {
+            "status": "pass",
+            "observedValue": 210,
+            "evidence": [
+              {
+                "file": "baseline.md",
+                "section": "1. 统一指标定义并复算",
+                "lineStart": 175,
+                "lineEnd": 175,
+                "excerpt": "| **订单口径客单价** | 16,000÷80＝**200元** | 25,200÷120＝**210元** | 增加10元，增长5.00% |"
+              }
+            ]
+          },
+          "withMethods": {
+            "status": "pass",
+            "observedValue": 210,
+            "evidence": [
+              {
+                "file": "with-methods.md",
+                "section": "3. 比率、客单价与分母复算",
+                "lineStart": 199,
+                "lineEnd": 199,
+                "excerpt": "| 按订单计算的客单价＝实收 ÷ 支付订单 | 16000 ÷ 80＝**200元/单** | 25200 ÷ 120＝**210元/单** | **增加10元/单，增长5%** |"
+              }
+            ]
+          }
+        },
+        {
+          "id": "revenueGrowth",
+          "kind": "numeric",
+          "predefined": true,
+          "unit": "fraction",
+          "formula": "(25200 - 16000) / 16000",
+          "independentlyRecomputed": 0.575,
+          "exactReference": "23/40",
+          "prewrittenExpected": 0.575,
+          "baseline": {
+            "status": "pass",
+            "observedValue": 0.575,
+            "evidence": [
+              {
+                "file": "baseline.md",
+                "section": "1. 统一指标定义并复算",
+                "lineStart": 174,
+                "lineEnd": 174,
+                "excerpt": "| 实收 | 16,000元 | 25,200元 | 增加9,200元，增长57.50% |"
+              }
+            ]
+          },
+          "withMethods": {
+            "status": "pass",
+            "observedValue": 0.575,
+            "evidence": [
+              {
+                "file": "with-methods.md",
+                "section": "2. 原始规模变化",
+                "lineStart": 189,
+                "lineEnd": 189,
+                "excerpt": "| 实收 | 16000元 | 25200元 | ＋9200元 | **＋57.5%** |"
+              }
+            ]
+          }
+        },
+        {
+          "id": "ordersGrowth",
+          "kind": "numeric",
+          "predefined": true,
+          "unit": "fraction",
+          "formula": "(120 - 80) / 80",
+          "independentlyRecomputed": 0.5,
+          "exactReference": "1/2",
+          "prewrittenExpected": 0.5,
+          "baseline": {
+            "status": "pass",
+            "observedValue": 0.5,
+            "evidence": [
+              {
+                "file": "baseline.md",
+                "section": "1. 统一指标定义并复算",
+                "lineStart": 170,
+                "lineEnd": 170,
+                "excerpt": "| 支付订单数 | 80 | 120 | 增加40，增长50% |"
+              }
+            ]
+          },
+          "withMethods": {
+            "status": "pass",
+            "observedValue": 0.5,
+            "evidence": [
+              {
+                "file": "with-methods.md",
+                "section": "2. 原始规模变化",
+                "lineStart": 187,
+                "lineEnd": 187,
+                "excerpt": "| 支付订单 | 80单 | 120单 | ＋40单 | **＋50%** |"
+              }
+            ]
+          }
+        },
+        {
+          "id": "buyerConversionChangePP",
+          "kind": "numeric",
+          "predefined": true,
+          "unit": "percentage points",
+          "formula": "(70 / 2000 - 60 / 1000) * 100",
+          "independentlyRecomputed": -2.5,
+          "exactReference": "-5/2",
+          "prewrittenExpected": -2.5,
+          "baseline": {
+            "status": "pass",
+            "observedValue": -2.5,
+            "evidence": [
+              {
+                "file": "baseline.md",
+                "section": "1. 统一指标定义并复算",
+                "lineStart": 173,
+                "lineEnd": 173,
+                "excerpt": "| **买家转化率** | 60÷1,000＝**6.00%** | 70÷2,000＝**3.50%** | **下降2.50个百分点，相对下降41.67%** |"
+              }
+            ]
+          },
+          "withMethods": {
+            "status": "pass",
+            "observedValue": -2.5,
+            "evidence": [
+              {
+                "file": "with-methods.md",
+                "section": "3. 比率、客单价与分母复算",
+                "lineStart": 198,
+                "lineEnd": 198,
+                "excerpt": "| 买家转化率＝去重买家 ÷ 访客 | 60 ÷ 1000＝**6%** | 70 ÷ 2000＝**3.5%** | **下降2.5个百分点；相对下降41.67%** |"
+              }
+            ]
+          }
+        },
+        {
+          "id": "no causal promo proof",
+          "kind": "judgment",
+          "predefined": true,
+          "critical": true,
+          "baseline": {
+            "status": "pass",
+            "evidence": [
+              {
+                "file": "baseline.md",
+                "section": "3. 哪些原因或经营结果不能下结论",
+                "lineStart": 210,
+                "lineEnd": 210,
+                "excerpt": "- **不能认定促销造成收入或订单增长。** 没有随机对照，也没有提供其他可识别促销独立影响的分析。投放、渠道构成、季节、商品组合等都可能影响两期表现，目前只能说促销与这些变化在同一期发生。"
+              }
+            ]
+          },
+          "withMethods": {
+            "status": "pass",
+            "evidence": [
+              {
+                "file": "with-methods.md",
+                "section": "5. 哪些结论成立，哪些还不能成立",
+                "lineStart": 237,
+                "lineEnd": 237,
+                "excerpt": "- **促销的因果效果。** 本期有促销，但没有随机对照；无法知道没有促销时会发生什么，既不能断言促销导致增长，也不能反过来断言促销导致转化率下降。"
+              }
+            ]
+          },
+          "reviewReason": "描述性增长与促销因果分开；两组也不将转化下降直接归因促销。"
+        },
+        {
+          "id": "profit unknown",
+          "kind": "judgment",
+          "predefined": true,
+          "critical": true,
+          "baseline": {
+            "status": "pass",
+            "evidence": [
+              {
+                "file": "baseline.md",
+                "section": "3. 哪些原因或经营结果不能下结论",
+                "lineStart": 212,
+                "lineEnd": 212,
+                "excerpt": "- **不能判断利润是否增长。** 现有数据只有实收，没有成本、促销让利的完整成本、投放支出和退款信息。利润变化方向、幅度及促销投入产出比均无法可靠计算；实收增长不能代替利润增长。"
+              }
+            ]
+          },
+          "withMethods": {
+            "status": "pass",
+            "evidence": [
+              {
+                "file": "with-methods.md",
+                "section": "5. 哪些结论成立，哪些还不能成立",
+                "lineStart": 239,
+                "lineEnd": 239,
+                "excerpt": "- **利润增长。** 未知货品、履约、平台、营销、劳动等成本和退款，实收增加不等于利润增加，也不能判断利润变化方向。"
+              }
+            ]
+          },
+          "reviewReason": "两组保留成本/退款未知，不用实收替代利润。"
+        },
+        {
+          "id": "rejects conversion+50% andprofitclaim",
+          "kind": "judgment",
+          "predefined": true,
+          "critical": true,
+          "baseline": {
+            "status": "pass",
+            "evidence": [
+              {
+                "file": "baseline.md",
+                "section": "4. 审核负责人希望使用的表述",
+                "lineStart": 220,
+                "lineEnd": 220,
+                "excerpt": "**建议不使用原句，三个关键判断都需要修正：**"
+              }
+            ]
+          },
+          "withMethods": {
+            "status": "pass",
+            "evidence": [
+              {
+                "file": "with-methods.md",
+                "section": "三、店铺复盘与对外结论审核",
+                "lineStart": 167,
+                "lineEnd": 167,
+                "excerpt": "**本期支付订单增长50%、实收增长57.5%，但订单率和买家转化率都下降。现有资料无法证明促销带来了这些变化，也无法判断利润是否增长。负责人拟写的“促销让购买转化率提升50%，利润同步大涨”应修改。**"
+              }
+            ]
+          },
+          "reviewReason": "两组拒绝原句，指出50%是订单数量增幅，利润无依据；均给谨慎对外文本。"
+        },
+        {
+          "id": "distinguishes orders vsunique buyers",
+          "kind": "judgment",
+          "predefined": true,
+          "critical": true,
+          "baseline": {
+            "status": "pass",
+            "evidence": [
+              {
+                "file": "baseline.md",
+                "section": "1. 统一指标定义并复算",
+                "lineStart": 162,
+                "lineEnd": 162,
+                "excerpt": "- **订单率**＝支付订单数÷访客数。它反映每位访客对应的订单产出，不能直接等同于有多少访客完成购买，因为同一买家可能下多单。"
+              }
+            ]
+          },
+          "withMethods": {
+            "status": "pass",
+            "evidence": [
+              {
+                "file": "with-methods.md",
+                "section": "1. 口径与可用范围",
+                "lineStart": 175,
+                "lineEnd": 175,
+                "excerpt": "- **订单率＝支付订单数 ÷ 访客数。** 同一位买家可能支付多笔订单，所以订单数不能替代去重买家数。"
+              }
+            ]
+          },
+          "reviewReason": "两组采用独立定义，未把80/120订单当60/70买家。"
+        }
+      ]
+    }
+  ],
+  "additionalExplanationAudit": [
+    {
+      "id": "conditional-labor-cash",
+      "groups": "withMethods",
+      "status": "pass",
+      "calculation": "56.7/44.145; ceil(2600/.)=46/59; monthly balances2503/1373.05; deduct labor1620 =>883/-246.95",
+      "reason": "附加现金/劳动两口径是明确条件分支；没有断言劳动一定不付现金，也没有用46/59替代含劳动68/100。",
+      "evidence": [
+        {
+          "file": "with-methods.md",
+          "section": "1. 先统一周期与成本口径",
+          "lineStart": 17,
+          "lineEnd": 17,
+          "excerpt": "题目未说明这18元是否实际支付为工资，因此分别列示两种口径："
+        },
+        {
+          "file": "with-methods.md",
+          "section": "3. 月盈亏平衡量与容量",
+          "lineStart": 58,
+          "lineEnd": 58,
+          "excerpt": "46单和59单只覆盖未扣劳动价值口径下的已列成本，不能据此声称劳动已经获得补偿。对这次报价决策，更完整的比较应使用68单与100单。"
+        }
+      ],
+      "changesPredefinedScore": false
+    },
+    {
+      "id": "capacity-gap-and-cost-reduction",
+      "groups": "both",
+      "status": "pass",
+      "calculation": "883 - (-246.95)=1129.95; 246.95 / 90 = 2.743888...",
+      "reason": "满容量差额与降低固定费/单位成本的条件演算正确，均未声称真实可实现。",
+      "evidence": [
+        {
+          "file": "baseline.md",
+          "section": "3. 条件式经营建议",
+          "lineStart": 75,
+          "lineEnd": 75,
+          "excerpt": "- **如果目的是让八五折常规报价覆盖全部已知成本，需要先改变成本或容量条件。** 在90单时，每月还差246.95元；等价地，需要月固定费下降246.95元，或每单非平台变动成本下降约2.7439元，或由其他明确、可持续的贡献补足。若保持当前单价和单位成本，则至少需要100单/月，已经超过现有容量，扩容还可能带来新增成本。"
+        },
+        {
+          "file": "with-methods.md",
+          "section": "4. 每月满容量90单时的余额",
+          "lineStart": 71,
+          "lineEnd": 71,
+          "excerpt": "同样交付90单时，八五折比原价少留下1129.95元。由于固定费未变，单笔贡献虽仍为正，八五折却无法在现有月容量内覆盖已列全部成本。"
+        }
+      ],
+      "changesPredefinedScore": false
+    },
+    {
+      "id": "capacity-price-floor",
+      "groups": "both",
+      "status": "pass",
+      "calculation": "Pmin=66500/837=79.450418...; cent quote ceil(100P)/100=79.46",
+      "reason": "两组均说明只覆盖给定成本、满容量且有需求的条件，非市场愿付或盈利保证。",
+      "evidence": [
+        {
+          "file": "baseline.md",
+          "section": "3. 条件式经营建议",
+          "lineStart": 84,
+          "lineEnd": 84,
+          "excerpt": "若按分报价，至少为 **79.46元/单**。这个价格没有为未知成本、需求不足或经营利润预留空间，因此只能作为满容量条件下的已知成本下限。"
+        },
+        {
+          "file": "with-methods.md",
+          "section": "5. 条件式建议",
+          "lineStart": 83,
+          "lineEnd": 83,
+          "excerpt": "若售价只能精确到分，则至少79.46元才能覆盖这一口径下的已列成本。它是满容量情景的成本底线，不是市场愿付价格，也没有包含未知费用。"
+        }
+      ],
+      "changesPredefinedScore": false
+    },
+    {
+      "id": "sales-multiplier",
+      "groups": "both",
+      "status": "pass",
+      "calculation": "38.7/26.145=1.48020654...",
+      "reason": "贡献追平需要约48.02%单量增加；有包组还明确整单向上取整和容量约束。",
+      "evidence": [
+        {
+          "file": "baseline.md",
+          "section": "3. 条件式经营建议",
+          "lineStart": 76,
+          "lineEnd": 76,
+          "excerpt": "- **如果只考虑限时促销，应比较实际可实现的销量，而不能假定降价必然带来足够订单。** 固定费相同时，八五折要追平原价的贡献，销量至少需要达到原价销量的 \\(38.7\\div26.145\\approx1.4802\\) 倍，即增加约48.02%。例如，原价若只能卖60单，月余额为－278元；八五折若确实能卖满90单，月余额为－246.95元，只改善31.05元，仍未覆盖全部已知成本。该例只是条件演算，不是需求预测。"
+        },
+        {
+          "file": "with-methods.md",
+          "section": "5. 条件式建议",
+          "lineStart": 87,
+          "lineEnd": 87,
+          "excerpt": "**折扣单量 ≥ ⌈原价单量 × 38.70 ÷ 26.145⌉，约需原价单量的1.4802倍。**"
+        }
+      ],
+      "changesPredefinedScore": false
+    },
+    {
+      "id": "baseline-conditional-examples",
+      "groups": "baseline",
+      "status": "pass",
+      "calculation": "quarter2649/-740.85; original60orders=-278, discounted90orders=-246.95 =>+31.05",
+      "reason": "基线附加季度和60→90单情景算术正确并标条件，不是需求预测。",
+      "evidence": [
+        {
+          "file": "baseline.md",
+          "section": "2. 月盈亏平衡量与满容量余额",
+          "lineStart": 70,
+          "lineEnd": 70,
+          "excerpt": "如果连续三个月都交付并收款90单，季度合计270单，则原价的季度余额为 **2,649.00元**，八五折为 **－740.85元**。这仍然只覆盖已列明的成本口径。"
+        },
+        {
+          "file": "baseline.md",
+          "section": "3. 条件式经营建议",
+          "lineStart": 76,
+          "lineEnd": 76,
+          "excerpt": "- **如果只考虑限时促销，应比较实际可实现的销量，而不能假定降价必然带来足够订单。** 固定费相同时，八五折要追平原价的贡献，销量至少需要达到原价销量的 \\(38.7\\div26.145\\approx1.4802\\) 倍，即增加约48.02%。例如，原价若只能卖60单，月余额为－278元；八五折若确实能卖满90单，月余额为－246.95元，只改善31.05元，仍未覆盖全部已知成本。该例只是条件演算，不是需求预测。"
+        }
+      ],
+      "changesPredefinedScore": false
+    },
+    {
+      "id": "procurement-formula-and-unit-cost",
+      "groups": "both",
+      "status": "pass",
+      "calculation": "ceil(max(demand,MOQ)/pack)=max(ceil(demand/pack),ceil(MOQ/pack)); A6640/800=8.3; B(6480+F)/720=9+F/720",
+      "reason": "正包装量时两种整包公式等价；单位成本补充没有替代整批现金/交期判断。",
+      "evidence": [
+        {
+          "file": "baseline.md",
+          "section": "1. 实际采购量和已知现金支出",
+          "lineStart": 99,
+          "lineEnd": 99,
+          "excerpt": "\\text{采购量}=\\left\\lceil\\frac{\\max(\\text{需求量},\\text{MOQ})}{\\text{每包件数}}\\right\\rceil\\times\\text{每包件数}"
+        },
+        {
+          "file": "with-methods.md",
+          "section": "1. 实际采购数量必须同时满足MOQ和整包要求",
+          "lineStart": 101,
+          "lineEnd": 101,
+          "excerpt": "**采购包数＝max（⌈需求量 ÷ 每包件数⌉，⌈MOQ ÷ 每包件数⌉）。**"
+        },
+        {
+          "file": "with-methods.md",
+          "section": "1. 实际采购数量必须同时满足MOQ和整包要求",
+          "lineStart": 123,
+          "lineEnd": 123,
+          "excerpt": "A的已列到货成本为6640 ÷ 800＝8.30元/购入件；B为9＋F ÷ 720元/购入件。但本次采购现金支出还受多购数量影响，不能只看每件价格。多出的160件或80件没有已知用途与变现价值，不能先抵减本次支出；未来仓储、损耗或处置成本也没有资料。"
+        }
+      ],
+      "changesPredefinedScore": false
+    },
+    {
+      "id": "store-extra-ratios",
+      "groups": "both",
+      "status": "pass",
+      "calculation": "buyer receipt+35%; orders/buyer+28.5714%; receipt/visitor-21.25%",
+      "reason": "附加分母计算正确；两组均没有据此声称老客复购提高。",
+      "evidence": [
+        {
+          "file": "baseline.md",
+          "section": "1. 统一指标定义并复算",
+          "lineStart": 176,
+          "lineEnd": 176,
+          "excerpt": "| 买家人均实收 | 16,000÷60≈266.67元 | 25,200÷70＝360.00元 | 增加约93.33元，增长35.00% |"
+        },
+        {
+          "file": "baseline.md",
+          "section": "2. 哪些增长可以确认",
+          "lineStart": 191,
+          "lineEnd": 191,
+          "excerpt": "这个结果说明订单增长不能全部解释为购买人数增加；但它本身不能证明老客复购改善，也不能识别是谁增加了下单次数。判断复购需要买家跨期匹配、新老客划分及订单明细。"
+        },
+        {
+          "file": "with-methods.md",
+          "section": "3. 比率、客单价与分母复算",
+          "lineStart": 201,
+          "lineEnd": 201,
+          "excerpt": "| 每位买家平均支付订单数＝订单 ÷ 去重买家 | 80 ÷ 60≈**1.333单/位** | 120 ÷ 70≈**1.714单/位** | **增长28.57%** |"
+        },
+        {
+          "file": "with-methods.md",
+          "section": "3. 比率、客单价与分母复算",
+          "lineStart": 206,
+          "lineEnd": 206,
+          "excerpt": "可以确认本期每位去重买家的平均订单数增加；没有跨期买家身份与购买明细，不能据此宣布老客复购率提高。"
+        }
+      ],
+      "changesPredefinedScore": false
+    },
+    {
+      "id": "sequential-revenue-decomposition",
+      "groups": "withMethods",
+      "status": "pass",
+      "calculation": "+16000 -8000 +1200 =+9200; total ratio2*0.75*1.05=1.575",
+      "reason": "新增分解算术正确，明确替换顺序依赖、非因果。",
+      "evidence": [
+        {
+          "file": "with-methods.md",
+          "section": "4. 收入增长如何在算术上分解",
+          "lineStart": 224,
+          "lineEnd": 224,
+          "excerpt": "| 访客数替换项 | （2000 − 1000）× 8% × 200 | ＋16000元 |"
+        },
+        {
+          "file": "with-methods.md",
+          "section": "4. 收入增长如何在算术上分解",
+          "lineStart": 225,
+          "lineEnd": 225,
+          "excerpt": "| 订单率替换项 | 2000 ×（6% − 8%）× 200 | −8000元 |"
+        },
+        {
+          "file": "with-methods.md",
+          "section": "4. 收入增长如何在算术上分解",
+          "lineStart": 226,
+          "lineEnd": 226,
+          "excerpt": "| 客单价替换项 | 2000 × 6% ×（210 − 200） | ＋1200元 |"
+        },
+        {
+          "file": "with-methods.md",
+          "section": "4. 收入增长如何在算术上分解",
+          "lineStart": 229,
+          "lineEnd": 229,
+          "excerpt": "这表明，在给定顺序的算术分解中，访客规模增长和每单实收提高，与订单率下降同时存在，最后得到实收增加9200元。**分解金额会受替换顺序影响，它不证明促销、渠道或任何具体动作造成了相应增量。**"
+        }
+      ],
+      "changesPredefinedScore": false
+    },
+    {
+      "id": "overlapping-channel-aggregation-advice",
+      "groups": "withMethods",
+      "status": "not_assessable",
+      "calculation": "No channel-level records or membership map supplied.",
+      "reason": "“总分子除以可去重的总分母”可读为整体合法口径，但题目没有渠道拆分，无法实际验证。若渠道重叠，分子中的买家/订单也需在与分母一致的实体与归属口径去重；这是一条非阻断适用性提示，不把歧义判为本题数值错误，也不加分。",
+      "evidence": [
+        {
+          "file": "with-methods.md",
+          "section": "5. 哪些结论成立，哪些还不能成立",
+          "lineStart": 242,
+          "lineEnd": 242,
+          "excerpt": "后续可先用现有记录核对两期收款、订单和退款归属，再按同一渠道及商品口径拆分访客、买家、订单和实收，以区分渠道结构变化与渠道内部变化。分组后的整体比率应使用总分子除以可去重的总分母，不能简单平均各组百分比。"
+        }
+      ],
+      "changesPredefinedScore": false
+    }
+  ],
+  "summary": {
+    "predefinedNumericCriteria": 26,
+    "predefinedJudgmentCriteria": 11,
+    "predefinedCriteriaTotal": 37,
+    "baseline": {
+      "tasksPass": 3,
+      "tasksFail": 0,
+      "tasksNotAssessable": 0,
+      "criteriaPass": 37,
+      "criteriaFail": 0,
+      "criteriaNotAssessable": 0
+    },
+    "withMethods": {
+      "tasksPass": 3,
+      "tasksFail": 0,
+      "tasksNotAssessable": 0,
+      "criteriaPass": 37,
+      "criteriaFail": 0,
+      "criteriaNotAssessable": 0
+    },
+    "observedTaskPassRateDifferencePercentagePoints": 0,
+    "observedCriterionPassRateDifferencePercentagePoints": 0,
+    "conclusion": "两组均通过全部3题和37项预设标准，观察到的正确率提升为0个百分点。本试验未检出方法包提升正确率，也未检出新增解释导致的确定性错误；不能据此证明方法包无效、普遍等效或全面可靠。"
+  },
+  "artifactDescription": {
+    "baselineCharacters": 6413,
+    "withMethodsCharacters": 7842,
+    "lengthInterpretation": "Only character counts; no measured runtime, token cost, usability, efficiency or reader-comprehension score.",
+    "withMethodsAdditionalContent": "额外区分劳动估值与现金口径、提供固定顺序的收入增量分解等。基线也已有充分正确的单位、容量、缺口和因果边界；内容更长不等于本次正确率提升。"
+  },
+  "sourceReadAssessment": {
+    "manifestFilesExist": true,
+    "listedFileCount": 15,
+    "checkedPaths": [
+      {
+        "path": "agents/pricing-cost-analyst/AGENT.md",
+        "exists": true
+      },
+      {
+        "path": "agents/pricing-cost-analyst/capability.json",
+        "exists": true
+      },
+      {
+        "path": "agents/pricing-cost-analyst/method.json",
+        "exists": true
+      },
+      {
+        "path": "agents/pricing-cost-analyst/references/professional-method.md",
+        "exists": true
+      },
+      {
+        "path": "agents/pricing-cost-analyst/references/worked-delivery.md",
+        "exists": true
+      },
+      {
+        "path": "agents/supplier-comparison-analyst/AGENT.md",
+        "exists": true
+      },
+      {
+        "path": "agents/supplier-comparison-analyst/capability.json",
+        "exists": true
+      },
+      {
+        "path": "agents/supplier-comparison-analyst/method.json",
+        "exists": true
+      },
+      {
+        "path": "agents/supplier-comparison-analyst/references/professional-method.md",
+        "exists": true
+      },
+      {
+        "path": "agents/supplier-comparison-analyst/references/worked-delivery.md",
+        "exists": true
+      },
+      {
+        "path": "agents/store-performance-analyst/AGENT.md",
+        "exists": true
+      },
+      {
+        "path": "agents/store-performance-analyst/capability.json",
+        "exists": true
+      },
+      {
+        "path": "agents/store-performance-analyst/method.json",
+        "exists": true
+      },
+      {
+        "path": "agents/store-performance-analyst/references/professional-method.md",
+        "exists": true
+      },
+      {
+        "path": "agents/store-performance-analyst/references/worked-delivery.md",
+        "exists": true
+      }
+    ],
+    "recordScope": "sources-read.json is a supplied read manifest, not by itself an authenticated tool trace; its external links are not counted as fetched sources.",
+    "inferenceLimit": "This review did not independently establish package-read execution, context isolation, model/provider identity or evaluation latency from the five inputs."
+  },
+  "limitations": [
+    "Three synthetic tasks, one trial per condition, current conversation only; no repeatability or statistical effect estimate.",
+    "Both conditions reach the predefined ceiling, so this set cannot expose a positive correctness difference.",
+    "The reviewer sees group names and has participated in other Service content authoring; grading uses prewritten task-specific criteria and exact excerpts, not a blinded third-party certification.",
+    "No actual supplier transaction, shop data system, pricing operation, DSh/DeepSeek runtime or other host invocation is established.",
+    "No generalization to all industry Agents/Skills, real customers or future model versions."
+  ],
+  "sourceFilesUnchanged": true,
+  "status": "frozen"
+}

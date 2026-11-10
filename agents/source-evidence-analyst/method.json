@@ -42,7 +42,10 @@
   "acceptance": [
     "关键事实有可访问一手来源及时间，或明确未证实",
     "草稿与实际平台操作分开，未获回执不写已发布/已申诉",
-    "被拒目标不通过API、代理或其他Agent再尝试"
+    "被拒目标不通过API、代理或其他Agent再尝试",
+    "逐项声明绑定原始来源/版本/位置、事件与发表时间、适用对象和支持范围；转引链及研究/报告关系可核。",
+    "结论或草稿对应当前问题；研究综合附检索范围/日期/式、预先纳排、筛选去向与反证，不超出实际覆盖。",
+    "具体列不可访问/缺全文/不完整时段、异质性和冲突，并解释各缺口会怎样影响当前决定。"
   ],
   "exclusiveResources": [
     "browser.session",
@@ -89,7 +92,20 @@
         "w3c-prov",
         "slsa-provenance",
         "kim-decision",
-        "goalpro"
+        "goalpro",
+        "cochrane-search",
+        "prisma-report"
+      ]
+    },
+    {
+      "id": "source-evidence-analyst-delivery",
+      "path": "references/delivery-template.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "cochrane-search",
+        "prisma-report"
       ]
     }
   ],
@@ -101,7 +117,8 @@
       "把冲突、缺口和可推翻结论的证据交回调用方"
     ],
     "knowledgeAssetIds": [
-      "source-evidence-analyst-core"
+      "source-evidence-analyst-core",
+      "source-evidence-analyst-delivery"
     ],
     "diagnosticSequence": [
       {
@@ -130,6 +147,24 @@
           "未覆盖时段与材料缺页"
         ],
         "whenMissing": "给出最短补证动作，并交条件结论，不填造“已证实”。"
+      },
+      {
+        "id": "search-protocol",
+        "question": "检索需要回答什么范围，采用何种纳排、数据库/渠道与搜索式？",
+        "evidenceRequired": [
+          "问题和纳排条件",
+          "实际查询/日期/范围"
+        ],
+        "whenMissing": "只报告已取材料覆盖，不称系统穷尽"
+      },
+      {
+        "id": "study-report",
+        "question": "筛选单位是记录、报告还是独立研究？",
+        "evidenceRequired": [
+          "去重映射",
+          "研究标识/样本/期间"
+        ],
+        "whenMissing": "无法确认独立性时标关联疑点，不累计票数"
       }
     ],
     "decisionRules": [
@@ -150,6 +185,24 @@
         "when": "目标材料不可访问或被明确拒绝",
         "action": "交已取得证据、缺失项和由用户补交的材料清单",
         "avoid": "绕过拒绝、借另一 Agent 重试，或假装已看到未取得页面。"
+      },
+      {
+        "id": "eligibility-first",
+        "when": "要综合多个来源或研究",
+        "action": "先记录纳排与检索方案；变更留下理由并检查影响",
+        "avoid": "看到结论后筛掉相反材料而不披露"
+      },
+      {
+        "id": "study-report",
+        "when": "多个网页/论文可能对应同一底层研究",
+        "action": "保留报告到研究映射，合并重复证据范围",
+        "avoid": "把报告数量当独立研究数量"
+      },
+      {
+        "id": "reporting-not-proof",
+        "when": "报告格式齐全但方法或效果证据不足",
+        "action": "分开报告完整、偏倚风险和实际效应判断",
+        "avoid": "把清单通过称研究已证实"
       }
     ],
     "contractGuidance": [
@@ -185,58 +238,137 @@
         "outputChecks": [
           {
             "field": "facts",
-            "criterion": "每项事实有出处、范围、时间与支持程度。",
-            "rejectWhen": "把转载数量或截图文字当事件真实性。"
+            "criterion": "逐项声明绑定原始来源/版本/位置、事件与发表时间、适用对象和支持范围；转引链及研究/报告关系可核。",
+            "rejectWhen": "把多次转载或同一研究多篇报告算独立证据，或摘要未见原文却声称全文核实。",
+            "id": "source-evidence-analyst-facts",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "声明到来源位置的矩阵",
+              "原始/转引及研究/报告去重关系",
+              "材料取得与未取得记录"
+            ],
+            "blocking": true
           },
           {
             "field": "delivery",
-            "criterion": "结论/草稿逐项对应核查问题，事实与推断分开。",
-            "rejectWhen": "写已发送、已申诉或未证实的指控。"
+            "criterion": "结论或草稿对应当前问题；研究综合附检索范围/日期/式、预先纳排、筛选去向与反证，不超出实际覆盖。",
+            "rejectWhen": "未检索称全网穷尽，见结果改纳排而不披露，或正式发送/申诉无回执。",
+            "id": "source-evidence-analyst-delivery",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "问题与检索/筛选协议",
+              "逐条纳排及去重后的证据表",
+              "结论与支持/冲突/反证对应"
+            ],
+            "blocking": true
           },
           {
             "field": "limitations",
-            "criterion": "明确冲突、不可访问材料和会改变决定的缺口。",
-            "rejectWhen": "以笼统“仅供参考”隐藏具体证据缺失。"
+            "criterion": "具体列不可访问/缺全文/不完整时段、异质性和冲突，并解释各缺口会怎样影响当前决定。",
+            "rejectWhen": "仅写仅供参考，或把PRISMA报告齐全等同研究质量/医学有效性。",
+            "id": "source-evidence-analyst-limitations",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "缺口与受影响结论",
+              "替代解释和可改变决定的下一证据"
+            ],
+            "blocking": true
           },
           {
             "field": "status",
             "criterion": "只总结当前角色的实际交付状态与已说明限制。",
-            "rejectWhen": "把候选产物状态等同用户最终接受。"
+            "rejectWhen": "把候选产物状态等同用户最终接受。",
+            "id": "source-evidence-analyst-status",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "当前产物与未完成范围",
+              "阻断/部分完成的具体原因"
+            ],
+            "blocking": true
           },
           {
             "field": "artifactRefs",
             "criterion": "引用确实存在且当前任务相关的产物；未产出不编路径。",
-            "rejectWhen": "把预计文件或未读取摘要当真实产物。"
+            "rejectWhen": "把预计文件或未读取摘要当真实产物。",
+            "id": "source-evidence-analyst-artifactrefs",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "实际文件或记录位置",
+              "内容版本及其证据级别"
+            ],
+            "blocking": true
           },
           {
             "field": "criterionResults",
             "criterion": "每项区分实际观察、自报判断和未运行。",
-            "rejectWhen": "把结构检查、文档读取或自报pass当独立验收。"
+            "rejectWhen": "把结构检查、文档读取或自报pass当独立验收。",
+            "id": "source-evidence-analyst-criterionresults",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "任务验收条件逐项对应",
+              "实际证据引用及观察/自报/未运行标记"
+            ],
+            "blocking": true
           },
           {
             "field": "missingCapabilities",
             "criterion": "明确缺少何种能力、影响哪个检查或动作。",
-            "rejectWhen": "工具不可用仍宣称已执行。"
+            "rejectWhen": "工具不可用仍宣称已执行。",
+            "id": "source-evidence-analyst-missingcapabilities",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "本任务可用工具与权限绑定",
+              "缺能力影响的具体核查项"
+            ],
+            "blocking": true
           },
           {
             "field": "failures",
             "criterion": "记录真实失败与范围，不泄露敏感材料。",
-            "rejectWhen": "凭推测补失败或隐去影响结论的问题。"
+            "rejectWhen": "凭推测补失败或隐去影响结论的问题。",
+            "id": "source-evidence-analyst-failures",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "真实失败记录/目标/时间",
+              "可重试范围和停止依据"
+            ],
+            "blocking": true
           },
           {
             "field": "stopReason",
             "criterion": "说明角色当前结束、缺证据或被阻塞的具体原因。",
-            "rejectWhen": "把未完成判断静默转为成功。"
+            "rejectWhen": "把未完成判断静默转为成功。",
+            "id": "source-evidence-analyst-stopreason",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "当前结束条件",
+              "剩余事实或能力缺口"
+            ],
+            "blocking": true
           },
           {
             "field": "handoff",
             "criterion": "交事实、产物、限制与待决定项；控制权留调用方。",
-            "rejectWhen": "自行批准下一阶段、调度或高影响操作。"
+            "rejectWhen": "自行批准下一阶段、调度或高影响操作。",
+            "id": "source-evidence-analyst-handoff",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "产物和证据包",
+              "待决定项、受影响范围与接收责任"
+            ],
+            "blocking": true
           },
           {
             "field": "nativeRuntimeVerified",
             "criterion": "未经独立宿主运行证明保持false。",
-            "rejectWhen": "因模板存在、合同测试或本地装入而声称原生运行已验证。"
+            "rejectWhen": "因模板存在、合同测试或本地装入而声称原生运行已验证。",
+            "id": "source-evidence-analyst-nativeruntimeverified",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "当前值保持false",
+              "独立宿主证据状态，与本地/作者样例分开"
+            ],
+            "blocking": true
           }
         ]
       }

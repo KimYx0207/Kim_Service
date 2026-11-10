@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "roleId": "metric-contract",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "buyer-orders",
+      "capabilityId": "metric-contract-deliver",
+      "category": "worked_example",
+      "scenario": "人次不同",
+      "input": {
+        "question": "购买用户比例",
+        "dataMap": "1000访客、150买家、200订单",
+        "policies": "买家按人去重"
+      },
+      "candidateOutputExcerpt": {
+        "definitions": "买家转化15%，订单密度0.2笔/访客。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "实体与单位正确。",
+      "diagnosticRefs": [
+        "grain"
+      ],
+      "decisionRuleRefs": [
+        "distinct-entity"
+      ]
+    },
+    {
+      "id": "wrong-denominator",
+      "capabilityId": "metric-contract-deliver",
+      "category": "failure_boundary",
+      "scenario": "订单冒充买家",
+      "input": {
+        "question": "买家转化",
+        "dataMap": "1000访客，150买家，200订单",
+        "policies": "未知"
+      },
+      "candidateOutputExcerpt": {
+        "definitions": "买家转化20%。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "用订单替代去重人。",
+      "diagnosticRefs": [
+        "grain"
+      ],
+      "decisionRuleRefs": [
+        "distinct-entity"
+      ]
+    },
+    {
+      "id": "time-boundary",
+      "capabilityId": "metric-contract-deliver",
+      "category": "worked_example",
+      "scenario": "创建与支付时点不同",
+      "input": {
+        "question": "两报表不一致",
+        "dataMap": "A按支付日，B按创建日",
+        "policies": "同一周窗口"
+      },
+      "candidateOutputExcerpt": {
+        "reconciliation": "先定位跨周订单，不能直接平均。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "时间定义决定集合。",
+      "diagnosticRefs": [
+        "time"
+      ],
+      "decisionRuleRefs": [
+        "same-name"
+      ]
+    },
+    {
+      "id": "silent-change",
+      "capabilityId": "metric-contract-deliver",
+      "category": "failure_boundary",
+      "scenario": "改分母不改版本",
+      "input": {
+        "question": "展示增长",
+        "dataMap": "原所有访客，现仅登录访客",
+        "policies": "沿用原转化名称和趋势"
+      },
+      "candidateOutputExcerpt": {
+        "changePolicy": "无需说明，直接与旧值比较。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "语义改变损害可比性。",
+      "diagnosticRefs": [
+        "decision",
+        "grain"
+      ],
+      "decisionRuleRefs": [
+        "single-source"
+      ]
+    }
+  ]
+}

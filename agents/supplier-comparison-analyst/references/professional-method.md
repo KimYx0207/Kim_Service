@@ -53,49 +53,9 @@
 
 保留本包 calculation-tool.json、delivery-tool.json 与现有 Python helper、四类完整案例。计算只对明确输入做规范化；缺工具时可展示可复算小例但注明未调用。helper 的真实输出不是供应商信用认证。
 
-## 正例与反例
+## 案例与完整交付
 
-以下是作者设计的合成片段，不是模型运行记录，也不是完整正式交付；预期判断仍需独立专业复核。
-
-### moq-cost（可接受候选）
-
-合成需求120个同规格袋，A最低150个每个2元另运费35；B恰好120个每个2.1元另运费23。
-
-输入：{"specification":"相同布料尺寸拉链袋，单位个","quantity":120,"currency":"CNY","quotes":[{"supplier":"A","unitPrice":2,"moq":150,"shipping":35},{"supplier":"B","unitPrice":2.1,"moq":120,"shipping":23}]}
-
-候选输出片段：
-
-```json
-{
-  "normalizedQuotes": [
-    "A需买150个，335元，超购30个。",
-    "B需买120个，275元，无超购。"
-  ],
-  "recommendations": [
-    "已知到货费用B较低；质量、交期和未计费用仍待确认，不能仅据此保证B最佳。"
-  ]
-}
-```
-
-判断理由：按真实购买量比较，并限定结论范围。
-
-### unknown-fee（应拒绝候选）
-
-A运费未知，B已含运费，未给质量权重。
-
-输入：{"specification":"同规格袋","quantity":120,"currency":"CNY","quotes":[{"supplier":"A","unitPrice":2,"shipping":null},{"supplier":"B","unitPrice":2.1,"shipping":23}]}
-
-候选输出片段：
-
-```json
-{
-  "comparison": [
-    "A运费按0元，默认质量90分，总分第一。"
-  ]
-}
-```
-
-判断理由：未知运费和质量不能变成零成本与虚构分数。
+当前任务的完整实务样例与专业拒收条件见 [worked-delivery.md](worked-delivery.md)。结构化正反例仅在 [professional-cases.json](../evals/professional-cases.json) 维护，避免同一候选 JSON 在多处漂移；这些作者预期不是本次任务已经通过的证据。
 
 ## 失败与人工边界
 

@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 1,
+  "id": "healthcare-operations-analyst",
+  "componentType": "agent",
+  "componentVersion": "0.1.1",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "healthcare-operations-analyst-deliver",
+      "summary": "分析就诊服务流程、等待与返工、改进试点及平衡指标 healthcare service operations quality improvement PDSA",
+      "useWhen": [
+        "就诊流程等待长，需要定位排队与重复步骤。",
+        "服务改进只看效率，需要补结果和不良影响指标。",
+        "准备小规模流程试点，需要定义测量与停止条件。"
+      ],
+      "doNotUseWhen": [
+        "不诊断、不处方、不做个体临床分诊，不替代医疗质量或患者安全决策。",
+        "要求自动发布、付款、修改生产系统或联系第三方时交调用方授权处理。",
+        "要求把假设或资料形式当作专业认证、保证收益或最终验收时不适用。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "service": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "服务环节、对象、地点、流程、授权范围与改进目标"
+          },
+          "observations": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "已获授权的汇总/脱敏时间、完成、返工和体验记录"
+          },
+          "constraints": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "安全约束、人员容量、现有政策与复核责任"
+          }
+        },
+        "required": [
+          "service",
+          "observations",
+          "constraints"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "processMap": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "流程、时间与瓶颈假设"
+          },
+          "measurementPlan": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "结果、过程和平衡指标"
+          },
+          "pilotPlan": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "小范围改进与观察方案"
+          },
+          "assessment": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "有范围的结果解释"
+          },
+          "facts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前输入、来源、期间单位及证据缺口"
+          },
+          "limitations": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "未执行、未观察、方法假设和外推边界"
+          },
+          "handoff": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前产物、规则结果、证据定位与待解决事项交调用方"
+          }
+        },
+        "required": [
+          "processMap",
+          "measurementPlan",
+          "pilotPlan",
+          "assessment",
+          "facts",
+          "limitations",
+          "handoff"
+        ],
+        "deliveryFormat": "conceptual-human-delivery"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "可能改变临床优先级、患者安全或真实服务流程的方案由医疗和运营负责人共同复核。",
+          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

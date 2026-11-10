@@ -13,7 +13,8 @@
   ],
   "skillLoading": [
     "先读取本角色 knowledgeAssets 中的包内专业方法；来源记录不等于当前任务联网，案例不是实际运行证据。",
-    "读取本角色 knowledgeAssets；只在当前任务实际需要时读取用户指定的项目/平台规范，缺来源不假称已读取。"
+    "读取本角色 knowledgeAssets；只在当前任务实际需要时读取用户指定的项目/平台规范，缺来源不假称已读取。",
+    "读取本包 references/worked-delivery.md 的完整产物与专业反例；按当前输入迁移，不把合成答案当本次事实或验收记录"
   ],
   "steps": [
     "先读取包内专业方法与现有 AGENT.md，绑定当前输入、目标和材料范围；来源引用不等于当前任务联网。",
@@ -50,6 +51,18 @@
         "plain-language",
         "goalpro"
       ]
+    },
+    {
+      "id": "product-listing-writer-worked-delivery",
+      "path": "references/worked-delivery.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "ftc-advertising",
+        "plain-language",
+        "goalpro"
+      ]
     }
   ],
   "expertise": {
@@ -60,7 +73,8 @@
       "不创造检测、认证、疗效或销量保证"
     ],
     "knowledgeAssetIds": [
-      "product-listing-writer-core"
+      "product-listing-writer-core",
+      "product-listing-writer-worked-delivery"
     ],
     "diagnosticSequence": [
       {
@@ -124,28 +138,67 @@
         "outputChecks": [
           {
             "field": "factLedger",
-            "criterion": "事实、来源与未证实项分开。",
-            "rejectWhen": "把推测写成测试结论。"
+            "criterion": "事实逐条绑定来源、SKU/变体与已测/标注/未知状态，重要规格不猜填。",
+            "rejectWhen": "厂家标注写成独立检测、不同SKU混用数据。",
+            "id": "product-listing-writer-fact-ledger",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "原规格/证据",
+              "SKU对应",
+              "未知项"
+            ],
+            "blocking": true
           },
           {
             "field": "titleOptions",
             "criterion": "商品身份、关键信息和版本准确。",
-            "rejectWhen": "含无证疗效、销量或认证声明。"
+            "rejectWhen": "含无证疗效、销量或认证声明。",
+            "id": "product-listing-writer-title-options",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "当前输入中与 titleOptions 对应的事实、约束及缺口",
+              "实际 titleOptions 产物与所声明通过条件的逐项对照",
+              "对本字段拒收条件的检查结果与未验证范围"
+            ],
+            "blocking": true
           },
           {
             "field": "sellingPoints",
-            "criterion": "价值表达有事实基础与必要条件。",
-            "rejectWhen": "超出材料的效果保证。"
+            "criterion": "卖点与隐含使用承诺由当前证据支持，特征到价值的推理不跨越未测条件。",
+            "rejectWhen": "无测试写保温时长、医疗/婴幼儿适用或绝对效果。",
+            "id": "product-listing-writer-selling-points",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "卖点-证据映射",
+              "测试条件或待补证据"
+            ],
+            "blocking": true
           },
           {
             "field": "detailCopy",
-            "criterion": "完整信息一致，尺寸单位与配件/价格条件清楚。",
-            "rejectWhen": "同页不同SKU/条件混用。"
+            "criterion": "规格、配件、用法与限制在标题/图片/详情间一致，价格库存依当前系统。",
+            "rejectWhen": "关键信息冲突、隐去影响决策的限制或固化过期价格。",
+            "id": "product-listing-writer-detail-copy",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "页面字段交叉核对",
+              "当前商品数据",
+              "待生成资产说明"
+            ],
+            "blocking": true
           },
           {
             "field": "openQuestions",
             "criterion": "列影响购买判断的缺失证据。",
-            "rejectWhen": "遗漏关键限制只留营销问题。"
+            "rejectWhen": "遗漏关键限制只留营销问题。",
+            "id": "product-listing-writer-open-questions",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "当前输入中与 openQuestions 对应的事实、约束及缺口",
+              "实际 openQuestions 产物与所声明通过条件的逐项对照",
+              "对本字段拒收条件的检查结果与未验证范围"
+            ],
+            "blocking": true
           }
         ]
       }

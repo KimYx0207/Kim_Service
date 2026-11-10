@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "roleId": "experiment-analysis",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "proportion-change",
+      "capabilityId": "experiment-analysis-deliver",
+      "category": "worked_example",
+      "scenario": "百分点与相对变化",
+      "input": {
+        "design": "给定两组计数",
+        "observations": {
+          "A": [
+            100,
+            1000
+          ],
+          "B": [
+            120,
+            1000
+          ]
+        },
+        "metrics": "转化率"
+      },
+      "candidateOutputExcerpt": {
+        "effectEstimate": "10%与12%，+2个百分点，相对+20%，显著性尚未判断。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "单位正确。",
+      "diagnosticRefs": [
+        "estimand"
+      ],
+      "decisionRuleRefs": [
+        "absolute-relative"
+      ]
+    },
+    {
+      "id": "event-independence",
+      "capabilityId": "experiment-analysis-deliver",
+      "category": "failure_boundary",
+      "scenario": "会话冒充独立用户",
+      "input": {
+        "design": "用户随机分配",
+        "observations": "每用户10次会话",
+        "metrics": "用户是否转化"
+      },
+      "candidateOutputExcerpt": {
+        "effectEstimate": "把所有会话作为独立样本，区间更窄。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "重复观测非独立用户。",
+      "diagnosticRefs": [
+        "unit"
+      ],
+      "decisionRuleRefs": [
+        "independent-unit"
+      ]
+    },
+    {
+      "id": "srm-first",
+      "capabilityId": "experiment-analysis-deliver",
+      "category": "worked_example",
+      "scenario": "分流不匹配",
+      "input": {
+        "design": "预期1:1",
+        "observations": "1000与1600入组，日志待核",
+        "metrics": "购买"
+      },
+      "candidateOutputExcerpt": {
+        "integrityReview": "先调查分配/日志/排除，暂不确认效果。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "数据可信度先于结论。",
+      "diagnosticRefs": [
+        "integrity"
+      ],
+      "decisionRuleRefs": [
+        "quality-before-effect"
+      ]
+    },
+    {
+      "id": "picked-winner",
+      "capabilityId": "experiment-analysis-deliver",
+      "category": "failure_boundary",
+      "scenario": "结果后改主指标",
+      "input": {
+        "design": "原主指标留存",
+        "observations": "留存不变，20项中点击上升",
+        "metrics": "改点击为主指标"
+      },
+      "candidateOutputExcerpt": {
+        "decision": "点击显著，实验预设目标已达成。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "事后挑选伪装预设。",
+      "diagnosticRefs": [
+        "decision-rule"
+      ],
+      "decisionRuleRefs": [
+        "predeclared"
+      ]
+    }
+  ]
+}

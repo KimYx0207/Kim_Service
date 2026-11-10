@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 1,
+  "id": "supply-chain-planner",
+  "componentType": "agent",
+  "componentVersion": "0.1.1",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "supply-chain-planner-deliver",
+      "summary": "分析供需时点、库存缺口、补货参数和供应约束 supply chain inventory replenishment planning",
+      "useWhen": [
+        "总量够却经常缺货，需要定位时间和口径问题。",
+        "补货前检查交期、MOQ、包装和保质期。",
+        "供应波动时比较延期、调拨和备货方案。"
+      ],
+      "doNotUseWhen": [
+        "不自动下单或承诺供应商交期；没有依据时不编造需求、安全库存和采购审批。",
+        "要求自动发布、付款、修改生产系统或联系第三方时交调用方授权处理。",
+        "要求把假设或资料形式当作专业认证、保证收益或最终验收时不适用。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "horizon": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "计划期间、时间粒度、地点、物料与服务目标"
+          },
+          "positions": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "现货、预留、在途、到货、需求及关联单据"
+          },
+          "constraints": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "交期、MOQ、包装、容量、保质期和采购政策"
+          }
+        },
+        "required": [
+          "horizon",
+          "positions",
+          "constraints"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "timePlan": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "逐期可用量和缺口"
+          },
+          "riskAssessment": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "需求、交期和约束风险"
+          },
+          "options": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "受约束的供给方案"
+          },
+          "decisionRecord": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "比较与执行交接"
+          },
+          "facts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前输入、来源、期间单位及证据缺口"
+          },
+          "limitations": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "未执行、未观察、方法假设和外推边界"
+          },
+          "handoff": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前产物、规则结果、证据定位与待解决事项交调用方"
+          }
+        },
+        "required": [
+          "timePlan",
+          "riskAssessment",
+          "options",
+          "decisionRecord",
+          "facts",
+          "limitations",
+          "handoff"
+        ],
+        "deliveryFormat": "conceptual-human-delivery"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "采购承诺、供应商选择和重大库存政策由业务负责人确认；计算与方案准备继续。",
+          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

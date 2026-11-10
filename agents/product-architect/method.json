@@ -24,7 +24,8 @@
   "skillLoading": [
     "先读取 knowledgeAssets 中本角色包内 professional-method；知识文件受组件哈希约束，仅供当前任务，来源清单不等于本轮联网读取",
     "仅在涉及软件仓库时加载该仓库工程指南",
-    "涉及数据指标时加载数据口径方法，涉及迁移时加载版本迁移指南"
+    "涉及数据指标时加载数据口径方法，涉及迁移时加载版本迁移指南",
+    "读取本包 references/worked-delivery.md 的完整产物与专业反例；按当前输入迁移，不把合成答案当本次事实或验收记录"
   ],
   "steps": [
     "绑定当前 designBinding/designContext 与项目事实；从指定入口和锁文件核实实际框架/工具版本、相关代码与验收ID，再按包内专业方法处理正反场景",
@@ -94,6 +95,20 @@
         "spec-kit-tasks",
         "anthropic-skills"
       ]
+    },
+    {
+      "id": "product-architect-worked-delivery",
+      "path": "references/worked-delivery.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "domain-modeling",
+        "spec-kit-plan",
+        "spec-kit-spec",
+        "spec-kit-tasks",
+        "anthropic-skills"
+      ]
     }
   ],
   "expertise": {
@@ -104,7 +119,8 @@
       "架构探索后才细化模块，复用宿主决定与任务状态"
     ],
     "knowledgeAssetIds": [
-      "product-architect-core"
+      "product-architect-core",
+      "product-architect-worked-delivery"
     ],
     "diagnosticSequence": [
       {
@@ -188,58 +204,137 @@
         "outputChecks": [
           {
             "field": "scope",
-            "criterion": "用户结果、阶段和非目标清楚。",
-            "rejectWhen": "把框架选择当用户需求。"
+            "criterion": "目标、非目标、业务角色和可观察验收逐项关联；开放规则有明确待决项，不能悄悄假定。",
+            "rejectWhen": "范围以技术名词代替用户结果，或新增未授权支付/数据迁移等范围。",
+            "id": "product-architect-scope",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "目标与模块映射",
+              "开放决策及影响范围"
+            ],
+            "blocking": true
           },
           {
             "field": "architecture",
-            "criterion": "选择有当前版本/约束/替代依据，架构与模块不重复建真源。",
-            "rejectWhen": "列技术名但无取舍，或把探索当已批准。"
+            "criterion": "每个权威数据、状态转换、接口和权限归属唯一；技术选择说明约束、替代方案及撤回代价。",
+            "rejectWhen": "有图无接口/状态责任；不具备约束依据就引入分布式服务。",
+            "id": "product-architect-architecture",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "接口与状态表",
+              "决策依据与替代方案",
+              "关键失败路径"
+            ],
+            "blocking": true
           },
           {
             "field": "migration",
-            "criterion": "迁移、兼容、回滚和删除候选有证据。",
-            "rejectWhen": "无恢复路径直接删除旧接口。"
+            "criterion": "迁移包含字段映射、业务口径对账、切换和可实施的回退窗口；删除候选有使用证据。",
+            "rejectWhen": "把备份路径或行数相等当作恢复和业务完整性已验证。",
+            "id": "product-architect-migration",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "试迁移对账",
+              "切换/回退条件",
+              "兼容调用方列表"
+            ],
+            "blocking": true
           },
           {
             "field": "status",
             "criterion": "只总结当前角色的实际交付状态与已说明限制。",
-            "rejectWhen": "把候选产物状态等同用户最终接受。"
+            "rejectWhen": "把候选产物状态等同用户最终接受。",
+            "id": "product-architect-status",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "逐项交付/验收结果与当前状态对照",
+              "未执行、失败或阻塞项及其影响"
+            ],
+            "blocking": true
           },
           {
             "field": "artifactRefs",
             "criterion": "引用确实存在且当前任务相关的产物；未产出不编路径。",
-            "rejectWhen": "把预计文件或未读取摘要当真实产物。"
+            "rejectWhen": "把预计文件或未读取摘要当真实产物。",
+            "id": "product-architect-artifact-refs",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "实际存在的当前产物及定位",
+              "产物与任务、版本的对应关系"
+            ],
+            "blocking": true
           },
           {
             "field": "criterionResults",
             "criterion": "每项区分实际观察、自报判断和未运行。",
-            "rejectWhen": "把结构检查、文档读取或自报pass当独立验收。"
+            "rejectWhen": "把结构检查、文档读取或自报pass当独立验收。",
+            "id": "product-architect-criterion-results",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "当前标准ID、实际观察和证据引用",
+              "自报、独立观察与未运行的区分"
+            ],
+            "blocking": true
           },
           {
             "field": "missingCapabilities",
             "criterion": "明确缺少何种能力、影响哪个检查或动作。",
-            "rejectWhen": "工具不可用仍宣称已执行。"
+            "rejectWhen": "工具不可用仍宣称已执行。",
+            "id": "product-architect-missing-capabilities",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "实际可用工具/材料检查",
+              "缺口影响的动作和验收项"
+            ],
+            "blocking": true
           },
           {
             "field": "failures",
             "criterion": "记录真实失败与范围，不泄露敏感材料。",
-            "rejectWhen": "凭推测补失败或隐去影响结论的问题。"
+            "rejectWhen": "凭推测补失败或隐去影响结论的问题。",
+            "id": "product-architect-failures",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "实际失败或矛盾记录",
+              "受影响范围与敏感信息处理"
+            ],
+            "blocking": true
           },
           {
             "field": "stopReason",
             "criterion": "说明角色当前结束、缺证据或被阻塞的具体原因。",
-            "rejectWhen": "把未完成判断静默转为成功。"
+            "rejectWhen": "把未完成判断静默转为成功。",
+            "id": "product-architect-stop-reason",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "角色实际结束或阻塞状态",
+              "继续所需输入/能力或已完成范围"
+            ],
+            "blocking": true
           },
           {
             "field": "handoff",
             "criterion": "交事实、产物、限制与待决定项；控制权留调用方。",
-            "rejectWhen": "自行批准下一阶段、调度或高影响操作。"
+            "rejectWhen": "自行批准下一阶段、调度或高影响操作。",
+            "id": "product-architect-handoff",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "下一执行者可用的事实/产物/限制",
+              "需要调用方决定的具体事项"
+            ],
+            "blocking": true
           },
           {
             "field": "nativeRuntimeVerified",
             "criterion": "未经独立宿主运行证明保持false。",
-            "rejectWhen": "因模板存在、合同测试或本地装入而声称原生运行已验证。"
+            "rejectWhen": "因模板存在、合同测试或本地装入而声称原生运行已验证。",
+            "id": "product-architect-native-runtime-verified",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "独立宿主观察记录或明确未验证",
+              "模板安装/合同检查与真实运行的区分"
+            ],
+            "blocking": true
           }
         ]
       }

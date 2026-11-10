@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "memory-3layer",
   "componentType": "skill",
-  "componentVersion": "1.0.0",
+  "componentVersion": "1.1.0",
   "entrypoint": "SKILL.md",
   "capabilities": [
     {

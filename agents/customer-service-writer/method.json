@@ -13,7 +13,8 @@
   ],
   "skillLoading": [
     "先读取本角色 knowledgeAssets 中的包内专业方法；来源记录不等于当前任务联网，案例不是实际运行证据。",
-    "读取本角色 knowledgeAssets；只在当前任务实际需要时读取用户指定的项目/平台规范，缺来源不假称已读取。"
+    "读取本角色 knowledgeAssets；只在当前任务实际需要时读取用户指定的项目/平台规范，缺来源不假称已读取。",
+    "读取本包 references/worked-delivery.md 的完整产物与专业反例；按当前输入迁移，不把合成答案当本次事实或验收记录"
   ],
   "steps": [
     "先读取包内专业方法与现有 AGENT.md，绑定当前输入、目标和材料范围；来源引用不等于当前任务联网。",
@@ -50,6 +51,18 @@
         "kim-decision",
         "goalpro"
       ]
+    },
+    {
+      "id": "customer-service-writer-worked-delivery",
+      "path": "references/worked-delivery.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "plain-language",
+        "kim-decision",
+        "goalpro"
+      ]
     }
   ],
   "expertise": {
@@ -60,7 +73,8 @@
       "不自动退款、赔偿、私下联系或承诺未确认物流"
     ],
     "knowledgeAssetIds": [
-      "customer-service-writer-core"
+      "customer-service-writer-core",
+      "customer-service-writer-worked-delivery"
     ],
     "diagnosticSequence": [
       {
@@ -124,28 +138,67 @@
         "outputChecks": [
           {
             "field": "caseSummary",
-            "criterion": "诉求、事实、未知与紧急性分开。",
-            "rejectWhen": "将客户指控直接认定为事实或反向责怪客户。"
+            "criterion": "客户诉求、实际订单/物流事实、未知和影响分别记录，不将推测当政策或执行结果。",
+            "rejectWhen": "遗漏核心诉求或编造物流/退款状态。",
+            "id": "customer-service-writer-case-summary",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "客户原话",
+              "已核订单/政策事实"
+            ],
+            "blocking": true
           },
           {
             "field": "replyDrafts",
-            "criterion": "回复具体，承诺在政策/事实/权限范围内。",
-            "rejectWhen": "虚构后台操作、退款或送达时间。"
+            "criterion": "回复准确回应问题并给当前权限内的具体下一步，所有金额、日期和承诺有依据。",
+            "rejectWhen": "写已退款/已发货但没有回执，或虚构赔偿/处理时限。",
+            "id": "customer-service-writer-reply-drafts",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "事实与政策对照",
+              "可执行下一步",
+              "承诺依据"
+            ],
+            "blocking": true
           },
           {
             "field": "decisionPoints",
             "criterion": "明确哪些需要用户/有权人员选择。",
-            "rejectWhen": "把政策外动作静默当已批准。"
+            "rejectWhen": "把政策外动作静默当已批准。",
+            "id": "customer-service-writer-decision-points",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "当前输入中与 decisionPoints 对应的事实、约束及缺口",
+              "实际 decisionPoints 产物与所声明通过条件的逐项对照",
+              "对本字段拒收条件的检查结果与未验证范围"
+            ],
+            "blocking": true
           },
           {
             "field": "escalation",
-            "criterion": "说明触发原因、负责角色与需交材料。",
-            "rejectWhen": "安全投诉仍仅作普通安抚。"
+            "criterion": "升级条件、所需材料与接收角色明确，普通事项可继续，高影响动作留给适当授权者。",
+            "rejectWhen": "无差别转人工或由文案直接批准资金/账户动作。",
+            "id": "customer-service-writer-escalation",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "触发条件",
+              "交接所需材料",
+              "授权范围"
+            ],
+            "blocking": true
           },
           {
             "field": "followUp",
             "criterion": "下一次联系/检查条件真实且责任明确。",
-            "rejectWhen": "随意承诺响应时间或宣称消息已发送。"
+            "rejectWhen": "随意承诺响应时间或宣称消息已发送。",
+            "id": "customer-service-writer-follow-up",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "当前输入中与 followUp 对应的事实、约束及缺口",
+              "实际 followUp 产物与所声明通过条件的逐项对照",
+              "对本字段拒收条件的检查结果与未验证范围"
+            ],
+            "blocking": true
           }
         ]
       }

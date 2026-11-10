@@ -1,12 +1,19 @@
 ---
 name: agent-teams-playbook
 metadata:
-  version: "4.8.0"
+  version: "4.9.0"
 description: |
   Cross-runtime playbook for multi-agent collaboration, agent teams, swarm orchestration, parallel task distribution, capability discovery, and quality gates on Claude Code, Codex, OpenClaw, and Cursor. Use for 多agent、agent协作、agent编排、并行agent、分工协作、拉团队、多代理协作 or complex work needing independent roles and review. Map the six-stage workflow to the active host's actual capabilities; report sequential degradation when parallel agents are unavailable.
 ---
 
 # Agent Teams 编排手册
+
+## 本能力的验收方法
+
+执行前读取 [method.json](method.json) 中当前 capabilityId 的诊断、决策和逐字段 outputChecks，并读取 [任务验收与完整示例](references/acceptance.md)。按本次能力选择相应规则，不用字段齐全、行数或作者自报代替产物质量。缺少 blocking 证据时保留未验收；既有具体授权与宿主最终决定权不变。
+
+专业引用与工具路线继续按下文渐进读取；[来源记录](PROVENANCE.md) 和 [作者正反例](evals/professional-cases.json) 供评审。当前 Meta Skill 发现不会自动注入 method.json，宿主需按此入口读取；未观察到加载或执行时不得宣称生效。
+
 
 本 Skill 为调用方提供多 Agent 分工、执行和质量检查建议。宿主协调器负责角色边界、过程与最终交付；在 Meta_Kim 中，Router、跨组件状态机和最终验收仍由 Meta_Kim 负责，本包不接管这些职责。
 
@@ -191,8 +198,9 @@ Skill(skill="planning-with-files")
 - **Skill任务**：用当前平台的 Skill 调用机制调用本地已安装的skill；Claude Code 示例：`Skill(skill="skill-name", args="任务描述")`
 - **Agent任务**：使用当前平台原生 subagent 工具；Claude Code 使用宿主暴露的 `Agent` / `Task`，Codex 使用当前宿主暴露的原生 spawn schema（见下方 profiles）
 - 混合编排时skill和subagent可并行运行；平台不支持并行时按阶段顺序执行并说明降级
+- 按实际产物依赖、资源冲突和宿主容量分发就绪任务；A 等待人工只暂停 A 及其依赖者，无关的 B/C 继续。批准绑定具体产物版本，状态由宿主单一维护。
 - 每个agent/skill完成后汇报：`✅ [角色名] 完成: [一句话结果]`
-- 遇到问题时给用户选项，而不是自己默默选一个
+- 例行且已授权的可逆修复直接继续；只有会改变范围、关键取舍或越过当前授权时，把具体方案与证据交用户决定。
 
 **Agent → Skill 委派**（子agent调用skill的3种模式）：
 
@@ -216,7 +224,7 @@ Skill(skill="planning-with-files")
 - 完整性：文档、配置说明、使用示例是否齐全
 - 平台诚实性：是否准确说明了真实调用的工具和降级行为
 
-全部通过 → 进入阶段5。不通过 → 打回修改，最多2轮，仍不通过则通知用户人工介入。
+全部必需条件通过 → 进入阶段5。不通过 → 先诊断失败原因、已发生副作用和可改变的条件，再按当前任务的资源/次数预算重试；没有新进展或预算耗尽时交回可恢复检查点与具体待决定项，不机械固定两轮，也不跳过验收。其他独立任务继续。
 
 ### 阶段5：结果交付 & 部署移交
 

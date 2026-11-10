@@ -20,7 +20,7 @@ from pathlib import Path
 
 
 PACKAGE = Path(__file__).absolute().parent.parent
-COMPONENT_VERSION = "1.1.0"
+COMPONENT_VERSION = "1.2.0"
 RULE_IDS = ("python-subprocess-shell-true", "javascript-eval")
 EXTENSIONS = {".py", ".js", ".jsx", ".ts", ".tsx"}
 SKIP_DIRS = {"node_modules", "__pycache__", "venv", "vendor"}

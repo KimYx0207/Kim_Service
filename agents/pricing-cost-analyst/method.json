@@ -13,7 +13,8 @@
   ],
   "skillLoading": [
     "先读取本角色 knowledgeAssets 中的包内专业方法；来源记录不等于当前任务联网，案例不是实际运行证据。",
-    "读取本角色 knowledgeAssets；只在当前任务实际需要时读取用户指定的项目/平台规范，缺来源不假称已读取。"
+    "读取本角色 knowledgeAssets；只在当前任务实际需要时读取用户指定的项目/平台规范，缺来源不假称已读取。",
+    "读取本包 references/worked-delivery.md 的完整产物与专业反例；按当前输入迁移，不把合成答案当本次事实或验收记录"
   ],
   "steps": [
     "先读取包内专业方法与现有 AGENT.md，绑定当前输入、目标和材料范围；来源引用不等于当前任务联网。",
@@ -50,6 +51,18 @@
         "kim-decision",
         "goalpro"
       ]
+    },
+    {
+      "id": "pricing-cost-analyst-worked-delivery",
+      "path": "references/worked-delivery.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "sba-break-even",
+        "kim-decision",
+        "goalpro"
+      ]
     }
   ],
   "expertise": {
@@ -60,7 +73,8 @@
       "不把成本底线当市场愿付价格，不提供税务/投资结论"
     ],
     "knowledgeAssetIds": [
-      "pricing-cost-analyst-core"
+      "pricing-cost-analyst-core",
+      "pricing-cost-analyst-worked-delivery"
     ],
     "diagnosticSequence": [
       {
@@ -125,27 +139,67 @@
           {
             "field": "assumptions",
             "criterion": "期间、单位、费用范围和缺项显式。",
-            "rejectWhen": "把税费/退款/获客未知写成0。"
+            "rejectWhen": "把税费/退款/获客未知写成0。",
+            "id": "pricing-cost-analyst-assumptions",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "当前输入中与 assumptions 对应的事实、约束及缺口",
+              "实际 assumptions 产物与所声明通过条件的逐项对照",
+              "对本字段拒收条件的检查结果与未验证范围"
+            ],
+            "blocking": true
           },
           {
             "field": "unitEconomics",
-            "criterion": "公式、币种与现金/时间成本分开，可复算。",
-            "rejectWhen": "重复计费或漏掉随价格变化的费率。"
+            "criterion": "售价、费用基数、固定/变动成本与计价单位可追溯，单位贡献按同一口径重算并避免退款双算。",
+            "rejectWhen": "用毛利率代替单位贡献、漏平台比例费或混合每件与每单。",
+            "id": "pricing-cost-analyst-unit-economics",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "成本逐项表",
+              "公式及代入值",
+              "税费/退款口径"
+            ],
+            "blocking": true
           },
           {
             "field": "scenarios",
-            "criterion": "条件变化与可交付容量同时说明。",
-            "rejectWhen": "用没有需求依据的销量写确定收益。"
+            "criterion": "每个情景变化的价格/费用/销量/容量同时重算，未知量有显式范围。",
+            "rejectWhen": "折扣后仍沿用原比例费用，或需求提升仅凭假设。",
+            "id": "pricing-cost-analyst-scenarios",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "情景参数",
+              "重算结果",
+              "需求与容量约束"
+            ],
+            "blocking": true
           },
           {
             "field": "breakEven",
-            "criterion": "贡献正才算同期间固定成本覆盖，检查产能。",
-            "rejectWhen": "负贡献还声称多卖就盈利。"
+            "criterion": "同期间固定成本除以正单位贡献并向上取整；非正贡献明确无有限盈亏平衡量，再对照交付容量。",
+            "rejectWhen": "负贡献仍给正的有限目标，或季度/月成本换算错误。",
+            "id": "pricing-cost-analyst-break-even",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "期间/币种/单位",
+              "贡献与取整计算",
+              "容量对照"
+            ],
+            "blocking": true
           },
           {
             "field": "recommendation",
             "criterion": "推荐有范围、条件与未验证的愿付假设。",
-            "rejectWhen": "把成本推算等同最佳市场价或税务结论。"
+            "rejectWhen": "把成本推算等同最佳市场价或税务结论。",
+            "id": "pricing-cost-analyst-recommendation",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "当前输入中与 recommendation 对应的事实、约束及缺口",
+              "实际 recommendation 产物与所声明通过条件的逐项对照",
+              "对本字段拒收条件的检查结果与未验证范围"
+            ],
+            "blocking": true
           }
         ]
       }

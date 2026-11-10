@@ -5,6 +5,13 @@ description: Helps users discover and install agent skills when they ask questio
 
 # find-skill
 
+## 本能力的验收方法
+
+执行前读取 [method.json](method.json) 中当前 capabilityId 的诊断、决策和逐字段 outputChecks，并读取 [任务验收与完整示例](references/acceptance.md)。按本次能力选择相应规则，不用字段齐全、行数或作者自报代替产物质量。缺少 blocking 证据时保留未验收；既有具体授权与宿主最终决定权不变。
+
+专业引用与工具路线继续按下文渐进读取；[来源记录](PROVENANCE.md) 和 [作者正反例](evals/professional-cases.json) 供评审。当前 Meta Skill 发现不会自动注入 method.json，宿主需按此入口读取；未观察到加载或执行时不得宣称生效。
+
+
 Helps users discover and install agent skills from the open skills ecosystem.
 
 ## When to Use This Skill
@@ -28,11 +35,11 @@ Use this skill when the user:
 
 ## ⚠️ Windows Compatibility
 
-**On Windows, you MUST use PowerShell to run skills commands!**
+**On Windows, check the current shell, Node/npx and CLI before choosing a command form.**
 
-The default Bash/Git Bash environment on Windows does NOT work with `npx skills` - commands will return empty output.
+PowerShell is a useful compatibility route when the observed shell fails. A particular Git Bash failure does not prove all Windows Bash environments are unsupported. Inspect exit status and output; a timeout or blank response is not a successful empty search.
 
-**Always use this format on Windows:**
+**PowerShell examples (verify the installed CLI's `--help` first):**
 ```bash
 powershell -Command "npx skills find '[query]'"
 # Project install (only after explicit project-scope approval)
@@ -85,7 +92,7 @@ When a user asks for help with something, identify:
 
 Check the host's registered skills and readable project skill directories first. If no sufficient local match is found and network access is allowed, derive 2-5 generic English keywords and run the find command. Keep the original prompt and all private paths or identifiers local.
 
-**On Windows (REQUIRED):**
+**Windows PowerShell example:**
 ```bash
 powershell -Command "npx skills find '[query]'"
 ```
@@ -104,7 +111,7 @@ Example searches (Windows format):
 | "I need to create a changelog" | `powershell -Command "npx skills find 'changelog'"` |
 | "数据分析" | `powershell -Command "npx skills find 'data analysis'"` |
 
-> **Note:** Search only supports English keywords! See Chinese keyword reference below.
+> English keywords often broaden cross-language discovery; this is a query strategy, not a claim that the service cannot search Chinese. See the translation examples below.
 
 If the command fails, times out, is blocked, or returns output that cannot be parsed, report the search as unavailable or failed. Do not report that the skill does not exist.
 
@@ -113,7 +120,7 @@ If the command fails, times out, is blocked, or returns output that cannot be pa
 When you find relevant skills, present them to the user with:
 
 1. The skill name and what it does
-2. Separately labeled project and user install commands they can review (Windows format!)
+2. Separately labeled project and user install commands for the observed shell, exact skill and agent
 3. A link to learn more at skills.sh
 
 Example response:
@@ -135,7 +142,7 @@ Learn more: https://skills.sh/vercel-labs/agent-skills/vercel-react-best-practic
 
 If the user wants to proceed, show the exact selected skill, target agent, scope, and command. Install only after the user explicitly approves that exact project or user scope.
 
-**On Windows — project scope (REQUIRED):**
+**Windows PowerShell — project scope example:**
 ```bash
 powershell -Command "npx skills add <owner/repo@skill> -a <agent>"
 ```
@@ -164,7 +171,7 @@ Do not add `-y`, `--yes`, `--all`, or any unapproved skill or agent. Verify the 
 
 ## Chinese to English Keyword Reference
 
-**Important: Search only supports English keywords!**
+**Use these translations as alternative queries when relevant; do not infer backend language support from a single empty result.**
 
 | Chinese (中文) | English Keywords |
 | ------------- | ---------------- |
@@ -183,7 +190,7 @@ Do not add `-y`, `--yes`, `--all`, or any unapproved skill or agent. Verify the 
 1. **Use specific keywords**: "react testing" is better than just "testing"
 2. **Try alternative terms**: If "deploy" doesn't work, try "deployment" or "ci-cd"
 3. **Check popular sources**: Many skills come from `vercel-labs/agent-skills` or `ComposioHQ/awesome-claude-skills`
-4. **Use English keywords**: Chinese search will return empty results
+4. **Try relevant English keywords** when cross-language results are useful; record which queries actually completed.
 
 ## When No Skills Are Found
 
@@ -208,13 +215,13 @@ powershell -Command "npx skills init my-xyz-skill"
 ## Troubleshooting
 
 ### Q: Search returns empty on Windows?
-A: Make sure you're using `powershell -Command "npx skills find '...'"` format, not direct `npx skills find`.
+A: Inspect Node/npx, CLI help, exit code and network access first. If the current shell fails, try the documented PowerShell form and keep the failure record; do not call an unparseable result “no matches”.
 
 ### Q: Chinese search returns nothing?
-A: Search only supports English keywords. Translate your query to English first.
+A: Try a relevant English translation as an additional query. Confirm the search completed before interpreting an empty result; it does not establish a universal language restriction.
 
 ### Q: How to verify installation?
-A: Run `powershell -Command "npx skills list"` for project scope or `powershell -Command "npx skills list -g"` for user scope.
+A: List the requested scope, then inspect the exact target entrypoint and all referenced resources against the reviewed source revision. A list entry proves discovery, not successful task execution. Observe a fresh host trigger separately if that claim is needed.
 
 ### Q: How to update this skill?
 A: After explicit approval for the intended scope, run `powershell -Command "npx skills update find-skill"` for project scope or add `-g` for user scope.

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "kim-decision",
   "componentType": "skill",
-  "componentVersion": "0.0.0+imported.fbbe41c",
+  "componentVersion": "0.1.0",
   "entrypoint": "SKILL.md",
   "capabilities": [
     {

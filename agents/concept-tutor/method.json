@@ -13,7 +13,8 @@
   ],
   "skillLoading": [
     "先读取本角色 knowledgeAssets 中的包内专业方法；来源记录不等于当前任务联网，案例不是实际运行证据。",
-    "读取本角色 knowledgeAssets；只在当前任务实际需要时读取用户指定的项目/平台规范，缺来源不假称已读取。"
+    "读取本角色 knowledgeAssets；只在当前任务实际需要时读取用户指定的项目/平台规范，缺来源不假称已读取。",
+    "读取本包 references/worked-delivery.md 的完整产物与专业反例；按当前输入迁移，不把合成答案当本次事实或验收记录"
   ],
   "steps": [
     "先读取包内专业方法与现有 AGENT.md，绑定当前输入、目标和材料范围；来源引用不等于当前任务联网。",
@@ -50,6 +51,18 @@
         "kim-decision",
         "goalpro"
       ]
+    },
+    {
+      "id": "concept-tutor-worked-delivery",
+      "path": "references/worked-delivery.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "ies-learning",
+        "kim-decision",
+        "goalpro"
+      ]
     }
   ],
   "expertise": {
@@ -60,7 +73,8 @@
       "解释一个概念并用新题观察理解；不诊断学习障碍"
     ],
     "knowledgeAssetIds": [
-      "concept-tutor-core"
+      "concept-tutor-core",
+      "concept-tutor-worked-delivery"
     ],
     "diagnosticSequence": [
       {
@@ -124,28 +138,65 @@
         "outputChecks": [
           {
             "field": "stickingPoint",
-            "criterion": "以学习者过程为依据，必要时标诊断假设。",
-            "rejectWhen": "无过程就断言其基础差或有学习障碍。"
+            "criterion": "卡点对应学习者实际答案或解释，并区分概念、表征、运算与信息缺失。",
+            "rejectWhen": "未看作答就给人格/能力标签或固定学习风格诊断。",
+            "id": "concept-tutor-sticking-point",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "原始作答",
+              "错误步骤定位"
+            ],
+            "blocking": true
           },
           {
             "field": "explanation",
             "criterion": "表征、单位和符号一致，直接解释卡点。",
-            "rejectWhen": "概念偷换或用口诀跳过意义。"
+            "rejectWhen": "概念偷换或用口诀跳过意义。",
+            "id": "concept-tutor-explanation",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "当前输入中与 explanation 对应的事实、约束及缺口",
+              "实际 explanation 产物与所声明通过条件的逐项对照",
+              "对本字段拒收条件的检查结果与未验证范围"
+            ],
+            "blocking": true
           },
           {
             "field": "workedExample",
-            "criterion": "例题过程可复算，解释每步。",
-            "rejectWhen": "只给结论或把“份”说成整体。"
+            "criterion": "例题的单位、条件和每步推导正确，表示方法一致，解释说明为何这样做。",
+            "rejectWhen": "仅给答案、错把不同整体相加或步骤不可复算。",
+            "id": "concept-tutor-worked-example",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "完整演算",
+              "单位/条件核对"
+            ],
+            "blocking": true
           },
           {
             "field": "transferQuestion",
-            "criterion": "变化能检验同一概念且不直接泄露答案。",
-            "rejectWhen": "原样重复示范或考未学的额外知识。"
+            "criterion": "新问题检验同一概念在不同表述/情境的迁移，先让学习者独立回答再据证据反馈。",
+            "rejectWhen": "把自报懂了当掌握，或立即给出完整答案使检查失效。",
+            "id": "concept-tutor-transfer-question",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "迁移题与目标对应",
+              "独立回答及反馈记录"
+            ],
+            "blocking": true
           },
           {
             "field": "nextStep",
             "criterion": "按不同作答说明下一步检查。",
-            "rejectWhen": "未收到作答就宣布掌握。"
+            "rejectWhen": "未收到作答就宣布掌握。",
+            "id": "concept-tutor-next-step",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "当前输入中与 nextStep 对应的事实、约束及缺口",
+              "实际 nextStep 产物与所声明通过条件的逐项对照",
+              "对本字段拒收条件的检查结果与未验证范围"
+            ],
+            "blocking": true
           }
         ]
       }

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "find-skill",
   "componentType": "skill",
-  "componentVersion": "0.0.0+imported.cf7635e",
+  "componentVersion": "0.1.0",
   "entrypoint": "SKILL.md",
   "capabilities": [
     {

@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "roleId": "sales-operations-analyst",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "dedup-snapshot",
+      "capabilityId": "sales-operations-analyst-deliver",
+      "category": "worked_example",
+      "scenario": "同一商机两个快照",
+      "input": {
+        "scope": "本月CNY，最新快照",
+        "opportunities": [
+          {
+            "id": "O2",
+            "amount": 70000,
+            "version": 1
+          },
+          {
+            "id": "O2",
+            "amount": 80000,
+            "version": 2
+          }
+        ],
+        "rules": "同ID取最新有效快照"
+      },
+      "candidateOutputExcerpt": {
+        "pipelineAudit": "计80000，不计150000，旧版本用于金额变化。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "按单一交易粒度汇总。",
+      "diagnosticRefs": [
+        "identity"
+      ],
+      "decisionRuleRefs": [
+        "deduplicate"
+      ]
+    },
+    {
+      "id": "default-probability",
+      "capabilityId": "sales-operations-analyst-deliver",
+      "category": "failure_boundary",
+      "scenario": "没有历史数据的谈判单",
+      "input": {
+        "scope": "本月CNY",
+        "opportunities": [
+          {
+            "id": "O3",
+            "amount": 120000,
+            "stage": "谈判"
+          }
+        ],
+        "rules": "未提供阶段历史"
+      },
+      "candidateOutputExcerpt": {
+        "forecast": "谈判默认90%，必然回款108000。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "概率与回款都无证据。",
+      "diagnosticRefs": [
+        "probability",
+        "time"
+      ],
+      "decisionRuleRefs": [
+        "calibrate",
+        "cash-boundary"
+      ]
+    },
+    {
+      "id": "cash-separation",
+      "capabilityId": "sales-operations-analyst-deliver",
+      "category": "worked_example",
+      "scenario": "已签但付款日下月",
+      "input": {
+        "scope": "本月CNY",
+        "opportunities": [
+          {
+            "id": "O1",
+            "signed": 100000,
+            "payment": "次月"
+          }
+        ],
+        "rules": "看本月收款"
+      },
+      "candidateOutputExcerpt": {
+        "forecast": "已签100000；本月到账没有证据，不并入本月已收。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "销售口径与现金口径分开。",
+      "diagnosticRefs": [
+        "time"
+      ],
+      "decisionRuleRefs": [
+        "cash-boundary"
+      ]
+    },
+    {
+      "id": "open-not-lost",
+      "capabilityId": "sales-operations-analyst-deliver",
+      "category": "failure_boundary",
+      "scenario": "观察窗口未结束",
+      "input": {
+        "scope": "第1周观察",
+        "opportunities": {
+          "open": 8,
+          "won": 2
+        },
+        "rules": "销售周期通常跨月，当前无终局"
+      },
+      "candidateOutputExcerpt": {
+        "bottlenecks": "成交率20%，剩余80%全部失败。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "开放样本不能当永久失败。",
+      "diagnosticRefs": [
+        "probability"
+      ],
+      "decisionRuleRefs": [
+        "censored"
+      ]
+    }
+  ]
+}

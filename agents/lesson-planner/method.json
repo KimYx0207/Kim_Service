@@ -13,7 +13,8 @@
   ],
   "skillLoading": [
     "先读取本角色 knowledgeAssets 中的包内专业方法；来源记录不等于当前任务联网，案例不是实际运行证据。",
-    "读取本角色 knowledgeAssets；只在当前任务实际需要时读取用户指定的项目/平台规范，缺来源不假称已读取。"
+    "读取本角色 knowledgeAssets；只在当前任务实际需要时读取用户指定的项目/平台规范，缺来源不假称已读取。",
+    "读取本包 references/worked-delivery.md 的完整产物与专业反例；按当前输入迁移，不把合成答案当本次事实或验收记录"
   ],
   "steps": [
     "先读取包内专业方法与现有 AGENT.md，绑定当前输入、目标和材料范围；来源引用不等于当前任务联网。",
@@ -49,6 +50,17 @@
         "ies-learning",
         "goalpro"
       ]
+    },
+    {
+      "id": "lesson-planner-worked-delivery",
+      "path": "references/worked-delivery.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "ies-learning",
+        "goalpro"
+      ]
     }
   ],
   "expertise": {
@@ -59,7 +71,8 @@
       "以学生可观察表现检查目标，不把活动热闹等同学习"
     ],
     "knowledgeAssetIds": [
-      "lesson-planner-core"
+      "lesson-planner-core",
+      "lesson-planner-worked-delivery"
     ],
     "diagnosticSequence": [
       {
@@ -123,28 +136,66 @@
         "outputChecks": [
           {
             "field": "objectives",
-            "criterion": "每个目标有可观察学生表现。",
-            "rejectWhen": "只列教师讲授内容或泛泛“了解”。"
+            "criterion": "目标写明学习者要独立做出的产物/行为及合格条件，范围适合给定时长和基础。",
+            "rejectWhen": "只有了解/掌握等词，无可观察证据或超出基础。",
+            "id": "lesson-planner-objectives",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "目标与判据",
+              "学员基础/时长"
+            ],
+            "blocking": true
           },
           {
             "field": "lessonFlow",
-            "criterion": "时间可加总，活动含任务、材料和检查。",
-            "rejectWhen": "活动无法在课时完成或缺转换成本。"
+            "criterion": "环节含讲解、练习、反馈、检查及必要等待，总时长与预算一致，备用方案不重复计入。",
+            "rejectWhen": "分钟合计超时，只有演示没有独立练习。",
+            "id": "lesson-planner-lesson-flow",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "逐环节时长合计",
+              "学员产物",
+              "等待/备用条件"
+            ],
+            "blocking": true
           },
           {
             "field": "teacherPrompts",
             "criterion": "问题能暴露目标误区并给可用追问。",
-            "rejectWhen": "只有“懂了吗”或诱导学生齐声说懂。"
+            "rejectWhen": "只有“懂了吗”或诱导学生齐声说懂。",
+            "id": "lesson-planner-teacher-prompts",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "当前输入中与 teacherPrompts 对应的事实、约束及缺口",
+              "实际 teacherPrompts 产物与所声明通过条件的逐项对照",
+              "对本字段拒收条件的检查结果与未验证范围"
+            ],
+            "blocking": true
           },
           {
             "field": "differentiation",
             "criterion": "支架与挑战对应真实先备差异。",
-            "rejectWhen": "按无证据标签分类或改变目标而不说明。"
+            "rejectWhen": "按无证据标签分类或改变目标而不说明。",
+            "id": "lesson-planner-differentiation",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "当前输入中与 differentiation 对应的事实、约束及缺口",
+              "实际 differentiation 产物与所声明通过条件的逐项对照",
+              "对本字段拒收条件的检查结果与未验证范围"
+            ],
+            "blocking": true
           },
           {
             "field": "exitCheck",
-            "criterion": "独立结果能决定补教/继续的分支。",
-            "rejectWhen": "只问是否喜欢课堂，随后宣布目标达成。"
+            "criterion": "退出题能区分目标是否达到和关键误解，结果用于后续调整而不是只问满意度。",
+            "rejectWhen": "老师讲过或学员点头即判断目标完成。",
+            "id": "lesson-planner-exit-check",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "退出题/评分规则",
+              "真实回答或未实施说明"
+            ],
+            "blocking": true
           }
         ]
       }

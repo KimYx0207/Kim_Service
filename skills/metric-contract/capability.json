@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 1,
+  "id": "metric-contract",
+  "componentType": "skill",
+  "componentVersion": "0.1.1",
+  "entrypoint": "SKILL.md",
+  "capabilities": [
+    {
+      "id": "metric-contract-deliver",
+      "summary": "定义指标人群、粒度、分母、事件、时间与数据血缘 metric contract KPI semantic layer data lineage",
+      "useWhen": [
+        "不同报表同名指标不一致，需要找口径差异。",
+        "新产品或仪表盘需要定义指标与数据来源。",
+        "改事件或数据模型前需要判断旧指标影响。"
+      ],
+      "doNotUseWhen": [
+        "不把指标命名当真实数据正确，也不替代数据所有者批准生产口径或财务披露。",
+        "要求自动发布、付款、修改生产系统或联系第三方时交调用方授权处理。",
+        "要求把假设或资料形式当作专业认证、保证收益或最终验收时不适用。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "question": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "业务决定、目标人群和拟衡量行为"
+          },
+          "dataMap": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "事件、实体、字段、关联、时间与数据源"
+          },
+          "policies": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "纳排、去重、时间窗、退款/迟到、版本和负责人"
+          }
+        },
+        "required": [
+          "question",
+          "dataMap",
+          "policies"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "definitions": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "指标定义和适用解释"
+          },
+          "lineage": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "数据血缘与实现约束"
+          },
+          "reconciliation": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "可复算对账与差异"
+          },
+          "changePolicy": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "指标版本和变更影响"
+          },
+          "facts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前输入、来源、期间单位及证据缺口"
+          },
+          "limitations": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "未执行、未观察、方法假设和外推边界"
+          },
+          "handoff": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前产物、规则结果、证据定位与待解决事项交调用方"
+          }
+        },
+        "required": [
+          "definitions",
+          "lineage",
+          "reconciliation",
+          "changePolicy",
+          "facts",
+          "limitations",
+          "handoff"
+        ],
+        "deliveryFormat": "conceptual-human-delivery"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "经营结算、对外财务披露、考核奖惩或影响个人权益的指标由相应业务与数据责任人确认。",
+          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

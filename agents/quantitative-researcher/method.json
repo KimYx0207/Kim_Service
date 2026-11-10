@@ -40,7 +40,10 @@
     "费用与回撤口径可复算，基准区间相同",
     "结果仅解释给定样本，不保证收益，不接交易接口",
     "历史股票资格、ST/停牌/退市和行业必须按当时时点判定；禁止用当前is_active等快照过滤历史选股",
-    "有分红或多批持仓时，研究结果、账户成本、应收分红与观察指标口径一致；独立算例不能替代实际账户链路"
+    "有分红或多批持仓时，研究结果、账户成本、应收分红与观察指标口径一致；独立算例不能替代实际账户链路",
+    "问题、样本和信息可用时点一致；历史资格按当时资料，训练/选择/最终检验分开并记录尝试。",
+    "逐期净值、成本、现金流、回撤和基准按同单位同区间重算；未知成本保留未知，分红/持仓批次与实际路径对齐。",
+    "绑定数据/代码版本、参数、切分、随机性、运行入口和真实回执；helper结果仅声明给定收益算术范围。"
   ],
   "exclusiveResources": [],
   "coordinationOwner": "caller",
@@ -83,7 +86,20 @@
       "sourceRefs": [
         "sklearn-pitfalls",
         "kim-decision",
-        "goalpro"
+        "goalpro",
+        "sklearn-time-series",
+        "sklearn-validation"
+      ]
+    },
+    {
+      "id": "quantitative-researcher-delivery",
+      "path": "references/delivery-template.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "sklearn-time-series",
+        "sklearn-validation"
       ]
     }
   ],
@@ -95,7 +111,8 @@
       "研究辅助；不执行交易或保证收益"
     ],
     "knowledgeAssetIds": [
-      "quantitative-researcher-core"
+      "quantitative-researcher-core",
+      "quantitative-researcher-delivery"
     ],
     "diagnosticSequence": [
       {
@@ -124,6 +141,33 @@
           "样本外/敏感性结果和复算输入"
         ],
         "whenMissing": "把稳健性列未验证；不要把单点最佳当一般规律。"
+      },
+      {
+        "id": "historical-universe",
+        "question": "历史样本资格和属性是否按当时可知资料构造？",
+        "evidenceRequired": [
+          "证券状态/行业有效期",
+          "退市/停牌/缺失记录"
+        ],
+        "whenMissing": "不能用今天快照回填历史"
+      },
+      {
+        "id": "cash-path",
+        "question": "收益、费用、分红和持有批次是否共享同一真实计算路径？",
+        "evidenceRequired": [
+          "持仓/现金流/分红记录",
+          "现有代码与观察指标"
+        ],
+        "whenMissing": "仅交差异与条件算术，不声称账务核对"
+      },
+      {
+        "id": "selection-budget",
+        "question": "尝试过哪些方案，最终测试是否被反复使用？",
+        "evidenceRequired": [
+          "参数/特征尝试日志",
+          "独立评价边界"
+        ],
+        "whenMissing": "将结果标探索性，不能声称独立检验"
       }
     ],
     "decisionRules": [
@@ -144,6 +188,30 @@
         "when": "算式和输入完整",
         "action": "用现有计算 helper 或独立算式复算，保留输入版本/参数/实际输出",
         "avoid": "把写了计算步骤、代码可导入或自报 pass 当真实运行。"
+      },
+      {
+        "id": "as-of",
+        "when": "历史资格或属性来自当前快照",
+        "action": "恢复有效时间/可获时间的历史资料并列缺口",
+        "avoid": "只保留今天仍上市或当前非ST对象"
+      },
+      {
+        "id": "dividend-consistency",
+        "when": "收益序列或价格已计分红又有现金分红记录",
+        "action": "核复权/现金流/批次语义，只按定义计一次",
+        "avoid": "在已含分红收益上再加同笔现金形成双计"
+      },
+      {
+        "id": "test-reuse",
+        "when": "同一测试段反复用于挑参数或策略",
+        "action": "标记其已参与选择，另保独立未来/留出验证",
+        "avoid": "继续称原测试独立"
+      },
+      {
+        "id": "helper-scope",
+        "when": "本包calculate返回成功",
+        "action": "只确认给定收益序列的算术与内部时间顺序",
+        "avoid": "把通过当真实行情、成交与策略认证"
       }
     ],
     "contractGuidance": [
@@ -179,58 +247,138 @@
         "outputChecks": [
           {
             "field": "research",
-            "criterion": "问题、样本与信息时序一致，区分探索和检验。",
-            "rejectWhen": "把事后调参结果称为独立检验。"
+            "criterion": "问题、样本和信息可用时点一致；历史资格按当时资料，训练/选择/最终检验分开并记录尝试。",
+            "rejectWhen": "用当前存续/ST/行业快照过滤历史，预处理看全样本或测试集反复调参却称独立。",
+            "id": "quantitative-researcher-research",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "样本资格与字段可用时间",
+              "训练/选择/测试日期及版本",
+              "候选尝试与选择记录"
+            ],
+            "blocking": true
           },
           {
             "field": "results",
-            "criterion": "计算有单位、期间、成本和适用范围。",
-            "rejectWhen": "少量合成数据推出稳定收益或省略负面情景。"
+            "criterion": "逐期净值、成本、现金流、回撤和基准按同单位同区间重算；未知成本保留未知，分红/持仓批次与实际路径对齐。",
+            "rejectWhen": "用毛收益冒充净收益、双计分红/费用、合成算例当策略有效或隐藏负面情景。",
+            "id": "quantitative-researcher-results",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "逐期输入/费用/现金流定义",
+              "公式/真实计算输出与基准",
+              "成本敏感性及亏损情景"
+            ],
+            "blocking": true
           },
           {
             "field": "reproducibility",
-            "criterion": "绑定数据版本、参数、公式和实际运行/未运行状态。",
-            "rejectWhen": "把 helper 存在当已运行或用未知随机状态宣称可复现。"
+            "criterion": "绑定数据/代码版本、参数、切分、随机性、运行入口和真实回执；helper结果仅声明给定收益算术范围。",
+            "rejectWhen": "helper存在或时间戳自洽就称市场数据真实、信号有效、样本外独立或宿主验证。",
+            "id": "quantitative-researcher-reproducibility",
+            "verificationMethod": "behavior_probe",
+            "evidenceRequired": [
+              "可复现输入/参数/代码版本",
+              "实际日志或未执行标记",
+              "未验证数据/信号/成交范围"
+            ],
+            "blocking": true
           },
           {
             "field": "status",
             "criterion": "只总结当前角色的实际交付状态与已说明限制。",
-            "rejectWhen": "把候选产物状态等同用户最终接受。"
+            "rejectWhen": "把候选产物状态等同用户最终接受。",
+            "id": "quantitative-researcher-status",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "当前产物与未完成范围",
+              "阻断/部分完成的具体原因"
+            ],
+            "blocking": true
           },
           {
             "field": "artifactRefs",
             "criterion": "引用确实存在且当前任务相关的产物；未产出不编路径。",
-            "rejectWhen": "把预计文件或未读取摘要当真实产物。"
+            "rejectWhen": "把预计文件或未读取摘要当真实产物。",
+            "id": "quantitative-researcher-artifactrefs",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "实际文件或记录位置",
+              "内容版本及其证据级别"
+            ],
+            "blocking": true
           },
           {
             "field": "criterionResults",
             "criterion": "每项区分实际观察、自报判断和未运行。",
-            "rejectWhen": "把结构检查、文档读取或自报pass当独立验收。"
+            "rejectWhen": "把结构检查、文档读取或自报pass当独立验收。",
+            "id": "quantitative-researcher-criterionresults",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "任务验收条件逐项对应",
+              "实际证据引用及观察/自报/未运行标记"
+            ],
+            "blocking": true
           },
           {
             "field": "missingCapabilities",
             "criterion": "明确缺少何种能力、影响哪个检查或动作。",
-            "rejectWhen": "工具不可用仍宣称已执行。"
+            "rejectWhen": "工具不可用仍宣称已执行。",
+            "id": "quantitative-researcher-missingcapabilities",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "本任务可用工具与权限绑定",
+              "缺能力影响的具体核查项"
+            ],
+            "blocking": true
           },
           {
             "field": "failures",
             "criterion": "记录真实失败与范围，不泄露敏感材料。",
-            "rejectWhen": "凭推测补失败或隐去影响结论的问题。"
+            "rejectWhen": "凭推测补失败或隐去影响结论的问题。",
+            "id": "quantitative-researcher-failures",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "真实失败记录/目标/时间",
+              "可重试范围和停止依据"
+            ],
+            "blocking": true
           },
           {
             "field": "stopReason",
             "criterion": "说明角色当前结束、缺证据或被阻塞的具体原因。",
-            "rejectWhen": "把未完成判断静默转为成功。"
+            "rejectWhen": "把未完成判断静默转为成功。",
+            "id": "quantitative-researcher-stopreason",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "当前结束条件",
+              "剩余事实或能力缺口"
+            ],
+            "blocking": true
           },
           {
             "field": "handoff",
             "criterion": "交事实、产物、限制与待决定项；控制权留调用方。",
-            "rejectWhen": "自行批准下一阶段、调度或高影响操作。"
+            "rejectWhen": "自行批准下一阶段、调度或高影响操作。",
+            "id": "quantitative-researcher-handoff",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "产物和证据包",
+              "待决定项、受影响范围与接收责任"
+            ],
+            "blocking": true
           },
           {
             "field": "nativeRuntimeVerified",
             "criterion": "未经独立宿主运行证明保持false。",
-            "rejectWhen": "因模板存在、合同测试或本地装入而声称原生运行已验证。"
+            "rejectWhen": "因模板存在、合同测试或本地装入而声称原生运行已验证。",
+            "id": "quantitative-researcher-nativeruntimeverified",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "当前值保持false",
+              "独立宿主证据状态，与本地/作者样例分开"
+            ],
+            "blocking": true
           }
         ]
       }

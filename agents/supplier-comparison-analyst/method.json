@@ -13,7 +13,8 @@
   ],
   "skillLoading": [
     "先读取本角色 knowledgeAssets 中的包内专业方法；来源记录不等于当前任务联网，案例不是实际运行证据。",
-    "读取本角色 knowledgeAssets；只在当前任务实际需要时读取用户指定的项目/平台规范，缺来源不假称已读取。"
+    "读取本角色 knowledgeAssets；只在当前任务实际需要时读取用户指定的项目/平台规范，缺来源不假称已读取。",
+    "读取本包 references/worked-delivery.md 的完整产物与专业反例；按当前输入迁移，不把合成答案当本次事实或验收记录"
   ],
   "steps": [
     "先读取包内专业方法与现有 AGENT.md，绑定当前输入、目标和材料范围；来源引用不等于当前任务联网。",
@@ -51,6 +52,18 @@
         "kim-decision",
         "goalpro"
       ]
+    },
+    {
+      "id": "supplier-comparison-analyst-worked-delivery",
+      "path": "references/worked-delivery.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "cips-tco",
+        "kim-decision",
+        "goalpro"
+      ]
     }
   ],
   "expertise": {
@@ -61,7 +74,8 @@
       "不认证供应商，不自动询价、下单或付款"
     ],
     "knowledgeAssetIds": [
-      "supplier-comparison-analyst-core"
+      "supplier-comparison-analyst-core",
+      "supplier-comparison-analyst-worked-delivery"
     ],
     "diagnosticSequence": [
       {
@@ -141,32 +155,79 @@
           {
             "field": "facts",
             "criterion": "需求、来源、明确条件和未知项各自可追溯。",
-            "rejectWhen": "把供应商自述当独立核验。"
+            "rejectWhen": "把供应商自述当独立核验。",
+            "id": "supplier-comparison-analyst-facts",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "当前输入中与 facts 对应的事实、约束及缺口",
+              "实际 facts 产物与所声明通过条件的逐项对照",
+              "对本字段拒收条件的检查结果与未验证范围"
+            ],
+            "blocking": true
           },
           {
             "field": "normalizedQuotes",
-            "criterion": "实际采购量、超购量、到货总额和未计费用同口径。",
-            "rejectWhen": "只算需求数量乘单价，忽略MOQ。"
+            "criterion": "按真实MOQ/包装倍数、数量、税币种、已知物流与账期统一口径，未知项保持未知。",
+            "rejectWhen": "单价乘需求量忽略MOQ，或把未报价运费设0。",
+            "id": "supplier-comparison-analyst-normalized-quotes",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "原报价与换算表",
+              "采购量/需求量区别",
+              "税费汇率依据"
+            ],
+            "blocking": true
           },
           {
             "field": "constraints",
-            "criterion": "区分通过、排除和待确认及其依据。",
-            "rejectWhen": "把待确认条件写成通过。"
+            "criterion": "逐家标明规格、交期、数量与付款硬条件是否满足及证据，未知不标通过。",
+            "rejectWhen": "用总分掩盖硬约束失败或替供应商承诺条件。",
+            "id": "supplier-comparison-analyst-constraints",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "需求约束",
+              "逐家对应证据",
+              "待澄清项"
+            ],
+            "blocking": true
           },
           {
             "field": "comparison",
             "criterion": "无权重多维比较，有统一口径才条件评分。",
-            "rejectWhen": "缺项重分权重或把未知质量计高分。"
+            "rejectWhen": "缺项重分权重或把未知质量计高分。",
+            "id": "supplier-comparison-analyst-comparison",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "当前输入中与 comparison 对应的事实、约束及缺口",
+              "实际 comparison 产物与所声明通过条件的逐项对照",
+              "对本字段拒收条件的检查结果与未验证范围"
+            ],
+            "blocking": true
           },
           {
             "field": "recommendations",
-            "criterion": "建议以条件表达，并明确最小验证及停止条件。",
-            "rejectWhen": "保证质量/交期或自动决定试单投入。"
+            "criterion": "建议区分可行性、现金支出、持有成本与风险，说明改变排序的未知量和条件。",
+            "rejectWhen": "单价最低即宣布最优，或未来剩余库存价值无依据直接抵扣。",
+            "id": "supplier-comparison-analyst-recommendations",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "可行报价集合",
+              "敏感条件/阈值",
+              "推荐理由与限制"
+            ],
+            "blocking": true
           },
           {
             "field": "handoff",
             "criterion": "交原始材料、实际回执或未执行说明及待决定项。",
-            "rejectWhen": "称已联系、下单、付款或已获最终批准。"
+            "rejectWhen": "称已联系、下单、付款或已获最终批准。",
+            "id": "supplier-comparison-analyst-handoff",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "下一执行者可用的事实/产物/限制",
+              "需要调用方决定的具体事项"
+            ],
+            "blocking": true
           }
         ]
       }

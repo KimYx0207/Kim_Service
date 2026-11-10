@@ -13,7 +13,8 @@
   ],
   "skillLoading": [
     "先读取本角色 knowledgeAssets 中的包内专业方法；来源记录不等于当前任务联网，案例不是实际运行证据。",
-    "读取本角色 knowledgeAssets；只在当前任务实际需要时读取用户指定的项目/平台规范，缺来源不假称已读取。"
+    "读取本角色 knowledgeAssets；只在当前任务实际需要时读取用户指定的项目/平台规范，缺来源不假称已读取。",
+    "读取本包 references/worked-delivery.md 的完整产物与专业反例；按当前输入迁移，不把合成答案当本次事实或验收记录"
   ],
   "steps": [
     "先读取包内专业方法与现有 AGENT.md，绑定当前输入、目标和材料范围；来源引用不等于当前任务联网。",
@@ -51,6 +52,19 @@
         "youtube-experiments",
         "goalpro"
       ]
+    },
+    {
+      "id": "headline-cover-optimizer-worked-delivery",
+      "path": "references/worked-delivery.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "youtube-title",
+        "youtube-ctr",
+        "youtube-experiments",
+        "goalpro"
+      ]
     }
   ],
   "expertise": {
@@ -61,7 +75,8 @@
       "核对一致性，提供可检验选择而非流量保证"
     ],
     "knowledgeAssetIds": [
-      "headline-cover-optimizer-core"
+      "headline-cover-optimizer-core",
+      "headline-cover-optimizer-worked-delivery"
     ],
     "diagnosticSequence": [
       {
@@ -126,27 +141,64 @@
           {
             "field": "promise",
             "criterion": "标题封面的共同承诺可在正文定位。",
-            "rejectWhen": "暗示正文没有的收益或因果。"
+            "rejectWhen": "暗示正文没有的收益或因果。",
+            "id": "headline-cover-optimizer-promise",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "当前输入中与 promise 对应的事实、约束及缺口",
+              "实际 promise 产物与所声明通过条件的逐项对照",
+              "对本字段拒收条件的检查结果与未验证范围"
+            ],
+            "blocking": true
           },
           {
             "field": "titleCandidates",
-            "criterion": "不同表达仍保持对象、条件与证据一致。",
-            "rejectWhen": "换词但都依赖未证实的数字。"
+            "criterion": "每条标题的对象、数字、结果和时效都能在正文证据中找到，候选提供不同真实切入点。",
+            "rejectWhen": "虚构收益/保证/全平台能力，或只是同义词改写。",
+            "id": "headline-cover-optimizer-title-candidates",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "标题承诺-正文位置对照",
+              "适用受众"
+            ],
+            "blocking": true
           },
           {
             "field": "recommended",
             "criterion": "给出适合当前读者/材料的理由与待测点。",
-            "rejectWhen": "声称已经证明点击率最高。"
+            "rejectWhen": "声称已经证明点击率最高。",
+            "id": "headline-cover-optimizer-recommended",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "当前输入中与 recommended 对应的事实、约束及缺口",
+              "实际 recommended 产物与所声明通过条件的逐项对照",
+              "对本字段拒收条件的检查结果与未验证范围"
+            ],
+            "blocking": true
           },
           {
             "field": "coverOptions",
-            "criterion": "构图、文案、素材及实际制作状态明确。",
-            "rejectWhen": "把设计描述当成已交付封面图。"
+            "criterion": "给准确文案、元素层级、裁切范围与目标缩略预览，关键信息在实际尺寸可读。",
+            "rejectWhen": "只有抽象审美词，或以大图可读替代缩略图检查。",
+            "id": "headline-cover-optimizer-cover-options",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "封面制作规格",
+              "目标尺寸预览/未渲染标记"
+            ],
+            "blocking": true
           },
           {
             "field": "consistencyCheck",
-            "criterion": "逐项检查数字、人物、结果、限定条件。",
-            "rejectWhen": "只勾选字段齐全，不核正文承诺。"
+            "criterion": "逐项检查承诺兑现与限制，实验结论绑定真实设计和数据。",
+            "rejectWhen": "把主观偏好、点赞变化或未做的实验当效果证明。",
+            "id": "headline-cover-optimizer-consistency-check",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "承诺核对表",
+              "实验范围或未测声明"
+            ],
+            "blocking": true
           }
         ]
       }

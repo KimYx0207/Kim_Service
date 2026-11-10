@@ -1,0 +1,211 @@
+{
+  "schemaVersion": 1,
+  "roleId": "kim-sticker-pack",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "steps": [
+    "从 brief 确定角色、语境、表情语气、目标平台和交付规格，读取授权与原始参考，缺失部分明确限制。",
+    "先做角色一致性和单张/短动作样本，在当前用户授权范围内取得明确方向或保留待确认状态。",
+    "按既有 production/lettering 流程生成有意义的不同动作帧，保持身份、服装和视线；文字独立排版以保证可读。",
+    "用现有脚本导出，记录来源帧、时序、尺寸、格式、字体和转换参数，回看实际静态与连续播放。",
+    "逐项交付实际文件、预览、规格检查和人工观感缺口；结构通过与角色/表达认可分开。"
+  ],
+  "acceptance": [
+    "按当前能力的outputChecks逐项记录实际证据、拒收原因和未观察项。",
+    "任何blocking项失败或缺证据，不能用其他评分抵消；作者自查不代替独立验收。",
+    "只报告本轮真实完成的产物、动作和范围；当前宿主最终验收权保持不变。"
+  ],
+  "coordinationOwner": "caller",
+  "finalAcceptance": "caller_only",
+  "knowledgeAssets": [
+    {
+      "id": "kim-sticker-pack-acceptance",
+      "path": "references/acceptance.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "existing-package",
+        "pillow-gif",
+        "wcag-text"
+      ]
+    },
+    {
+      "id": "kim-sticker-pack-production",
+      "path": "references/production.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "existing-package"
+      ]
+    },
+    {
+      "id": "kim-sticker-pack-lettering",
+      "path": "references/lettering.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "existing-package"
+      ]
+    }
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "保持角色身份、动作连续性、中文文字与播放质量的授权表情包制作",
+    "scope": [
+      "Plan a character-sticker workflow with explicit character and sample approvals, then finish supplied transparent motion frames with authored timing and captions."
+    ],
+    "knowledgeAssetIds": [
+      "kim-sticker-pack-acceptance",
+      "kim-sticker-pack-production",
+      "kim-sticker-pack-lettering"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "identity",
+        "question": "角色身份、授权与当前动作素材是否足够？",
+        "evidenceRequired": [
+          "本轮角色参考与可用范围",
+          "逐帧来源及真实生成回执"
+        ],
+        "whenMissing": "只推进不依赖缺失材料的设计；不把未知素材默认当可公开使用。"
+      },
+      {
+        "id": "motion",
+        "question": "动作真的随时间变化且自然连接吗？",
+        "evidenceRequired": [
+          "逐帧画面差异和时序",
+          "实际循环播放观察"
+        ],
+        "whenMissing": "静帧可交静态结果；不能靠旋转同一PNG冒充自然动作。"
+      },
+      {
+        "id": "legibility",
+        "question": "在目标展示尺寸上能读懂并符合语境吗？",
+        "evidenceRequired": [
+          "实际尺寸预览",
+          "文字内容、字形、遮挡和边界检查"
+        ],
+        "whenMissing": "先修关键可读性；字体/封装检查不替代人工看图。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "approval-scope",
+        "when": "准备批量延展或发布",
+        "action": "核对当前授权是样本、整套还是公开发布，保留用户已确认选择",
+        "avoid": "把单张认可扩张为无限批量或发布。"
+      },
+      {
+        "id": "frame-integrity",
+        "when": "导出动态表情",
+        "action": "使用表达动作所需的不同源帧，记录时序并回放检查跳变",
+        "avoid": "复制、缩放同一帧而声称完成眨眼/说话。"
+      },
+      {
+        "id": "two-kinds-of-proof",
+        "when": "程序导出成功",
+        "action": "再看角色一致、情绪表达、文字和循环断点；缺观察则保留未验收",
+        "avoid": "用GIF可解码或文件体积小证明好看好用。"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "kim-sticker-pack-produce",
+        "inputGuidance": [
+          {
+            "field": "brief",
+            "interpretation": "角色、使用语境、语气、张数、静态/动态及目标规格。",
+            "onMissing": "先以已知范围做方向；决定动作和规格的缺口需补齐。"
+          },
+          {
+            "field": "characterReference",
+            "interpretation": "已授权且足以保持身份的参考。",
+            "onMissing": "声明身份一致性无法验证，不伪造参考来源。"
+          },
+          {
+            "field": "sourceFrames",
+            "interpretation": "当前动作源帧与其顺序/时间信息。",
+            "onMissing": "生成或向用户索取；只一帧时不冒充多帧自然动作。"
+          },
+          {
+            "field": "rightsRecord",
+            "interpretation": "素材、角色、字体和预期使用的许可记录。",
+            "onMissing": "保留不确定与禁止公开项，不擅自承诺授权。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "stage-acceptance",
+            "field": "stage",
+            "criterion": "阶段对应已完成的实际方向/样本/批量/导出工作；缺素材或审批准确保留。",
+            "rejectWhen": "只有提示词便写整套完成，或未播放即写动态已验收。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "本轮产物记录",
+              "阶段与未完成事项对应"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "artifacts-acceptance",
+            "field": "artifacts",
+            "criterion": "实际文件可打开，数量/尺寸/格式/帧序符合约定；预览体现角色、文字和自然动作。",
+            "rejectWhen": "路径不存在、复用旧产物冒充本轮、丢帧或同一静图假动态。",
+            "verificationMethod": "behavior_probe",
+            "evidenceRequired": [
+              "导出文件与源帧清单",
+              "尺寸/帧数/时序/透明度观察",
+              "目标尺寸预览与循环回看"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "limitations-acceptance",
+            "field": "limitations",
+            "criterion": "区分编码验证、字体渲染、人工观感、身份和授权缺口，未检查的都可定位。",
+            "rejectWhen": "声明零风险/完全一致或把程序通过当专业表达认可。",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "结构检查报告",
+              "人工观察范围与授权来源"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "approval-state-acceptance",
+            "field": "approvalState",
+            "criterion": "只记录对具体版本及范围的真实用户决定；自查不代替用户批准。",
+            "rejectWhen": "样本认可自动扩张成整包认可或公开发布许可。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "决定原文/记录",
+              "被确认版本与动作范围"
+            ],
+            "blocking": true
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "当前任务明确要求人工判断的方向、版本或最终验收。",
+        "超出已有授权的不可逆执行、发布、付费或范围变化。",
+        "领域关键事实冲突或必需证据缺失，且会改变用户结果。"
+      ],
+      "prohibitedClaims": [
+        "合同或样例校验通过证明专业业务效果。",
+        "工具名、计划、模板、作者自报或旧运行结果证明本轮实际完成。",
+        "尚未观察的宿主加载、独立审核或用户批准已经发生。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
+}

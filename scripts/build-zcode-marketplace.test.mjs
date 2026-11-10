@@ -5,9 +5,16 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import test, { before, after } from 'node:test';
-import { AGENTS, SKILLS, ROLES, META_FILES, KIM_FILES, buildMarketplace, safeRelative, sha256 } from './build-zcode-marketplace.mjs';
+import { AGENTS, META_RESOURCE_FILES, buildMarketplace, safeRelative, sha256 } from './build-zcode-marketplace.mjs';
 import { checkZcodeRelease } from './check-zcode-release.mjs';
 
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+// Use the physical temporary directory on macOS, where /var is a system
+// symlink, without relaxing the builder's separate symlink rejection tests.
+const TEMP_ROOT = fs.realpathSync.native(os.tmpdir());
+const SKILLS = ['goalpro', 'find-skill'];
+const ROLES = ['frontend-engineer', 'workplace-writer'];
+const META_FILES = ['LICENSE', 'NOTICE', ...AGENTS.map(id => `canonical/agents/${id}.md`), 'canonical/skills/meta-theory/SKILL.md', 'canonical/skills/meta-theory/references/current-method.md', 'config/contracts/fixture.json', ...META_RESOURCE_FILES];
 let scratch, metaRoot, kimRoot, sequence = 0;
 const git = (root, args) => execFileSync('git', ['-c', 'core.hooksPath=' + path.join(scratch, 'no-hooks'), '-c', 'commit.gpgsign=false', ...args], { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
 function commit(root) { git(root, ['add', '--all']); git(root, ['commit', '-qm', 'fixture source']); }
@@ -36,12 +43,18 @@ function fixture(kind, files) {
   return root;
 }
 before(() => {
-  scratch = fs.mkdtempSync(path.join(os.tmpdir(), 'kim-service-zcode-public-'));
+  scratch = fs.mkdtempSync(path.join(TEMP_ROOT, 'kim-service-zcode-public-'));
   metaRoot = fixture('meta', META_FILES);
-  kimRoot = fixture('kim', KIM_FILES);
+  kimRoot = fixture('kim', ['LICENSE', 'NOTICE']);
+  for (const item of [...ROLES.map(id => `agents/${id}`), ...SKILLS.map(id => `skills/${id}`), 'docs/images']) {
+    fs.mkdirSync(path.dirname(path.join(kimRoot, item)), { recursive: true });
+    fs.cpSync(path.join(ROOT, item), path.join(kimRoot, item), { recursive: true });
+  }
+  fs.writeFileSync(path.join(kimRoot, 'catalog.json'), JSON.stringify({ assets: JSON.parse(fs.readFileSync(path.join(ROOT, 'catalog.json'))).assets }));
+  commit(kimRoot);
 });
 after(() => {
-  assert(path.resolve(scratch).startsWith(path.resolve(os.tmpdir()) + path.sep) && path.basename(scratch).startsWith('kim-service-zcode-public-'));
+  assert(path.resolve(scratch).startsWith(TEMP_ROOT + path.sep) && path.basename(scratch).startsWith('kim-service-zcode-public-'));
   fs.rmSync(scratch, { recursive: true, force: true });
 });
 const options = () => ({ metaRoot, kimRoot, metaCommit: git(metaRoot, ['rev-parse', 'HEAD']).trim(), kimCommit: git(kimRoot, ['rev-parse', 'HEAD']).trim(), outputRoot: path.join(scratch, `output-${sequence++}`) });
@@ -54,10 +67,10 @@ test('fresh deterministic bundle copies exact committed payloads, licenses and o
   const first = options(), second = options();
   const a = buildMarketplace(first), b = buildMarketplace(second);
   assert.equal(a.closureSha256, b.closureSha256);
-  assert.equal(a.sourceCopies, 195);
-  assert.equal(a.agentEntrypoints, 13);
-  assert.equal(a.derivedEntrypoints, 2);
-  assert.equal(a.skillRoots, 6);
+  assert.ok(a.sourceCopies > META_FILES.length + ROLES.length);
+  assert.equal(a.agentEntrypoints, AGENTS.length + ROLES.length);
+  assert.equal(a.derivedEntrypoints, ROLES.length + AGENTS.length + 1);
+  assert.equal(a.skillRoots, SKILLS.length + 1);
   assert.equal(a.installed, false);
   assert.equal(a.nativeInvocation, false);
   const manifest = readJson(first.outputRoot, 'source-manifest.json');
@@ -73,19 +86,24 @@ test('fresh deterministic bundle copies exact committed payloads, licenses and o
     assert.equal(sha256(bytes), row.sha256);
   }
   assert.deepEqual(walk(path.join(first.outputRoot, 'plugins/meta-kim-local/agents')).sort(), AGENTS.map(id => id + '.md').sort());
-  assert.deepEqual(walk(path.join(first.outputRoot, 'plugins/kim-service-local/agents')).sort(), [...ROLES.map(id => id + '.md'), 'method.json'].sort());
+  for (const sourcePath of [...META_RESOURCE_FILES, 'config/contracts/fixture.json']) assert.equal(fs.readFileSync(path.join(first.outputRoot, 'plugins/meta-kim-local/source', sourcePath), 'utf8'), fs.readFileSync(path.join(metaRoot, sourcePath), 'utf8'));
+  assert.deepEqual(walk(path.join(first.outputRoot, 'plugins/kim-service-local/agents')).sort(), ROLES.map(id => id + '.md').sort());
   for (const row of manifest.derivedEntrypoints) {
     const bytes = fs.readFileSync(path.join(first.outputRoot, row.destination));
-    const original = execFileSync('git', ['cat-file', 'blob', row.sourceGitBlob], { cwd: kimRoot });
-    assert(bytes.subarray(0, original.length).equals(original));
+    const original = execFileSync('git', ['cat-file', 'blob', row.sourceGitBlob], { cwd: row.source === 'meta' ? metaRoot : kimRoot });
+    if (row.source === 'kim') assert(bytes.subarray(0, original.length).equals(original));
+    else { assert.deepEqual(fs.readFileSync(path.join(first.outputRoot, row.originalPath)), original); assert.match(bytes.toString(), /Resolve repository-relative/); }
     assert.equal(sha256(bytes), row.sha256);
     assert.equal(bytes.length, row.bytes);
-    assert.match(bytes.toString(), /never use agents\/method.json/);
-    assert.equal(JSON.parse(fs.readFileSync(path.join(first.outputRoot, row.methodPath))).roleId, row.sourcePath.split('/')[1]);
+    if (row.source === 'kim') {
+      assert.match(bytes.toString(), /Resolve method.json, knowledgeAssets/);
+      assert.equal(JSON.parse(fs.readFileSync(path.join(first.outputRoot, row.methodPath))).roleId, row.sourcePath.split('/')[1]);
+    }
     assert(!manifest.files.some(source => source.destination === row.destination), 'derived entry must not claim byte-identical Git copy');
   }
   for (const id of ROLES) for (const file of ['AGENT.md', 'LICENSE', 'NOTICE', 'capability.json']) assert(fs.existsSync(path.join(first.outputRoot, 'plugins/kim-service-local/components/agents', id, file)));
-  assert.deepEqual(readJson(first.outputRoot, 'plugins/kim-service-local/agents/method.json'), readJson(first.outputRoot, 'plugins/kim-service-local/components/agents/frontend-engineer/method.json'));
+  assert(!fs.existsSync(path.join(first.outputRoot, 'plugins/kim-service-local/agents/method.json')), 'roles use their own bound method, not a shared frontend sidecar');
+  for (const asset of readJson(kimRoot, 'catalog.json').assets) assert.equal(sha256(fs.readFileSync(path.join(first.outputRoot, 'plugins/kim-service-local', asset.path))), asset.sha256);
   for (const id of SKILLS) assert(fs.existsSync(path.join(first.outputRoot, 'plugins/kim-service-local/skills', id, 'SKILL.md')));
   const closure = readJson(first.outputRoot, 'bundle-manifest.json');
   assert.deepEqual(walk(first.outputRoot).filter(f => f !== 'bundle-manifest.json').sort(), closure.files.map(f => f.path).sort());
@@ -200,10 +218,47 @@ test('hardlinked selected source files cannot enter a generated bundle', () => {
   } finally { fs.unlinkSync(alias); }
 });
 
-test('new tracked files in a selected component require an explicit allowlist review', () => {
-  const extra = path.join(kimRoot, 'agents/frontend-engineer/unreviewed.txt'); fs.writeFileSync(extra, 'new'); commit(kimRoot);
-  const opts = options(); assert.throws(() => buildMarketplace(opts), /closure changed/); assert(!fs.existsSync(opts.outputRoot));
-  fs.unlinkSync(extra); commit(kimRoot);
+test('committed new knowledge and canonical roles are included with their complete resource trees', () => {
+  const extra = path.join(kimRoot, 'agents/frontend-engineer/references/new-knowledge.md');
+  fs.writeFileSync(extra, 'New reviewed knowledge in this explicitly selected commit.');
+  const newRole = path.join(kimRoot, 'agents/business-finance-analyst');
+  fs.cpSync(path.join(ROOT, 'agents/business-finance-analyst'), newRole, { recursive: true });
+  commit(kimRoot);
+  try {
+    const opts = options(); const result = buildMarketplace(opts);
+    assert.equal(result.agentEntrypoints, AGENTS.length + ROLES.length + 1);
+    assert.equal(fs.readFileSync(path.join(opts.outputRoot, 'plugins/kim-service-local/components/agents/frontend-engineer/references/new-knowledge.md'), 'utf8'), fs.readFileSync(extra, 'utf8'));
+    assert(fs.existsSync(path.join(opts.outputRoot, 'plugins/kim-service-local/agents/business-finance-analyst.md')));
+    const method = readJson(opts.outputRoot, 'plugins/kim-service-local/components/agents/business-finance-analyst/method.json');
+    for (const asset of method.knowledgeAssets) assert(fs.existsSync(path.join(opts.outputRoot, 'plugins/kim-service-local/components/agents/business-finance-analyst', asset.path)));
+  } finally { fs.unlinkSync(extra); fs.rmSync(newRole, { recursive: true }); commit(kimRoot); }
+});
+
+test('committed missing professional knowledge fails before packaging rather than hiding a broken source', () => {
+  const file = path.join(kimRoot, 'agents/frontend-engineer/references/professional-method.md');
+  const original = fs.readFileSync(file);
+  fs.unlinkSync(file); commit(kimRoot);
+  try {
+    const opts = options();
+    assert.throws(() => buildMarketplace(opts), /professional method resources or quality contract are incomplete/u);
+    assert(!fs.existsSync(opts.outputRoot));
+  } finally { fs.writeFileSync(file, original); commit(kimRoot); }
+});
+
+test('missing public Meta registries fail before output and unselected private config stays excluded', () => {
+  const file = path.join(metaRoot, META_RESOURCE_FILES[0]);
+  const original = fs.readFileSync(file);
+  fs.unlinkSync(file); commit(metaRoot);
+  try {
+    const opts = options(); assert.throws(() => buildMarketplace(opts), /Meta method source resource missing/u);
+    assert(!fs.existsSync(opts.outputRoot));
+  } finally { fs.writeFileSync(file, original); commit(metaRoot); }
+  const privatePath = path.join(metaRoot, 'config/private-local-settings.json');
+  fs.writeFileSync(privatePath, '{"fixture":"not included"}'); commit(metaRoot);
+  try {
+    const opts = options(); buildMarketplace(opts);
+    assert(!walk(opts.outputRoot).some(file => file.includes('private-local-settings')));
+  } finally { fs.unlinkSync(privatePath); commit(metaRoot); }
 });
 
 test('Windows physical root aliases work without weakening output overlap checks', { skip: process.platform !== 'win32' }, () => {
@@ -215,7 +270,7 @@ test('Windows physical root aliases work without weakening output overlap checks
   assert.equal(fs.realpathSync.native(aliased.kimRoot), fs.realpathSync.native(kimRoot));
   assert(!fs.lstatSync(aliased.metaRoot).isSymbolicLink());
   const result = buildMarketplace(aliased);
-  assert.equal(result.sourceCopies, 195);
+  assert.ok(result.sourceCopies > META_FILES.length + ROLES.length);
   assert(fs.existsSync(path.join(opts.outputRoot, 'bundle-manifest.json')));
   assert.equal(readJson(opts.outputRoot, 'source-manifest.json').meta.commit, opts.metaCommit);
   const overlap = path.join(aliased.metaRoot, 'new-output');

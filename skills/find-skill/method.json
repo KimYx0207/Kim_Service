@@ -1,0 +1,294 @@
+{
+  "schemaVersion": 1,
+  "roleId": "find-skill",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "steps": [
+    "从任务和已有上下文提取能力缺口，先检查宿主注册和仓库本地能力。",
+    "仅在允许联网且存在真实缺口时，使用脱敏通用词检索并读取候选正文、脚本与许可。",
+    "记录候选来源版本、匹配条件、输入输出、权限和不能完成的部分；选择证据最适合者或明确弃选。",
+    "安装前对齐已授权的精确来源、技能、宿主和作用域；按当前 CLI 帮助形成参数。",
+    "回读安装位置、资源和来源版本；分别报告复制成功、宿主发现与实际调用，不用下载量代替能力。"
+  ],
+  "acceptance": [
+    "按当前能力的outputChecks逐项记录实际证据、拒收原因和未观察项。",
+    "任何blocking项失败或缺证据，不能用其他评分抵消；作者自查不代替独立验收。",
+    "只报告本轮真实完成的产物、动作和范围；当前宿主最终验收权保持不变。"
+  ],
+  "coordinationOwner": "caller",
+  "finalAcceptance": "caller_only",
+  "knowledgeAssets": [
+    {
+      "id": "find-skill-acceptance",
+      "path": "references/acceptance.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "existing-package",
+        "skills-cli",
+        "agent-skills"
+      ]
+    }
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "证据驱动的能力发现、精确候选选择与作用域内安装验收",
+    "scope": [
+      "Discover installed skills first and optionally search public skill sources with a sanitized query.",
+      "Install one selected skill into the current project after explicit approval of the exact target.",
+      "Install one selected skill into user-level agent configuration after explicit approval of the exact target."
+    ],
+    "knowledgeAssetIds": [
+      "find-skill-acceptance"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "fit",
+        "question": "本地能力是否已覆盖任务？",
+        "evidenceRequired": [
+          "实际能力入口",
+          "任务输入输出与排除边界"
+        ],
+        "whenMissing": "先读本地，缺口未证实不必外搜。"
+      },
+      {
+        "id": "trust",
+        "question": "推荐候选的实际内容和来源是否看过？",
+        "evidenceRequired": [
+          "SKILL 与被调用脚本",
+          "版本与许可证"
+        ],
+        "whenMissing": "只能列未审候选，不给已验证推荐。"
+      },
+      {
+        "id": "installed",
+        "question": "写入发生在哪个作用域，宿主是否看到？",
+        "evidenceRequired": [
+          "安装后文件与资源",
+          "本轮宿主发现证据"
+        ],
+        "whenMissing": "写入可报告，加载效果保持未观察。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "local-first",
+        "when": "存在合适本地能力",
+        "action": "复用并停止外搜",
+        "avoid": "为安装新包重复引入同功能依赖。"
+      },
+      {
+        "id": "search-failure",
+        "when": "检索失败或返回不可解析",
+        "action": "保留失败来源并尝试已允许的替代来源",
+        "avoid": "将空白输出解释为无匹配。"
+      },
+      {
+        "id": "scope-stability",
+        "when": "安装失败",
+        "action": "在原授权范围排错或保留失败",
+        "avoid": "通过改作用域或添加全量参数绕过失败。"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "skill-search",
+        "inputGuidance": [
+          {
+            "field": "task",
+            "interpretation": "本地保留的任务目标和能力缺口。",
+            "onMissing": "先明确要交付什么。"
+          },
+          {
+            "field": "allowNetwork",
+            "interpretation": "是否允许外部候选搜索；不是安装权限。",
+            "onMissing": "按 false，先读已安装/仓库能力。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "local-matches-acceptance",
+            "field": "localMatches",
+            "criterion": "先检查当前宿主和仓库实际可见能力，说明匹配任务、必需输入和排除项。",
+            "rejectWhen": "仅按名称或关键词命中，不读作用范围就认为可用。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "本地入口路径与阅读内容",
+              "任务需求逐项匹配"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "external-search-status-acceptance",
+            "field": "externalSearchStatus",
+            "criterion": "只有检索完成且输出可解析才标 completed；被拦、超时或空白异常保留 unavailable/failed。",
+            "rejectWhen": "把无法检索当作不存在，或未联网却写 completed。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "本轮检索调用及返回",
+              "失败/未请求原因"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "candidates-acceptance",
+            "field": "candidates",
+            "criterion": "候选含来源、精确技能标识、已读文件、匹配点、缺口、许可证和脚本/权限观察；推荐不是安装成功。",
+            "rejectWhen": "只有热度/星数、把检索摘要当审计或擅自安装。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "候选 SKILL.md 与相关脚本",
+              "当前版本/提交及许可记录"
+            ],
+            "blocking": true
+          }
+        ]
+      },
+      {
+        "capabilityId": "skill-install-project",
+        "inputGuidance": [
+          {
+            "field": "source",
+            "interpretation": "核对过的仓库/本地来源与版本；来源名不是信任证明。",
+            "onMissing": "先检查候选内容与来源，不安装猜测目标。"
+          },
+          {
+            "field": "skill",
+            "interpretation": "来源内精确的 Skill 名称与目录。",
+            "onMissing": "先列出候选，避免安装整个集合。"
+          },
+          {
+            "field": "agent",
+            "interpretation": "当前宿主真实支持的目标标识。",
+            "onMissing": "查看当前 CLI 帮助及宿主技能目录。"
+          },
+          {
+            "field": "approvedCommand",
+            "interpretation": "与来源、Skill、agent、作用域一致的已授权命令。",
+            "onMissing": "保持预览；既有明确授权可复用，不重复询问。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "status-acceptance",
+            "field": "status",
+            "criterion": "安装成功须由目标作用域中的实际入口、必要资源与当前源版本核对支持；失败保留原作用域。",
+            "rejectWhen": "只凭退出码/列表名字称已安装，或失败后换成全局/项目范围。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "批准的精确目标",
+              "安装后文件与资源回读及差异"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "scope-acceptance",
+            "field": "scope",
+            "criterion": "实际路径和命令的作用域与 project 授权一致；没有扩大到其他宿主。",
+            "rejectWhen": "偷偷加 -g、--all，或修改未授权 agent 目录。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "命令参数",
+              "实际目标路径与范围"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "verification-acceptance",
+            "field": "verification",
+            "criterion": "回读 SKILL 名称、关键引用资源和安装来源；宿主尚未重新发现时明确未观察加载。",
+            "rejectWhen": "把下载、复制或命令完成当作宿主已触发成功。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "安装结果与回读",
+              "宿主发现/未观察状态"
+            ],
+            "blocking": true
+          }
+        ]
+      },
+      {
+        "capabilityId": "skill-install-user",
+        "inputGuidance": [
+          {
+            "field": "source",
+            "interpretation": "核对过的仓库/本地来源与版本；来源名不是信任证明。",
+            "onMissing": "先检查候选内容与来源，不安装猜测目标。"
+          },
+          {
+            "field": "skill",
+            "interpretation": "来源内精确的 Skill 名称与目录。",
+            "onMissing": "先列出候选，避免安装整个集合。"
+          },
+          {
+            "field": "agent",
+            "interpretation": "当前宿主真实支持的目标标识。",
+            "onMissing": "查看当前 CLI 帮助及宿主技能目录。"
+          },
+          {
+            "field": "approvedCommand",
+            "interpretation": "与来源、Skill、agent、作用域一致的已授权命令。",
+            "onMissing": "保持预览；既有明确授权可复用，不重复询问。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "status-acceptance",
+            "field": "status",
+            "criterion": "安装成功须由目标作用域中的实际入口、必要资源与当前源版本核对支持；失败保留原作用域。",
+            "rejectWhen": "只凭退出码/列表名字称已安装，或失败后换成全局/项目范围。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "批准的精确目标",
+              "安装后文件与资源回读及差异"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "scope-acceptance",
+            "field": "scope",
+            "criterion": "实际路径和命令的作用域与 user 授权一致；没有扩大到其他宿主。",
+            "rejectWhen": "偷偷加 -g、--all，或修改未授权 agent 目录。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "命令参数",
+              "实际目标路径与范围"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "verification-acceptance",
+            "field": "verification",
+            "criterion": "回读 SKILL 名称、关键引用资源和安装来源；宿主尚未重新发现时明确未观察加载。",
+            "rejectWhen": "把下载、复制或命令完成当作宿主已触发成功。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "安装结果与回读",
+              "宿主发现/未观察状态"
+            ],
+            "blocking": true
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "当前任务明确要求人工判断的方向、版本或最终验收。",
+        "超出已有授权的不可逆执行、发布、付费或范围变化。",
+        "领域关键事实冲突或必需证据缺失，且会改变用户结果。"
+      ],
+      "prohibitedClaims": [
+        "合同或样例校验通过证明专业业务效果。",
+        "工具名、计划、模板、作者自报或旧运行结果证明本轮实际完成。",
+        "尚未观察的宿主加载、独立审核或用户批准已经发生。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
+}

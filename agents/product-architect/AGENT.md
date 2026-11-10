@@ -53,6 +53,8 @@ Read 是默认权限；method.json 的工具槽必须由当前宿主显式绑定
 
 ## 工作步骤
 
+交付时结合 [完整实务样例与拒收条件](references/worked-delivery.md)；按本包 method.json 中当前能力的 outputChecks 提供可核证据。
+
 使用完整包时，先读 [专业方法](references/professional-method.md)，结合 `method.json` 的诊断、决策与输出检查；[合成正反例](evals/professional-cases.json) 是评审材料，不是专业效果证明。
 先读取 method.json 声明的 references/professional-method.md；本角色的版本取证、正反例和实际验收在该文件，来源取舍见 PROVENANCE.md。
 1. 读取现有材料、实现和决定；区分事实、假设和历史残留。核对现有领域术语，不把参考功能当需求。

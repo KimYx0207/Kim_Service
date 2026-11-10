@@ -5,215 +5,32 @@ import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { componentFilesSha256, discoverComponents } from './capability-catalog.mjs';
+import { checkComponentMethod } from './check-agent-pack.mjs';
 
 export const AGENTS = Object.freeze(['meta-artisan', 'meta-chrysalis', 'meta-conductor', 'meta-genesis', 'meta-librarian', 'meta-prism', 'meta-scout', 'meta-sentinel', 'meta-warden']);
-export const SKILLS = Object.freeze(['agent-teams-playbook', 'find-skill', 'goalpro', 'kim-decision', 'meta-skill-creator']);
-export const ROLES = Object.freeze(['frontend-engineer', 'workplace-writer', 'product-architect', 'interaction-designer']);
-export const BOUND_METHOD_ROLES = Object.freeze(['product-architect', 'interaction-designer']);
 export const MARKETPLACE = 'kim-local-reviewed';
-// Exact reviewed content selection. New files require a reviewed builder change.
-export const META_FILES = Object.freeze([
-  "LICENSE",
-  "NOTICE",
-  "canonical/agents/meta-artisan.md",
-  "canonical/agents/meta-chrysalis.md",
-  "canonical/agents/meta-conductor.md",
-  "canonical/agents/meta-genesis.md",
-  "canonical/agents/meta-librarian.md",
-  "canonical/agents/meta-prism.md",
-  "canonical/agents/meta-scout.md",
-  "canonical/agents/meta-sentinel.md",
-  "canonical/agents/meta-warden.md",
-  "canonical/skills/meta-theory/SKILL.md",
-  "canonical/skills/meta-theory/evals/eval-contract.md",
-  "canonical/skills/meta-theory/references/create-agent.md",
-  "canonical/skills/meta-theory/references/dev-governance.md",
-  "canonical/skills/meta-theory/references/evolution-writeback.md",
-  "canonical/skills/meta-theory/references/global-owner-discovery.md",
-  "canonical/skills/meta-theory/references/intent-amplification.md",
-  "canonical/skills/meta-theory/references/meta-theory.md",
-  "canonical/skills/meta-theory/references/outcome-evaluation.md",
-  "canonical/skills/meta-theory/references/owner-resolution.md",
-  "canonical/skills/meta-theory/references/path-selection.md",
-  "canonical/skills/meta-theory/references/planning-files.md",
-  "canonical/skills/meta-theory/references/rhythm-orchestration.md",
-  "canonical/skills/meta-theory/references/runtime-claude.md",
-  "canonical/skills/meta-theory/references/runtime-codex.md",
-  "canonical/skills/meta-theory/references/spine-state.md",
-  "canonical/skills/meta-theory/references/ten-step-governance.md",
-  "canonical/skills/meta-theory/references/verification-evidence.md"
-]);
-export const KIM_FILES = Object.freeze([
-  "LICENSE",
-  "NOTICE",
-  "agents/frontend-engineer/AGENT.md",
-  "agents/frontend-engineer/CHANGELOG.md",
-  "agents/frontend-engineer/LICENSE",
-  "agents/frontend-engineer/NOTICE",
-  "agents/frontend-engineer/README.md",
-  "agents/frontend-engineer/capability.json",
-  "agents/frontend-engineer/example.json",
-  "agents/frontend-engineer/method.json",
-  "agents/frontend-engineer/tests/contract.test.mjs",
-  "agents/workplace-writer/AGENT.md",
-  "agents/workplace-writer/CHANGELOG.md",
-  "agents/workplace-writer/LICENSE",
-  "agents/workplace-writer/NOTICE",
-  "agents/workplace-writer/README.md",
-  "agents/workplace-writer/capability.json",
-  "agents/workplace-writer/tests/contract.test.mjs",
-  "agents/product-architect/AGENT.md",
-  "agents/product-architect/CHANGELOG.md",
-  "agents/product-architect/LICENSE",
-  "agents/product-architect/NOTICE",
-  "agents/product-architect/PROVENANCE.md",
-  "agents/product-architect/README.md",
-  "agents/product-architect/capability.json",
-  "agents/product-architect/example.json",
-  "agents/product-architect/method.json",
-  "agents/product-architect/tests/contract.test.mjs",
-  "agents/interaction-designer/AGENT.md",
-  "agents/interaction-designer/CHANGELOG.md",
-  "agents/interaction-designer/LICENSE",
-  "agents/interaction-designer/NOTICE",
-  "agents/interaction-designer/PROVENANCE.md",
-  "agents/interaction-designer/README.md",
-  "agents/interaction-designer/capability.json",
-  "agents/interaction-designer/example.json",
-  "agents/interaction-designer/method.json",
-  "agents/interaction-designer/tests/contract.test.mjs",
-  "skills/agent-teams-playbook/.gitattributes",
-  "skills/agent-teams-playbook/.gitignore",
-  "skills/agent-teams-playbook/CHANGELOG.md",
-  "skills/agent-teams-playbook/LICENSE",
-  "skills/agent-teams-playbook/NOTICE",
-  "skills/agent-teams-playbook/README.md",
-  "skills/agent-teams-playbook/README_EN.md",
-  "skills/agent-teams-playbook/SKILL.md",
-  "skills/agent-teams-playbook/capability.json",
-  "skills/agent-teams-playbook/images/二维码基础款.png",
-  "skills/agent-teams-playbook/images/微信.jpg",
-  "skills/agent-teams-playbook/images/支付宝.jpg",
-  "skills/agent-teams-playbook/scripts/install.sh",
-  "skills/agent-teams-playbook/tests/fixtures/codex-host-profiles.json",
-  "skills/agent-teams-playbook/tests/runtime-contracts.test.mjs",
-  "skills/agent-teams-playbook/tests/test_installer.py",
-  "skills/find-skill/CHANGELOG.md",
-  "skills/find-skill/LICENSE",
-  "skills/find-skill/NOTICE",
-  "skills/find-skill/README.md",
-  "skills/find-skill/README_CN.md",
-  "skills/find-skill/SKILL.md",
-  "skills/find-skill/capability.json",
-  "skills/find-skill/tests/find-skill.behavior.test.mjs",
-  "skills/goalpro/.gitignore",
-  "skills/goalpro/CHANGELOG.md",
-  "skills/goalpro/LICENSE",
-  "skills/goalpro/NOTICE",
-  "skills/goalpro/README.md",
-  "skills/goalpro/SKILL.md",
-  "skills/goalpro/capability.json",
-  "skills/goalpro/docs/images/alipay.jpg",
-  "skills/goalpro/docs/images/contact-qr.png",
-  "skills/goalpro/docs/images/wechat-pay.jpg",
-  "skills/goalpro/references/examples.md",
-  "skills/goalpro/references/source-rules.md",
-  "skills/goalpro/tests/behavior.test.mjs",
-  "skills/goalpro/tests/boundary.test.mjs",
-  "skills/goalpro/tests/governance.test.mjs",
-  "skills/kim-decision/.gitattributes",
-  "skills/kim-decision/.gitignore",
-  "skills/kim-decision/CHANGELOG.md",
-  "skills/kim-decision/LICENSE",
-  "skills/kim-decision/LICENSE-APACHE",
-  "skills/kim-decision/LICENSE-MIT",
-  "skills/kim-decision/NOTICE",
-  "skills/kim-decision/README.md",
-  "skills/kim-decision/README.zh-CN.md",
-  "skills/kim-decision/SKILL.md",
-  "skills/kim-decision/capability.json",
-  "skills/kim-decision/docs/images/alipay.jpg",
-  "skills/kim-decision/docs/images/contact-qr.png",
-  "skills/kim-decision/docs/images/wechat-pay.jpg",
-  "skills/kim-decision/docs/zh-CN/SKILL.md",
-  "skills/kim-decision/docs/zh-CN/examples/calibration.md",
-  "skills/kim-decision/docs/zh-CN/examples/creation.md",
-  "skills/kim-decision/docs/zh-CN/examples/debugging.md",
-  "skills/kim-decision/docs/zh-CN/examples/decision.md",
-  "skills/kim-decision/docs/zh-CN/references/business.md",
-  "skills/kim-decision/docs/zh-CN/references/distillation.md",
-  "skills/kim-decision/docs/zh-CN/references/execution.md",
-  "skills/kim-decision/docs/zh-CN/references/gates.md",
-  "skills/kim-decision/docs/zh-CN/references/master-lens.md",
-  "skills/kim-decision/docs/zh-CN/references/method.md",
-  "skills/kim-decision/docs/zh-CN/references/models.md",
-  "skills/kim-decision/docs/zh-CN/references/output.md",
-  "skills/kim-decision/docs/zh-CN/references/path.md",
-  "skills/kim-decision/docs/zh-CN/references/verification.md",
-  "skills/kim-decision/examples/calibration.md",
-  "skills/kim-decision/examples/creation.md",
-  "skills/kim-decision/examples/debugging.md",
-  "skills/kim-decision/examples/decision.md",
-  "skills/kim-decision/references/business.md",
-  "skills/kim-decision/references/distillation.md",
-  "skills/kim-decision/references/execution.md",
-  "skills/kim-decision/references/gates.md",
-  "skills/kim-decision/references/master-lens.md",
-  "skills/kim-decision/references/method.md",
-  "skills/kim-decision/references/models.md",
-  "skills/kim-decision/references/output.md",
-  "skills/kim-decision/references/path.md",
-  "skills/kim-decision/references/verification.md",
-  "skills/kim-decision/tests/behavior.test.mjs",
-  "skills/kim-decision/tests/boundary.test.mjs",
-  "skills/meta-skill-creator/CHANGELOG.md",
-  "skills/meta-skill-creator/LICENSE",
-  "skills/meta-skill-creator/NOTICE",
-  "skills/meta-skill-creator/README.md",
-  "skills/meta-skill-creator/SKILL.md",
-  "skills/meta-skill-creator/assets/acceptance-run-template.md",
-  "skills/meta-skill-creator/assets/domain-research-brief-template.md",
-  "skills/meta-skill-creator/assets/host-attestation-template.json",
-  "skills/meta-skill-creator/assets/host-event-anchor-template.json",
-  "skills/meta-skill-creator/assets/loop-run-record-template.md",
-  "skills/meta-skill-creator/assets/multimodal-prompt-brief-template.md",
-  "skills/meta-skill-creator/assets/package-plan-template.md",
-  "skills/meta-skill-creator/assets/product-design-board-template.md",
-  "skills/meta-skill-creator/assets/reviewer-attestation-template.json",
-  "skills/meta-skill-creator/assets/skill-contract-template.md",
-  "skills/meta-skill-creator/assets/trigger-run-record-template.json",
-  "skills/meta-skill-creator/capability.json",
-  "skills/meta-skill-creator/docs/images/alipay.jpg",
-  "skills/meta-skill-creator/docs/images/contact-qr.png",
-  "skills/meta-skill-creator/docs/images/wechat-pay.jpg",
-  "skills/meta-skill-creator/evals/trigger-eval.json",
-  "skills/meta-skill-creator/examples/example-input.md",
-  "skills/meta-skill-creator/examples/example-output.md",
-  "skills/meta-skill-creator/references/closed-loop-governance.md",
-  "skills/meta-skill-creator/references/evaluation-method.md",
-  "skills/meta-skill-creator/references/evidence.md",
-  "skills/meta-skill-creator/references/experience-surface-model.md",
-  "skills/meta-skill-creator/references/intent-domain-research.md",
-  "skills/meta-skill-creator/references/interactive-mvp-product-skill.md",
-  "skills/meta-skill-creator/references/multimodal-tooling.md",
-  "skills/meta-skill-creator/references/product-design.md",
-  "skills/meta-skill-creator/references/release-gate.md",
-  "skills/meta-skill-creator/references/skill-contract.md",
-  "skills/meta-skill-creator/references/source-abstraction-boundary.md",
-  "skills/meta-skill-creator/scripts/check_acceptance_runs.py",
-  "skills/meta-skill-creator/scripts/check_closed_loop.py",
-  "skills/meta-skill-creator/scripts/check_meta_skill_package.py",
-  "skills/meta-skill-creator/scripts/prepare_acceptance_run.py",
-  "skills/meta-skill-creator/scripts/run-acceptance.sh",
-  "skills/meta-skill-creator/scripts/run-baseline.sh",
-  "skills/meta-skill-creator/scripts/test_acceptance_runs.py"
+// Public repository facts referenced by meta-theory, aligned with Meta_Kim's
+// DSh projection. This bounded selection excludes private/local config state.
+export const META_RESOURCE_FILES = Object.freeze([
+  'canonical/runtime-assets/dsh/host-contract.json',
+  'config/runtime-capability-matrix.json',
+  'config/os-compatibility-matrix.json',
+  'config/runtime-compatibility-catalog.json',
+  'config/skills.json',
+  'config/sync.json',
+  'config/capability-index/agent-eligibility.json',
+  'config/capability-index/dependency-project-registry.json',
+  'config/capability-index/meta-kim-capabilities.json',
+  'config/capability-index/provider-registry.json',
+  'config/capability-index/weapon-registry.json',
+  'config/governance/decision-pattern-catalog.json'
 ]);
 const REPOSITORIES = { meta: 'KimYx0207/Meta_Kim', kim: 'KimYx0207/Kim_Service' };
 const MAX_BYTES = 32 * 1024 * 1024;
 const MAX_FILE_BYTES = 8 * 1024 * 1024;
 const jsonBytes = value => Buffer.from(JSON.stringify(value, null, 2) + '\n');
 export const sha256 = value => createHash('sha256').update(value).digest('hex');
-const sorted = values => [...values].sort();
 
 function gitEnvironment() {
   const env = { ...process.env };
@@ -290,10 +107,19 @@ function sourceSnapshot(root, commit, kind) {
   assert.equal(git(['rev-parse', 'HEAD']).toString().trim(), commit, 'source HEAD mismatch');
   assert(repositoryIdentity(git(['config', '--get', 'remote.origin.url']).toString()) === REPOSITORIES[kind].toLowerCase(), 'source origin mismatch');
   assert.equal(git(['status', '--porcelain=v1', '--untracked-files=all', '--ignore-submodules=all']).length, 0, 'source checkout must be clean');
-  const expected = kind === 'meta' ? META_FILES : KIM_FILES;
+  // Use the canonical capability contracts from this exact clean source, then
+  // bind their complete resource trees to committed Git blobs below. Adding
+  // knowledge/cases must not leave a hardcoded old projection silently stale.
+  const components = kind === 'kim'
+    ? discoverComponents(root).filter(({ contract }) => ['agent', 'skill'].includes(contract.componentType))
+    : [];
+  if (kind === 'kim') assert(components.length > 0, 'no canonical agent/skill components');
+  for (const component of components) assert.deepEqual(checkComponentMethod(path.join(root, component.path)), [], 'professional method resources or quality contract are incomplete');
+  const assets = kind === 'kim' ? JSON.parse(git(['show', `${commit}:catalog.json`])).assets ?? [] : [];
+  for (const asset of assets) assert(typeof asset.path === 'string' && /^docs\/images\/[^/\\]+\.(?:png|jpe?g|webp|gif|svg)$/iu.test(asset.path), 'invalid shared public asset path');
   const prefixes = kind === 'meta'
-    ? ['LICENSE', 'NOTICE', ...AGENTS.map(id => `canonical/agents/${id}.md`), 'canonical/skills/meta-theory']
-    : ['LICENSE', 'NOTICE', ...SKILLS.map(id => `skills/${id}`), ...ROLES.map(id => `agents/${id}`)];
+    ? ['LICENSE', 'NOTICE', ...AGENTS.map(id => `canonical/agents/${id}.md`), 'canonical/skills/meta-theory', 'config/contracts', ...META_RESOURCE_FILES]
+    : ['LICENSE', 'NOTICE', ...components.map(component => component.path), ...assets.map(asset => asset.path)];
   const entries = git(['ls-tree', '-rz', commit, '--', ...prefixes]).toString('utf8').split('\0').filter(Boolean).map(line => {
     const match = /^(100644|100755) blob ([a-f0-9]{40})\t(.+)$/.exec(line);
     assert(match, 'selected source must contain regular committed files');
@@ -301,7 +127,7 @@ function sourceSnapshot(root, commit, kind) {
     noLinks(path.join(root, match[3]), true);
     return { mode: match[1], blob: match[2], path: match[3] };
   });
-  assert.deepEqual(sorted(entries.map(row => row.path)), sorted(expected), 'selected source closure changed; review the allowlist');
+  assert(entries.length > 0 && entries.length <= 4096, 'selected source file count bound exceeded');
   const versionFile = kind === 'meta' ? 'package.json' : 'VERSION';
   const version = kind === 'meta' ? JSON.parse(git(['show', `${commit}:${versionFile}`])).version : git(['show', `${commit}:${versionFile}`]).toString().trim();
   if (kind === 'meta') assert(/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-[a-zA-Z0-9.-]+)?$/.test(version), 'invalid Meta package version');
@@ -324,7 +150,19 @@ function sourceSnapshot(root, commit, kind) {
   }
   assert.equal(cursor, payload.length, 'unexpected Git blob bytes');
   const files = new Map(entries.map(row => [row.path, blobs.get(row.blob)]));
-  return { root, commit, version, git, files, entries,
+  for (const name of ['LICENSE', 'NOTICE']) assert(files.has(name), 'root license/notice missing');
+  if (kind === 'meta') {
+    for (const name of [...META_RESOURCE_FILES, 'canonical/skills/meta-theory/SKILL.md']) assert(files.has(name), 'Meta method source resource missing');
+    assert([...files.keys()].some(name => name.startsWith('config/contracts/') && name.endsWith('.json')), 'Meta machine contract sources missing');
+  }
+  for (const component of components) {
+    const prefix = component.path + '/';
+    const committed = entries.filter(row => row.path.startsWith(prefix)).map(row => ({ relativePath: row.path.slice(prefix.length), contents: files.get(row.path) }));
+    assert.equal(componentFilesSha256(committed), component.contentSha256, 'canonical component differs from its committed complete resource tree');
+    for (const name of [component.entrypoint, 'capability.json', 'method.json', 'LICENSE', 'NOTICE']) assert(files.has(prefix + name), 'complete component source is missing a required file');
+  }
+  for (const asset of assets) assert(files.has(asset.path) && sha256(files.get(asset.path)) === asset.sha256, 'shared public asset is missing or has changed');
+  return { root, commit, version, git, files, entries, components,
     metadata: { repository: `https://github.com/${REPOSITORIES[kind]}`, commit,
       tree: git(['rev-parse', `${commit}^{tree}`]).toString().trim(), version } };
 }
@@ -336,6 +174,7 @@ function frontmatter(bytes, expectedName) {
   const name = /^name:\s*([^\n]+)$/m.exec(match[1])?.[1].trim().replace(/^['"]|['"]$/g, '');
   assert.equal(name, expectedName, 'entrypoint name mismatch');
   assert(/^description:\s*\S/m.test(match[1]), 'entrypoint description missing');
+  return `---\n${match[1]}\n---\n`;
 }
 
 const LIMITS_TEXT = 'Beta compatibility content only; not a formal Meta_Kim Zcode runtime. Packaging is not installation, native Agent invocation, automatic method-file reading, model compliance, tool permission or final acceptance. HookPrompt is deferred: no native Zcode Hook adapter. No Hooks, MCP, Commands, automatic script execution, downloads or dependency installation are registered. Reference scripts and tests are retained as inert source. Preserve existing user and project capabilities.';
@@ -364,51 +203,58 @@ export function buildMarketplace({ metaRoot, metaCommit, kimRoot, kimCommit, out
     add(destination, bytes);
     copies.push({ source: source === meta ? 'meta' : 'kim', sourcePath, destination, bytes: bytes.length, sha256: sha256(bytes), gitBlob: source.entries.find(row => row.path === sourcePath).blob });
   };
+  // Keep the original repository-relative hierarchy for all governance
+  // documents and their contracts/registries. Native wrappers are explicit
+  // navigation into this readable tree, never a substitute for the methods.
+  for (const [relative] of meta.files) {
+    copy(meta, relative, relative === 'LICENSE' || relative === 'NOTICE' ? `plugins/meta-kim-local/${relative}` : `plugins/meta-kim-local/source/${relative}`);
+  }
+  const metaLoader = (id, sourcePath, destination) => {
+    const header = frontmatter(meta.files.get(sourcePath), id);
+    const sourceRoot = path.posix.relative(path.posix.dirname(destination), 'plugins/meta-kim-local/source');
+    const original = `${sourceRoot}/${sourcePath}`;
+    const body = `\n# ${id}\n\nBefore responding or delegating, read the complete original method at \`${original}\`. This entry only locates that method; its professional/governance instructions are not replaced by this short loader.\n\nResolve repository-relative \`config/\` and \`canonical/\` paths against \`${sourceRoot}/\`. Resolve relative links inside an original file against that file's own directory. The source tree includes the complete meta-theory references, all nine governance roles, machine contracts and the reviewed public runtime/capability registries. Read the task-relevant facts before choosing a runtime or capability; missing source material remains an explicit blocker, never an assumed successful check.\n\nUse the current host's real tools, permissions and completion receipts. Governance roles do not implement business tasks themselves. Native Agent/Skill discovery does not prove model compliance, tool authority or final user acceptance.\n`;
+    const bytes = Buffer.from(header + body);
+    add(destination, bytes);
+    derivedEntrypoints.push({ source: 'meta', sourcePath, sourceGitBlob: meta.entries.find(row => row.path === sourcePath).blob, destination, transform: 'explicit_complete_governance_source_loader_v1', originalPath: `plugins/meta-kim-local/source/${sourcePath}`, sourceRoot: 'plugins/meta-kim-local/source', bytes: bytes.length, sha256: sha256(bytes) });
+  };
   for (const id of AGENTS) {
-    const sourcePath = `canonical/agents/${id}.md`;
-    frontmatter(meta.files.get(sourcePath), id);
-    copy(meta, sourcePath, `plugins/meta-kim-local/agents/${id}.md`);
+    metaLoader(id, `canonical/agents/${id}.md`, `plugins/meta-kim-local/agents/${id}.md`);
     entrypoints.push({ plugin: 'meta-kim-local', name: id, qualifiedName: `meta-kim-local:${id}`, path: `agents/${id}.md` });
   }
-  for (const [relative] of meta.files) {
-    if (relative.startsWith('canonical/skills/meta-theory/')) copy(meta, relative, `plugins/meta-kim-local/skills/meta-theory/${relative.slice('canonical/skills/meta-theory/'.length)}`);
-    else if (relative === 'LICENSE' || relative === 'NOTICE') copy(meta, relative, `plugins/meta-kim-local/${relative}`);
-  }
-  frontmatter(meta.files.get('canonical/skills/meta-theory/SKILL.md'), 'meta-theory');
+  metaLoader('meta-theory', 'canonical/skills/meta-theory/SKILL.md', 'plugins/meta-kim-local/skills/meta-theory/SKILL.md');
   for (const [relative] of kim.files) copy(kim, relative, relative.startsWith('agents/') ? `plugins/kim-service-local/components/${relative}` : `plugins/kim-service-local/${relative}`);
-  for (const id of SKILLS) frontmatter(kim.files.get(`skills/${id}/SKILL.md`), id);
-  for (const id of ROLES) {
-    const sourcePath = `agents/${id}/AGENT.md`;
+  const roles = kim.components.filter(component => component.contract.componentType === 'agent');
+  const skills = kim.components.filter(component => component.contract.componentType === 'skill');
+  for (const component of skills) frontmatter(kim.files.get(`${component.path}/${component.entrypoint}`), component.contract.id);
+  for (const component of roles) {
+    const id = component.contract.id;
+    const sourcePath = `${component.path}/${component.entrypoint}`;
     frontmatter(kim.files.get(sourcePath), id);
     const destination = `plugins/kim-service-local/agents/${id}.md`;
-    if (BOUND_METHOD_ROLES.includes(id)) {
-      const methodPath = `agents/${id}/method.json`;
-      assert.equal(JSON.parse(kim.files.get(methodPath)).roleId, id, 'design method role mismatch');
-      const binding = `\n\n## Zcode package resource binding\n\nThis generated entry retains the original role instructions above. For this role, method.json means ../components/agents/${id}/method.json relative to this entry file; never use agents/method.json, which belongs to frontend-engineer. The complete original component, contracts, examples and licenses are in ../components/agents/${id}/. Load only relevant resources through the existing authorized Read tool. This binding adds no tools or permissions.\n`;
-      const bytes = Buffer.concat([kim.files.get(sourcePath), Buffer.from(binding)]);
-      add(destination, bytes);
-      derivedEntrypoints.push({ source: 'kim', sourcePath, sourceGitBlob: kim.entries.find(row => row.path === sourcePath).blob, destination, transform: 'append_explicit_component_method_binding_v1', methodPath: `plugins/kim-service-local/components/${methodPath}`, bytes: bytes.length, sha256: sha256(bytes) });
-    } else copy(kim, sourcePath, destination);
+    const methodPath = `${component.path}/method.json`;
+    assert.equal(JSON.parse(kim.files.get(methodPath)).roleId, id, 'professional method role mismatch');
+    const binding = `\n\n## Zcode package resource binding\n\nThis entry retains the original role instructions above. The complete original component is at ../components/${component.path}/ relative to this entry file. Resolve method.json, knowledgeAssets, examples, scripts and all relative links against that original component directory, including nested reference paths. Read ../components/${methodPath} and the capability contract before acting, then load only task-relevant knowledge and its outputChecks. Do not use another role's method or infer missing tools. The caller retains permissions, scheduling and final acceptance. This binding registers no additional tools.\n`;
+    const bytes = Buffer.concat([kim.files.get(sourcePath), Buffer.from(binding)]);
+    add(destination, bytes);
+    derivedEntrypoints.push({ source: 'kim', sourcePath, sourceGitBlob: kim.entries.find(row => row.path === sourcePath).blob, destination, transform: 'append_explicit_component_method_binding_v2', methodPath: `plugins/kim-service-local/components/${methodPath}`, bytes: bytes.length, sha256: sha256(bytes) });
     entrypoints.push({ plugin: 'kim-service-local', name: id, qualifiedName: `kim-service-local:${id}`, path: `agents/${id}.md` });
   }
-  assert.equal(JSON.parse(kim.files.get('agents/frontend-engineer/method.json')).roleId, 'frontend-engineer', 'frontend method role mismatch');
-  copy(kim, 'agents/frontend-engineer/method.json', 'plugins/kim-service-local/agents/method.json');
-  assert.equal(copies.length, 195, 'reviewed source copy count changed');
   const manifests = [
     { name: 'meta-kim-local', version: meta.version, description: 'Nine canonical governance agents and complete meta-theory; Beta content.', license: 'Apache-2.0', agents: './agents', skills: './skills' },
-    { name: 'kim-service-local', version: kim.version.slice(1) + '.0', description: 'Five complete skills and four professional role components; Beta content.', license: 'MIT', agents: './agents', skills: './skills' }
+    { name: 'kim-service-local', version: kim.version.slice(1) + '.0', description: `${skills.length} complete skills and ${roles.length} professional role components; Beta content.`, license: 'MIT', agents: './agents', skills: './skills' }
   ];
   for (const manifest of manifests) {
     add(`plugins/${manifest.name}/.zcode-plugin/plugin.json`, jsonBytes(manifest));
-    add(`plugins/${manifest.name}/README.md`, `# ${manifest.name}\n\n${LIMITS_TEXT}\n\nThe source manifest pins repository/commit and every copied file. Each original license and notice is retained. Root licenses do not replace component licenses.\n\nUse qualified agent names. Complete Kim role components live in components/agents/. The unchanged frontend entry mentions method.json; agents/method.json is a byte-identical sidecar of components/agents/frontend-engineer/method.json. No automatic file reading or host tool binding is asserted.\n`);
+    add(`plugins/${manifest.name}/README.md`, `# ${manifest.name}\n\n${LIMITS_TEXT}\n\nThe source manifest pins repository/commit and every copied file. Each original license and notice is retained. Root licenses do not replace component licenses.\n\nUse qualified agent names. Meta native entries load their original methods from source/canonical/; repository-relative config/ references resolve under source/. Complete Kim role components live in components/agents/. Each generated role entry explicitly binds its own component method and resource directory. Shared contact/payment images retain their original source paths and bytes. No automatic file reading or host tool binding is asserted.\n`);
   }
   add('marketplace.json', jsonBytes({ name: MARKETPLACE, description: 'Pinned Meta_Kim and Kim_Service Beta compatibility content.', plugins: manifests.map(m => ({ name: m.name, source: `./plugins/${m.name}`, version: m.version, description: m.description, strict: true })) }));
   copies.sort((a, b) => a.destination < b.destination ? -1 : a.destination > b.destination ? 1 : 0);
   add('source-manifest.json', jsonBytes({ schemaVersion: 1, kind: 'beta_compatibility_content_not_runtime_certification',
     meta: meta.metadata, kim: kim.metadata, officialPluginDocs: 'https://zcode.z.ai/en/docs/plugin',
-    policy: { sourceBytes: 'committed_git_blobs', symlinks: 'rejected', hooks: 'not_registered', mcp: 'not_registered', commands: 'not_registered', hookPrompt: 'deferred_no_native_zcode_adapter', formalMetaZcodeProjection: false, installation: 'not_performed', nativeInvocation: 'not_performed' },
+    policy: { sourceBytes: 'committed_git_blobs', symlinks: 'rejected', hooks: 'not_registered', mcp: 'not_registered', commands: 'not_registered', hookPrompt: 'deferred_no_native_zcode_adapter', formalMetaZcodeProjection: false, sourceSelection: 'canonical_agent_skill_contracts_with_committed_complete_resources', installation: 'not_performed', nativeInvocation: 'not_performed' },
     entrypoints, files: copies, derivedEntrypoints }));
-  add('README.md', `# Zcode Beta compatibility content\n\n${LIMITS_TEXT}\n\nMarketplace: ${MARKETPLACE}. Source copies: 195; Generated design-role entrypoints: 2; Agent entrypoints: 13; Skill roots: 6. No third-party loader code, vendor path, credentials or personal installation receipt is included. See source-manifest.json, bundle-manifest.json and each component LICENSE/NOTICE. Official format documentation: https://zcode.z.ai/en/docs/plugin\n\nAfter checking hashes, keep this complete directory at a persistent location you own. Review with the official Zcode plugins validate command before registering it. Normal commands:\n\n    zcode plugins validate <persistent-marketplace-directory>\n    zcode plugins marketplace add <persistent-marketplace-directory> --scope user\n    zcode plugins install meta-kim-local@${MARKETPLACE} -s user\n    zcode plugins install kim-service-local@${MARKETPLACE} -s user\n    zcode plugins list --json\n\nThese are user actions, not actions performed by the builder. Preserve unrelated plugins/capabilities. For existing entries use the normal marketplace refresh and plugins update route. Confirm actual enabled content and qualified names separately; successful install is not native model/Agent acceptance.\n`);
+  add('README.md', `# Zcode Beta compatibility content\n\n${LIMITS_TEXT}\n\nMarketplace: ${MARKETPLACE}. Source copies: ${copies.length}; Generated native entrypoints: ${derivedEntrypoints.length}; Agent entrypoints: ${entrypoints.length}; Skill roots: ${skills.length + 1}. No third-party loader code, vendor path, credentials or personal installation receipt is included. See source-manifest.json, bundle-manifest.json and each component LICENSE/NOTICE. Official format documentation: https://zcode.z.ai/en/docs/plugin\n\nAfter checking hashes, keep this complete directory at a persistent location you own. Review with the official Zcode plugins validate command before registering it. Normal commands:\n\n    zcode plugins validate <persistent-marketplace-directory>\n    zcode plugins marketplace add <persistent-marketplace-directory> --scope user\n    zcode plugins install meta-kim-local@${MARKETPLACE} -s user\n    zcode plugins install kim-service-local@${MARKETPLACE} -s user\n    zcode plugins list --json\n\nThese are user actions, not actions performed by the builder. Preserve unrelated plugins/capabilities. For existing entries use the normal marketplace refresh and plugins update route. Confirm actual enabled content and qualified names separately; successful install is not native model/Agent acceptance.\n`);
   const closure = [...files].map(([relative, bytes]) => ({ path: relative, bytes: bytes.length, sha256: sha256(bytes) })).sort((a, b) => a.path < b.path ? -1 : a.path > b.path ? 1 : 0);
   assert(closure.reduce((n, row) => n + row.bytes, 0) <= MAX_BYTES, 'bundle size bound exceeded');
   const closureSha256 = sha256(jsonBytes(closure));
@@ -426,7 +272,7 @@ export function buildMarketplace({ metaRoot, metaCommit, kimRoot, kimCommit, out
     fs.writeFileSync(target, bytes, { flag: 'wx' });
   }
   fs.writeFileSync(path.join(output, 'bundle-manifest.json'), bundleManifest, { flag: 'wx' });
-  return { closureSha256, manifestSha256: sha256(bundleManifest), files: files.size + 1, sourceCopies: copies.length, derivedEntrypoints: derivedEntrypoints.length, agentEntrypoints: entrypoints.length, skillRoots: 6, installed: false, nativeInvocation: false };
+  return { closureSha256, manifestSha256: sha256(bundleManifest), files: files.size + 1, sourceCopies: copies.length, derivedEntrypoints: derivedEntrypoints.length, agentEntrypoints: entrypoints.length, skillRoots: skills.length + 1, installed: false, nativeInvocation: false };
 }
 
 function parseArguments(args) {

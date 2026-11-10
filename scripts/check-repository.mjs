@@ -733,7 +733,8 @@ function validateReadmeLayoutText(rawReadme, assets, groups, label, report = fai
   }
 
   for (const asset of assets) {
-    const matches = images.filter((image) => image.src === asset.path);
+    const acceptedPaths = asset.readmePaths ?? [asset.path];
+    const matches = images.filter((image) => acceptedPaths.includes(image.src));
     if (matches.length !== 1) {
       reject(label + ' must contain exactly one rendered image for ' + asset.path + '; found ' + matches.length);
       continue;
@@ -821,6 +822,25 @@ function checkReadmeLayoutRegressions(assets, groups) {
   validateReadmeLayoutText(good, assets, groups, 'README layout positive fixture', (message) => goodErrors.push(message));
   if (goodErrors.length) fail('README layout scanner rejected its positive fixture: ' + goodErrors.join('; '));
 
+  // Both a shared root asset and an existing identical package copy can render
+  // the same protected asset, but displaying both is still a duplicate.
+  const projectedAssets = assets.map(asset => ({ ...asset, readmePaths: ['../../' + asset.path, asset.path] }));
+  let projectedGood = good;
+  for (const asset of assets) projectedGood = projectedGood.replaceAll('src="' + asset.path + '"', 'src="../../' + asset.path + '"');
+  const projectedErrors = [];
+  validateReadmeLayoutText(projectedGood, projectedAssets, groups, 'README shared-asset positive fixture', message => projectedErrors.push(message));
+  validateReadmeLayoutText(good, projectedAssets, groups, 'README legacy-copy positive fixture', message => projectedErrors.push(message));
+  if (projectedErrors.length) fail('README asset projection rejected valid paths: ' + projectedErrors.join('; '));
+  const projectedBad = [
+    projectedGood.replace('src="../../' + contact.path + '"', 'src="../../../' + contact.path + '"'),
+    projectedGood + '\n<p align="center"><img src="' + contact.path + '" alt="duplicate" width="' + contact.readme.width + '"></p>'
+  ];
+  for (const [index, fixture] of projectedBad.entries()) {
+    const fixtureErrors = [];
+    validateReadmeLayoutText(fixture, projectedAssets, groups, 'README asset projection negative fixture', message => fixtureErrors.push(message));
+    if (!fixtureErrors.length) fail('README asset projection missed negative fixture ' + String(index + 1));
+  }
+
   const badFixtures = [
     good.replace(
       'width="' + contact.readme.width + '"',
@@ -836,6 +856,25 @@ function checkReadmeLayoutRegressions(assets, groups) {
     validateReadmeLayoutText(fixture, assets, groups, 'README layout negative fixture', (message) => fixtureErrors.push(message));
     if (fixtureErrors.length === 0) fail('README layout scanner missed negative fixture ' + String(index + 1));
   }
+}
+
+function assetsRelativeToReadme(directory, assets, label) {
+  return assets.map(asset => {
+    const canonicalPath = path.resolve(ROOT, asset.path);
+    const readmePaths = [normalize(path.relative(directory, canonicalPath))];
+    const legacyCopy = path.resolve(directory, asset.path);
+    if (legacyCopy !== canonicalPath && fs.existsSync(legacyCopy)) {
+      const stat = fs.lstatSync(legacyCopy);
+      if (!isInsideRoot(legacyCopy) || !stat.isFile() || stat.isSymbolicLink()) {
+        fail(label + ' public asset copy must be a regular repository file: ' + asset.path);
+      } else if (sha256(legacyCopy) !== String(asset.sha256).toLowerCase()) {
+        fail(label + ' public asset hash drift: ' + asset.path);
+      } else {
+        readmePaths.push(asset.path);
+      }
+    }
+    return { ...asset, readmePaths };
+  });
 }
 
 function checkReadmeLayouts(catalog) {
@@ -859,10 +898,11 @@ function checkReadmeLayouts(catalog) {
     if (component.snapshot === 'capability-contract-pending-release' ||
         String(component.revision || '').startsWith('pending-local:')) continue;
     const componentRoot = path.resolve(ROOT, component.path);
+    const componentAssets = assetsRelativeToReadme(componentRoot, catalog.assets, component.id + ' README');
     for (const filename of matchingReadmeFiles(componentRoot, layout.componentDocumentPattern, component.id)) {
       validateReadmeLayoutText(
         fs.readFileSync(path.join(componentRoot, filename), 'utf8'),
-        catalog.assets,
+        componentAssets,
         groups,
         component.id + ' ' + filename
       );

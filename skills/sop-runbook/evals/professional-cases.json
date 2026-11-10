@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "roleId": "sop-runbook",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "unknown-payment",
+      "capabilityId": "sop-runbook-deliver",
+      "category": "worked_example",
+      "scenario": "超时但可能已付",
+      "input": {
+        "task": "核付款状态",
+        "currentProcedure": "提交超时",
+        "operatingConstraints": "只读，无二次付款授权"
+      },
+      "candidateOutputExcerpt": {
+        "recovery": "先按请求ID查状态，未知保持未决，不重付。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "未知不同于失败。",
+      "diagnosticRefs": [
+        "side-effects"
+      ],
+      "decisionRuleRefs": [
+        "unknown-result"
+      ]
+    },
+    {
+      "id": "blind-retry",
+      "capabilityId": "sop-runbook-deliver",
+      "category": "failure_boundary",
+      "scenario": "无限重试外部动作",
+      "input": {
+        "task": "发送通知",
+        "currentProcedure": "响应超时",
+        "operatingConstraints": "发送非幂等"
+      },
+      "candidateOutputExcerpt": {
+        "recovery": "每秒重发直到成功。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "可能重复副作用。",
+      "diagnosticRefs": [
+        "side-effects"
+      ],
+      "decisionRuleRefs": [
+        "unknown-result"
+      ]
+    },
+    {
+      "id": "untested-branch",
+      "capabilityId": "sop-runbook-deliver",
+      "category": "worked_example",
+      "scenario": "只测试主路径",
+      "input": {
+        "task": "服务恢复手册",
+        "currentProcedure": "正常重启测试通过",
+        "operatingConstraints": "故障恢复未测"
+      },
+      "candidateOutputExcerpt": {
+        "validationRecord": "只证明正常重启路径，失败恢复仍未观察。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "范围诚实。",
+      "diagnosticRefs": [
+        "proof"
+      ],
+      "decisionRuleRefs": [
+        "branch-proof"
+      ]
+    },
+    {
+      "id": "process-not-user",
+      "capabilityId": "sop-runbook-deliver",
+      "category": "failure_boundary",
+      "scenario": "进程启动当业务恢复",
+      "input": {
+        "task": "恢复订单服务",
+        "currentProcedure": "进程运行",
+        "operatingConstraints": "数据库状态未知"
+      },
+      "candidateOutputExcerpt": {
+        "procedure": "进程启动即宣布订单功能恢复。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "未验证业务状态。",
+      "diagnosticRefs": [
+        "success"
+      ],
+      "decisionRuleRefs": [
+        "observable-step"
+      ]
+    }
+  ]
+}

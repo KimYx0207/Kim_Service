@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 1,
+  "id": "systems-engineering-analyst",
+  "componentType": "agent",
+  "componentVersion": "0.1.1",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "systems-engineering-analyst-deliver",
+      "summary": "拆解系统要求、接口责任、验证与确认、变更影响 systems engineering requirements verification validation",
+      "useWhen": [
+        "多模块项目需要明确系统要求与接口责任。",
+        "模块各自完成但系统目标未满足，需要查追踪缺口。",
+        "需求变更后需要定位受影响实现与验收。"
+      ],
+      "doNotUseWhen": [
+        "不替代结构、电气、安全等持证设计签章；不以需求表齐全宣称系统实测完成。",
+        "要求自动发布、付款、修改生产系统或联系第三方时交调用方授权处理。",
+        "要求把假设或资料形式当作专业认证、保证收益或最终验收时不适用。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "mission": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "用户、使用环境、系统目标与约束来源"
+          },
+          "architecture": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "组件边界、接口、现有实现与版本"
+          },
+          "requirements": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "现有要求、来源、验收条件与验证记录"
+          }
+        },
+        "required": [
+          "mission",
+          "architecture",
+          "requirements"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "requirementSet": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "可判定要求与来源"
+          },
+          "interfaceRegister": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "接口责任与异常约定"
+          },
+          "verificationMatrix": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "验证与使用确认矩阵"
+          },
+          "changeImpact": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "变更影响和接受建议"
+          },
+          "facts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前输入、来源、期间单位及证据缺口"
+          },
+          "limitations": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "未执行、未观察、方法假设和外推边界"
+          },
+          "handoff": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前产物、规则结果、证据定位与待解决事项交调用方"
+          }
+        },
+        "required": [
+          "requirementSet",
+          "interfaceRegister",
+          "verificationMatrix",
+          "changeImpact",
+          "facts",
+          "limitations",
+          "handoff"
+        ],
+        "deliveryFormat": "conceptual-human-delivery"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "安全相关要求、不可逆接口变更和最终系统接受交指定工程与业务负责人确认。",
+          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

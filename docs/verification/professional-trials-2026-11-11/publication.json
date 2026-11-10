@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "normalization": "Answer wording unchanged; only private absolute link/path targets made portable, grading file renamed, current read-resource byte hashes added to source manifest. Review original input hashes refer to original observed bytes, not normalized publication bytes.",
+  "files": [
+    {
+      "file": "tasks.json",
+      "observedOriginalSha256": "01539948c821235cabed8a114e767059d99caacba5070226ee01b3ad816fa443",
+      "publishedSha256": "01539948c821235cabed8a114e767059d99caacba5070226ee01b3ad816fa443"
+    },
+    {
+      "file": "prespecified-criteria.json",
+      "observedOriginalSha256": "3be11cb07389f64d58a03c4c926bff0af155419aee2c8c605e4131e37d384733",
+      "publishedSha256": "3be11cb07389f64d58a03c4c926bff0af155419aee2c8c605e4131e37d384733"
+    },
+    {
+      "file": "baseline.md",
+      "observedOriginalSha256": "194d3b9388ffd58755048c992cd428221c481d6baa93f941e352cc162bdb7ad2",
+      "publishedSha256": "194d3b9388ffd58755048c992cd428221c481d6baa93f941e352cc162bdb7ad2"
+    },
+    {
+      "file": "with-methods.md",
+      "observedOriginalSha256": "dc1e40897ce99dd10df4f4e566572223a5b05a6aa09429a3ac13e1e162864453",
+      "publishedSha256": "205c92582692a0fc97f1fbf9f097e144a2fc741b4056de11c6976e56717259c9"
+    },
+    {
+      "file": "sources-read.json",
+      "observedOriginalSha256": "41cc8077006c401e4277b29a603814863dd07b34e2ef14058d7cfe483ba94329",
+      "publishedSha256": "f91917015c2d28e33dca979500b1a2e12d4a2d00c0c0b20654c64bbef7b6c88b"
+    },
+    {
+      "file": "review.json",
+      "observedOriginalSha256": "040052483fefa6701895bcc4812057d9574a07557d9c97c4b04e4bc36b058276",
+      "publishedSha256": "5bf24ba31f3dd8b3a9a7eb8e89b0d197c3609d0dd732aca817cd98a77004e928"
+    },
+    {
+      "file": "review.md",
+      "observedOriginalSha256": "fd2a024b86db25b6691fece24df1586bd0397387111a679a58f955a36fc811b7",
+      "publishedSha256": "fd2a024b86db25b6691fece24df1586bd0397387111a679a58f955a36fc811b7"
+    }
+  ]
+}

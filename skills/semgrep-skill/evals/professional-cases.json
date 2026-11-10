@@ -1,0 +1,301 @@
+{
+  "schemaVersion": 1,
+  "roleId": "semgrep-skill",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "local-security-scan-worked",
+      "capabilityId": "local-security-scan",
+      "category": "worked_example",
+      "scenario": "两条规则扫描发现shell=True；另一个候选结果漏掉一选中文件。",
+      "input": {
+        "schemaVersion": 1,
+        "workspaceRoot": "/example/project",
+        "target": "src"
+      },
+      "candidateOutputExcerpt": {
+        "schemaVersion": 1,
+        "componentVersion": "1.2.0",
+        "status": "completed",
+        "completed": true,
+        "findings": [
+          {
+            "checkId": "python-subprocess-shell-true",
+            "path": "sample.py",
+            "start": {
+              "line": 3,
+              "col": 1
+            },
+            "end": {
+              "line": 3,
+              "col": 44
+            },
+            "severity": "WARNING",
+            "message": "Avoid shell=True when invoking subprocesses."
+          }
+        ],
+        "errors": [],
+        "runtime": {
+          "pythonVersion": "3.x (example)",
+          "semgrepVersion": "example-observed-version"
+        },
+        "rules": {
+          "source": "canonical:skills/semgrep-skill/rules/local-security.yml",
+          "sourceSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "effectiveSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "includedRuleIds": [
+            "python-subprocess-shell-true",
+            "javascript-eval"
+          ]
+        },
+        "networkUsed": false,
+        "filesModified": false
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "作者构造的合格报告形状，保留本场景的实际范围与未观察边界；重点核验：精确返回1且stdout只有一个可解析结果对象。",
+      "diagnosticRefs": [
+        "coverage",
+        "authority",
+        "projection"
+      ],
+      "decisionRuleRefs": [
+        "scan-not-certification",
+        "receipt-closure",
+        "no-tool-install"
+      ]
+    },
+    {
+      "id": "local-security-scan-counterexample",
+      "capabilityId": "local-security-scan",
+      "category": "failure_boundary",
+      "scenario": "两条规则扫描发现shell=True；另一个候选结果漏掉一选中文件。",
+      "input": {
+        "schemaVersion": 1,
+        "workspaceRoot": "/example/project",
+        "target": "src"
+      },
+      "candidateOutputExcerpt": {
+        "schemaVersion": 1,
+        "componentVersion": "1.2.0",
+        "status": "completed",
+        "completed": true,
+        "findings": [],
+        "errors": [
+          {
+            "code": "missing_scan_coverage",
+            "message": "one selected file was not confirmed scanned"
+          }
+        ],
+        "runtime": {
+          "pythonVersion": "3.x (example)",
+          "semgrepVersion": "example-observed-version"
+        },
+        "rules": {
+          "source": "canonical:skills/semgrep-skill/rules/local-security.yml",
+          "sourceSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "effectiveSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "includedRuleIds": [
+            "python-subprocess-shell-true",
+            "javascript-eval"
+          ]
+        },
+        "networkUsed": false,
+        "filesModified": false
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "漏扫且有覆盖错误不能completed；空发现更不能证明干净。",
+      "diagnosticRefs": [
+        "coverage",
+        "authority",
+        "projection"
+      ],
+      "decisionRuleRefs": [
+        "scan-not-certification",
+        "receipt-closure",
+        "no-tool-install"
+      ]
+    },
+    {
+      "id": "preview-skill-projection-change-worked",
+      "capabilityId": "preview-skill-projection-change",
+      "category": "worked_example",
+      "scenario": "只预览项目安装，不授权写入。",
+      "input": {
+        "scope": "project",
+        "projectRoot": "/example/project",
+        "apply": false
+      },
+      "candidateOutputExcerpt": {
+        "ok": true,
+        "action": "install",
+        "mode": "dry-run",
+        "target": "/example/project/.claude/skills/semgrep-skill"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "作者构造的合格报告形状，保留本场景的实际范围与未观察边界；重点核验：仅实际计划或事务按协议成功时true；被拒绝时保留错误。",
+      "diagnosticRefs": [
+        "coverage",
+        "authority",
+        "projection"
+      ],
+      "decisionRuleRefs": [
+        "scan-not-certification",
+        "receipt-closure",
+        "no-tool-install"
+      ]
+    },
+    {
+      "id": "preview-skill-projection-change-counterexample",
+      "capabilityId": "preview-skill-projection-change",
+      "category": "failure_boundary",
+      "scenario": "只预览项目安装，不授权写入。",
+      "input": {
+        "scope": "project",
+        "projectRoot": "/example/project",
+        "apply": false
+      },
+      "candidateOutputExcerpt": {
+        "ok": true,
+        "action": "install",
+        "mode": "dry-run",
+        "target": "/example/user/.claude/skills/semgrep-skill"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "目标已跳到用户目录，违反项目作用域；哈希/ok字段不能抵消范围错误。",
+      "diagnosticRefs": [
+        "coverage",
+        "authority",
+        "projection"
+      ],
+      "decisionRuleRefs": [
+        "scan-not-certification",
+        "receipt-closure",
+        "no-tool-install"
+      ]
+    },
+    {
+      "id": "apply-skill-installation-worked",
+      "capabilityId": "apply-skill-installation",
+      "category": "worked_example",
+      "scenario": "项目级安装后需验证完整引用与事务。",
+      "input": {
+        "scope": "project",
+        "projectRoot": "/example/project",
+        "apply": true
+      },
+      "candidateOutputExcerpt": {
+        "ok": true,
+        "action": "install",
+        "mode": "apply",
+        "target": "/example/project/.claude/skills/semgrep-skill",
+        "targetHash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "作者构造的合格报告形状，保留本场景的实际范围与未观察边界；重点核验：仅实际计划或事务按协议成功时true；被拒绝时保留错误。",
+      "diagnosticRefs": [
+        "coverage",
+        "authority",
+        "projection"
+      ],
+      "decisionRuleRefs": [
+        "scan-not-certification",
+        "receipt-closure",
+        "no-tool-install"
+      ]
+    },
+    {
+      "id": "apply-skill-installation-counterexample",
+      "capabilityId": "apply-skill-installation",
+      "category": "failure_boundary",
+      "scenario": "项目级安装后需验证完整引用与事务。",
+      "input": {
+        "scope": "project",
+        "projectRoot": "/example/project",
+        "apply": true
+      },
+      "candidateOutputExcerpt": {
+        "ok": true,
+        "action": "install",
+        "mode": "apply",
+        "target": "/example/user/.claude/skills/semgrep-skill",
+        "targetHash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "目标已跳到用户目录，违反项目作用域；哈希/ok字段不能抵消范围错误。",
+      "diagnosticRefs": [
+        "coverage",
+        "authority",
+        "projection"
+      ],
+      "decisionRuleRefs": [
+        "scan-not-certification",
+        "receipt-closure",
+        "no-tool-install"
+      ]
+    },
+    {
+      "id": "apply-skill-rollback-worked",
+      "capabilityId": "apply-skill-rollback",
+      "category": "worked_example",
+      "scenario": "项目级升级后恢复有效回执的上一版本。",
+      "input": {
+        "scope": "project",
+        "projectRoot": "/example/project",
+        "apply": true,
+        "rollback": true
+      },
+      "candidateOutputExcerpt": {
+        "ok": true,
+        "action": "rollback",
+        "mode": "apply",
+        "target": "/example/project/.claude/skills/semgrep-skill",
+        "targetHash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "作者构造的合格报告形状，保留本场景的实际范围与未观察边界；重点核验：仅实际计划或事务按协议成功时true；被拒绝时保留错误。",
+      "diagnosticRefs": [
+        "coverage",
+        "authority",
+        "projection"
+      ],
+      "decisionRuleRefs": [
+        "scan-not-certification",
+        "receipt-closure",
+        "no-tool-install"
+      ]
+    },
+    {
+      "id": "apply-skill-rollback-counterexample",
+      "capabilityId": "apply-skill-rollback",
+      "category": "failure_boundary",
+      "scenario": "项目级升级后恢复有效回执的上一版本。",
+      "input": {
+        "scope": "project",
+        "projectRoot": "/example/project",
+        "apply": true,
+        "rollback": true
+      },
+      "candidateOutputExcerpt": {
+        "ok": true,
+        "action": "rollback",
+        "mode": "apply",
+        "target": "/example/user/.claude/skills/semgrep-skill",
+        "targetHash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "目标已跳到用户目录，违反项目作用域；哈希/ok字段不能抵消范围错误。",
+      "diagnosticRefs": [
+        "coverage",
+        "authority",
+        "projection"
+      ],
+      "decisionRuleRefs": [
+        "scan-not-certification",
+        "receipt-closure",
+        "no-tool-install"
+      ]
+    }
+  ]
+}

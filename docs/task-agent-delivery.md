@@ -17,7 +17,7 @@
 | 商业化闭环 | 现有 side-business-evaluator → pricing-cost-analyst → launch-planner；按需复用 store-performance-analyst | 假设、成本、可执行试验、观察指标与复盘 | 实际可归因数据；不把计划写成已获收入 |
 | 跨任务交付审查 | delivery-verifier | 清单、hash、确定性检查与缺口 | 本地工具回执；最终接受由调用方负责 |
 
-角色不是固定人数。一个小修改可以仅用实现角色与独立验收；当前已完成的任务不重新创建。内容研究、写作、复盘等已有16个角色继续复用，避免再建同义角色。
+角色不是固定人数。一个小修改可以仅用实现角色与独立验收；当前已完成的任务不重新创建。内容研究、写作、复盘等现有角色继续复用，避免再建同义角色。
 
 ## 先探索需求，再完整设计，再拆任务
 
@@ -33,7 +33,7 @@
 
 产品架构先交系统与技术基线：已有系统约束、可行替代、当前版本、来源和决策依据。`productDesign.mode=exploration` 可以只包含 architecture 和模块轮廓；关键选择未定时不伪造详细实现。进入 delivery 后，模块需要实际任务、接口、共享状态、交互/领域状态、业务规则和验收覆盖。与 Meta_Kim 的 `softwareDesign` 对接时，沿用同一 PRD 身份、版本和当前 `designBinding`，不创建另一份任务真源。
 
-四个软件交付角色通过 `method.json.knowledgeAssets` 声明包内 `references/professional-method.md`、适用范围与来源行。Meta_Kim 校验完整组件及资料路径/字节后，把选中的知识与当前模块上下文送到实际工单。来源链接表示资料出处，不代表当前宿主已在线重读；时效敏感的版本和能力仍要核查官方实现。
+专业 Agent 通过 `method.json.knowledgeAssets` 声明包内 `references/professional-method.md`、适用范围与来源行。Meta_Kim 校验完整组件及资料路径/字节后，把选中的知识与当前模块上下文送到实际工单。来源链接表示资料出处，不代表当前宿主已在线重读；时效敏感的版本和能力仍要核查官方实现。
 
 ## 执行合同
 

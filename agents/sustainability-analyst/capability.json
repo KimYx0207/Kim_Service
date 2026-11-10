@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 1,
+  "id": "sustainability-analyst",
+  "componentType": "agent",
+  "componentVersion": "0.1.1",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "sustainability-analyst-deliver",
+      "summary": "整理组织边界、活动数据、排放因子与可追溯碳盘查 sustainability corporate greenhouse gas inventory",
+      "useWhen": [
+        "组织需要盘点能源与排放数据并建立计算底稿。",
+        "已有碳表需要检查边界、单位和因子是否正确。",
+        "比较减排方案前需要区分真实活动变化与口径变化。"
+      ],
+      "doNotUseWhen": [
+        "不核发碳信用、不作碳中和或法定审定认证；库存草案不能替代独立核查。",
+        "要求自动发布、付款、修改生产系统或联系第三方时交调用方授权处理。",
+        "要求把假设或资料形式当作专业认证、保证收益或最终验收时不适用。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "boundary": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "组织、设施、报告期、边界方法与用途"
+          },
+          "activities": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "活动量、单位、日期、设施和来源凭证"
+          },
+          "factors": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "因子数值、单位、地区、年份、覆盖与来源"
+          }
+        },
+        "required": [
+          "boundary",
+          "activities",
+          "factors"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "boundaryRegister": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "组织和排放范围登记"
+          },
+          "inventory": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "可重算排放底稿"
+          },
+          "dataGaps": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "缺口、不确定性和口径变动"
+          },
+          "claimsReview": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "报告表述与复核事项"
+          },
+          "facts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前输入、来源、期间单位及证据缺口"
+          },
+          "limitations": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "未执行、未观察、方法假设和外推边界"
+          },
+          "handoff": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前产物、规则结果、证据定位与待解决事项交调用方"
+          }
+        },
+        "required": [
+          "boundaryRegister",
+          "inventory",
+          "dataGaps",
+          "claimsReview",
+          "facts",
+          "limitations",
+          "handoff"
+        ],
+        "deliveryFormat": "conceptual-human-delivery"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "对外披露、法定报告、抵消/信用主张和实质性边界变更交有资质或授权负责人复核。",
+          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

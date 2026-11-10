@@ -13,6 +13,13 @@ description: >
 
 # KIM Skill
 
+## 本能力的验收方法
+
+执行前读取 [method.json](method.json) 中当前 capabilityId 的诊断、决策和逐字段 outputChecks，并读取 [任务验收与完整示例](references/acceptance.md)。按本次能力选择相应规则，不用字段齐全、行数或作者自报代替产物质量。缺少 blocking 证据时保留未验收；既有具体授权与宿主最终决定权不变。
+
+专业引用与工具路线继续按下文渐进读取；[来源记录](PROVENANCE.md) 和 [作者正反例](evals/professional-cases.json) 供评审。当前 Meta Skill 发现不会自动注入 method.json，宿主需按此入口读取；未观察到加载或执行时不得宣称生效。
+
+
 ## Operating target
 
 Deliver a usable decision or artifact.
@@ -97,7 +104,7 @@ Every sentence in the output must carry new information. A sentence that restate
 
 When key evidence is missing and the answer would change depending on that evidence, do two things in this order:
 
-1. State the specific missing data as a decision fork (e.g., "Monthly trial volume is unknown. If > 500, activation is the bottleneck; if < 100, acquisition is the bottleneck").
+1. State the specific missing data as a decision fork (e.g., "Trial volume, acquisition cost and activation loss are unknown. Compare the reachable value of improving acquisition versus activation using the actual funnel and cost data; name the values at which the recommendation reverses"). Do not infer the bottleneck from an arbitrary volume cutoff.
 2. Ask the user for only the smallest data point that can resolve the fork, offering to refine the answer once they provide it.
 
 Do not guess missing data. Do not fill templates with speculation dressed as inference.
@@ -143,7 +150,7 @@ The goal is to inform, not to override. Users may have constraints that are not 
 
 Usable result must be specific enough to execute without further research. Prefer:
 
-- exact tools (e.g., "Google Analytics → Behavior Flow" not "check analytics")
+- exact available tools and observed report routes, checked against the current product version; an old UI label is not an executable step
 - exact actions (e.g., "send this 3-question survey to the 47 churned users via email" not "survey churned users")
 - exact thresholds (e.g., "if response rate > 30%, proceed to step 2" not "check if enough responses")
 - exact commands, scripts, or templates when applicable
@@ -321,8 +328,8 @@ Separate:
 
 Tier each item:
 
-- A: real data, real customers, real revenue, verified outcomes
-- B: public case studies, competitor validation, published benchmarks
+- A: direct, traceable evidence relevant to the specific claim, with date, population/denominator and measurement limits; real data alone does not establish causality or representativeness
+- B: indirect evidence such as public cases or benchmarks, with source, scope and transfer limits; publication alone does not validate this user's outcome
 - C: reasonable reasoning from available facts, not yet verified
 - D: guesswork, no supporting evidence — do not use as decision basis
 
@@ -401,7 +408,7 @@ Load one file at a time, only when the task needs it.
 
 - `references/method.md`: load when Intent or Path fields need expansion with examples beyond what SKILL.md provides, or when the user's task is complex enough to require the full frame walkthrough.
 - `references/path.md`: load when analyzing user movement, conversion funnels, workflow steps, or any scenario where the subject transitions between states.
-- `references/models.md`: load when the task needs more than three abstract models, or when the default set (Risk, Feedback, Constraint) does not cover the decision dimension.
+- `references/models.md`: load when the current analysis misses a decision-relevant dimension; choose models by the uncertainty they resolve, not by a required count.
 - `references/gates.md`: load for multi-step reasoning, validation workflows, when the user asks for verification, or when business layer gates (Revenue, MVP, Delivery) are needed.
 - `references/output.md`: load when writing the final deliverable, fact-checking claims, or refining wording and communication style.
 - `references/verification.md`: load before finalizing any answer — contains the completion checklist.
@@ -576,7 +583,7 @@ Core checks:
 Business layer (when loaded):
 
 - revenue check (six questions answered or gaps flagged)
-- MVP scope (V1 fits one sentence, exclusions listed, delivery under 14 days)
+- MVP scope (specific testable result, exclusions listed, delivery within the user's actual budget and business feedback cycle; no universal 14-day limit)
 - boss perspective (at least one quick win identified)
 - delivery loop (input through confirmation complete)
 - no D-tier evidence used as decision basis

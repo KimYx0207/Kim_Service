@@ -79,6 +79,6 @@ node scripts/check-repository.mjs
 
 ## 按任务绑定的专业方法
 
-全部 24 个 Agent 保留默认只读权限，`method.json` 描述由当前宿主绑定的方法；所有包现在都有有界专业资料和 `expertise`。它不是新 provider 或调度器，不授予工具操作权。跨角色组合、资源等待/占用/释放/失效恢复和最终接受仍属调用方。详见 [任务交付指南](task-agent-delivery.md)。`delivery-verifier` 的 Node 回执验证及 `quantitative-researcher` 的 Node 算术 helper 均为显式固定命令绑定，不自动进入现有 Python delivery 协议；Windows 不支持本包安全打开标志时明确 blocked，不降级为不安全读取。
+全部专业 Agent 保留默认只读权限，`method.json` 描述由当前宿主绑定的方法；所有包现在都有有界专业资料和 `expertise`。它不是新 provider 或调度器，不授予工具操作权。跨角色组合、资源等待/占用/释放/失效恢复和最终接受仍属调用方。详见 [任务交付指南](task-agent-delivery.md)。`delivery-verifier` 的 Node 回执验证及 `quantitative-researcher` 的 Node 算术 helper 均为显式固定命令绑定，不自动进入现有 Python delivery 协议；Windows 不支持本包安全打开标志时明确 blocked，不降级为不安全读取。
 
-根检查器与 [expertise schema](../schemas/agent-expertise.schema.json) 检查字段、引用、字节预算、路径和案例输入/输出的声明类型。已有无 `expertise` 的外部或历史方法仍兼容；新增专业作者应按[作者指南](expert-package-authoring.md)提供实质资料。`professionalEffect: not_evaluated` 明确表示合同检查不执行领域评审；即使正反例均可读取，也不能据此宣称所有专业角色的模型表现已通过。
+根检查器与 [expertise schema](../schemas/agent-expertise.schema.json) 检查字段、引用、字节预算、路径和案例输入/输出的声明类型。仓库专业包默认要求完整 `expertise` 与逐项证据标准；无此信息的外部或历史方法只有显式 legacy 检查兼容，并标记 `legacy_incomplete`。新增专业作者应按[作者指南](expert-package-authoring.md)提供实质资料。`professionalEffect: not_evaluated` 明确表示合同检查不执行领域评审；即使正反例均可读取，也不能据此宣称所有专业角色的模型表现已通过。

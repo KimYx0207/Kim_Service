@@ -1,0 +1,502 @@
+{
+  "schemaVersion": 1,
+  "roleId": "semgrep-skill",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "steps": [
+    "验证明确授权的本地目录、协议与当前可信CLI，拒绝猜测根、外部规则和链接。",
+    "使用既有scan.py隔离环境执行两条规则，保留输入选择、实际覆盖、错误与规则哈希。",
+    "将完成度与发现分开解释，不把零发现或CLI退出0视为安全保证。",
+    "安装或回滚先明确作用域和授权，用现有事务安装器与完整文件回执，不改扫描目标。",
+    "回读投影中的入口、合同、专业参考和案例，核哈希与恢复结果，保留原生宿主未测边界。"
+  ],
+  "acceptance": [
+    "按当前能力的outputChecks逐项记录实际证据、拒收原因和未观察项。",
+    "任何blocking项失败或缺证据，不能用其他评分抵消；作者自查不代替独立验收。",
+    "只报告本轮真实完成的产物、动作和范围；当前宿主最终验收权保持不变。"
+  ],
+  "coordinationOwner": "caller",
+  "finalAcceptance": "caller_only",
+  "knowledgeAssets": [
+    {
+      "id": "semgrep-skill-acceptance",
+      "path": "references/acceptance.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "existing-package",
+        "semgrep-cli",
+        "agent-skills"
+      ]
+    }
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "有界、只读、可追溯的本地两规则扫描及带回执的Skill安装回滚",
+    "scope": [
+      "Run the installed local Semgrep CLI on an explicitly authorized local directory with two bundled non-secret rules and a sanitized JSON result; no remote configuration or source changes.",
+      "Preview an installation, upgrade, or rollback of the Skill projection at an explicitly selected project or user scope without writing files.",
+      "Install or upgrade the Skill projection at an explicitly selected project or user scope after approval; this does not install Semgrep.",
+      "Restore the receipted previous Skill projection after explicit approval while preserving the displaced current version."
+    ],
+    "knowledgeAssetIds": [
+      "semgrep-skill-acceptance"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "coverage",
+        "question": "哪些文件被选择，哪些被CLI实际确认扫描？",
+        "evidenceRequired": [
+          "目标与符合扩展名的文件集合",
+          "CLI扫描列表与错误"
+        ],
+        "whenMissing": "缺失覆盖保留partial/failed，不能报告clean。"
+      },
+      {
+        "id": "authority",
+        "question": "当前动作授权是扫描、预览、安装还是回滚？",
+        "evidenceRequired": [
+          "明确范围和项目根",
+          "原有回执及用户授权"
+        ],
+        "whenMissing": "只做已授权步骤，不从scan扩展到安装/修复。"
+      },
+      {
+        "id": "projection",
+        "question": "安装后的完整引用链可读且可恢复吗？",
+        "evidenceRequired": [
+          "目标库存与逐文件哈希",
+          "method资源和上版回执"
+        ],
+        "whenMissing": "不称安装完成，保持或恢复原目标。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "scan-not-certification",
+        "when": "结果完成且可能有发现",
+        "action": "报告两规则覆盖、发现和未扫描范围",
+        "avoid": "把零发现或退出0说成安全审计通过。"
+      },
+      {
+        "id": "receipt-closure",
+        "when": "安装或回滚受管Skill",
+        "action": "事务写入并校验完整引用与回执；未知/改动内容拒绝覆盖",
+        "avoid": "只拷入口、丢许可证或破坏用户修改。"
+      },
+      {
+        "id": "no-tool-install",
+        "when": "Semgrep不可用或规则能力不足",
+        "action": "保留unavailable或范围限制，由用户另行决定依赖",
+        "avoid": "自动联网安装、Registry规则或修复目标。"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "local-security-scan",
+        "inputGuidance": [
+          {
+            "field": "schemaVersion",
+            "interpretation": "固定1的严格输入格式，不接受未知字段。",
+            "onMissing": "返回invalid_input，不猜旧协议。"
+          },
+          {
+            "field": "workspaceRoot",
+            "interpretation": "用户明确授权的绝对本地根，不能是盘符根、链接或网络路径。",
+            "onMissing": "返回invalid_input，不默认当前目录。"
+          },
+          {
+            "field": "target",
+            "interpretation": "根内存在的目录，限制按实际扫描文件判断。",
+            "onMissing": "返回invalid_input，不扩大到全部项目。"
+          },
+          {
+            "field": "rules",
+            "interpretation": "仅本包固定local-security.yml并抽取两条非秘密规则。",
+            "onMissing": "采用本包规则；不能允许Registry或自动修复。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "schema-version-acceptance",
+            "field": "schemaVersion",
+            "criterion": "精确返回1且stdout只有一个可解析结果对象。",
+            "rejectWhen": "混合日志、未知schema或丢必需字段。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "实际stdout",
+              "JSON解析"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "component-version-acceptance",
+            "field": "componentVersion",
+            "criterion": "与实际执行包的capability版本一致。",
+            "rejectWhen": "旧包结果当本版或版本与扫描脚本不一致。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "执行路径与包版本",
+              "实际结果"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "status-acceptance",
+            "field": "status",
+            "criterion": "按实际覆盖与错误返回completed/partial/invalid_input/unavailable/failed，不把退出0解释成无漏洞。",
+            "rejectWhen": "工具不存在、文件漏扫或解析错仍completed。",
+            "verificationMethod": "behavior_probe",
+            "evidenceRequired": [
+              "选中文件与CLI确认列表",
+              "退出码/清洗错误"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "completed-acceptance",
+            "field": "completed",
+            "criterion": "仅所有选中文件确认扫描且无未解决覆盖错误时true；有发现仍可true。",
+            "rejectWhen": "findings非空就false，或漏扫也true。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "输入选择清单",
+              "实际扫描列表对照"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "findings-acceptance",
+            "field": "findings",
+            "criterion": "仅两条规则的相对路径、范围、等级与固定消息，不含原代码/秘密/元变量；不夸大为全部漏洞。",
+            "rejectWhen": "空发现被称安全认证、外部路径泄露或返回原始源码。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "规则ID与规范化结果",
+              "覆盖限制"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "errors-acceptance",
+            "field": "errors",
+            "criterion": "失败或部分结果含可操作且清洗后的原因，原始CLI输出不外泄。",
+            "rejectWhen": "吞错误、伪造clean或直接输出敏感原文。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "实际错误分支与脱敏输出"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "runtime-acceptance",
+            "field": "runtime",
+            "criterion": "记录实际可信主机CLI/Python观察；未找到CLI保持unavailable且不自动安装。",
+            "rejectWhen": "虚构版本或付费/下载工具扩充本次许可。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "隔离版本探测回执"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "rules-acceptance",
+            "field": "rules",
+            "criterion": "来源与有效规则分别给哈希，执行集合恰为两条声明规则。",
+            "rejectWhen": "把legacy secret-pattern也执行或取远程config。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "原规则/有效规则哈希",
+              "实际argv和规则集合"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "network-used-acceptance",
+            "field": "networkUsed",
+            "criterion": "false只声明本地配置、metrics/version禁用及环境隔离，不宣称操作系统网络隔离。",
+            "rejectWhen": "未观测抓包却说无任何网络可能。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "实际argv和环境限制",
+              "明确可信宿主边界"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "files-modified-acceptance",
+            "field": "filesModified",
+            "criterion": "false指目标源文件未改，临时文件在目标外并清理；修复仅建议。",
+            "rejectWhen": "开启autofix、写项目报告或把临时处理说成零文件活动。",
+            "verificationMethod": "behavior_probe",
+            "evidenceRequired": [
+              "目标扫描前后哈希",
+              "临时目录清理观察"
+            ],
+            "blocking": true
+          }
+        ]
+      },
+      {
+        "capabilityId": "preview-skill-projection-change",
+        "inputGuidance": [
+          {
+            "field": "scope",
+            "interpretation": "明确project或user；扫描许可不等于安装许可。",
+            "onMissing": "保持预览，不猜用户级。"
+          },
+          {
+            "field": "projectRoot",
+            "interpretation": "project作用域下的明确根；user不使用此参数。",
+            "onMissing": "project缺少则返回错误。"
+          },
+          {
+            "field": "apply",
+            "interpretation": "false为只读预览，true为已获相应范围授权的实际事务。",
+            "onMissing": "默认预览；不隐式执行。"
+          },
+          {
+            "field": "rollback",
+            "interpretation": "选择恢复本安装器有效回执指向的上一版本；不是任意删除。",
+            "onMissing": "未请求回滚则预览安装。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "ok-acceptance",
+            "field": "ok",
+            "criterion": "仅实际计划或事务按协议成功时true；被拒绝时保留错误。",
+            "rejectWhen": "无效回执/未知目录仍覆盖并true。",
+            "verificationMethod": "behavior_probe",
+            "evidenceRequired": [
+              "实际安装器返回",
+              "目标前后状态"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "action-acceptance",
+            "field": "action",
+            "criterion": "与请求的install/rollback一致，回滚只取有效上一版本。",
+            "rejectWhen": "把删除重装伪装回滚。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "参数与回执链"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "mode-acceptance",
+            "field": "mode",
+            "criterion": "dry-run不写目标，apply才执行当前授权变更。",
+            "rejectWhen": "预览偷偷创建/覆盖目录。",
+            "verificationMethod": "behavior_probe",
+            "evidenceRequired": [
+              "实际mode",
+              "目录前后对照"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "target-acceptance",
+            "field": "target",
+            "criterion": "位于明确project/user作用域；不跟随链接，不碰legacy code-security。",
+            "rejectWhen": "切作用域、覆盖未知内容或跨项目写。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "解析路径",
+              "链接/未知目录拒绝结果"
+            ],
+            "blocking": true
+          }
+        ]
+      },
+      {
+        "capabilityId": "apply-skill-installation",
+        "inputGuidance": [
+          {
+            "field": "scope",
+            "interpretation": "明确project或user；扫描许可不等于安装许可。",
+            "onMissing": "保持预览，不猜用户级。"
+          },
+          {
+            "field": "projectRoot",
+            "interpretation": "project作用域下的明确根；user不使用此参数。",
+            "onMissing": "project缺少则返回错误。"
+          },
+          {
+            "field": "apply",
+            "interpretation": "false为只读预览，true为已获相应范围授权的实际事务。",
+            "onMissing": "默认预览；不隐式执行。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "ok-acceptance",
+            "field": "ok",
+            "criterion": "仅实际计划或事务按协议成功时true；被拒绝时保留错误。",
+            "rejectWhen": "无效回执/未知目录仍覆盖并true。",
+            "verificationMethod": "behavior_probe",
+            "evidenceRequired": [
+              "实际安装器返回",
+              "目标前后状态"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "action-acceptance",
+            "field": "action",
+            "criterion": "与请求的install/rollback一致，回滚只取有效上一版本。",
+            "rejectWhen": "把删除重装伪装回滚。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "参数与回执链"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "mode-acceptance",
+            "field": "mode",
+            "criterion": "dry-run不写目标，apply才执行当前授权变更。",
+            "rejectWhen": "预览偷偷创建/覆盖目录。",
+            "verificationMethod": "behavior_probe",
+            "evidenceRequired": [
+              "实际mode",
+              "目录前后对照"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "target-acceptance",
+            "field": "target",
+            "criterion": "位于明确project/user作用域；不跟随链接，不碰legacy code-security。",
+            "rejectWhen": "切作用域、覆盖未知内容或跨项目写。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "解析路径",
+              "链接/未知目录拒绝结果"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "target-hash-acceptance",
+            "field": "targetHash",
+            "criterion": "来自目标完整文件清单，含method/专业引用/案例/许可证；安装回读或回滚恢复后能复算。",
+            "rejectWhen": "只拷入口导致引用缺失，或新旧版本混合但报成功。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "实际文件库存与逐文件哈希",
+              "安装链接闭包和回滚内容对照"
+            ],
+            "blocking": true
+          }
+        ]
+      },
+      {
+        "capabilityId": "apply-skill-rollback",
+        "inputGuidance": [
+          {
+            "field": "scope",
+            "interpretation": "明确project或user；扫描许可不等于安装许可。",
+            "onMissing": "保持预览，不猜用户级。"
+          },
+          {
+            "field": "projectRoot",
+            "interpretation": "project作用域下的明确根；user不使用此参数。",
+            "onMissing": "project缺少则返回错误。"
+          },
+          {
+            "field": "apply",
+            "interpretation": "false为只读预览，true为已获相应范围授权的实际事务。",
+            "onMissing": "默认预览；不隐式执行。"
+          },
+          {
+            "field": "rollback",
+            "interpretation": "选择恢复本安装器有效回执指向的上一版本；不是任意删除。",
+            "onMissing": "未请求回滚则预览安装。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "ok-acceptance",
+            "field": "ok",
+            "criterion": "仅实际计划或事务按协议成功时true；被拒绝时保留错误。",
+            "rejectWhen": "无效回执/未知目录仍覆盖并true。",
+            "verificationMethod": "behavior_probe",
+            "evidenceRequired": [
+              "实际安装器返回",
+              "目标前后状态"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "action-acceptance",
+            "field": "action",
+            "criterion": "与请求的install/rollback一致，回滚只取有效上一版本。",
+            "rejectWhen": "把删除重装伪装回滚。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "参数与回执链"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "mode-acceptance",
+            "field": "mode",
+            "criterion": "dry-run不写目标，apply才执行当前授权变更。",
+            "rejectWhen": "预览偷偷创建/覆盖目录。",
+            "verificationMethod": "behavior_probe",
+            "evidenceRequired": [
+              "实际mode",
+              "目录前后对照"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "target-acceptance",
+            "field": "target",
+            "criterion": "位于明确project/user作用域；不跟随链接，不碰legacy code-security。",
+            "rejectWhen": "切作用域、覆盖未知内容或跨项目写。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "解析路径",
+              "链接/未知目录拒绝结果"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "target-hash-acceptance",
+            "field": "targetHash",
+            "criterion": "来自目标完整文件清单，含method/专业引用/案例/许可证；安装回读或回滚恢复后能复算。",
+            "rejectWhen": "只拷入口导致引用缺失，或新旧版本混合但报成功。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "实际文件库存与逐文件哈希",
+              "安装链接闭包和回滚内容对照"
+            ],
+            "blocking": true
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "当前任务明确要求人工判断的方向、版本或最终验收。",
+        "超出已有授权的不可逆执行、发布、付费或范围变化。",
+        "领域关键事实冲突或必需证据缺失，且会改变用户结果。"
+      ],
+      "prohibitedClaims": [
+        "合同或样例校验通过证明专业业务效果。",
+        "工具名、计划、模板、作者自报或旧运行结果证明本轮实际完成。",
+        "尚未观察的宿主加载、独立审核或用户批准已经发生。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
+}

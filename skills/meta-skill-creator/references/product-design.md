@@ -32,7 +32,7 @@
 | 质量无法证明 | 没有 baseline | with/without 对照 |
 | 越改越复杂 | 主文件堆成百科 | progressive disclosure 和 package plan |
 | 多模态质量差 | 只写一段泛图片提示词，不查本地生图/MCP能力 | 先做本地能力盘点，再写结构化 multimodal brief，最后用实图/截图/导出证据验收 |
-| fallback 盖过主路径 | 明明有 Image2/原生生图或渲染能力，却先跑 MCP、SVG 或静态模拟 | 按 Image2/host-native -> MCP/plugin -> local render -> static preview 顺序选择，并记录降级原因 |
+| 工具路线改变了用户产物 | 把可编辑表格/精确数据图转成图片，或只交静态模拟代替真实图像 | 先按精度、编辑与使用需求选产物原生路线；仅栅格创意图使用 Image2/host-native -> MCP/plugin -> local render -> static preview，并记录降级原因 |
 | 外部参考容易变抄袭 | 直接模仿结构或话术 | source abstraction boundary 只抽象机制 |
 | ready 宣称过早 | quick validate 被当成质量证明 | release gate 分层验收 |
 | 失败不沉淀 | 每次临场补丁 | 闭环运行记录 + 写回/不写回决策 + 回归检查 |
@@ -156,7 +156,7 @@
 - 当前可用 MCP/plugin 有哪些：生图、视频、画布、浏览器、渲染、部署、数据可视化等？
 - 项目本地已有脚本、模板、assets、validator、preview 生成器是什么？
 - 哪些工具要用户显式许可，因为会付费、发外部请求、发布或改外部状态？
-- 主路径是什么，fallback 顺序是什么，什么情况下才允许从 Image2/host-native 降级到 MCP？
+- 当前产物的主路径是什么；若是栅格创意图，什么情况下才允许从 Image2/host-native 降级到 MCP？精确图表、可编辑文件与原生界面应直接选相应工具，不套用图片降级链。
 - 什么证据能证明输出真的生成了：文件、widget、截图、URL、validator、原生弹框返回？
 
 输出：Local Capability Inventory + Multimodal Brief Contract。缺这个，不写多模态 skill 的 `SKILL.md`。
@@ -236,7 +236,7 @@ raw intent
 
 对多模态或工具依赖 skill，Output Eval 必须额外覆盖：
 
-- Image2/host-native 可用时是否优先使用；MCP 是否只有在 Image2 不可用/失败后才使用，而不是直接写提示词、MCP 或 SVG。
+- 是否按产物类型选择了保持精度、编辑性和实际使用方式的工具；栅格创意图才检查 Image2/host-native 优先与降级证据，不能让这条规则迫使统计图、文档或界面变成生图。
 - 结构化 prompt brief 是否包含构图、文字、工具约束、负面约束、验收标准和 fallback。
 - 没有实图/导出/截图证据时，是否诚实标为 `partial` 或 `blocked`。
 - 是否跑过新窗口/新进程 acceptance，避免当前线程记忆把缺口盖住。

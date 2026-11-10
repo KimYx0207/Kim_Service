@@ -5,6 +5,13 @@ description: 当用户要写出高质量 Goal Prompt，把模糊、战略性、�
 
 # Goal Prompt
 
+## 本能力的验收方法
+
+执行前读取 [method.json](method.json) 中当前 capabilityId 的诊断、决策和逐字段 outputChecks，并读取 [任务验收与完整示例](references/acceptance.md)。按本次能力选择相应规则，不用字段齐全、行数或作者自报代替产物质量。缺少 blocking 证据时保留未验收；既有具体授权与宿主最终决定权不变。
+
+专业引用与工具路线继续按下文渐进读取；[来源记录](PROVENANCE.md) 和 [作者正反例](evals/professional-cases.json) 供评审。当前 Meta Skill 发现不会自动注入 method.json，宿主需按此入口读取；未观察到加载或执行时不得宣称生效。
+
+
 目标：先区分用户明确表达的意图、AI 推断的潜在意图和需要用户确认的价值判断，再把战略判断、证据标准和成败边界写成 Codex / Claude Code 能执行、能验收、少跑偏的 Goal Prompt。只有存在真实后续迭代需求时，才追加交付后使用的 Loop Prompt。
 
 GoalPro 的交付物是可复制的提示词，不是任务执行结果。默认一次性交付只输出 `Goal Prompt`。只有用户明确要求持续迭代 / LOOP，或任务在本次交付后会持续产生新证据并需要下一轮动作时，才追加 `Loop Prompt`。Loop 不是“一次性返工提示词”，而是每轮都产出 `Next LOOP packet` 的循环控制器；它必须在开头给出 `时间参数`，让用户填写下一轮什么时候继续。除非用户明确说“按这个 goal 执行 / 开始改 / 写入文件 / 提交 / 创建自动化”，否则输出适用的提示词后必须停止。
@@ -102,7 +109,7 @@ Deep Research 执行顺序：
 1. 定义研究问题：写清这次研究要改变哪个 Goal 判断。
 2. 拆子问题：事实、规范、实践、失败、反证、决策影响，选 3-7 个。
 3. 分来源层级：official / local / github / paper / reddit / x，不同来源权重不同。
-4. 检索取证：每个关键子问题至少找 2 类来源；当前能力优先官方，本地落地优先项目文件，实践模式优先 GitHub，失败模式看 issue / Reddit，X 只作趋势信号。
+4. 检索取证：覆盖会改变决策的关键主张，按相关性、独立性、时效与反证判断充分性，不设固定来源数量；当前能力优先官方，本地落地优先项目文件，实践模式优先 GitHub，失败模式看 issue / Reddit，X 只作趋势信号。
 5. 填 Evidence Map：每条证据说明 direct/proxy、claim、relevance、confidence、counterevidence、decision impact；proxy 还要注明代理对象、覆盖范围与缺口。
 6. 反证检查：主动找能推翻当前路线的证据；冲突保留，不强行合并。
 7. 定信心等级：high / medium / low，并说明依据。
@@ -294,4 +301,4 @@ Next LOOP packet:
 ## 需要更多细节时
 
 - 方法依据：读 `references/source-rules.md`。
-- 示例校准：读 `references/examples.md`。其中旧示例若仍使用单一 `Intent` 或默认双提示词，只能参考任务内容；输出形态与字段必须以本文件当前的三类意图区分和 Loop 需求判断门为准。
+- 示例校准：读 `references/examples.md`，按其中已更新的三类意图区分和 Loop 需求判断门选择相应场景；单次任务不自动附加循环。

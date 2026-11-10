@@ -41,8 +41,8 @@ Check before the final answer.
 ## Models
 
 - [ ] No named person is used as internal method.
-- [ ] At least one model is used for simple tasks.
-- [ ] At least three models are used for complex tasks.
+- [ ] Each selected model addresses a decision-relevant uncertainty; simple tasks may need only direct constraint analysis.
+- [ ] Complex tasks cover material tradeoffs and counterevidence without padding the model count.
 - [ ] Each model gives a finding and fix.
 - [ ] The fix returns to the path.
 
@@ -50,7 +50,7 @@ Check before the final answer.
 
 - [ ] Expert patterns are converted into abstract pressure-test questions.
 - [ ] No famous person appears as a visible role or answer mode unless the user explicitly asked for source lineage.
-- [ ] At least three relevant lenses were checked for complex business, product, strategy, content, offer, or execution decisions.
+- [ ] Relevant lenses expose material blind spots; each retained lens changes a finding, action or limitation, regardless of count.
 - [ ] The answer contains the useful fixes from the lenses, not the lens names.
 - [ ] First-screen, inversion, reality, manual-first, or operating gaps are corrected when they would change the answer.
 

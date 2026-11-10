@@ -1,6 +1,6 @@
 # Frontend method provenance
 
-Inspected 2026-11-10. The package contains original Chinese method prose and original synthetic examples. No upstream code or template text is bundled. These references are research inputs, not tool permissions, installed skills or evidence that a worker fetched them during its task. Local content is versioned with component 0.2.0; actual project framework versions must be read from the supplied repository.
+Inspected 2026-11-10. The package contains original Chinese method prose and original synthetic examples. No upstream code or template text is bundled. These references are research inputs, not tool permissions, installed skills or evidence that a worker fetched them during its task. The original source inspection remains dated above; behavior-proof references were inspected 2026-11-11. Local content is versioned with component 0.4.1; actual project framework versions must be read from the supplied repository.
 
 | sourceRef | Source and revision | Adopted | Not adopted |
 | --- | --- | --- | --- |
@@ -8,5 +8,8 @@ Inspected 2026-11-10. The package contains original Chinese method prose and ori
 | vercel-react | [Vercel React guidance](https://github.com/vercel-labs/agent-skills/blob/1a2c79d4e6c4a2283dc2c614b6538cbe1ed5ca62/skills/react-best-practices/SKILL.md), metadata 1.0.0, MIT; also inspected [async-parallel](https://github.com/vercel-labs/agent-skills/blob/1a2c79d4e6c4a2283dc2c614b6538cbe1ed5ca62/skills/react-best-practices/rules/async-parallel.md) | Profile dependency waterfalls; parallelize independent reads only | Assuming React/Next.js, installing performance libraries, copying performance multiplier claims or deployment workflows |
 | react-effects | [React Synchronizing with Effects](https://react.dev/learn/synchronizing-with-effects), retrieved 2026-11-10; page then identified v19.3 | Separate events from synchronization and handle stale async results | Applying latest APIs to a project whose installed version is unknown; making Effects the universal fetching strategy |
 | w3c-dialog | [W3C APG modal dialog pattern](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/), retrieved 2026-11-10, living guidance | Focus entry, containment and recovery when the UI actually is modal | Treating ARIA attributes or an APG example as proof of browser/assistive-technology compatibility |
+
+| playwright-behavior | [Playwright best practices](https://playwright.dev/docs/best-practices), official living guide, inspected 2026-11-11 | User-visible outcomes, independent test state, controlled external responses and scoped diagnostics | Assuming mocked responses establish real persistence or authorization; duplicating tests for implementation details |
+| playwright-assertions | [Playwright assertions](https://playwright.dev/docs/test-assertions), official living guide, inspected 2026-11-11 | Await asynchronous, condition-based checks and preserve actual failure | Treating fixed sleeps or unawaited checks as successful behavior proof |
 
 The included MIT LICENSE covers this package's original material. Referenced licenses do not turn cited upstream files into bundled content. Validate applicability against the current task before use; a pinned source can still be unsuitable or outdated for that project.

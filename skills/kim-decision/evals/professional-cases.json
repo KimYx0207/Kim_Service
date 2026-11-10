@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "roleId": "kim-decision",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "kim-decision-analysis-worked",
+      "capabilityId": "kim-decision-analysis",
+      "category": "worked_example",
+      "scenario": "报价超过硬预算，而收益尚未实测。",
+      "input": {
+        "decisionQuestion": "一人服务团队是否应本月购买自动排班系统？",
+        "context": [
+          "每周排班用3小时，人工成本80元/小时；未来3个月规模不变。"
+        ],
+        "evidence": [
+          "当前报价800元/月；试用未测节省比例。"
+        ],
+        "constraints": [
+          "月现金支出上限600元",
+          "不能降低排班准确性"
+        ]
+      },
+      "candidateOutputExcerpt": {
+        "artifactType": "decision-analysis",
+        "status": "decision-ready",
+        "verdict": "当前800元/月方案违反600元硬预算，不购买；先保留现流程。若有低于预算的方案，再按实际节省与准确性试用比较。",
+        "evidence": {
+          "confirmed": [
+            "提供报价800元/月、预算600元/月；只支持本次条件判断。"
+          ],
+          "assumptions": [
+            "未来3个月规模不变来自用户。"
+          ],
+          "gaps": [
+            "自动排班节省比例和错误率未测。"
+          ]
+        },
+        "nextAction": "核实供应商是否有不超过600元/月的版本；存在才用同一周历史排班在离线试用比较耗时和冲突，不改正式排班。",
+        "passSignal": "报价不超过600元/月且离线排班无新增冲突；时间收益需覆盖实际月费（80元/小时×实测月节省小时），未达标不购。",
+        "executionAuthorized": false,
+        "finalAcceptanceClaimed": false
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "作者构造的合格报告形状，保留本场景的实际范围与未观察边界；重点核验：保持 decision-analysis，建议和执行状态分离。",
+      "diagnosticRefs": [
+        "decision-frame",
+        "evidence-scope",
+        "sensitivity"
+      ],
+      "decisionRuleRefs": [
+        "hard-constraints",
+        "decision-reversal",
+        "budgeted-test"
+      ]
+    },
+    {
+      "id": "kim-decision-analysis-counterexample",
+      "capabilityId": "kim-decision-analysis",
+      "category": "failure_boundary",
+      "scenario": "报价超过硬预算，而收益尚未实测。",
+      "input": {
+        "decisionQuestion": "一人服务团队是否应本月购买自动排班系统？",
+        "context": [
+          "每周排班用3小时，人工成本80元/小时；未来3个月规模不变。"
+        ],
+        "evidence": [
+          "当前报价800元/月；试用未测节省比例。"
+        ],
+        "constraints": [
+          "月现金支出上限600元",
+          "不能降低排班准确性"
+        ]
+      },
+      "candidateOutputExcerpt": {
+        "artifactType": "decision-analysis",
+        "status": "decision-ready",
+        "verdict": "自动化综合分95，立即买800元方案。",
+        "evidence": {
+          "confirmed": [
+            "真实数据证明必赚。"
+          ],
+          "assumptions": [],
+          "gaps": []
+        },
+        "nextAction": "14天完成全部部署。",
+        "passSignal": "达到100次使用。",
+        "executionAuthorized": false,
+        "finalAcceptanceClaimed": false
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "评分掩盖硬预算，随意期限与使用次数不能证明净收益或准确性。",
+      "diagnosticRefs": [
+        "decision-frame",
+        "evidence-scope",
+        "sensitivity"
+      ],
+      "decisionRuleRefs": [
+        "hard-constraints",
+        "decision-reversal",
+        "budgeted-test"
+      ]
+    }
+  ]
+}

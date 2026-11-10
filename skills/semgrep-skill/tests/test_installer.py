@@ -28,7 +28,12 @@ class InstallerTests(unittest.TestCase):
         self.source = self.temp / "component"
         (self.source / "scripts").mkdir(parents=True)
         (self.source / "rules").mkdir()
-        for relative in ("SKILL.md", "capability.json", "rules/local-security.yml", "scripts/install.py", "scripts/scan.py"):
+        for relative in (
+            "SKILL.md", "capability.json", "rules/local-security.yml", "scripts/install.py", "scripts/scan.py",
+            "method.json", "PROVENANCE.md", "references/acceptance.md", "evals/professional-cases.json",
+            "install.sh", "install.ps1", "README.md", "README_EN.md", "LICENSE", "NOTICE",
+            "images/二维码基础款.png", "images/支付宝.jpg", "images/微信.jpg",
+        ):
             destination = self.source / relative
             destination.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(ROOT / relative, destination)
@@ -83,7 +88,7 @@ class InstallerTests(unittest.TestCase):
         self.assertEqual(result["targetHash"], receipt["targetHash"])
         self.assertEqual(receipt["target"], str(self.target))
         self.assertEqual(receipt["scope"], "project")
-        self.assertEqual(receipt["componentVersion"], "1.1.0")
+        self.assertEqual(receipt["componentVersion"], "1.2.0")
         self.assertTrue((self.target / "scripts" / "scan.py").is_file())
         completed = subprocess.run([sys.executable, str(self.target / "scripts" / "scan.py"), "--input-json", "-"], input="{}", capture_output=True, text=True)
         self.assertEqual(completed.returncode, 2)
@@ -91,6 +96,25 @@ class InstallerTests(unittest.TestCase):
         for item in receipt["files"]:
             self.assertEqual(item["sha256"], sha256(self.target / item["path"]))
         self.assertNotIn("code-security", str(self.target))
+
+    def test_installed_skill_preserves_method_reference_and_license_closure(self) -> None:
+        self.install()
+        method = json.loads((self.target / "method.json").read_text(encoding="utf-8"))
+        source_method = json.loads((self.source / "method.json").read_text(encoding="utf-8"))
+        self.assertEqual(method, source_method)
+        resources = [asset["path"] for asset in method["knowledgeAssets"]]
+        resources.extend([method["expertise"]["evaluation"]["casesPath"], "PROVENANCE.md", "LICENSE", "NOTICE"])
+        for relative in resources:
+            self.assertTrue((self.target / relative).is_file(), relative)
+            self.assertEqual((self.target / relative).read_bytes(), (self.source / relative).read_bytes())
+        before = (self.target / "references/acceptance.md").read_bytes()
+        (self.source / "references/acceptance.md").write_bytes(before + b"\nNew reviewed standard.\n")
+        self.install()
+        self.assertNotEqual((self.target / "references/acceptance.md").read_bytes(), before)
+        rolled_back = self.run_installer("--rollback", "--apply")
+        self.assertEqual(rolled_back.returncode, 0, rolled_back.stderr)
+        self.assertEqual((self.target / "references/acceptance.md").read_bytes(), before)
+        self.assertEqual(json.loads((self.target / "method.json").read_text()), source_method)
 
     def test_upgrade_keeps_previous_install_and_can_roll_back(self) -> None:
         first = self.install()

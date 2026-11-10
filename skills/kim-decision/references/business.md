@@ -26,7 +26,7 @@ Decision rule:
 For every proposal, force scope compression:
 
 1. V1 scope: what does the first version do? (one sentence maximum)
-2. Exclusions: what is explicitly NOT in V1? (at least three items)
+2. Exclusions: which plausible extensions would distract from the current validation? Name the relevant exclusions; do not invent three merely to satisfy a count.
 3. Fastest delivery: how many days to ship V1?
 4. Minimum customer: who is the smallest viable customer?
 5. Minimum deal: what is the smallest transaction that validates the model?
@@ -36,7 +36,7 @@ Compression rules:
 
 - V1 scope exceeds one sentence → compress until it fits
 - No exclusions listed → scope is too broad, cut until exclusions appear
-- Fastest delivery exceeds 14 days → break into smaller pieces
+- Fastest delivery exceeds the user's time/resource budget or cannot expose the critical uncertainty within the business feedback cycle → reduce scope or renegotiate the constraint; no universal 14-day cutoff
 - No failure criteria → add one before proceeding
 
 ## Boss Perspective model

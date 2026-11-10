@@ -3,7 +3,7 @@ import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import test from 'node:test';
-import { spawnSync } from 'node:child_process';
+import { execFile } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { performance } from 'node:perf_hooks';
 
@@ -22,12 +22,39 @@ function testTimeout(value) {
   return milliseconds;
 }
 const processTimeout = testTimeout(process.env.KIM_SERVICE_TEST_PROCESS_TIMEOUT_MS);
-function checkedSpawn(args, options, label) {
+// Use an asynchronous pipe with an explicit EOF. A synchronous pipe can
+// stall before delivering EOF on some macOS runtimes; changing the reader or
+// using a temporary input file would stop exercising the real stdin protocol.
+function executeProcess(args, options, timeoutMs = processTimeout) {
+  const { input = '', encoding = 'utf8', maxBuffer = 4 * 1024 * 1024, ...rest } = options;
+  return new Promise((resolve) => {
+    let spawned = false, stdinFinished = false, stdinError;
+    const child = execFile(python, args, {
+      ...rest, encoding, maxBuffer, timeout: timeoutMs, shell: false,
+    }, (error, stdout, stderr) => {
+      // Exit 2 is the tool's deliberate invalid_input result, not a transport
+      // failure. Timeouts, signals, spawn/stream errors and buffer exhaustion
+      // still fail. The caller checks the exact exit code and JSON status.
+      const deliberateEarlyRejection = error?.code === 2 && stdinError?.code === 'EPIPE';
+      const transportError = error && (error.killed || typeof error.code !== 'number')
+        ? error : (stdinError && !deliberateEarlyRejection ? stdinError : undefined);
+      resolve({ error: transportError, signal: error?.signal ?? null,
+        status: error ? (typeof error.code === 'number' ? error.code : null) : 0,
+        stdout, stderr, spawned, stdinFinished, stdinError: stdinError?.code ?? null });
+    });
+    child.once('spawn', () => { spawned = true; });
+    child.stdin.once('finish', () => { stdinFinished = true; });
+    child.stdin.once('error', (error) => { stdinError = error; });
+    child.stdin.end(input);
+  });
+}
+async function checkedSpawn(args, options, label) {
   const started = performance.now();
-  const child = spawnSync(python, args, { ...options, timeout: processTimeout, shell: false });
+  const child = await executeProcess(args, options);
   const diagnostic = JSON.stringify({ label, elapsedMs: Math.round(performance.now() - started),
     timeoutMs: processTimeout, errorCode: child.error?.code ?? null,
-    status: child.status, signal: child.signal,
+    status: child.status, signal: child.signal, childSpawned: child.spawned,
+    stdinFinished: child.stdinFinished, stdinError: child.stdinError,
     inputBytes: Buffer.byteLength(options.input ?? ''),
     inputSha256: createHash('sha256').update(options.input ?? '').digest('hex'),
     stdoutBytes: Buffer.byteLength(child.stdout ?? ''), stderrBytes: Buffer.byteLength(child.stderr ?? '') });
@@ -49,8 +76,8 @@ test('test process budget has a finite default and rejects malformed or unbounde
   assert.equal(testTimeout('60000'), 60000);
   for (const value of ['0', '9999', '60001', 'Infinity', '1e4', '-1', '', ' 30000']) assert.throws(() => testTimeout(value));
 });
-test('Python test interpreter starts in isolation before delivery cases', (t) => {
-  const { child, diagnostic } = checkedSpawn(['-I', '-B', '-c', 'import sys; print(sys.version.split()[0])'],
+test('Python test interpreter starts in isolation before delivery cases', async (t) => {
+  const { child, diagnostic } = await checkedSpawn(['-I', '-B', '-c', 'import sys; print(sys.version.split()[0])'],
     { encoding: 'utf8', cwd: root }, 'python-startup-preflight');
   t.diagnostic(diagnostic);
   assert.equal(child.status, 0, diagnostic);
@@ -58,8 +85,8 @@ test('Python test interpreter starts in isolation before delivery cases', (t) =>
   assert.match(child.stdout.trim(), /^3\.\d+\.\d+$/);
 });
 
-function invoke(input, script = 'deliver.py', args = ['--input-json', '-']) {
-  const { child, diagnostic } = checkedSpawn(['-I', '-B', path.join(root, 'scripts', script), ...args], {
+async function invoke(input, script = 'deliver.py', args = ['--input-json', '-']) {
+  const { child, diagnostic } = await checkedSpawn(['-I', '-B', path.join(root, 'scripts', script), ...args], {
     input: typeof input === 'string' ? input : JSON.stringify(input), encoding: 'utf8',
     maxBuffer: 4 * 1024 * 1024, cwd: root,
   }, `${script}:${args.join(' ')}`);
@@ -68,8 +95,8 @@ function invoke(input, script = 'deliver.py', args = ['--input-json', '-']) {
   assert.equal(child.status, output.status === 'invalid_input' ? 2 : 0, diagnostic);
   return output;
 }
-function run(materials, request = task) {
-  const output = invoke({ task: request, inputJson: typeof materials === 'string' ? materials : JSON.stringify(materials) });
+async function run(materials, request = task) {
+  const output = await invoke({ task: request, inputJson: typeof materials === 'string' ? materials : JSON.stringify(materials) });
   assert.deepEqual(Object.keys(output).sort(), ['schemaVersion', 'status', 'tool', 'toolVersion', 'calculationPerformed',
     'brief', 'missing', 'questions', 'issues', 'receipt', 'receiptJson', 'receiptSha256', 'delivery', 'handoff', 'networkUsed', 'filesModified'].sort());
   assert.equal(output.schemaVersion, 1);
@@ -88,7 +115,7 @@ function run(materials, request = task) {
   return output;
 }
 
-function checkMutations(mutations) {
+async function checkMutations(mutations) {
   const code = `import copy, importlib.util, json, sys
 sys.dont_write_bytecode = True
 spec = importlib.util.spec_from_file_location('delivery', sys.argv[1])
@@ -106,12 +133,34 @@ for mutation in json.loads(sys.argv[2]):
         continue
     raise AssertionError('accepted invalid domain receipt: ' + mutation)
 print('validated')`;
-  const { child, diagnostic } = checkedSpawn(['-I', '-B', '-c', code, path.join(root, 'scripts/deliver.py'), JSON.stringify(mutations)], {
+  const { child, diagnostic } = await checkedSpawn(['-I', '-B', '-c', code, path.join(root, 'scripts/deliver.py'), JSON.stringify(mutations)], {
     input: JSON.stringify(fixture('normal')), encoding: 'utf8',
   }, 'domain-receipt-mutations');
   assert.equal(child.status, 0, diagnostic);
   assert.equal(child.stdout.trim(), 'validated');
 }
+
+test('async stdin delivers all UTF-8 bytes and a real EOF before reading a receipt', async () => {
+  const input = '纸'.repeat(100000);
+  const { child } = await checkedSpawn(['-I', '-B', '-c',
+    'import sys, hashlib; data=sys.stdin.buffer.read(); sys.stdout.buffer.write((str(len(data)) + "\\n" + hashlib.sha256(data).hexdigest() + "\\n").encode("ascii"))'],
+    { input, encoding: 'utf8', cwd: root }, 'stdin-eof-probe');
+  assert.equal(child.status, 0);
+  assert.equal(child.spawned, true);
+  assert.equal(child.stdinFinished, true);
+  assert.equal(child.stdinError, null);
+  assert.equal(child.stdout, `${Buffer.byteLength(input)}\n${createHash('sha256').update(input).digest('hex')}\n`);
+});
+
+test('async process deadlines and output limits remain terminal failures', async () => {
+  const timeout = await executeProcess(['-I', '-B', '-c', 'import time; time.sleep(10)'],
+    { encoding: 'utf8', cwd: root }, 50);
+  assert.throws(() => assertProcessFinished(timeout, 'deadline exceeded'), /deadline exceeded/);
+  const oversized = await executeProcess(['-I', '-B', '-c', "print('x' * 100000)"],
+    { encoding: 'utf8', cwd: root, maxBuffer: 1024 });
+  assert.equal(oversized.error?.code, 'ERR_CHILD_PROCESS_STDIO_MAXBUFFER');
+  assert.throws(() => assertProcessFinished(oversized, 'output limit exceeded'), /output limit exceeded/);
+});
 
 test('component-owned delivery descriptor is optional and never expands agent permissions', () => {
   const cap = JSON.parse(read('capability.json')).capabilities[0];
@@ -128,11 +177,11 @@ test('component-owned delivery descriptor is optional and never expands agent pe
   });
 });
 
-test('delivery uses real original calculator receipts and preserves partial unknowns', () => {
+test('delivery uses real original calculator receipts and preserves partial unknowns', async () => {
   for (const name of ['normal', 'missing-fields', 'definition-conflict']) {
     const materials = fixture(name);
-    const output = run(materials);
-    assert.deepEqual(output.receipt, invoke(materials, 'calculate.py'));
+    const output = await run(materials);
+    assert.deepEqual(output.receipt, await invoke(materials, 'calculate.py'));
     assert.equal(output.status, output.receipt.status);
     assert.equal(output.calculationPerformed, true);
     assert.equal(typeof output.delivery, 'string');
@@ -140,11 +189,11 @@ test('delivery uses real original calculator receipts and preserves partial unkn
   }
 });
 
-test('missing materials ask component questions without calculating; zero and false are not missing', () => {
+test('missing materials ask component questions without calculating; zero and false are not missing', async () => {
   for (const missing of [undefined, null, '', '  ', []]) {
     const materials = fixture('normal');
     materials[REQUIRED] = missing;
-    const output = run(materials);
+    const output = await run(materials);
     assert.equal(output.status, 'needs_input');
     assert.deepEqual(output.missing, [REQUIRED]);
     assert.equal(output.calculationPerformed, false);
@@ -156,7 +205,7 @@ test('missing materials ask component questions without calculating; zero and fa
   for (const value of [0, false]) {
     const materials = fixture('normal');
     materials[REQUIRED] = value;
-    const output = run(materials);
+    const output = await run(materials);
     assert.equal(output.status, 'invalid_input');
     assert.equal(output.calculationPerformed, true);
     assert.deepEqual(output.missing, []);
@@ -164,51 +213,51 @@ test('missing materials ask component questions without calculating; zero and fa
   }
 });
 
-test('strict inner parsing rejects duplicate keys before missing preflight and preserves the task', () => {
+test('strict inner parsing rejects duplicate keys before missing preflight and preserves the task', async () => {
   for (const inputJson of ['{"rows":[],"rows":[]}', '{"quotes":[{"supplierId":"A","supplierId":"B"}]}',
     '{"a":1,"\\u0061":2}', '{', 'null', '[]', '{"schemaVersion":NaN}', ' '.repeat(MAX_BYTES + 1)]) {
-    const output = run(inputJson);
+    const output = await run(inputJson);
     assert.equal(output.status, 'invalid_input');
     assert.equal(output.calculationPerformed, true);
     assert.equal(output.receipt.status, 'invalid_input');
-    assert.deepEqual(output.receipt, invoke(inputJson, 'calculate.py'), 'rejected receipt matches the original calculator');
+    assert.deepEqual(output.receipt, await invoke(inputJson, 'calculate.py'), 'rejected receipt matches the original calculator');
     assert.equal(output.handoff.status, 'blocked');
     assert.deepEqual(output.missing, []);
     assert.deepEqual(output.questions, []);
   }
 });
 
-test('nonfinite and oversized UTF-8 inputs retain actionable original error codes', () => {
+test('nonfinite and oversized UTF-8 inputs retain actionable original error codes', async () => {
   for (const raw of ['{"quantity":NaN}', '{"quantity":Infinity}', '{"quantity":-Infinity}',
     '{"quotes":[{"packPrice":NaN}]}']) {
-    const output = run(raw);
-    assert.deepEqual(output.receipt, invoke(raw, 'calculate.py'));
+    const output = await run(raw);
+    assert.deepEqual(output.receipt, await invoke(raw, 'calculate.py'));
     assert.equal(output.receipt.quality.issues[0].code, 'nonfinite_number');
   }
   const oversized = JSON.stringify({ specification: '纸'.repeat(Math.ceil(MAX_BYTES / 3)) });
   assert.ok(Buffer.byteLength(oversized) > MAX_BYTES);
-  const output = run(oversized);
-  assert.deepEqual(output.receipt, invoke(oversized, 'calculate.py'));
+  const output = await run(oversized);
+  assert.deepEqual(output.receipt, await invoke(oversized, 'calculate.py'));
   assert.equal(output.receipt.quality.issues[0].code, 'input_size');
 });
 
-test('fixed CLI and bounded envelope reject malformed shapes without raw input or traces', () => {
+test('fixed CLI and bounded envelope reject malformed shapes without raw input or traces', async () => {
   const marker = 'PRIVATE_TEST_MARKER';
   for (const envelope of [null, [], {}, { task, inputJson: 1 }, { task: ' ', inputJson: '{}' },
     { task, inputJson: '{}', receipt: { marker } }, '{broken' + marker,
     '{"task":"x","task":"y","inputJson":"{}"}', ' '.repeat(1600001)]) {
-    const output = invoke(envelope);
+    const output = await invoke(envelope);
     assert.equal(output.status, 'invalid_input');
     assert.equal(output.handoff.status, 'blocked');
     assert.equal(JSON.stringify(output).includes(marker), false);
   }
-  assert.equal(invoke({ task, inputJson: '{}' }, 'deliver.py', ['--file', marker]).status, 'invalid_input');
-  const output = run(JSON.stringify(fixture('normal')).padEnd(MAX_BYTES, ' '));
+  assert.equal((await invoke({ task, inputJson: '{}' }, 'deliver.py', ['--file', marker])).status, 'invalid_input');
+  const output = await run(JSON.stringify(fixture('normal')).padEnd(MAX_BYTES, ' '));
   assert.equal(output.status, 'completed', 'original raw byte boundary remains inclusive');
 });
 
-test('delivery imports the adjacent helper without bytecode, subprocesses, network or file writes', () => {
-  run(fixture('normal'));
+test('delivery imports the adjacent helper without bytecode, subprocesses, network or file writes', async () => {
+  await run(fixture('normal'));
   assert.equal(fs.existsSync(path.join(root, 'scripts/__pycache__')), false);
   const script = read('scripts/deliver.py');
   assert.match(script, /importlib\.util\.spec_from_file_location/);
@@ -220,17 +269,17 @@ const TOOL = 'supplier-comparison-calculate', VERSION = '0.1.0', MAX_BYTES = 262
 const SCOPE = 'compare_supplied_materials_only', REQUIRED = 'quantity', QUESTION_PATTERN = /采购数量.*不需要为了核算先设置权重/;
 const fixture = name => JSON.parse(read(`tests/fixtures/${name}.json`));
 
-test('supplier delivery renders totals, zero excess and unknown fees without choosing a supplier', () => {
-  const output = run(fixture('normal'));
+test('supplier delivery renders totals, zero excess and unknown fees without choosing a supplier', async () => {
+  const output = await run(fixture('normal'));
   assert.match(output.delivery, /A：到货总支出 335 CNY，实收 150，超购 30/);
   assert.match(output.delivery, /B：到货总支出 275 CNY，实收 120，超购 0/);
   assert.match(output.delivery, /未合成排名/);
-  assert.match(run(fixture('missing-fields')).delivery, /到货总支出 待确认/);
+  assert.match((await run(fixture('missing-fields'))).delivery, /到货总支出 待确认/);
   assert.equal(output.brief.permitsContactOrPurchase, false);
 });
 
-test('supplier conflicts keep partial receipt and ask the unified-definition handoff question', () => {
-  const output = run(fixture('definition-conflict'));
+test('supplier conflicts keep partial receipt and ask the unified-definition handoff question', async () => {
+  const output = await run(fixture('definition-conflict'));
   assert.equal(output.status, 'partial');
   assert.equal(output.receipt.status, 'partial');
   assert.deepEqual(output.handoff, { status: 'needs_input', code: 'calculation_definition_conflict',
@@ -240,8 +289,8 @@ test('supplier conflicts keep partial receipt and ask the unified-definition han
   ]);
 });
 
-test('supplier domain validation rejects identity, flags, shape, row binding, and numeric corruption', () => {
-  checkMutations(["r['tool'] = 'other'", "r['toolVersion'] = '9'", "r['networkUsed'] = True",
+test('supplier domain validation rejects identity, flags, shape, row binding, and numeric corruption', async () => {
+  await checkMutations(["r['tool'] = 'other'", "r['toolVersion'] = '9'", "r['networkUsed'] = True",
     "r['quality']['certifiedSuppliers'] = True", "r['unexpected'] = True", "r['normalizedQuotes'].pop()",
     "r['normalizedQuotes'][0]['supplierId'] = 'unbound'", "r['normalizedQuotes'][0]['landedTotal'] = 335",
     "r['normalizedQuotes'][0]['costPerDeliveredUnit'] = 'NaN'", "r['normalizedQuotes'][0]['constraintStatus'] = 'approved'",

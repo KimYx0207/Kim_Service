@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 1,
+  "id": "manufacturing-quality-analyst",
+  "componentType": "agent",
+  "componentVersion": "0.1.2",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "manufacturing-quality-analyst-deliver",
+      "summary": "分析测量系统、过程稳定性、质量异常与纠正措施 manufacturing quality statistical process control capability",
+      "useWhen": [
+        "质量波动需要分清测量误差、过程变化和实际不合格。",
+        "需要解释Cp/Cpk或建立合理的过程监控。",
+        "重复问题需要从临时遏制走到可验证纠正措施。"
+      ],
+      "doNotUseWhen": [
+        "不替代出厂放行、安全工程签章或质量体系认证；无过程前提不宣布能力达标。",
+        "要求自动发布、付款、修改生产系统或联系第三方时交调用方授权处理。",
+        "要求把假设或资料形式当作专业认证、保证收益或最终验收时不适用。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "process": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "产品/工序、质量特性、规格、单位和采样设计"
+          },
+          "measurements": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "带时间、批次/设备/操作者的数据和测量系统资料"
+          },
+          "decision": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前放行/改善问题、已有措施和业务约束"
+          }
+        },
+        "required": [
+          "process",
+          "measurements",
+          "decision"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "measurementReview": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "测量与采样适用性"
+          },
+          "processAssessment": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "稳定性和能力解释"
+          },
+          "investigation": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "异常证据与原因验证"
+          },
+          "controlPlan": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "措施和复发监测"
+          },
+          "facts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前输入、来源、期间单位及证据缺口"
+          },
+          "limitations": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "未执行、未观察、方法假设和外推边界"
+          },
+          "handoff": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前产物、规则结果、证据定位与待解决事项交调用方"
+          }
+        },
+        "required": [
+          "measurementReview",
+          "processAssessment",
+          "investigation",
+          "controlPlan",
+          "facts",
+          "limitations",
+          "handoff"
+        ],
+        "deliveryFormat": "conceptual-human-delivery"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "涉及批次放行、产品安全、停线或永久工艺调整时交质量与工程责任人确认。",
+          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

@@ -15,14 +15,20 @@ const groups = {
   career: ['resume-editor', 'interview-coach', 'workplace-writer'],
   education: ['lesson-planner', 'concept-tutor', 'exercise-designer'],
   business: ['side-business-evaluator', 'launch-planner', 'pricing-cost-analyst'],
-  procurement: ['supplier-comparison-analyst'],
+  procurement: ['supplier-comparison-analyst', 'supply-chain-planner'],
+  operations: ['business-finance-analyst', 'sales-operations-analyst', 'user-researcher', 'hiring-process-designer'],
+  engineering: ['data-quality-analyst', 'application-security-reviewer', 'manufacturing-quality-analyst', 'systems-engineering-analyst'],
+  sectorOperations: ['sustainability-analyst', 'healthcare-operations-analyst', 'agronomy-planner'],
   delivery: ['product-architect', 'interaction-designer', 'frontend-engineer', 'backend-data-engineer', 'media-production-engineer', 'quantitative-researcher', 'source-evidence-analyst', 'delivery-verifier']
 };
 
 test('the agreed scopes expose bounded industry and task-delivery agent contracts', () => {
   const index = buildCapabilityIndex(root);
   const agents = index.components.filter((component) => component.componentType === 'agent');
-  assert.deepEqual(agents.map((component) => component.id).sort(), Object.values(groups).flat().sort());
+  const published = new Set(agents.map((component) => component.id));
+  for (const id of Object.values(groups).flat()) assert.ok(published.has(id), `Missing agreed scope: ${id}`);
+  // New packages are discovered and checked below without a production role
+  // allow-list; keeping an agreed scope is separate from counting all roles.
   for (const component of agents) {
     assert.deepEqual(checkAgentPack(path.join(root, component.path)), [], component.id);
     const capability = index.capabilities.find((entry) => entry.componentId === component.id);

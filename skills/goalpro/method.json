@@ -1,0 +1,248 @@
+{
+  "schemaVersion": 1,
+  "roleId": "goalpro",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "steps": [
+    "分开原话、推断和会改变路线的价值选择，先利用已有上下文解决事实问题。",
+    "识别一次性交付或持续输入，取证只服务会改变目标、范围和验收的判断。",
+    "把目标写成可观察最终行为；每个重要条件给成功、失败及证据来源，避免交付数量替代结果。",
+    "需要 Loop 时绑定上一轮产物和开放差距，写明 Done/Continue/Pause 与可继承输入。",
+    "检查提示词可复制、当前事实有依据、没有越过 prompt-only 边界，再交付适用的代码块。"
+  ],
+  "acceptance": [
+    "按当前能力的outputChecks逐项记录实际证据、拒收原因和未观察项。",
+    "任何blocking项失败或缺证据，不能用其他评分抵消；作者自查不代替独立验收。",
+    "只报告本轮真实完成的产物、动作和范围；当前宿主最终验收权保持不变。"
+  ],
+  "coordinationOwner": "caller",
+  "finalAcceptance": "caller_only",
+  "knowledgeAssets": [
+    {
+      "id": "goalpro-acceptance",
+      "path": "references/acceptance.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "existing-package",
+        "nasa-verification",
+        "agent-evals"
+      ]
+    }
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "将真实意图转成可证伪的 Goal Prompt，并仅在真实续作需求下生成 Loop Prompt",
+    "scope": [
+      "Create a bounded Goal Prompt with separated intent, goal/plan/output boundaries, and evidence conditions without executing the target task.",
+      "Create a Loop Prompt only for an explicit loop request or when post-delivery evidence determines a subsequent action."
+    ],
+    "knowledgeAssetIds": [
+      "goalpro-acceptance"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "intent",
+        "question": "哪些限制是用户说过，哪些只是作者推断？",
+        "evidenceRequired": [
+          "原始请求或已确认上下文",
+          "目标与验收条件映射"
+        ],
+        "whenMissing": "保留可逆假设；会改变路线的未知只提关键问题。"
+      },
+      {
+        "id": "falsifiable",
+        "question": "什么可观察情况会证明没做到？",
+        "evidenceRequired": [
+          "目标行为",
+          "成功与失败样本"
+        ],
+        "whenMissing": "改写空泛质量词，不以创建文件作为结果。"
+      },
+      {
+        "id": "continuation",
+        "question": "下一轮有什么新增输入？",
+        "evidenceRequired": [
+          "上一轮实际结果",
+          "新反馈/运行证据或明确 Loop 请求"
+        ],
+        "whenMissing": "一次性交付只给 Goal，不自动创建循环。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "evidence-fit",
+        "when": "需要当前外部事实决定路线",
+        "action": "查直接相关的一手资料与反证，记录未覆盖范围",
+        "avoid": "凑固定来源数或把研究计划当已验证结论。"
+      },
+      {
+        "id": "prompt-only",
+        "when": "任务仅要提示词",
+        "action": "交可复制提示词并停止",
+        "avoid": "开始执行生成的目标或创建后台自动化。"
+      },
+      {
+        "id": "bounded-loop",
+        "when": "确有续作请求或新增证据",
+        "action": "绑定原目标、实际差距、继续条件与停止预算",
+        "avoid": "每轮换目标、无限返工或重复无关验证。"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "goalpro-goal-prompt",
+        "inputGuidance": [
+          {
+            "field": "request",
+            "interpretation": "用户要整理成目标的原始请求。",
+            "onMissing": "无法确定对象才询问。"
+          },
+          {
+            "field": "providedContext",
+            "interpretation": "已提供的材料、限制和确认选择。",
+            "onMissing": "标明未读取内容，不能假装看过仓库。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "artifact-type-acceptance",
+            "field": "artifactType",
+            "criterion": "取证足够时为 goal-prompt；关键依据未取得则 draft-goal 或 research-plan。",
+            "rejectWhen": "未研究却写研究已完成，或证据缺失仍给最终战略。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "实际取证范围",
+              "形态与缺口对应"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "content-acceptance",
+            "field": "content",
+            "criterion": "可复制提示词保持原意，含对象/范围/非目标/先读材料、可观察通过失败条件和执行边界。",
+            "rejectWhen": "套字段却无具体行为、悄加用户价值选择，或一次性请求自动附循环。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "原请求到条件的映射",
+              "至少一组能区分通过与失败的任务样例"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "evidence-status-acceptance",
+            "field": "evidenceStatus",
+            "criterion": "sufficient 只覆盖当前目标判断所需证据；否则 insufficient 并说明会改变什么。",
+            "rejectWhen": "按链接数、来源名或权威名声直接认定充分。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "关键判断的证据及适用范围",
+              "反证和缺口"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "execution-authorized-acceptance",
+            "field": "executionAuthorized",
+            "criterion": "保持 false，提示词不代表当前已执行、写入或创建自动化。",
+            "rejectWhen": "交提示词同时改项目或声称后台已开始。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "本轮实际动作清单",
+              "提示词边界"
+            ],
+            "blocking": true
+          }
+        ]
+      },
+      {
+        "capabilityId": "goalpro-loop-prompt",
+        "inputGuidance": [
+          {
+            "field": "request",
+            "interpretation": "循环要继续服务的已确认目标。",
+            "onMissing": "先取得原目标，不能用最近一次错误代替总目标。"
+          },
+          {
+            "field": "continuationNeed",
+            "interpretation": "明确 Loop 请求或交付后新证据。",
+            "onMissing": "不满足就只保留单次 Goal。"
+          },
+          {
+            "field": "previousResult",
+            "interpretation": "上一轮真实产物、验证和差距，缺失时是待取材料。",
+            "onMissing": "可写读取入口和 Pause 条件，不假装上一轮通过。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "artifact-type-acceptance",
+            "field": "artifactType",
+            "criterion": "只输出 loop-prompt，不生成新执行器或额外 Workflow Prompt。",
+            "rejectWhen": "把可复制循环说明当后台任务。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "交付代码块",
+              "实际是否有调度动作"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "content-acceptance",
+            "field": "content",
+            "criterion": "开头时间参数；绑定原目标、上一轮证据、开放差距、验证增量及 Done/Continue/Pause。",
+            "rejectWhen": "仅“继续优化”或没有预算/无进展停止条件。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "上一轮证据引用",
+              "下一轮可直接复用的完整包"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "continuation-need-acceptance",
+            "field": "continuationNeed",
+            "criterion": "与用户明确请求或新增反馈证据一致。",
+            "rejectWhen": "仅因任务复杂、文件多而强加 Loop。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "用户请求或新输入来源"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "execution-authorized-acceptance",
+            "field": "executionAuthorized",
+            "criterion": "保持 false；循环提示词不授权运行、定时、发布或付费。",
+            "rejectWhen": "凭时间字段声称自动化已经启用。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "生成内容",
+              "当前动作边界"
+            ],
+            "blocking": true
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "当前任务明确要求人工判断的方向、版本或最终验收。",
+        "超出已有授权的不可逆执行、发布、付费或范围变化。",
+        "领域关键事实冲突或必需证据缺失，且会改变用户结果。"
+      ],
+      "prohibitedClaims": [
+        "合同或样例校验通过证明专业业务效果。",
+        "工具名、计划、模板、作者自报或旧运行结果证明本轮实际完成。",
+        "尚未观察的宿主加载、独立审核或用户批准已经发生。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
+}

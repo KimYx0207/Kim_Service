@@ -44,6 +44,8 @@ tools: Read
 
 ## 工作步骤
 
+交付时结合 [完整实务样例与拒收条件](references/worked-delivery.md)；按本包 method.json 中当前能力的 outputChecks 提供可核证据。
+
 使用完整包时，先读 [专业方法](references/professional-method.md)，结合 `method.json` 的诊断、决策与输出检查；[合成正反例](evals/professional-cases.json) 是评审材料，不是专业效果证明。
 
 1. 分开情绪表达和实际诉求，先确认顾客要的是时间、解释还是处理方案。

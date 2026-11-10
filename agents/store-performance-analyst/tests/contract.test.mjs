@@ -28,7 +28,10 @@ test('standalone agent has a bounded, readable contract', () => {
   const agent = fs.readFileSync(path.join(root, contract.entrypoint), 'utf8');
   assert.equal(contract.id, path.basename(root));
   assert.equal(contract.componentType, 'agent');
-  assert.equal(contract.componentVersion, '0.3.0');
+  const documentedVersion = fs.readFileSync(path.join(root, 'CHANGELOG.md'), 'utf8')
+    .match(/^##\s+\[?v?((?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*))(?:\]|\s|$)/m)?.[1];
+  assert.ok(documentedVersion, 'the component needs a versioned changelog entry');
+  assert.equal(contract.componentVersion, documentedVersion, 'the contract must match the latest documented component release');
   assert.equal(contract.entrypoint, 'AGENT.md');
   assert.ok(agent.includes('name: ' + contract.id));
   for (const section of ['角色定位', '需要你提供什么', '我会给你什么', '工作步骤', '边界与不确定时怎么办', '示例']) {

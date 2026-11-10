@@ -1,0 +1,233 @@
+{
+  "schemaVersion": 1,
+  "roleId": "data-quality-analyst",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "join-cardinality",
+      "capabilityId": "data-quality-analyst-deliver",
+      "category": "worked_example",
+      "scenario": "一订单多明细造成重复",
+      "input": {
+        "purpose": "核对订单总额",
+        "data": {
+          "orders": [
+            {
+              "id": "O1",
+              "amount": 100
+            },
+            {
+              "id": "O2",
+              "amount": 200
+            }
+          ],
+          "items": [
+            {
+              "order": "O1",
+              "amount": 40
+            },
+            {
+              "order": "O1",
+              "amount": 60
+            },
+            {
+              "order": "O2",
+              "amount": 200
+            }
+          ]
+        },
+        "contract": "订单ID唯一，先汇总明细"
+      },
+      "candidateOutputExcerpt": {
+        "reconciliation": "两表正确总额300；直接连接后订单列400为重复。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "连接基数决定正确聚合顺序。",
+      "diagnosticRefs": [
+        "join"
+      ],
+      "decisionRuleRefs": [
+        "key-before-join"
+      ]
+    },
+    {
+      "id": "score-mask",
+      "capabilityId": "data-quality-analyst-deliver",
+      "category": "failure_boundary",
+      "scenario": "主键冲突被总分掩盖",
+      "input": {
+        "purpose": "结算",
+        "data": "100行中2行同ID不同金额",
+        "contract": "订单ID唯一"
+      },
+      "candidateOutputExcerpt": {
+        "violations": "总体98分，允许直接结算。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "主键冲突是独立阻断。",
+      "diagnosticRefs": [
+        "shape"
+      ],
+      "decisionRuleRefs": [
+        "critical-independent"
+      ]
+    },
+    {
+      "id": "null-amount",
+      "capabilityId": "data-quality-analyst-deliver",
+      "category": "worked_example",
+      "scenario": "缺金额不能默认为零",
+      "input": {
+        "purpose": "汇总收入",
+        "data": [
+          {
+            "id": "A",
+            "amount": 100
+          },
+          {
+            "id": "B",
+            "amount": "未知"
+          }
+        ],
+        "contract": "金额必须来自账单"
+      },
+      "candidateOutputExcerpt": {
+        "profile": "已知金额100；B缺金额，总额尚未确定。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "缺失影响总额可用性。",
+      "diagnosticRefs": [
+        "meaning",
+        "shape"
+      ],
+      "decisionRuleRefs": [
+        "null-not-zero"
+      ]
+    },
+    {
+      "id": "unapproved-cleanup",
+      "capabilityId": "data-quality-analyst-deliver",
+      "category": "failure_boundary",
+      "scenario": "异常订单可能真实",
+      "input": {
+        "purpose": "复盘交易",
+        "data": "订单X金额是中位数100倍",
+        "contract": "没有最大金额限制"
+      },
+      "candidateOutputExcerpt": {
+        "repairPlan": "自动删除X作为脏数据。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "异常并非错误且无删除授权。",
+      "diagnosticRefs": [
+        "truth"
+      ],
+      "decisionRuleRefs": [
+        "preserve-raw"
+      ]
+    },
+    {
+      "id": "null-skipped-by-relationship",
+      "capabilityId": "data-quality-analyst-deliver",
+      "category": "worked_example",
+      "scenario": "引用通过不代表必填完整",
+      "input": {
+        "purpose": "检查订单能否结算",
+        "data": {
+          "orders": [
+            {
+              "id": "O1",
+              "customer_id": "C1"
+            },
+            {
+              "id": "O2",
+              "customer_id": null
+            }
+          ],
+          "customers": [
+            {
+              "id": "C1"
+            }
+          ],
+          "relationshipRun": {
+            "eligible": 1,
+            "checked": 1,
+            "failures": 0
+          }
+        },
+        "contract": "customer_id必填且存在于客户表；引用查询排除NULL"
+      },
+      "candidateOutputExcerpt": {
+        "profile": "原始2条；引用实检1条失败0，必填实检2条失败1。",
+        "violations": "O2缺customer_id，阻断对应结算；引用通过不能抵消。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "谓词覆盖与非空条件独立，保留可定位缺口。",
+      "diagnosticRefs": [
+        "shape",
+        "coverage"
+      ],
+      "decisionRuleRefs": [
+        "no-vacuous-pass",
+        "critical-independent"
+      ]
+    },
+    {
+      "id": "empty-extract-passes",
+      "capabilityId": "data-quality-analyst-deliver",
+      "category": "failure_boundary",
+      "scenario": "空提取的零失败被夸大为业务完整",
+      "input": {
+        "purpose": "本期结算",
+        "data": {
+          "expectedRecords": 20,
+          "extractedRecords": 0,
+          "failedRecords": 0
+        },
+        "contract": "同期来源应有20条，当前提取原因未明"
+      },
+      "candidateOutputExcerpt": {
+        "profile": "0条失败，因此所有订单质量100%合格，可结算。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "零覆盖未解释且抽取与预期不一致，不能生成全量通过。",
+      "diagnosticRefs": [
+        "coverage"
+      ],
+      "decisionRuleRefs": [
+        "no-vacuous-pass"
+      ]
+    },
+    {
+      "id": "multiple-errors-one-record",
+      "capabilityId": "data-quality-analyst-deliver",
+      "category": "worked_example",
+      "scenario": "一个记录同时违反两条规则",
+      "input": {
+        "purpose": "核错误影响面",
+        "data": [
+          {
+            "id": "O2",
+            "customer_id": null,
+            "amount": null
+          }
+        ],
+        "contract": "两个字段必填，订单ID作为记录键"
+      },
+      "candidateOutputExcerpt": {
+        "violations": "2个字段失败事件、1个受影响订单；分别定位非空规则，不以2条坏订单统计。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "错误事件数与记录数使用不同计数单位。",
+      "diagnosticRefs": [
+        "shape",
+        "coverage"
+      ],
+      "decisionRuleRefs": [
+        "no-vacuous-pass"
+      ]
+    }
+  ]
+}

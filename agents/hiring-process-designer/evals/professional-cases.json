@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "roleId": "hiring-process-designer",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "job-task",
+      "capabilityId": "hiring-process-designer-deliver",
+      "category": "worked_example",
+      "scenario": "岗位关联能力",
+      "input": {
+        "role": "退货客服",
+        "process": "需要共同题",
+        "successEvidence": "正确核政策并升级例外"
+      },
+      "candidateOutputExcerpt": {
+        "competencyMap": "核事实/应用政策/解释/升级均对应实际任务。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "任务定义能力。",
+      "diagnosticRefs": [
+        "tasks",
+        "entry"
+      ],
+      "decisionRuleRefs": [
+        "job-related"
+      ]
+    },
+    {
+      "id": "school-proxy",
+      "capabilityId": "hiring-process-designer-deliver",
+      "category": "failure_boundary",
+      "scenario": "背景替代能力",
+      "input": {
+        "role": "客服",
+        "process": "只看简历学校",
+        "successEvidence": "无工作样本"
+      },
+      "candidateOutputExcerpt": {
+        "ratingRubric": "名校自动最高分。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "背景无具体任务证据。",
+      "diagnosticRefs": [
+        "evidence"
+      ],
+      "decisionRuleRefs": [
+        "job-related"
+      ]
+    },
+    {
+      "id": "missing-evidence",
+      "capabilityId": "hiring-process-designer-deliver",
+      "category": "worked_example",
+      "scenario": "回答未覆盖能力",
+      "input": {
+        "role": "客服",
+        "process": "只问个人介绍",
+        "successEvidence": "需处理投诉"
+      },
+      "candidateOutputExcerpt": {
+        "ratingRubric": "投诉处理未观察，补共同情境题。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "没有证据不是低能力。",
+      "diagnosticRefs": [
+        "evidence"
+      ],
+      "decisionRuleRefs": [
+        "not-observed"
+      ]
+    },
+    {
+      "id": "automatic-reject",
+      "capabilityId": "hiring-process-designer-deliver",
+      "category": "failure_boundary",
+      "scenario": "分数直接淘汰",
+      "input": {
+        "role": "分析员",
+        "process": "未经校准评分表",
+        "successEvidence": "需数据核查"
+      },
+      "candidateOutputExcerpt": {
+        "reviewPlan": "低于75自动淘汰无需人工复核。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "阈值及重大决定无验证与授权。",
+      "diagnosticRefs": [
+        "consistency"
+      ],
+      "decisionRuleRefs": [
+        "human-decision"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,151 @@
+{
+  "schemaVersion": 1,
+  "roleId": "agronomy-planner",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "unit-water",
+      "capabilityId": "agronomy-planner-deliver",
+      "category": "worked_example",
+      "scenario": "面积水深换算",
+      "input": {
+        "field": "2ha，本周",
+        "waterEvidence": "ETc35mm，有效雨10mm，其他项假定0",
+        "constraints": "效率0.8"
+      },
+      "candidateOutputExcerpt": {
+        "waterBalance": "净25mm=500m³；毛625m³，按给定假设。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "单位和效率正确。",
+      "diagnosticRefs": [
+        "balance",
+        "delivery"
+      ],
+      "decisionRuleRefs": [
+        "net-gross"
+      ]
+    },
+    {
+      "id": "unit-error",
+      "capabilityId": "agronomy-planner-deliver",
+      "category": "failure_boundary",
+      "scenario": "mm直接乘面积",
+      "input": {
+        "field": "2ha",
+        "waterEvidence": "净25mm",
+        "constraints": "效率0.8"
+      },
+      "candidateOutputExcerpt": {
+        "waterBalance": "净50m³，毛40m³。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "遗漏10系数且效率方向错误。",
+      "diagnosticRefs": [
+        "balance"
+      ],
+      "decisionRuleRefs": [
+        "net-gross"
+      ]
+    },
+    {
+      "id": "forecast-scenario",
+      "capabilityId": "agronomy-planner-deliver",
+      "category": "worked_example",
+      "scenario": "预报不是事实",
+      "input": {
+        "field": "2ha",
+        "waterEvidence": "ETc35mm，预报有效雨10mm",
+        "constraints": "储水未知"
+      },
+      "candidateOutputExcerpt": {
+        "waterBalance": "给有雨/无雨情景，储水未知待核，不作现场指令。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "保留预报不确定。",
+      "diagnosticRefs": [
+        "weather"
+      ],
+      "decisionRuleRefs": [
+        "forecast"
+      ]
+    },
+    {
+      "id": "unfounded-prescription",
+      "capabilityId": "agronomy-planner-deliver",
+      "category": "failure_boundary",
+      "scenario": "没有现场条件开指令",
+      "input": {
+        "field": "作物/土壤未知",
+        "waterEvidence": "区域平均ET",
+        "constraints": "未给"
+      },
+      "candidateOutputExcerpt": {
+        "scheduleOptions": "每日固定灌10mm并施药，保证丰收。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "无现场依据且超出范围。",
+      "diagnosticRefs": [
+        "stage",
+        "delivery"
+      ],
+      "decisionRuleRefs": [
+        "field-authority"
+      ]
+    },
+    {
+      "id": "rain-sufficient",
+      "capabilityId": "agronomy-planner-deliver",
+      "category": "worked_example",
+      "scenario": "简化模型雨量足够，需求不得为负且盈余不是排水实测",
+      "input": {
+        "field": "2ha，本周",
+        "waterEvidence": "ETc10mm、有效雨Pe20mm，其他水量项明确省略",
+        "constraints": "效率0.8，已声明适用同一系统边界"
+      },
+      "candidateOutputExcerpt": {
+        "waterBalance": "净深度max(0,10−20)=0mm，净量和条件毛量均0m³；另列简化盈余10mm，实际储水/径流/排水未观察。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "灌溉需求非负，简化盈余与实测水量去向分开。",
+      "diagnosticRefs": [
+        "balance",
+        "delivery"
+      ],
+      "decisionRuleRefs": [
+        "net-gross"
+      ]
+    },
+    {
+      "id": "invalid-efficiency",
+      "capabilityId": "agronomy-planner-deliver",
+      "category": "failure_boundary",
+      "scenario": "零、负和大于1的效率不能用于毛量换算",
+      "input": {
+        "field": "净量已知的合成地块",
+        "waterEvidence": "条件净量100m³",
+        "constraints": {
+          "efficiencyScenarios": [
+            0,
+            -0.2,
+            1.2
+          ],
+          "sameSystemBoundary": true
+        }
+      },
+      "candidateOutputExcerpt": {
+        "waterBalance": "按η=0/−0.2/1.2分别得到无限大、−500m³、83.33m³，三项均可作为供水建议。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "效率必须是有限数值且0<η≤1；这些值均非法，不得除算或把结果作为供水量，应保留条件净量并核参数。",
+      "diagnosticRefs": [
+        "delivery"
+      ],
+      "decisionRuleRefs": [
+        "net-gross"
+      ]
+    }
+  ]
+}

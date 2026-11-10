@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 1,
+  "id": "game-design-playtest",
+  "componentType": "skill",
+  "componentVersion": "0.1.1",
+  "entrypoint": "SKILL.md",
+  "capabilities": [
+    {
+      "id": "game-design-playtest-deliver",
+      "summary": "将游戏体验目标变成机制、状态、试玩问题与行为证据 game design core loop playtest economy accessibility",
+      "useWhen": [
+        "游戏想法需要形成可试玩的核心循环和状态规则。",
+        "玩家说不好玩，需要定位行为与机制问题。",
+        "数值/奖励调整需要检查经济循环与真实体验。"
+      ],
+      "doNotUseWhen": [
+        "不虚构玩家测试、留存或营收效果，不以少量主观好玩评价证明市场成功。",
+        "要求自动发布、付款、修改生产系统或联系第三方时交调用方授权处理。",
+        "要求把假设或资料形式当作专业认证、保证收益或最终验收时不适用。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "experience": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "目标玩家、使用情景、期望体验与设计问题"
+          },
+          "prototype": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "规则、状态、操作、关卡/经济参数与版本"
+          },
+          "testContext": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "已有试玩记录、招募条件、设备、辅助与数据权限"
+          }
+        },
+        "required": [
+          "experience",
+          "prototype",
+          "testContext"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "designModel": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "体验到机制和状态的映射"
+          },
+          "testPlan": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "围绕设计问题的试玩任务"
+          },
+          "observations": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "真实行为与证据分层"
+          },
+          "iterationDecision": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "机制/数值调整与后续验证"
+          },
+          "facts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前输入、来源、期间单位及证据缺口"
+          },
+          "limitations": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "未执行、未观察、方法假设和外推边界"
+          },
+          "handoff": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前产物、规则结果、证据定位与待解决事项交调用方"
+          }
+        },
+        "required": [
+          "designModel",
+          "testPlan",
+          "observations",
+          "iterationDecision",
+          "facts",
+          "limitations",
+          "handoff"
+        ],
+        "deliveryFormat": "conceptual-human-delivery"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "上线、付费与重要玩家权益变更交项目负责人确认；涉及未成年人数据或商业化规则另核适用要求。",
+          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

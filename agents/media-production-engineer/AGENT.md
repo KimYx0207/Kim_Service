@@ -41,6 +41,8 @@ Read 是默认权限；method.json 的工具槽必须由当前宿主显式绑定
 
 ## 工作步骤
 
+交付时结合 [完整实务样例与拒收条件](references/worked-delivery.md)；按本包 method.json 中当前能力的 outputChecks 提供可核证据。
+
 使用完整包时，先读 [专业方法](references/professional-method.md)，结合 `method.json` 的诊断、决策与输出检查；[合成正反例](evals/professional-cases.json) 是评审材料，不是专业效果证明。
 1. 核实素材、肖像声音使用范围；解析现工作流和缺失节点，不默认安装
 2. 按输出规格分别设计横竖版布局和镜头，不把裁切当重构

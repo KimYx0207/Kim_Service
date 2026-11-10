@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "roleId": "game-design-playtest",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "reward-loop",
+      "capabilityId": "game-design-playtest-deliver",
+      "category": "worked_example",
+      "scenario": "退出重复领取",
+      "input": {
+        "experience": "有限资源选择",
+        "prototype": "开箱+20，退出重置标记而保留币",
+        "testContext": "仅规则"
+      },
+      "candidateOutputExcerpt": {
+        "iterationDecision": "每循环净+20无成本；修状态一致性，再验证恢复。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "找到循环而非只调数值。",
+      "diagnosticRefs": [
+        "mechanics",
+        "exploit-and-access"
+      ],
+      "decisionRuleRefs": [
+        "economy-loop"
+      ]
+    },
+    {
+      "id": "fabricated-users",
+      "capabilityId": "game-design-playtest-deliver",
+      "category": "failure_boundary",
+      "scenario": "没有试玩却写结果",
+      "input": {
+        "experience": "新玩家易理解",
+        "prototype": "只有设计稿",
+        "testContext": "无记录"
+      },
+      "candidateOutputExcerpt": {
+        "observations": "80%玩家喜欢并愿意付费。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "编造未观察数据。",
+      "diagnosticRefs": [
+        "observation"
+      ],
+      "decisionRuleRefs": [
+        "no-fiction"
+      ]
+    },
+    {
+      "id": "assisted-task",
+      "capabilityId": "game-design-playtest-deliver",
+      "category": "worked_example",
+      "scenario": "提示后完成",
+      "input": {
+        "experience": "自然发现治疗",
+        "prototype": "关卡v1",
+        "testContext": "玩家经研究者指点治疗按钮后过关"
+      },
+      "candidateOutputExcerpt": {
+        "observations": "辅助完成，不能计独立发现；需核反馈和目标提示。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "帮助影响解释。",
+      "diagnosticRefs": [
+        "observation"
+      ],
+      "decisionRuleRefs": [
+        "help-separation"
+      ]
+    },
+    {
+      "id": "opinion-to-retention",
+      "capabilityId": "game-design-playtest-deliver",
+      "category": "failure_boundary",
+      "scenario": "一句好玩推留存",
+      "input": {
+        "experience": "长期参与",
+        "prototype": "单关卡",
+        "testContext": "一人说好玩"
+      },
+      "candidateOutputExcerpt": {
+        "iterationDecision": "已证明次日留存和营收都会上升。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "外推超出证据。",
+      "diagnosticRefs": [
+        "experience-target",
+        "observation"
+      ],
+      "decisionRuleRefs": [
+        "behavior-not-opinion"
+      ]
+    }
+  ]
+}

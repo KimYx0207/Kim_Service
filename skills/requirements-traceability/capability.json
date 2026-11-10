@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 1,
+  "id": "requirements-traceability",
+  "componentType": "skill",
+  "componentVersion": "0.1.1",
+  "entrypoint": "SKILL.md",
+  "capabilities": [
+    {
+      "id": "requirements-traceability-deliver",
+      "summary": "连接需求、决策、实现、测试与验收证据并处理变更 requirements traceability acceptance evidence change impact",
+      "useWhen": [
+        "详细PRD拆成模块后需要证明要求未漏。",
+        "测试很多但不知道覆盖哪些用户要求。",
+        "需求变化后定位旧代码、失效证据与需重验范围。"
+      ],
+      "doNotUseWhen": [
+        "追踪表不替代实际测试或人工接受；本包不决定跨模块调度和最终批准。",
+        "要求自动发布、付款、修改生产系统或联系第三方时交调用方授权处理。",
+        "要求把假设或资料形式当作专业认证、保证收益或最终验收时不适用。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "requirements": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前需求/验收条件、唯一ID、版本和来源"
+          },
+          "artifacts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "设计、代码、文档、执行/测试记录与版本"
+          },
+          "changes": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "变更、依赖、接受责任和已获决定"
+          }
+        },
+        "required": [
+          "requirements",
+          "artifacts",
+          "changes"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "traceMatrix": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "需求到实现和验证的双向矩阵"
+          },
+          "evidenceAssessment": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "逐项证据适用判定"
+          },
+          "impactMap": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "变更影响与失效记录"
+          },
+          "acceptancePacket": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "接受材料与未决事项"
+          },
+          "facts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前输入、来源、期间单位及证据缺口"
+          },
+          "limitations": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "未执行、未观察、方法假设和外推边界"
+          },
+          "handoff": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前产物、规则结果、证据定位与待解决事项交调用方"
+          }
+        },
+        "required": [
+          "traceMatrix",
+          "evidenceAssessment",
+          "impactMap",
+          "acceptancePacket",
+          "facts",
+          "limitations",
+          "handoff"
+        ],
+        "deliveryFormat": "conceptual-human-delivery"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "最终接受、关键要求豁免及不可逆范围变更交有授权的业务/工程责任人决定。",
+          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

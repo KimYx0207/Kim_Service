@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "roleId": "application-security-reviewer",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "tenant-hypothesis",
+      "capabilityId": "application-security-reviewer-deliver",
+      "category": "worked_example",
+      "scenario": "全局策略未知",
+      "input": {
+        "scope": "只读控制器",
+        "materials": "按订单ID查找，无中间件",
+        "riskContext": "多租户"
+      },
+      "candidateOutputExcerpt": {
+        "findings": "存在待核边界，尚未证明可绕过全局策略。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "片段不足以证明可达。",
+      "diagnosticRefs": [
+        "implementation",
+        "evidence"
+      ],
+      "decisionRuleRefs": [
+        "hypothesis"
+      ]
+    },
+    {
+      "id": "hidden-button",
+      "capabilityId": "application-security-reviewer-deliver",
+      "category": "failure_boundary",
+      "scenario": "界面隐藏当作修复",
+      "input": {
+        "scope": "读代码",
+        "materials": "删按钮，API未改",
+        "riskContext": "敏感导出"
+      },
+      "candidateOutputExcerpt": {
+        "remediation": "按钮隐藏，越权已修。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "未建立服务端授权。",
+      "diagnosticRefs": [
+        "boundary",
+        "implementation"
+      ],
+      "decisionRuleRefs": [
+        "server-control"
+      ]
+    },
+    {
+      "id": "out-of-scope",
+      "capabilityId": "application-security-reviewer-deliver",
+      "category": "worked_example",
+      "scenario": "只授权离线审阅",
+      "input": {
+        "scope": "只读离线材料",
+        "materials": "API地址",
+        "riskContext": "未知"
+      },
+      "candidateOutputExcerpt": {
+        "verificationPlan": "未运行请求，列授权环境所需拒绝用例。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "未扩大授权。",
+      "diagnosticRefs": [
+        "authorization"
+      ],
+      "decisionRuleRefs": [
+        "least-action"
+      ]
+    },
+    {
+      "id": "quiet-scanner",
+      "capabilityId": "application-security-reviewer-deliver",
+      "category": "failure_boundary",
+      "scenario": "扫描无告警",
+      "input": {
+        "scope": "依赖扫描报告",
+        "materials": "扫描通过",
+        "riskContext": "多租户"
+      },
+      "candidateOutputExcerpt": {
+        "findings": "系统完全安全。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "有限扫描不能证明业务授权。",
+      "diagnosticRefs": [
+        "evidence"
+      ],
+      "decisionRuleRefs": [
+        "coverage"
+      ]
+    }
+  ]
+}

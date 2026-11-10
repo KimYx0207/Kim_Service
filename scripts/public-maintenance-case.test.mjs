@@ -7,6 +7,9 @@ import { createHash } from 'node:crypto';
 import { CASE_ROOT, verifyPublicCase } from '../docs/cases/maintenance-handoff-20261022/verify.mjs';
 
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
+// Keep evidence-path tests on the physical directory when the OS temp path
+// itself is an alias (macOS /var); the safe-open policy remains unchanged.
+const TEMP_ROOT = fs.realpathSync.native(os.tmpdir());
 const request = JSON.parse(fs.readFileSync(path.join(CASE_ROOT, 'verification-request.json'), 'utf8'));
 
 test('public manifest binds real included files and retains historical evidence boundaries', () => {
@@ -49,9 +52,9 @@ test('existing verifier checks public case while external acceptance stays parti
 });
 
 test('copy with content drift or missing file cannot pass the fixed public manifest', t => {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'kim-service-public-case-'));
+  const root = fs.mkdtempSync(path.join(TEMP_ROOT, 'kim-service-public-case-'));
   t.after(() => {
-    assert(path.resolve(root).startsWith(path.resolve(os.tmpdir()) + path.sep) && path.basename(root).startsWith('kim-service-public-case-'));
+    assert(path.resolve(root).startsWith(TEMP_ROOT + path.sep) && path.basename(root).startsWith('kim-service-public-case-'));
     fs.rmSync(root, { recursive: true, force: true });
   });
   for (const row of request.artifacts) fs.copyFileSync(path.join(CASE_ROOT, row.path), path.join(root, row.path));

@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "roleId": "kim-sticker-pack",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "kim-sticker-pack-produce-worked",
+      "capabilityId": "kim-sticker-pack-produce",
+      "category": "worked_example",
+      "scenario": "用户只要一个眨眼样本，已有三种眼睛状态参考。",
+      "input": {
+        "brief": "为已授权原创角色做1枚“收到”眨眼动态样本，先看样本再决定整套。",
+        "characterReference": "character-approved.png",
+        "sourceFrames": [
+          "eyes-open.png",
+          "eyes-half.png",
+          "eyes-closed.png"
+        ],
+        "rightsRecord": {
+          "character": "用户原创且授权本次样本",
+          "font": "选用有适用许可的字体"
+        }
+      },
+      "candidateOutputExcerpt": {
+        "stage": "sample_exported_pending_review",
+        "artifacts": [
+          "received-sample.gif",
+          "received-contact-sheet.png",
+          "frame-manifest.json"
+        ],
+        "limitations": [
+          "示例文件名代表应交的作者合成交付清单，不是本仓库实际生成结果。",
+          "GIF解码和逐帧检查只覆盖编码；目标尺寸观感待实际用户查看。"
+        ],
+        "approvalState": "整套尚未获批；仅本次样本制作已授权"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "作者构造的合格报告形状，保留本场景的实际范围与未观察边界；重点核验：阶段对应已完成的实际方向/样本/批量/导出工作；缺素材或审批准确保留。",
+      "diagnosticRefs": [
+        "identity",
+        "motion",
+        "legibility"
+      ],
+      "decisionRuleRefs": [
+        "approval-scope",
+        "frame-integrity",
+        "two-kinds-of-proof"
+      ]
+    },
+    {
+      "id": "kim-sticker-pack-produce-counterexample",
+      "capabilityId": "kim-sticker-pack-produce",
+      "category": "failure_boundary",
+      "scenario": "用户只要一个眨眼样本，已有三种眼睛状态参考。",
+      "input": {
+        "brief": "为已授权原创角色做1枚“收到”眨眼动态样本，先看样本再决定整套。",
+        "characterReference": "character-approved.png",
+        "sourceFrames": [
+          "eyes-open.png",
+          "eyes-half.png",
+          "eyes-closed.png"
+        ],
+        "rightsRecord": {
+          "character": "用户原创且授权本次样本",
+          "font": "选用有适用许可的字体"
+        }
+      },
+      "candidateOutputExcerpt": {
+        "stage": "full_pack_accepted",
+        "artifacts": [
+          "同一个角色PNG重复旋转后合成20枚动态表情"
+        ],
+        "limitations": [],
+        "approvalState": "脚本通过即用户已批准发布"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "授权被扩大，缺少真实动作与文件/播放证据，程序返回不能证明用户验收。",
+      "diagnosticRefs": [
+        "identity",
+        "motion",
+        "legibility"
+      ],
+      "decisionRuleRefs": [
+        "approval-scope",
+        "frame-integrity",
+        "two-kinds-of-proof"
+      ]
+    }
+  ]
+}

@@ -39,7 +39,8 @@
   "skillLoading": [
     "先读取本角色 knowledgeAssets 中的包内专业方法；来源记录不等于当前任务联网，案例不是实际运行证据。",
     "按现工作流加载对应制作工具方法，不复述全部节点目录",
-    "需要真实媒体时使用素材来源检索和权利核查方法"
+    "需要真实媒体时使用素材来源检索和权利核查方法",
+    "读取本包 references/worked-delivery.md 的完整产物与专业反例；按当前输入迁移，不把合成答案当本次事实或验收记录"
   ],
   "steps": [
     "核实素材、肖像声音使用范围；解析现工作流和缺失节点，不默认安装",
@@ -100,6 +101,18 @@
         "goalpro",
         "agent-teams-boundary"
       ]
+    },
+    {
+      "id": "media-production-engineer-worked-delivery",
+      "path": "references/worked-delivery.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "ffprobe-doc",
+        "goalpro",
+        "agent-teams-boundary"
+      ]
     }
   ],
   "expertise": {
@@ -110,7 +123,8 @@
       "没有渲染能力时交可执行模板并标明未渲染"
     ],
     "knowledgeAssetIds": [
-      "media-production-engineer-core"
+      "media-production-engineer-core",
+      "media-production-engineer-worked-delivery"
     ],
     "diagnosticSequence": [
       {
@@ -194,58 +208,138 @@
         "outputChecks": [
           {
             "field": "workflowPackage",
-            "criterion": "说明输入、版本、时间线、参数和复现步骤。",
-            "rejectWhen": "写通用命令却不标明当前环境未运行。"
+            "criterion": "镜头/音轨/字幕表绑定不可变内容、时间及实际工具输入输出，材料可定位且步骤可重复。",
+            "rejectWhen": "只有美术形容词或无关联素材的提示词，不能复现基本设定。",
+            "id": "media-production-engineer-workflow-package",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "分镜与时间表",
+              "工具版本/素材映射",
+              "不可变设定清单"
+            ],
+            "blocking": true
           },
           {
             "field": "mediaArtifacts",
-            "criterion": "仅列实际文件，或明确空且仅模板交付。",
-            "rejectWhen": "把预计路径当存在的渲染产物。"
+            "criterion": "引用实际存在的目标文件和规格；草稿与渲染产物状态分开，身份/人数/时序符合任务。",
+            "rejectWhen": "以预计路径当文件，或用静帧代替可播放成片。",
+            "id": "media-production-engineer-media-artifacts",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "目标文件哈希与探测结果",
+              "可播放产物",
+              "版本对应"
+            ],
+            "blocking": true
           },
           {
             "field": "qualityEvidence",
-            "criterion": "分别列参数核验、画面、字幕与音频实际检查。",
-            "rejectWhen": "将容器可读等同质量通过。"
+            "criterion": "分别记录文件规格检测、逐段播放及字幕/人物/音画检查，未执行项明确。",
+            "rejectWhen": "以生成成功消息证明视觉、声音和播放质量，或声称未使用工具的检测结果。",
+            "id": "media-production-engineer-quality-evidence",
+            "verificationMethod": "behavior_probe",
+            "evidenceRequired": [
+              "ffprobe或实际检测日志",
+              "逐段播放问题表",
+              "字幕与画面检查"
+            ],
+            "blocking": true
           },
           {
             "field": "status",
             "criterion": "只总结当前角色的实际交付状态与已说明限制。",
-            "rejectWhen": "把候选产物状态等同用户最终接受。"
+            "rejectWhen": "把候选产物状态等同用户最终接受。",
+            "id": "media-production-engineer-status",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "逐项交付/验收结果与当前状态对照",
+              "未执行、失败或阻塞项及其影响"
+            ],
+            "blocking": true
           },
           {
             "field": "artifactRefs",
             "criterion": "引用确实存在且当前任务相关的产物；未产出不编路径。",
-            "rejectWhen": "把预计文件或未读取摘要当真实产物。"
+            "rejectWhen": "把预计文件或未读取摘要当真实产物。",
+            "id": "media-production-engineer-artifact-refs",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "实际存在的当前产物及定位",
+              "产物与任务、版本的对应关系"
+            ],
+            "blocking": true
           },
           {
             "field": "criterionResults",
             "criterion": "每项区分实际观察、自报判断和未运行。",
-            "rejectWhen": "把结构检查、文档读取或自报pass当独立验收。"
+            "rejectWhen": "把结构检查、文档读取或自报pass当独立验收。",
+            "id": "media-production-engineer-criterion-results",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "当前标准ID、实际观察和证据引用",
+              "自报、独立观察与未运行的区分"
+            ],
+            "blocking": true
           },
           {
             "field": "missingCapabilities",
             "criterion": "明确缺少何种能力、影响哪个检查或动作。",
-            "rejectWhen": "工具不可用仍宣称已执行。"
+            "rejectWhen": "工具不可用仍宣称已执行。",
+            "id": "media-production-engineer-missing-capabilities",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "实际可用工具/材料检查",
+              "缺口影响的动作和验收项"
+            ],
+            "blocking": true
           },
           {
             "field": "failures",
             "criterion": "记录真实失败与范围，不泄露敏感材料。",
-            "rejectWhen": "凭推测补失败或隐去影响结论的问题。"
+            "rejectWhen": "凭推测补失败或隐去影响结论的问题。",
+            "id": "media-production-engineer-failures",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "实际失败或矛盾记录",
+              "受影响范围与敏感信息处理"
+            ],
+            "blocking": true
           },
           {
             "field": "stopReason",
             "criterion": "说明角色当前结束、缺证据或被阻塞的具体原因。",
-            "rejectWhen": "把未完成判断静默转为成功。"
+            "rejectWhen": "把未完成判断静默转为成功。",
+            "id": "media-production-engineer-stop-reason",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "角色实际结束或阻塞状态",
+              "继续所需输入/能力或已完成范围"
+            ],
+            "blocking": true
           },
           {
             "field": "handoff",
             "criterion": "交事实、产物、限制与待决定项；控制权留调用方。",
-            "rejectWhen": "自行批准下一阶段、调度或高影响操作。"
+            "rejectWhen": "自行批准下一阶段、调度或高影响操作。",
+            "id": "media-production-engineer-handoff",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "下一执行者可用的事实/产物/限制",
+              "需要调用方决定的具体事项"
+            ],
+            "blocking": true
           },
           {
             "field": "nativeRuntimeVerified",
             "criterion": "未经独立宿主运行证明保持false。",
-            "rejectWhen": "因模板存在、合同测试或本地装入而声称原生运行已验证。"
+            "rejectWhen": "因模板存在、合同测试或本地装入而声称原生运行已验证。",
+            "id": "media-production-engineer-native-runtime-verified",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "独立宿主观察记录或明确未验证",
+              "模板安装/合同检查与真实运行的区分"
+            ],
+            "blocking": true
           }
         ]
       }

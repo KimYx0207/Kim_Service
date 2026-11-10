@@ -1,6 +1,6 @@
 # Zcode Beta 内容包
 
-这是可下载、可重建的兼容内容分发，不是 Meta_Kim 新增正式 runtime。它复用已经存在的专业方法：9 个 Meta canonical agents、完整 meta-theory、5 个 Kim skills，以及 frontend-engineer / workplace-writer / product-architect / interaction-designer 四个完整组件。没有新增角色能力。
+这是可下载、可重建的原生插件内容分发。它包含 9 个 Meta canonical agents、完整 meta-theory，并从选定 Kim_Service 提交的标准能力合同中发现全部专业 Agent 和 Skill，连同其完整方法、知识、输出检查、案例、脚本及许可一起打包。当前目录为 36 个专业 Agent、15 个 Skill，实际数量由构建结果报告。Meta_Kim 的调度、权限和最终验收仍由宿主真实接入，不因内容包存在而自动启用。
 
 ## 重建
 
@@ -10,9 +10,13 @@
 node scripts/build-zcode-marketplace.mjs --meta-root <absolute-meta-checkout> --meta-commit <exact-meta-commit> --kim-root <absolute-kim-checkout> --kim-commit <exact-kim-commit> --output <new-absolute-output-directory>
 ```
 
-从 Kim_Service 的发布树运行脚本。输出父目录必须已存在，输出目录必须全新且位于两个源根之外；脚本不合并、不清理、不覆盖任何现有目录。源 checkout 必须干净，不能用含未提交修改的日常项目。Git 内容过滤器与 fsmonitor 在只读检查中被禁用，不执行其命令；依赖过滤转换或未下载 LFS 内容的 checkout 可能被拒绝。符号链接、硬链接、选中组件新增或缺少的文件、非法路径均拒绝。
+从 Kim_Service 的发布树运行脚本。输出父目录必须已存在，输出目录必须全新且位于两个源根之外；脚本不合并、不清理、不覆盖任何现有目录。源 checkout 必须干净，不能用含未提交修改的日常项目。Git 内容过滤器与 fsmonitor 在只读检查中被禁用，不执行其命令；依赖过滤转换或未下载 LFS 内容的 checkout 可能被拒绝。符号链接、硬链接、非法路径、缺失的必要知识文件、未满足专业质量合同的组件均拒绝。
 
-选择清单固定为 195 份原样源文件拷贝、2 个带方法路径绑定的生成入口、13 个 Agent Markdown 入口和 6 个 Skill 根目录。其余角色和文件不纳入。195 份源拷贝来自所声明提交的 Git blob，文本字节不改写；两个新增设计角色入口保留原始正文并追加各自 method.json 的明确路径，避免误读 frontend 的同名 sidecar，source-manifest 的 derivedEntrypoints 单独记录这些生成入口与摘要；root 和各组件的 LICENSE/NOTICE、合同、资料、测试与参考脚本完整保留。参考脚本只是源文件，构建过程不会运行它们。不同源提交可以改变内容和哈希；选中组件若新增文件，先审查并更新固定清单，再构建。
+组件选择来自当前明确指定提交的 `capability.json`；每个选中组件的完整文件树与提交中的 Git blobs 逐项绑定，工作区内容与提交不同即拒绝。新增职业和知识文件无需同步另一份固定数量清单。Meta 仍保留现有九个治理角色，meta-theory 的完整资源目录随选定提交更新。Meta 原始方法保存在 `source/canonical/`，被方法使用的全部 `config/contracts/` 以及 12 份经审查的公开运行时、系统和能力注册文件按原层次保存在 `source/`。原生入口明确指向这棵原始资料树，并要求读取实际所需的完整方法；缺少注册文件会在构建前拒绝。未复制整个 `config/` 目录，个人配置不混入公开内容包。构建器读取合同和资料并进行结构检查，不执行输入仓库的程序。
+
+所有专业 Agent 的原始组件保存在 `components/agents/<角色>/`，原文、`method.json`、知识、案例、验证脚本和许可保持字节不变。原生的扁平 `agents/<角色>.md` 入口保留正文并追加该角色自己的资源目录绑定；`source-manifest.json` 的 `derivedEntrypoints` 单独记录生成入口及摘要。旧版本共用的 frontend `agents/method.json` 已由逐角色绑定替代，避免其他角色误读同名文件。
+
+Skills 以完整 `skills/<名称>/` 目录保留；根目录声明的联系和付款图片也按原位置与原始哈希复制，使用 `../../docs/images/...` 的新包不会断图。每个角色都必须保有完整方法及逐项质量合同。数量和总文件数只作为构建清单，不能替代实际任务验收。
 
 产物包含：
 
@@ -59,6 +63,12 @@ zcode plugins list --json
 
 这些是用户正常 CLI 操作，builder 不会代为执行。既有同名插件使用正常 marketplace refresh / plugins update 路线，先查看现有来源和状态，不覆盖未知个人 Agent。两插件/marketplace ID 保持既有名称；Kim V1.10 的插件版本为 `1.10.0`，Meta 插件版本来自绑定 source 的 package.json。
 
-Meta 入口用 `meta-kim-local:meta-warden` 等 qualified name；Kim 用 `kim-service-local:frontend-engineer`、`kim-service-local:workplace-writer`、`kim-service-local:product-architect` 或 `kim-service-local:interaction-designer`。完整角色资料位于 `components/agents/`；frontend 的 `agents/method.json` 是与完整组件一致的 sidecar。安装并不证明模型自动读取了 method、已绑定工具槽或完成业务任务。
+Meta 入口用 `meta-kim-local:meta-warden` 等 qualified name；Kim 使用实际发现的 `kim-service-local:<角色>`，例如 `kim-service-local:frontend-engineer` 或 `kim-service-local:business-finance-analyst`。完整角色资料位于各自 `components/agents/<角色>/`，生成入口明确要求从那里读取方法、所需知识与验收条件；Skill 使用 `skills/<名称>/SKILL.md`。安装并不证明模型自动读取了 method、已绑定工具槽或完成业务任务。
 
 HookPrompt 暂无原生 Zcode adapter，继续 deferred。本包不注册 Hook、MCP、Command，不自动安装依赖或执行脚本，不增加权限。官方 validate/list/inspect、模型调用、宿主工具权限、视觉检查和最终用户接受分别需要实际证据；静态构建成功不代表这些已通过。
+
+## 本次修复的依据与验证
+
+2026-11-11 回读 [ZCode 官方插件格式](https://zcode.z.ai/en/docs/plugin)：原生 Agent 使用 `agents/*.md`，Skill 使用 `skills/<name>/SKILL.md`，插件 manifest 使用 `.zcode-plugin/plugin.json`；入口迁移需要保留原资源基目录。Meta 原文会读取根目录的运行时/OS矩阵和能力注册，故它们连同机器合同一起进入明确的 `source/` 资料根，不依赖可选 MCP 或用户的工作目录。旧 builder 的 195 文件固定清单未覆盖后来增加的专业方法和知识文件，会在当前真实源码上拒绝构建。本次按原能力合同选择完整组件，同时保留确切提交、逐文件 Git blob、许可和闭包检查。
+
+回归包含：新增已提交知识与专业组件能够完整进入包；缺少必要知识时不生成输出；相同输入重建字节一致；联系/付款图哈希不变；Git filters 不执行；已有输出不覆盖；消费者内容改变仍须通过版本升级门禁。真实两仓构建和原生宿主的可用证据由本轮交付记录分别列明。

@@ -91,6 +91,158 @@
         "resolve-conflict",
         "respect-access"
       ]
+    },
+    {
+      "id": "selection-ledger",
+      "capabilityId": "source-evidence-analyst-deliver",
+      "category": "worked_example",
+      "scenario": "记录/报告/研究分母分开",
+      "input": {
+        "question": "综合工具对任务耗时的证据",
+        "sources": "15条记录去重4，筛选排4，寻全文7缺1，评6排2，纳4报告对应3研究",
+        "deliverablePurpose": "有范围研究综合",
+        "acceptanceCriteria": [
+          {
+            "id": "scope",
+            "condition": "关键事实有可访问一手来源及时间，或明确未证实",
+            "evidenceRequired": "指定材料、产物与独立检查"
+          }
+        ],
+        "handoffContext": {
+          "taskId": "synthetic-example",
+          "upstreamArtifacts": [],
+          "permittedActions": [
+            "read_supplied_materials"
+          ],
+          "resourceLeases": []
+        }
+      },
+      "candidateOutputExcerpt": {
+        "delivery": "保留15→11→7→6→4报告/3研究及1未取全文，不能称4次独立复现。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "去向可对账且研究与报告分开。",
+      "diagnosticRefs": [
+        "search-protocol",
+        "study-report"
+      ],
+      "decisionRuleRefs": [
+        "eligibility-first",
+        "study-report"
+      ]
+    },
+    {
+      "id": "posthoc-exclusion",
+      "capabilityId": "source-evidence-analyst-deliver",
+      "category": "failure_boundary",
+      "scenario": "看结果后删反例",
+      "input": {
+        "question": "某方法是否有效",
+        "sources": "相同任务三研究，一项负面",
+        "deliverablePurpose": "内部比较",
+        "acceptanceCriteria": [
+          {
+            "id": "scope",
+            "condition": "关键事实有可访问一手来源及时间，或明确未证实",
+            "evidenceRequired": "指定材料、产物与独立检查"
+          }
+        ],
+        "handoffContext": {
+          "taskId": "synthetic-example",
+          "upstreamArtifacts": [],
+          "permittedActions": [
+            "read_supplied_materials"
+          ],
+          "resourceLeases": []
+        }
+      },
+      "candidateOutputExcerpt": {
+        "delivery": "排除负面研究因为不支持期望，其余全部证明有效。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "事后有利纳排没有理由和协议。",
+      "diagnosticRefs": [
+        "search-protocol",
+        "counterevidence"
+      ],
+      "decisionRuleRefs": [
+        "eligibility-first"
+      ]
+    },
+    {
+      "id": "unretrieved-fulltext",
+      "capabilityId": "source-evidence-analyst-deliver",
+      "category": "worked_example",
+      "scenario": "无法取得全文",
+      "input": {
+        "question": "核方法研究质量",
+        "sources": "只有摘要，全文未取得",
+        "deliverablePurpose": "资料评审",
+        "acceptanceCriteria": [
+          {
+            "id": "scope",
+            "condition": "关键事实有可访问一手来源及时间，或明确未证实",
+            "evidenceRequired": "指定材料、产物与独立检查"
+          }
+        ],
+        "handoffContext": {
+          "taskId": "synthetic-example",
+          "upstreamArtifacts": [],
+          "permittedActions": [
+            "read_supplied_materials"
+          ],
+          "resourceLeases": []
+        }
+      },
+      "candidateOutputExcerpt": {
+        "limitations": "全文方法未核，无法完成偏倚风险判断；保留待取状态及影响。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "缺全文不会自动变核实。",
+      "diagnosticRefs": [
+        "source-chain",
+        "search-protocol"
+      ],
+      "decisionRuleRefs": [
+        "respect-access"
+      ]
+    },
+    {
+      "id": "reporting-certification",
+      "capabilityId": "source-evidence-analyst-deliver",
+      "category": "failure_boundary",
+      "scenario": "清单完整当效果认证",
+      "input": {
+        "question": "是否能采纳临床结论",
+        "sources": "PRISMA式清单齐全，方法质量未审",
+        "deliverablePurpose": "证据摘要",
+        "acceptanceCriteria": [
+          {
+            "id": "scope",
+            "condition": "关键事实有可访问一手来源及时间，或明确未证实",
+            "evidenceRequired": "指定材料、产物与独立检查"
+          }
+        ],
+        "handoffContext": {
+          "taskId": "synthetic-example",
+          "upstreamArtifacts": [],
+          "permittedActions": [
+            "read_supplied_materials"
+          ],
+          "resourceLeases": []
+        }
+      },
+      "candidateOutputExcerpt": {
+        "delivery": "已通过PRISMA，所以疗效可靠且可替代专业审查。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "报告标准不证明研究效应。",
+      "diagnosticRefs": [
+        "counterevidence"
+      ],
+      "decisionRuleRefs": [
+        "reporting-not-proof"
+      ]
     }
   ]
 }

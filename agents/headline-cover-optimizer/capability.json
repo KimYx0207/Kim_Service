@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "headline-cover-optimizer",
   "componentType": "agent",
-  "componentVersion": "0.2.0",
+  "componentVersion": "0.3.0",
   "entrypoint": "AGENT.md",
   "capabilities": [
     {
@@ -138,11 +138,11 @@
                 "coverText": {
                   "type": "string"
                 },
-              "layout": {
-                "type": "string",
-                "minLength": 1,
-                "description": "按内容、实际素材和展示条件说明布局；实拍、流程图、局部标注、前后对比等是例子，不是封闭列表"
-              },
+                "layout": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "按内容、实际素材和展示条件说明布局；实拍、流程图、局部标注、前后对比等是例子，不是封闭列表"
+                },
                 "visualAnchor": {
                   "type": "string"
                 },

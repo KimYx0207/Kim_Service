@@ -1,0 +1,373 @@
+{
+  "schemaVersion": 1,
+  "roleId": "memory-3layer",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "memory-3layer-read-worked",
+      "capabilityId": "memory-3layer-read",
+      "category": "worked_example",
+      "scenario": "同一项目存在一条有效新命令和已废止旧命令。",
+      "input": {
+        "projectDir": "/example/project",
+        "contextBudgetChars": 1200,
+        "recentDays": 7
+      },
+      "candidateOutputExcerpt": {
+        "resolvedRoot": "/example/project/.memory-3layer",
+        "context": "Layer 1 active: 构建命令为 pnpm build；旧 npm build 为 superseded 未载入。",
+        "statistics": {
+          "active": 1,
+          "superseded": 1,
+          "invalid": 0,
+          "effectiveBudgetChars": 1200
+        },
+        "invalidFiles": [],
+        "runtimeEvidence": {
+          "manualLoad": "author-example",
+          "nativeHook": "not-observed"
+        }
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "作者构造的合格报告形状，保留本场景的实际范围与未观察边界；重点核验：解析后的目录在已授权项目内，与实际读取文件一致。",
+      "diagnosticRefs": [
+        "truth",
+        "lifecycle",
+        "runtime"
+      ],
+      "decisionRuleRefs": [
+        "confirmed-write",
+        "preserve-history",
+        "honest-runtime"
+      ]
+    },
+    {
+      "id": "memory-3layer-read-counterexample",
+      "capabilityId": "memory-3layer-read",
+      "category": "failure_boundary",
+      "scenario": "同一项目存在一条有效新命令和已废止旧命令。",
+      "input": {
+        "projectDir": "/example/project",
+        "contextBudgetChars": 1200,
+        "recentDays": 7
+      },
+      "candidateOutputExcerpt": {
+        "resolvedRoot": "/example/other-project/.memory-3layer",
+        "context": "仍使用 npm build，所有记录都已自动记住。",
+        "statistics": {
+          "active": 2
+        },
+        "invalidFiles": [],
+        "runtimeEvidence": {
+          "nativeHook": "passed-because-installed"
+        }
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "跨项目和生命周期错误会把旧知识写回决策；配置不能证明宿主触发。",
+      "diagnosticRefs": [
+        "truth",
+        "lifecycle",
+        "runtime"
+      ],
+      "decisionRuleRefs": [
+        "confirmed-write",
+        "preserve-history",
+        "honest-runtime"
+      ]
+    },
+    {
+      "id": "memory-3layer-append-worked",
+      "capabilityId": "memory-3layer-append",
+      "category": "worked_example",
+      "scenario": "同一已确认构建命令以不同空白/大小写再次记录。",
+      "input": {
+        "projectDir": "/example/project",
+        "fact": "以后构建使用 pnpm build。",
+        "topic": "build",
+        "confirmationSource": "用户明确说“记住以后构建使用 pnpm build”。"
+      },
+      "candidateOutputExcerpt": {
+        "success": true,
+        "memory_root": "/example/project/.memory-3layer",
+        "runtime": "manual",
+        "loaded": {
+          "layer1": 1
+        },
+        "written": [],
+        "skipped": [
+          {
+            "reason": "duplicate"
+          }
+        ],
+        "runtime_evidence": "not-observed",
+        "event_envelope_present": true,
+        "next": "事实已存在，未新增；若命令改变，先做有证据的冲突复查。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "作者构造的合格报告形状，保留本场景的实际范围与未观察边界；重点核验：true 表示记录流程完成或合法重复跳过，false 表示未接纳；不能把 true 简化为新增成功。",
+      "diagnosticRefs": [
+        "truth",
+        "lifecycle",
+        "runtime"
+      ],
+      "decisionRuleRefs": [
+        "confirmed-write",
+        "preserve-history",
+        "honest-runtime"
+      ]
+    },
+    {
+      "id": "memory-3layer-append-counterexample",
+      "capabilityId": "memory-3layer-append",
+      "category": "failure_boundary",
+      "scenario": "同一已确认构建命令以不同空白/大小写再次记录。",
+      "input": {
+        "projectDir": "/example/project",
+        "fact": "以后构建使用 pnpm build。",
+        "topic": "build",
+        "confirmationSource": "用户明确说“记住以后构建使用 pnpm build”。"
+      },
+      "candidateOutputExcerpt": {
+        "success": true,
+        "written": [
+          "第二条相同事实"
+        ],
+        "skipped": [],
+        "runtime_evidence": "native-hook-passed"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "核心只支持标准化精确去重，应跳过重复；记录器不能自证原生 Hook。",
+      "diagnosticRefs": [
+        "truth",
+        "lifecycle",
+        "runtime"
+      ],
+      "decisionRuleRefs": [
+        "confirmed-write",
+        "preserve-history",
+        "honest-runtime"
+      ]
+    },
+    {
+      "id": "memory-3layer-govern-long-term-worked",
+      "capabilityId": "memory-3layer-govern-long-term",
+      "category": "worked_example",
+      "scenario": "新部署ADR仍是草案。",
+      "input": {
+        "projectDir": "/example/project",
+        "reviewScope": "部署区事实冲突",
+        "evidenceRefs": [
+          "旧事实f1: region-a",
+          "新ADR-v2建议region-b但尚未批准"
+        ]
+      },
+      "candidateOutputExcerpt": {
+        "review": {
+          "conflict": "f1 与 ADR-v2 不一致；新ADR是建议，不是已生效决定。"
+        },
+        "proposals": [
+          {
+            "id": "f1",
+            "action": "批准ADR-v2后将f1标superseded并添加新来源事实"
+          }
+        ],
+        "appliedChanges": [],
+        "pendingConfirmation": [
+          "确认ADR-v2是否已生效及目标事实ID"
+        ]
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "作者构造的合格报告形状，保留本场景的实际范围与未观察边界；重点核验：区分重复、冲突、过时与稳定经验；语义判断解释证据，不假装核心自动理解。",
+      "diagnosticRefs": [
+        "truth",
+        "lifecycle",
+        "runtime"
+      ],
+      "decisionRuleRefs": [
+        "confirmed-write",
+        "preserve-history",
+        "honest-runtime"
+      ]
+    },
+    {
+      "id": "memory-3layer-govern-long-term-counterexample",
+      "capabilityId": "memory-3layer-govern-long-term",
+      "category": "failure_boundary",
+      "scenario": "新部署ADR仍是草案。",
+      "input": {
+        "projectDir": "/example/project",
+        "reviewScope": "部署区事实冲突",
+        "evidenceRefs": [
+          "旧事实f1: region-a",
+          "新ADR-v2建议region-b但尚未批准"
+        ]
+      },
+      "candidateOutputExcerpt": {
+        "review": {
+          "conflict": "新文件时间较晚所以必然正确"
+        },
+        "proposals": [],
+        "appliedChanges": [
+          "删除f1并写region-b到长期规则"
+        ],
+        "pendingConfirmation": []
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "时间戳不能替代批准，物理删除历史也违背可追溯治理。",
+      "diagnosticRefs": [
+        "truth",
+        "lifecycle",
+        "runtime"
+      ],
+      "decisionRuleRefs": [
+        "confirmed-write",
+        "preserve-history",
+        "honest-runtime"
+      ]
+    },
+    {
+      "id": "memory-3layer-migrate-worked",
+      "capabilityId": "memory-3layer-migrate",
+      "category": "worked_example",
+      "scenario": "源有损坏文件，目标已有不同内容的同名事实。",
+      "input": {
+        "projectDir": "/example/project",
+        "sourceDir": ".claude/memory",
+        "targetDir": ".memory-3layer",
+        "dryRun": true
+      },
+      "candidateOutputExcerpt": {
+        "copied": [],
+        "skipped": [],
+        "conflict": [
+          {
+            "path": "layer1/build.json",
+            "reason": "目标同名内容不同；dry-run 未写入"
+          }
+        ],
+        "invalid": [
+          {
+            "path": "layer1/broken.json",
+            "reason": "JSON不可解析，未复制"
+          }
+        ]
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "作者构造的合格报告形状，保留本场景的实际范围与未观察边界；重点核验：只列识别且有效的文件；dry-run 表示计划而非落盘，apply 后逐文件核目标内容与源保持不变。",
+      "diagnosticRefs": [
+        "truth",
+        "lifecycle",
+        "runtime"
+      ],
+      "decisionRuleRefs": [
+        "confirmed-write",
+        "preserve-history",
+        "honest-runtime"
+      ]
+    },
+    {
+      "id": "memory-3layer-migrate-counterexample",
+      "capabilityId": "memory-3layer-migrate",
+      "category": "failure_boundary",
+      "scenario": "源有损坏文件，目标已有不同内容的同名事实。",
+      "input": {
+        "projectDir": "/example/project",
+        "sourceDir": ".claude/memory",
+        "targetDir": ".memory-3layer",
+        "dryRun": true
+      },
+      "candidateOutputExcerpt": {
+        "copied": [
+          "覆盖build.json并删除旧目录"
+        ],
+        "skipped": [],
+        "conflict": [],
+        "invalid": []
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "非破坏迁移不允许覆盖、删除或伪称全部成功。",
+      "diagnosticRefs": [
+        "truth",
+        "lifecycle",
+        "runtime"
+      ],
+      "decisionRuleRefs": [
+        "confirmed-write",
+        "preserve-history",
+        "honest-runtime"
+      ]
+    },
+    {
+      "id": "memory-3layer-install-runtime-worked",
+      "capabilityId": "memory-3layer-install-runtime",
+      "category": "worked_example",
+      "scenario": "已有数据且用户仅要求手动安装核心。",
+      "input": {
+        "projectDir": "/example/project",
+        "host": "manual"
+      },
+      "candidateOutputExcerpt": {
+        "success": true,
+        "requested_platform": "manual",
+        "selected_platform": "manual",
+        "memory_dir": "/example/project/.memory-3layer",
+        "project_dir": "/example/project",
+        "initialized": false,
+        "gitignore_changed": false,
+        "adapters": {},
+        "manual": true,
+        "next": "手动运行loader检查上下文；未观察原生Hook。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "作者构造的合格报告形状，保留本场景的实际范围与未观察边界；重点核验：仅表示安装/配置事务完成；失败清楚报告且不声称自动记忆生效。",
+      "diagnosticRefs": [
+        "truth",
+        "lifecycle",
+        "runtime"
+      ],
+      "decisionRuleRefs": [
+        "confirmed-write",
+        "preserve-history",
+        "honest-runtime"
+      ]
+    },
+    {
+      "id": "memory-3layer-install-runtime-counterexample",
+      "capabilityId": "memory-3layer-install-runtime",
+      "category": "failure_boundary",
+      "scenario": "已有数据且用户仅要求手动安装核心。",
+      "input": {
+        "projectDir": "/example/project",
+        "host": "manual"
+      },
+      "candidateOutputExcerpt": {
+        "success": true,
+        "requested_platform": "manual",
+        "selected_platform": "codex",
+        "memory_dir": "/example/project/.memory-3layer",
+        "project_dir": "/example/project",
+        "initialized": true,
+        "gitignore_changed": true,
+        "adapters": {
+          "nativeHook": "passed-from-config"
+        },
+        "manual": false,
+        "next": "自动长期记忆已生效。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "扩大为原生配置并伪称实际触发，初始化可能破坏已有数据。",
+      "diagnosticRefs": [
+        "truth",
+        "lifecycle",
+        "runtime"
+      ],
+      "decisionRuleRefs": [
+        "confirmed-write",
+        "preserve-history",
+        "honest-runtime"
+      ]
+    }
+  ]
+}

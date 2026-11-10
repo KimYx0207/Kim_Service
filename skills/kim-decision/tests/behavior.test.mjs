@@ -32,7 +32,7 @@ test('contract identifies the proven Kim Decision component version and entrypoi
   assert.equal(contract.schemaVersion, 1);
   assert.equal(contract.id, 'kim-decision');
   assert.equal(contract.componentType, 'skill');
-  assert.equal(contract.componentVersion, '0.0.0+imported.fbbe41c');
+  assert.equal(contract.componentVersion, '0.1.0');
   const changelog = fs.readFileSync(path.join(componentRoot, 'CHANGELOG.md'), 'utf8');
   assert.match(changelog, /revision `fbbe41cb6155ffd605c65b5af3f876ec25cfc0ea`/);
   assert.equal(contract.entrypoint, 'SKILL.md');

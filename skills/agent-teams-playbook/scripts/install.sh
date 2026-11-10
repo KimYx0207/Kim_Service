@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # agent-teams-playbook Installation Script
-# Version: V4.8.0
+# Version: V4.9.0
 # Description: Installs the agent-teams-playbook Skill for Claude Code, Codex, OpenClaw, or Cursor
 # Note: "swarm/蜂群" is generic; Claude Code's official concept is "Agent Teams"
 
@@ -17,8 +17,14 @@ TX_OLD_MOVED=0
 TX_PROMOTED=0
 TX_COMMITTED=0
 
-VERSION="V4.8.0"
+VERSION="V4.9.0"
 SKILL_NAME="agent-teams-playbook"
+INSTALL_FILES=(
+    "SKILL.md" "README.md" "README_EN.md" "capability.json" "method.json"
+    "PROVENANCE.md" "references/acceptance.md" "evals/professional-cases.json"
+    "LICENSE" "NOTICE" "scripts/install.sh"
+    "images/二维码基础款.png" "images/支付宝.jpg" "images/微信.jpg"
+)
 GITHUB_REPO="KimYx0207/Kim_Service"
 GITHUB_BRANCH="main"
 GITHUB_COMPONENT_PATH="skills/agent-teams-playbook"
@@ -314,7 +320,7 @@ copy_local_files() {
     if [ -n "${package_subdir}" ] && [ -d "${repo_dir}/${package_subdir}" ]; then
         source_dir="${repo_dir}/${package_subdir}"
     fi
-    local files=("SKILL.md" "README.md")
+    local files=("${INSTALL_FILES[@]}")
 
     for file in "${files[@]}"; do
         local source="${source_dir}/${file}"
@@ -327,6 +333,7 @@ copy_local_files() {
             exit 1
         fi
 
+        mkdir -p "${output%/*}"
         cp "${source}" "${output}"
         print_success "${file} copied successfully"
     done
@@ -345,7 +352,7 @@ download_files() {
     if [ -n "${package_subdir}" ]; then
         base_url="${base_url}/${package_subdir}"
     fi
-    local files=("SKILL.md" "README.md")
+    local files=("${INSTALL_FILES[@]}")
     local download_cmd=""
 
     # Determine download command (curl with fallback to wget)
@@ -367,6 +374,7 @@ download_files() {
         local output="${install_dir}/${file}"
 
         print_info "Downloading ${file}..."
+        mkdir -p "${output%/*}"
 
         if [ "$download_cmd" = "curl" ]; then
             if curl -fsSL -o "${output}" "${url}"; then
@@ -395,7 +403,7 @@ verify_installation() {
     local install_dir="$1"
     print_header "Step 4: Verifying Installation"
 
-    local files=("SKILL.md" "README.md")
+    local files=("${INSTALL_FILES[@]}")
     local all_valid=true
 
     for file in "${files[@]}"; do

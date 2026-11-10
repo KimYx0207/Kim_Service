@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 1,
+  "id": "construction-information-review",
+  "componentType": "skill",
+  "componentVersion": "0.1.1",
+  "entrypoint": "SKILL.md",
+  "capabilities": [
+    {
+      "id": "construction-information-review-deliver",
+      "summary": "核对建筑模型信息要求、IFC/IDS版本、属性覆盖和交付证据 construction BIM IFC IDS information delivery review",
+      "useWhen": [
+        "建筑模型移交时需要核属性、分类和信息缺项。",
+        "准备IDS要求或解释校验器报告。",
+        "多个模型/版本合并时需要定位信息缺失与责任。"
+      ],
+      "doNotUseWhen": [
+        "信息完整不等于结构、消防、几何碰撞或施工安全合格；不提供持证设计签章。",
+        "要求自动发布、付款、修改生产系统或联系第三方时交调用方授权处理。",
+        "要求把假设或资料形式当作专业认证、保证收益或最终验收时不适用。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "requirements": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "交付用途、对象适用规则、所需属性/分类/单位及来源"
+          },
+          "models": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "已授权IFC/模型文件、版本、对象标识和导出信息"
+          },
+          "validationContext": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "IDS/工具版本、执行记录、专业审查范围与责任"
+          }
+        },
+        "required": [
+          "requirements",
+          "models",
+          "validationContext"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "scopeMap": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "要求与对象适用范围"
+          },
+          "informationFindings": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "对象级缺失和错误定位"
+          },
+          "validationEvidence": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "执行与工具范围记录"
+          },
+          "handover": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "整改与专业接受交接"
+          },
+          "facts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前输入、来源、期间单位及证据缺口"
+          },
+          "limitations": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "未执行、未观察、方法假设和外推边界"
+          },
+          "handoff": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前产物、规则结果、证据定位与待解决事项交调用方"
+          }
+        },
+        "required": [
+          "scopeMap",
+          "informationFindings",
+          "validationEvidence",
+          "handover",
+          "facts",
+          "limitations",
+          "handoff"
+        ],
+        "deliveryFormat": "conceptual-human-delivery"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "法定合规、结构/消防等设计判断和正式工程交付由相应有资质责任人确认。",
+          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

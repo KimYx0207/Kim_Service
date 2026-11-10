@@ -1,0 +1,151 @@
+{
+  "schemaVersion": 1,
+  "roleId": "xiaohongshu-skill",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "xiaohongshu-create-visual-package-worked",
+      "capabilityId": "xiaohongshu-create-visual-package",
+      "category": "worked_example",
+      "scenario": "仅通用工作方法题目，尚未有成效数据或批量许可。",
+      "input": {
+        "topic": "小团队项目文件命名",
+        "goal": "让读者能在一个项目试用4项命名约定",
+        "audience": "经常共享项目文件的同事",
+        "sourceMaterials": [
+          "用户只给通用工作方法题目，没有客户案例和成效数据。"
+        ],
+        "autoPermission": false
+      },
+      "candidateOutputExcerpt": {
+        "status": "partial_pending_mvp_confirmation",
+        "selectedTitle": "文件总找不到？先把这4件事写进名字",
+        "titleAlternatives": [
+          "文件总找不到？先把这4件事写进名字",
+          "项目文件别再叫“最终版2”了",
+          "给文件起名，我先约定这4项",
+          "发给同事前，先看文件名有没有这4项",
+          "不用换工具，先把项目文件命名说清楚",
+          "同一个项目，文件名可以少点猜谜",
+          "“最新版”到底是哪份？试试这张检查单",
+          "整理项目资料，先从一个文件夹开始"
+        ],
+        "body": "文件名叫“最终版2”，发送时很确定，过几天又不确定了。可以先在一个项目里约定4项：项目、内容、日期、版本。例如“春季活动_报名页_2026-11-10_v02”。项目说明归属，内容说明是什么，日期说明这份版本的时间，版本号帮助区分修改。它不保证适合所有团队：已经有文档版本管理或固定客户模板时，优先沿用现有规则。先拿一个最近项目试一周，问接收者能否找到指定文件；没改善再改规则，不一次重命名全部历史文件。图中是示意文件，不是真实客户资料。#项目协作 #文件整理 #工作方法 #资料管理",
+        "cover": {
+          "stage": "sample",
+          "text": "文件名，先说清4件事",
+          "artifact": "本案例假定当前工具生成的cover-v1.png；需真实运行回执才可在实际交付这样报告",
+          "review": "待用户看具体版本"
+        },
+        "interiorPages": [
+          {
+            "page": 1,
+            "text": "先看混乱：最终版、最终版2、这版真最终。问题是接收者不知道归属和版本。",
+            "visual": "示意文件列表；标明示意"
+          },
+          {
+            "page": 2,
+            "text": "项目：先说它属于谁，例如“春季活动”。",
+            "visual": "文件名第一段高亮"
+          },
+          {
+            "page": 3,
+            "text": "内容：写清这是什么，例如“报名页”。",
+            "visual": "第二段高亮，不用泛泛“资料”"
+          },
+          {
+            "page": 4,
+            "text": "日期：约定统一日期含义，例如这一版的修改日期。",
+            "visual": "第三段与日历示意；不称唯一正确格式"
+          },
+          {
+            "page": 5,
+            "text": "版本：用共同约定区分修改，例如v02；已有版本系统优先用原机制。",
+            "visual": "两份同主题版本对照"
+          },
+          {
+            "page": 6,
+            "text": "先试一个项目：接收者能找到指定文件吗？没有改善就改规则；不要直接改全部历史。",
+            "visual": "查找任务与核对清单；不显示虚构效率数据"
+          }
+        ],
+        "publishingBoundary": "当前只有首轮封面MVP许可，内页为未生成规划；未发布。",
+        "missingRealMaterials": [
+          "无真实客户文件，使用明确标注的示意画面；无改善数据，不作效率保证。"
+        ],
+        "evidence": [
+          "作者合成案例；实际运行必须替换为当轮生成记录与用户决定。"
+        ]
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "作者构造的合格报告形状，保留本场景的实际范围与未观察边界；重点核验：状态按真实生产与许可：MVP待审保留partial，全部约定图片与内容完成才complete。",
+      "diagnosticRefs": [
+        "promise",
+        "permission",
+        "asset-truth"
+      ],
+      "decisionRuleRefs": [
+        "promise-delivery",
+        "scoped-production",
+        "current-assets"
+      ]
+    },
+    {
+      "id": "xiaohongshu-create-visual-package-counterexample",
+      "capabilityId": "xiaohongshu-create-visual-package",
+      "category": "failure_boundary",
+      "scenario": "仅通用工作方法题目，尚未有成效数据或批量许可。",
+      "input": {
+        "topic": "小团队项目文件命名",
+        "goal": "让读者能在一个项目试用4项命名约定",
+        "audience": "经常共享项目文件的同事",
+        "sourceMaterials": [
+          "用户只给通用工作方法题目，没有客户案例和成效数据。"
+        ],
+        "autoPermission": false
+      },
+      "candidateOutputExcerpt": {
+        "status": "complete",
+        "selectedTitle": "这个方法让所有团队效率翻倍",
+        "titleAlternatives": [
+          "文件总找不到？先把这4件事写进名字",
+          "项目文件别再叫“最终版2”了",
+          "给文件起名，我先约定这4项",
+          "发给同事前，先看文件名有没有这4项",
+          "不用换工具，先把项目文件命名说清楚",
+          "同一个项目，文件名可以少点猜谜",
+          "“最新版”到底是哪份？试试这张检查单",
+          "整理项目资料，先从一个文件夹开始"
+        ],
+        "body": "我用了100次，100%有效，私信购买。",
+        "cover": {
+          "artifact": "旧outputs/cover.png"
+        },
+        "interiorPages": [
+          {
+            "prompt": "未来要生成的6页"
+          }
+        ],
+        "publishingBoundary": "系统已自动发布",
+        "missingRealMaterials": [],
+        "evidence": [
+          "模板字段全部填写所以验收通过"
+        ]
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "虚构经历和效果、复用旧图冒充当前生成、提示词代图与越过授权同时失真。",
+      "diagnosticRefs": [
+        "promise",
+        "permission",
+        "asset-truth"
+      ],
+      "decisionRuleRefs": [
+        "promise-delivery",
+        "scoped-production",
+        "current-assets"
+      ]
+    }
+  ]
+}

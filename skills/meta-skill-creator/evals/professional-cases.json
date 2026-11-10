@@ -1,0 +1,201 @@
+{
+  "schemaVersion": 1,
+  "roleId": "meta-skill-creator",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "meta-skill-create-refactor-worked",
+      "capabilityId": "meta-skill-create-refactor",
+      "category": "worked_example",
+      "scenario": "现有导入技能出现可复现的类型错误。",
+      "input": {
+        "workflowEvidence": [
+          "现有CSV导入器两次把前导零订单号变成整数；有原始样本与错误输出。"
+        ],
+        "targetSkillPath": "skills/csv-import-review",
+        "successCriteria": [
+          "00123导入后仍为00123",
+          "拒绝缺必填列并显示原因"
+        ],
+        "hosts": [
+          "codex"
+        ],
+        "constraints": [
+          "只改现有包，不安装全局依赖"
+        ]
+      },
+      "candidateOutputExcerpt": {
+        "packageDecision": "修改现有CSV审查Skill，复用解析器并补标识符类型与缺列诊断。",
+        "changedFiles": [
+          "SKILL.md明确读取列类型合同",
+          "references/identifier-rules.md保留前导零规则",
+          "evals样本新增00123和缺列反例"
+        ],
+        "triggerBoundary": {
+          "positive": "审查导入CSV",
+          "negative": "只要统计总行数不触发完整导入审查"
+        },
+        "progressiveLoading": [
+          "入口读取字段合同；遇标识符再读identifier-rules；可编辑CSV仍输出CSV而非截图"
+        ],
+        "validationPlan": [
+          "冻结00123字符串与缺列拒绝标准",
+          "比较同一输入的新旧实际输出；未运行标pending"
+        ],
+        "remainingGaps": [
+          "尚未做新会话业务前测，不能宣称效果已提升"
+        ]
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "作者构造的合格报告形状，保留本场景的实际范围与未观察边界；重点核验：说明技能化是否比现有流程更有价值，复用/修改/不造新包的选择有失败证据支持。",
+      "diagnosticRefs": [
+        "value",
+        "medium",
+        "evaluation"
+      ],
+      "decisionRuleRefs": [
+        "artifact-first",
+        "critical-blocker",
+        "frozen-comparison"
+      ]
+    },
+    {
+      "id": "meta-skill-create-refactor-counterexample",
+      "capabilityId": "meta-skill-create-refactor",
+      "category": "failure_boundary",
+      "scenario": "现有导入技能出现可复现的类型错误。",
+      "input": {
+        "workflowEvidence": [
+          "现有CSV导入器两次把前导零订单号变成整数；有原始样本与错误输出。"
+        ],
+        "targetSkillPath": "skills/csv-import-review",
+        "successCriteria": [
+          "00123导入后仍为00123",
+          "拒绝缺必填列并显示原因"
+        ],
+        "hosts": [
+          "codex"
+        ],
+        "constraints": [
+          "只改现有包，不安装全局依赖"
+        ]
+      },
+      "candidateOutputExcerpt": {
+        "packageDecision": "创建10个专家Agent即可覆盖全部行业",
+        "changedFiles": [
+          "十份两行角色提示词"
+        ],
+        "triggerBoundary": {
+          "positive": "任何任务"
+        },
+        "progressiveLoading": [
+          "所有产物优先Image2"
+        ],
+        "validationPlan": [
+          "统计字数大于100即可"
+        ],
+        "remainingGaps": []
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "角色数量和长度无法解决保留前导零的实际失败，还扩大不相关范围。",
+      "diagnosticRefs": [
+        "value",
+        "medium",
+        "evaluation"
+      ],
+      "decisionRuleRefs": [
+        "artifact-first",
+        "critical-blocker",
+        "frozen-comparison"
+      ]
+    },
+    {
+      "id": "meta-skill-evaluate-worked",
+      "capabilityId": "meta-skill-evaluate",
+      "category": "worked_example",
+      "scenario": "仅完成包结构检查，没有运行实际业务样本。",
+      "input": {
+        "skillPath": "skills/csv-import-review@candidate",
+        "evaluationLayer": "core",
+        "baselineEvidence": [],
+        "acceptanceEvidence": [
+          "只运行本地结构检查，未执行CSV业务任务。"
+        ],
+        "rubric": {
+          "blocking": [
+            "00123必须保留为字符串"
+          ]
+        }
+      },
+      "candidateOutputExcerpt": {
+        "status": "structure-only",
+        "findings": [
+          "入口和引用存在，00123业务行为尚未观察。"
+        ],
+        "evidenceLevel": "structure",
+        "promotionRecommendation": "保持候选；先用冻结样本取得实际新旧产物。",
+        "promotionDecision": "requires-human-owner",
+        "remainingGaps": [
+          "baseline缺失",
+          "实际产物缺失",
+          "独立触发与业务审核未做"
+        ]
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "作者构造的合格报告形状，保留本场景的实际范围与未观察边界；重点核验：精确反映结构、产物、运行与人工各层证据，pending不能变pass。",
+      "diagnosticRefs": [
+        "value",
+        "medium",
+        "evaluation"
+      ],
+      "decisionRuleRefs": [
+        "artifact-first",
+        "critical-blocker",
+        "frozen-comparison"
+      ]
+    },
+    {
+      "id": "meta-skill-evaluate-counterexample",
+      "capabilityId": "meta-skill-evaluate",
+      "category": "failure_boundary",
+      "scenario": "仅完成包结构检查，没有运行实际业务样本。",
+      "input": {
+        "skillPath": "skills/csv-import-review@candidate",
+        "evaluationLayer": "core",
+        "baselineEvidence": [],
+        "acceptanceEvidence": [
+          "只运行本地结构检查，未执行CSV业务任务。"
+        ],
+        "rubric": {
+          "blocking": [
+            "00123必须保留为字符串"
+          ]
+        }
+      },
+      "candidateOutputExcerpt": {
+        "status": "pass",
+        "findings": [
+          "有全部字段所以效果提高90%"
+        ],
+        "evidenceLevel": "human",
+        "promotionRecommendation": "直接公开全行业专家版",
+        "promotionDecision": "requires-human-owner",
+        "remainingGaps": []
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "字段检查不支持效果、人审或提升幅度；最终保留人工字段也不能抵消其他虚假结论。",
+      "diagnosticRefs": [
+        "value",
+        "medium",
+        "evaluation"
+      ],
+      "decisionRuleRefs": [
+        "artifact-first",
+        "critical-blocker",
+        "frozen-comparison"
+      ]
+    }
+  ]
+}

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "interaction-designer",
   "componentType": "agent",
-  "componentVersion": "0.4.0",
+  "componentVersion": "0.5.0",
   "entrypoint": "AGENT.md",
   "capabilities": [
     {

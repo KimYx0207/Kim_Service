@@ -13,7 +13,8 @@
   ],
   "skillLoading": [
     "先读取本角色 knowledgeAssets 中的包内专业方法；来源记录不等于当前任务联网，案例不是实际运行证据。",
-    "读取本角色 knowledgeAssets；只在当前任务实际需要时读取用户指定的项目/平台规范，缺来源不假称已读取。"
+    "读取本角色 knowledgeAssets；只在当前任务实际需要时读取用户指定的项目/平台规范，缺来源不假称已读取。",
+    "读取本包 references/worked-delivery.md 的完整产物与专业反例；按当前输入迁移，不把合成答案当本次事实或验收记录"
   ],
   "steps": [
     "先读取包内专业方法与现有 AGENT.md，绑定当前输入、目标和材料范围；来源引用不等于当前任务联网。",
@@ -52,6 +53,18 @@
         "w3c-prov",
         "goalpro"
       ]
+    },
+    {
+      "id": "delivery-verifier-worked-delivery",
+      "path": "references/worked-delivery.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "slsa-provenance",
+        "w3c-prov",
+        "goalpro"
+      ]
     }
   ],
   "expertise": {
@@ -62,7 +75,8 @@
       "汇总缺失、失败和外部专业判断；不做最终批准"
     ],
     "knowledgeAssetIds": [
-      "delivery-verifier-core"
+      "delivery-verifier-core",
+      "delivery-verifier-worked-delivery"
     ],
     "diagnosticSequence": [
       {
@@ -136,38 +150,88 @@
         "outputChecks": [
           {
             "field": "status",
-            "criterion": "仅总结本次列明检查的 completed/partial/blocked。",
-            "rejectWhen": "把 completed 解释成最终接受。"
+            "criterion": "总结与所有关键项的实际结果一致，保留阻塞和未测状态，用户接受仍归调用方。",
+            "rejectWhen": "有关键失败/缺证据仍宣布最终通过或替用户批准。",
+            "id": "delivery-verifier-status",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "逐项判据汇总",
+              "阻断/未测原因"
+            ],
+            "blocking": true
           },
           {
             "field": "artifactRefs",
-            "criterion": "每项记录实读结果或缺失，预期与实际区分。",
-            "rejectWhen": "引用未读文件的假哈希。"
+            "criterion": "引用确实读取过的当前产物并注明类型和范围，不能把计划路径当实际产物。",
+            "rejectWhen": "不存在/未读取/跨任务文件被登记为已验证。",
+            "id": "delivery-verifier-artifact-refs",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "当前文件内容/元数据",
+              "任务对应关系"
+            ],
+            "blocking": true
           },
           {
             "field": "criterionResults",
-            "criterion": "逐项说明观察、结果及未核范围。",
-            "rejectWhen": "把人工标准转换为任意存在性检查。"
+            "criterion": "逐项绑定当前任务/标准版本、实际产物和独立观察；缺证据与历史/作者自报分开，硬失败不能被其他通过项抵消。",
+            "rejectWhen": "引用文件存在或作者自报即pass，旧版本结果审批新要求。",
+            "id": "delivery-verifier-criterion-results",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "当前标准与源版本",
+              "实际产物内容/哈希",
+              "独立观察与未测项"
+            ],
+            "blocking": true
           },
           {
             "field": "missingCapabilities",
             "criterion": "写明缺少的检查能力及影响。",
-            "rejectWhen": "遗漏未执行的专业或用户判断。"
+            "rejectWhen": "遗漏未执行的专业或用户判断。",
+            "id": "delivery-verifier-missing-capabilities",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "实际可用工具/材料检查",
+              "缺口影响的动作和验收项"
+            ],
+            "blocking": true
           },
           {
             "field": "failures",
             "criterion": "仅记录实际检查失败及安全可见原因。",
-            "rejectWhen": "把未运行当运行失败或泄露私人绝对路径。"
+            "rejectWhen": "把未运行当运行失败或泄露私人绝对路径。",
+            "id": "delivery-verifier-failures",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "实际失败或矛盾记录",
+              "受影响范围与敏感信息处理"
+            ],
+            "blocking": true
           },
           {
             "field": "stopReason",
             "criterion": "解释为何检查结束或被阻塞。",
-            "rejectWhen": "缺关键证据却笼统写全部通过。"
+            "rejectWhen": "缺关键证据却笼统写全部通过。",
+            "id": "delivery-verifier-stop-reason",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "角色实际结束或阻塞状态",
+              "继续所需输入/能力或已完成范围"
+            ],
+            "blocking": true
           },
           {
             "field": "handoff",
             "criterion": "交材料、事实、限制与下一位检查者需要的输入。",
-            "rejectWhen": "代调用方批准交付、授权或发布。"
+            "rejectWhen": "代调用方批准交付、授权或发布。",
+            "id": "delivery-verifier-handoff",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "下一执行者可用的事实/产物/限制",
+              "需要调用方决定的具体事项"
+            ],
+            "blocking": true
           }
         ]
       }

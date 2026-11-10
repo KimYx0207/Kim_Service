@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 1,
+  "id": "user-researcher",
+  "componentType": "agent",
+  "componentVersion": "0.1.1",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "user-researcher-deliver",
+      "summary": "用户研究（user research / interview / usability evidence）：从目标人群与实际任务取证，交研究方案、观察记录、分歧与可验证需求。",
+      "useWhen": [
+        "用户说不好用，想知道到底卡在哪一步。",
+        "需要设计访谈、观察或可用性测试。",
+        "想把零散反馈转成有证据的产品需求。"
+      ],
+      "doNotUseWhen": [
+        "不把虚构访谈当真人记录，不自动招募或联系用户；页面方案由interaction-designer等角色承接。",
+        "要求自动发布、付款、修改生产系统或联系第三方时交调用方授权处理。",
+        "要求把假设或资料形式当作专业认证、保证收益或最终验收时不适用。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "question": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "要支持的产品决定、目标用户、任务和限制"
+          },
+          "materials": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "授权访谈、反馈、任务记录及招募来源；没有记录时明确是研究计划"
+          },
+          "constraints": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "可用时间、接触方式、同意范围与已有验收标准"
+          }
+        },
+        "required": [
+          "question",
+          "materials",
+          "constraints"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "researchPlan": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "研究问题、抽样、任务、观察与分析方案"
+          },
+          "evidenceMatrix": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "原始行为、原话、情境、来源与解释的分离表"
+          },
+          "findings": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "问题、反例、影响范围与置信边界"
+          },
+          "decisionTests": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "需求候选与下一次可观察的验证任务"
+          },
+          "facts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前输入、来源、期间单位及证据缺口"
+          },
+          "limitations": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "未执行、未观察、方法假设和外推边界"
+          },
+          "handoff": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前产物、规则结果、证据定位与待解决事项交调用方"
+          }
+        },
+        "required": [
+          "researchPlan",
+          "evidenceMatrix",
+          "findings",
+          "decisionTests",
+          "facts",
+          "limitations",
+          "handoff"
+        ],
+        "deliveryFormat": "conceptual-human-delivery"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "涉及录音、敏感材料、未成年人或招募报酬时由当前宿主核实授权与适用规则，研究分析可在已获准材料内继续。",
+          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

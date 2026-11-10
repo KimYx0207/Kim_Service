@@ -1,11 +1,18 @@
 ---
 name: semgrep-skill
 description: "Runs the installed local Semgrep CLI through a bounded JSON wrapper with two bundled non-secret rules. Requires an explicit authorized workspaceRoot and target. No remote rules, uploads, installs, source excerpts or automatic fixes."
-version: "1.1.0"
+version: "1.2.0"
 context: fork
 ---
 
 # Local Semgrep security scan
+
+## 本能力的验收方法
+
+执行前读取 [method.json](method.json) 中当前 capabilityId 的诊断、决策和逐字段 outputChecks，并读取 [任务验收与完整示例](references/acceptance.md)。按本次能力选择相应规则，不用字段齐全、行数或作者自报代替产物质量。缺少 blocking 证据时保留未验收；既有具体授权与宿主最终决定权不变。
+
+专业引用与工具路线继续按下文渐进读取；[来源记录](PROVENANCE.md) 和 [作者正反例](evals/professional-cases.json) 供评审。当前 Meta Skill 发现不会自动注入 method.json，宿主需按此入口读取；未观察到加载或执行时不得宣称生效。
+
 
 Use only `<skill-dir>/scripts/scan.py`, where `<skill-dir>` contains this file.
 The package `capability.json` defines the input, result and optional invocation.
@@ -79,7 +86,9 @@ only; omitted file types and excluded directories were not audited.
 
 `install.ps1`, `install.sh` and `scripts/install.py` remain dry-run first, require
 explicit project/user scope, and require `--apply` to write. They project this
-file, `capability.json`, `scripts/scan.py` and the bundled rules with hash receipts
-and rollback. They never install Semgrep or overwrite legacy code-security.
+file, `capability.json`, the executable scripts, bundled rules, method, referenced
+professional resources, examples, documentation and licenses with hash receipts
+and rollback. The projected method's links must remain readable after installation.
+They never install Semgrep or overwrite legacy code-security.
 See README for preview/apply/rollback commands; do not treat scan permission as
 permission to install or change source.

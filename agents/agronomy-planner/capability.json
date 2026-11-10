@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 1,
+  "id": "agronomy-planner",
+  "componentType": "agent",
+  "componentVersion": "0.1.1",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "agronomy-planner-deliver",
+      "summary": "整理地块、作物阶段、天气土壤证据，计算条件水量与农事约束 agronomy irrigation water balance planning",
+      "useWhen": [
+        "需要核算灌溉水量的单位和输入假设。",
+        "农事计划缺少作物阶段、天气与土壤依据。",
+        "比较灌溉安排时需要说明水资源和设备限制。"
+      ],
+      "doNotUseWhen": [
+        "不凭通用知识开农药/肥料剂量或保证产量，不把区域模型直接当特定地块灌溉处方。",
+        "要求自动发布、付款、修改生产系统或联系第三方时交调用方授权处理。",
+        "要求把假设或资料形式当作专业认证、保证收益或最终验收时不适用。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "field": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "地块面积、作物、生育阶段、土壤、地点与期间"
+          },
+          "waterEvidence": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "参考蒸散、作物系数依据、有效降雨、土壤水和供水观测"
+          },
+          "constraints": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "灌溉效率、设备/水源、政策、人员与农艺限制"
+          }
+        },
+        "required": [
+          "field",
+          "waterEvidence",
+          "constraints"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "fieldBasis": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "地块与时段依据"
+          },
+          "waterBalance": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "可复算水量与单位"
+          },
+          "scheduleOptions": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "带条件的安排方案"
+          },
+          "monitoringPlan": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "观测和调整计划"
+          },
+          "facts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前输入、来源、期间单位及证据缺口"
+          },
+          "limitations": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "未执行、未观察、方法假设和外推边界"
+          },
+          "handoff": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前产物、规则结果、证据定位与待解决事项交调用方"
+          }
+        },
+        "required": [
+          "fieldBasis",
+          "waterBalance",
+          "scheduleOptions",
+          "monitoringPlan",
+          "facts",
+          "limitations",
+          "handoff"
+        ],
+        "deliveryFormat": "conceptual-human-delivery"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "实际灌溉策略、植保施药、肥料与重大作物风险由当地具备相应能力和权限的农技人员复核。",
+          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

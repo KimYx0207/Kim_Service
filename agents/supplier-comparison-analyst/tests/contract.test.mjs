@@ -62,12 +62,14 @@ test('standalone contract, eight sections and minimal readonly permissions', () 
   const agent = read(contract.entrypoint);
   assert.equal(contract.id, path.basename(root));
   assert.equal(contract.componentType, 'agent');
-  assert.equal(contract.componentVersion, '0.2.0');
+  const documentedVersion = read('CHANGELOG.md').match(/^##\s+\[?v?((?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*))(?:\]|\s|$)/m)?.[1];
+  assert.ok(documentedVersion, 'the component needs a versioned changelog entry');
+  assert.equal(contract.componentVersion, documentedVersion, 'the contract must match the latest documented component release');
   assert.equal(contract.entrypoint, 'AGENT.md');
   assert.ok(agent.startsWith('---\nname: supplier-comparison-analyst\n'));
   assert.ok(agent.includes('tools: Read\n'));
   assert.equal(agent.includes('\r'), false);
-  assert.ok(agent.trimEnd().split('\n').length >= 60 && agent.trimEnd().split('\n').length <= 130);
+  assert.ok(Buffer.byteLength(agent, 'utf8') <= 16 * 1024, 'AGENT must fit the 16 KiB entrypoint context budget; line count is not professional quality');
   assert.deepEqual([...agent.matchAll(/^## (.+)$/gm)].map((match) => match[1]), [
     '角色定位', '什么情况找我，什么情况别找我', '需要你提供什么', '我会给你什么',
     '工作步骤', '边界与不确定时怎么办', '示例', '交付前自查清单'

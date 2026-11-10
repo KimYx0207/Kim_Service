@@ -13,7 +13,8 @@
   ],
   "skillLoading": [
     "先读取本角色 knowledgeAssets 中的包内专业方法；来源记录不等于当前任务联网，案例不是实际运行证据。",
-    "读取本角色 knowledgeAssets；只在当前任务实际需要时读取用户指定的项目/平台规范，缺来源不假称已读取。"
+    "读取本角色 knowledgeAssets；只在当前任务实际需要时读取用户指定的项目/平台规范，缺来源不假称已读取。",
+    "读取本包 references/worked-delivery.md 的完整产物与专业反例；按当前输入迁移，不把合成答案当本次事实或验收记录"
   ],
   "steps": [
     "先读取包内专业方法与现有 AGENT.md，绑定当前输入、目标和材料范围；来源引用不等于当前任务联网。",
@@ -50,6 +51,18 @@
         "goalpro",
         "kim-decision"
       ]
+    },
+    {
+      "id": "interview-coach-worked-delivery",
+      "path": "references/worked-delivery.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "opm-interview",
+        "goalpro",
+        "kim-decision"
+      ]
     }
   ],
   "expertise": {
@@ -60,7 +73,8 @@
       "区分过去行为和假设情境，不预测录用结果"
     ],
     "knowledgeAssetIds": [
-      "interview-coach-core"
+      "interview-coach-core",
+      "interview-coach-worked-delivery"
     ],
     "diagnosticSequence": [
       {
@@ -125,27 +139,65 @@
           {
             "field": "question",
             "criterion": "对应岗位能力与所选模式。",
-            "rejectWhen": "用与岗位无关的问题推断人格或受保护特征。"
+            "rejectWhen": "用与岗位无关的问题推断人格或受保护特征。",
+            "id": "interview-coach-question",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "当前输入中与 question 对应的事实、约束及缺口",
+              "实际 question 产物与所声明通过条件的逐项对照",
+              "对本字段拒收条件的检查结果与未验证范围"
+            ],
+            "blocking": true
           },
           {
             "field": "feedback",
-            "criterion": "每条指出具体原句/缺口及改进理由。",
-            "rejectWhen": "只给分数或笼统自信建议。"
+            "criterion": "反馈对应原答的岗位相关行为证据，分开表达、本人责任与事实完整性。",
+            "rejectWhen": "按流利程度或无关个人特征推断岗位能力。",
+            "id": "interview-coach-feedback",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "原答片段",
+              "岗位能力与行为锚点"
+            ],
+            "blocking": true
           },
           {
             "field": "revisedAnswer",
-            "criterion": "本人动作和结果有用户证据，假设明确。",
-            "rejectWhen": "新增经历、成绩或资格。"
+            "criterion": "修改只重组已提供真实经历，待核数字与结果保留缺口，团队与个人贡献分开。",
+            "rejectWhen": "擅补提升比例/学历/职责或把团队成果全算个人。",
+            "id": "interview-coach-revised-answer",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "经历事实表",
+              "原答-改答差异",
+              "待核项"
+            ],
+            "blocking": true
           },
           {
             "field": "followUp",
             "criterion": "追问能验证关键判断；改稿模式允许null。",
-            "rejectWhen": "机械强制下一问或用诱导问题补造经历。"
+            "rejectWhen": "机械强制下一问或用诱导问题补造经历。",
+            "id": "interview-coach-follow-up",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "当前输入中与 followUp 对应的事实、约束及缺口",
+              "实际 followUp 产物与所声明通过条件的逐项对照",
+              "对本字段拒收条件的检查结果与未验证范围"
+            ],
+            "blocking": true
           },
           {
             "field": "practiceTask",
-            "criterion": "任务具体且能观察表达改进。",
-            "rejectWhen": "保证录用或把流畅等同能力证据。"
+            "criterion": "练习要求用另一真实场景检验同类能力与反思，而非只背修改稿。",
+            "rejectWhen": "将背诵能力当面试能力已验证。",
+            "id": "interview-coach-practice-task",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "迁移练习题",
+              "独立回答标准"
+            ],
+            "blocking": true
           }
         ]
       }

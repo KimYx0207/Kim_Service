@@ -1,0 +1,166 @@
+{
+  "schemaVersion": 1,
+  "roleId": "requirements-traceability",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "critical-unknown",
+      "capabilityId": "requirements-traceability-deliver",
+      "category": "worked_example",
+      "scenario": "关键测试未跑",
+      "input": {
+        "requirements": "R1保存、R2隔离必需",
+        "artifacts": "R1测试通过，R2仅计划",
+        "changes": "无"
+      },
+      "candidateOutputExcerpt": {
+        "acceptancePacket": "R2未观察，相关接受受阻，不能用总通过率抵消。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "关键项独立判定。",
+      "diagnosticRefs": [
+        "evidence"
+      ],
+      "decisionRuleRefs": [
+        "critical-failure"
+      ]
+    },
+    {
+      "id": "fixture-as-host",
+      "capabilityId": "requirements-traceability-deliver",
+      "category": "failure_boundary",
+      "scenario": "作者示例当运行证据",
+      "input": {
+        "requirements": "工具实际可用",
+        "artifacts": "合成示例JSON",
+        "changes": "无"
+      },
+      "candidateOutputExcerpt": {
+        "evidenceAssessment": "真实宿主验证通过。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "证据类型错误。",
+      "diagnosticRefs": [
+        "evidence"
+      ],
+      "decisionRuleRefs": [
+        "evidence-level"
+      ]
+    },
+    {
+      "id": "targeted-change",
+      "capabilityId": "requirements-traceability-deliver",
+      "category": "worked_example",
+      "scenario": "只改隔离要求",
+      "input": {
+        "requirements": "保存与隔离",
+        "artifacts": "保存测试与旧隔离测试",
+        "changes": "隔离改为多租户"
+      },
+      "candidateOutputExcerpt": {
+        "impactMap": "重审隔离及相关依赖；保存证据是否仍适用按关联判断。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "按影响定位。",
+      "diagnosticRefs": [
+        "impact"
+      ],
+      "decisionRuleRefs": [
+        "targeted-invalidation"
+      ]
+    },
+    {
+      "id": "conflicting-baseline",
+      "capabilityId": "requirements-traceability-deliver",
+      "category": "failure_boundary",
+      "scenario": "新旧PRD冲突",
+      "input": {
+        "requirements": "旧版允许匿名，新版要求登录",
+        "artifacts": "匿名实现通过",
+        "changes": "当前基线不明"
+      },
+      "candidateOutputExcerpt": {
+        "acceptancePacket": "选旧版宣布通过，无需记录冲突。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "不能挑有利版本。",
+      "diagnosticRefs": [
+        "baseline"
+      ],
+      "decisionRuleRefs": [
+        "single-baseline"
+      ]
+    },
+    {
+      "id": "unchanged-leaf-shared-change",
+      "capabilityId": "requirements-traceability-deliver",
+      "category": "worked_example",
+      "scenario": "共享身份依赖变化影响未修改页面",
+      "input": {
+        "requirements": "A/B权限隔离，C独立离线导出",
+        "artifacts": "E1/E2在B1通过；A/B依赖X，C已核无该依赖；D动态关系未知",
+        "changes": "B2仅改X，A/B/C叶文件未改"
+      },
+      "candidateOutputExcerpt": {
+        "impactMap": "A/B原权限证据需重验；C在输入/规则及无其他影响的已核范围保留；D关系待核。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "重验跟随证实的共享依赖，未知关系不当无影响。",
+      "diagnosticRefs": [
+        "impact",
+        "evidence"
+      ],
+      "decisionRuleRefs": [
+        "targeted-invalidation",
+        "bound-evidence"
+      ]
+    },
+    {
+      "id": "branch-as-version",
+      "capabilityId": "requirements-traceability-deliver",
+      "category": "failure_boundary",
+      "scenario": "可移动分支名被当不可变运行版本",
+      "input": {
+        "requirements": "当前租户规则通过验证",
+        "artifacts": "旧报告URL包含main，无具体提交/工作区差异/执行记录",
+        "changes": "main已更新且租户规则变化"
+      },
+      "candidateOutputExcerpt": {
+        "evidenceAssessment": "两份URL都在main，版本相同，全部继承通过。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "分支名不固定内容，旧规则与实际发生均缺绑定。",
+      "diagnosticRefs": [
+        "evidence"
+      ],
+      "decisionRuleRefs": [
+        "bound-evidence"
+      ]
+    },
+    {
+      "id": "overwritten-comparison",
+      "capabilityId": "requirements-traceability-deliver",
+      "category": "failure_boundary",
+      "scenario": "比较前旧基线已被本次输出覆盖",
+      "input": {
+        "requirements": "定位本次受影响模块",
+        "artifacts": "baseline.json原为B1，本次生成器先把B2写入同路径，再拿B2与该路径比较",
+        "changes": "结果差异0"
+      },
+      "candidateOutputExcerpt": {
+        "impactMap": "没有变化，所有旧测试都继续通过。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "自比无法证明无变化，需要保留或恢复真实B1再判断。",
+      "diagnosticRefs": [
+        "baseline",
+        "impact"
+      ],
+      "decisionRuleRefs": [
+        "bound-evidence"
+      ]
+    }
+  ]
+}

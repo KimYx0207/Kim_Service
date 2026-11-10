@@ -2,16 +2,17 @@
   "schemaVersion": 1,
   "id": "source-evidence-analyst",
   "componentType": "agent",
-  "componentVersion": "0.2.0",
+  "componentVersion": "0.3.0",
   "entrypoint": "AGENT.md",
   "capabilities": [
     {
       "id": "source-evidence-analyst-deliver",
-      "summary": "核实公开或授权材料中的声明、时间和平台操作证据，交可追溯事实包与人工处理材料",
+      "summary": "核实声明、时间与操作证据，组织可复查检索、筛选和研究综合，交可追溯事实包与人工处理材料",
       "useWhen": [
         "热点评论需要核查原帖和一手来源",
         "账号/渠道复盘需要区分事实与推断",
-        "需要内容修订、申诉材料或只读资产清单"
+        "需要内容修订、申诉材料或只读资产清单",
+        "论文、政策或技术综述需要可复查检索、筛选与研究证据综合"
       ],
       "doNotUseWhen": [
         "需要未经批准发布、申诉或联系他人：交调用方",

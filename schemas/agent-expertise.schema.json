@@ -135,12 +135,22 @@
             "items": {
               "type": "object",
               "additionalProperties": false,
+              "description": "Legacy checks may contain only field/criterion/rejectWhen. Complete authoring standards supply all four review fields together. A declared standard is not an executed evaluation or acceptance receipt.",
               "required": [
                 "field",
                 "criterion",
                 "rejectWhen"
               ],
+              "dependentRequired": {
+                "id": ["verificationMethod", "evidenceRequired", "blocking"],
+                "verificationMethod": ["id", "evidenceRequired", "blocking"],
+                "evidenceRequired": ["id", "verificationMethod", "blocking"],
+                "blocking": ["id", "verificationMethod", "evidenceRequired"]
+              },
               "properties": {
+                "id": {
+                  "$ref": "#/$defs/id"
+                },
                 "field": {
                   "$ref": "#/$defs/field"
                 },
@@ -149,6 +159,23 @@
                 },
                 "rejectWhen": {
                   "$ref": "#/$defs/text"
+                },
+                "verificationMethod": {
+                  "type": "string",
+                  "enum": [
+                    "artifact_inspection",
+                    "deterministic_recompute",
+                    "behavior_probe",
+                    "source_check",
+                    "domain_review"
+                  ]
+                },
+                "evidenceRequired": {
+                  "$ref": "#/$defs/textList"
+                },
+                "blocking": {
+                  "type": "boolean",
+                  "description": "A missing or failed blocking check cannot be offset by other successful checks. This does not grant acceptance authority to the worker or override the user's current task scope."
                 }
               }
             }

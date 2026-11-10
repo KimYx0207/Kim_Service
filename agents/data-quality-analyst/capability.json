@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 1,
+  "id": "data-quality-analyst",
+  "componentType": "agent",
+  "componentVersion": "0.1.1",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "data-quality-analyst-deliver",
+      "summary": "数据质量审查（data quality / reconciliation / lineage）：核表结构、业务键、缺失、重复、引用关系和总额对账，交可定位问题及修复方案。",
+      "useWhen": [
+        "两张表金额对不上，想找原因。",
+        "准备做分析，先检查数据能不能用。",
+        "数据有重复、缺失或异常，想整理修复规则。"
+      ],
+      "doNotUseWhen": [
+        "不未经授权改写数据、删除记录或推断缺失真实值；生产迁移由backend-data-engineer等执行角色处理。",
+        "要求自动发布、付款、修改生产系统或联系第三方时交调用方授权处理。",
+        "要求把假设或资料形式当作专业认证、保证收益或最终验收时不适用。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "purpose": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "数据将支持的决定、关键字段和业务影响"
+          },
+          "data": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "授权数据或样本、提取时间、来源和表间关系"
+          },
+          "contract": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "字段口径、键、单位、允许缺失、引用关系与容差"
+          }
+        },
+        "required": [
+          "purpose",
+          "data",
+          "contract"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "profile": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "字段分布、范围、缺失和计数剖面"
+          },
+          "violations": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "逐规则可定位的问题记录"
+          },
+          "reconciliation": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "数量/金额/引用关系的双向对账"
+          },
+          "repairPlan": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "有依据的修复和再验证方案"
+          },
+          "facts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前输入、来源、期间单位及证据缺口"
+          },
+          "limitations": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "未执行、未观察、方法假设和外推边界"
+          },
+          "handoff": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前产物、规则结果、证据定位与待解决事项交调用方"
+          }
+        },
+        "required": [
+          "profile",
+          "violations",
+          "reconciliation",
+          "repairPlan",
+          "facts",
+          "limitations",
+          "handoff"
+        ],
+        "deliveryFormat": "conceptual-human-delivery"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "涉及个人敏感数据、不可逆清洗、生产回填或业务规则更改，由数据负责人和当前宿主决定。",
+          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}
