@@ -68,6 +68,23 @@
       "sourceCommit": "c4dcec8a7fefaae6fdc0934d4de30fe2b2d7fc91",
       "exactComponentBytesChecked": true,
       "ancestorChecks": "passed"
+    },
+    "physicalTempFixtures": {
+      "command": "node --test scripts/build-dsh-package.test.mjs scripts/build-zcode-marketplace.test.mjs scripts/public-maintenance-case.test.mjs",
+      "environment": "Linux TMPDIR, TMP and TEMP point to a real symbolic-link alias, reproducing the macOS /var physical-path distinction",
+      "tests": 26,
+      "pass": 25,
+      "fail": 0,
+      "skip": 1,
+      "scope": "Only fixture setup resolves the OS temporary directory. Production path rejection and explicit linked-source/output rejection tests remain unchanged."
+    },
+    "firstHostedRun": {
+      "url": "https://github.com/KimYx0207/Kim_Service/actions/runs/42913589158",
+      "head": "468ff52242897b4f93a3f6cb4abec428ce6eb173",
+      "ubuntu": "passed",
+      "windows": "passed",
+      "macos": "18 root fixture failures: the system /var alias was rejected before the intended assertions",
+      "followUp": "Resolve only the fixture temporary root to its physical path; latest PR checks record the corrected cross-platform outcome."
     }
   },
   "pairedTrial": {
@@ -129,6 +146,10 @@
     "service-zcode-final.log": {
       "sha256": "7b38c23d5d516f54197acc663bec555cf4f2f5dac1dd72d0cabe7d1c1f5cfdd6",
       "bytes": 1539
+    },
+    "service-physical-temp-regression.log": {
+      "sha256": "99b3e848b75f24a532ee9519958c1a41831c174e104eda80fb6749cc447bb155",
+      "bytes": 2739
     }
   },
   "protectedAssets": "Root contact/payment footer bytes and 3 original QR assets unchanged; new Skill README references the same canonical assets.",
@@ -138,6 +159,7 @@
     "Shared contact/payment images preserved at source-relative paths in DSh.",
     "ZCode discovers every canonical professional component and retains complete committed knowledge and quality contracts.",
     "Meta ZCode loaders resolve full canonical methods, machine contracts and 12 public configuration resources from source/.",
-    "Pending component provenance bound to the real remote source commit after byte and ancestry checks."
+    "Pending component provenance bound to the real remote source commit after byte and ancestry checks.",
+    "macOS test fixtures resolve the OS temporary root physically; linked source/output rejection and evidence safe-open rules remain unchanged."
   ]
 }

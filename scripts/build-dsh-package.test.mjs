@@ -9,6 +9,10 @@ import { discoverComponents } from './capability-catalog.mjs';
 import { buildDshFiles, writeDshPackage } from './build-dsh-package.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+// macOS exposes os.tmpdir() beneath /var -> /private/var. Fixtures use the
+// physical root so ordinary tests reach their subject; explicit link tests
+// below still exercise the production refusal of linked source/output paths.
+const TEMP_ROOT = fs.realpathSync.native(os.tmpdir());
 const sha = (bytes) => createHash('sha256').update(bytes).digest('hex');
 function resourceParts(files, indexPath) {
   const index = JSON.parse(files.get(indexPath));
@@ -20,7 +24,7 @@ function resourceParts(files, indexPath) {
   return parts.map((part) => ({ ...part, file: `${dir}/${part.path}` }));
 }
 function fixture(t) {
-  const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'service-dsh-'));
+  const temp = fs.mkdtempSync(path.join(TEMP_ROOT, 'service-dsh-'));
   t.after(() => fs.rmSync(temp, { recursive: true, force: true }));
   const root = path.join(temp, 'source');
   fs.mkdirSync(root);

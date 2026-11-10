@@ -9,6 +9,9 @@ import { AGENTS, META_RESOURCE_FILES, buildMarketplace, safeRelative, sha256 } f
 import { checkZcodeRelease } from './check-zcode-release.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+// Use the physical temporary directory on macOS, where /var is a system
+// symlink, without relaxing the builder's separate symlink rejection tests.
+const TEMP_ROOT = fs.realpathSync.native(os.tmpdir());
 const SKILLS = ['goalpro', 'find-skill'];
 const ROLES = ['frontend-engineer', 'workplace-writer'];
 const META_FILES = ['LICENSE', 'NOTICE', ...AGENTS.map(id => `canonical/agents/${id}.md`), 'canonical/skills/meta-theory/SKILL.md', 'canonical/skills/meta-theory/references/current-method.md', 'config/contracts/fixture.json', ...META_RESOURCE_FILES];
@@ -40,7 +43,7 @@ function fixture(kind, files) {
   return root;
 }
 before(() => {
-  scratch = fs.mkdtempSync(path.join(os.tmpdir(), 'kim-service-zcode-public-'));
+  scratch = fs.mkdtempSync(path.join(TEMP_ROOT, 'kim-service-zcode-public-'));
   metaRoot = fixture('meta', META_FILES);
   kimRoot = fixture('kim', ['LICENSE', 'NOTICE']);
   for (const item of [...ROLES.map(id => `agents/${id}`), ...SKILLS.map(id => `skills/${id}`), 'docs/images']) {
@@ -51,7 +54,7 @@ before(() => {
   commit(kimRoot);
 });
 after(() => {
-  assert(path.resolve(scratch).startsWith(path.resolve(os.tmpdir()) + path.sep) && path.basename(scratch).startsWith('kim-service-zcode-public-'));
+  assert(path.resolve(scratch).startsWith(TEMP_ROOT + path.sep) && path.basename(scratch).startsWith('kim-service-zcode-public-'));
   fs.rmSync(scratch, { recursive: true, force: true });
 });
 const options = () => ({ metaRoot, kimRoot, metaCommit: git(metaRoot, ['rev-parse', 'HEAD']).trim(), kimCommit: git(kimRoot, ['rev-parse', 'HEAD']).trim(), outputRoot: path.join(scratch, `output-${sequence++}`) });
