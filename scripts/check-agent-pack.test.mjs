@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
-import { checkAgentPack, REQUIRED_SECTIONS } from './check-agent-pack.mjs';
+import { checkAgentPack, REQUIRED_SECTIONS, METHOD_CONTENT_LIMITS } from './check-agent-pack.mjs';
 
 function temporaryRoot(t) {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'kim-service-agent-pack-'));
@@ -131,4 +131,62 @@ test('side effects, thin routing lists, and oversized documents are rejected', (
   assert.equal(errorsMatching(checkAgentPack(thin), /useWhen needs at least 3/).length, 1);
   const oversized = writePack(temporaryRoot(t), { agent: agentDocument({ extraLines: filler(80) }) });
   assert.equal(errorsMatching(checkAgentPack(oversized), /must have 60-130 lines/).length, 1);
+});
+
+function writeKnowledge(root) {
+  const method = { schemaVersion: 1, roleId: 'sample-agent', protocol: 'host-bound-task-method-v1', runtimeStatus: 'needs_probe',
+    automaticInvocation: false, steps: ['Use supplied materials'], acceptance: ['Observe the result'], coordinationOwner: 'caller', finalAcceptance: 'caller_only',
+    knowledgeAssets: [{ id: 'sample-core', path: 'references/core.md', appliesTo: ['always'], sourceRefs: ['sample-source'] }] };
+  fs.mkdirSync(path.join(root, 'references'));
+  fs.writeFileSync(path.join(root, 'references/core.md'), '# Original task method\n\nCheck actual behavior.\n');
+  fs.writeFileSync(path.join(root, 'PROVENANCE.md'), '| sourceRef | source | adopted | not adopted |\n| sample-source | https://example.test/fixed | inspect facts | grant authority |\n');
+  const save = () => fs.writeFileSync(path.join(root, 'method.json'), JSON.stringify(method));
+  save(); return { method, save };
+}
+
+test('optional knowledge files are checked through the actual pack validator and legacy methods still work', (t) => {
+  const root = writePack(temporaryRoot(t)); const { method, save } = writeKnowledge(root);
+  assert.deepEqual(checkAgentPack(root), []);
+  delete method.knowledgeAssets; save();
+  fs.rmSync(path.join(root, 'PROVENANCE.md'));
+  assert.deepEqual(checkAgentPack(root), [], 'existing structured methods need no new knowledge metadata');
+});
+
+test('dangling provenance and nonexistent knowledge files fail actual package checks', (t) => {
+  const root = writePack(temporaryRoot(t)); const { method, save } = writeKnowledge(root);
+  method.knowledgeAssets[0].sourceRefs = ['not-declared']; save();
+  assert.ok(checkAgentPack(root).some(error => error.includes('sourceRefs must name rows')));
+  method.knowledgeAssets[0].sourceRefs = ['sample-source']; save();
+  fs.rmSync(path.join(root, 'references/core.md'));
+  assert.ok(checkAgentPack(root).some(error => error.includes('knowledge file must be bounded')));
+});
+
+test('knowledge paths reject traversal, absolute paths and duplicated identities', (t) => {
+  const root = writePack(temporaryRoot(t)); const { method, save } = writeKnowledge(root);
+  for (const unsafe of ['../private.md', '/private.md', 'C:/private.md', 'references/../private.md', 'references\\core.md']) {
+    method.knowledgeAssets[0].path = unsafe; save();
+    assert.ok(checkAgentPack(root).some(error => error.includes('path must be unique package-relative')));
+  }
+  method.knowledgeAssets[0].path = 'references/core.md'; method.knowledgeAssets.push(structuredClone(method.knowledgeAssets[0])); save();
+  assert.ok(checkAgentPack(root).some(error => error.includes('id must be unique')));
+});
+
+test('symlink ancestors do not make external content a package knowledge asset', (t) => {
+  const temp = temporaryRoot(t); const root = writePack(temp); writeKnowledge(root);
+  fs.mkdirSync(path.join(temp, 'external'));
+  fs.writeFileSync(path.join(temp, 'external/core.md'), 'outside-package');
+  fs.rmSync(path.join(root, 'references'), { recursive: true });
+  try { fs.symlinkSync(path.join(temp, 'external'), path.join(root, 'references'), process.platform === 'win32' ? 'junction' : 'dir'); }
+  catch (error) { if (['EPERM', 'EACCES'].includes(error.code)) { t.skip('symlink creation unavailable'); return; } throw error; }
+  assert.ok(checkAgentPack(root).some(error => error.includes('without symlinks')));
+});
+
+test('empty, invalid UTF-8 and over-budget documents cannot masquerade as loaded knowledge', (t) => {
+  const root = writePack(temporaryRoot(t)); writeKnowledge(root);
+  fs.writeFileSync(path.join(root, 'references/core.md'), '  \n');
+  assert.ok(checkAgentPack(root).some(error => error.includes('must not be empty')));
+  fs.writeFileSync(path.join(root, 'references/core.md'), Buffer.from([0xff, 0xfe]));
+  assert.ok(checkAgentPack(root).some(error => error.includes('bounded UTF-8')));
+  fs.writeFileSync(path.join(root, 'references/core.md'), 'a'.repeat(METHOD_CONTENT_LIMITS.assetBytes + 1));
+  assert.ok(checkAgentPack(root).some(error => error.includes('bounded UTF-8')));
 });

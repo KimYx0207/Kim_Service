@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.0
+
+- Add original, source-attributed professional knowledge with explicit `knowledgeAssets` loading and concrete positive, negative and acceptance examples.
+- Carry the current design binding and project facts through the existing method; architecture exploration may precede detailed modules in one `productDesign.softwareDesign` output.
+- Add a bounded candidate handoff checker for relationships and coverage. Its result does not establish decision provenance, model quality, execution permission or product acceptance.
+
 ## 0.2.0
 
 - Make requirements exploration precede complete product design and delivery slicing; return concrete recommendations, tradeoffs and dependent decisions to the caller.

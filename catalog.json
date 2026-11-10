@@ -28,9 +28,9 @@
       "source": "canonical:agents/backend-data-engineer",
       "revision": "ce3f4d52a6dc0476ec9183d4e57dd74eef3b299d",
       "snapshot": "committed-component-tree",
-      "version": "0.1.0",
-      "contractSha256": "16d0d2adf3b31e796de346e6000ada2f42c07b278acf4f3daccf0e7b2ba8407d",
-      "contentSha256": "5807123c199567a3b4b849129b47a118622267241a132514d7237c8c91f61836",
+      "version": "0.2.0",
+      "contractSha256": "9dfc3bbb9066a735b896c77488e50025ee828448d19c4a130f1d80b408a93c12",
+      "contentSha256": "a3548009b8501ca360bf9cbc79785e57c2f65a59632d1008d28a0faf6893ac9a",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -125,9 +125,9 @@
       "source": "canonical:agents/frontend-engineer",
       "revision": "ce3f4d52a6dc0476ec9183d4e57dd74eef3b299d",
       "snapshot": "committed-component-tree",
-      "version": "0.1.0",
-      "contractSha256": "a55049458cfe876d07024fe3961dbba34bb07a886d89cd29b021c5dd4d5696c0",
-      "contentSha256": "b30ed237ee0032f8bfe779becd09f88a4d1fcb2f3228e24beeff7b8cf6095a9b",
+      "version": "0.2.0",
+      "contractSha256": "009e2bee9d75597792e5413235668019a9bdf422f318aaabe437d6d93caf19ab",
+      "contentSha256": "b8220af44e3597852c3c4dae22264ec8a4d9a2079cdbeaf53c147879e7eae22d",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -163,9 +163,9 @@
       "source": "canonical:agents/interaction-designer",
       "revision": "689714dada0f897326c77d41c972790b85efd0ed",
       "snapshot": "committed-component-tree",
-      "version": "0.2.0",
-      "contractSha256": "57e89cfd67d7481af794f61a0894842e829a646ed2764dd491b3dc0f685c544e",
-      "contentSha256": "adc139bdd9fba5dd41ae27695fc1463cb5491ae69177a6253c49bc70edaffa6a",
+      "version": "0.3.0",
+      "contractSha256": "3c062003fc573d329ad600d842b3ddb3c29d0524a9cc783b8d10fb2bb508b44c",
+      "contentSha256": "1af1c69341f1e976973ad6e6f02eb82b361d7328fa16f67c84b84da2982fc862",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -277,16 +277,18 @@
       "source": "canonical:agents/product-architect",
       "revision": "689714dada0f897326c77d41c972790b85efd0ed",
       "snapshot": "committed-component-tree",
-      "version": "0.2.0",
-      "contractSha256": "9a0923721d0eb4738dd74fbdb4c8eac044363f83a2920900b81b1daa199d1ebc",
-      "contentSha256": "dccd1fc768a686b86fa1e689b56004a88473a0d17b4d4ff108f4b9d97aaaf7eb",
+      "version": "0.3.0",
+      "contractSha256": "438f7851b8f07229ca3d057408b3a84c8c9d6900818121121ce074664ff37a88",
+      "contentSha256": "d181fc29d79b7ca43b3c2290f868376ed157f970aea5edbd2460b783ee2e3efd",
       "required": [
         "AGENT.md",
         "capability.json",
-        "tests/contract.test.mjs"
+        "tests/contract.test.mjs",
+        "tests/design-handoff.test.mjs"
       ],
       "validation": [
-        "node tests/contract.test.mjs"
+        "node tests/contract.test.mjs",
+        "node tests/design-handoff.test.mjs"
       ]
     },
     {

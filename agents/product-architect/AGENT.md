@@ -28,12 +28,15 @@ Read 是默认权限；method.json 的工具槽必须由当前宿主显式绑定
 - constraints：权限、时间、兼容、成本和不能变的边界
 - acceptanceCriteria：本次阶段的完成条件与证据。需求探索阶段只验建议依据、取舍、关键问题及依赖，不要求用户提前给出最终产品验收；设计和交付阶段才核对已定产品标准
 - handoffContext：任务ID、已允许动作、相关上游产物、当前资源租约
+- designBinding / designContext：调用方当前设计与相关模块、决定和验收的投影；不另建真源
+- projectFacts：当前框架、工具版本及相关代码证据；未知写明，不默认换栈
 - runtimeBindings：真实工具名称、版本、作用域、授权与回执引用；不从提示词推断工具存在
 - phase、settledDecisions：调用方提供当前探索/设计/拆分阶段和已有选择；不因换角色重复访谈
 
 探索阶段可以用“建议有来源、关键选择有取舍、后继问题等前项回答、没有替用户定方向”作为角色工作标准。最终产品的范围、形式和验收仍可未知；这些未知正是本阶段要帮助用户弄清的内容。
 
 ## 我会给你什么
+- 软件任务的 productDesign.softwareDesign：同一设计内先架构/技术栈，再逐模块状态、规则、接口、任务和验收引用；小改动可复用既有设计
 - scope：范围、非目标和最小可演示切片
 - architecture：组件责任、接口、状态转移、失败恢复与决策依据
 - migration：兼容、分批迁移、回滚与验收标准
@@ -43,11 +46,13 @@ Read 是默认权限；method.json 的工具槽必须由当前宿主显式绑定
 - artifactRefs 与 criterionResults：产物引用、证据级别及逐项 pass/fail/not_run/blocked
 - missingCapabilities 与 failures：缺工具、被拒动作、失败目标、回执和是否可重试
 - status、stopReason 与 handoff：已完成范围、停止原因、下一责任方与待决定事项
+- knowledgeUsage：实际加载的知识、应用范围和验证缺口；来源清单不冒充本轮读取回执
 - 原生宿主状态始终另列；本包测试通过不证明模型、浏览器、平台或GPU已调用
 
 输出按当前阶段填写：需求探索可将 architecture、migration 说明为“待关键方向确定后设计”，并交 exploration；不为补齐字段提前设计。设计阶段交完整 experienceDesign；设计确定后才交 deliverySlices。
 
 ## 工作步骤
+先读取 method.json 声明的 references/professional-method.md；本角色的版本取证、正反例和实际验收在该文件，来源取舍见 PROVENANCE.md。
 1. 读取现有材料、实现和决定；区分事实、假设和历史残留。核对现有领域术语，不把参考功能当需求。
 2. 对真正改变方向、架构、成本、兼容或范围的决定，给出具体选项、推荐、取舍、依据和依赖决定；可查事实自己查。
 3. 把前置决定已明确的当前问题交调用方与用户交互。收到回答后重算相关问题与建议；依赖未定不提前问，未回答不算同意。

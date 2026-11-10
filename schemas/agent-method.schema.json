@@ -1,0 +1,121 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/KimYx0207/Kim_Service/schemas/agent-method.schema.json",
+  "title": "Kim Service optional structured Agent method",
+  "description": "Existing methods remain compatible. knowledgeAssets are bounded package-local method content, not tool grants or invocation evidence. Repository checks enforce real files, byte budgets and provenance references.",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schemaVersion",
+    "roleId",
+    "protocol",
+    "runtimeStatus",
+    "automaticInvocation",
+    "steps",
+    "acceptance",
+    "coordinationOwner",
+    "finalAcceptance"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "roleId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "protocol": {
+      "const": "host-bound-task-method-v1"
+    },
+    "runtimeStatus": {
+      "const": "needs_probe"
+    },
+    "automaticInvocation": {
+      "const": false
+    },
+    "steps": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "^(?=[\\s\\S]*\\S)[\\s\\S]+$"
+      }
+    },
+    "acceptance": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "^(?=[\\s\\S]*\\S)[\\s\\S]+$"
+      }
+    },
+    "coordinationOwner": {
+      "const": "caller"
+    },
+    "finalAcceptance": {
+      "const": "caller_only"
+    },
+    "knowledgeAssets": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "path",
+          "appliesTo",
+          "sourceRefs"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "path": {
+            "type": "string",
+            "maxLength": 240,
+            "pattern": "^(?!/)(?!.*(?:^|/)\\.{1,2}(?:/|$))[A-Za-z0-9_.-]+(?:/[A-Za-z0-9_.-]+)*\\.md$"
+          },
+          "appliesTo": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 16,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^(?=[\\s\\S]*\\S)[\\s\\S]+$",
+              "maxLength": 128
+            }
+          },
+          "sourceRefs": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 16,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-contentLimits": {
+    "methodBytes": 65536,
+    "assetBytes": 12288,
+    "totalAssetBytes": 65536,
+    "provenanceBytes": 65536
+  }
+}

@@ -2,6 +2,20 @@
 
 Kim Service uses one repository-level two-part public version (`V<major>.<minor>`) and one GitHub Release for the professional-capability dependency repository. Component CHANGELOG files record component provenance; this file is the release-note authority. Historical verification and source notes are kept in the [testing record](./docs/verification-history.md).
 
+## Unreleased
+
+### Professional knowledge and two-level software design
+
+- Product Architect and Interaction Designer move from 0.2.0 to **0.3.0**. Frontend Engineer and Backend Data Engineer move from 0.1.0 to **0.2.0**. Each now includes original, source-attributed professional material with explicit applicability in `method.json.knowledgeAssets`.
+- Architecture exploration can precede detailed modules. Software delivery describes the system/technology baseline and module purpose, interactions, business rules, contracts, state, implementation approach and acceptance through the existing `productDesign` output. The current design identity and related project context can travel through handoffs without creating a second task authority.
+- Frontend and backend methods preserve the actual project stack and add concrete guidance for interaction states, accessibility, data invariants, concurrency, authorization, testing and migration. Examples remain synthetic; package quality checks do not imply a successful native model task.
+- The Product Architect adds a bounded `design-handoff-check-v1` helper for candidate structure and reference checks. It does not authenticate user decisions, certify digest provenance or accept the product, and it is not silently added to Meta_Kim's calculation-tool allowlist.
+- Package validation now checks optional method knowledge declarations, package-local files, provenance references, UTF-8 text and bounded byte budgets. Existing methods without knowledge declarations remain compatible. Generated catalog and task-browser content are rebuilt from the same component sources.
+- Chinese and English READMEs explain the job-to-capability path, the relationship with Meta_Kim, concrete package contents and current evidence limits. An original architecture illustration is included. All existing contact content and payment QR images are preserved.
+
+These are source changes for review, not a newly published repository Release or ZCode marketplace version. Codex, Claude Code, Cursor, Gemini CLI and ZCode still require their host-specific installation, tool and native-execution checks. No new permissions or external side effects are granted by these professional packages.
+
+
 ## V1.10 - 2026-10-23
 
 ### Affected components

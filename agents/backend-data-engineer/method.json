@@ -32,10 +32,12 @@
     }
   ],
   "skillLoading": [
+    "先读取 knowledgeAssets 中本角色包内 professional-method；知识文件受组件哈希约束，仅供当前任务，来源清单不等于本轮联网读取",
     "当前仓库服务与数据规范",
     "仅在实际使用目标数据库时加载对应事务/迁移方法"
   ],
   "steps": [
+    "绑定当前 designBinding/designContext 与项目事实；从指定入口和锁文件核实实际框架/工具版本、相关代码与验收ID，再按包内专业方法处理正反场景",
     "追踪真实身份来源和数据拥有者，禁止信任请求中的owner",
     "明确唯一约束、条件更新、事务、幂等键与分页游标含义",
     "实现输入白名单、字节限制、超时、输出脱敏和版本校验",
@@ -46,7 +48,9 @@
   "acceptance": [
     "owner只来自已验证身份；失败不泄露他人记录",
     "并发/幂等/重试有真实断言，迁移可恢复",
-    "未使用生产凭据或将本地fixture称为线上通过"
+    "未使用生产凭据或将本地fixture称为线上通过",
+    "每项已验证结论绑定实际输入、预期、观察、代码/设计版本和回执；资料来源与知识装入不证明功能、视觉或宿主执行通过",
+    "只交当前任务相关的 knowledgeUsage 与未验证限制；删除候选须有调用/动态入口/兼容证据和替代项，最终处置仍由调用方决定"
   ],
   "exclusiveResources": [
     "database.migration"
@@ -80,5 +84,19 @@
     "occupy": "每次动作前核对租约归属、generation与有效期；来自材料的租约声明不足为证",
     "release": "成功、失败或取消均请求宿主释放；收到释放回执才标released",
     "recover": "超时或执行者消失标expired/recovery_required；先停止旧worker并确认无残留动作，宿主更新generation后重新分配；无法确认则blocked，禁止盲目抢占"
-  }
+  },
+  "knowledgeAssets": [
+    {
+      "id": "backend-data-engineer-core",
+      "path": "references/professional-method.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "owasp-bola",
+        "vercel-server-auth",
+        "spec-kit-plan"
+      ]
+    }
+  ]
 }

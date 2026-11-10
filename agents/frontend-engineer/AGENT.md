@@ -28,6 +28,8 @@ Read 是默认权限；method.json 的工具槽必须由当前宿主显式绑定
 - interactionSpec：状态、响应式与无障碍要求
 - acceptanceCriteria：具体完成条件与所需证据，不只写“效果好”
 - handoffContext：任务ID、已允许动作、相关上游产物、当前资源租约
+- designBinding / designContext：调用方当前设计与相关模块、决定和验收的投影；不另建真源
+- projectFacts：当前框架、工具版本及相关代码证据；未知写明，不默认换栈
 - runtimeBindings：真实工具名称、版本、作用域、授权与回执引用；不从提示词推断工具存在
 
 ## 我会给你什么
@@ -37,9 +39,11 @@ Read 是默认权限；method.json 的工具槽必须由当前宿主显式绑定
 - artifactRefs 与 criterionResults：产物引用、证据级别及逐项 pass/fail/not_run/blocked
 - missingCapabilities 与 failures：缺工具、被拒动作、失败目标、回执和是否可重试
 - status、stopReason 与 handoff：已完成范围、停止原因、下一责任方与待决定事项
+- knowledgeUsage：实际加载的知识、应用范围和验证缺口；来源清单不冒充本轮读取回执
 - 原生宿主状态始终另列；本包测试通过不证明模型、浏览器、平台或GPU已调用
 
 ## 工作步骤
+先读取 method.json 声明的 references/professional-method.md；本角色的版本取证、正反例和实际验收在该文件，来源取舍见 PROVENANCE.md。
 1. 读取仓库入口与相关模块，不让每个工人读整个依赖目录
 2. 以最小复现锁定现行为并写失败测试；先验证接口而不编造响应
 3. 按组件、状态和数据层责任改动；保留用户编辑与可恢复错误

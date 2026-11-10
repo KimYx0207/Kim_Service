@@ -38,6 +38,76 @@ export const LIMITS = Object.freeze({
 
 const FORBIDDEN_PHRASE_EXEMPT_LINE = /禁用词[：:]/;
 const HEADING_LINE = /^## (.+?)\s*$/;
+const METHOD_SCHEMA = JSON.parse(fs.readFileSync(new URL('../schemas/agent-method.schema.json', import.meta.url), 'utf8'));
+const KNOWLEDGE_SCHEMA = METHOD_SCHEMA.properties.knowledgeAssets;
+const ASSET_SCHEMA = KNOWLEDGE_SCHEMA.items;
+export const METHOD_CONTENT_LIMITS = Object.freeze(METHOD_SCHEMA['x-contentLimits']);
+
+function readBoundedPackageText(componentRoot, relativePath, maxBytes) {
+  if (typeof relativePath !== 'string' || relativePath.includes('\\') || /^[A-Za-z]:|^\/|\x00/.test(relativePath) ||
+      relativePath.split('/').some(part => ['', '.', '..'].includes(part))) throw new Error('requires a package-relative path');
+  let current = componentRoot;
+  const parts = relativePath.split('/');
+  for (const [index, part] of parts.entries()) {
+    current = path.join(current, part);
+    const stat = fs.lstatSync(current);
+    if (stat.isSymbolicLink() || (index < parts.length - 1 ? !stat.isDirectory() : !stat.isFile())) throw new Error('requires regular files without symlink ancestors');
+    if (index === parts.length - 1 && stat.size > maxBytes) throw new Error('exceeds byte budget');
+  }
+  const bytes = fs.readFileSync(current);
+  if (bytes.length > maxBytes) throw new Error('exceeds byte budget');
+  return { text: new TextDecoder('utf-8', { fatal: true }).decode(bytes), bytes: bytes.length };
+}
+
+function checkOptionalMethod(componentRoot, errors) {
+  const methodPath = path.join(componentRoot, 'method.json');
+  // lstat distinguishes an absent legacy file from a broken symlink.
+  try { fs.lstatSync(methodPath); } catch (error) {
+    if (error.code === 'ENOENT') return;
+    errors.push('method.json cannot be inspected'); return;
+  }
+  let method;
+  try { method = JSON.parse(readBoundedPackageText(componentRoot, 'method.json', METHOD_CONTENT_LIMITS.methodBytes).text); }
+  catch { errors.push('method.json must be bounded UTF-8 JSON in a regular package file'); return; }
+  if (!method || typeof method !== 'object' || Array.isArray(method)) { errors.push('method.json must be an object'); return; }
+  for (const key of METHOD_SCHEMA.required) if (!Object.hasOwn(method, key)) errors.push('method.json requires ' + key);
+  for (const [key, rule] of Object.entries(METHOD_SCHEMA.properties)) {
+    if (Object.hasOwn(rule, 'const') && method[key] !== rule.const) errors.push('method.json ' + key + ' must remain ' + String(rule.const));
+  }
+  if (method.roleId !== path.basename(componentRoot)) errors.push('method.json roleId must equal the component id');
+  for (const key of ['steps', 'acceptance']) if (!Array.isArray(method[key]) || method[key].length === 0 || !method[key].every(isNonEmptyString)) errors.push('method.json ' + key + ' needs non-empty method text');
+  if (method.knowledgeAssets === undefined) return;
+  if (!Array.isArray(method.knowledgeAssets) || method.knowledgeAssets.length < KNOWLEDGE_SCHEMA.minItems || method.knowledgeAssets.length > KNOWLEDGE_SCHEMA.maxItems) {
+    errors.push('method.json knowledgeAssets must be a non-empty bounded list'); return;
+  }
+  let provenance = '';
+  try { provenance = readBoundedPackageText(componentRoot, 'PROVENANCE.md', METHOD_CONTENT_LIMITS.provenanceBytes).text; }
+  catch { errors.push('knowledgeAssets requires a bounded regular PROVENANCE.md'); }
+  const declaredSources = new Set([...provenance.matchAll(/^\|\s*([a-z0-9]+(?:-[a-z0-9]+)*)\s*\|/gm)].map(match => match[1]));
+  const ids = new Set(); const paths = new Set(); let totalBytes = 0;
+  for (const [index, asset] of method.knowledgeAssets.entries()) {
+    const label = 'method.json knowledgeAssets[' + index + ']';
+    if (!asset || typeof asset !== 'object' || Array.isArray(asset)) { errors.push(label + ' must be an object'); continue; }
+    if (Object.keys(asset).some(key => !ASSET_SCHEMA.required.includes(key)) || ASSET_SCHEMA.required.some(key => !Object.hasOwn(asset, key))) errors.push(label + ' requires only id/path/appliesTo/sourceRefs');
+    if (typeof asset.id !== 'string' || asset.id.length > ASSET_SCHEMA.properties.id.maxLength || !new RegExp(ASSET_SCHEMA.properties.id.pattern).test(asset.id) || ids.has(asset.id)) errors.push(label + ' id must be unique and valid');
+    ids.add(asset.id);
+    for (const key of ['appliesTo', 'sourceRefs']) {
+      const rule = ASSET_SCHEMA.properties[key]; const value = asset[key];
+      if (!Array.isArray(value) || value.length < rule.minItems || value.length > rule.maxItems || !value.every(item => isNonEmptyString(item) && item.length <= 128) || new Set(value).size !== value.length) {
+        errors.push(label + ' ' + key + ' must be a bounded unique text list');
+      } else if (key === 'sourceRefs' && value.some(id => !declaredSources.has(id))) errors.push(label + ' sourceRefs must name rows in PROVENANCE.md');
+    }
+    const rule = ASSET_SCHEMA.properties.path;
+    if (typeof asset.path !== 'string' || asset.path.length > rule.maxLength || !new RegExp(rule.pattern).test(asset.path) || paths.has(asset.path)) { errors.push(label + ' path must be unique package-relative Markdown'); continue; }
+    paths.add(asset.path);
+    try {
+      const content = readBoundedPackageText(componentRoot, asset.path, METHOD_CONTENT_LIMITS.assetBytes);
+      totalBytes += content.bytes;
+      if (!isNonEmptyString(content.text)) errors.push(label + ' knowledge file must not be empty');
+    } catch { errors.push(label + ' knowledge file must be bounded UTF-8, regular and inside the package without symlinks'); }
+  }
+  if (totalBytes > METHOD_CONTENT_LIMITS.totalAssetBytes) errors.push('knowledgeAssets total content exceeds byte budget');
+}
 
 function isNonEmptyString(value) {
   return typeof value === 'string' && value.trim().length > 0;
@@ -261,6 +331,7 @@ export function checkAgentPack(componentRoot) {
   const errors = [];
   if (!fs.existsSync(root) || !fs.lstatSync(root).isDirectory()) return ['component directory does not exist: ' + root];
   const contract = checkContract(root, errors);
+  checkOptionalMethod(root, errors);
   checkAgentDocument(root, contract, errors);
   checkCompanionFiles(root, errors);
   return errors;

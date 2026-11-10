@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "frontend-engineer",
   "componentType": "agent",
-  "componentVersion": "0.1.0",
+  "componentVersion": "0.2.0",
   "entrypoint": "AGENT.md",
   "capabilities": [
     {
@@ -159,6 +159,99 @@
               "permittedActions",
               "resourceLeases"
             ]
+          },
+          "designBinding": {
+            "type": "object",
+            "properties": {
+              "designId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "revision": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "designDigest": {
+                "type": "string",
+                "minLength": 1
+              },
+              "sliceId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "contextDigest": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "designId",
+              "revision"
+            ],
+            "description": "由调用方提供的现行设计绑定；仅引用，不授予权限或自行认定当前版本。"
+          },
+          "designContext": {
+            "type": "object",
+            "description": "调用方投影的当前模块/决定/状态/接口/上游产物；只读任务上下文，不是权限或另一份PRD真源。"
+          },
+          "projectFacts": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "versions": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "version": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "evidenceRefs": {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "version",
+                    "evidenceRefs"
+                  ]
+                }
+              },
+              "codeRefs": {
+                "type": "array",
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "constraints": {
+                "type": "array",
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "required": [
+              "versions",
+              "codeRefs"
+            ],
+            "description": "本轮已核实的项目版本/代码入口/边界；未知版本写 null，不把网上最新版当安装版本。"
           }
         },
         "required": [
@@ -362,6 +455,81 @@
           "nativeRuntimeVerified": {
             "const": false,
             "description": "包静态合同或本地helper检查不会升级原生宿主加载；真实探测由调用方另外保存"
+          },
+          "designBinding": {
+            "type": "object",
+            "properties": {
+              "designId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "revision": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "designDigest": {
+                "type": "string",
+                "minLength": 1
+              },
+              "sliceId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "contextDigest": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "designId",
+              "revision"
+            ],
+            "description": "由调用方提供的现行设计绑定；仅引用，不授予权限或自行认定当前版本。"
+          },
+          "knowledgeUsage": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "assetId": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "sourceRefs": {
+                  "type": "array",
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "appliedTo": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "verification": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "limitations": {
+                  "type": "array",
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              },
+              "required": [
+                "assetId",
+                "sourceRefs",
+                "appliedTo",
+                "verification",
+                "limitations"
+              ]
+            },
+            "description": "仅记录本轮实际装入或核实并使用的知识；PROVENANCE 清单不是本轮读取证据，不证明产物专业质量。"
           }
         },
         "required": [

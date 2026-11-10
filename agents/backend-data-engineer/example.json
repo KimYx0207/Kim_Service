@@ -17,6 +17,19 @@
         "read_supplied_materials"
       ],
       "resourceLeases": []
+    },
+    "projectFacts": {
+      "versions": [
+        {
+          "name": "project runtime",
+          "version": null,
+          "evidenceRefs": []
+        }
+      ],
+      "codeRefs": [],
+      "constraints": [
+        "合成案例没有读取真实仓库，不声称已核实版本"
+      ]
     }
   },
   "output": {
@@ -63,6 +76,7 @@
       ],
       "requiresDecision": false
     },
-    "nativeRuntimeVerified": false
+    "nativeRuntimeVerified": false,
+    "knowledgeUsage": []
   }
 }
