@@ -70,9 +70,11 @@
       "ancestorChecks": "passed",
       "followUpCommands": [
         "node scripts/catalog-automation.mjs build --provenance-revision 302c9896590103564eb0cce2b349e530b83d5026 --provenance-component supplier-comparison-analyst",
-        "node scripts/catalog-automation.mjs build --provenance-revision 302c9896590103564eb0cce2b349e530b83d5026 --provenance-component store-performance-analyst"
+        "node scripts/catalog-automation.mjs build --provenance-revision 302c9896590103564eb0cce2b349e530b83d5026 --provenance-component store-performance-analyst",
+        "node scripts/catalog-automation.mjs build --provenance-revision 6940a7e4e315c6585ad96403c387a57fab50cf71 --provenance-component supplier-comparison-analyst",
+        "node scripts/catalog-automation.mjs build --provenance-revision 6940a7e4e315c6585ad96403c387a57fab50cf71 --provenance-component store-performance-analyst"
       ],
-      "followUpSourceCommit": "302c9896590103564eb0cce2b349e530b83d5026"
+      "followUpSourceCommit": "6940a7e4e315c6585ad96403c387a57fab50cf71"
     },
     "physicalTempFixtures": {
       "command": "node --test scripts/build-dsh-package.test.mjs scripts/build-zcode-marketplace.test.mjs scripts/public-maintenance-case.test.mjs",
@@ -111,6 +113,17 @@
       "source": "https://github.com/nodejs/node/issues/67280",
       "status": "Open external report on Node 22.21.1, not a maintainer-confirmed cause for this Node 24 failure.",
       "adoption": "Preserve bounded Python reads, use explicit asynchronous stdin completion, retain hard failures, and verify on hosted macOS."
+    },
+    "utf8ProbePortability": {
+      "hostedRun": "https://github.com/KimYx0207/Kim_Service/actions/runs/42916194889",
+      "head": "2c1c7ceee93360bb3e8794789067c923bee153e3",
+      "macos": "passed",
+      "ubuntu": "passed",
+      "windows": "Both new EOF probes received the exact byte count and SHA-256 but failed on Python text stdout CRLF versus expected LF. All business and process-limit assertions passed.",
+      "fix": "Only the synthetic probe writes ASCII bytes through sys.stdout.buffer; the exact expected output, actual input hash and EOF assertions remain unchanged.",
+      "targetedTests": 25,
+      "pass": 25,
+      "fail": 0
     }
   },
   "pairedTrial": {
@@ -184,11 +197,15 @@
     "service-root-async-final.log": {
       "sha256": "73481d2ccdcbe4f3bac6e4fb9537f57a9f920c65e9fd5b3aa2a15a4099481389",
       "bytes": 13096
+    },
+    "service-async-stdin-portable-regression.log": {
+      "sha256": "59a2f6f4c24ee70847ab50478de34e82119d952d60060cdd696d22a1e91ea2d7",
+      "bytes": 2976
     }
   },
   "protectedAssets": "Root contact/payment footer bytes and 3 original QR assets unchanged; new Skill README references the same canonical assets.",
-  "sourceCommit": "302c9896590103564eb0cce2b349e530b83d5026",
-  "sourceTree": "730a3a2d27dc664c297c06942605ab51ab420d24",
+  "sourceCommit": "6940a7e4e315c6585ad96403c387a57fab50cf71",
+  "sourceTree": "b9e84642f67b2f4ff2000a83e8936fecae7caa11",
   "recoveryFixes": [
     "Shared contact/payment images preserved at source-relative paths in DSh.",
     "ZCode discovers every canonical professional component and retains complete committed knowledge and quality contracts.",
