@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.0 - 2026-11-10
+
+- Add contract-bound expertise: domain diagnostics, decision rules, input guidance, output checks and professional review boundaries.
+- Add authored positive and failure cases; structural checks and knowledge transport do not claim expert-effect validation.
+- Keep the existing professional knowledge, source attribution and deterministic helpers; add reusable review metadata.
+
 ## 0.3.0
 
 - Add original, source-attributed professional knowledge with explicit `knowledgeAssets` loading and concrete positive, negative and acceptance examples.

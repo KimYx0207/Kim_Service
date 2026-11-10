@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "roleId": "pricing-cost-analyst",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "price-time-check",
+      "scenario": "每单2小时，时间估值30元/小时，现金手续费3元，期间固定60元。",
+      "input": {
+        "offer": "服务每单2小时，比较79、99、129元",
+        "variableCosts": "每单现金手续费3元；时间成本2×30=60元",
+        "fixedCosts": "本期固定60元，不含税费等未知项"
+      },
+      "candidateOutputExcerpt": {
+        "unitEconomics": [
+          "计入时间后每单贡献分别16、36、66元；现金剩余不等于最终利润。"
+        ],
+        "breakEven": "同期间且其他假设成立时，覆盖60元固定成本分别至少4、2、1单；还要检查可用工时。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "公式、时间与期间一致；未声称市场接受这些价格。",
+      "capabilityId": "pricing-cost-analyst-assist",
+      "category": "worked_example",
+      "diagnosticRefs": [
+        "unit-boundary",
+        "cost-class",
+        "capacity-demand"
+      ],
+      "decisionRuleRefs": [
+        "separate-time-cash",
+        "nonpositive-margin",
+        "price-experiment"
+      ]
+    },
+    {
+      "id": "negative-margin",
+      "scenario": "每单价格50，随单现金和时间成本合计70，固定100。",
+      "input": {
+        "offer": "每单50元",
+        "variableCosts": "每单70元",
+        "fixedCosts": "本期100元"
+      },
+      "candidateOutputExcerpt": {
+        "breakEven": "100÷(50-70)=-5，所以卖到5单就能盈利。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "负贡献下销量增加扩大该口径亏损，没有有限正盈亏平衡量。",
+      "capabilityId": "pricing-cost-analyst-assist",
+      "category": "failure_boundary",
+      "diagnosticRefs": [
+        "unit-boundary",
+        "cost-class",
+        "capacity-demand"
+      ],
+      "decisionRuleRefs": [
+        "separate-time-cash",
+        "nonpositive-margin",
+        "price-experiment"
+      ]
+    }
+  ]
+}

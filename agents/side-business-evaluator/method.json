@@ -1,0 +1,169 @@
+{
+  "schemaVersion": 1,
+  "roleId": "side-business-evaluator",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "toolSlots": [
+    {
+      "id": "documents.read",
+      "required": false,
+      "onMissing": "use_supplied_materials_and_report_unread_sources"
+    }
+  ],
+  "skillLoading": [
+    "先读取本角色 knowledgeAssets 中的包内专业方法；来源记录不等于当前任务联网，案例不是实际运行证据。",
+    "读取本角色 knowledgeAssets；只在当前任务实际需要时读取用户指定的项目/平台规范，缺来源不假称已读取。"
+  ],
+  "steps": [
+    "先读取包内专业方法与现有 AGENT.md，绑定当前输入、目标和材料范围；来源引用不等于当前任务联网。",
+    "用户真实可投入什么，哪些约束不能突破？ 不默认追加预算、借贷或辞职；先按已知约束缩小方向。",
+    "客户问题是否有实际行为证据？ 把需求列假设，不把赞美当购买证明。",
+    "哪项未知最可能让方向失败？ 先做能消除最大不确定性的测试，不盲目搭产品。",
+    "排除或缩为可承担的服务范围",
+    "继续核真实工作情境和现有解决方式",
+    "报告反证并改范围/停止该假设",
+    "逐项应用本角色输出检查，交事实、产物和未验证限制；当前宿主决定工具绑定、任务状态与最终验收。"
+  ],
+  "acceptance": [
+    "需求、能力与成本假设可被验证或推翻。",
+    "先硬约束，再多维取舍，未知保留。",
+    "给条件推荐及为什么符合当前资源。",
+    "每步有对象、输入、观察和改变决定的信号。",
+    "对应实际风险和反证，而非泛泛坚持。",
+    "真实执行、结构检查和专业效果分开报告；不能用本包案例或自报判断代替当前任务观察。"
+  ],
+  "coordinationOwner": "caller",
+  "permissionSource": "current_task_host_authorization",
+  "finalAcceptance": "caller_only",
+  "contextPolicy": "仅装入所选方法、当前明确输入和相关上游产物；不读取其他任务或长期私人历史。",
+  "memoryPolicy": "任务范围内；不保存秘密、个人长期画像或整段对话。",
+  "knowledgeAssets": [
+    {
+      "id": "side-business-evaluator-core",
+      "path": "references/professional-method.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "sba-market",
+        "kim-decision",
+        "goalpro"
+      ]
+    }
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "资源约束、客户问题、替代方案与需求证据",
+    "scope": [
+      "比较可行方向并设计最小需求验证",
+      "不保证收入，不代用户投资或作高风险专业承诺"
+    ],
+    "knowledgeAssetIds": [
+      "side-business-evaluator-core"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "resource-fit",
+        "question": "用户真实可投入什么，哪些约束不能突破？",
+        "evidenceRequired": [
+          "可用时间/预算/技能与资质",
+          "实际能接触的客户群"
+        ],
+        "whenMissing": "不默认追加预算、借贷或辞职；先按已知约束缩小方向。"
+      },
+      {
+        "id": "problem-evidence",
+        "question": "客户问题是否有实际行为证据？",
+        "evidenceRequired": [
+          "访谈原话、现有替代办法与成本",
+          "愿意提供样本/试用等行动"
+        ],
+        "whenMissing": "把需求列假设，不把赞美当购买证明。"
+      },
+      {
+        "id": "smallest-test",
+        "question": "哪项未知最可能让方向失败？",
+        "evidenceRequired": [
+          "交付能力、获客、重复需求等关键假设",
+          "最小可观察测试与用户可承受损失"
+        ],
+        "whenMissing": "先做能消除最大不确定性的测试，不盲目搭产品。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "constraints-first",
+        "when": "想法超过当前时间/预算或需要未具备资格",
+        "action": "排除或缩为可承担的服务范围",
+        "avoid": "用想象收入掩盖现实约束。"
+      },
+      {
+        "id": "behavior-over-praise",
+        "when": "只有口头说好，没有问题或行动证据",
+        "action": "继续核真实工作情境和现有解决方式",
+        "avoid": "把两位朋友点赞写成市场验证成功。"
+      },
+      {
+        "id": "stop-or-revise",
+        "when": "测试显示问题不重要或交付成本失衡",
+        "action": "报告反证并改范围/停止该假设",
+        "avoid": "为了继续计划而静默改成功标准。"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "side-business-evaluator-assist",
+        "inputGuidance": [
+          {
+            "field": "resources",
+            "interpretation": "真实时间、预算、技能与不可突破条件。",
+            "onMissing": "先问会改变候选范围的关键资源。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "field": "assumptions",
+            "criterion": "需求、能力与成本假设可被验证或推翻。",
+            "rejectWhen": "把推测写成市场事实。"
+          },
+          {
+            "field": "comparison",
+            "criterion": "先硬约束，再多维取舍，未知保留。",
+            "rejectWhen": "虚构权重和精确收入来排名。"
+          },
+          {
+            "field": "recommendation",
+            "criterion": "给条件推荐及为什么符合当前资源。",
+            "rejectWhen": "保证赚多少钱或建议未请求的借贷/辞职。"
+          },
+          {
+            "field": "validationPlan",
+            "criterion": "每步有对象、输入、观察和改变决定的信号。",
+            "rejectWhen": "只有学习/注册账号/做品牌等产物活动。"
+          },
+          {
+            "field": "stopSignals",
+            "criterion": "对应实际风险和反证，而非泛泛坚持。",
+            "rejectWhen": "失败后自动提高投入或修改目标证明自己正确。"
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "受监管服务、金融投入、税务或资质问题需相应合格人员审核；普通方向比较可继续。",
+        "投入额度和可接受损失由用户决定，不能由模型推断风险偏好。"
+      ],
+      "prohibitedClaims": [
+        "合同、来源装入或作者案例不证明专业效果、用户接受或原生模型运行成功。",
+        "资料、工具槽位与建议不授予执行权限，不接管调用方调度、审批或最终验收。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
+}

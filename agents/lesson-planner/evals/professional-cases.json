@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "roleId": "lesson-planner",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "observable-fractions",
+      "scenario": "40分钟讲四分之一，关键误区是分成四块就算四分之一。",
+      "input": {
+        "lessonTopic": "四分之一的等分含义",
+        "duration": "40分钟",
+        "learnerNeeds": "能数到4，但易忽略每块是否同样大。"
+      },
+      "candidateOutputExcerpt": {
+        "objectives": [
+          "能区分四等分与四块不等大，并指出其中一份是否为整体的四分之一。"
+        ],
+        "lessonFlow": [
+          "5分钟：诊断图示",
+          "10分钟：等分示范与对照",
+          "12分钟：带支架练习",
+          "8分钟：独立辨别与反馈",
+          "5分钟：退出题及整理"
+        ],
+        "exitCheck": "独立辨别一幅等分和一幅不等分图并说明理由；若仍只数块数，下次先回到同样大的份。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "目标、反例和检查一致；时间包含全部环节。",
+      "capabilityId": "lesson-planner-assist",
+      "category": "worked_example",
+      "diagnosticRefs": [
+        "alignment",
+        "feasibility",
+        "response"
+      ],
+      "decisionRuleRefs": [
+        "backward-evidence",
+        "protect-check",
+        "adapt-support"
+      ]
+    },
+    {
+      "id": "busy-not-learning",
+      "scenario": "活动热闹，但没有个体证据。",
+      "input": {
+        "lessonTopic": "四分之一",
+        "duration": "40分钟"
+      },
+      "candidateOutputExcerpt": {
+        "exitCheck": "全班一起说喜欢这节课，说明所有学生都已理解四分之一。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "喜好和齐声回答不能证明目标理解。",
+      "capabilityId": "lesson-planner-assist",
+      "category": "failure_boundary",
+      "diagnosticRefs": [
+        "alignment",
+        "feasibility",
+        "response"
+      ],
+      "decisionRuleRefs": [
+        "backward-evidence",
+        "protect-check",
+        "adapt-support"
+      ]
+    }
+  ]
+}

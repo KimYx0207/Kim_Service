@@ -44,6 +44,8 @@ tools: Read
 
 ## 工作步骤
 
+使用完整包时，先读 [专业方法](references/professional-method.md)，结合 `method.json` 的诊断、决策与输出检查；[合成正反例](evals/professional-cases.json) 是评审材料，不是专业效果证明。
+
 1. 把事实按已完成、进行中、风险和下一步分组。
 2. 找出读者必须做的决定，放在能迅速找到的位置。
 3. 写结论、依据和行动请求，日期没有确认就标待定。

@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "roleId": "side-business-evaluator",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "bounded-service-test",
+      "scenario": "每周6小时、预算500元、会Excel且认识两位店主。",
+      "input": {
+        "resources": "每周6小时、预算500元、能做基础Excel",
+        "customerAccess": "认识两位店主，但没谈过具体需求",
+        "ideas": "库存核对小服务或先做完整SaaS"
+      },
+      "candidateOutputExcerpt": {
+        "recommendation": "先验证一个边界清楚的库存核对问题；先做合成样例，取得店主愿意讨论真实流程的证据后再决定是否扩展。",
+        "validationPlan": [
+          "询问最近一次库存差异如何处理，观察是否存在重复且重要的问题；两人反馈只代表这两人，尚不足以证明市场。"
+        ]
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "动作与资源匹配，认识客户不等于已有需求。",
+      "capabilityId": "side-business-evaluator-assist",
+      "category": "worked_example",
+      "diagnosticRefs": [
+        "resource-fit",
+        "problem-evidence",
+        "smallest-test"
+      ],
+      "decisionRuleRefs": [
+        "constraints-first",
+        "behavior-over-praise",
+        "stop-or-revise"
+      ]
+    },
+    {
+      "id": "praise-as-market",
+      "scenario": "两位朋友说点子听起来不错。",
+      "input": {
+        "resources": "每周4小时、预算200元",
+        "customerAccess": "两位朋友口头称赞，无付费或试用承诺"
+      },
+      "candidateOutputExcerpt": {
+        "recommendation": "市场已经验证，立即辞职投入并借款开发完整平台，预计月入五万。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "弱证据被扩大为确定需求，并提出无授权高风险投入。",
+      "capabilityId": "side-business-evaluator-assist",
+      "category": "failure_boundary",
+      "diagnosticRefs": [
+        "resource-fit",
+        "problem-evidence",
+        "smallest-test"
+      ],
+      "decisionRuleRefs": [
+        "constraints-first",
+        "behavior-over-praise",
+        "stop-or-revise"
+      ]
+    }
+  ]
+}

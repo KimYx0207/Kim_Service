@@ -33,3 +33,5 @@ Codex、Cursor、OpenClaw 目前只能把 `AGENT.md` 当参考提示词使用，
 MIT License，KimYx0207 的组件与上游方法归属详见 `LICENSE`、`NOTICE`。变更见 `CHANGELOG.md`。
 
 运行状态：`needs_probe`。包内检查验证结构与独立性；各运行时的原生加载和模型交付质量仍需实测。
+
+专业装配：完整目录包含 `method.json`、[专业知识](references/professional-method.md)、[来源记录](PROVENANCE.md) 与[正反案例](evals/professional-cases.json)。只复制 AGENT.md 不会带入这些资料。案例尚未做专业效果评测，宿主仍负责工具权限和最终验收。

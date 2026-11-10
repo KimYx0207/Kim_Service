@@ -41,6 +41,8 @@ const HEADING_LINE = /^## (.+?)\s*$/;
 const METHOD_SCHEMA = JSON.parse(fs.readFileSync(new URL('../schemas/agent-method.schema.json', import.meta.url), 'utf8'));
 const KNOWLEDGE_SCHEMA = METHOD_SCHEMA.properties.knowledgeAssets;
 const ASSET_SCHEMA = KNOWLEDGE_SCHEMA.items;
+const EXPERTISE_SCHEMA = JSON.parse(fs.readFileSync(new URL('../schemas/agent-expertise.schema.json', import.meta.url), 'utf8'));
+const EXPERTISE_CASES_SCHEMA = JSON.parse(fs.readFileSync(new URL('../schemas/agent-expertise-cases.schema.json', import.meta.url), 'utf8'));
 export const METHOD_CONTENT_LIMITS = Object.freeze(METHOD_SCHEMA['x-contentLimits']);
 
 function readBoundedPackageText(componentRoot, relativePath, maxBytes) {
@@ -59,7 +61,110 @@ function readBoundedPackageText(componentRoot, relativePath, maxBytes) {
   return { text: new TextDecoder('utf-8', { fatal: true }).decode(bytes), bytes: bytes.length };
 }
 
-function checkOptionalMethod(componentRoot, errors) {
+// The package schemas use this small structural dialect. Capability examples
+// share its type/required/enum checks; prose, deliveryFormat and other annotations
+// are not assertions. This is not a general JSON Schema or semantic evaluator.
+function checkShape(value, rule, errors, label, { schema = rule, patterns = true, depth = 0 } = {}) {
+  if (depth > 32) { errors.push(label + ' exceeds schema nesting budget'); return; }
+  if (rule.$ref) {
+    const match = rule.$ref.match(/^#\/\$defs\/([A-Za-z0-9_-]+)$/);
+    if (!match || !schema.$defs?.[match[1]]) { errors.push(label + ' has an unsupported schema reference'); return; }
+    rule = schema.$defs[match[1]];
+  }
+  const actualType = value === null ? 'null' : Array.isArray(value) ? 'array' : typeof value;
+  const types = rule.type === undefined ? null : Array.isArray(rule.type) ? rule.type : [rule.type];
+  if (types && !types.some(type => type === actualType || type === 'integer' && Number.isInteger(value))) {
+    errors.push(label + ' must have declared type ' + types.join('|')); return;
+  }
+  if (Object.hasOwn(rule, 'const') && value !== rule.const) errors.push(label + ' must equal ' + String(rule.const));
+  if (rule.enum && !rule.enum.includes(value)) errors.push(label + ' must match a declared enum value');
+  if (typeof value === 'string') {
+    if (rule.minLength !== undefined && value.length < rule.minLength || rule.maxLength !== undefined && value.length > rule.maxLength) errors.push(label + ' exceeds declared text bounds');
+    if (patterns && rule.pattern && !new RegExp(rule.pattern).test(value)) errors.push(label + ' does not match the declared text pattern');
+  }
+  if (typeof value === 'number') {
+    if (!Number.isFinite(value) || rule.minimum !== undefined && value < rule.minimum || rule.maximum !== undefined && value > rule.maximum) errors.push(label + ' exceeds declared numeric bounds');
+  }
+  if (Array.isArray(value)) {
+    if (rule.minItems !== undefined && value.length < rule.minItems || rule.maxItems !== undefined && value.length > rule.maxItems) errors.push(label + ' exceeds declared list bounds');
+    if (rule.uniqueItems && new Set(value).size !== value.length) errors.push(label + ' must contain unique entries');
+    if (rule.items) for (const [index, item] of value.entries()) checkShape(item, rule.items, errors, `${label}[${index}]`, { schema, patterns, depth: depth + 1 });
+  } else if (value && typeof value === 'object') {
+    if (rule.minProperties !== undefined && Object.keys(value).length < rule.minProperties) errors.push(label + ' needs a non-empty object');
+    for (const key of rule.required ?? []) if (!Object.hasOwn(value, key)) errors.push(label + ' requires ' + key);
+    for (const [key, item] of Object.entries(value)) {
+      if (Object.hasOwn(rule.properties ?? {}, key)) checkShape(item, rule.properties[key], errors, label + '.' + key, { schema, patterns, depth: depth + 1 });
+      else if (rule.additionalProperties === false) errors.push(label + ' contains unsupported field ' + key);
+    }
+  }
+}
+
+function assertJsonBudget(value) {
+  const pending = [[value, 0]]; let nodes = 0;
+  while (pending.length) {
+    const [item, depth] = pending.pop();
+    if (++nodes > 10000 || depth > 32) throw new Error('JSON nesting/node budget exceeded');
+    if (item && typeof item === 'object') for (const child of Object.values(item)) pending.push([child, depth + 1]);
+  }
+}
+
+function uniqueIds(items, label, errors) {
+  const ids = items.map(item => item.id);
+  if (new Set(ids).size !== ids.length) errors.push(label + ' ids must be unique');
+  return new Set(ids);
+}
+
+function checkExpertise(componentRoot, method, contract, errors) {
+  if (method.expertise === undefined) return;
+  const before = errors.length;
+  checkShape(method.expertise, EXPERTISE_SCHEMA, errors, 'method.json expertise');
+  if (errors.length !== before) return;
+  const expertise = method.expertise;
+  const assetIds = new Set(method.knowledgeAssets.map(asset => asset?.id));
+  if (expertise.knowledgeAssetIds.some(id => !assetIds.has(id))) errors.push('expertise knowledgeAssetIds must name this method\'s knowledge assets');
+  const diagnosticIds = uniqueIds(expertise.diagnosticSequence, 'expertise diagnosticSequence', errors);
+  const ruleIds = uniqueIds(expertise.decisionRules, 'expertise decisionRules', errors);
+  const capabilities = new Map((contract?.capabilities ?? []).map(capability => [capability.id, capability]));
+  const guidance = new Map();
+  for (const entry of expertise.contractGuidance) {
+    if (guidance.has(entry.capabilityId)) errors.push('expertise contractGuidance capabilityId must be unique');
+    guidance.set(entry.capabilityId, entry);
+    const capability = capabilities.get(entry.capabilityId);
+    if (!capability) { errors.push('expertise contractGuidance must name an existing capability'); continue; }
+    for (const [direction, entries] of [['input', entry.inputGuidance], ['output', entry.outputChecks]]) {
+      const fields = entries.map(item => item.field);
+      if (new Set(fields).size !== fields.length) errors.push('expertise ' + direction + ' fields must be unique');
+      if (fields.some(field => !Object.hasOwn(capability[direction]?.properties ?? {}, field))) errors.push('expertise ' + direction + ' guidance must name declared capability fields');
+      if ((capability[direction]?.required ?? []).some(field => !fields.includes(field))) errors.push('expertise ' + direction + ' guidance must cover required capability fields');
+    }
+  }
+  let examples;
+  try {
+    examples = JSON.parse(readBoundedPackageText(componentRoot, expertise.evaluation.casesPath, METHOD_CONTENT_LIMITS.expertiseCasesBytes).text);
+    assertJsonBudget(examples);
+  } catch { errors.push('expertise cases must be bounded UTF-8 JSON in a regular package file without symlinks'); return; }
+  const casesBefore = errors.length;
+  checkShape(examples, EXPERTISE_CASES_SCHEMA, errors, 'expertise cases');
+  if (errors.length !== casesBefore) return;
+  if (examples.roleId !== method.roleId) errors.push('expertise cases roleId must equal the current role');
+  uniqueIds(examples.cases, 'expertise cases', errors);
+  for (const expected of ['acceptable_example', 'reject_example']) if (!examples.cases.some(item => item.expectedAssessment === expected)) errors.push('expertise cases need both acceptable and rejected examples');
+  for (const category of ['worked_example', 'failure_boundary']) if (!examples.cases.some(item => item.category === category)) errors.push('expertise cases need worked and failure-boundary scenarios');
+  for (const example of examples.cases) {
+    const label = 'expertise case ' + example.id;
+    if (example.diagnosticRefs.some(id => !diagnosticIds.has(id)) || example.decisionRuleRefs.some(id => !ruleIds.has(id))) errors.push(label + ' must reference declared diagnostics and decisions');
+    const capability = capabilities.get(example.capabilityId);
+    if (!capability || !guidance.has(example.capabilityId)) { errors.push(label + ' must name a capability with contract guidance'); continue; }
+    checkShape(example.input, capability.input, errors, label + ' input', { patterns: false });
+    if (Object.keys(example.input).some(field => !Object.hasOwn(capability.input?.properties ?? {}, field))) errors.push(label + ' input must use declared capability fields');
+    // Excerpts deliberately omit unrelated delivery fields; present fields retain
+    // the actual declared type, nested requirements and enum constraints.
+    const partialOutput = { ...capability.output, required: [], additionalProperties: false };
+    checkShape(example.candidateOutputExcerpt, partialOutput, errors, label + ' output excerpt', { patterns: false });
+  }
+}
+
+function checkOptionalMethod(componentRoot, contract, errors) {
   const methodPath = path.join(componentRoot, 'method.json');
   // lstat distinguishes an absent legacy file from a broken symlink.
   try { fs.lstatSync(methodPath); } catch (error) {
@@ -76,7 +181,10 @@ function checkOptionalMethod(componentRoot, errors) {
   }
   if (method.roleId !== path.basename(componentRoot)) errors.push('method.json roleId must equal the component id');
   for (const key of ['steps', 'acceptance']) if (!Array.isArray(method[key]) || method[key].length === 0 || !method[key].every(isNonEmptyString)) errors.push('method.json ' + key + ' needs non-empty method text');
-  if (method.knowledgeAssets === undefined) return;
+  if (method.knowledgeAssets === undefined) {
+    if (method.expertise !== undefined) errors.push('expertise requires source-bound knowledgeAssets');
+    return;
+  }
   if (!Array.isArray(method.knowledgeAssets) || method.knowledgeAssets.length < KNOWLEDGE_SCHEMA.minItems || method.knowledgeAssets.length > KNOWLEDGE_SCHEMA.maxItems) {
     errors.push('method.json knowledgeAssets must be a non-empty bounded list'); return;
   }
@@ -107,6 +215,7 @@ function checkOptionalMethod(componentRoot, errors) {
     } catch { errors.push(label + ' knowledge file must be bounded UTF-8, regular and inside the package without symlinks'); }
   }
   if (totalBytes > METHOD_CONTENT_LIMITS.totalAssetBytes) errors.push('knowledgeAssets total content exceeds byte budget');
+  checkExpertise(componentRoot, method, contract, errors);
 }
 
 function isNonEmptyString(value) {
@@ -331,7 +440,7 @@ export function checkAgentPack(componentRoot) {
   const errors = [];
   if (!fs.existsSync(root) || !fs.lstatSync(root).isDirectory()) return ['component directory does not exist: ' + root];
   const contract = checkContract(root, errors);
-  checkOptionalMethod(root, errors);
+  checkOptionalMethod(root, contract, errors);
   checkAgentDocument(root, contract, errors);
   checkCompanionFiles(root, errors);
   return errors;

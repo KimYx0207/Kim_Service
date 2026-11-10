@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "store-performance-analyst",
   "componentType": "agent",
-  "componentVersion": "0.2.0",
+  "componentVersion": "0.3.0",
   "entrypoint": "AGENT.md",
   "capabilities": [
     {

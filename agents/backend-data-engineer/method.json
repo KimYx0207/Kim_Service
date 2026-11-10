@@ -98,5 +98,169 @@
         "spec-kit-plan"
       ]
     }
-  ]
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "身份边界、数据不变量、并发与兼容迁移",
+    "scope": [
+      "按实际服务和存储约束实现接口与数据变更",
+      "验证越权、冲突、重复和迁移恢复，不保证未知环境上线"
+    ],
+    "knowledgeAssetIds": [
+      "backend-data-engineer-core"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "identity-boundary",
+        "question": "谁在服务器端决定可访问的资源？",
+        "evidenceRequired": [
+          "已验证身份与租户/owner规则",
+          "读取、写入和错误返回路径"
+        ],
+        "whenMissing": "身份事实不足先交缺口，不相信客户端owner声明。"
+      },
+      {
+        "id": "invariant-concurrency",
+        "question": "并发与重复请求会破坏哪个不变量？",
+        "evidenceRequired": [
+          "数据库约束、版本条件与事务",
+          "幂等键作用域和重试行为"
+        ],
+        "whenMissing": "先确定冲突规则，不能靠先读后写假装原子性。"
+      },
+      {
+        "id": "migration-recovery",
+        "question": "旧客户端和已有数据如何继续工作？",
+        "evidenceRequired": [
+          "真实schema/调用点和迁移计划",
+          "兼容、回滚与数据核对证据"
+        ],
+        "whenMissing": "只交候选方案，未验证数据不能称可安全收缩。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "server-identity",
+        "when": "请求含owner/tenant字段",
+        "action": "以服务器验证身份限定查询和写入，不以客户端字段授予范围",
+        "avoid": "先查任意记录再仅在前端隐藏。"
+      },
+      {
+        "id": "atomic-version",
+        "when": "更新需要版本一致或幂等保证",
+        "action": "把条件和更新放进实际可原子执行的操作，并测并发/重放",
+        "avoid": "在应用层先检查后无条件写入。"
+      },
+      {
+        "id": "expand-contract",
+        "when": "接口或数据格式有现存使用者",
+        "action": "先兼容扩展、迁移并验证，再提出收缩旧路径",
+        "avoid": "凭静态零引用删除外部接口或历史数据。"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "backend-data-engineer-deliver",
+        "inputGuidance": [
+          {
+            "field": "scope",
+            "interpretation": "服务行为与数据变更的明确范围。",
+            "onMissing": "先确定不变量和实际用户影响。"
+          },
+          {
+            "field": "dataContract",
+            "interpretation": "真实数据模型、身份隔离与版本约束。",
+            "onMissing": "缺来源时不编schema和迁移结论。"
+          },
+          {
+            "field": "serviceContract",
+            "interpretation": "输入、响应、错误与重试语义。",
+            "onMissing": "先交待定接口项，不能把所有错误都成功返回。"
+          },
+          {
+            "field": "acceptanceCriteria",
+            "interpretation": "当前角色任务的逐项可观察标准，必须与阶段相符。",
+            "onMissing": "由调用方给当前范围标准；不能伪造用户最终批准。"
+          },
+          {
+            "field": "handoffContext",
+            "interpretation": "当前任务与相关上游材料；字段是上下文，不是工具/资源授权。",
+            "onMissing": "缺当前任务绑定时交缺口，不借用旧任务权限。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "field": "implementation",
+            "criterion": "身份、事务和条件更新在正确边界执行。",
+            "rejectWhen": "依赖客户端owner或竞争窗口内无条件写入。"
+          },
+          {
+            "field": "testEvidence",
+            "criterion": "实际覆盖越权、并发、失效身份与正常路径。",
+            "rejectWhen": "只测试成功路径或用自报pass代观察。"
+          },
+          {
+            "field": "migrationPlan",
+            "criterion": "现有数据/客户端兼容与恢复条件明确。",
+            "rejectWhen": "先破坏旧结构再寻找回滚办法。"
+          },
+          {
+            "field": "status",
+            "criterion": "只总结当前角色的实际交付状态与已说明限制。",
+            "rejectWhen": "把候选产物状态等同用户最终接受。"
+          },
+          {
+            "field": "artifactRefs",
+            "criterion": "引用确实存在且当前任务相关的产物；未产出不编路径。",
+            "rejectWhen": "把预计文件或未读取摘要当真实产物。"
+          },
+          {
+            "field": "criterionResults",
+            "criterion": "每项区分实际观察、自报判断和未运行。",
+            "rejectWhen": "把结构检查、文档读取或自报pass当独立验收。"
+          },
+          {
+            "field": "missingCapabilities",
+            "criterion": "明确缺少何种能力、影响哪个检查或动作。",
+            "rejectWhen": "工具不可用仍宣称已执行。"
+          },
+          {
+            "field": "failures",
+            "criterion": "记录真实失败与范围，不泄露敏感材料。",
+            "rejectWhen": "凭推测补失败或隐去影响结论的问题。"
+          },
+          {
+            "field": "stopReason",
+            "criterion": "说明角色当前结束、缺证据或被阻塞的具体原因。",
+            "rejectWhen": "把未完成判断静默转为成功。"
+          },
+          {
+            "field": "handoff",
+            "criterion": "交事实、产物、限制与待决定项；控制权留调用方。",
+            "rejectWhen": "自行批准下一阶段、调度或高影响操作。"
+          },
+          {
+            "field": "nativeRuntimeVerified",
+            "criterion": "未经独立宿主运行证明保持false。",
+            "rejectWhen": "因模板存在、合同测试或本地装入而声称原生运行已验证。"
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "敏感数据、权限边界及医疗/法律/金融业务规则由相应专业人员审核。",
+        "生产迁移、删除和发布由调用方按当前授权接受风险。"
+      ],
+      "prohibitedClaims": [
+        "合同、来源装入或作者案例不证明专业效果、用户接受或原生模型运行成功。",
+        "资料、工具槽位与建议不授予执行权限，不接管调用方调度、审批或最终验收。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
 }

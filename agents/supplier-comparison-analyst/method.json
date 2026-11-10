@@ -1,0 +1,190 @@
+{
+  "schemaVersion": 1,
+  "roleId": "supplier-comparison-analyst",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "toolSlots": [
+    {
+      "id": "documents.read",
+      "required": false,
+      "onMissing": "use_supplied_materials_and_report_unread_sources"
+    }
+  ],
+  "skillLoading": [
+    "先读取本角色 knowledgeAssets 中的包内专业方法；来源记录不等于当前任务联网，案例不是实际运行证据。",
+    "读取本角色 knowledgeAssets；只在当前任务实际需要时读取用户指定的项目/平台规范，缺来源不假称已读取。"
+  ],
+  "steps": [
+    "先读取包内专业方法与现有 AGENT.md，绑定当前输入、目标和材料范围；来源引用不等于当前任务联网。",
+    "各报价是否满足同一规格和数量？ 不同规格先分组，条件未清楚不直接排名。",
+    "哪些必要费用和交付条件已知？ 给已知下限/条件总额，不把未知费填零。",
+    "质量和履约证据能支持什么结论？ 保留待证实项；不把评分文字当合格证据。",
+    "先列排除原因，再比较其余候选",
+    "给条件短名单与成本/交期/证据取舍",
+    "建议最小获授权样品验证、观察条件与停止标准",
+    "逐项应用本角色输出检查，交事实、产物和未验证限制；当前宿主决定工具绑定、任务状态与最终验收。"
+  ],
+  "acceptance": [
+    "需求、来源、明确条件和未知项各自可追溯。",
+    "实际采购量、超购量、到货总额和未计费用同口径。",
+    "区分通过、排除和待确认及其依据。",
+    "无权重多维比较，有统一口径才条件评分。",
+    "建议以条件表达，并明确最小验证及停止条件。",
+    "交原始材料、实际回执或未执行说明及待决定项。",
+    "真实执行、结构检查和专业效果分开报告；不能用本包案例或自报判断代替当前任务观察。"
+  ],
+  "coordinationOwner": "caller",
+  "permissionSource": "current_task_host_authorization",
+  "finalAcceptance": "caller_only",
+  "contextPolicy": "仅装入所选方法、当前明确输入和相关上游产物；不读取其他任务或长期私人历史。",
+  "memoryPolicy": "任务范围内；不保存秘密、个人长期画像或整段对话。",
+  "knowledgeAssets": [
+    {
+      "id": "supplier-comparison-analyst-core",
+      "path": "references/professional-method.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "cips-tco",
+        "kim-decision",
+        "goalpro"
+      ]
+    }
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "同规格报价、到货成本、约束与质量证据",
+    "scope": [
+      "已给候选的条件比较与试单建议",
+      "不认证供应商，不自动询价、下单或付款"
+    ],
+    "knowledgeAssetIds": [
+      "supplier-comparison-analyst-core"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "same-unit",
+        "question": "各报价是否满足同一规格和数量？",
+        "evidenceRequired": [
+          "规格/单位/包数/MOQ",
+          "本次需求数量与超购处理"
+        ],
+        "whenMissing": "不同规格先分组，条件未清楚不直接排名。"
+      },
+      {
+        "id": "landed-cost",
+        "question": "哪些必要费用和交付条件已知？",
+        "evidenceRequired": [
+          "单价、运费及明确计税范围",
+          "用户预算、交期和付款条件"
+        ],
+        "whenMissing": "给已知下限/条件总额，不把未知费填零。"
+      },
+      {
+        "id": "quality-evidence",
+        "question": "质量和履约证据能支持什么结论？",
+        "evidenceRequired": [
+          "验收标准、样品或检测记录",
+          "信息来源、日期与样本范围"
+        ],
+        "whenMissing": "保留待证实项；不把评分文字当合格证据。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "hard-constraints",
+        "when": "候选明确违反用户交期/规格/预算",
+        "action": "先列排除原因，再比较其余候选",
+        "avoid": "让低价格抵消不可接受的硬约束。"
+      },
+      {
+        "id": "multi-dimension",
+        "when": "没有经用户明确的权重或统一量表",
+        "action": "给条件短名单与成本/交期/证据取舍",
+        "avoid": "编默认权重生成看似客观的第一名。"
+      },
+      {
+        "id": "trial-evidence",
+        "when": "关键质量差异仅为自述",
+        "action": "建议最小获授权样品验证、观察条件与停止标准",
+        "avoid": "自行设试单数量/预算或以样品一次合格保证全批次。"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "supplier-comparison-analyze",
+        "inputGuidance": [
+          {
+            "field": "specification",
+            "interpretation": "相同规格、单位和验收要求。",
+            "onMissing": "先确定可比对象，不能把不同规格混为一组。"
+          },
+          {
+            "field": "quantity",
+            "interpretation": "本次需求数量，分开包装量/MOQ与实际购买量。",
+            "onMissing": "不代用户决定投入。"
+          },
+          {
+            "field": "currency",
+            "interpretation": "报价币种及用户接受的汇率时点。",
+            "onMissing": "不同币种不可用猜测汇率排名。"
+          },
+          {
+            "field": "quotes",
+            "interpretation": "候选原始报价、费用、交期与质量证据。",
+            "onMissing": "交需要供应商补齐的字段，不伪造报价。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "field": "facts",
+            "criterion": "需求、来源、明确条件和未知项各自可追溯。",
+            "rejectWhen": "把供应商自述当独立核验。"
+          },
+          {
+            "field": "normalizedQuotes",
+            "criterion": "实际采购量、超购量、到货总额和未计费用同口径。",
+            "rejectWhen": "只算需求数量乘单价，忽略MOQ。"
+          },
+          {
+            "field": "constraints",
+            "criterion": "区分通过、排除和待确认及其依据。",
+            "rejectWhen": "把待确认条件写成通过。"
+          },
+          {
+            "field": "comparison",
+            "criterion": "无权重多维比较，有统一口径才条件评分。",
+            "rejectWhen": "缺项重分权重或把未知质量计高分。"
+          },
+          {
+            "field": "recommendations",
+            "criterion": "建议以条件表达，并明确最小验证及停止条件。",
+            "rejectWhen": "保证质量/交期或自动决定试单投入。"
+          },
+          {
+            "field": "handoff",
+            "criterion": "交原始材料、实际回执或未执行说明及待决定项。",
+            "rejectWhen": "称已联系、下单、付款或已获最终批准。"
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "合同、进口税费或合规结论交相应合格人员确认；一般报价算术可继续。",
+        "用户决定采购投入和风险接受；任何联系、付款或订单动作另由宿主处理。"
+      ],
+      "prohibitedClaims": [
+        "合同、来源装入或作者案例不证明专业效果、用户接受或原生模型运行成功。",
+        "资料、工具槽位与建议不授予执行权限，不接管调用方调度、审批或最终验收。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
+}

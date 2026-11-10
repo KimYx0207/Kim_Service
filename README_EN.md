@@ -29,13 +29,16 @@ Open the [Chinese task browser](docs/start.html), find a capability and inspect 
 | --- | --- |
 | `AGENT.md` / `SKILL.md` / `README.md` | Entry point, applicability, procedure and boundaries |
 | `capability.json` | Discoverable capability, inputs, outputs, permissions and side effects |
-| `method.json` when provided | Domain steps, tool needs, handoff and quality criteria |
+| `method.json` (all 24 Agents; other component types when provided) | Domain steps and tool needs; `expertise` binds diagnosis, decisions and existing input/output fields |
 | `references/` when needed | Actual professional material, selected through `knowledgeAssets` with applicability and provenance |
-| `example.json` | Complete examples explicitly separated from real execution evidence |
+| `example.json` / examples in `AGENT.md` | Complete package examples separated from real execution evidence |
+| Agent `evals/professional-cases.json` | Authored positive and failure examples with review reasoning; not model results |
 | Package `tests/` and `scripts/` | Validation or narrowly scoped deterministic helpers |
 | `PROVENANCE.md` and `LICENSE` | Sources, adaptation limits and licensing |
 
-The updated product, interaction, frontend and backend materials cover architecture tradeoffs, module contracts, interaction states, accessibility, data invariants, concurrency and migration. Meta_Kim loads selected resources into the actual worker context and checks their source bytes. A structural contract pass does not establish professional quality; current task review and acceptance remain necessary.
+All 24 Agents now include domain knowledge, diagnostic questions, conditional decisions, input guidance, output checks, tool boundaries and review cases. They cover software design and development, evidence and quantitative research, media, delivery verification, content, commerce, procurement, education, career communication and small-business analysis. Existing substantive methods and deterministic helpers remain. New materials are original; each package records the principles adopted and rejected from its references.
+
+Meta_Kim loads selected resources into the actual method context and checks their complete source bytes. Contract checks detect type errors, missing fields, dangling references and unsafe resource paths; they do not judge the professional accuracy of advice. The 48 synthetic cases are review materials with professional effect `not_evaluated`, not a claim that every domain expert has been validated. High-impact professional conclusions retain human review boundaries.
 
 ## How it works with Meta_Kim
 
@@ -55,7 +58,7 @@ First establish the system and technology baseline, then detail modules, interfa
 
 The installation source is the **selected directory in Kim_Service**. The catalog's `source` and `revision` describe historical provenance; they are not instructions to clone obsolete standalone repositories. Check the source and version of an existing capability before reusing or upgrading one entry.
 
-Released baseline: [V1.10](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.10). [Unreleased](CHANGELOG.md#unreleased) updates Product Architect and Interaction Designer to 0.3.0 and Frontend / Backend Data Engineer to 0.2.0. These source changes have not been published as a new Release.
+Released baseline: [V1.10](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.10). [Unreleased](CHANGELOG.md#unreleased) extends the professional contract across all 24 Agents: Product Architect, Interaction Designer and Script Writer are 0.4.0; Frontend, Backend Data, Store Performance and Interview Coach are 0.3.0; the remaining Agents are 0.2.0. Package changelogs record the individual changes. These source changes have not been published as a new Release.
 
 The packages provide portable content and explicit contracts. **Codex, Claude Code, Cursor, Gemini CLI and ZCode paths, tools and Hook conventions belong to their hosts or the Meta_Kim adapter.** Copying/installing a package does not establish native Agent loading, model performance or business acceptance. The existing ZCode content-package update path is documented in the [Beta guide](docs/zcode-beta.md).
 
@@ -72,7 +75,7 @@ node scripts/check-repository.mjs
 node --test scripts/*.test.mjs
 ```
 
-Further reading: [delivery guide](docs/task-agent-delivery.md) · [package contract](docs/agent-pack-contract.md) · [reference audit](docs/task-agent-reference-audit.md) · [changelog](CHANGELOG.md).
+Further reading: [delivery guide](docs/task-agent-delivery.md) · [package contract](docs/agent-pack-contract.md) · [expert-material authoring guide](docs/expert-package-authoring.md) · [24-role gap and source audit](docs/expertise-coverage-2026-11-10.md) · [changelog](CHANGELOG.md).
 
 ## Contact and support
 

@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "roleId": "launch-planner",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "inventory-slice",
+      "scenario": "已选做一个合成库存核对示范，每天1小时，不需购买工具。",
+      "input": {
+        "chosenIdea": "给店主演示最小库存核对表",
+        "resources": "每天1小时，共7天；现有表格软件",
+        "constraints": "只用合成数据，不访问客户系统"
+      },
+      "candidateOutputExcerpt": {
+        "firstDeliverable": "一张可输入期初、入库、出库并核对期末的合成演示表。",
+        "budget": [
+          "本轮新增现金支出0；不因可用200元就购买工具。"
+        ],
+        "acceptance": [
+          "输入10、5、3，期末应为12；空值与负库存有明确提示；未进行真实客户交付。"
+        ]
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "最小结果可演示、可验算，支出与授权没有被扩大。",
+      "capabilityId": "launch-planner-assist",
+      "category": "worked_example",
+      "diagnosticRefs": [
+        "first-result",
+        "blocking-input",
+        "risk-evidence"
+      ],
+      "decisionRuleRefs": [
+        "vertical-slice",
+        "real-dependency",
+        "evidence-replan"
+      ]
+    },
+    {
+      "id": "unnecessary-block",
+      "scenario": "主视觉需用户选择，但合成计算校验不依赖该选择。",
+      "input": {
+        "chosenIdea": "演示库存核对工具",
+        "resources": "计算规则已定；封面风格等用户选择",
+        "constraints": "计算样例与风格独立"
+      },
+      "candidateOutputExcerpt": {
+        "schedule": [
+          "先等全部视觉问题得到答案，在此之前所有合成计算和资料核对都暂停。"
+        ]
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "将局部决定变成无依据的全局阻塞；应把真实依赖交宿主调度。",
+      "capabilityId": "launch-planner-assist",
+      "category": "failure_boundary",
+      "diagnosticRefs": [
+        "first-result",
+        "blocking-input",
+        "risk-evidence"
+      ],
+      "decisionRuleRefs": [
+        "vertical-slice",
+        "real-dependency",
+        "evidence-replan"
+      ]
+    }
+  ]
+}

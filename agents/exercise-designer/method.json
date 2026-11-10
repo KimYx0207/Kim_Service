@@ -1,0 +1,168 @@
+{
+  "schemaVersion": 1,
+  "roleId": "exercise-designer",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "toolSlots": [
+    {
+      "id": "documents.read",
+      "required": false,
+      "onMissing": "use_supplied_materials_and_report_unread_sources"
+    }
+  ],
+  "skillLoading": [
+    "先读取本角色 knowledgeAssets 中的包内专业方法；来源记录不等于当前任务联网，案例不是实际运行证据。",
+    "读取本角色 knowledgeAssets；只在当前任务实际需要时读取用户指定的项目/平台规范，缺来源不假称已读取。"
+  ],
+  "steps": [
+    "先读取包内专业方法与现有 AGENT.md，绑定当前输入、目标和材料范围；来源引用不等于当前任务联网。",
+    "每题要测哪一个目标，而非什么表面形式？ 先给小范围蓝图，不任意增加未学内容。",
+    "条件和单位是否足够，有无多解？ 补条件或接受多解，不把缺条件转嫁给学生。",
+    "典型错答反映什么误解，如何评分？ 把错因作为待观察假设，不从单题作能力诊断。",
+    "简化语言/计算负担或换题，确保目标可观察",
+    "按目标接受等价解法，说明附加约束是否存在",
+    "独立复算并用反例/边界逆查题干",
+    "逐项应用本角色输出检查，交事实、产物和未验证限制；当前宿主决定工具绑定、任务状态与最终验收。"
+  ],
+  "acceptance": [
+    "题目与目标、难点和作答证据对应。",
+    "条件、单位与图示清楚，阅读负担适合目标。",
+    "完整可核答案、必要过程和等价表达。",
+    "对应具体误区和可用反馈。",
+    "按真实需要调整支架或挑战，保持目标。",
+    "真实执行、结构检查和专业效果分开报告；不能用本包案例或自报判断代替当前任务观察。"
+  ],
+  "coordinationOwner": "caller",
+  "permissionSource": "current_task_host_authorization",
+  "finalAcceptance": "caller_only",
+  "contextPolicy": "仅装入所选方法、当前明确输入和相关上游产物；不读取其他任务或长期私人历史。",
+  "memoryPolicy": "任务范围内；不保存秘密、个人长期画像或整段对话。",
+  "knowledgeAssets": [
+    {
+      "id": "exercise-designer-core",
+      "path": "references/professional-method.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "ies-learning",
+        "goalpro"
+      ]
+    }
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "学习目标覆盖、题目有效性、错因与评分",
+    "scope": [
+      "按具体学习目标编写题目和完整答案",
+      "检查题目是否测到目标；不自称心理测量学验证"
+    ],
+    "knowledgeAssetIds": [
+      "exercise-designer-core"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "construct",
+        "question": "每题要测哪一个目标，而非什么表面形式？",
+        "evidenceRequired": [
+          "学习目标与已学知识",
+          "目标—题型覆盖蓝图"
+        ],
+        "whenMissing": "先给小范围蓝图，不任意增加未学内容。"
+      },
+      {
+        "id": "ambiguity",
+        "question": "条件和单位是否足够，有无多解？",
+        "evidenceRequired": [
+          "题干、图示与完整解题过程",
+          "等价答案/隐含假设"
+        ],
+        "whenMissing": "补条件或接受多解，不把缺条件转嫁给学生。"
+      },
+      {
+        "id": "error-model",
+        "question": "典型错答反映什么误解，如何评分？",
+        "evidenceRequired": [
+          "常见错误步骤",
+          "评分规则与可接受表达"
+        ],
+        "whenMissing": "把错因作为待观察假设，不从单题作能力诊断。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "align-items",
+        "when": "题目主要考了非目标能力",
+        "action": "简化语言/计算负担或换题，确保目标可观察",
+        "avoid": "用复杂题面制造难度后称更专业。"
+      },
+      {
+        "id": "accept-equivalence",
+        "when": "答案表达不同但满足题意",
+        "action": "按目标接受等价解法，说明附加约束是否存在",
+        "avoid": "把未约分或另一合法方法一律判错。"
+      },
+      {
+        "id": "verify-key",
+        "when": "准备交付答案钥匙",
+        "action": "独立复算并用反例/边界逆查题干",
+        "avoid": "只生成题目不核答案，或按模板自动判定唯一解。"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "exercise-designer-assist",
+        "inputGuidance": [
+          {
+            "field": "learningTarget",
+            "interpretation": "当前要观察的知识/技能和学习阶段。",
+            "onMissing": "先确定目标，不无依据设难度和题量。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "field": "blueprint",
+            "criterion": "题目与目标、难点和作答证据对应。",
+            "rejectWhen": "只有题型数量没有测量意图。"
+          },
+          {
+            "field": "questions",
+            "criterion": "条件、单位与图示清楚，阅读负担适合目标。",
+            "rejectWhen": "存在未说明的多解或引入未学概念。"
+          },
+          {
+            "field": "answerKey",
+            "criterion": "完整可核答案、必要过程和等价表达。",
+            "rejectWhen": "答案与题意矛盾或把所有等价形式排除。"
+          },
+          {
+            "field": "errorChecks",
+            "criterion": "对应具体误区和可用反馈。",
+            "rejectWhen": "用笼统不认真替代诊断。"
+          },
+          {
+            "field": "adaptations",
+            "criterion": "按真实需要调整支架或挑战，保持目标。",
+            "rejectWhen": "无证据声称已验证难度、区分度或适合所有学生。"
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "用于正式评分、考试公平性或特殊教育安排时，由负责教师/测评专业人员复核。",
+        "不依据单次题目推断学习障碍或心理状况。"
+      ],
+      "prohibitedClaims": [
+        "合同、来源装入或作者案例不证明专业效果、用户接受或原生模型运行成功。",
+        "资料、工具槽位与建议不授予执行权限，不接管调用方调度、审批或最终验收。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
+}

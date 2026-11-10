@@ -15,3 +15,5 @@ node tests/contract.test.mjs
 这些检查验证包设计与合成案例，不调用付费模型，不证明原生 Agent 加载或真实平台执行。当前 runtimeStatus 为 needs_probe。
 
 调用方保留路由、资源互斥、授权和最终验收；专业角色仅交自己负责的产物。
+
+专业装配：完整目录包含 `method.json`、[专业知识](references/professional-method.md)、[来源记录](PROVENANCE.md) 与[正反案例](evals/professional-cases.json)。只复制 AGENT.md 不会带入这些资料。案例尚未做专业效果评测，宿主仍负责工具权限和最终验收。

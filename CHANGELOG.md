@@ -4,9 +4,18 @@ Kim Service uses one repository-level two-part public version (`V<major>.<minor>
 
 ## Unreleased
 
+### Reusable professional material across 24 Agents
+
+- All 24 existing Agents now carry a structured method, bounded source-attributed knowledge and the same optional `expertise` contract. This adds 20 original knowledge resources and 17 structured methods while preserving the four software-role core documents and existing calculation/verification helpers.
+- The contract describes domain diagnostics, conditional decisions, required input guidance, output checks and human professional review boundaries. Authors extend package data and the existing capability contract, without adding role switches, a second provider registry or a separate scheduler.
+- Each Agent supplies two synthetic review cases (48 total), including a substantive failure example. They remain `not_evaluated`: structural checks and complete-byte handoff do not certify expert judgment, native model execution or user acceptance.
+- The existing package checker rejects dangling asset/decision/field references, malformed example inputs/outputs, unsafe case resources and metadata that pretends to be quality evidence. Existing methods without the new optional metadata remain compatible.
+- Product Architect, Interaction Designer and Script Writer are now 0.4.0; Frontend Engineer, Backend Data Engineer, Store Performance Analyst and Interview Coach are 0.3.0; other Agents are 0.2.0. Component changelogs record the individual additions. Primary-source adoption, non-adoption, licensing limits and the full gap audit are documented.
+- The headline/cover role no longer asserts that inaccurate titles universally trigger platform demotion. Its method distinguishes content accuracy, audience/traffic composition and actual experiment evidence.
+
 ### Professional knowledge and two-level software design
 
-- Product Architect and Interaction Designer move from 0.2.0 to **0.3.0**. Frontend Engineer and Backend Data Engineer move from 0.1.0 to **0.2.0**. Each now includes original, source-attributed professional material with explicit applicability in `method.json.knowledgeAssets`.
+- The initial software-method update introduced Product Architect / Interaction Designer 0.3.0 and Frontend / Backend Data Engineer 0.2.0; the all-role expertise additions above advance those versions. Their original source-attributed professional material keeps explicit applicability in `method.json.knowledgeAssets`.
 - Architecture exploration can precede detailed modules. Software delivery describes the system/technology baseline and module purpose, interactions, business rules, contracts, state, implementation approach and acceptance through the existing `productDesign` output. The current design identity and related project context can travel through handoffs without creating a second task authority.
 - Frontend and backend methods preserve the actual project stack and add concrete guidance for interaction states, accessibility, data invariants, concurrency, authorization, testing and migration. Examples remain synthetic; package quality checks do not imply a successful native model task.
 - The Product Architect adds a bounded `design-handoff-check-v1` helper for candidate structure and reference checks. It does not authenticate user decisions, certify digest provenance or accept the product, and it is not silently added to Meta_Kim's calculation-tool allowlist.

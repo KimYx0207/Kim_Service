@@ -29,13 +29,16 @@ Kim Service 是老金（KimYx0207）维护的专业能力库。每个 Agent、Sk
 | --- | --- |
 | `AGENT.md` / `SKILL.md` / `README.md` | 入口、适用任务、执行方法与边界 |
 | `capability.json` | 可发现的能力、输入、输出、权限和副作用约定 |
-| `method.json`（按包提供） | 领域步骤、工具需求、交接方式、质量标准 |
+| `method.json`（24 个 Agent 均提供；其他类型按包提供） | 领域步骤、工具需求、交接方式；`expertise` 绑定诊断、决策与现有输入输出 |
 | `references/`（按需） | 实际专业资料；由 `knowledgeAssets` 声明适用范围和来源 |
-| `example.json` | 完整示例；明确区分示例数据和真实回执 |
+| `example.json` / `AGENT.md` 内示例 | 按包提供的完整示例；示例数据与真实回执分开 |
+| `evals/professional-cases.json`（Agent） | 合成正例、失败反例与评审依据；不是模型运行结果 |
 | `tests/`、`scripts/`（按包提供） | 组件检查或范围明确的确定性工具 |
 | `PROVENANCE.md`、`LICENSE` | 资料来源、改造边界与许可证 |
 
-新增的产品、交互、前端、后端资料围绕架构取舍、模块接口、交互状态、可访问性、数据不变量、并发和迁移组织。选中的资料会随 Meta_Kim 工单进入实际执行上下文，并校验来源文件的字节。通过文件或合同校验，只说明结构正确；专业成果仍需要当前任务中的审查和验收。
+24 个 Agent 都有领域知识、诊断问题、条件决策、输入解释、输出检查、工具边界与正反案例。内容覆盖软件设计与开发、来源与量化研究、媒体制作、交付核验、内容、电商、采购、教育、求职职场和副业分析。已有的具体方法和确定性工具继续保留；新增资料是原创组织，采用与未采用的参考原则记录在各包来源文件中。
+
+选中的资料会随 Meta_Kim 工单进入实际执行上下文，并校验来源文件的完整字节。合同检查能发现错误类型、缺项、悬空引用或不安全资源路径，不能判断文字建议是否专业。48 个合成案例目前是评审材料，专业效果均为 `not_evaluated`；这不构成“所有行业专家已验证”的声明，高影响专业结论仍须相应人工审核。
 
 ## 与 Meta_Kim 的关系
 
@@ -55,7 +58,7 @@ Kim Service 是老金（KimYx0207）维护的专业能力库。每个 Agent、Sk
 
 当前组件安装源就是 **Kim_Service 内选中的目录**。`catalog.json` 的 `source` / `revision` 记录历史来源，不是要求重新克隆旧独立仓库。已有同类能力先核对来源与版本，复用或升级一个入口。
 
-已发布基线：[V1.10](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.10)。当前 [Unreleased](CHANGELOG.md#unreleased) 更新产品架构与交互设计至 0.3.0、前端与后端数据工程至 0.2.0；尚未作为新 Release 发布。
+已发布基线：[V1.10](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.10)。当前 [Unreleased](CHANGELOG.md#unreleased) 扩展全部 24 个 Agent 的专业知识合同：产品架构、交互设计和脚本文案为 0.4.0；前端、后端数据、店铺复盘和面试练习为 0.3.0；其余 Agent 为 0.2.0。具体变化见各包 CHANGELOG，尚未作为新 Release 发布。
 
 这些包采用可移植内容与显式合同。**Codex、Claude Code、Cursor、Gemini CLI、ZCode 的安装路径、工具和 Hook 约定由各宿主或 Meta_Kim 适配层处理。** 包被复制或成功安装，不等于原生 Agent 加载、真实模型表现或业务验收通过。ZCode 内容包的既有更新路径见 [Beta 指南](docs/zcode-beta.md)。
 
@@ -72,7 +75,7 @@ node scripts/check-repository.mjs
 node --test scripts/*.test.mjs
 ```
 
-深入阅读：[任务交付指南](docs/task-agent-delivery.md) · [能力包约定](docs/agent-pack-contract.md) · [参考源盘点](docs/task-agent-reference-audit.md) · [变更记录](CHANGELOG.md)。
+深入阅读：[任务交付指南](docs/task-agent-delivery.md) · [能力包约定](docs/agent-pack-contract.md) · [专家资料作者指南](docs/expert-package-authoring.md) · [24 角色差距与来源审计](docs/expertise-coverage-2026-11-10.md) · [变更记录](CHANGELOG.md)。
 
 ## 联系与支持
 

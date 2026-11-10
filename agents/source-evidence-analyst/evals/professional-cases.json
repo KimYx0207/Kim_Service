@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "roleId": "source-evidence-analyst",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "notice-only",
+      "scenario": "合成平台通知只有“附件缺失”，没有提交回执。",
+      "input": {
+        "question": "平台提示附件缺失，准备申诉材料",
+        "sources": "用户提供的一张通知截图；通知时间已知",
+        "deliverablePurpose": "整理人工提交材料，不发送",
+        "acceptanceCriteria": [
+          {
+            "id": "scope",
+            "condition": "关键事实有可访问一手来源及时间，或明确未证实",
+            "evidenceRequired": "指定材料、产物与独立检查"
+          }
+        ],
+        "handoffContext": {
+          "taskId": "synthetic-example",
+          "upstreamArtifacts": [],
+          "permittedActions": [
+            "read_supplied_materials"
+          ],
+          "resourceLeases": []
+        }
+      },
+      "candidateOutputExcerpt": {
+        "facts": [
+          "通知截图显示附件缺失；尚无本次提交回执。"
+        ],
+        "limitations": [
+          "无法确认附件是否成功上传，也无法判断故障归属。"
+        ]
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "只报告看见的通知，不从缺回执推出平台责任。",
+      "capabilityId": "source-evidence-analyst-deliver",
+      "category": "worked_example",
+      "diagnosticRefs": [
+        "claim-scope",
+        "source-chain",
+        "counterevidence"
+      ],
+      "decisionRuleRefs": [
+        "bound-claim",
+        "resolve-conflict",
+        "respect-access"
+      ]
+    },
+    {
+      "id": "repeated-story",
+      "scenario": "三个网页都转载同一条未核实说法。",
+      "input": {
+        "question": "三篇转载是否证明某功能已全面上线？",
+        "sources": "合成材料：三篇文章都引同一条个人帖子，无官方发布记录。",
+        "deliverablePurpose": "内部研究摘要",
+        "acceptanceCriteria": [
+          {
+            "id": "scope",
+            "condition": "关键事实有可访问一手来源及时间，或明确未证实",
+            "evidenceRequired": "指定材料、产物与独立检查"
+          }
+        ],
+        "handoffContext": {
+          "taskId": "synthetic-example",
+          "upstreamArtifacts": [],
+          "permittedActions": [
+            "read_supplied_materials"
+          ],
+          "resourceLeases": []
+        }
+      },
+      "candidateOutputExcerpt": {
+        "delivery": "三个独立来源均证实功能已向所有用户上线。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "来源不独立，个人帖也不覆盖所有用户。",
+      "capabilityId": "source-evidence-analyst-deliver",
+      "category": "failure_boundary",
+      "diagnosticRefs": [
+        "claim-scope",
+        "source-chain",
+        "counterevidence"
+      ],
+      "decisionRuleRefs": [
+        "bound-claim",
+        "resolve-conflict",
+        "respect-access"
+      ]
+    }
+  ]
+}

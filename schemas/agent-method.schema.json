@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/KimYx0207/Kim_Service/schemas/agent-method.schema.json",
   "title": "Kim Service optional structured Agent method",
-  "description": "Existing methods remain compatible. knowledgeAssets are bounded package-local method content, not tool grants or invocation evidence. Repository checks enforce real files, byte budgets and provenance references.",
+  "description": "Existing methods remain compatible. knowledgeAssets are bounded package-local method content, not tool grants or invocation evidence. Repository checks enforce real files, byte budgets and provenance references. Optional expertise binds diagnosis, decisions, contract guidance and authored review cases to existing package assets; it is not professional-effect evidence.",
   "type": "object",
   "additionalProperties": true,
   "required": [
@@ -110,12 +110,16 @@
           }
         }
       }
+    },
+    "expertise": {
+      "$ref": "agent-expertise.schema.json"
     }
   },
   "x-contentLimits": {
     "methodBytes": 65536,
     "assetBytes": 12288,
     "totalAssetBytes": 65536,
-    "provenanceBytes": 65536
+    "provenanceBytes": 65536,
+    "expertiseCasesBytes": 65536
   }
 }

@@ -47,6 +47,8 @@ Read 是默认权限；method.json 的工具槽必须由当前宿主显式绑定
 - 原生宿主状态始终另列；本包测试通过不证明模型、浏览器、平台或GPU已调用
 
 ## 工作步骤
+
+使用完整包时，先读 [专业方法](references/professional-method.md)，结合 `method.json` 的诊断、决策与输出检查；[合成正反例](evals/professional-cases.json) 是评审材料，不是专业效果证明。
 先读取 method.json 声明的 references/professional-method.md；本角色的版本取证、正反例和实际验收在该文件，来源取舍见 PROVENANCE.md。
 1. 读取调用方已定需求、术语与材料，先看当前界面和来源图；无截图不声称完成视觉审查。关键选择未定则返回具体影响，不自作决定。
 2. 从实际用户动机和使用情境出发，逐项说明动作、反馈、规则与结果；不机械套用固定人群、心理标签或游戏机制。

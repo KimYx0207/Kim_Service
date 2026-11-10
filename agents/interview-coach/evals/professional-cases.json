@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "roleId": "interview-coach",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "editing-mode",
+      "scenario": "用户要把真实异常订单经历讲清楚，不要求模拟下一题。",
+      "input": {
+        "targetRole": "运营助理",
+        "experience": "发现3张订单金额不同，逐条核对源表，整理差异后请主管确认，后续影响未知。",
+        "practiceMode": "改写现有回答"
+      },
+      "candidateOutputExcerpt": {
+        "revisedAnswer": "我发现3张订单金额与源表不一致，逐条核对并整理差异清单，再请主管确认处理。我的工作是核对和交接，后续业务影响目前没有数据。",
+        "followUp": null
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "交付完整改稿，未把未知结果写成成绩。",
+      "capabilityId": "interview-coach-assist",
+      "category": "worked_example",
+      "diagnosticRefs": [
+        "competency",
+        "behavior-evidence",
+        "feedback-loop"
+      ],
+      "decisionRuleRefs": [
+        "respect-mode",
+        "do-not-fake",
+        "probe-decisions"
+      ]
+    },
+    {
+      "id": "hypothesis-as-history",
+      "scenario": "用户没有带团队经历，问题问过去如何处理成员冲突。",
+      "input": {
+        "targetRole": "项目协调",
+        "experience": "没有带团队或处理成员冲突的真实经历。",
+        "practiceMode": "行为题练习"
+      },
+      "candidateOutputExcerpt": {
+        "revisedAnswer": "我曾带领10人团队，通过我的协调把冲突解决并让业绩翻倍。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "把假设理想答法伪装为过去行为。",
+      "capabilityId": "interview-coach-assist",
+      "category": "failure_boundary",
+      "diagnosticRefs": [
+        "competency",
+        "behavior-evidence",
+        "feedback-loop"
+      ],
+      "decisionRuleRefs": [
+        "respect-mode",
+        "do-not-fake",
+        "probe-decisions"
+      ]
+    }
+  ]
+}

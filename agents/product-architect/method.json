@@ -95,5 +95,169 @@
         "anthropic-skills"
       ]
     }
-  ]
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "需求决定、架构选择与模块验收映射",
+    "scope": [
+      "把当前事实与关键决定组织进同一产品设计",
+      "架构探索后才细化模块，复用宿主决定与任务状态"
+    ],
+    "knowledgeAssetIds": [
+      "product-architect-core"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "current-facts",
+        "question": "现有系统、版本和用户真正结果分别是什么？",
+        "evidenceRequired": [
+          "当前入口/锁文件/约束",
+          "已定决定、证据引用和未知项"
+        ],
+        "whenMissing": "先查可得事实，关键价值选择才交用户决定。"
+      },
+      {
+        "id": "architecture-choice",
+        "question": "什么选择会改变边界、成本或兼容？",
+        "evidenceRequired": [
+          "可行替代方案与具体取舍",
+          "影响范围、迁移约束和可推翻建议的证据"
+        ],
+        "whenMissing": "给架构探索与条件建议，不伪装完整详细设计。"
+      },
+      {
+        "id": "module-closure",
+        "question": "模块状态、接口、任务和验收是否引用同一设计？",
+        "evidenceRequired": [
+          "architecture.moduleIds与modules",
+          "接口/状态/任务/验收ID和删除候选证据"
+        ],
+        "whenMissing": "关键决定未定时保留轮廓；交付阶段才要求完整闭包。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "architecture-first",
+        "when": "架构/技术选择仍待关键决定",
+        "action": "在同一productDesign的软件架构层列推荐、替代和证据，允许模块空或只给目的轮廓",
+        "avoid": "为过结构检查提前编造完整模块。"
+      },
+      {
+        "id": "bounded-slices",
+        "when": "关键设计已定",
+        "action": "按用户结果拆可演示切片，注明输入与真实阻塞依赖",
+        "avoid": "按岗位清单代替可验收任务或另建调度状态。"
+      },
+      {
+        "id": "safe-removal",
+        "when": "候选旧代码看似不用",
+        "action": "检查调用、动态入口、配置/兼容与替代证据再提出清理",
+        "avoid": "把文本零引用直接等同可安全删除。"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "product-architect-deliver",
+        "inputGuidance": [
+          {
+            "field": "goal",
+            "interpretation": "用户可观察结果，保留明确意图与推断区别。",
+            "onMissing": "先澄清会改变路线的目标。"
+          },
+          {
+            "field": "currentSystem",
+            "interpretation": "真实系统现状及资料范围。",
+            "onMissing": "只给探索和待查项，不假称已读仓库。"
+          },
+          {
+            "field": "constraints",
+            "interpretation": "现有兼容、资源、权限和不应做的范围。",
+            "onMissing": "显式标记未知，不能默默选难逆方案。"
+          },
+          {
+            "field": "acceptanceCriteria",
+            "interpretation": "当前角色任务的逐项可观察标准，必须与阶段相符。",
+            "onMissing": "由调用方给当前范围标准；不能伪造用户最终批准。"
+          },
+          {
+            "field": "handoffContext",
+            "interpretation": "当前任务与相关上游材料；字段是上下文，不是工具/资源授权。",
+            "onMissing": "缺当前任务绑定时交缺口，不借用旧任务权限。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "field": "scope",
+            "criterion": "用户结果、阶段和非目标清楚。",
+            "rejectWhen": "把框架选择当用户需求。"
+          },
+          {
+            "field": "architecture",
+            "criterion": "选择有当前版本/约束/替代依据，架构与模块不重复建真源。",
+            "rejectWhen": "列技术名但无取舍，或把探索当已批准。"
+          },
+          {
+            "field": "migration",
+            "criterion": "迁移、兼容、回滚和删除候选有证据。",
+            "rejectWhen": "无恢复路径直接删除旧接口。"
+          },
+          {
+            "field": "status",
+            "criterion": "只总结当前角色的实际交付状态与已说明限制。",
+            "rejectWhen": "把候选产物状态等同用户最终接受。"
+          },
+          {
+            "field": "artifactRefs",
+            "criterion": "引用确实存在且当前任务相关的产物；未产出不编路径。",
+            "rejectWhen": "把预计文件或未读取摘要当真实产物。"
+          },
+          {
+            "field": "criterionResults",
+            "criterion": "每项区分实际观察、自报判断和未运行。",
+            "rejectWhen": "把结构检查、文档读取或自报pass当独立验收。"
+          },
+          {
+            "field": "missingCapabilities",
+            "criterion": "明确缺少何种能力、影响哪个检查或动作。",
+            "rejectWhen": "工具不可用仍宣称已执行。"
+          },
+          {
+            "field": "failures",
+            "criterion": "记录真实失败与范围，不泄露敏感材料。",
+            "rejectWhen": "凭推测补失败或隐去影响结论的问题。"
+          },
+          {
+            "field": "stopReason",
+            "criterion": "说明角色当前结束、缺证据或被阻塞的具体原因。",
+            "rejectWhen": "把未完成判断静默转为成功。"
+          },
+          {
+            "field": "handoff",
+            "criterion": "交事实、产物、限制与待决定项；控制权留调用方。",
+            "rejectWhen": "自行批准下一阶段、调度或高影响操作。"
+          },
+          {
+            "field": "nativeRuntimeVerified",
+            "criterion": "未经独立宿主运行证明保持false。",
+            "rejectWhen": "因模板存在、合同测试或本地装入而声称原生运行已验证。"
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "高影响数据、安全、法律或合规决定需要对应负责人/专业人员复核。",
+        "用户接受、发布、删除与迁移执行由宿主按当前授权处理。"
+      ],
+      "prohibitedClaims": [
+        "合同、来源装入或作者案例不证明专业效果、用户接受或原生模型运行成功。",
+        "资料、工具槽位与建议不授予执行权限，不接管调用方调度、审批或最终验收。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
 }

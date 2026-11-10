@@ -44,6 +44,8 @@ tools: Read
 
 ## 工作步骤
 
+使用完整包时，先读 [专业方法](references/professional-method.md)，结合 `method.json` 的诊断、决策与输出检查；[合成正反例](evals/professional-cases.json) 是评审材料，不是专业效果证明。
+
 1. 先确认学生已经会什么，将主题缩成一到两个可观察目标。
 2. 选择能暴露误解的例子，确保概念与材料一致。
 3. 排出引入、演示、学生操作和独立检查，时长相加等于课时。

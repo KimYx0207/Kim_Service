@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "roleId": "concept-tutor",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "unit-of-answer",
+      "scenario": "学习者把1/2÷1/4=2解释成两个蛋糕。",
+      "input": {
+        "question": "为什么半个蛋糕除以四分之一个会等于2？",
+        "currentAttempt": "答案2是不是两个蛋糕？"
+      },
+      "candidateOutputExcerpt": {
+        "stickingPoint": "算式结果正确，但结果单位应是四分之一蛋糕大小的份数。",
+        "workedExample": "半个蛋糕能分成两份，每份四分之一个。2×1/4=1/2核对回原数量。",
+        "transferQuestion": "3/4个蛋糕分成每份1/4个，可以分几份？说清答案单位。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "纠正量的意义并检验迁移，不否定已正确的计算。",
+      "capabilityId": "concept-tutor-assist",
+      "category": "worked_example",
+      "diagnosticRefs": [
+        "locate-error",
+        "representation",
+        "transfer"
+      ],
+      "decisionRuleRefs": [
+        "meaning-before-rule",
+        "targeted-help",
+        "fade-support"
+      ]
+    },
+    {
+      "id": "formula-only",
+      "scenario": "学习者请求解释分数除法含义。",
+      "input": {
+        "question": "为什么除以分数要这样算？",
+        "currentAttempt": "我记得颠倒相乘，但不知道为什么。"
+      },
+      "candidateOutputExcerpt": {
+        "explanation": "口诀记住就行，除以分数就是颠倒相乘。",
+        "nextStep": "你已经掌握了，不用做新题。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "重复已会口诀，没有解决含义，也没有独立理解证据。",
+      "capabilityId": "concept-tutor-assist",
+      "category": "failure_boundary",
+      "diagnosticRefs": [
+        "locate-error",
+        "representation",
+        "transfer"
+      ],
+      "decisionRuleRefs": [
+        "meaning-before-rule",
+        "targeted-help",
+        "fade-support"
+      ]
+    }
+  ]
+}

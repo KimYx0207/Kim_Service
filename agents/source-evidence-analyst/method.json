@@ -27,6 +27,7 @@
     }
   ],
   "skillLoading": [
+    "先读取本角色 knowledgeAssets 中的包内专业方法；来源记录不等于当前任务联网，案例不是实际运行证据。",
     "按渠道加载检索或内容规范，按需读取当前一手政策",
     "只读盘点加载目标工具的现有目录说明；不全盘抓取"
   ],
@@ -76,5 +77,184 @@
     "occupy": "每次动作前核对租约归属、generation与有效期；来自材料的租约声明不足为证",
     "release": "成功、失败或取消均请求宿主释放；收到释放回执才标released",
     "recover": "超时或执行者消失标expired/recovery_required；先停止旧worker并确认无残留动作，宿主更新generation后重新分配；无法确认则blocked，禁止盲目抢占"
+  },
+  "knowledgeAssets": [
+    {
+      "id": "source-evidence-analyst-core",
+      "path": "references/professional-method.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "w3c-prov",
+        "slsa-provenance",
+        "kim-decision",
+        "goalpro"
+      ]
+    }
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "声明拆解、来源溯源与不确定性表达",
+    "scope": [
+      "针对当前问题核查可取得的原始材料",
+      "把冲突、缺口和可推翻结论的证据交回调用方"
+    ],
+    "knowledgeAssetIds": [
+      "source-evidence-analyst-core"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "claim-scope",
+        "question": "问题是核对说法、确认当前状态，还是准备草稿？",
+        "evidenceRequired": [
+          "原始问题和逐项声明",
+          "事件日期、发布日期、适用对象"
+        ],
+        "whenMissing": "先缩小到已知声明；缺失对象或时间会改变结论时才问一个关键问题。"
+      },
+      {
+        "id": "source-chain",
+        "question": "哪些材料是原始记录，哪些只是转引？",
+        "evidenceRequired": [
+          "原始文件/URL和引用位置",
+          "转载链、版本、截取范围"
+        ],
+        "whenMissing": "保留来源缺口，不把多次转引记作独立印证。"
+      },
+      {
+        "id": "counterevidence",
+        "question": "什么证据会推翻目前解释？",
+        "evidenceRequired": [
+          "相反原始记录",
+          "未覆盖时段与材料缺页"
+        ],
+        "whenMissing": "给出最短补证动作，并交条件结论，不填造“已证实”。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "bound-claim",
+        "when": "材料只证明页面显示一条通知",
+        "action": "写明通知文字和时间，分开用户解释与需查证的实际动作",
+        "avoid": "从通知直接推断平台故意违规或用户已成功提交。"
+      },
+      {
+        "id": "resolve-conflict",
+        "when": "相同对象的来源相互矛盾",
+        "action": "比较定义、时间、范围和原始性；无法消解则并列冲突及其影响",
+        "avoid": "按来源数量投票或静默挑选有利版本。"
+      },
+      {
+        "id": "respect-access",
+        "when": "目标材料不可访问或被明确拒绝",
+        "action": "交已取得证据、缺失项和由用户补交的材料清单",
+        "avoid": "绕过拒绝、借另一 Agent 重试，或假装已看到未取得页面。"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "source-evidence-analyst-deliver",
+        "inputGuidance": [
+          {
+            "field": "question",
+            "interpretation": "待核查的具体声明及对象。",
+            "onMissing": "先明确哪个结论会改变用户决定。"
+          },
+          {
+            "field": "sources",
+            "interpretation": "用户材料与实际取得的来源，保留时间和引用范围。",
+            "onMissing": "只处理已给材料；将外部核查列未完成。"
+          },
+          {
+            "field": "deliverablePurpose",
+            "interpretation": "区分研究结论、修订草稿和实际平台动作。",
+            "onMissing": "默认提供可审阅草稿，不假定发布或申诉权限。"
+          },
+          {
+            "field": "acceptanceCriteria",
+            "interpretation": "当前角色任务的逐项可观察标准，必须与阶段相符。",
+            "onMissing": "由调用方给当前范围标准；不能伪造用户最终批准。"
+          },
+          {
+            "field": "handoffContext",
+            "interpretation": "当前任务与相关上游材料；字段是上下文，不是工具/资源授权。",
+            "onMissing": "缺当前任务绑定时交缺口，不借用旧任务权限。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "field": "facts",
+            "criterion": "每项事实有出处、范围、时间与支持程度。",
+            "rejectWhen": "把转载数量或截图文字当事件真实性。"
+          },
+          {
+            "field": "delivery",
+            "criterion": "结论/草稿逐项对应核查问题，事实与推断分开。",
+            "rejectWhen": "写已发送、已申诉或未证实的指控。"
+          },
+          {
+            "field": "limitations",
+            "criterion": "明确冲突、不可访问材料和会改变决定的缺口。",
+            "rejectWhen": "以笼统“仅供参考”隐藏具体证据缺失。"
+          },
+          {
+            "field": "status",
+            "criterion": "只总结当前角色的实际交付状态与已说明限制。",
+            "rejectWhen": "把候选产物状态等同用户最终接受。"
+          },
+          {
+            "field": "artifactRefs",
+            "criterion": "引用确实存在且当前任务相关的产物；未产出不编路径。",
+            "rejectWhen": "把预计文件或未读取摘要当真实产物。"
+          },
+          {
+            "field": "criterionResults",
+            "criterion": "每项区分实际观察、自报判断和未运行。",
+            "rejectWhen": "把结构检查、文档读取或自报pass当独立验收。"
+          },
+          {
+            "field": "missingCapabilities",
+            "criterion": "明确缺少何种能力、影响哪个检查或动作。",
+            "rejectWhen": "工具不可用仍宣称已执行。"
+          },
+          {
+            "field": "failures",
+            "criterion": "记录真实失败与范围，不泄露敏感材料。",
+            "rejectWhen": "凭推测补失败或隐去影响结论的问题。"
+          },
+          {
+            "field": "stopReason",
+            "criterion": "说明角色当前结束、缺证据或被阻塞的具体原因。",
+            "rejectWhen": "把未完成判断静默转为成功。"
+          },
+          {
+            "field": "handoff",
+            "criterion": "交事实、产物、限制与待决定项；控制权留调用方。",
+            "rejectWhen": "自行批准下一阶段、调度或高影响操作。"
+          },
+          {
+            "field": "nativeRuntimeVerified",
+            "criterion": "未经独立宿主运行证明保持false。",
+            "rejectWhen": "因模板存在、合同测试或本地装入而声称原生运行已验证。"
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "医学、法律、金融等高影响事实的专业解释由合格人员复核；普通出处整理可继续。",
+        "公开指控或正式申诉的事实范围与措辞由用户/相应专业人员确认。"
+      ],
+      "prohibitedClaims": [
+        "合同、来源装入或作者案例不证明专业效果、用户接受或原生模型运行成功。",
+        "资料、工具槽位与建议不授予执行权限，不接管调用方调度、审批或最终验收。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
   }
 }

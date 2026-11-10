@@ -190,3 +190,102 @@ test('empty, invalid UTF-8 and over-budget documents cannot masquerade as loaded
   fs.writeFileSync(path.join(root, 'references/core.md'), 'a'.repeat(METHOD_CONTENT_LIMITS.assetBytes + 1));
   assert.ok(checkAgentPack(root).some(error => error.includes('bounded UTF-8')));
 });
+
+function writeExpertise(root) {
+  const { method, save } = writeKnowledge(root);
+  const capability = contract();
+  capability.capabilities[0].input.properties = { request: { type: 'string' } };
+  capability.capabilities[0].output.properties = { content: { type: 'string' } };
+  fs.writeFileSync(path.join(root, 'capability.json'), JSON.stringify(capability));
+  method.expertise = {
+    schemaVersion: 1, domain: 'An example decision with traceable evidence', scope: ['Bounded source review'],
+    knowledgeAssetIds: ['sample-core'],
+    diagnosticSequence: [
+      { id: 'claim', question: 'What claim is being tested?', evidenceRequired: ['Original statement'], whenMissing: 'Separate the unverified claim' },
+      { id: 'scope', question: 'Does the evidence cover the claim?', evidenceRequired: ['Observed object and date'], whenMissing: 'Limit the conclusion to the observed scope' },
+    ],
+    decisionRules: [
+      { id: 'trace', when: 'A fact has an original source', action: 'Describe the supported scope', avoid: 'Treating repetition as independent evidence' },
+      { id: 'bound', when: 'Source coverage is incomplete', action: 'Name the missing evidence', avoid: 'Claiming a universal result' },
+    ],
+    contractGuidance: [{ capabilityId: 'sample-agent-run',
+      inputGuidance: [{ field: 'request', interpretation: 'The specific claim to inspect', onMissing: 'Request the claim before evaluating it' }],
+      outputChecks: [{ field: 'content', criterion: 'Bind the conclusion to the observed material', rejectWhen: 'It claims more than the source supports' }],
+    }],
+    reviewBoundary: { humanReviewTriggers: ['High-stakes domain judgment'], prohibitedClaims: ['Metadata proves professional accuracy'] },
+    evaluation: { casesPath: 'evals/professional-cases.json', professionalEffect: 'not_evaluated', evidenceKind: 'authored_examples' },
+  };
+  const examples = { schemaVersion: 1, roleId: 'sample-agent', protocol: 'professional-review-cases-v1', inputProvenance: 'synthetic', evaluationStatus: 'not_evaluated', cases: [
+    { id: 'bounded-fact', capabilityId: 'sample-agent-run', category: 'worked_example', scenario: 'One reviewed sample', input: { request: 'One sample returned 200' },
+      candidateOutputExcerpt: { content: 'This observed sample returned 200; other samples are untested.' }, expectedAssessment: 'acceptable_example', reason: 'The scope matches the evidence', diagnosticRefs: ['claim'], decisionRuleRefs: ['trace'] },
+    { id: 'false-generalization', capabilityId: 'sample-agent-run', category: 'failure_boundary', scenario: 'One reviewed sample is used to claim a universal result', input: { request: 'One sample returned 200' },
+      candidateOutputExcerpt: { content: 'All requests always succeed.' }, expectedAssessment: 'reject_example', reason: 'The statement exceeds the observed scope', diagnosticRefs: ['scope'], decisionRuleRefs: ['bound'] },
+  ] };
+  fs.mkdirSync(path.join(root, 'evals'));
+  const saveCases = () => fs.writeFileSync(path.join(root, 'evals/professional-cases.json'), JSON.stringify(examples));
+  save(); saveCases();
+  return { method, save, examples, saveCases };
+}
+
+test('an authored rejection case is valid review material, not a professional success receipt', (t) => {
+  const root = writePack(temporaryRoot(t)); const { examples } = writeExpertise(root);
+  assert.deepEqual(checkAgentPack(root), []);
+  assert.equal(examples.cases[1].candidateOutputExcerpt.content, 'All requests always succeed.');
+  assert.equal(examples.evaluationStatus, 'not_evaluated');
+});
+
+test('expertise references are bound to real assets, capability fields and case decisions', (t) => {
+  const root = writePack(temporaryRoot(t)); const { method, save, examples, saveCases } = writeExpertise(root);
+  method.expertise.knowledgeAssetIds = ['missing-core'];
+  method.expertise.contractGuidance[0].inputGuidance[0].field = 'inventedInput'; save();
+  examples.cases[0].diagnosticRefs = ['undeclared-diagnosis']; saveCases();
+  const errors = checkAgentPack(root);
+  assert.ok(errors.some(error => error.includes('knowledgeAssetIds')));
+  assert.ok(errors.some(error => error.includes('guidance must name declared capability fields')));
+  assert.ok(errors.some(error => error.includes('guidance must cover required capability fields')));
+  assert.ok(errors.some(error => error.includes('must reference declared diagnostics')));
+});
+
+test('actual example input and output types are checked without accepting missing required inputs', (t) => {
+  const root = writePack(temporaryRoot(t)); const { examples, saveCases } = writeExpertise(root);
+  examples.cases[0].input = {};
+  examples.cases[1].candidateOutputExcerpt.content = 42; saveCases();
+  const errors = checkAgentPack(root);
+  assert.ok(errors.some(error => error.includes('input requires request')));
+  assert.ok(errors.some(error => error.includes('output excerpt.content must have declared type string')));
+});
+
+test('expertise metadata cannot promote itself to verified quality or add tool authority', (t) => {
+  const root = writePack(temporaryRoot(t)); const { method, save } = writeExpertise(root);
+  method.expertise.evaluation.professionalEffect = 'verified';
+  method.expertise.permissions = ['execute:anything']; save();
+  const errors = checkAgentPack(root);
+  assert.ok(errors.some(error => error.includes('must equal not_evaluated')));
+  assert.ok(errors.some(error => error.includes('unsupported field permissions')));
+});
+
+test('review cases need a real counterexample and cannot be replaced with an execution claim', (t) => {
+  const root = writePack(temporaryRoot(t)); const { examples, saveCases } = writeExpertise(root);
+  examples.cases[1].expectedAssessment = 'acceptable_example'; saveCases();
+  assert.ok(checkAgentPack(root).some(error => error.includes('both acceptable and rejected examples')));
+  examples.evaluationStatus = 'all_models_passed'; saveCases();
+  assert.ok(checkAgentPack(root).some(error => error.includes('evaluationStatus must equal not_evaluated')));
+});
+
+test('case resources reject traversal, symlinks, oversized and deeply nested data before use', (t) => {
+  const temp = temporaryRoot(t); const root = writePack(temp); const { method, save, examples, saveCases } = writeExpertise(root);
+  method.expertise.evaluation.casesPath = '../outside.json'; save();
+  assert.ok(checkAgentPack(root).some(error => error.includes('casesPath')));
+  method.expertise.evaluation.casesPath = 'evals/professional-cases.json'; save();
+  fs.writeFileSync(path.join(root, 'evals/professional-cases.json'), ' '.repeat(METHOD_CONTENT_LIMITS.expertiseCasesBytes + 1));
+  assert.ok(checkAgentPack(root).some(error => error.includes('cases must be bounded')));
+  let nested = {};
+  for (let i = 0; i < 35; i++) nested = { child: nested };
+  examples.cases[0].input.request = nested; saveCases();
+  assert.ok(checkAgentPack(root).some(error => error.includes('cases must be bounded')));
+  fs.rmSync(path.join(root, 'evals/professional-cases.json'));
+  fs.writeFileSync(path.join(temp, 'outside.json'), JSON.stringify(examples));
+  try { fs.symlinkSync(path.join(temp, 'outside.json'), path.join(root, 'evals/professional-cases.json')); }
+  catch (error) { if (['EPERM', 'EACCES'].includes(error.code)) { t.diagnostic('Symlink creation unavailable; other bounds exercised'); return; } throw error; }
+  assert.ok(checkAgentPack(root).some(error => error.includes('cases must be bounded')));
+});

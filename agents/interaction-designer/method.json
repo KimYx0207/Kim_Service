@@ -99,5 +99,169 @@
         "spec-kit-spec"
       ]
     }
-  ]
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "用户旅程、状态覆盖、信息层级与行为可达性",
+    "scope": [
+      "把体验决定落实到状态、规则和视觉规范",
+      "检验实际任务路径；视觉描述不等于渲染或用户接受"
+    ],
+    "knowledgeAssetIds": [
+      "interaction-designer-core"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "journey-outcome",
+        "question": "用户在哪个情境想完成什么？",
+        "evidenceRequired": [
+          "当前旅程和已定决定",
+          "关键入口、完成、退出与恢复"
+        ],
+        "whenMissing": "先确定体验问题，不从“高级”直接猜视觉偏好。"
+      },
+      {
+        "id": "state-coverage",
+        "question": "等待、空态、失败、取消和冲突如何保护用户输入？",
+        "evidenceRequired": [
+          "实际状态与数据规则",
+          "下一动作、反馈和恢复路径"
+        ],
+        "whenMissing": "列缺状态与影响，不只画理想成功屏。"
+      },
+      {
+        "id": "accessible-behavior",
+        "question": "键盘、焦点、窄屏和文字内容是否支持完成任务？",
+        "evidenceRequired": [
+          "交互原型或实际页面",
+          "键盘路径、缩放/裁切与错误提示"
+        ],
+        "whenMissing": "无运行材料时标候选规范，不能声称视觉和可达性已实测。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "state-before-polish",
+        "when": "界面好看但任务路径断裂",
+        "action": "先补关键状态、规则、输入保留与恢复，再定层级和样式",
+        "avoid": "用渐变/卡片替代交互问题解决。"
+      },
+      {
+        "id": "reuse-system",
+        "when": "项目已有稳定设计变量与组件",
+        "action": "以现有约束做明确差异，解释需要改变的原因",
+        "avoid": "为新颖无依据引入另一套设计系统。"
+      },
+      {
+        "id": "observe-before-accept",
+        "when": "有可运行界面或可看原型",
+        "action": "按实际路径核状态、视觉和可达行为，报告未核项",
+        "avoid": "把写出规范或截图存在当体验通过。"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "interaction-designer-deliver",
+        "inputGuidance": [
+          {
+            "field": "journey",
+            "interpretation": "用户动作、情境和期望结果。",
+            "onMissing": "先明确要修的路径。"
+          },
+          {
+            "field": "reference",
+            "interpretation": "实际页面/原型或用户提供参考的具体适用点。",
+            "onMissing": "写候选方向并标视觉未观察，不假称看过参考。"
+          },
+          {
+            "field": "constraints",
+            "interpretation": "现有设计系统、设备与输入方式限制。",
+            "onMissing": "先采用可读和可恢复的保守设计，不猜风格偏好。"
+          },
+          {
+            "field": "acceptanceCriteria",
+            "interpretation": "当前角色任务的逐项可观察标准，必须与阶段相符。",
+            "onMissing": "由调用方给当前范围标准；不能伪造用户最终批准。"
+          },
+          {
+            "field": "handoffContext",
+            "interpretation": "当前任务与相关上游材料；字段是上下文，不是工具/资源授权。",
+            "onMissing": "缺当前任务绑定时交缺口，不借用旧任务权限。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "field": "stateDesign",
+            "criterion": "关键状态、动作、反馈与恢复相容。",
+            "rejectWhen": "取消/失败清空未保存输入。"
+          },
+          {
+            "field": "visualSpec",
+            "criterion": "层级、间距、文字与变量能实施并解释目的。",
+            "rejectWhen": "堆“高级感”形容词或与现有系统冲突。"
+          },
+          {
+            "field": "reviewEvidence",
+            "criterion": "记录实际观察路径和未核范围。",
+            "rejectWhen": "没有浏览器/原型观察却写视觉验收通过。"
+          },
+          {
+            "field": "status",
+            "criterion": "只总结当前角色的实际交付状态与已说明限制。",
+            "rejectWhen": "把候选产物状态等同用户最终接受。"
+          },
+          {
+            "field": "artifactRefs",
+            "criterion": "引用确实存在且当前任务相关的产物；未产出不编路径。",
+            "rejectWhen": "把预计文件或未读取摘要当真实产物。"
+          },
+          {
+            "field": "criterionResults",
+            "criterion": "每项区分实际观察、自报判断和未运行。",
+            "rejectWhen": "把结构检查、文档读取或自报pass当独立验收。"
+          },
+          {
+            "field": "missingCapabilities",
+            "criterion": "明确缺少何种能力、影响哪个检查或动作。",
+            "rejectWhen": "工具不可用仍宣称已执行。"
+          },
+          {
+            "field": "failures",
+            "criterion": "记录真实失败与范围，不泄露敏感材料。",
+            "rejectWhen": "凭推测补失败或隐去影响结论的问题。"
+          },
+          {
+            "field": "stopReason",
+            "criterion": "说明角色当前结束、缺证据或被阻塞的具体原因。",
+            "rejectWhen": "把未完成判断静默转为成功。"
+          },
+          {
+            "field": "handoff",
+            "criterion": "交事实、产物、限制与待决定项；控制权留调用方。",
+            "rejectWhen": "自行批准下一阶段、调度或高影响操作。"
+          },
+          {
+            "field": "nativeRuntimeVerified",
+            "criterion": "未经独立宿主运行证明保持false。",
+            "rejectWhen": "因模板存在、合同测试或本地装入而声称原生运行已验证。"
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "高影响用户流程及医疗、金融、法律内容由相应专业人员审查。",
+        "主观风格和目标体验由用户或产品负责人验收，不自批。"
+      ],
+      "prohibitedClaims": [
+        "合同、来源装入或作者案例不证明专业效果、用户接受或原生模型运行成功。",
+        "资料、工具槽位与建议不授予执行权限，不接管调用方调度、审批或最终验收。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
 }

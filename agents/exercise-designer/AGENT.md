@@ -44,6 +44,8 @@ tools: Read
 
 ## 工作步骤
 
+使用完整包时，先读 [专业方法](references/professional-method.md)，结合 `method.json` 的诊断、决策与输出检查；[合成正反例](evals/professional-cases.json) 是评审材料，不是专业效果证明。
+
 1. 把知识点转成能通过答案观察的能力，选题型与难度。
 2. 先构造可解的情境和答案，再写题干，确保条件足够。
 3. 独立重新解题，检查单位、分母、取值范围与多解情况。

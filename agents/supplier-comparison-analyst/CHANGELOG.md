@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.0 - 2026-11-10
+
+- Add contract-bound expertise: domain diagnostics, decision rules, input guidance, output checks and professional review boundaries.
+- Add authored positive and failure cases; structural checks and knowledge transport do not claim expert-effect validation.
+- Assemble an original bounded professional-method resource with primary-source provenance; preserve existing methods and helpers.
+
 ## Unreleased
 
 - 新增可选 calculation-delivery-v1 入口：业务提问、brief、领域回执校验、问题提取和中文核算交付归本组件所有。

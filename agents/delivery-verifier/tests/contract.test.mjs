@@ -12,7 +12,7 @@ test('standalone Agent follows the eight-section readonly pack contract', () => 
   assert.equal(contract.schemaVersion, 1);
   assert.equal(contract.id, 'delivery-verifier');
   assert.equal(contract.componentType, 'agent');
-  assert.equal(contract.componentVersion, '0.1.0');
+  assert.equal(contract.componentVersion, '0.2.0');
   assert.equal(contract.entrypoint, 'AGENT.md');
   assert.ok(agent.startsWith('---\nname: delivery-verifier\n'));
   assert.ok(agent.includes('tools: Read\n'));

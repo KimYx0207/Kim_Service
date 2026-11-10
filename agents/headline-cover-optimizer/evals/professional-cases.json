@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "roleId": "headline-cover-optimizer",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "bounded-title",
+      "scenario": "正文演示三步核对CSV导出，没有经营效果研究。",
+      "input": {
+        "bodyOrKeyPoints": "演示下载CSV、核对行数、检查编码，全部使用合成数据",
+        "platform": "教程文章",
+        "goal": "让新手愿意打开并按步骤检查"
+      },
+      "candidateOutputExcerpt": {
+        "promise": "教新手核对一次CSV导出是否完整",
+        "recommended": {
+          "main": "CSV下载后，先检查这三件事",
+          "alternate": "给新手的CSV导出核对步骤",
+          "reason": "承诺对应正文三项检查；点击效果未验证"
+        },
+        "coverOptions": [
+          {
+            "coverText": "CSV下载后检查",
+            "layout": "合成文件截图与局部标注",
+            "visualAnchor": "圈出行数与编码位置",
+            "materialsNeeded": "标明合成的CSV截图，实际缩略可读性待核"
+          },
+          {
+            "coverText": "导出后核对三步",
+            "layout": "三步流程图",
+            "visualAnchor": "下载、核行数、查编码的顺序",
+            "materialsNeeded": "原创图形；当前只交构图说明，未渲染"
+          }
+        ]
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "推荐理由来自内容与读者任务，未凭空承诺收益。",
+      "capabilityId": "headline-cover-optimizer-optimize",
+      "category": "worked_example",
+      "diagnosticRefs": [
+        "promise",
+        "thumbnail-context",
+        "test-context"
+      ],
+      "decisionRuleRefs": [
+        "truth-before-strength",
+        "complement",
+        "no-causal-shortcut"
+      ]
+    },
+    {
+      "id": "ctr-confound",
+      "scenario": "旧标题100次曝光20点击，新标题1000次曝光100点击，流量来源不同。",
+      "input": {
+        "bodyOrKeyPoints": "同一篇教程",
+        "currentTitle": "新手导出检查",
+        "goal": "解释CTR从20%降到10%",
+        "audience": "新版本拓展了陌生推荐流量"
+      },
+      "candidateOutputExcerpt": {
+        "recommended": {
+          "main": "立即换回旧标题",
+          "alternate": "停止发这类教程",
+          "reason": "新标题必然更差，平台已经降权。"
+        }
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "受众和曝光构成改变，数据不能证明标题因果或平台处罚。",
+      "capabilityId": "headline-cover-optimizer-optimize",
+      "category": "failure_boundary",
+      "diagnosticRefs": [
+        "promise",
+        "thumbnail-context",
+        "test-context"
+      ],
+      "decisionRuleRefs": [
+        "truth-before-strength",
+        "complement",
+        "no-causal-shortcut"
+      ]
+    }
+  ]
+}

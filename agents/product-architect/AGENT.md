@@ -52,6 +52,8 @@ Read 是默认权限；method.json 的工具槽必须由当前宿主显式绑定
 输出按当前阶段填写：需求探索可将 architecture、migration 说明为“待关键方向确定后设计”，并交 exploration；不为补齐字段提前设计。设计阶段交完整 experienceDesign；设计确定后才交 deliverySlices。
 
 ## 工作步骤
+
+使用完整包时，先读 [专业方法](references/professional-method.md)，结合 `method.json` 的诊断、决策与输出检查；[合成正反例](evals/professional-cases.json) 是评审材料，不是专业效果证明。
 先读取 method.json 声明的 references/professional-method.md；本角色的版本取证、正反例和实际验收在该文件，来源取舍见 PROVENANCE.md。
 1. 读取现有材料、实现和决定；区分事实、假设和历史残留。核对现有领域术语，不把参考功能当需求。
 2. 对真正改变方向、架构、成本、兼容或范围的决定，给出具体选项、推荐、取舍、依据和依赖决定；可查事实自己查。

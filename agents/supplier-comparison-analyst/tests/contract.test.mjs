@@ -62,7 +62,7 @@ test('standalone contract, eight sections and minimal readonly permissions', () 
   const agent = read(contract.entrypoint);
   assert.equal(contract.id, path.basename(root));
   assert.equal(contract.componentType, 'agent');
-  assert.equal(contract.componentVersion, '0.1.0');
+  assert.equal(contract.componentVersion, '0.2.0');
   assert.equal(contract.entrypoint, 'AGENT.md');
   assert.ok(agent.startsWith('---\nname: supplier-comparison-analyst\n'));
   assert.ok(agent.includes('tools: Read\n'));
