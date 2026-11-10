@@ -109,7 +109,7 @@ print('validated')`;
 test('async stdin delivers all UTF-8 bytes and a real EOF before reading a receipt', async () => {
   const input = '纸'.repeat(100000);
   const { child } = await checkedSpawn(['-I', '-B', '-c',
-    'import sys, hashlib; data=sys.stdin.buffer.read(); print(len(data)); print(hashlib.sha256(data).hexdigest())'],
+    'import sys, hashlib; data=sys.stdin.buffer.read(); sys.stdout.buffer.write((str(len(data)) + "\\n" + hashlib.sha256(data).hexdigest() + "\\n").encode("ascii"))'],
     { input, encoding: 'utf8', cwd: root }, 'stdin-eof-probe');
   assert.equal(child.status, 0);
   assert.equal(child.spawned, true);

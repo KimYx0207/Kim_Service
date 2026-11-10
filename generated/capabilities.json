@@ -10053,7 +10053,7 @@
       ]
     },
     {
-      "componentContentSha256": "32eb7ef178de9bf93fbc8e6ee07a11b2fbce3bdaf1f1d4f35e4d0c17681314cf",
+      "componentContentSha256": "db316f52fc8fd44abaeff8b9622d75bd465924e2ffabddcd4f638fa30a68bb59",
       "componentId": "store-performance-analyst",
       "componentPath": "agents/store-performance-analyst",
       "componentType": "agent",
@@ -10173,7 +10173,7 @@
       ]
     },
     {
-      "componentContentSha256": "a1ad92f66d5d91ebfc229758a1c98012e0a168265e02029600e9720b1db7349e",
+      "componentContentSha256": "3e6443c7cd9bf56ab55fa5a5a066fbcd77b4ef329fdc1134257a009bc03e2a6a",
       "componentId": "supplier-comparison-analyst",
       "componentPath": "agents/supplier-comparison-analyst",
       "componentType": "agent",
@@ -11703,7 +11703,7 @@
       ],
       "componentType": "agent",
       "componentVersion": "0.4.0",
-      "contentSha256": "32eb7ef178de9bf93fbc8e6ee07a11b2fbce3bdaf1f1d4f35e4d0c17681314cf",
+      "contentSha256": "db316f52fc8fd44abaeff8b9622d75bd465924e2ffabddcd4f638fa30a68bb59",
       "contractSha256": "be1260b6ebbbf92e41da855404f8abe011424561235a691a02dd33475637a4d0",
       "entrypoint": "AGENT.md",
       "id": "store-performance-analyst",
@@ -11719,7 +11719,7 @@
       ],
       "componentType": "agent",
       "componentVersion": "0.3.0",
-      "contentSha256": "a1ad92f66d5d91ebfc229758a1c98012e0a168265e02029600e9720b1db7349e",
+      "contentSha256": "3e6443c7cd9bf56ab55fa5a5a066fbcd77b4ef329fdc1134257a009bc03e2a6a",
       "contractSha256": "d857136fc0648b6af4e5203e2ac592b1f30e32c1a95b65ba7539d51fb9eab3a3",
       "entrypoint": "AGENT.md",
       "id": "supplier-comparison-analyst",
