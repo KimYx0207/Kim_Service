@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "roleId": "product-listing-writer",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "facts-only",
+      "scenario": "帆布袋35×38cm，有拉链无内袋，未做承重和防水测试。",
+      "input": {
+        "productFacts": "帆布袋，35×38cm，12oz，拉链，无内袋，29元；承重/防水未测试。"
+      },
+      "candidateOutputExcerpt": {
+        "detailCopy": "35×38cm帆布袋，12oz面料，拉链开合，无内袋。价格29元。承重与防水性能尚未验证，购买前请根据实际用途确认。",
+        "openQuestions": [
+          "如需承重或防水卖点，补对应测试与使用条件。"
+        ]
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "规格完整，未知性能没有变成保证。",
+      "capabilityId": "product-listing-writer-assist",
+      "category": "worked_example",
+      "diagnosticRefs": [
+        "fact-ledger",
+        "buyer-question",
+        "cross-copy"
+      ],
+      "decisionRuleRefs": [
+        "supported-benefit",
+        "variant-clarity",
+        "regulated-claim"
+      ]
+    },
+    {
+      "id": "unsupported-performance",
+      "scenario": "同款普通拉链袋没有测试或认证。",
+      "input": {
+        "productFacts": "拉链帆布袋，无防水和安全测试。"
+      },
+      "candidateOutputExcerpt": {
+        "detailCopy": "完全防水、防盗，承重100公斤，官方认证可放心装贵重物品。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "新加未经证实的性能、认证和安全承诺。",
+      "capabilityId": "product-listing-writer-assist",
+      "category": "failure_boundary",
+      "diagnosticRefs": [
+        "fact-ledger",
+        "buyer-question",
+        "cross-copy"
+      ],
+      "decisionRuleRefs": [
+        "supported-benefit",
+        "variant-clarity",
+        "regulated-claim"
+      ]
+    }
+  ]
+}

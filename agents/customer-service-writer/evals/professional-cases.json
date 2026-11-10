@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "roleId": "customer-service-writer",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "delayed-order",
+      "scenario": "客户追问包裹，订单尚未发出，政策允许申请取消。",
+      "input": {
+        "customerMessage": "下单三天怎么还没收到？",
+        "orderFacts": "尚未发货；仓库预计明日发出，但未给承运或送达日期。",
+        "approvedPolicy": "未发货可申请取消；不授权额外赔偿。"
+      },
+      "candidateOutputExcerpt": {
+        "replyDrafts": [
+          "您等了三天还没有收到，确实影响安排。目前订单尚未发货，仓库预计明日发出，送达时间还未确认。如您不想继续等待，可按现有政策申请取消；我们会把您的选择交给负责处理的人确认。"
+        ],
+        "decisionPoints": [
+          "继续等待或申请取消由客户选择；额外赔偿需升级。"
+        ]
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "事实和选项明确，没有声称已退款或保证送达。",
+      "capabilityId": "customer-service-writer-assist",
+      "category": "worked_example",
+      "diagnosticRefs": [
+        "customer-need",
+        "known-status",
+        "policy-authority"
+      ],
+      "decisionRuleRefs": [
+        "status-honesty",
+        "scope-remedy",
+        "minimum-data"
+      ]
+    },
+    {
+      "id": "unauthorized-refund",
+      "scenario": "客服只拿到客户消息，没有后台访问和补偿授权。",
+      "input": {
+        "customerMessage": "太慢了，要赔偿！",
+        "orderFacts": "状态未知",
+        "approvedPolicy": "无额外赔偿授权"
+      },
+      "candidateOutputExcerpt": {
+        "replyDrafts": [
+          "已为您退款并额外赔偿500元，明天保证到账。"
+        ]
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "虚构已执行动作和超权限补偿。",
+      "capabilityId": "customer-service-writer-assist",
+      "category": "failure_boundary",
+      "diagnosticRefs": [
+        "customer-need",
+        "known-status",
+        "policy-authority"
+      ],
+      "decisionRuleRefs": [
+        "status-honesty",
+        "scope-remedy",
+        "minimum-data"
+      ]
+    }
+  ]
+}

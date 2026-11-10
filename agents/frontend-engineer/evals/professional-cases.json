@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 1,
+  "roleId": "frontend-engineer",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "preserve-on-cancel",
+      "scenario": "当前接口409包含serverVersion，取消冲突面板要保留草稿。",
+      "input": {
+        "scope": "给冲突面板加取消操作",
+        "interfaceContract": "409含serverVersion，不允许静默覆盖",
+        "interactionSpec": "取消回编辑并保留本机正文",
+        "acceptanceCriteria": [
+          {
+            "id": "scope",
+            "condition": "接口字段与服务一致，错误不被吞掉",
+            "evidenceRequired": "指定材料、产物与独立检查"
+          }
+        ],
+        "handoffContext": {
+          "taskId": "synthetic-example",
+          "upstreamArtifacts": [],
+          "permittedActions": [
+            "read_supplied_materials"
+          ],
+          "resourceLeases": []
+        },
+        "projectFacts": {
+          "versions": [
+            {
+              "name": "project runtime",
+              "version": null,
+              "evidenceRefs": []
+            }
+          ],
+          "codeRefs": [],
+          "constraints": [
+            "合成案例没有读取真实仓库，不声称已核实版本"
+          ]
+        }
+      },
+      "candidateOutputExcerpt": {
+        "patch": "在当前草稿状态上关闭冲突面板，取消不发覆盖请求；409和网络异常分支保留正文。",
+        "behaviorEvidence": "候选实现策略；需要以实际页面观察关闭后内容和请求记录，尚未执行。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "行为与接口约束一致，并保留未运行边界。",
+      "capabilityId": "frontend-engineer-deliver",
+      "category": "worked_example",
+      "diagnosticRefs": [
+        "project-context",
+        "state-contract",
+        "observable-result"
+      ],
+      "decisionRuleRefs": [
+        "one-state-owner",
+        "preserve-work",
+        "prove-path"
+      ]
+    },
+    {
+      "id": "build-as-behavior",
+      "scenario": "构建成功但没有检查失败返回，代码catch后显示成功并清空正文。",
+      "input": {
+        "scope": "修复保存反馈",
+        "interfaceContract": "409表示版本冲突",
+        "interactionSpec": "冲突必须保留草稿",
+        "acceptanceCriteria": [
+          {
+            "id": "scope",
+            "condition": "接口字段与服务一致，错误不被吞掉",
+            "evidenceRequired": "指定材料、产物与独立检查"
+          }
+        ],
+        "handoffContext": {
+          "taskId": "synthetic-example",
+          "upstreamArtifacts": [],
+          "permittedActions": [
+            "read_supplied_materials"
+          ],
+          "resourceLeases": []
+        },
+        "projectFacts": {
+          "versions": [
+            {
+              "name": "project runtime",
+              "version": null,
+              "evidenceRefs": []
+            }
+          ],
+          "codeRefs": [],
+          "constraints": [
+            "合成案例没有读取真实仓库，不声称已核实版本"
+          ]
+        }
+      },
+      "candidateOutputExcerpt": {
+        "behaviorEvidence": "build通过，所以保存、冲突和键盘行为全部已验证。",
+        "patch": "捕获任何异常后显示保存成功并清空内容。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "检查不能覆盖实际行为，且代码违背冲突语义。",
+      "capabilityId": "frontend-engineer-deliver",
+      "category": "failure_boundary",
+      "diagnosticRefs": [
+        "project-context",
+        "state-contract",
+        "observable-result"
+      ],
+      "decisionRuleRefs": [
+        "one-state-owner",
+        "preserve-work",
+        "prove-path"
+      ]
+    }
+  ]
+}

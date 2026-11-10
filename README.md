@@ -4,34 +4,78 @@
   <a href="README.md">简体中文</a> · <a href="README_EN.md">English</a>
 </p>
 
-**这是老金（KimYx0207）维护的独立专业能力依赖仓库。**
+**给 AI Agent 配上做事的方法、专业资料和明确的交付标准。**
 
-这里收录可发现、可单独使用、可验证的 Hook、Skill、Tool 与专业 Agent，并为未来合格的 App 保留同一包规范。每个能力包解决一个明确问题；Kim Service 不承担跨组件 Router、任务状态机或最终验收大脑。
+Kim Service 是老金（KimYx0207）维护的专业能力库。每个 Agent、Skill、Hook 或 Tool 解决一个明确问题，带有入口、方法、输入输出约定、示例和验证方式。你可以单独使用，也可以由 [Meta_Kim](https://github.com/KimYx0207/Meta_Kim) 发现和调用。
 
-当前发布：[V1.10](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.10)。产品架构与交互设计角色均更新至 **0.2.0**：先探索需求、提供建议与取舍，再把已定需求形成完整设计和可演示任务。具体变更见 [CHANGELOG.md（英文）](CHANGELOG.md)。
+## 先从你要做的事开始
 
-Zcode 用户可按 [Beta 内容包指南](docs/zcode-beta.md) 刷新既有 marketplace，再通过正常插件更新入口升级。兼容包包含完整专业组件与方法；安装成功不代表原生 Agent 加载、模型表现或最终业务验收已经通过。
+> “我有一个报名产品的想法。请先帮我比较系统方案，再细化用户流程、异常状态、前后端接口和验收。沿用当前项目已经合适的技术，不要只列岗位名字。”
 
-## 收录内容
+打开[中文任务入口](docs/start.html)，按关键词找到能力，查看所需资料与交付内容，然后复制请求。下载完整仓库后，可以直接在浏览器打开 `docs/start.html` 离线浏览；GitHub 文件页显示的是源码。浏览目录本身不会安装或执行任何组件。
 
-- 面向人的组件目录：[hooks](hooks)、[skills](skills)、[tools](tools)、[行业角色](agents/README.md)。
-- 发布库存与来源事实：[catalog.json](catalog.json)。
-- 自动生成的 Capability 索引：[generated/capabilities.json](generated/capabilities.json)。
-- 按需组合专业任务团队：[任务交付指南](docs/task-agent-delivery.md) 与 [完整参考源盘点](docs/task-agent-reference-audit.md)。
+| 你要做的事 | 可以先看 |
+| --- | --- |
+| 从模糊想法走到系统方案和模块 PRD | [产品架构](agents/product-architect/) |
+| 把用户动机变成流程、界面状态与恢复路径 | [交互设计](agents/interaction-designer/) |
+| 把设计落实到当前前端技术和可用界面 | [前端工程](agents/frontend-engineer/) |
+| 定义数据、接口、事务、权限和迁移行为 | [后端与数据工程](agents/backend-data-engineer/) |
+| 核对交付物和实际检查证据 | [交付验证](agents/delivery-verifier/) |
+| 内容、教学、运营、分析等其他任务 | [完整专业角色目录](agents/README.md) |
 
-组件总表不再手工复制进 README。新增或修改能力包后，根脚本会从包内 `capability.json` 自动发现、校验并生成索引，避免 README、catalog 和组件目录相互漂移。
+## 一个专业包里有什么？
 
-## 怎么使用
+| 文件 | 用途 |
+| --- | --- |
+| `AGENT.md` / `SKILL.md` / `README.md` | 入口、适用任务、执行方法与边界 |
+| `capability.json` | 可发现的能力、输入、输出、权限和副作用约定 |
+| `method.json`（24 个 Agent 均提供；其他类型按包提供） | 领域步骤、工具需求、交接方式；`expertise` 绑定诊断、决策与现有输入输出 |
+| `references/`（按需） | 实际专业资料；由 `knowledgeAssets` 声明适用范围和来源 |
+| `example.json` / `AGENT.md` 内示例 | 按包提供的完整示例；示例数据与真实回执分开 |
+| `evals/professional-cases.json`（Agent） | 合成正例、失败反例与评审依据；不是模型运行结果 |
+| `tests/`、`scripts/`（按包提供） | 组件检查或范围明确的确定性工具 |
+| `PROVENANCE.md`、`LICENSE` | 资料来源、改造边界与许可证 |
 
-先打开[「从你要做的事开始」中文入口](docs/start.html)，按关键词查看输入、交付和使用说明，并复制任务请求。克隆或下载完整仓库后，直接用浏览器打开 `docs/start.html` 即可离线浏览；GitHub 文件页只显示源码。此入口不安装或运行能力。
+24 个 Agent 都有领域知识、诊断问题、条件决策、输入解释、输出检查、工具边界与正反案例。内容覆盖软件设计与开发、来源与量化研究、媒体制作、交付核验、内容、电商、采购、教育、求职职场和副业分析。已有的具体方法和确定性工具继续保留；新增资料是原创组织，采用与未采用的参考原则记录在各包来源文件中。
 
-1. 从自动索引或对应类型目录选择能力包。
-2. 按包内 `entrypoint` 阅读入口；常见入口为 Hook/Tool 的 `README.md`、Skill 的 `SKILL.md` 或 Agent 的 `AGENT.md`。
-3. 按项目说明安装到你的项目或个人环境中。
+选中的资料会随 Meta_Kim 工单进入实际执行上下文，并校验来源文件的完整字节。合同检查能发现错误类型、缺项、悬空引用或不安全资源路径，不能判断文字建议是否专业。48 个合成案例目前是评审材料，专业效果均为 `not_evaluated`；这不构成“所有行业专家已验证”的声明，高影响专业结论仍须相应人工审核。
 
-当前安装源是 Kim_Service 中选中的组件目录。`catalog.json` 的 `source` 与 `revision` 记录导入来源，不能当作最新安装地址；已收录的能力包不需要再克隆旧独立仓库。若本地已有相同能力，先核对来源和版本，再选择复用或升级一个入口，避免重复安装。
+## 与 Meta_Kim 的关系
 
-每个项目都带有自己的使用说明、许可证、归属和更新记录。合集的最新版本请查看 [GitHub Releases](https://github.com/KimYx0207/Kim_Service/releases)，本次更新内容见 [CHANGELOG.md](CHANGELOG.md)。
+<p align="center">
+  <img src="docs/images/intent-to-delivery.svg" alt="Meta_Kim 与 Kim Service 的职责，以及从意图到交付的关系" width="1000">
+</p>
+
+*架构示意图。Meta_Kim 负责决策、编排和连续性，Kim Service 提供专业方法与能力。*
+
+系统和技术栈先形成基线，再细化模块、接口、状态和验收。两层设计属于同一份 PRD。模块对应实际交付任务；能否并行由调用方的依赖、资源和权限决定。Kim Service 不另建调度器、权限系统或最终验收状态。
+
+## 使用与更新
+
+1. 从任务入口或索引选包，阅读其入口和必要资料。
+2. 提供当前目标、项目事实、验收条件和相关上游产物。单独使用时，让你的客户端读取选中的组件目录；集成使用时由 Meta_Kim 校验并绑定该来源。
+3. 宿主提供真实可用工具及已授权范围。缺少工具时，组件交付可用材料和明确缺口，不宣称已写入、已部署或已通过验收。
+
+当前组件安装源就是 **Kim_Service 内选中的目录**。`catalog.json` 的 `source` / `revision` 记录历史来源，不是要求重新克隆旧独立仓库。已有同类能力先核对来源与版本，复用或升级一个入口。
+
+已发布基线：[V1.10](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.10)。当前 [Unreleased](CHANGELOG.md#unreleased) 扩展全部 24 个 Agent 的专业知识合同：产品架构、交互设计和脚本文案为 0.4.0；前端、后端数据、店铺复盘和面试练习为 0.3.0；其余 Agent 为 0.2.0。具体变化见各包 CHANGELOG，尚未作为新 Release 发布。
+
+这些包采用可移植内容与显式合同。**Codex、Claude Code、Cursor、Gemini CLI、ZCode 的安装路径、工具和 Hook 约定由各宿主或 Meta_Kim 适配层处理。** 包被复制或成功安装，不等于原生 Agent 加载、真实模型表现或业务验收通过。ZCode 内容包的既有更新路径见 [Beta 指南](docs/zcode-beta.md)。
+
+## 维护与目录
+
+[Agent](agents/) · [Skill](skills/) · [Hook](hooks/) · [Tool](tools/) · [组件目录](catalog.json) · [自动能力索引](generated/capabilities.json)
+
+修改包内源文件后，用同一套生成器维护目录，不手工维护第二份能力总表：
+
+```bash
+node scripts/catalog-automation.mjs build
+node scripts/start-page.mjs build
+node scripts/check-repository.mjs
+node --test scripts/*.test.mjs
+```
+
+深入阅读：[任务交付指南](docs/task-agent-delivery.md) · [能力包约定](docs/agent-pack-contract.md) · [专家资料作者指南](docs/expert-package-authoring.md) · [24 角色差距与来源审计](docs/expertise-coverage-2026-11-10.md) · [变更记录](CHANGELOG.md)。
 
 ## 联系与支持
 
@@ -54,4 +98,4 @@ Zcode 用户可按 [Beta 内容包指南](docs/zcode-beta.md) 刷新既有 marke
 
 ## 开源说明
 
-Kim Service 仓库级内容采用 MIT License。每个能力包的许可证和来源记录独立生效；涉及改造或迁移的包以其 `LICENSE`、`PROVENANCE` 或同类文件为准。
+仓库级内容采用 [MIT License](LICENSE)。每个能力包的许可证及来源记录独立生效，以包内 `LICENSE`、`PROVENANCE` 或同类文件为准。

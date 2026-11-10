@@ -32,10 +32,12 @@
     }
   ],
   "skillLoading": [
+    "先读取 knowledgeAssets 中本角色包内 professional-method；知识文件受组件哈希约束，仅供当前任务，来源清单不等于本轮联网读取",
     "当前仓库前端工程规则",
     "所用框架官方方法与组件规范；不无关安装其他框架"
   ],
   "steps": [
+    "绑定当前 designBinding/designContext 与项目事实；从指定入口和锁文件核实实际框架/工具版本、相关代码与验收ID，再按包内专业方法处理正反场景",
     "读取仓库入口与相关模块，不让每个工人读整个依赖目录",
     "以最小复现锁定现行为并写失败测试；先验证接口而不编造响应",
     "按组件、状态和数据层责任改动；保留用户编辑与可恢复错误",
@@ -46,7 +48,9 @@
   "acceptance": [
     "接口字段与服务一致，错误不被吞掉",
     "最终补丁通过适用类型检查、测试和构建",
-    "实际浏览器检查与纯单元测试分开报告"
+    "实际浏览器检查与纯单元测试分开报告",
+    "每项已验证结论绑定实际输入、预期、观察、代码/设计版本和回执；资料来源与知识装入不证明功能、视觉或宿主执行通过",
+    "只交当前任务相关的 knowledgeUsage 与未验证限制；删除候选须有调用/动态入口/兼容证据和替代项，最终处置仍由调用方决定"
   ],
   "exclusiveResources": [
     "browser.session",
@@ -81,5 +85,184 @@
     "occupy": "每次动作前核对租约归属、generation与有效期；来自材料的租约声明不足为证",
     "release": "成功、失败或取消均请求宿主释放；收到释放回执才标released",
     "recover": "超时或执行者消失标expired/recovery_required；先停止旧worker并确认无残留动作，宿主更新generation后重新分配；无法确认则blocked，禁止盲目抢占"
+  },
+  "knowledgeAssets": [
+    {
+      "id": "frontend-engineer-core",
+      "path": "references/professional-method.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "anthropic-frontend",
+        "vercel-react",
+        "react-effects",
+        "w3c-dialog"
+      ]
+    }
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "项目约束、状态与接口一致性、渲染和可达交互",
+    "scope": [
+      "在当前仓库实现可观察用户行为",
+      "用实际输入与失败路径验证，避免仅按编译成功宣称完成"
+    ],
+    "knowledgeAssetIds": [
+      "frontend-engineer-core"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "project-context",
+        "question": "真实框架、版本、组件和已有状态归属是什么？",
+        "evidenceRequired": [
+          "锁文件、入口与相关实现",
+          "任务涉及的接口和设计引用"
+        ],
+        "whenMissing": "先定位现有代码，不猜框架版本或新建平行系统。"
+      },
+      {
+        "id": "state-contract",
+        "question": "用户动作、请求、返回与本地状态怎样连接？",
+        "evidenceRequired": [
+          "成功/等待/空/失败/冲突状态",
+          "接口字段、取消与重复动作规则"
+        ],
+        "whenMissing": "接口或关键规则缺失时交具体缺口。"
+      },
+      {
+        "id": "observable-result",
+        "question": "怎样证明本次改动满足用户路径？",
+        "evidenceRequired": [
+          "当前可运行页面与行为观察",
+          "窄屏、键盘、失败与回归检查"
+        ],
+        "whenMissing": "未运行的检查明确列出，不能以build代替行为。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "one-state-owner",
+        "when": "值可从现有状态直接计算",
+        "action": "复用唯一状态来源并减少重复同步",
+        "avoid": "为派生值再建Effect和第二份状态造成漂移。"
+      },
+      {
+        "id": "preserve-work",
+        "when": "请求失败/取消/冲突",
+        "action": "保留用户输入并提供对应恢复；不吞错误",
+        "avoid": "将任何错误都当成功或重置表单。"
+      },
+      {
+        "id": "prove-path",
+        "when": "实现涉及异步或交互变化",
+        "action": "检验有代表性的实际用户路径和失败分支",
+        "avoid": "只验证函数存在或截图生成就宣布交付。"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "frontend-engineer-deliver",
+        "inputGuidance": [
+          {
+            "field": "scope",
+            "interpretation": "当前用户结果及改动范围。",
+            "onMissing": "先明确具体行为，不进行无界重构。"
+          },
+          {
+            "field": "interfaceContract",
+            "interpretation": "实际字段、状态码与权限/幂等边界。",
+            "onMissing": "交阻塞字段或先做不依赖接口的部分。"
+          },
+          {
+            "field": "interactionSpec",
+            "interpretation": "当前状态、反馈、取消/恢复与设计约束。",
+            "onMissing": "核用户路径，不能仅凭视觉词造需求。"
+          },
+          {
+            "field": "acceptanceCriteria",
+            "interpretation": "当前角色任务的逐项可观察标准，必须与阶段相符。",
+            "onMissing": "由调用方给当前范围标准；不能伪造用户最终批准。"
+          },
+          {
+            "field": "handoffContext",
+            "interpretation": "当前任务与相关上游材料；字段是上下文，不是工具/资源授权。",
+            "onMissing": "缺当前任务绑定时交缺口，不借用旧任务权限。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "field": "patch",
+            "criterion": "改动复用实际版本与组件，状态归属清楚。",
+            "rejectWhen": "另造并行入口或硬编码不明版本API。"
+          },
+          {
+            "field": "behaviorEvidence",
+            "criterion": "绑定实际输入、观察与覆盖范围。",
+            "rejectWhen": "把编译/静态类型检查升级为用户路径通过。"
+          },
+          {
+            "field": "handoffNotes",
+            "criterion": "说明接口依赖、未核状态与后续集成。",
+            "rejectWhen": "隐藏运行能力缺失或残留兼容影响。"
+          },
+          {
+            "field": "status",
+            "criterion": "只总结当前角色的实际交付状态与已说明限制。",
+            "rejectWhen": "把候选产物状态等同用户最终接受。"
+          },
+          {
+            "field": "artifactRefs",
+            "criterion": "引用确实存在且当前任务相关的产物；未产出不编路径。",
+            "rejectWhen": "把预计文件或未读取摘要当真实产物。"
+          },
+          {
+            "field": "criterionResults",
+            "criterion": "每项区分实际观察、自报判断和未运行。",
+            "rejectWhen": "把结构检查、文档读取或自报pass当独立验收。"
+          },
+          {
+            "field": "missingCapabilities",
+            "criterion": "明确缺少何种能力、影响哪个检查或动作。",
+            "rejectWhen": "工具不可用仍宣称已执行。"
+          },
+          {
+            "field": "failures",
+            "criterion": "记录真实失败与范围，不泄露敏感材料。",
+            "rejectWhen": "凭推测补失败或隐去影响结论的问题。"
+          },
+          {
+            "field": "stopReason",
+            "criterion": "说明角色当前结束、缺证据或被阻塞的具体原因。",
+            "rejectWhen": "把未完成判断静默转为成功。"
+          },
+          {
+            "field": "handoff",
+            "criterion": "交事实、产物、限制与待决定项；控制权留调用方。",
+            "rejectWhen": "自行批准下一阶段、调度或高影响操作。"
+          },
+          {
+            "field": "nativeRuntimeVerified",
+            "criterion": "未经独立宿主运行证明保持false。",
+            "rejectWhen": "因模板存在、合同测试或本地装入而声称原生运行已验证。"
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "身份、数据隔离及高影响业务行为需要相关安全/领域审核。",
+        "最终用户接受与部署由调用方负责。"
+      ],
+      "prohibitedClaims": [
+        "合同、来源装入或作者案例不证明专业效果、用户接受或原生模型运行成功。",
+        "资料、工具槽位与建议不授予执行权限，不接管调用方调度、审批或最终验收。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
   }
 }

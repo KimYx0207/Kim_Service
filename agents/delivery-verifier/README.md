@@ -30,3 +30,5 @@ node scripts/verify.mjs --artifact-root /absolute/authorized/artifacts --input-j
 - 无工具时仅交材料内的人工检查说明与缺项，不声称运行脚本
 
 不联网、不执行任意命令、不改交付文件、不存个人长期记忆，不新增权限或调度系统。
+
+专业装配：完整目录包含 `method.json`、[专业知识](references/professional-method.md)、[来源记录](PROVENANCE.md) 与[正反案例](evals/professional-cases.json)。只复制 AGENT.md 不会带入这些资料。案例尚未做专业效果评测，宿主仍负责工具权限和最终验收。

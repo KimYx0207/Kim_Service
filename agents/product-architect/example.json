@@ -17,7 +17,30 @@
         "read_supplied_materials"
       ],
       "resourceLeases": []
-    }
+    },
+    "projectFacts": {
+      "versions": [
+        {
+          "name": "project runtime",
+          "version": null,
+          "evidenceRefs": []
+        }
+      ],
+      "codeRefs": [],
+      "constraints": [
+        "合成案例没有读取真实仓库，不声称已核实版本"
+      ]
+    },
+    "phase": "requirements_exploration",
+    "settledDecisions": [
+      {
+        "decisionId": "preserve-draft",
+        "value": "合成决定：取消与冲突都不静默覆盖本机草稿",
+        "evidenceRefs": [
+          "fixture:user-choice"
+        ]
+      }
+    ]
   },
   "output": {
     "scope": "本轮交离线修改、版本比较与冲突提示的设计",
@@ -57,6 +80,177 @@
       ],
       "requiresDecision": false
     },
-    "nativeRuntimeVerified": false
+    "nativeRuntimeVerified": false,
+    "knowledgeUsage": [],
+    "productDesign": {
+      "schemaVersion": 1,
+      "designId": "synthetic-offline-draft",
+      "revision": 1,
+      "mode": "exploration",
+      "sourceRefs": [
+        "fixture:synthetic-materials"
+      ],
+      "settledDecisionRefs": [
+        "preserve-draft"
+      ],
+      "userJourneys": [
+        {
+          "id": "resolve-conflict",
+          "audience": "合成用户",
+          "motivation": "保留本机草稿后解决冲突",
+          "steps": [
+            {
+              "action": "打开冲突面板",
+              "feedback": "显示版本来源和差异",
+              "result": "可选择保留或取消"
+            }
+          ],
+          "rules": [
+            "不静默覆盖"
+          ],
+          "failureRecovery": [
+            "取消保留本机正文"
+          ],
+          "resourceRefs": [],
+          "criterionIds": [
+            "scope"
+          ]
+        }
+      ],
+      "taskSlices": [
+        {
+          "id": "conflict-service",
+          "outcome": "合成服务契约拒绝过期更新",
+          "capabilityNeed": [
+            "backend-data-engineer"
+          ],
+          "criterionIds": [
+            "scope"
+          ],
+          "journeyRefs": [
+            "resolve-conflict"
+          ],
+          "decisionRefs": [
+            "preserve-draft"
+          ],
+          "interfaceRefs": [
+            "versioned-draft"
+          ],
+          "stateRefs": [
+            "draft-state"
+          ],
+          "dependsOn": []
+        },
+        {
+          "id": "conflict-ui",
+          "outcome": "合成界面取消后保留草稿",
+          "capabilityNeed": [
+            "frontend-engineer"
+          ],
+          "criterionIds": [
+            "scope"
+          ],
+          "journeyRefs": [
+            "resolve-conflict"
+          ],
+          "decisionRefs": [
+            "preserve-draft"
+          ],
+          "interfaceRefs": [
+            "versioned-draft"
+          ],
+          "stateRefs": [
+            "draft-state"
+          ],
+          "dependsOn": [
+            "conflict-service"
+          ]
+        }
+      ],
+      "interfaces": [
+        {
+          "id": "versioned-draft",
+          "producerTaskId": "conflict-service",
+          "consumerTaskIds": [
+            "conflict-ui"
+          ],
+          "contract": "合成接口：条件更新失败不静默覆盖草稿"
+        }
+      ],
+      "sharedState": [
+        {
+          "id": "draft-state",
+          "ownerTaskId": "conflict-ui",
+          "consumerTaskIds": [
+            "conflict-service"
+          ],
+          "description": "本机草稿与远端版本分开保存"
+        }
+      ],
+      "softwareDesign": {
+        "schemaVersion": 1,
+        "architecture": {
+          "id": "draft-architecture",
+          "revision": 1,
+          "summary": "演示两层设计关系；真实技术栈和版本待读取仓库，不能当作完整实施设计",
+          "decisionRefs": [
+            "preserve-draft"
+          ],
+          "technologyChoices": [],
+          "constraints": [
+            {
+              "id": "preserve-content",
+              "requirement": "不能静默覆盖本机草稿",
+              "verification": "合成验收计划：取消前后逐字比较草稿，尚未执行"
+            }
+          ],
+          "moduleIds": [
+            "conflict-resolution"
+          ]
+        },
+        "modules": [
+          {
+            "id": "conflict-resolution",
+            "purpose": "比较版本并保留用户编辑",
+            "journeyRefs": [
+              "resolve-conflict"
+            ],
+            "decisionRefs": [
+              "preserve-draft"
+            ],
+            "interfaceRefs": [
+              "versioned-draft"
+            ],
+            "stateRefs": [
+              "draft-state"
+            ],
+            "taskIds": [
+              "conflict-service",
+              "conflict-ui"
+            ],
+            "acceptanceCriterionIds": [
+              "scope"
+            ],
+            "states": [
+              {
+                "name": "conflict",
+                "behavior": "并列来源并提供保留、合并和取消"
+              },
+              {
+                "name": "editing",
+                "behavior": "取消后回到未丢失的本机正文"
+              }
+            ],
+            "businessRules": [
+              "未获明确选择不覆盖本机正文"
+            ],
+            "implementationNotes": [
+              "仅演示引用结构；实际代码入口和数据库语义待核实"
+            ],
+            "removalCandidates": []
+          }
+        ]
+      }
+    }
   }
 }

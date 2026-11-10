@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "roleId": "supplier-comparison-analyst",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "moq-cost",
+      "scenario": "合成需求120个同规格袋，A最低150个每个2元另运费35；B恰好120个每个2.1元另运费23。",
+      "input": {
+        "specification": "相同布料尺寸拉链袋，单位个",
+        "quantity": 120,
+        "currency": "CNY",
+        "quotes": [
+          {
+            "supplier": "A",
+            "unitPrice": 2,
+            "moq": 150,
+            "shipping": 35
+          },
+          {
+            "supplier": "B",
+            "unitPrice": 2.1,
+            "moq": 120,
+            "shipping": 23
+          }
+        ]
+      },
+      "candidateOutputExcerpt": {
+        "normalizedQuotes": [
+          "A需买150个，335元，超购30个。",
+          "B需买120个，275元，无超购。"
+        ],
+        "recommendations": [
+          "已知到货费用B较低；质量、交期和未计费用仍待确认，不能仅据此保证B最佳。"
+        ]
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "按真实购买量比较，并限定结论范围。",
+      "capabilityId": "supplier-comparison-analyze",
+      "category": "worked_example",
+      "diagnosticRefs": [
+        "same-unit",
+        "landed-cost",
+        "quality-evidence"
+      ],
+      "decisionRuleRefs": [
+        "hard-constraints",
+        "multi-dimension",
+        "trial-evidence"
+      ]
+    },
+    {
+      "id": "unknown-fee",
+      "scenario": "A运费未知，B已含运费，未给质量权重。",
+      "input": {
+        "specification": "同规格袋",
+        "quantity": 120,
+        "currency": "CNY",
+        "quotes": [
+          {
+            "supplier": "A",
+            "unitPrice": 2,
+            "shipping": null
+          },
+          {
+            "supplier": "B",
+            "unitPrice": 2.1,
+            "shipping": 23
+          }
+        ]
+      },
+      "candidateOutputExcerpt": {
+        "comparison": [
+          "A运费按0元，默认质量90分，总分第一。"
+        ]
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "未知运费和质量不能变成零成本与虚构分数。",
+      "capabilityId": "supplier-comparison-analyze",
+      "category": "failure_boundary",
+      "diagnosticRefs": [
+        "same-unit",
+        "landed-cost",
+        "quality-evidence"
+      ],
+      "decisionRuleRefs": [
+        "hard-constraints",
+        "multi-dimension",
+        "trial-evidence"
+      ]
+    }
+  ]
+}

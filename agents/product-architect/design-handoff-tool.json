@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "protocol": "design-handoff-check-v1",
+  "id": "design-handoff-check",
+  "componentId": "product-architect",
+  "toolVersion": "0.1.0",
+  "invocation": {
+    "type": "local_cli",
+    "runtime": "node",
+    "entrypoint": "scripts/check-design-handoff.mjs",
+    "argv": ["--input-json", "-"],
+    "inputTransport": "stdin_json",
+    "outputTransport": "stdout_json",
+    "shell": false
+  },
+  "files": ["scripts/check-design-handoff.mjs"],
+  "inputContract": "references/design-handoff-api.md",
+  "maxInputBytes": 262144,
+  "hostBinding": "requires_host_binding",
+  "nativeAgentStatus": "needs_probe",
+  "sideEffects": [],
+  "networkUsed": false,
+  "filesModified": false,
+  "nativeAgentInvocation": false
+}

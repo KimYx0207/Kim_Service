@@ -4,34 +4,78 @@
   <a href="README.md">简体中文</a> · <a href="README_EN.md">English</a>
 </p>
 
-**An independent professional-capability dependency repository maintained by Lao Jin (KimYx0207).**
+**Give AI agents professional methods, working knowledge and clear delivery criteria.**
 
-It contains discoverable, independently usable, and verifiable Hooks, Skills, Tools, and professional Agents, with the same package convention reserved for future qualified Apps. Kim Service does not act as a cross-component Router, task state machine, or final acceptance brain.
+Kim Service is a professional capability library maintained by Lao Jin (KimYx0207). Each Agent, Skill, Hook or Tool addresses a specific task with an entry point, method, input/output contract, examples and validation. Use a package independently or let [Meta_Kim](https://github.com/KimYx0207/Meta_Kim) discover and bind it.
 
-Current release: [V1.10](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.10). Product Architect and Interaction Designer are both at **0.2.0**: explore requirements with recommendations and trade-offs, then turn settled requirements into complete designs and demonstrable tasks. See [CHANGELOG.md](CHANGELOG.md) for the changes.
+## Start with the job
 
-Zcode users can follow the [Beta content-bundle guide (Chinese)](docs/zcode-beta.md) to refresh the existing marketplace and use the normal plugin update entrypoint. The compatibility bundle includes complete professional components and methods; installation does not establish native Agent loading, model performance or final business acceptance.
+> “I have an idea for a registration product. Compare system options first, then detail the user flow, failure states, frontend/backend contracts and acceptance. Preserve suitable technology already in the project.”
 
-## What's included
+Open the [Chinese task browser](docs/start.html), find a capability and inspect its inputs and deliverable. After downloading the full repository, open `docs/start.html` directly for offline browsing; the GitHub file page shows source. Browsing does not install or run components.
 
-- Human-facing package directories: [hooks](hooks), [skills](skills), [tools](tools), and [industry roles (Chinese)](agents/README.md).
-- Release inventory and provenance facts: [catalog.json](catalog.json).
-- Generated Capability index: [generated/capabilities.json](generated/capabilities.json).
-- Compose bounded task-delivery specialists: [delivery guide](docs/task-agent-delivery.md) and [reference-source audit](docs/task-agent-reference-audit.md) (Chinese).
+| Job | Start here |
+| --- | --- |
+| Turn a rough idea into system choices and a module PRD | [Product Architect](agents/product-architect/) |
+| Connect user motivation, interaction states and recovery | [Interaction Designer](agents/interaction-designer/) |
+| Implement usable interfaces with the current frontend stack | [Frontend Engineer](agents/frontend-engineer/) |
+| Design data, APIs, transactions, authorization and migration | [Backend and Data Engineer](agents/backend-data-engineer/) |
+| Check actual deliverables and verification evidence | [Delivery Verifier](agents/delivery-verifier/) |
+| Content, teaching, operations, analysis and other work | [Professional role directory](agents/README.md) |
 
-The component table is not duplicated manually in this README. Root automation discovers package-level `capability.json` files and regenerates the indexes so the README, catalog, and package tree cannot silently drift apart.
+## Inside a professional package
 
-## How to use
+| File | Purpose |
+| --- | --- |
+| `AGENT.md` / `SKILL.md` / `README.md` | Entry point, applicability, procedure and boundaries |
+| `capability.json` | Discoverable capability, inputs, outputs, permissions and side effects |
+| `method.json` (all 24 Agents; other component types when provided) | Domain steps and tool needs; `expertise` binds diagnosis, decisions and existing input/output fields |
+| `references/` when needed | Actual professional material, selected through `knowledgeAssets` with applicability and provenance |
+| `example.json` / examples in `AGENT.md` | Complete package examples separated from real execution evidence |
+| Agent `evals/professional-cases.json` | Authored positive and failure examples with review reasoning; not model results |
+| Package `tests/` and `scripts/` | Validation or narrowly scoped deterministic helpers |
+| `PROVENANCE.md` and `LICENSE` | Sources, adaptation limits and licensing |
 
-Start with the [task-oriented catalog (Chinese)](docs/start.html) to filter by keyword, inspect inputs and deliverables, open usage instructions, and copy a task request. After cloning or downloading the complete repository, open `docs/start.html` directly in a browser for offline browsing; GitHub's file view shows source code. This page does not install or execute capabilities.
+All 24 Agents now include domain knowledge, diagnostic questions, conditional decisions, input guidance, output checks, tool boundaries and review cases. They cover software design and development, evidence and quantitative research, media, delivery verification, content, commerce, procurement, education, career communication and small-business analysis. Existing substantive methods and deterministic helpers remain. New materials are original; each package records the principles adopted and rejected from its references.
 
-1. Choose a package from the generated index or its type directory.
-2. Follow the package `entrypoint`; common entrypoints are `README.md` for Hooks and Tools, `SKILL.md` for Skills, or `AGENT.md` for Agents.
-3. Follow the project instructions to install it for a project or your personal environment.
+Meta_Kim loads selected resources into the actual method context and checks their complete source bytes. Contract checks detect type errors, missing fields, dangling references and unsafe resource paths; they do not judge the professional accuracy of advice. The 48 synthetic cases are review materials with professional effect `not_evaluated`, not a claim that every domain expert has been validated. High-impact professional conclusions retain human review boundaries.
 
-Use the selected component directory in Kim_Service as the current installation source. The `source` and `revision` fields in `catalog.json` record import provenance, not the latest installation address. Included packages do not require cloning their former standalone repositories. If the same capability is already present locally, check its source and version before reusing or upgrading one entrypoint to avoid duplicate installations.
+## How it works with Meta_Kim
 
-Each project includes its own usage guide, license, attribution, and change history. See [GitHub Releases](https://github.com/KimYx0207/Kim_Service/releases) for the latest collection release and [CHANGELOG.md](CHANGELOG.md) for the current update notes.
+<p align="center">
+  <img src="docs/images/intent-to-delivery.svg" alt="Meta_Kim and Kim Service responsibilities from intent to delivery" width="1000">
+</p>
+
+*Architecture illustration. Meta_Kim owns decisions, coordination and continuity; Kim Service supplies professional methods and capabilities.*
+
+First establish the system and technology baseline, then detail modules, interfaces, state and acceptance. Both are views of one PRD. Modules map to real delivery tasks, while the caller decides concurrency from dependencies, resources and permissions. Kim Service does not introduce a separate scheduler, permission authority or final acceptance store.
+
+## Use and update
+
+1. Choose a package from the task browser or index and read its entry point and required material.
+2. Supply the current goal, project facts, acceptance criteria and relevant upstream artifacts. For independent use, have your client read that component directory; Meta_Kim integration verifies and binds the source.
+3. Let the host supply actual tools and authorized scope. Missing tools yield useful materials and explicit gaps, never invented writes, deployments or acceptance.
+
+The installation source is the **selected directory in Kim_Service**. The catalog's `source` and `revision` describe historical provenance; they are not instructions to clone obsolete standalone repositories. Check the source and version of an existing capability before reusing or upgrading one entry.
+
+Released baseline: [V1.10](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.10). [Unreleased](CHANGELOG.md#unreleased) extends the professional contract across all 24 Agents: Product Architect, Interaction Designer and Script Writer are 0.4.0; Frontend, Backend Data, Store Performance and Interview Coach are 0.3.0; the remaining Agents are 0.2.0. Package changelogs record the individual changes. These source changes have not been published as a new Release.
+
+The packages provide portable content and explicit contracts. **Codex, Claude Code, Cursor, Gemini CLI and ZCode paths, tools and Hook conventions belong to their hosts or the Meta_Kim adapter.** Copying/installing a package does not establish native Agent loading, model performance or business acceptance. The existing ZCode content-package update path is documented in the [Beta guide](docs/zcode-beta.md).
+
+## Maintain and explore
+
+[Agents](agents/) · [Skills](skills/) · [Hooks](hooks/) · [Tools](tools/) · [Catalog](catalog.json) · [Generated capability index](generated/capabilities.json)
+
+After editing package sources, regenerate the existing catalog rather than maintaining a second manual inventory:
+
+```bash
+node scripts/catalog-automation.mjs build
+node scripts/start-page.mjs build
+node scripts/check-repository.mjs
+node --test scripts/*.test.mjs
+```
+
+Further reading: [delivery guide](docs/task-agent-delivery.md) · [package contract](docs/agent-pack-contract.md) · [expert-material authoring guide](docs/expert-package-authoring.md) · [24-role gap and source audit](docs/expertise-coverage-2026-11-10.md) · [changelog](CHANGELOG.md).
 
 ## Contact and support
 
@@ -54,4 +98,4 @@ If these open-source projects help you, please consider starring, sharing, or bu
 
 ## Open-source note
 
-Repository-level Kim Service material uses the MIT License. Each capability package has independently authoritative license and provenance records; adapted or migrated packages are governed by their `LICENSE`, `PROVENANCE`, or equivalent files.
+Repository-level content uses the [MIT License](LICENSE). Each package retains its own license and provenance; consult its `LICENSE`, `PROVENANCE` or equivalent source records.

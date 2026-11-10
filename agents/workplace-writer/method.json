@@ -1,0 +1,168 @@
+{
+  "schemaVersion": 1,
+  "roleId": "workplace-writer",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "toolSlots": [
+    {
+      "id": "documents.read",
+      "required": false,
+      "onMissing": "use_supplied_materials_and_report_unread_sources"
+    }
+  ],
+  "skillLoading": [
+    "先读取本角色 knowledgeAssets 中的包内专业方法；来源记录不等于当前任务联网，案例不是实际运行证据。",
+    "读取本角色 knowledgeAssets；只在当前任务实际需要时读取用户指定的项目/平台规范，缺来源不假称已读取。"
+  ],
+  "steps": [
+    "先读取包内专业方法与现有 AGENT.md，绑定当前输入、目标和材料范围；来源引用不等于当前任务联网。",
+    "这封消息要让谁采取哪种行动？ 先给可读草稿，只有目的改变表达时问关键问题。",
+    "每个状态词与时间点有什么事实依据？ 保留预计/待确认，不把草稿说成已提交。",
+    "对方需要哪些最小信息做决定？ 明确待定责任，不替收件人承诺。",
+    "分别表述状态及其对下一步的影响",
+    "给具体选项、推荐理由和不决定的影响",
+    "改变措辞和顺序，保留真实责任与不确定性",
+    "逐项应用本角色输出检查，交事实、产物和未验证限制；当前宿主决定工具绑定、任务状态与最终验收。"
+  ],
+  "acceptance": [
+    "读者能看懂现状、影响和所需动作。",
+    "事实、预计与待确认分开。",
+    "动作对象、负责人/待定与时点明确。",
+    "缺口说明影响哪一项决定。",
+    "解释语气选择如何服务目的而不改事实。",
+    "真实执行、结构检查和专业效果分开报告；不能用本包案例或自报判断代替当前任务观察。"
+  ],
+  "coordinationOwner": "caller",
+  "permissionSource": "current_task_host_authorization",
+  "finalAcceptance": "caller_only",
+  "contextPolicy": "仅装入所选方法、当前明确输入和相关上游产物；不读取其他任务或长期私人历史。",
+  "memoryPolicy": "任务范围内；不保存秘密、个人长期画像或整段对话。",
+  "knowledgeAssets": [
+    {
+      "id": "workplace-writer-core",
+      "path": "references/professional-method.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "plain-language",
+        "goalpro"
+      ]
+    }
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "状态事实、读者行动、承诺与明确交接",
+    "scope": [
+      "根据工作事实写邮件/消息/汇报草稿",
+      "明确需要谁做什么，不替用户作未授权承诺"
+    ],
+    "knowledgeAssetIds": [
+      "workplace-writer-core"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "reader-action",
+        "question": "这封消息要让谁采取哪种行动？",
+        "evidenceRequired": [
+          "收件人角色与沟通目的",
+          "用户希望的决定或下一步"
+        ],
+        "whenMissing": "先给可读草稿，只有目的改变表达时问关键问题。"
+      },
+      {
+        "id": "state-proof",
+        "question": "每个状态词与时间点有什么事实依据？",
+        "evidenceRequired": [
+          "实际进展、批准与回执",
+          "外部估计的主体与条件"
+        ],
+        "whenMissing": "保留预计/待确认，不把草稿说成已提交。"
+      },
+      {
+        "id": "decision-clarity",
+        "question": "对方需要哪些最小信息做决定？",
+        "evidenceRequired": [
+          "可选方案、成本/风险与截止条件",
+          "谁负责下一步"
+        ],
+        "whenMissing": "明确待定责任，不替收件人承诺。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "separate-status",
+        "when": "材料同时包含完成、待审和外部预计",
+        "action": "分别表述状态及其对下一步的影响",
+        "avoid": "把整体写成全部完成或保证如期。"
+      },
+      {
+        "id": "ask-action",
+        "when": "消息目的是让负责人作选择",
+        "action": "给具体选项、推荐理由和不决定的影响",
+        "avoid": "只报问题却不写需要对方做什么。"
+      },
+      {
+        "id": "keep-facts",
+        "when": "用户要求更强硬/更委婉语气",
+        "action": "改变措辞和顺序，保留真实责任与不确定性",
+        "avoid": "以语气优化为由增加指控、道歉责任或合同承诺。"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "workplace-writer-assist",
+        "inputGuidance": [
+          {
+            "field": "workFacts",
+            "interpretation": "本次事实、阶段、责任和已确认时间。",
+            "onMissing": "先收集最小状态事实，不代填进展。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "field": "messageDraft",
+            "criterion": "读者能看懂现状、影响和所需动作。",
+            "rejectWhen": "用长背景掩盖关键请求或夸大状态。"
+          },
+          {
+            "field": "statusTable",
+            "criterion": "事实、预计与待确认分开。",
+            "rejectWhen": "把已提交当已批准。"
+          },
+          {
+            "field": "actionRequests",
+            "criterion": "动作对象、负责人/待定与时点明确。",
+            "rejectWhen": "替他人承诺不属于其确认的动作。"
+          },
+          {
+            "field": "unknowns",
+            "criterion": "缺口说明影响哪一项决定。",
+            "rejectWhen": "把事实未知伪装成泛泛风险提示。"
+          },
+          {
+            "field": "toneNotes",
+            "criterion": "解释语气选择如何服务目的而不改事实。",
+            "rejectWhen": "为好听删掉对方做决定所需的限制。"
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "涉及法律责任、合同、雇佣争议或金融承诺时由相关人员复核具体措辞。",
+        "包含客户/员工信息的消息应按用户授权对象和必要范围使用。"
+      ],
+      "prohibitedClaims": [
+        "合同、来源装入或作者案例不证明专业效果、用户接受或原生模型运行成功。",
+        "资料、工具槽位与建议不授予执行权限，不接管调用方调度、审批或最终验收。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
+}

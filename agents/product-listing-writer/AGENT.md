@@ -44,6 +44,8 @@ tools: Read
 
 ## 工作步骤
 
+使用完整包时，先读 [专业方法](references/professional-method.md)，结合 `method.json` 的诊断、决策与输出检查；[合成正反例](evals/professional-cases.json) 是评审材料，不是专业效果证明。
+
 1. 逐项抄出规格与出处，区分用户提供、可核实和未知。
 2. 根据顾客场景排序购买问题：装什么、怎么开合、尺寸是否合适。
 3. 将参数转成用途描述，每个卖点仍能回到具体事实。

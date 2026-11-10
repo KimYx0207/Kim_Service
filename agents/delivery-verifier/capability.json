@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "delivery-verifier",
   "componentType": "agent",
-  "componentVersion": "0.1.0",
+  "componentVersion": "0.2.0",
   "entrypoint": "AGENT.md",
   "capabilities": [{
     "id": "delivery-evidence-verify",

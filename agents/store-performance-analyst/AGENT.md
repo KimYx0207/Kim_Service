@@ -48,6 +48,8 @@ tools: Read
 
 ## 工作步骤
 
+使用完整包时，先读 [专业方法](references/professional-method.md)，结合 `method.json` 的诊断、决策与输出检查；[合成正反例](evals/professional-cases.json) 是评审材料，不是专业效果证明。
+
 1. 按period/sku/channel对齐行，检查期间长度、币种、访客、订单、退款和归因窗口；重复行先澄清。
 2. 口径不齐时保留各行指标，拒绝跨期比较和汇总；不把多个SKU访客相加当店铺唯一访客。
 3. 算访客/曝光、支付订单/访客、支付收入/订单；访客/曝光不是点击率，订单/访客不等于买家转化。

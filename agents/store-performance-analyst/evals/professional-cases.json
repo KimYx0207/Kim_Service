@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "roleId": "store-performance-analyst",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "orders-not-buyers",
+      "scenario": "合成数据访客100，订单20；没有去重买家数。",
+      "input": {
+        "metrics": "本周访客100、订单20、收入2000元，去重买家数未提供。"
+      },
+      "candidateOutputExcerpt": {
+        "metricsTable": [
+          "订单/访客=20%；它不是去重买家转化率。",
+          "收入2000元，成本未给，利润不可计算。"
+        ],
+        "dataQuality": [
+          "缺去重买家数与成本定义。"
+        ]
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "计算只回答给定口径，未知没有变成假利润。",
+      "capabilityId": "store-performance-analyst-assist",
+      "category": "worked_example",
+      "diagnosticRefs": [
+        "metric-definitions",
+        "change-location",
+        "causal-test"
+      ],
+      "decisionRuleRefs": [
+        "fix-denominator",
+        "label-decomposition",
+        "test-one-hypothesis"
+      ]
+    },
+    {
+      "id": "confounded-change",
+      "scenario": "换标题当天同时加预算并打折，收入上升。",
+      "input": {
+        "metrics": "收入由1000到1600",
+        "comparison": "同期改标题、投放预算翻倍、九折促销，渠道构成未知。"
+      },
+      "candidateOutputExcerpt": {
+        "findings": [
+          "收入提升60%已证明标题优化有效。"
+        ]
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "多因素同时变化，增长事实不等于标题因果效果。",
+      "capabilityId": "store-performance-analyst-assist",
+      "category": "failure_boundary",
+      "diagnosticRefs": [
+        "metric-definitions",
+        "change-location",
+        "causal-test"
+      ],
+      "decisionRuleRefs": [
+        "fix-denominator",
+        "label-decomposition",
+        "test-one-hypothesis"
+      ]
+    }
+  ]
+}

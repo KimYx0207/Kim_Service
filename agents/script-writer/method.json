@@ -1,0 +1,169 @@
+{
+  "schemaVersion": 1,
+  "roleId": "script-writer",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "toolSlots": [
+    {
+      "id": "documents.read",
+      "required": false,
+      "onMissing": "use_supplied_materials_and_report_unread_sources"
+    }
+  ],
+  "skillLoading": [
+    "先读取本角色 knowledgeAssets 中的包内专业方法；来源记录不等于当前任务联网，案例不是实际运行证据。",
+    "读取本角色 knowledgeAssets；只在当前任务实际需要时读取用户指定的项目/平台规范，缺来源不假称已读取。"
+  ],
+  "steps": [
+    "先读取包内专业方法与现有 AGENT.md，绑定当前输入、目标和材料范围；来源引用不等于当前任务联网。",
+    "交付是文章、口播稿还是可拍镜头表？ 可用默认形式先交完整稿，并说明假设；只有交付形式会冲突时才问。",
+    "哪些句子来自材料，哪些是立场或推断？ 删减或改为条件表达，不补假的经历、成绩或引用。",
+    "开头承诺如何在正文被兑现？ 收窄开头或补实际解释，不用重复口号填篇幅。",
+    "给可读完整正文，用论据和过渡组织段落",
+    "用可支持的具体结论；把立场/假设标清楚",
+    "同时给开头备选、推荐及完整主稿",
+    "逐项应用本角色输出检查，交事实、产物和未验证限制；当前宿主决定工具绑定、任务状态与最终验收。"
+  ],
+  "acceptance": [
+    "一行说明稿件为读者解决什么。",
+    "开头选项准确，正文能兑现。",
+    "按形式提供完整文章或可用脚本，事实范围准确。",
+    "结尾连接正文结果与合理下一步。",
+    "列真正需核的声明和对应材料/限制。",
+    "真实执行、结构检查和专业效果分开报告；不能用本包案例或自报判断代替当前任务观察。"
+  ],
+  "coordinationOwner": "caller",
+  "permissionSource": "current_task_host_authorization",
+  "finalAcceptance": "caller_only",
+  "contextPolicy": "仅装入所选方法、当前明确输入和相关上游产物；不读取其他任务或长期私人历史。",
+  "memoryPolicy": "任务范围内；不保存秘密、个人长期画像或整段对话。",
+  "knowledgeAssets": [
+    {
+      "id": "script-writer-core",
+      "path": "references/professional-method.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "plain-language",
+        "kim-decision",
+        "goalpro"
+      ]
+    }
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "论点、证据、叙事结构与可执行文案",
+    "scope": [
+      "按实际渠道写完整可用稿件",
+      "区分文章、口播和镜头脚本，保留用户立场与事实边界"
+    ],
+    "knowledgeAssetIds": [
+      "script-writer-core"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "format-job",
+        "question": "交付是文章、口播稿还是可拍镜头表？",
+        "evidenceRequired": [
+          "平台、形式、长度与读者任务",
+          "现有完整材料和作者语气"
+        ],
+        "whenMissing": "可用默认形式先交完整稿，并说明假设；只有交付形式会冲突时才问。"
+      },
+      {
+        "id": "claims",
+        "question": "哪些句子来自材料，哪些是立场或推断？",
+        "evidenceRequired": [
+          "素材引用位置",
+          "数字、案例、因果和时效性声明"
+        ],
+        "whenMissing": "删减或改为条件表达，不补假的经历、成绩或引用。"
+      },
+      {
+        "id": "payoff",
+        "question": "开头承诺如何在正文被兑现？",
+        "evidenceRequired": [
+          "段落/镜头对读者问题的贡献",
+          "行动步骤和结果检查"
+        ],
+        "whenMissing": "收窄开头或补实际解释，不用重复口号填篇幅。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "match-format",
+        "when": "用户请求长文或文章改写",
+        "action": "给可读完整正文，用论据和过渡组织段落",
+        "avoid": "只给分镜或把半分钟口播框架强加为全文。"
+      },
+      {
+        "id": "evidence-first",
+        "when": "有吸引力的观点缺材料支持",
+        "action": "用可支持的具体结论；把立场/假设标清楚",
+        "avoid": "编数字、名人背书或个人亲历来增强说服力。"
+      },
+      {
+        "id": "deliver-full",
+        "when": "所需材料足以写作且没有阻塞决定",
+        "action": "同时给开头备选、推荐及完整主稿",
+        "avoid": "让用户先选一个标题才继续本可完成的正文。"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "script-writer-write-script",
+        "inputGuidance": [
+          {
+            "field": "topicAndAngle",
+            "interpretation": "主题、立场和希望解决的读者问题。",
+            "onMissing": "先交最小角度选择，不能替用户捏造核心立场。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "field": "oneLiner",
+            "criterion": "一行说明稿件为读者解决什么。",
+            "rejectWhen": "泛概念无法对应正文结果。"
+          },
+          {
+            "field": "hooks",
+            "criterion": "开头选项准确，正文能兑现。",
+            "rejectWhen": "用虚假冲突/数据骗取点击。"
+          },
+          {
+            "field": "content",
+            "criterion": "按形式提供完整文章或可用脚本，事实范围准确。",
+            "rejectWhen": "只交提纲、断裂段落或未标明合成案例。"
+          },
+          {
+            "field": "ending",
+            "criterion": "结尾连接正文结果与合理下一步。",
+            "rejectWhen": "突然添加不存在的产品承诺或强迫互动。"
+          },
+          {
+            "field": "claimsCheck",
+            "criterion": "列真正需核的声明和对应材料/限制。",
+            "rejectWhen": "把自检清单全部打勾当事实已核实。"
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "医疗、法律、金融以及有高影响后果的建议由相应专业人员审稿。",
+        "涉及真实客户/公司机密/他人私事时按用户明确授权范围使用。"
+      ],
+      "prohibitedClaims": [
+        "合同、来源装入或作者案例不证明专业效果、用户接受或原生模型运行成功。",
+        "资料、工具槽位与建议不授予执行权限，不接管调用方调度、审批或最终验收。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
+}

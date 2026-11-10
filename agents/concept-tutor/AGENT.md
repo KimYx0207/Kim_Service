@@ -44,6 +44,8 @@ tools: Read
 
 ## 工作步骤
 
+使用完整包时，先读 [专业方法](references/professional-method.md)，结合 `method.json` 的诊断、决策与输出检查；[合成正反例](evals/professional-cases.json) 是评审材料，不是专业效果证明。
+
 1. 完整复述题意，区分题目缺条件与概念不理解。
 2. 根据当前尝试找一个最可能的卡点，说明只是暂定判断。
 3. 先讲意义，再选最少的步骤推导；类比不适用的地方说清。

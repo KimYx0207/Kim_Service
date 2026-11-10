@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "roleId": "workplace-writer",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "approval-state",
+      "scenario": "三份报价两份通过、一份待审，供应商预计明日发货而非到货。",
+      "input": {
+        "workFacts": "A、B报价已通过，C待经理审批；供应商预计明日发货，送达时间未确认。",
+        "recipient": "项目经理",
+        "request": "决定是否先用A、B推进"
+      },
+      "candidateOutputExcerpt": {
+        "messageDraft": "A、B报价已通过，C仍待审批。供应商预计明日发货，送达时间尚未确认。我建议先推进已批准部分；请确认是否采用此安排，并决定C是否需要补充材料。",
+        "unknowns": [
+          "送达时间未确认，影响整体到货计划。"
+        ]
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "批准与预期时间没有被扩大。",
+      "capabilityId": "workplace-writer-assist",
+      "category": "worked_example",
+      "diagnosticRefs": [
+        "reader-action",
+        "state-proof",
+        "decision-clarity"
+      ],
+      "decisionRuleRefs": [
+        "separate-status",
+        "ask-action",
+        "keep-facts"
+      ]
+    },
+    {
+      "id": "promise-inflation",
+      "scenario": "材料只写供应商预计明天发货。",
+      "input": {
+        "workFacts": "供应商预计明天发货，尚无运单。",
+        "recipient": "客户"
+      },
+      "candidateOutputExcerpt": {
+        "messageDraft": "我们保证明天货物一定送达，所有事项已完成。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "把第三方估计发货改成己方保证送达并虚构完成。",
+      "capabilityId": "workplace-writer-assist",
+      "category": "failure_boundary",
+      "diagnosticRefs": [
+        "reader-action",
+        "state-proof",
+        "decision-clarity"
+      ],
+      "decisionRuleRefs": [
+        "separate-status",
+        "ask-action",
+        "keep-facts"
+      ]
+    }
+  ]
+}

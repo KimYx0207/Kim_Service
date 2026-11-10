@@ -2,6 +2,29 @@
 
 Kim Service uses one repository-level two-part public version (`V<major>.<minor>`) and one GitHub Release for the professional-capability dependency repository. Component CHANGELOG files record component provenance; this file is the release-note authority. Historical verification and source notes are kept in the [testing record](./docs/verification-history.md).
 
+## Unreleased
+
+### Reusable professional material across 24 Agents
+
+- All 24 existing Agents now carry a structured method, bounded source-attributed knowledge and the same optional `expertise` contract. This adds 20 original knowledge resources and 17 structured methods while preserving the four software-role core documents and existing calculation/verification helpers.
+- The contract describes domain diagnostics, conditional decisions, required input guidance, output checks and human professional review boundaries. Authors extend package data and the existing capability contract, without adding role switches, a second provider registry or a separate scheduler.
+- Each Agent supplies two synthetic review cases (48 total), including a substantive failure example. They remain `not_evaluated`: structural checks and complete-byte handoff do not certify expert judgment, native model execution or user acceptance.
+- The existing package checker rejects dangling asset/decision/field references, malformed example inputs/outputs, unsafe case resources and metadata that pretends to be quality evidence. Existing methods without the new optional metadata remain compatible.
+- Product Architect, Interaction Designer and Script Writer are now 0.4.0; Frontend Engineer, Backend Data Engineer, Store Performance Analyst and Interview Coach are 0.3.0; other Agents are 0.2.0. Component changelogs record the individual additions. Primary-source adoption, non-adoption, licensing limits and the full gap audit are documented.
+- The headline/cover role no longer asserts that inaccurate titles universally trigger platform demotion. Its method distinguishes content accuracy, audience/traffic composition and actual experiment evidence.
+
+### Professional knowledge and two-level software design
+
+- The initial software-method update introduced Product Architect / Interaction Designer 0.3.0 and Frontend / Backend Data Engineer 0.2.0; the all-role expertise additions above advance those versions. Their original source-attributed professional material keeps explicit applicability in `method.json.knowledgeAssets`.
+- Architecture exploration can precede detailed modules. Software delivery describes the system/technology baseline and module purpose, interactions, business rules, contracts, state, implementation approach and acceptance through the existing `productDesign` output. The current design identity and related project context can travel through handoffs without creating a second task authority.
+- Frontend and backend methods preserve the actual project stack and add concrete guidance for interaction states, accessibility, data invariants, concurrency, authorization, testing and migration. Examples remain synthetic; package quality checks do not imply a successful native model task.
+- The Product Architect adds a bounded `design-handoff-check-v1` helper for candidate structure and reference checks. It does not authenticate user decisions, certify digest provenance or accept the product, and it is not silently added to Meta_Kim's calculation-tool allowlist.
+- Package validation now checks optional method knowledge declarations, package-local files, provenance references, UTF-8 text and bounded byte budgets. Existing methods without knowledge declarations remain compatible. Generated catalog and task-browser content are rebuilt from the same component sources.
+- Chinese and English READMEs explain the job-to-capability path, the relationship with Meta_Kim, concrete package contents and current evidence limits. An original architecture illustration is included. All existing contact content and payment QR images are preserved.
+
+These are source changes for review, not a newly published repository Release or ZCode marketplace version. Codex, Claude Code, Cursor, Gemini CLI and ZCode still require their host-specific installation, tool and native-execution checks. No new permissions or external side effects are granted by these professional packages.
+
+
 ## V1.10 - 2026-10-23
 
 ### Affected components

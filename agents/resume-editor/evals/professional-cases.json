@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "roleId": "resume-editor",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "team-ownership",
+      "scenario": "原材料说团队处理300单，申请人负责汇总与异常清单。",
+      "input": {
+        "experience": "在5人团队参与处理每周约300单，我负责每日汇总和整理异常单，个人处理量不详。",
+        "jobDescription": "运营助理：订单核对、异常跟踪、周报"
+      },
+      "candidateOutputExcerpt": {
+        "revisedResume": "参与团队每周约300单的订单处理，负责每日汇总与异常清单整理，支持后续跟踪。",
+        "evidenceGaps": [
+          "300单为团队口径；尚无个人处理量和效率提升数据。"
+        ]
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "把相关动作写清，保留数字归属。",
+      "capabilityId": "resume-editor-assist",
+      "category": "worked_example",
+      "diagnosticRefs": [
+        "job-match",
+        "ownership",
+        "reader-path"
+      ],
+      "decisionRuleRefs": [
+        "evidence-map",
+        "honest-result",
+        "minimal-private"
+      ]
+    },
+    {
+      "id": "invented-seniority",
+      "scenario": "真实经历是协助汇总订单，没有管理职责或结果数据。",
+      "input": {
+        "experience": "协助整理订单表",
+        "jobDescription": "要求带团队和精通数据分析"
+      },
+      "candidateOutputExcerpt": {
+        "revisedResume": "管理20人团队，精通高级数据分析，半年提升销售80%。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "岗位要求被错误写成个人事实，新增职责和成果。",
+      "capabilityId": "resume-editor-assist",
+      "category": "failure_boundary",
+      "diagnosticRefs": [
+        "job-match",
+        "ownership",
+        "reader-path"
+      ],
+      "decisionRuleRefs": [
+        "evidence-map",
+        "honest-result",
+        "minimal-private"
+      ]
+    }
+  ]
+}

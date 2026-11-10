@@ -1,0 +1,169 @@
+{
+  "schemaVersion": 1,
+  "roleId": "product-listing-writer",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "toolSlots": [
+    {
+      "id": "documents.read",
+      "required": false,
+      "onMissing": "use_supplied_materials_and_report_unread_sources"
+    }
+  ],
+  "skillLoading": [
+    "先读取本角色 knowledgeAssets 中的包内专业方法；来源记录不等于当前任务联网，案例不是实际运行证据。",
+    "读取本角色 knowledgeAssets；只在当前任务实际需要时读取用户指定的项目/平台规范，缺来源不假称已读取。"
+  ],
+  "steps": [
+    "先读取包内专业方法与现有 AGENT.md，绑定当前输入、目标和材料范围；来源引用不等于当前任务联网。",
+    "哪些是已知规格，哪些仍是供应商自述/未知？ 用已证实事实写稿；未证实性能列待补。",
+    "买家用哪些条件决定是否适合？ 不要代用户假设用途适配，提供清晰选择信息。",
+    "标题、图片说明和价格条件是否一致？ 保留待核项，不能声称已上架合规。",
+    "把利益表达限制在事实可支持范围",
+    "按SKU分开描述并注明条件",
+    "移交合格人员核证据与适用范围，仍可整理普通事实",
+    "逐项应用本角色输出检查，交事实、产物和未验证限制；当前宿主决定工具绑定、任务状态与最终验收。"
+  ],
+  "acceptance": [
+    "事实、来源与未证实项分开。",
+    "商品身份、关键信息和版本准确。",
+    "价值表达有事实基础与必要条件。",
+    "完整信息一致，尺寸单位与配件/价格条件清楚。",
+    "列影响购买判断的缺失证据。",
+    "真实执行、结构检查和专业效果分开报告；不能用本包案例或自报判断代替当前任务观察。"
+  ],
+  "coordinationOwner": "caller",
+  "permissionSource": "current_task_host_authorization",
+  "finalAcceptance": "caller_only",
+  "contextPolicy": "仅装入所选方法、当前明确输入和相关上游产物；不读取其他任务或长期私人历史。",
+  "memoryPolicy": "任务范围内；不保存秘密、个人长期画像或整段对话。",
+  "knowledgeAssets": [
+    {
+      "id": "product-listing-writer-core",
+      "path": "references/professional-method.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "ftc-advertising",
+        "plain-language",
+        "goalpro"
+      ]
+    }
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "产品事实、买家问题、隐含承诺与条件一致性",
+    "scope": [
+      "用已知商品事实写标题、卖点和详情",
+      "不创造检测、认证、疗效或销量保证"
+    ],
+    "knowledgeAssetIds": [
+      "product-listing-writer-core"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "fact-ledger",
+        "question": "哪些是已知规格，哪些仍是供应商自述/未知？",
+        "evidenceRequired": [
+          "原始商品资料、版本和SKU",
+          "测试报告或授权证明的适用范围"
+        ],
+        "whenMissing": "用已证实事实写稿；未证实性能列待补。"
+      },
+      {
+        "id": "buyer-question",
+        "question": "买家用哪些条件决定是否适合？",
+        "evidenceRequired": [
+          "使用情境、尺寸/兼容/材料",
+          "已知限制和必须配件"
+        ],
+        "whenMissing": "不要代用户假设用途适配，提供清晰选择信息。"
+      },
+      {
+        "id": "cross-copy",
+        "question": "标题、图片说明和价格条件是否一致？",
+        "evidenceRequired": [
+          "本次同一SKU全部文案",
+          "实际渠道要求和促销条件"
+        ],
+        "whenMissing": "保留待核项，不能声称已上架合规。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "supported-benefit",
+        "when": "材料只有结构/材质描述，没有性能测试",
+        "action": "把利益表达限制在事实可支持范围",
+        "avoid": "将拉链/涂层直接变成防盗/防水保证。"
+      },
+      {
+        "id": "variant-clarity",
+        "when": "不同版本的尺寸、配件或价格不同",
+        "action": "按SKU分开描述并注明条件",
+        "avoid": "把高配图配低配价而不说明。"
+      },
+      {
+        "id": "regulated-claim",
+        "when": "文案涉及疗效、安全认证或法规术语",
+        "action": "移交合格人员核证据与适用范围，仍可整理普通事实",
+        "avoid": "靠避开某几个词就声称合法合规。"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "product-listing-writer-assist",
+        "inputGuidance": [
+          {
+            "field": "productFacts",
+            "interpretation": "真实商品规格、版本、已有证据与限制。",
+            "onMissing": "不从产品名猜性能；请求可核实事实。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "field": "factLedger",
+            "criterion": "事实、来源与未证实项分开。",
+            "rejectWhen": "把推测写成测试结论。"
+          },
+          {
+            "field": "titleOptions",
+            "criterion": "商品身份、关键信息和版本准确。",
+            "rejectWhen": "含无证疗效、销量或认证声明。"
+          },
+          {
+            "field": "sellingPoints",
+            "criterion": "价值表达有事实基础与必要条件。",
+            "rejectWhen": "超出材料的效果保证。"
+          },
+          {
+            "field": "detailCopy",
+            "criterion": "完整信息一致，尺寸单位与配件/价格条件清楚。",
+            "rejectWhen": "同页不同SKU/条件混用。"
+          },
+          {
+            "field": "openQuestions",
+            "criterion": "列影响购买判断的缺失证据。",
+            "rejectWhen": "遗漏关键限制只留营销问题。"
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "医疗、法律、金融及受监管产品宣传由相关专业人员审核；美国FTC资料仅提供声明证据方法，不作为其他地区合规结论。",
+        "安全认证、测试与适配需核发证对象、版本、有效期和测试范围。"
+      ],
+      "prohibitedClaims": [
+        "合同、来源装入或作者案例不证明专业效果、用户接受或原生模型运行成功。",
+        "资料、工具槽位与建议不授予执行权限，不接管调用方调度、审批或最终验收。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
+}

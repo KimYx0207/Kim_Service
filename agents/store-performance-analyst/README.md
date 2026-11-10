@@ -32,3 +32,5 @@
 可选 [delivery-tool.json](delivery-tool.json) 由 `deliveryContract` 发现，固定 `scripts/deliver.py --input-json -` 接收 `{task,inputJson}`；本组件负责缺项提问、brief、回执校验和中文交付，宿主保留路由授权与通用来源核验。完整 [交付协议](docs/delivery-api.md) 与 `node tests/delivery.test.mjs`；原计算器 CLI 不变。
 
 许可证：[MIT](LICENSE)。固定来源及选择性吸收边界见[NOTICE](NOTICE)。
+
+专业装配：完整目录包含 `method.json`、[专业知识](references/professional-method.md)、[来源记录](PROVENANCE.md) 与[正反案例](evals/professional-cases.json)。只复制 AGENT.md 不会带入这些资料。案例尚未做专业效果评测，宿主仍负责工具权限和最终验收。

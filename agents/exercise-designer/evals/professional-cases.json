@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "roleId": "exercise-designer",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "equivalent-answer",
+      "scenario": "学生尚未学约分，目标为同分母分数相加。",
+      "input": {
+        "learningTarget": "同分母分数相加，尚未教学约分",
+        "constraints": "答案可保留同分母形式"
+      },
+      "candidateOutputExcerpt": {
+        "questions": [
+          "2/8 + 2/8 = ?"
+        ],
+        "answerKey": [
+          "4/8；1/2是等价答案，也接受。"
+        ],
+        "errorChecks": [
+          "若答4/16，检查是否误把分母也相加；未约分不作为本题目标错误。"
+        ]
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "题目与目标一致，评分不引入未教要求。",
+      "capabilityId": "exercise-designer-assist",
+      "category": "worked_example",
+      "diagnosticRefs": [
+        "construct",
+        "ambiguity",
+        "error-model"
+      ],
+      "decisionRuleRefs": [
+        "align-items",
+        "accept-equivalence",
+        "verify-key"
+      ]
+    },
+    {
+      "id": "ambiguous-whole",
+      "scenario": "题目把两块大小不同的饼各自一半直接相加，却不说明参考整体。",
+      "input": {
+        "learningTarget": "理解分数依赖整体",
+        "questionPlan": "一大饼的一半加一小饼的一半，共有几块完整饼？未给大小。"
+      },
+      "candidateOutputExcerpt": {
+        "answerKey": [
+          "唯一正确答案是1块完整饼，其他都错。"
+        ]
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "不同整体不可直接用同一单位相加，题干不足支持唯一结果。",
+      "capabilityId": "exercise-designer-assist",
+      "category": "failure_boundary",
+      "diagnosticRefs": [
+        "construct",
+        "ambiguity",
+        "error-model"
+      ],
+      "decisionRuleRefs": [
+        "align-items",
+        "accept-equivalence",
+        "verify-key"
+      ]
+    }
+  ]
+}

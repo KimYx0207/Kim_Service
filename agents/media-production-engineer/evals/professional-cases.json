@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "roleId": "media-production-engineer",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "template-only",
+      "scenario": "用户给授权合成素材但没有渲染环境。",
+      "input": {
+        "assets": "合成授权示例：旁白和两张原创插图",
+        "outputSpec": "竖屏1080x1920、30fps、10至15秒、带音轨",
+        "workflow": "仅提供模板，未绑定渲染环境",
+        "acceptanceCriteria": [
+          {
+            "id": "scope",
+            "condition": "每个导出实际满足用户规格且未硬编码片段数量",
+            "evidenceRequired": "指定材料、产物与独立检查"
+          }
+        ],
+        "handoffContext": {
+          "taskId": "synthetic-example",
+          "upstreamArtifacts": [],
+          "permittedActions": [
+            "read_supplied_materials"
+          ],
+          "resourceLeases": []
+        }
+      },
+      "candidateOutputExcerpt": {
+        "mediaArtifacts": [],
+        "qualityEvidence": "未渲染；尚无文件参数、字幕、视觉或听感检查。交模板及需要的真实导出核验步骤。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "没有把可执行模板冒充成品。",
+      "capabilityId": "media-production-engineer-deliver",
+      "category": "worked_example",
+      "diagnosticRefs": [
+        "spec-streams",
+        "timeline",
+        "render-evidence"
+      ],
+      "decisionRuleRefs": [
+        "probe-before-fix",
+        "sample-first",
+        "separate-quality"
+      ]
+    },
+    {
+      "id": "audio-missing",
+      "scenario": "要求有对白，实际探测只有视频流，退出码为0。",
+      "input": {
+        "assets": "合成授权视频和旁白",
+        "outputSpec": "10秒，视频及对白音轨",
+        "workflow": "合成探测记录：format可读，streams只有video，没有audio",
+        "acceptanceCriteria": [
+          {
+            "id": "scope",
+            "condition": "每个导出实际满足用户规格且未硬编码片段数量",
+            "evidenceRequired": "指定材料、产物与独立检查"
+          }
+        ],
+        "handoffContext": {
+          "taskId": "synthetic-example",
+          "upstreamArtifacts": [],
+          "permittedActions": [
+            "read_supplied_materials"
+          ],
+          "resourceLeases": []
+        }
+      },
+      "candidateOutputExcerpt": {
+        "qualityEvidence": "ffprobe退出码为0，所以音频和成片质量全部通过。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "容器可读不证明必要音轨存在，更不证明听感。",
+      "capabilityId": "media-production-engineer-deliver",
+      "category": "failure_boundary",
+      "diagnosticRefs": [
+        "spec-streams",
+        "timeline",
+        "render-evidence"
+      ],
+      "decisionRuleRefs": [
+        "probe-before-fix",
+        "sample-first",
+        "separate-quality"
+      ]
+    }
+  ]
+}

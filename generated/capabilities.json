@@ -344,12 +344,12 @@
       ]
     },
     {
-      "componentContentSha256": "5807123c199567a3b4b849129b47a118622267241a132514d7237c8c91f61836",
+      "componentContentSha256": "7302f79b5abae3436a77621f7468f1a79d8d167a4934328e4fc09f9ff897b844",
       "componentId": "backend-data-engineer",
       "componentPath": "agents/backend-data-engineer",
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contractSha256": "16d0d2adf3b31e796de346e6000ada2f42c07b278acf4f3daccf0e7b2ba8407d",
+      "componentVersion": "0.3.0",
+      "contractSha256": "b4e64f4ccc4b0ecbd7d38bc85e371fedf0f0c231d63f65d0a33e97ae84cdfc3d",
       "doNotUseWhen": [
         "量化策略评价：交 quantitative-researcher",
         "仅视觉布局：交 interaction-designer",
@@ -399,6 +399,40 @@
               "array"
             ]
           },
+          "designBinding": {
+            "description": "由调用方提供的现行设计绑定；仅引用，不授予权限或自行认定当前版本。",
+            "properties": {
+              "contextDigest": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "designDigest": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "designId": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "revision": {
+                "minimum": 1,
+                "type": "integer"
+              },
+              "sliceId": {
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "designId",
+              "revision"
+            ],
+            "type": "object"
+          },
+          "designContext": {
+            "description": "调用方投影的当前模块/决定/状态/接口/上游产物；只读任务上下文，不是权限或另一份PRD真源。",
+            "type": "object"
+          },
           "handoffContext": {
             "description": "只给本角色相关材料与依赖产物；控制权保留调用方",
             "properties": {
@@ -445,6 +479,65 @@
               "upstreamArtifacts",
               "permittedActions",
               "resourceLeases"
+            ],
+            "type": "object"
+          },
+          "projectFacts": {
+            "additionalProperties": false,
+            "description": "本轮已核实的项目版本/代码入口/边界；未知版本写 null，不把网上最新版当安装版本。",
+            "properties": {
+              "codeRefs": {
+                "items": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "type": "array",
+                "uniqueItems": true
+              },
+              "constraints": {
+                "items": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "type": "array",
+                "uniqueItems": true
+              },
+              "versions": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "evidenceRefs": {
+                      "items": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "type": "array",
+                      "uniqueItems": true
+                    },
+                    "name": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "version": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "version",
+                    "evidenceRefs"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "versions",
+              "codeRefs"
             ],
             "type": "object"
           },
@@ -584,6 +677,36 @@
             },
             "type": "array"
           },
+          "designBinding": {
+            "description": "由调用方提供的现行设计绑定；仅引用，不授予权限或自行认定当前版本。",
+            "properties": {
+              "contextDigest": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "designDigest": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "designId": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "revision": {
+                "minimum": 1,
+                "type": "integer"
+              },
+              "sliceId": {
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "designId",
+              "revision"
+            ],
+            "type": "object"
+          },
           "failures": {
             "items": {
               "properties": {
@@ -646,6 +769,51 @@
               "object",
               "array"
             ]
+          },
+          "knowledgeUsage": {
+            "description": "仅记录本轮实际装入或核实并使用的知识；PROVENANCE 清单不是本轮读取证据，不证明产物专业质量。",
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "appliedTo": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "assetId": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "limitations": {
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "sourceRefs": {
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "verification": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "assetId",
+                "sourceRefs",
+                "appliedTo",
+                "verification",
+                "limitations"
+              ],
+              "type": "object"
+            },
+            "type": "array"
           },
           "migrationPlan": {
             "description": "备份前提、兼容窗口、回滚和人工生产步骤",
@@ -834,12 +1002,12 @@
       ]
     },
     {
-      "componentContentSha256": "87daf815b0bf88052401c443fa9f505081ab5bd638e497e94b4b66d64c2f0399",
+      "componentContentSha256": "a7b2d9e7049fa7c846ab78bd6c324d765e7ecf8bb0f2c6b44db32936f51ab321",
       "componentId": "concept-tutor",
       "componentPath": "agents/concept-tutor",
       "componentType": "agent",
-      "componentVersion": "0.1.1",
-      "contractSha256": "d18e86e5ac9b168ab3462f526933d54379cd7b6bcdfafafaf7d940dc836d17df",
+      "componentVersion": "0.2.0",
+      "contractSha256": "afc1d231c1e22a5e282b11553ccb165821394462d7ecc56656fdb44bcf34f696",
       "doNotUseWhen": [
         "整节课教案交给 lesson-planner。",
         "批量出题交给 exercise-designer。",
@@ -922,12 +1090,12 @@
       ]
     },
     {
-      "componentContentSha256": "4357d3542b65eece1012e10a3f0b23461bd8998efa592b1cc6bc195245e4ebfe",
+      "componentContentSha256": "d5a49062b6f4716140de0690704a38cfe5fbbdbd1d6990cfb33ee25b0837ad43",
       "componentId": "customer-service-writer",
       "componentPath": "agents/customer-service-writer",
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contractSha256": "31614dd79a427bf77cfacadfd8e647e82da1eabe5bdd710598fd6fbbd0731a8f",
+      "componentVersion": "0.2.0",
+      "contractSha256": "39cd21ebb8b3f2569a8f9d97151062b9415f3b6033ebb186f2d15ac978b1cf98",
       "doNotUseWhen": [
         "商品页文案交给 product-listing-writer。",
         "店铺转化与退款数据分析交给 store-performance-analyst。",
@@ -1016,12 +1184,12 @@
       ]
     },
     {
-      "componentContentSha256": "c702a558a2e4c098990277df1b7f2a13c30d06ca0280345071ce7452bcadde91",
+      "componentContentSha256": "e58c0d1f20a1633ac1d459919f3fdf798edcb21471d974dd1aa764276b77e926",
       "componentId": "delivery-verifier",
       "componentPath": "agents/delivery-verifier",
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contractSha256": "304f8611c0c790ad5c991ecefef039de16c1148c5a8db49c3bcc0739ed26bb28",
+      "componentVersion": "0.2.0",
+      "contractSha256": "099bd21058001f97c2205a2bc18ea6cf7c62fb65f4006c3d2bddef006c83f9bd",
       "deliveryContract": "delivery-tool.json",
       "doNotUseWhen": [
         "需要调度、权限、锁或最终裁决时交回调用方或 Meta。",
@@ -1145,12 +1313,12 @@
       ]
     },
     {
-      "componentContentSha256": "75ee6f85b6b6da14d01f950dbd1110ca2364406bb0b03d4eb7c1a70d7194664b",
+      "componentContentSha256": "3f78b140ef907f720760cf9e6155a3812a7275015d593b9106a2b477c925d711",
       "componentId": "exercise-designer",
       "componentPath": "agents/exercise-designer",
       "componentType": "agent",
-      "componentVersion": "0.1.1",
-      "contractSha256": "d00f4ce46b2476e90ecee30eef98aff6b79cb40a9e7f4bea92860ecad5acdc88",
+      "componentVersion": "0.2.0",
+      "contractSha256": "7aaac0c7f3055618229f214c6621b112a6e4bac9a99b48b8dbd7b2b006275e8e",
       "doNotUseWhen": [
         "单题理解困难交给 concept-tutor。",
         "课堂整体安排交给 lesson-planner。",
@@ -1248,12 +1416,12 @@
       ]
     },
     {
-      "componentContentSha256": "b30ed237ee0032f8bfe779becd09f88a4d1fcb2f3228e24beeff7b8cf6095a9b",
+      "componentContentSha256": "1b9b15e616b1db8426a00a62cb1f09ac6def9c21039db8e2037d97134152dd3f",
       "componentId": "frontend-engineer",
       "componentPath": "agents/frontend-engineer",
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contractSha256": "a55049458cfe876d07024fe3961dbba34bb07a886d89cd29b021c5dd4d5696c0",
+      "componentVersion": "0.3.0",
+      "contractSha256": "d3ac16f9989c9921af036a9ddc61947996f4cd49b463b2ee5c5d93668d470222",
       "doNotUseWhen": [
         "未明确产品范围：交 product-architect",
         "更改服务认证和数据库：交 backend-data-engineer",
@@ -1294,6 +1462,40 @@
             },
             "minItems": 1,
             "type": "array"
+          },
+          "designBinding": {
+            "description": "由调用方提供的现行设计绑定；仅引用，不授予权限或自行认定当前版本。",
+            "properties": {
+              "contextDigest": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "designDigest": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "designId": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "revision": {
+                "minimum": 1,
+                "type": "integer"
+              },
+              "sliceId": {
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "designId",
+              "revision"
+            ],
+            "type": "object"
+          },
+          "designContext": {
+            "description": "调用方投影的当前模块/决定/状态/接口/上游产物；只读任务上下文，不是权限或另一份PRD真源。",
+            "type": "object"
           },
           "handoffContext": {
             "description": "只给本角色相关材料与依赖产物；控制权保留调用方",
@@ -1359,6 +1561,65 @@
               "object",
               "array"
             ]
+          },
+          "projectFacts": {
+            "additionalProperties": false,
+            "description": "本轮已核实的项目版本/代码入口/边界；未知版本写 null，不把网上最新版当安装版本。",
+            "properties": {
+              "codeRefs": {
+                "items": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "type": "array",
+                "uniqueItems": true
+              },
+              "constraints": {
+                "items": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "type": "array",
+                "uniqueItems": true
+              },
+              "versions": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "evidenceRefs": {
+                      "items": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "type": "array",
+                      "uniqueItems": true
+                    },
+                    "name": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "version": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "version",
+                    "evidenceRefs"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "versions",
+              "codeRefs"
+            ],
+            "type": "object"
           },
           "runtimeBindings": {
             "description": "宿主对本次任务实际工具的绑定；需求不等于权限。未知/拒绝必须保留",
@@ -1496,6 +1757,36 @@
             },
             "type": "array"
           },
+          "designBinding": {
+            "description": "由调用方提供的现行设计绑定；仅引用，不授予权限或自行认定当前版本。",
+            "properties": {
+              "contextDigest": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "designDigest": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "designId": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "revision": {
+                "minimum": 1,
+                "type": "integer"
+              },
+              "sliceId": {
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "designId",
+              "revision"
+            ],
+            "type": "object"
+          },
           "failures": {
             "items": {
               "properties": {
@@ -1558,6 +1849,51 @@
               "object",
               "array"
             ]
+          },
+          "knowledgeUsage": {
+            "description": "仅记录本轮实际装入或核实并使用的知识；PROVENANCE 清单不是本轮读取证据，不证明产物专业质量。",
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "appliedTo": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "assetId": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "limitations": {
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "sourceRefs": {
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "verification": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "assetId",
+                "sourceRefs",
+                "appliedTo",
+                "verification",
+                "limitations"
+              ],
+              "type": "object"
+            },
+            "type": "array"
           },
           "missingCapabilities": {
             "items": {
@@ -1804,12 +2140,12 @@
       ]
     },
     {
-      "componentContentSha256": "07ae947698b3f582d7efdada49ba50210d0e9685fc9728ade0712bb6fc43cf03",
+      "componentContentSha256": "3377c0a9b730fa209ba52e65e00a5fc6443dd50ff99278900d6e7a4dedf8a5d7",
       "componentId": "headline-cover-optimizer",
       "componentPath": "agents/headline-cover-optimizer",
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contractSha256": "65652d85af2cf08f70db08c6fd71f6ac0c4f5014d46ed4f5dd9fd8e496184f8c",
+      "componentVersion": "0.2.0",
+      "contractSha256": "7e5999b553ba354070060f93326d570e3d2cd3ccbd2f221a4fd918e8d5c4af65",
       "doNotUseWhen": [
         "用户还没有内容，只有一个方向：先用 topic-planner 定选题，或 script-writer 写正文",
         "用户要写正文、口播稿、脚本：改用 script-writer",
@@ -1909,11 +2245,9 @@
                   "type": "string"
                 },
                 "layout": {
-                  "enum": [
-                    "大字报",
-                    "真人实拍",
-                    "前后对比"
-                  ]
+                  "description": "按内容、实际素材和展示条件说明布局；实拍、流程图、局部标注、前后对比等是例子，不是封闭列表",
+                  "minLength": 1,
+                  "type": "string"
                 },
                 "materialsNeeded": {
                   "type": "string"
@@ -2071,12 +2405,12 @@
       ]
     },
     {
-      "componentContentSha256": "adc139bdd9fba5dd41ae27695fc1463cb5491ae69177a6253c49bc70edaffa6a",
+      "componentContentSha256": "efea34fbc8c285e6e14191d06e373eec1421086b59b3c7fa4a84c9a9c25495e8",
       "componentId": "interaction-designer",
       "componentPath": "agents/interaction-designer",
       "componentType": "agent",
-      "componentVersion": "0.2.0",
-      "contractSha256": "57e89cfd67d7481af794f61a0894842e829a646ed2764dd491b3dc0f685c544e",
+      "componentVersion": "0.4.0",
+      "contractSha256": "5948122203b95edaa99d2e2898d3eab27127f8aa74df9abb3ae1bb8001ea21ce",
       "doNotUseWhen": [
         "需要改后端权限：交 backend-data-engineer",
         "纯代码实现：交 frontend-engineer",
@@ -2125,6 +2459,40 @@
               "object",
               "array"
             ]
+          },
+          "designBinding": {
+            "description": "由调用方提供的现行设计绑定；仅引用，不授予权限或自行认定当前版本。",
+            "properties": {
+              "contextDigest": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "designDigest": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "designId": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "revision": {
+                "minimum": 1,
+                "type": "integer"
+              },
+              "sliceId": {
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "designId",
+              "revision"
+            ],
+            "type": "object"
+          },
+          "designContext": {
+            "description": "调用方投影的当前模块/决定/状态/接口/上游产物；只读任务上下文，不是权限或另一份PRD真源。",
+            "type": "object"
           },
           "handoffContext": {
             "description": "只给本角色相关材料与依赖产物；控制权保留调用方",
@@ -2182,6 +2550,65 @@
               "object",
               "array"
             ]
+          },
+          "projectFacts": {
+            "additionalProperties": false,
+            "description": "本轮已核实的项目版本/代码入口/边界；未知版本写 null，不把网上最新版当安装版本。",
+            "properties": {
+              "codeRefs": {
+                "items": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "type": "array",
+                "uniqueItems": true
+              },
+              "constraints": {
+                "items": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "type": "array",
+                "uniqueItems": true
+              },
+              "versions": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "evidenceRefs": {
+                      "items": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "type": "array",
+                      "uniqueItems": true
+                    },
+                    "name": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "version": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "version",
+                    "evidenceRefs"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "versions",
+              "codeRefs"
+            ],
+            "type": "object"
           },
           "reference": {
             "description": "现界面截图或明确视觉参考及来源",
@@ -2327,6 +2754,36 @@
               "array"
             ]
           },
+          "designBinding": {
+            "description": "由调用方提供的现行设计绑定；仅引用，不授予权限或自行认定当前版本。",
+            "properties": {
+              "contextDigest": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "designDigest": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "designId": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "revision": {
+                "minimum": 1,
+                "type": "integer"
+              },
+              "sliceId": {
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "designId",
+              "revision"
+            ],
+            "type": "object"
+          },
           "experienceDesign": {
             "description": "动机到动作、反馈、规则、结果的映射；开始、使用、完成、继续退出、失败恢复和必要资源",
             "type": [
@@ -2390,6 +2847,51 @@
             ],
             "type": "object"
           },
+          "knowledgeUsage": {
+            "description": "仅记录本轮实际装入或核实并使用的知识；PROVENANCE 清单不是本轮读取证据，不证明产物专业质量。",
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "appliedTo": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "assetId": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "limitations": {
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "sourceRefs": {
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "verification": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "assetId",
+                "sourceRefs",
+                "appliedTo",
+                "verification",
+                "limitations"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
           "missingCapabilities": {
             "items": {
               "properties": {
@@ -2423,6 +2925,353 @@
           "nativeRuntimeVerified": {
             "const": false,
             "description": "包静态合同或本地helper检查不会升级原生宿主加载；真实探测由调用方另外保存"
+          },
+          "productDesign": {
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "mode": {
+                      "const": "delivery"
+                    }
+                  },
+                  "required": [
+                    "mode"
+                  ]
+                },
+                "then": {
+                  "properties": {
+                    "softwareDesign": {
+                      "properties": {
+                        "modules": {
+                          "items": {
+                            "required": [
+                              "id",
+                              "purpose",
+                              "journeyRefs",
+                              "decisionRefs",
+                              "interfaceRefs",
+                              "stateRefs",
+                              "taskIds",
+                              "acceptanceCriterionIds",
+                              "states",
+                              "businessRules",
+                              "implementationNotes",
+                              "removalCandidates"
+                            ]
+                          },
+                          "minItems": 1
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            ],
+            "description": "当前任务同一份 productDesign 的候选内容或修订；其他字段沿用调用方 PRD。不是新的状态库、批准或调度器。",
+            "properties": {
+              "designId": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "mode": {
+                "enum": [
+                  "exploration",
+                  "delivery"
+                ]
+              },
+              "revision": {
+                "minimum": 1,
+                "type": "integer"
+              },
+              "schemaVersion": {
+                "const": 1
+              },
+              "settledDecisionRefs": {
+                "items": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "type": "array",
+                "uniqueItems": true
+              },
+              "softwareDesign": {
+                "additionalProperties": false,
+                "description": "当前 productDesign 内的两层软件设计；architecture 与 modules 引用同一设计的既有决定、旅程、状态、接口、任务和验收；没有独立批准或调度状态。探索允许未定项，小任务不强制新增。",
+                "properties": {
+                  "architecture": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "constraints": {
+                        "items": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "id": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "requirement": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "verification": {
+                              "minLength": 1,
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "requirement",
+                            "verification"
+                          ],
+                          "type": "object"
+                        },
+                        "type": "array"
+                      },
+                      "decisionRefs": {
+                        "items": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "type": "array",
+                        "uniqueItems": true
+                      },
+                      "id": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "moduleIds": {
+                        "items": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "type": "array",
+                        "uniqueItems": true
+                      },
+                      "revision": {
+                        "minimum": 1,
+                        "type": "integer"
+                      },
+                      "summary": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "technologyChoices": {
+                        "items": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "evidenceRefs": {
+                              "items": {
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "minItems": 1,
+                              "type": "array",
+                              "uniqueItems": true
+                            },
+                            "id": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "name": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "rationale": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "version": {
+                              "minLength": 1,
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "name",
+                            "version",
+                            "rationale",
+                            "evidenceRefs"
+                          ],
+                          "type": "object"
+                        },
+                        "type": "array"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "revision",
+                      "summary",
+                      "decisionRefs",
+                      "technologyChoices",
+                      "constraints",
+                      "moduleIds"
+                    ],
+                    "type": "object"
+                  },
+                  "modules": {
+                    "items": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "acceptanceCriterionIds": {
+                          "items": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "type": "array",
+                          "uniqueItems": true
+                        },
+                        "businessRules": {
+                          "items": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "type": "array",
+                          "uniqueItems": true
+                        },
+                        "decisionRefs": {
+                          "items": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "type": "array",
+                          "uniqueItems": true
+                        },
+                        "id": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "implementationNotes": {
+                          "items": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "type": "array",
+                          "uniqueItems": true
+                        },
+                        "interfaceRefs": {
+                          "items": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "type": "array",
+                          "uniqueItems": true
+                        },
+                        "journeyRefs": {
+                          "items": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "type": "array",
+                          "uniqueItems": true
+                        },
+                        "purpose": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "removalCandidates": {
+                          "items": {
+                            "additionalProperties": false,
+                            "properties": {
+                              "evidenceRefs": {
+                                "items": {
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "minItems": 1,
+                                "type": "array",
+                                "uniqueItems": true
+                              },
+                              "path": {
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "reason": {
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "replacement": {
+                                "minLength": 1,
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "path",
+                              "replacement",
+                              "reason",
+                              "evidenceRefs"
+                            ],
+                            "type": "object"
+                          },
+                          "type": "array"
+                        },
+                        "stateRefs": {
+                          "items": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "type": "array",
+                          "uniqueItems": true
+                        },
+                        "states": {
+                          "items": {
+                            "additionalProperties": false,
+                            "properties": {
+                              "behavior": {
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "name": {
+                                "minLength": 1,
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "name",
+                              "behavior"
+                            ],
+                            "type": "object"
+                          },
+                          "type": "array"
+                        },
+                        "taskIds": {
+                          "items": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "type": "array",
+                          "uniqueItems": true
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "purpose"
+                      ],
+                      "type": "object"
+                    },
+                    "type": "array"
+                  },
+                  "schemaVersion": {
+                    "const": 1
+                  }
+                },
+                "required": [
+                  "schemaVersion",
+                  "architecture",
+                  "modules"
+                ],
+                "type": "object"
+              },
+              "sourceRefs": {
+                "items": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "type": "array",
+                "uniqueItems": true
+              }
+            },
+            "type": "object"
           },
           "reviewEvidence": {
             "description": "逐状态截图/录屏对应的问题与待验项",
@@ -2490,12 +3339,12 @@
       ]
     },
     {
-      "componentContentSha256": "c956d9e95ae47388e45f620e2bf4dc43287532390c8e959c6a6ceac8515d3d7c",
+      "componentContentSha256": "5a7d59f2dda593a680f6a6a7262c757b3b2a1259da8890df5a6a09e7b822ccfd",
       "componentId": "interview-coach",
       "componentPath": "agents/interview-coach",
       "componentType": "agent",
-      "componentVersion": "0.2.0",
-      "contractSha256": "732d8629cc914fabc14944a3ad9b706b9448ad9fa8138de746f6b5b024ae9ade",
+      "componentVersion": "0.3.0",
+      "contractSha256": "5e815769a67640ebfeb4a71da4ebee9da538dabe0cafa8c68224e6670939c4b1",
       "doNotUseWhen": [
         "简历内容修改交给 resume-editor。",
         "日常工作沟通交给 workplace-writer。",
@@ -2850,12 +3699,12 @@
       ]
     },
     {
-      "componentContentSha256": "d66b6531f7d30e39d4fcafdeaf673d0727dbda7a8a3d6aa1809401a38f6a169f",
+      "componentContentSha256": "ad75a7a13accb622476250d0c33dcd6b5b8b1b8f2192427de6c95dba902f1e07",
       "componentId": "launch-planner",
       "componentPath": "agents/launch-planner",
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contractSha256": "44a83dd08b6774704f3b1d91d3d6d8b8b97917c06f42daf8fd0d0a70f3e9f86d",
+      "componentVersion": "0.2.0",
+      "contractSha256": "3887c4bd52766d64daec4e36d48139509f4f3f6d9cc9ce9d738fd513989fd9d1",
       "doNotUseWhen": [
         "还没选方向先找 side-business-evaluator。",
         "价格与成本计算交给 pricing-cost-analyst。",
@@ -2947,12 +3796,12 @@
       ]
     },
     {
-      "componentContentSha256": "3d7862145ef3e36fe4f72cc91489e918aea136ef74212cc2ce335c62c2e19cf0",
+      "componentContentSha256": "f0683daf3ae922f361b11af2a80da5e151ede2ede764846207f66c2e5c26a398",
       "componentId": "lesson-planner",
       "componentPath": "agents/lesson-planner",
       "componentType": "agent",
-      "componentVersion": "0.1.1",
-      "contractSha256": "56974894a42fadd74861eda35e858de2c8cc0b7c87253ffc8f9298d5bb4b5c5d",
+      "componentVersion": "0.2.0",
+      "contractSha256": "85d86a7456d7d35f82559211ababdba9e8cc2905ccba66e16394b81523d807da",
       "doNotUseWhen": [
         "单题讲解交给 concept-tutor。",
         "成套原创练习与答案交给 exercise-designer。",
@@ -3289,12 +4138,12 @@
       ]
     },
     {
-      "componentContentSha256": "a37d5ab8c991db97b105ccec0e2c6277e4fd0f6eb36b5cec36b8eaeb9e7ae53a",
+      "componentContentSha256": "24fe24ccb767cceac1cec27f4bb7552e03e7d8b716c34d3cf7465c29c00850d2",
       "componentId": "media-production-engineer",
       "componentPath": "agents/media-production-engineer",
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contractSha256": "3cb98044d0f7f3a648d8fc3dbb91560d5ca496edda26d051b1764158cac4253c",
+      "componentVersion": "0.2.0",
+      "contractSha256": "854faa92ec0edf12847fec28369bb5c35e3ce17f010ffe78a504696b48a60ebd",
       "doNotUseWhen": [
         "只要正文：使用 script-writer",
         "缺素材授权或真人声音肖像许可：交调用方",
@@ -4482,12 +5331,12 @@
       ]
     },
     {
-      "componentContentSha256": "98e88270dc062986aae2303465513e6cd30a145621d5f54a777f1c8eb79a83d2",
+      "componentContentSha256": "b98ace234bb6f78f2b33dd7cb538d48e98af87c7db59dc10eb767b9482de609f",
       "componentId": "pricing-cost-analyst",
       "componentPath": "agents/pricing-cost-analyst",
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contractSha256": "a05dc9d8365347f4724891d76c81fd615a378584e480436d41de47461d740fe5",
+      "componentVersion": "0.2.0",
+      "contractSha256": "402539612326ea28085d01178e6d6ad78a56106209319dde7989ed2506c2bd8f",
       "doNotUseWhen": [
         "副业方向选择交给 side-business-evaluator。",
         "第一周任务安排交给 launch-planner。",
@@ -4579,18 +5428,19 @@
       ]
     },
     {
-      "componentContentSha256": "dccd1fc768a686b86fa1e689b56004a88473a0d17b4d4ff108f4b9d97aaaf7eb",
+      "componentContentSha256": "94e3d7a233dcbcb27084cda5231e800bbab9ad4c4bc4b26ae8742da20a7da49b",
       "componentId": "product-architect",
       "componentPath": "agents/product-architect",
       "componentType": "agent",
-      "componentVersion": "0.2.0",
-      "contractSha256": "9a0923721d0eb4738dd74fbdb4c8eac044363f83a2920900b81b1daa199d1ebc",
+      "componentVersion": "0.4.0",
+      "contractSha256": "e3e9954ab49b1def5eb8cbcba48bc48f863886f97c14c05300ae149406572f0c",
       "doNotUseWhen": [
         "只要短文改稿：使用 script-writer",
         "只要界面视觉：交 interaction-designer",
         "没有授权的部署、购买和删库：交调用方决定"
       ],
       "entrypoint": "AGENT.md",
+      "helperContract": "design-handoff-tool.json",
       "humanGate": {
         "required": true,
         "when": [
@@ -4642,6 +5492,40 @@
               "object",
               "array"
             ]
+          },
+          "designBinding": {
+            "description": "由调用方提供的现行设计绑定；仅引用，不授予权限或自行认定当前版本。",
+            "properties": {
+              "contextDigest": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "designDigest": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "designId": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "revision": {
+                "minimum": 1,
+                "type": "integer"
+              },
+              "sliceId": {
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "designId",
+              "revision"
+            ],
+            "type": "object"
+          },
+          "designContext": {
+            "description": "调用方投影的当前模块/决定/状态/接口/上游产物；只读任务上下文，不是权限或另一份PRD真源。",
+            "type": "object"
           },
           "goal": {
             "description": "用户目标、已定范围和非目标；未确定方向保留为待决定项",
@@ -4708,6 +5592,65 @@
               "delivery_slicing"
             ],
             "type": "string"
+          },
+          "projectFacts": {
+            "additionalProperties": false,
+            "description": "本轮已核实的项目版本/代码入口/边界；未知版本写 null，不把网上最新版当安装版本。",
+            "properties": {
+              "codeRefs": {
+                "items": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "type": "array",
+                "uniqueItems": true
+              },
+              "constraints": {
+                "items": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "type": "array",
+                "uniqueItems": true
+              },
+              "versions": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "evidenceRefs": {
+                      "items": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "type": "array",
+                      "uniqueItems": true
+                    },
+                    "name": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "version": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "version",
+                    "evidenceRefs"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "versions",
+              "codeRefs"
+            ],
+            "type": "object"
           },
           "runtimeBindings": {
             "description": "宿主对本次任务实际工具的绑定；需求不等于权限。未知/拒绝必须保留",
@@ -4853,6 +5796,36 @@
               "array"
             ]
           },
+          "designBinding": {
+            "description": "由调用方提供的现行设计绑定；仅引用，不授予权限或自行认定当前版本。",
+            "properties": {
+              "contextDigest": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "designDigest": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "designId": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "revision": {
+                "minimum": 1,
+                "type": "integer"
+              },
+              "sliceId": {
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "designId",
+              "revision"
+            ],
+            "type": "object"
+          },
           "experienceDesign": {
             "description": "关键选择明确后的完整用户动机、操作反馈、规则、资源、结果与失败恢复；未知保留影响、责任和验证方法",
             "type": [
@@ -4924,6 +5897,51 @@
             ],
             "type": "object"
           },
+          "knowledgeUsage": {
+            "description": "仅记录本轮实际装入或核实并使用的知识；PROVENANCE 清单不是本轮读取证据，不证明产物专业质量。",
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "appliedTo": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "assetId": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "limitations": {
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "sourceRefs": {
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "verification": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "assetId",
+                "sourceRefs",
+                "appliedTo",
+                "verification",
+                "limitations"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
           "migration": {
             "description": "兼容、分批迁移、回滚与验收标准",
             "type": [
@@ -4965,6 +5983,353 @@
           "nativeRuntimeVerified": {
             "const": false,
             "description": "包静态合同或本地helper检查不会升级原生宿主加载；真实探测由调用方另外保存"
+          },
+          "productDesign": {
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "mode": {
+                      "const": "delivery"
+                    }
+                  },
+                  "required": [
+                    "mode"
+                  ]
+                },
+                "then": {
+                  "properties": {
+                    "softwareDesign": {
+                      "properties": {
+                        "modules": {
+                          "items": {
+                            "required": [
+                              "id",
+                              "purpose",
+                              "journeyRefs",
+                              "decisionRefs",
+                              "interfaceRefs",
+                              "stateRefs",
+                              "taskIds",
+                              "acceptanceCriterionIds",
+                              "states",
+                              "businessRules",
+                              "implementationNotes",
+                              "removalCandidates"
+                            ]
+                          },
+                          "minItems": 1
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            ],
+            "description": "当前任务同一份 productDesign 的候选内容或修订；其他字段沿用调用方 PRD。不是新的状态库、批准或调度器。",
+            "properties": {
+              "designId": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "mode": {
+                "enum": [
+                  "exploration",
+                  "delivery"
+                ]
+              },
+              "revision": {
+                "minimum": 1,
+                "type": "integer"
+              },
+              "schemaVersion": {
+                "const": 1
+              },
+              "settledDecisionRefs": {
+                "items": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "type": "array",
+                "uniqueItems": true
+              },
+              "softwareDesign": {
+                "additionalProperties": false,
+                "description": "当前 productDesign 内的两层软件设计；architecture 与 modules 引用同一设计的既有决定、旅程、状态、接口、任务和验收；没有独立批准或调度状态。探索允许未定项，小任务不强制新增。",
+                "properties": {
+                  "architecture": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "constraints": {
+                        "items": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "id": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "requirement": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "verification": {
+                              "minLength": 1,
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "requirement",
+                            "verification"
+                          ],
+                          "type": "object"
+                        },
+                        "type": "array"
+                      },
+                      "decisionRefs": {
+                        "items": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "type": "array",
+                        "uniqueItems": true
+                      },
+                      "id": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "moduleIds": {
+                        "items": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "type": "array",
+                        "uniqueItems": true
+                      },
+                      "revision": {
+                        "minimum": 1,
+                        "type": "integer"
+                      },
+                      "summary": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "technologyChoices": {
+                        "items": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "evidenceRefs": {
+                              "items": {
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "minItems": 1,
+                              "type": "array",
+                              "uniqueItems": true
+                            },
+                            "id": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "name": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "rationale": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "version": {
+                              "minLength": 1,
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "name",
+                            "version",
+                            "rationale",
+                            "evidenceRefs"
+                          ],
+                          "type": "object"
+                        },
+                        "type": "array"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "revision",
+                      "summary",
+                      "decisionRefs",
+                      "technologyChoices",
+                      "constraints",
+                      "moduleIds"
+                    ],
+                    "type": "object"
+                  },
+                  "modules": {
+                    "items": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "acceptanceCriterionIds": {
+                          "items": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "type": "array",
+                          "uniqueItems": true
+                        },
+                        "businessRules": {
+                          "items": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "type": "array",
+                          "uniqueItems": true
+                        },
+                        "decisionRefs": {
+                          "items": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "type": "array",
+                          "uniqueItems": true
+                        },
+                        "id": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "implementationNotes": {
+                          "items": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "type": "array",
+                          "uniqueItems": true
+                        },
+                        "interfaceRefs": {
+                          "items": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "type": "array",
+                          "uniqueItems": true
+                        },
+                        "journeyRefs": {
+                          "items": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "type": "array",
+                          "uniqueItems": true
+                        },
+                        "purpose": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "removalCandidates": {
+                          "items": {
+                            "additionalProperties": false,
+                            "properties": {
+                              "evidenceRefs": {
+                                "items": {
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "minItems": 1,
+                                "type": "array",
+                                "uniqueItems": true
+                              },
+                              "path": {
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "reason": {
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "replacement": {
+                                "minLength": 1,
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "path",
+                              "replacement",
+                              "reason",
+                              "evidenceRefs"
+                            ],
+                            "type": "object"
+                          },
+                          "type": "array"
+                        },
+                        "stateRefs": {
+                          "items": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "type": "array",
+                          "uniqueItems": true
+                        },
+                        "states": {
+                          "items": {
+                            "additionalProperties": false,
+                            "properties": {
+                              "behavior": {
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "name": {
+                                "minLength": 1,
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "name",
+                              "behavior"
+                            ],
+                            "type": "object"
+                          },
+                          "type": "array"
+                        },
+                        "taskIds": {
+                          "items": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "type": "array",
+                          "uniqueItems": true
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "purpose"
+                      ],
+                      "type": "object"
+                    },
+                    "type": "array"
+                  },
+                  "schemaVersion": {
+                    "const": 1
+                  }
+                },
+                "required": [
+                  "schemaVersion",
+                  "architecture",
+                  "modules"
+                ],
+                "type": "object"
+              },
+              "sourceRefs": {
+                "items": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "type": "array",
+                "uniqueItems": true
+              }
+            },
+            "type": "object"
           },
           "scope": {
             "description": "范围、非目标和最小可演示切片",
@@ -5012,16 +6377,17 @@
         "旧实现与新目标冲突，需要明确取舍"
       ],
       "validation": [
-        "tests/contract.test.mjs"
+        "tests/contract.test.mjs",
+        "tests/design-handoff.test.mjs"
       ]
     },
     {
-      "componentContentSha256": "3699e8ac48d7357bdc6127b3a6f2f8b712329885bd0fe428b3a95fde5c162c1f",
+      "componentContentSha256": "70367bff21586f9c7fcac04c92861709fa4ac419d2c91920b07e3f842ea5de57",
       "componentId": "product-listing-writer",
       "componentPath": "agents/product-listing-writer",
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contractSha256": "931b6de51cf3780cb4886a5d3e3a8e41b50888581b930bc841f81fd9b15c3f0e",
+      "componentVersion": "0.2.0",
+      "contractSha256": "a8ab75198ef6b5a61c1ba5860169835f5c6d8a46e7e0ce3f62f047fef580201e",
       "doNotUseWhen": [
         "客服咨询与售后回复交给 customer-service-writer。",
         "店铺数据诊断交给 store-performance-analyst。",
@@ -5243,12 +6609,12 @@
       ]
     },
     {
-      "componentContentSha256": "6a3c88af8df13ef1111b72efb1fc808bac294943a039c9db2862ffb125d8e7a7",
+      "componentContentSha256": "9b35aa66721d712ebe50e4123143cc63850a5fb19f139985b4fe233580791f1b",
       "componentId": "quantitative-researcher",
       "componentPath": "agents/quantitative-researcher",
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contractSha256": "b6c5e7cc4233853f0d04f06aee4dd1e9e2d9e652f1feb6a80322872404f3a5ba",
+      "componentVersion": "0.2.0",
+      "contractSha256": "3ad37ea6cf9e0c6d1f55ab9384ec9094bcbb24e76dee371b23aefa9df0f77d7c",
       "doNotUseWhen": [
         "代下单、转账或交易账户操作：交用户本人",
         "要求保证收益或捏造历史数据：拒绝",
@@ -5642,12 +7008,12 @@
       ]
     },
     {
-      "componentContentSha256": "6ef40fcf4ac3f453cd92d30e381d835ae0fafc23e3f96e065cdeb28cb528812d",
+      "componentContentSha256": "2c3f11edeaad006f2c997bfdc38ba9b949c710d1a334d1cc49e66cd808d920ab",
       "componentId": "resume-editor",
       "componentPath": "agents/resume-editor",
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contractSha256": "4bc12e6fe29ce73e0197980bcf4f700d0498020115b013c999936f0fa74bd59c",
+      "componentVersion": "0.2.0",
+      "contractSha256": "349863da98d3a3e4eeef2a5c015c5359ce3b60837f9f90d5b1478fbb9aa2d955",
       "doNotUseWhen": [
         "面试练习交给 interview-coach。",
         "工作周报和邮件交给 workplace-writer。",
@@ -5739,12 +7105,12 @@
       ]
     },
     {
-      "componentContentSha256": "705f23bd193861c3b547c4dffc9b71428799bd7e46f9417e7f9f3603117e7031",
+      "componentContentSha256": "ebf1db99a6f52e37a7787aa395ce87a469af64e65f1a794943722206b5be9d66",
       "componentId": "script-writer",
       "componentPath": "agents/script-writer",
       "componentType": "agent",
-      "componentVersion": "0.3.0",
-      "contractSha256": "94d184bbb16496dfb858fdc2305681c400417ec96f026c21aaf17d43641a8fa5",
+      "componentVersion": "0.4.0",
+      "contractSha256": "02b34686bd37b0e06c1383b1cf74832ff351fcaa9b3cb6072df488e65da7d119",
       "doNotUseWhen": [
         "用户还没定选题，只说「帮我写点东西」：改用 topic-planner",
         "用户只要标题、封面文字或封面版式：改用 headline-cover-optimizer",
@@ -5964,12 +7330,12 @@
       ]
     },
     {
-      "componentContentSha256": "c4ca06373b78b4bc546868f28770d0e9f37b39c10275d7fdc5c14af45a3c7c83",
+      "componentContentSha256": "f3662ebfaf3b048421607ab05866a9dec6f9c32865321fc39f1264e4df2e8d44",
       "componentId": "side-business-evaluator",
       "componentPath": "agents/side-business-evaluator",
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contractSha256": "ea33470a94f91980f8a0d071a2bff1bfc8858cbe87e3533aa116f7a2250abb81",
+      "componentVersion": "0.2.0",
+      "contractSha256": "6516c1719fcec29e62988cd7cc0df440389a3e95249b7f2e4ca4f67fccd3f650",
       "doNotUseWhen": [
         "已选方向的开工安排交给 launch-planner。",
         "报价与收支测算交给 pricing-cost-analyst。",
@@ -6303,12 +7669,12 @@
       ]
     },
     {
-      "componentContentSha256": "4e0ad46f6cf9fc6cb5f170e4cb140718b4f373a4cb6ec5efbe4e29509ffd6fba",
+      "componentContentSha256": "96ca6987b748002d6da951390fd0fcce197113eaaf15a674f6c455f2f68b1139",
       "componentId": "source-evidence-analyst",
       "componentPath": "agents/source-evidence-analyst",
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contractSha256": "4aa739bd8b19a8da11a68aabf918808f720672738cb707e5ac3ceba7454dbada",
+      "componentVersion": "0.2.0",
+      "contractSha256": "c19c1f1e9af595b9b56a718277c5ddd106de4f00616ac256e7a8c0a8ed2e8095",
       "doNotUseWhen": [
         "需要未经批准发布、申诉或联系他人：交调用方",
         "需要绕站点安全拒绝、登录或读取秘密：停止",
@@ -6698,12 +8064,12 @@
       ]
     },
     {
-      "componentContentSha256": "a72fd059cc0b6fdb6cbe611dbafdee4b593b4227f4d82362051b99a80fbd5b9b",
+      "componentContentSha256": "4c8488e9314e8d15cfd6c1b53202e801f381aa98e15b7857a8d9044d7996c740",
       "componentId": "store-performance-analyst",
       "componentPath": "agents/store-performance-analyst",
       "componentType": "agent",
-      "componentVersion": "0.2.0",
-      "contractSha256": "c27941ad6e4e9de87670cc0aaedbc87c7081b20fddfd63751eb04b199f44103b",
+      "componentVersion": "0.3.0",
+      "contractSha256": "927a10e2b1ef25f11cf0d4127524d014b0b4a7d1f486856a005498296f7331c6",
       "deliveryContract": "delivery-tool.json",
       "doNotUseWhen": [
         "商品文案交给 product-listing-writer。",
@@ -6818,12 +8184,12 @@
       ]
     },
     {
-      "componentContentSha256": "922c1f0d25591e74dad1f14bec61593554c422bc335d53871f2d2bbef6a6d1b6",
+      "componentContentSha256": "ecd3949b59626a7801fbb1d5239a79c557599268957252d2145d87599fb669da",
       "componentId": "supplier-comparison-analyst",
       "componentPath": "agents/supplier-comparison-analyst",
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contractSha256": "55ad094a8cf46c3035a331b33b56361b43d7929b5015e23303ffdddc6e284d10",
+      "componentVersion": "0.2.0",
+      "contractSha256": "2132b8f870b60b62290cfc4adf423b5098a3214970c751cecbe43318b10f3014",
       "deliveryContract": "delivery-tool.json",
       "doNotUseWhen": [
         "服务报价、单笔经营利润或固定成本覆盖测算交给 pricing-cost-analyst；经营期间复盘交给 store-performance-analyst。",
@@ -6951,12 +8317,12 @@
       ]
     },
     {
-      "componentContentSha256": "9aad6f2f74a8c2eeb2bdf681fbb1f356bfee4a335b024ef3ede205c03f39f889",
+      "componentContentSha256": "564877c37ea73aa07196f8877609c99f7bacf7e86b09bf125d35894dbd0c03d0",
       "componentId": "topic-planner",
       "componentPath": "agents/topic-planner",
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contractSha256": "ef1d30d8d8225c5c4d5da5a23ff7ed27ab3beba8de2f326b21485bae5fa8d435",
+      "componentVersion": "0.2.0",
+      "contractSha256": "7076f6255b479291f0a7b11df660ed97f98a7a3f908556273c7a1313db4785c3",
       "doNotUseWhen": [
         "用户已经定了选题，只要标题、封面文字或封面版式：改用 headline-cover-optimizer",
         "用户要口播稿、分镜表、图文正文或公众号文章：改用 script-writer",
@@ -7131,12 +8497,12 @@
       ]
     },
     {
-      "componentContentSha256": "84711e015ce4356136336d04d57111e97aff8ec2b423172450b47c8daa7ab901",
+      "componentContentSha256": "ba72f5c2032847b0b182dc70f793f74fc5ee3aea5044b421f9184e46fba36d1a",
       "componentId": "workplace-writer",
       "componentPath": "agents/workplace-writer",
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contractSha256": "c3d26a1372d6717ee97af2e2cf967478c962ba4b8e2539d6e9ac05f755465a31",
+      "componentVersion": "0.2.0",
+      "contractSha256": "167860f347406316a36cd416f809f2b7d9476c7d3a50f23965cb881b2a5c3ad1",
       "doNotUseWhen": [
         "求职材料交给 resume-editor。",
         "顾客售后话术交给 customer-service-writer。",
@@ -7356,9 +8722,9 @@
         "backend-data-engineer-deliver"
       ],
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contentSha256": "5807123c199567a3b4b849129b47a118622267241a132514d7237c8c91f61836",
-      "contractSha256": "16d0d2adf3b31e796de346e6000ada2f42c07b278acf4f3daccf0e7b2ba8407d",
+      "componentVersion": "0.3.0",
+      "contentSha256": "7302f79b5abae3436a77621f7468f1a79d8d167a4934328e4fc09f9ff897b844",
+      "contractSha256": "b4e64f4ccc4b0ecbd7d38bc85e371fedf0f0c231d63f65d0a33e97ae84cdfc3d",
       "entrypoint": "AGENT.md",
       "id": "backend-data-engineer",
       "path": "agents/backend-data-engineer",
@@ -7371,9 +8737,9 @@
         "concept-tutor-assist"
       ],
       "componentType": "agent",
-      "componentVersion": "0.1.1",
-      "contentSha256": "87daf815b0bf88052401c443fa9f505081ab5bd638e497e94b4b66d64c2f0399",
-      "contractSha256": "d18e86e5ac9b168ab3462f526933d54379cd7b6bcdfafafaf7d940dc836d17df",
+      "componentVersion": "0.2.0",
+      "contentSha256": "a7b2d9e7049fa7c846ab78bd6c324d765e7ecf8bb0f2c6b44db32936f51ab321",
+      "contractSha256": "afc1d231c1e22a5e282b11553ccb165821394462d7ecc56656fdb44bcf34f696",
       "entrypoint": "AGENT.md",
       "id": "concept-tutor",
       "path": "agents/concept-tutor",
@@ -7386,9 +8752,9 @@
         "customer-service-writer-assist"
       ],
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contentSha256": "4357d3542b65eece1012e10a3f0b23461bd8998efa592b1cc6bc195245e4ebfe",
-      "contractSha256": "31614dd79a427bf77cfacadfd8e647e82da1eabe5bdd710598fd6fbbd0731a8f",
+      "componentVersion": "0.2.0",
+      "contentSha256": "d5a49062b6f4716140de0690704a38cfe5fbbdbd1d6990cfb33ee25b0837ad43",
+      "contractSha256": "39cd21ebb8b3f2569a8f9d97151062b9415f3b6033ebb186f2d15ac978b1cf98",
       "entrypoint": "AGENT.md",
       "id": "customer-service-writer",
       "path": "agents/customer-service-writer",
@@ -7401,9 +8767,9 @@
         "delivery-evidence-verify"
       ],
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contentSha256": "c702a558a2e4c098990277df1b7f2a13c30d06ca0280345071ce7452bcadde91",
-      "contractSha256": "304f8611c0c790ad5c991ecefef039de16c1148c5a8db49c3bcc0739ed26bb28",
+      "componentVersion": "0.2.0",
+      "contentSha256": "e58c0d1f20a1633ac1d459919f3fdf798edcb21471d974dd1aa764276b77e926",
+      "contractSha256": "099bd21058001f97c2205a2bc18ea6cf7c62fb65f4006c3d2bddef006c83f9bd",
       "entrypoint": "AGENT.md",
       "id": "delivery-verifier",
       "path": "agents/delivery-verifier",
@@ -7417,9 +8783,9 @@
         "exercise-designer-assist"
       ],
       "componentType": "agent",
-      "componentVersion": "0.1.1",
-      "contentSha256": "75ee6f85b6b6da14d01f950dbd1110ca2364406bb0b03d4eb7c1a70d7194664b",
-      "contractSha256": "d00f4ce46b2476e90ecee30eef98aff6b79cb40a9e7f4bea92860ecad5acdc88",
+      "componentVersion": "0.2.0",
+      "contentSha256": "3f78b140ef907f720760cf9e6155a3812a7275015d593b9106a2b477c925d711",
+      "contractSha256": "7aaac0c7f3055618229f214c6621b112a6e4bac9a99b48b8dbd7b2b006275e8e",
       "entrypoint": "AGENT.md",
       "id": "exercise-designer",
       "path": "agents/exercise-designer",
@@ -7432,9 +8798,9 @@
         "frontend-engineer-deliver"
       ],
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contentSha256": "b30ed237ee0032f8bfe779becd09f88a4d1fcb2f3228e24beeff7b8cf6095a9b",
-      "contractSha256": "a55049458cfe876d07024fe3961dbba34bb07a886d89cd29b021c5dd4d5696c0",
+      "componentVersion": "0.3.0",
+      "contentSha256": "1b9b15e616b1db8426a00a62cb1f09ac6def9c21039db8e2037d97134152dd3f",
+      "contractSha256": "d3ac16f9989c9921af036a9ddc61947996f4cd49b463b2ee5c5d93668d470222",
       "entrypoint": "AGENT.md",
       "id": "frontend-engineer",
       "path": "agents/frontend-engineer",
@@ -7447,9 +8813,9 @@
         "headline-cover-optimizer-optimize"
       ],
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contentSha256": "07ae947698b3f582d7efdada49ba50210d0e9685fc9728ade0712bb6fc43cf03",
-      "contractSha256": "65652d85af2cf08f70db08c6fd71f6ac0c4f5014d46ed4f5dd9fd8e496184f8c",
+      "componentVersion": "0.2.0",
+      "contentSha256": "3377c0a9b730fa209ba52e65e00a5fc6443dd50ff99278900d6e7a4dedf8a5d7",
+      "contractSha256": "7e5999b553ba354070060f93326d570e3d2cd3ccbd2f221a4fd918e8d5c4af65",
       "entrypoint": "AGENT.md",
       "id": "headline-cover-optimizer",
       "path": "agents/headline-cover-optimizer",
@@ -7462,9 +8828,9 @@
         "interaction-designer-deliver"
       ],
       "componentType": "agent",
-      "componentVersion": "0.2.0",
-      "contentSha256": "adc139bdd9fba5dd41ae27695fc1463cb5491ae69177a6253c49bc70edaffa6a",
-      "contractSha256": "57e89cfd67d7481af794f61a0894842e829a646ed2764dd491b3dc0f685c544e",
+      "componentVersion": "0.4.0",
+      "contentSha256": "efea34fbc8c285e6e14191d06e373eec1421086b59b3c7fa4a84c9a9c25495e8",
+      "contractSha256": "5948122203b95edaa99d2e2898d3eab27127f8aa74df9abb3ae1bb8001ea21ce",
       "entrypoint": "AGENT.md",
       "id": "interaction-designer",
       "path": "agents/interaction-designer",
@@ -7477,9 +8843,9 @@
         "interview-coach-assist"
       ],
       "componentType": "agent",
-      "componentVersion": "0.2.0",
-      "contentSha256": "c956d9e95ae47388e45f620e2bf4dc43287532390c8e959c6a6ceac8515d3d7c",
-      "contractSha256": "732d8629cc914fabc14944a3ad9b706b9448ad9fa8138de746f6b5b024ae9ade",
+      "componentVersion": "0.3.0",
+      "contentSha256": "5a7d59f2dda593a680f6a6a7262c757b3b2a1259da8890df5a6a09e7b822ccfd",
+      "contractSha256": "5e815769a67640ebfeb4a71da4ebee9da538dabe0cafa8c68224e6670939c4b1",
       "entrypoint": "AGENT.md",
       "id": "interview-coach",
       "path": "agents/interview-coach",
@@ -7492,9 +8858,9 @@
         "launch-planner-assist"
       ],
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contentSha256": "d66b6531f7d30e39d4fcafdeaf673d0727dbda7a8a3d6aa1809401a38f6a169f",
-      "contractSha256": "44a83dd08b6774704f3b1d91d3d6d8b8b97917c06f42daf8fd0d0a70f3e9f86d",
+      "componentVersion": "0.2.0",
+      "contentSha256": "ad75a7a13accb622476250d0c33dcd6b5b8b1b8f2192427de6c95dba902f1e07",
+      "contractSha256": "3887c4bd52766d64daec4e36d48139509f4f3f6d9cc9ce9d738fd513989fd9d1",
       "entrypoint": "AGENT.md",
       "id": "launch-planner",
       "path": "agents/launch-planner",
@@ -7507,9 +8873,9 @@
         "lesson-planner-assist"
       ],
       "componentType": "agent",
-      "componentVersion": "0.1.1",
-      "contentSha256": "3d7862145ef3e36fe4f72cc91489e918aea136ef74212cc2ce335c62c2e19cf0",
-      "contractSha256": "56974894a42fadd74861eda35e858de2c8cc0b7c87253ffc8f9298d5bb4b5c5d",
+      "componentVersion": "0.2.0",
+      "contentSha256": "f0683daf3ae922f361b11af2a80da5e151ede2ede764846207f66c2e5c26a398",
+      "contractSha256": "85d86a7456d7d35f82559211ababdba9e8cc2905ccba66e16394b81523d807da",
       "entrypoint": "AGENT.md",
       "id": "lesson-planner",
       "path": "agents/lesson-planner",
@@ -7522,9 +8888,9 @@
         "media-production-engineer-deliver"
       ],
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contentSha256": "a37d5ab8c991db97b105ccec0e2c6277e4fd0f6eb36b5cec36b8eaeb9e7ae53a",
-      "contractSha256": "3cb98044d0f7f3a648d8fc3dbb91560d5ca496edda26d051b1764158cac4253c",
+      "componentVersion": "0.2.0",
+      "contentSha256": "24fe24ccb767cceac1cec27f4bb7552e03e7d8b716c34d3cf7465c29c00850d2",
+      "contractSha256": "854faa92ec0edf12847fec28369bb5c35e3ce17f010ffe78a504696b48a60ebd",
       "entrypoint": "AGENT.md",
       "id": "media-production-engineer",
       "path": "agents/media-production-engineer",
@@ -7537,9 +8903,9 @@
         "pricing-cost-analyst-assist"
       ],
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contentSha256": "98e88270dc062986aae2303465513e6cd30a145621d5f54a777f1c8eb79a83d2",
-      "contractSha256": "a05dc9d8365347f4724891d76c81fd615a378584e480436d41de47461d740fe5",
+      "componentVersion": "0.2.0",
+      "contentSha256": "b98ace234bb6f78f2b33dd7cb538d48e98af87c7db59dc10eb767b9482de609f",
+      "contractSha256": "402539612326ea28085d01178e6d6ad78a56106209319dde7989ed2506c2bd8f",
       "entrypoint": "AGENT.md",
       "id": "pricing-cost-analyst",
       "path": "agents/pricing-cost-analyst",
@@ -7552,14 +8918,15 @@
         "product-architect-deliver"
       ],
       "componentType": "agent",
-      "componentVersion": "0.2.0",
-      "contentSha256": "dccd1fc768a686b86fa1e689b56004a88473a0d17b4d4ff108f4b9d97aaaf7eb",
-      "contractSha256": "9a0923721d0eb4738dd74fbdb4c8eac044363f83a2920900b81b1daa199d1ebc",
+      "componentVersion": "0.4.0",
+      "contentSha256": "94e3d7a233dcbcb27084cda5231e800bbab9ad4c4bc4b26ae8742da20a7da49b",
+      "contractSha256": "e3e9954ab49b1def5eb8cbcba48bc48f863886f97c14c05300ae149406572f0c",
       "entrypoint": "AGENT.md",
       "id": "product-architect",
       "path": "agents/product-architect",
       "validation": [
-        "tests/contract.test.mjs"
+        "tests/contract.test.mjs",
+        "tests/design-handoff.test.mjs"
       ]
     },
     {
@@ -7567,9 +8934,9 @@
         "product-listing-writer-assist"
       ],
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contentSha256": "3699e8ac48d7357bdc6127b3a6f2f8b712329885bd0fe428b3a95fde5c162c1f",
-      "contractSha256": "931b6de51cf3780cb4886a5d3e3a8e41b50888581b930bc841f81fd9b15c3f0e",
+      "componentVersion": "0.2.0",
+      "contentSha256": "70367bff21586f9c7fcac04c92861709fa4ac419d2c91920b07e3f842ea5de57",
+      "contractSha256": "a8ab75198ef6b5a61c1ba5860169835f5c6d8a46e7e0ce3f62f047fef580201e",
       "entrypoint": "AGENT.md",
       "id": "product-listing-writer",
       "path": "agents/product-listing-writer",
@@ -7582,9 +8949,9 @@
         "quantitative-researcher-deliver"
       ],
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contentSha256": "6a3c88af8df13ef1111b72efb1fc808bac294943a039c9db2862ffb125d8e7a7",
-      "contractSha256": "b6c5e7cc4233853f0d04f06aee4dd1e9e2d9e652f1feb6a80322872404f3a5ba",
+      "componentVersion": "0.2.0",
+      "contentSha256": "9b35aa66721d712ebe50e4123143cc63850a5fb19f139985b4fe233580791f1b",
+      "contractSha256": "3ad37ea6cf9e0c6d1f55ab9384ec9094bcbb24e76dee371b23aefa9df0f77d7c",
       "entrypoint": "AGENT.md",
       "id": "quantitative-researcher",
       "path": "agents/quantitative-researcher",
@@ -7598,9 +8965,9 @@
         "resume-editor-assist"
       ],
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contentSha256": "6ef40fcf4ac3f453cd92d30e381d835ae0fafc23e3f96e065cdeb28cb528812d",
-      "contractSha256": "4bc12e6fe29ce73e0197980bcf4f700d0498020115b013c999936f0fa74bd59c",
+      "componentVersion": "0.2.0",
+      "contentSha256": "2c3f11edeaad006f2c997bfdc38ba9b949c710d1a334d1cc49e66cd808d920ab",
+      "contractSha256": "349863da98d3a3e4eeef2a5c015c5359ce3b60837f9f90d5b1478fbb9aa2d955",
       "entrypoint": "AGENT.md",
       "id": "resume-editor",
       "path": "agents/resume-editor",
@@ -7613,9 +8980,9 @@
         "script-writer-write-script"
       ],
       "componentType": "agent",
-      "componentVersion": "0.3.0",
-      "contentSha256": "705f23bd193861c3b547c4dffc9b71428799bd7e46f9417e7f9f3603117e7031",
-      "contractSha256": "94d184bbb16496dfb858fdc2305681c400417ec96f026c21aaf17d43641a8fa5",
+      "componentVersion": "0.4.0",
+      "contentSha256": "ebf1db99a6f52e37a7787aa395ce87a469af64e65f1a794943722206b5be9d66",
+      "contractSha256": "02b34686bd37b0e06c1383b1cf74832ff351fcaa9b3cb6072df488e65da7d119",
       "entrypoint": "AGENT.md",
       "id": "script-writer",
       "path": "agents/script-writer",
@@ -7628,9 +8995,9 @@
         "side-business-evaluator-assist"
       ],
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contentSha256": "c4ca06373b78b4bc546868f28770d0e9f37b39c10275d7fdc5c14af45a3c7c83",
-      "contractSha256": "ea33470a94f91980f8a0d071a2bff1bfc8858cbe87e3533aa116f7a2250abb81",
+      "componentVersion": "0.2.0",
+      "contentSha256": "f3662ebfaf3b048421607ab05866a9dec6f9c32865321fc39f1264e4df2e8d44",
+      "contractSha256": "6516c1719fcec29e62988cd7cc0df440389a3e95249b7f2e4ca4f67fccd3f650",
       "entrypoint": "AGENT.md",
       "id": "side-business-evaluator",
       "path": "agents/side-business-evaluator",
@@ -7643,9 +9010,9 @@
         "source-evidence-analyst-deliver"
       ],
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contentSha256": "4e0ad46f6cf9fc6cb5f170e4cb140718b4f373a4cb6ec5efbe4e29509ffd6fba",
-      "contractSha256": "4aa739bd8b19a8da11a68aabf918808f720672738cb707e5ac3ceba7454dbada",
+      "componentVersion": "0.2.0",
+      "contentSha256": "96ca6987b748002d6da951390fd0fcce197113eaaf15a674f6c455f2f68b1139",
+      "contractSha256": "c19c1f1e9af595b9b56a718277c5ddd106de4f00616ac256e7a8c0a8ed2e8095",
       "entrypoint": "AGENT.md",
       "id": "source-evidence-analyst",
       "path": "agents/source-evidence-analyst",
@@ -7658,9 +9025,9 @@
         "store-performance-analyst-assist"
       ],
       "componentType": "agent",
-      "componentVersion": "0.2.0",
-      "contentSha256": "a72fd059cc0b6fdb6cbe611dbafdee4b593b4227f4d82362051b99a80fbd5b9b",
-      "contractSha256": "c27941ad6e4e9de87670cc0aaedbc87c7081b20fddfd63751eb04b199f44103b",
+      "componentVersion": "0.3.0",
+      "contentSha256": "4c8488e9314e8d15cfd6c1b53202e801f381aa98e15b7857a8d9044d7996c740",
+      "contractSha256": "927a10e2b1ef25f11cf0d4127524d014b0b4a7d1f486856a005498296f7331c6",
       "entrypoint": "AGENT.md",
       "id": "store-performance-analyst",
       "path": "agents/store-performance-analyst",
@@ -7674,9 +9041,9 @@
         "supplier-comparison-analyze"
       ],
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contentSha256": "922c1f0d25591e74dad1f14bec61593554c422bc335d53871f2d2bbef6a6d1b6",
-      "contractSha256": "55ad094a8cf46c3035a331b33b56361b43d7929b5015e23303ffdddc6e284d10",
+      "componentVersion": "0.2.0",
+      "contentSha256": "ecd3949b59626a7801fbb1d5239a79c557599268957252d2145d87599fb669da",
+      "contractSha256": "2132b8f870b60b62290cfc4adf423b5098a3214970c751cecbe43318b10f3014",
       "entrypoint": "AGENT.md",
       "id": "supplier-comparison-analyst",
       "path": "agents/supplier-comparison-analyst",
@@ -7690,9 +9057,9 @@
         "topic-planner-plan-topics"
       ],
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contentSha256": "9aad6f2f74a8c2eeb2bdf681fbb1f356bfee4a335b024ef3ede205c03f39f889",
-      "contractSha256": "ef1d30d8d8225c5c4d5da5a23ff7ed27ab3beba8de2f326b21485bae5fa8d435",
+      "componentVersion": "0.2.0",
+      "contentSha256": "564877c37ea73aa07196f8877609c99f7bacf7e86b09bf125d35894dbd0c03d0",
+      "contractSha256": "7076f6255b479291f0a7b11df660ed97f98a7a3f908556273c7a1313db4785c3",
       "entrypoint": "AGENT.md",
       "id": "topic-planner",
       "path": "agents/topic-planner",
@@ -7705,9 +9072,9 @@
         "workplace-writer-assist"
       ],
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contentSha256": "84711e015ce4356136336d04d57111e97aff8ec2b423172450b47c8daa7ab901",
-      "contractSha256": "c3d26a1372d6717ee97af2e2cf967478c962ba4b8e2539d6e9ac05f755465a31",
+      "componentVersion": "0.2.0",
+      "contentSha256": "ba72f5c2032847b0b182dc70f793f74fc5ee3aea5044b421f9184e46fba36d1a",
+      "contractSha256": "167860f347406316a36cd416f809f2b7d9476c7d3a50f23965cb881b2a5c3ad1",
       "entrypoint": "AGENT.md",
       "id": "workplace-writer",
       "path": "agents/workplace-writer",

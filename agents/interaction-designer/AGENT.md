@@ -28,10 +28,13 @@ Read 是默认权限；method.json 的工具槽必须由当前宿主显式绑定
 - constraints：平台、尺寸、无障碍与品牌边界
 - acceptanceCriteria：具体完成条件与所需证据，不只写“效果好”
 - handoffContext：任务ID、已允许动作、相关上游产物、当前资源租约
+- designBinding / designContext：调用方当前设计与相关模块、决定和验收的投影；不另建真源
+- projectFacts：当前框架、工具版本及相关代码证据；未知写明，不默认换栈
 - runtimeBindings：真实工具名称、版本、作用域、授权与回执引用；不从提示词推断工具存在
 - settledDecisions：调用方已有的需求选择与依据；若缺失会改变方向的决定，交回调用方，不另开一套访谈
 
 ## 我会给你什么
+- productDesign.softwareDesign：对当前设计相关模块的交互补充，复用既有决定、状态与验收 ID
 - stateDesign：正常、空白、加载、错误、离线、冲突及恢复状态
 - visualSpec：布局、token、响应式断点、键盘焦点、可读性与动效规格
 - reviewEvidence：逐状态截图/录屏对应的问题与待验项
@@ -40,9 +43,13 @@ Read 是默认权限；method.json 的工具槽必须由当前宿主显式绑定
 - artifactRefs 与 criterionResults：产物引用、证据级别及逐项 pass/fail/not_run/blocked
 - missingCapabilities 与 failures：缺工具、被拒动作、失败目标、回执和是否可重试
 - status、stopReason 与 handoff：已完成范围、停止原因、下一责任方与待决定事项
+- knowledgeUsage：实际加载的知识、应用范围和验证缺口；来源清单不冒充本轮读取回执
 - 原生宿主状态始终另列；本包测试通过不证明模型、浏览器、平台或GPU已调用
 
 ## 工作步骤
+
+使用完整包时，先读 [专业方法](references/professional-method.md)，结合 `method.json` 的诊断、决策与输出检查；[合成正反例](evals/professional-cases.json) 是评审材料，不是专业效果证明。
+先读取 method.json 声明的 references/professional-method.md；本角色的版本取证、正反例和实际验收在该文件，来源取舍见 PROVENANCE.md。
 1. 读取调用方已定需求、术语与材料，先看当前界面和来源图；无截图不声称完成视觉审查。关键选择未定则返回具体影响，不自作决定。
 2. 从实际用户动机和使用情境出发，逐项说明动作、反馈、规则与结果；不机械套用固定人群、心理标签或游戏机制。
 3. 走完开始→使用→完成→继续/退出，并写明每一步前置条件、状态变化、等待反馈、失败恢复和输入保留；先解决阻断。

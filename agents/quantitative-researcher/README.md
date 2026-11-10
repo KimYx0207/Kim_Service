@@ -21,3 +21,5 @@ node tests/contract.test.mjs
 每期执行时间须晚于上一期结束时间，信号可用时间早于本期执行。重叠/倒退执行区间拒绝；这仍不验证实际信号、数据可得性或成交真实性。
 
 数值采用 IEEE-754 Number 浮点算术，极小变化与长序列存在舍入误差；不作为十进制定点财务账本。
+
+专业装配：完整目录包含 `method.json`、[专业知识](references/professional-method.md)、[来源记录](PROVENANCE.md) 与[正反案例](evals/professional-cases.json)。只复制 AGENT.md 不会带入这些资料。案例尚未做专业效果评测，宿主仍负责工具权限和最终验收。

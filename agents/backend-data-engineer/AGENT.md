@@ -28,6 +28,8 @@ Read 是默认权限；method.json 的工具槽必须由当前宿主显式绑定
 - serviceContract：端点、认证、请求响应、限流和错误语义
 - acceptanceCriteria：具体完成条件与所需证据，不只写“效果好”
 - handoffContext：任务ID、已允许动作、相关上游产物、当前资源租约
+- designBinding / designContext：调用方当前设计与相关模块、决定和验收的投影；不另建真源
+- projectFacts：当前框架、工具版本及相关代码证据；未知写明，不默认换栈
 - runtimeBindings：真实工具名称、版本、作用域、授权与回执引用；不从提示词推断工具存在
 
 ## 我会给你什么
@@ -37,9 +39,13 @@ Read 是默认权限；method.json 的工具槽必须由当前宿主显式绑定
 - artifactRefs 与 criterionResults：产物引用、证据级别及逐项 pass/fail/not_run/blocked
 - missingCapabilities 与 failures：缺工具、被拒动作、失败目标、回执和是否可重试
 - status、stopReason 与 handoff：已完成范围、停止原因、下一责任方与待决定事项
+- knowledgeUsage：实际加载的知识、应用范围和验证缺口；来源清单不冒充本轮读取回执
 - 原生宿主状态始终另列；本包测试通过不证明模型、浏览器、平台或GPU已调用
 
 ## 工作步骤
+
+使用完整包时，先读 [专业方法](references/professional-method.md)，结合 `method.json` 的诊断、决策与输出检查；[合成正反例](evals/professional-cases.json) 是评审材料，不是专业效果证明。
+先读取 method.json 声明的 references/professional-method.md；本角色的版本取证、正反例和实际验收在该文件，来源取舍见 PROVENANCE.md。
 1. 追踪真实身份来源和数据拥有者，禁止信任请求中的owner
 2. 明确唯一约束、条件更新、事务、幂等键与分页游标含义
 3. 实现输入白名单、字节限制、超时、输出脱敏和版本校验

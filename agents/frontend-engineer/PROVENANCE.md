@@ -1,0 +1,12 @@
+# Frontend method provenance
+
+Inspected 2026-11-10. The package contains original Chinese method prose and original synthetic examples. No upstream code or template text is bundled. These references are research inputs, not tool permissions, installed skills or evidence that a worker fetched them during its task. Local content is versioned with component 0.2.0; actual project framework versions must be read from the supplied repository.
+
+| sourceRef | Source and revision | Adopted | Not adopted |
+| --- | --- | --- | --- |
+| anthropic-frontend | [Anthropic frontend-design](https://github.com/anthropics/skills/blob/2c5958ecac7cee2b583967a2c4981d0f4a75c579/skills/frontend-design/SKILL.md), Apache-2.0 | Brief-specific visual choices, concise interface copy, real screenshot critique | A mandatory aesthetic, font replacement, unrelated memory access or automatic confirmation prompts |
+| vercel-react | [Vercel React guidance](https://github.com/vercel-labs/agent-skills/blob/1a2c79d4e6c4a2283dc2c614b6538cbe1ed5ca62/skills/react-best-practices/SKILL.md), metadata 1.0.0, MIT; also inspected [async-parallel](https://github.com/vercel-labs/agent-skills/blob/1a2c79d4e6c4a2283dc2c614b6538cbe1ed5ca62/skills/react-best-practices/rules/async-parallel.md) | Profile dependency waterfalls; parallelize independent reads only | Assuming React/Next.js, installing performance libraries, copying performance multiplier claims or deployment workflows |
+| react-effects | [React Synchronizing with Effects](https://react.dev/learn/synchronizing-with-effects), retrieved 2026-11-10; page then identified v19.3 | Separate events from synchronization and handle stale async results | Applying latest APIs to a project whose installed version is unknown; making Effects the universal fetching strategy |
+| w3c-dialog | [W3C APG modal dialog pattern](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/), retrieved 2026-11-10, living guidance | Focus entry, containment and recovery when the UI actually is modal | Treating ARIA attributes or an APG example as proof of browser/assistive-technology compatibility |
+
+The included MIT LICENSE covers this package's original material. Referenced licenses do not turn cited upstream files into bundled content. Validate applicability against the current task before use; a pinned source can still be unsuitable or outdated for that project.

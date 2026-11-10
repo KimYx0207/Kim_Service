@@ -28,7 +28,7 @@ test('standalone agent has a bounded, readable contract', () => {
   const agent = fs.readFileSync(path.join(root, contract.entrypoint), 'utf8');
   assert.equal(contract.id, path.basename(root));
   assert.equal(contract.componentType, 'agent');
-  assert.equal(contract.componentVersion, '0.2.0');
+  assert.equal(contract.componentVersion, '0.3.0');
   assert.equal(contract.entrypoint, 'AGENT.md');
   assert.ok(agent.includes('name: ' + contract.id));
   for (const section of ['角色定位', '需要你提供什么', '我会给你什么', '工作步骤', '边界与不确定时怎么办', '示例']) {

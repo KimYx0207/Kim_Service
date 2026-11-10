@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "roleId": "script-writer",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "evidence-scope",
+      "scenario": "用户要写一段库存核对教程，只有合成练习表。",
+      "input": {
+        "topicAndAngle": "给新手解释Excel库存核对",
+        "format": "图文正文",
+        "materials": [
+          "合成示例：期初10，入库5，出库3"
+        ]
+      },
+      "candidateOutputExcerpt": {
+        "content": "先用合成练习核对：期初10件，加进货5件，再减出库3件，期末应为12件。若表中不是12，先检查是否漏记、重复或把数量写成金额。这只是演示检查方法，不能证明某家店已减少损失。",
+        "claimsCheck": [
+          {
+            "claim": "期末12件",
+            "status": "用户提供",
+            "source": "合成输入10+5-3，可复算；非真实经营数据"
+          }
+        ]
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "正文兑现教学承诺，合成数据未伪装真实成果。",
+      "capabilityId": "script-writer-write-script",
+      "category": "worked_example",
+      "diagnosticRefs": [
+        "format-job",
+        "claims",
+        "payoff"
+      ],
+      "decisionRuleRefs": [
+        "match-format",
+        "evidence-first",
+        "deliver-full"
+      ]
+    },
+    {
+      "id": "invented-result",
+      "scenario": "材料只有自己做的练习表，没有客户使用记录。",
+      "input": {
+        "topicAndAngle": "介绍自制库存表",
+        "format": "图文正文",
+        "materials": [
+          "没有真实客户结果"
+        ]
+      },
+      "candidateOutputExcerpt": {
+        "content": "我帮300家门店把损耗降低80%，这张表保证一个月回本。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "编造客户、因果收益和保证；不能靠润色弥补证据缺失。",
+      "capabilityId": "script-writer-write-script",
+      "category": "failure_boundary",
+      "diagnosticRefs": [
+        "format-job",
+        "claims",
+        "payoff"
+      ],
+      "decisionRuleRefs": [
+        "match-format",
+        "evidence-first",
+        "deliver-full"
+      ]
+    }
+  ]
+}

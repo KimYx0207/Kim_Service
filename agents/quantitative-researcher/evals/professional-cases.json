@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "roleId": "quantitative-researcher",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "compound-check",
+      "scenario": "三期合成收益1%、-2%、3%，每期在同一乘数内扣0.1%，起始净值1。",
+      "input": {
+        "hypothesis": "比较固定持有与带成本日调仓",
+        "dataset": "合成三个周期收益，非真实行情",
+        "method": "初始净值1；收益1%、-2%、3%；单期扣费0.1%",
+        "acceptanceCriteria": [
+          {
+            "id": "scope",
+            "condition": "信号时点早于执行，训练测试无泄漏",
+            "evidenceRequired": "指定材料、产物与独立检查"
+          }
+        ],
+        "handoffContext": {
+          "taskId": "synthetic-example",
+          "upstreamArtifacts": [],
+          "permittedActions": [
+            "read_supplied_materials"
+          ],
+          "resourceLeases": []
+        }
+      },
+      "candidateOutputExcerpt": {
+        "results": "净值为 1.009 × 0.979 × 1.029 = 1.016457519；该收费定义下最大回撤2.1%。只是合成算术例，未证明真实策略收益。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "费用规则与复利公式明确，结论限于给定序列。",
+      "capabilityId": "quantitative-researcher-deliver",
+      "category": "worked_example",
+      "diagnosticRefs": [
+        "estimand",
+        "time-order",
+        "robustness"
+      ],
+      "decisionRuleRefs": [
+        "separate-fit",
+        "state-costs",
+        "replicate"
+      ]
+    },
+    {
+      "id": "leaked-transform",
+      "scenario": "先用全样本拟合标准化器，再按时间切分评价。",
+      "input": {
+        "hypothesis": "评价未来样本上的分类表现",
+        "dataset": "合成时间序列；标准化器拟合时已经看到最后一个月",
+        "method": "在最后一个月报告独立测试精度",
+        "acceptanceCriteria": [
+          {
+            "id": "scope",
+            "condition": "信号时点早于执行，训练测试无泄漏",
+            "evidenceRequired": "指定材料、产物与独立检查"
+          }
+        ],
+        "handoffContext": {
+          "taskId": "synthetic-example",
+          "upstreamArtifacts": [],
+          "permittedActions": [
+            "read_supplied_materials"
+          ],
+          "resourceLeases": []
+        }
+      },
+      "candidateOutputExcerpt": {
+        "research": "最后一个月完全独立，测试精度可直接代表未来表现。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "拟合已使用测试期信息，必须更正流程并重新评价。",
+      "capabilityId": "quantitative-researcher-deliver",
+      "category": "failure_boundary",
+      "diagnosticRefs": [
+        "estimand",
+        "time-order",
+        "robustness"
+      ],
+      "decisionRuleRefs": [
+        "separate-fit",
+        "state-costs",
+        "replicate"
+      ]
+    }
+  ]
+}

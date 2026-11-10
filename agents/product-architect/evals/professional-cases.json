@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 1,
+  "roleId": "product-architect",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "architecture-exploration",
+      "scenario": "断网编辑需求已确认，跨设备冲突策略仍需决定。",
+      "input": {
+        "goal": "编辑器断网可编辑，恢复后提示冲突",
+        "currentSystem": "浏览器本地记录；服务只有登录接口",
+        "constraints": "不能覆盖另一设备修改；本轮不部署",
+        "acceptanceCriteria": [
+          {
+            "id": "scope",
+            "condition": "每个用户结果有可观察验收项和责任输出",
+            "evidenceRequired": "指定材料、产物与独立检查"
+          }
+        ],
+        "handoffContext": {
+          "taskId": "synthetic-example",
+          "upstreamArtifacts": [],
+          "permittedActions": [
+            "read_supplied_materials"
+          ],
+          "resourceLeases": []
+        },
+        "projectFacts": {
+          "versions": [
+            {
+              "name": "project runtime",
+              "version": null,
+              "evidenceRefs": []
+            }
+          ],
+          "codeRefs": [],
+          "constraints": [
+            "合成案例没有读取真实仓库，不声称已核实版本"
+          ]
+        },
+        "phase": "requirements_exploration",
+        "settledDecisions": [
+          {
+            "decisionId": "preserve-draft",
+            "value": "合成决定：取消与冲突都不静默覆盖本机草稿",
+            "evidenceRefs": [
+              "fixture:user-choice"
+            ]
+          }
+        ]
+      },
+      "candidateOutputExcerpt": {
+        "architecture": "先比较保留双版本与显式合并：都保留本机草稿。同步服务接口、身份和版本事实待核；当前先交架构探索与决定依赖，不编所有模块细节。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "架构层保留真实未知，详细设计未被提前伪装完成。",
+      "capabilityId": "product-architect-deliver",
+      "category": "worked_example",
+      "diagnosticRefs": [
+        "current-facts",
+        "architecture-choice",
+        "module-closure"
+      ],
+      "decisionRuleRefs": [
+        "architecture-first",
+        "bounded-slices",
+        "safe-removal"
+      ]
+    },
+    {
+      "id": "false-complete-prd",
+      "scenario": "用户只给“一款离线编辑器”，没有当前服务与冲突决定。",
+      "input": {
+        "goal": "做离线编辑器",
+        "currentSystem": "尚未读取仓库和接口",
+        "constraints": "不能丢数据",
+        "acceptanceCriteria": [
+          {
+            "id": "scope",
+            "condition": "每个用户结果有可观察验收项和责任输出",
+            "evidenceRequired": "指定材料、产物与独立检查"
+          }
+        ],
+        "handoffContext": {
+          "taskId": "synthetic-example",
+          "upstreamArtifacts": [],
+          "permittedActions": [
+            "read_supplied_materials"
+          ],
+          "resourceLeases": []
+        },
+        "projectFacts": {
+          "versions": [
+            {
+              "name": "project runtime",
+              "version": null,
+              "evidenceRefs": []
+            }
+          ],
+          "codeRefs": [],
+          "constraints": [
+            "合成案例没有读取真实仓库，不声称已核实版本"
+          ]
+        },
+        "phase": "requirements_exploration",
+        "settledDecisions": [
+          {
+            "decisionId": "preserve-draft",
+            "value": "合成决定：取消与冲突都不静默覆盖本机草稿",
+            "evidenceRefs": [
+              "fixture:user-choice"
+            ]
+          }
+        ]
+      },
+      "candidateOutputExcerpt": {
+        "architecture": "已批准完整设计：默认永远用服务端覆盖本地，所有模块可以立即上线。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "未查事实和关键选择被当成批准，还违背不丢数据约束。",
+      "capabilityId": "product-architect-deliver",
+      "category": "failure_boundary",
+      "diagnosticRefs": [
+        "current-facts",
+        "architecture-choice",
+        "module-closure"
+      ],
+      "decisionRuleRefs": [
+        "architecture-first",
+        "bounded-slices",
+        "safe-removal"
+      ]
+    }
+  ]
+}

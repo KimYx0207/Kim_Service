@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "roleId": "delivery-verifier",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "hash-scope",
+      "scenario": "同一份文件摘要匹配，但标准还包含可用性审查。",
+      "input": {
+        "taskId": "synthetic-delivery",
+        "artifacts": [
+          {
+            "id": "report",
+            "path": "report.json",
+            "bytes": 10,
+            "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+          }
+        ],
+        "criteria": [
+          {
+            "id": "bytes",
+            "type": "sha256"
+          },
+          {
+            "id": "usability",
+            "type": "external_review"
+          }
+        ]
+      },
+      "candidateOutputExcerpt": {
+        "status": "partial",
+        "missingCapabilities": [
+          {
+            "criterionId": "usability",
+            "reason": "未进行用户/可用性审查"
+          }
+        ],
+        "handoff": {
+          "note": "摘要字段仅为合成输入；需要真实文件和调用回执才能确认完整性。"
+        }
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "没有把合成摘要或机械标准提升为最终接受。",
+      "capabilityId": "delivery-evidence-verify",
+      "category": "worked_example",
+      "diagnosticRefs": [
+        "identity",
+        "criterion-kind",
+        "receipt-binding"
+      ],
+      "decisionRuleRefs": [
+        "limit-hash",
+        "partial-result",
+        "stale-receipt"
+      ]
+    },
+    {
+      "id": "receipt-wrong-task",
+      "scenario": "回执写着成功，但taskId属于别的任务。",
+      "input": {
+        "taskId": "current-task",
+        "artifacts": [],
+        "criteria": [
+          {
+            "id": "receipt",
+            "type": "receipt_binding"
+          }
+        ],
+        "verificationReceipt": {
+          "taskId": "old-task",
+          "status": "completed"
+        }
+      },
+      "candidateOutputExcerpt": {
+        "status": "completed",
+        "criterionResults": [
+          {
+            "id": "receipt",
+            "status": "pass",
+            "reason": "回执中有completed"
+          }
+        ]
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "没有核对当前任务身份，旧回执不能支撑当前检查。",
+      "capabilityId": "delivery-evidence-verify",
+      "category": "failure_boundary",
+      "diagnosticRefs": [
+        "identity",
+        "criterion-kind",
+        "receipt-binding"
+      ],
+      "decisionRuleRefs": [
+        "limit-hash",
+        "partial-result",
+        "stale-receipt"
+      ]
+    }
+  ]
+}

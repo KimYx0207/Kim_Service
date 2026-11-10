@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "roleId": "topic-planner",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "usable-no-history",
+      "scenario": "新作者没有历史数据，有一份自己制作的库存练习表。",
+      "input": {
+        "niche": "给小店新手讲Excel库存核对",
+        "constraints": [
+          "每周2小时",
+          "只有自制练习表，没有客户案例"
+        ]
+      },
+      "candidateOutputExcerpt": {
+        "diagnosis": "尚无账号数据，先验证读者是否看懂进出库核对。",
+        "reviewRule": "收集读者能否指出练习表错误的反馈；不能仅用播放量证明教学有效。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "选题和证据范围匹配，观察信号对应真实用途。",
+      "capabilityId": "topic-planner-plan-topics",
+      "category": "worked_example",
+      "diagnosticRefs": [
+        "audience-job",
+        "funnel-gap",
+        "production-fit"
+      ],
+      "decisionRuleRefs": [
+        "promise-evidence",
+        "comparable-review",
+        "small-test"
+      ]
+    },
+    {
+      "id": "false-algorithm",
+      "scenario": "只有两条不同形式的内容，播放量差异很大。",
+      "input": {
+        "niche": "小店运营",
+        "recentPerformance": "一条30秒视频300播放，一篇图文30阅读，流量来源未知"
+      },
+      "candidateOutputExcerpt": {
+        "diagnosis": "平台已证明只推荐短视频，图文方向必须全部放弃。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "形式、来源和样本不可比，不能据此推断平台规则。",
+      "capabilityId": "topic-planner-plan-topics",
+      "category": "failure_boundary",
+      "diagnosticRefs": [
+        "audience-job",
+        "funnel-gap",
+        "production-fit"
+      ],
+      "decisionRuleRefs": [
+        "promise-evidence",
+        "comparable-review",
+        "small-test"
+      ]
+    }
+  ]
+}

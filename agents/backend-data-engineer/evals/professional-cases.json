@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 1,
+  "roleId": "backend-data-engineer",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "atomic-owner-update",
+      "scenario": "更新当前用户草稿，版本不匹配应409，失效令牌应401。",
+      "input": {
+        "scope": "实现带版本的草稿更新，仅本地",
+        "dataContract": "每条记录按owner隔离，version递增",
+        "serviceContract": "错误版本返回409；注销令牌返回401",
+        "acceptanceCriteria": [
+          {
+            "id": "scope",
+            "condition": "owner只来自已验证身份；失败不泄露他人记录",
+            "evidenceRequired": "指定材料、产物与独立检查"
+          }
+        ],
+        "handoffContext": {
+          "taskId": "synthetic-example",
+          "upstreamArtifacts": [],
+          "permittedActions": [
+            "read_supplied_materials"
+          ],
+          "resourceLeases": []
+        },
+        "projectFacts": {
+          "versions": [
+            {
+              "name": "project runtime",
+              "version": null,
+              "evidenceRefs": []
+            }
+          ],
+          "codeRefs": [],
+          "constraints": [
+            "合成案例没有读取真实仓库，不声称已核实版本"
+          ]
+        }
+      },
+      "candidateOutputExcerpt": {
+        "implementation": "owner来自已验证身份；在同一数据库更新条件中绑定owner、recordId与expectedVersion，未匹配按已定错误语义处理且不泄露他人数据。",
+        "testEvidence": "候选策略；需在真实实现检查跨owner、并发旧版本和令牌失效，尚未运行。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "边界和不变量明确，不把策略说明当测试回执。",
+      "capabilityId": "backend-data-engineer-deliver",
+      "category": "worked_example",
+      "diagnosticRefs": [
+        "identity-boundary",
+        "invariant-concurrency",
+        "migration-recovery"
+      ],
+      "decisionRuleRefs": [
+        "server-identity",
+        "atomic-version",
+        "expand-contract"
+      ]
+    },
+    {
+      "id": "client-owner-race",
+      "scenario": "实现相信请求ownerId并先读版本、再无条件更新。",
+      "input": {
+        "scope": "带版本草稿更新",
+        "dataContract": "每条记录按owner隔离、版本递增",
+        "serviceContract": "版本错误409",
+        "acceptanceCriteria": [
+          {
+            "id": "scope",
+            "condition": "owner只来自已验证身份；失败不泄露他人记录",
+            "evidenceRequired": "指定材料、产物与独立检查"
+          }
+        ],
+        "handoffContext": {
+          "taskId": "synthetic-example",
+          "upstreamArtifacts": [],
+          "permittedActions": [
+            "read_supplied_materials"
+          ],
+          "resourceLeases": []
+        },
+        "projectFacts": {
+          "versions": [
+            {
+              "name": "project runtime",
+              "version": null,
+              "evidenceRefs": []
+            }
+          ],
+          "codeRefs": [],
+          "constraints": [
+            "合成案例没有读取真实仓库，不声称已核实版本"
+          ]
+        }
+      },
+      "candidateOutputExcerpt": {
+        "implementation": "用请求中的ownerId查记录；先检查version，然后另一次无条件UPDATE。",
+        "testEvidence": "单次正常保存成功，因此越权和并发都安全。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "客户端授权和竞争窗口破坏隔离/版本保证，成功路径不能证明这些边界。",
+      "capabilityId": "backend-data-engineer-deliver",
+      "category": "failure_boundary",
+      "diagnosticRefs": [
+        "identity-boundary",
+        "invariant-concurrency",
+        "migration-recovery"
+      ],
+      "decisionRuleRefs": [
+        "server-identity",
+        "atomic-version",
+        "expand-contract"
+      ]
+    }
+  ]
+}
