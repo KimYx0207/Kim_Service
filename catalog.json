@@ -568,7 +568,7 @@
       "snapshot": "committed-component-tree",
       "version": "0.4.0",
       "contractSha256": "be1260b6ebbbf92e41da855404f8abe011424561235a691a02dd33475637a4d0",
-      "contentSha256": "2f1b6d391eb29115ba904fe4c3034c308b4648f55d971f243e1fda283f4811bb",
+      "contentSha256": "32eb7ef178de9bf93fbc8e6ee07a11b2fbce3bdaf1f1d4f35e4d0c17681314cf",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -589,7 +589,7 @@
       "snapshot": "committed-component-tree",
       "version": "0.3.0",
       "contractSha256": "d857136fc0648b6af4e5203e2ac592b1f30e32c1a95b65ba7539d51fb9eab3a3",
-      "contentSha256": "ec095317d182107017998755cc3b4e99cb51f31095db7bb6214346b1073605fc",
+      "contentSha256": "a1ad92f66d5d91ebfc229758a1c98012e0a168265e02029600e9720b1db7349e",
       "required": [
         "AGENT.md",
         "capability.json",
