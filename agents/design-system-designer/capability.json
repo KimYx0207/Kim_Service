@@ -1,0 +1,134 @@
+{
+  "schemaVersion": 1,
+  "id": "design-system-designer",
+  "componentType": "agent",
+  "componentVersion": "0.1.0",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "design-system-designer-deliver",
+      "summary": "把分散页面整理成一致的语义token、组件状态和可迁移的设计系统。 design system tokens component library",
+      "useWhen": [
+        "多个页面样式不统一，帮我整理设计系统。",
+        "把Figma或Penpot规范转成组件规则。",
+        "设计深色模式和多语言组件状态。"
+      ],
+      "doNotUseWhen": [
+        "单页流程交interaction-designer。",
+        "具体前端实现交frontend-engineer协作。",
+        "完整品牌定位交brand-visual-designer。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "surfaces": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "已有页面、组件、真实内容和用户任务"
+          },
+          "identity": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "品牌色、字体、语言、密度和平台"
+          },
+          "constraints": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "框架、兼容范围、可访问性目标和迁移节奏"
+          }
+        },
+        "required": [
+          "surfaces",
+          "identity",
+          "constraints"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "tokens": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "语义token与引用"
+          },
+          "components": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "组件行为与状态"
+          },
+          "examples": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "真实页面与多语言示例"
+          },
+          "migration": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "迁移和版本方案"
+          },
+          "facts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "本次材料、版本、单位和假设"
+          },
+          "handoff": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "产物位置、未完成项和下一步"
+          }
+        },
+        "required": [
+          "tokens",
+          "components",
+          "examples",
+          "migration",
+          "facts",
+          "handoff"
+        ]
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "影响所有产品的品牌承诺或破坏性组件接口调整由对应负责人选择；原型和试点迁移可按已授权范围继续。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

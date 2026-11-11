@@ -1,0 +1,253 @@
+{
+  "schemaVersion": 1,
+  "roleId": "design-system-designer",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "toolSlots": [
+    {
+      "id": "image.inspect",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    },
+    {
+      "id": "design.render",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    },
+    {
+      "id": "repository.read",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    },
+    {
+      "id": "repository.patch",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    },
+    {
+      "id": "browser.inspect",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    }
+  ],
+  "skillLoading": [
+    "按本次任务读取下面两份知识材料；只加载有关内容。",
+    "使用宿主已提供且获授权的相关工具槽；缺工具时仍完成资料分析与可用草案，把未执行步骤交接。"
+  ],
+  "steps": [
+    "盘点现有组件和页面，用截图及代码位置合并真正同义的模式。",
+    "先定义颜色、排版、间距的语义角色，再绑定原始值；按项目格式验证引用。",
+    "为每组件补状态矩阵、键盘行为、错误恢复和可访问名称。",
+    "用真实表单和列表试用，检查长中文、英文、日文、数字及主题变化。",
+    "先迁移一个页面观察问题，再推广已验证组件；保留旧新映射和版本记录。",
+    "当任务包括实现且宿主已有写入/测试能力时，实际修改授权范围内的源码并运行上述检查，交代码位置与结果；缺该能力则交实现草案并明确待执行范围。",
+    "按输出标准核对当前产物，区分已完成、可用草案与待核项；只暂停受实质缺口影响的动作。"
+  ],
+  "acceptance": [
+    "原始值、语义角色、组件引用分层，类型明确且无循环引用。",
+    "按钮、输入等组件有状态、键盘、错误和内容长度规则。",
+    "在至少一个真实任务上验证层级、长文本、缩放和浅深主题。",
+    "现有组件映射到替代项，渐进迁移并记录变化。 可以先交明确范围的草案；只把拒收条件中的实质错误限制在相关结论或动作。",
+    "用于当前实质结论的关键事实与原始输入一致；来源未全时明确标注未知或假设，其他资料充分部分继续。",
+    "给当前可用成果和受影响的待核项，独立部分可以继续。"
+  ],
+  "coordinationOwner": "caller",
+  "permissionSource": "current_task_host_authorization",
+  "finalAcceptance": "caller_only",
+  "contextPolicy": "只加载本次任务相关资料；工具操作沿用当前宿主的授权。",
+  "memoryPolicy": "保持本次任务上下文，不把材料另行持久保存。",
+  "knowledgeAssets": [
+    {
+      "id": "design-system-designer-method",
+      "path": "references/professional-method.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "design-tokens",
+        "storybook-a11y",
+        "wcag22"
+      ]
+    },
+    {
+      "id": "design-system-designer-delivery",
+      "path": "references/delivery-template.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "design-tokens",
+        "storybook-a11y",
+        "wcag22"
+      ]
+    }
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "设计系统设计师",
+    "scope": [
+      "把分散页面整理成一致的语义token、组件状态和可迁移的设计系统。",
+      "知识方法可独立使用；交付范围由当前任务确定。"
+    ],
+    "knowledgeAssetIds": [
+      "design-system-designer-method",
+      "design-system-designer-delivery"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "semantics",
+        "question": "不同值是否承担同一角色？",
+        "evidenceRequired": [
+          "页面/组件用途"
+        ],
+        "whenMissing": "按用途分组再合并。"
+      },
+      {
+        "id": "states",
+        "question": "用户出错或用键盘时如何反馈？",
+        "evidenceRequired": [
+          "状态表",
+          "交互流程"
+        ],
+        "whenMissing": "补关键状态再验收。"
+      },
+      {
+        "id": "migration",
+        "question": "哪些现有消费者会变？",
+        "evidenceRequired": [
+          "调用位置"
+        ],
+        "whenMissing": "先试一个页面。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "semantic-alias",
+        "when": "多主题共用组件",
+        "action": "组件引用语义token",
+        "avoid": "组件直接引用某主题色号"
+      },
+      {
+        "id": "no-cycle",
+        "when": "token引用相互依赖",
+        "action": "定位循环并重新建层次",
+        "avoid": "默认成空值继续发布"
+      },
+      {
+        "id": "real-content",
+        "when": "组件视觉评审",
+        "action": "使用真实内容和异常状态",
+        "avoid": "空白占位页代表所有场景"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "design-system-designer-deliver",
+        "inputGuidance": [
+          {
+            "field": "surfaces",
+            "interpretation": "已有页面、组件、真实内容和用户任务",
+            "onMissing": "先盘点现有样例，缺页不虚构已审查。"
+          },
+          {
+            "field": "identity",
+            "interpretation": "品牌色、字体、语言、密度和平台",
+            "onMissing": "可先给可替换语义角色，未定品牌参数保留选项。"
+          },
+          {
+            "field": "constraints",
+            "interpretation": "框架、兼容范围、可访问性目标和迁移节奏",
+            "onMissing": "先完成一个组件族试用。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "design-system-designer-tokens",
+            "field": "tokens",
+            "criterion": "原始值、语义角色、组件引用分层，类型明确且无循环引用。",
+            "rejectWhen": "同义token重复漂移，引用闭环或暗色仅反转颜色。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "token表/JSON",
+              "引用图"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "design-system-designer-components",
+            "field": "components",
+            "criterion": "按钮、输入等组件有状态、键盘、错误和内容长度规则。",
+            "rejectWhen": "只有静态正常态，禁用/焦点/错误无定义。",
+            "verificationMethod": "behavior_probe",
+            "evidenceRequired": [
+              "组件状态故事",
+              "键盘路径"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "design-system-designer-examples",
+            "field": "examples",
+            "criterion": "在至少一个真实任务上验证层级、长文本、缩放和浅深主题。",
+            "rejectWhen": "只画空组件墙，不处理真实内容。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "页面示例",
+              "不同语言/主题检查"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "design-system-designer-migration",
+            "field": "migration",
+            "criterion": "现有组件映射到替代项，渐进迁移并记录变化。 可以先交明确范围的草案；只把拒收条件中的实质错误限制在相关结论或动作。",
+            "rejectWhen": "直接全仓替换导致行为丢失。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "旧新映射",
+              "试点结果"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "design-system-designer-facts",
+            "field": "facts",
+            "criterion": "用于当前实质结论的关键事实与原始输入一致；来源未全时明确标注未知或假设，其他资料充分部分继续。",
+            "rejectWhen": "把编造、推断或示例写成已核实的关键事实，使当前结论不可靠。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "材料清单与假设"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "design-system-designer-handoff",
+            "field": "handoff",
+            "criterion": "给当前可用成果和受影响的待核项，独立部分可以继续。",
+            "rejectWhen": "遗漏交付位置或下一步导致无法接手。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "产物路径",
+              "下一步"
+            ],
+            "blocking": false
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "影响所有产品的品牌承诺或破坏性组件接口调整由对应负责人选择；原型和试点迁移可按已授权范围继续。"
+      ],
+      "prohibitedClaims": [
+        "示例是教学材料；真实完成情况以本次实际产物和检查为准。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
+}

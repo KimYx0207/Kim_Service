@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.1 - 2026-11-11
+
+- Use task-specific handling for material unknowns and existing authorization.
+- Keep truth and authority checks scoped to affected deliverables; allow explicit unknowns and partial progress.
+
 ## 0.3.0 - 2026-11-11
 
 - 为全部 1 项现有能力补充具体诊断、决策、逐字段验收、所需证据与不可抵消的阻断项。

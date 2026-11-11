@@ -1,0 +1,74 @@
+name: Publish GitHub release
+
+on:
+  create:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: >-
+      github.repository == 'KimYx0207/Kim_Service' &&
+      startsWith(github.ref, 'refs/heads/release/V') &&
+      (github.event_name == 'workflow_dispatch' || github.event.ref_type == 'branch')
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: write
+      actions: read
+    defaults:
+      run:
+        working-directory: service
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          path: service
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '24'
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12'
+      - name: Check publication source and completed main CI
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git checkout -B main "$GITHUB_SHA"
+          node .github/scripts/publish-release.mjs prepare "$RUNNER_TEMP/release-assets"
+      - name: Fetch the declared Meta_Kim release and previous public ZCode bundle
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          META_TAG=$(node -p "require('./.github/release.json').metaRelease")
+          PREVIOUS_TAG=$(node -p "require('./.github/release.json').previousZcodeRelease")
+          PREVIOUS_ASSET=$(node -p "require('./.github/release.json').previousZcodeAsset")
+          gh release view "$META_TAG" --repo KimYx0207/Meta_Kim --json isDraft,isPrerelease --jq 'if .isDraft or .isPrerelease then error("Meta release is not published") else . end'
+          git clone --branch "$META_TAG" --depth 1 https://github.com/KimYx0207/Meta_Kim.git "$GITHUB_WORKSPACE/meta"
+          gh release download "$PREVIOUS_TAG" --repo "$GITHUB_REPOSITORY" --pattern "$PREVIOUS_ASSET" --dir "$RUNNER_TEMP/previous-download"
+          unzip -q "$RUNNER_TEMP/previous-download/$PREVIOUS_ASSET" -d "$RUNNER_TEMP/previous-zcode"
+      - name: Build and verify source, DSH and ZCode packages
+        run: |
+          VERSION=$(cat VERSION)
+          META_SHA=$(git -C "$GITHUB_WORKSPACE/meta" rev-parse HEAD)
+          node scripts/build-dsh-package.mjs --output "$RUNNER_TEMP/dsh"
+          node scripts/build-dsh-package.mjs --output "$RUNNER_TEMP/dsh" --check > "$RUNNER_TEMP/release-assets/dsh-package-check.json"
+          node scripts/build-zcode-marketplace.mjs --meta-root "$GITHUB_WORKSPACE/meta" --meta-commit "$META_SHA" --kim-root "$GITHUB_WORKSPACE/service" --kim-commit "$GITHUB_SHA" --output "$RUNNER_TEMP/zcode" > "$RUNNER_TEMP/release-assets/zcode-package-check.json"
+          PREVIOUS_ROOT=$(python -c 'from pathlib import Path; import os; p=list(Path(os.environ["RUNNER_TEMP"],"previous-zcode").rglob("marketplace.json")); assert len(p)==1; print(p[0].parent)')
+          node scripts/check-repository.mjs --release --zcode-candidate "$RUNNER_TEMP/zcode" --zcode-previous "$PREVIOUS_ROOT"
+          git archive --format=zip --prefix="Kim_Service-$VERSION/" --output="$RUNNER_TEMP/release-assets/Kim_Service-$VERSION.zip" HEAD
+          python .github/scripts/archive-directory.py "$RUNNER_TEMP/dsh" "$RUNNER_TEMP/release-assets/Kim_Service-DSH-$VERSION.zip"
+          python .github/scripts/archive-directory.py "$RUNNER_TEMP/zcode" "$RUNNER_TEMP/release-assets/Kim-ZCode-$VERSION.zip"
+          cp "$RUNNER_TEMP/dsh/dsh-package.json" "$RUNNER_TEMP/release-assets/dsh-manifest.json"
+          cp "$RUNNER_TEMP/zcode/bundle-manifest.json" "$RUNNER_TEMP/release-assets/zcode-manifest.json"
+      - name: Publish the tag, packages and checksums
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node .github/scripts/publish-release.mjs publish "$RUNNER_TEMP/release-assets"

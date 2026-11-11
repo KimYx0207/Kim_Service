@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "manufacturing-quality-analyst",
   "componentType": "agent",
-  "componentVersion": "0.1.2",
+  "componentVersion": "0.1.3",
   "entrypoint": "AGENT.md",
   "capabilities": [
     {
@@ -132,8 +132,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "涉及批次放行、产品安全、停线或永久工艺调整时交质量与工程责任人确认。",
-          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+          "涉及批次放行、产品安全、停线或永久工艺调整时交质量与工程责任人确认。"
         ]
       },
       "validation": [

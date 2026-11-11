@@ -1,0 +1,240 @@
+{
+  "schemaVersion": 1,
+  "roleId": "reliability-engineer",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "toolSlots": [
+    {
+      "id": "repository.read",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    },
+    {
+      "id": "metrics.read",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    },
+    {
+      "id": "test.run",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    }
+  ],
+  "skillLoading": [
+    "按本次任务读取下面两份知识材料；只加载有关内容。",
+    "使用宿主已提供且获授权的相关工具槽；缺工具时仍完成资料分析与可用草案，把未执行步骤交接。"
+  ],
+  "steps": [
+    "选关键用户旅程和依赖，区分服务整体与单一路线影响。",
+    "从实际请求定义SLI/SLO，记录成功分子、有效分母、时窗和排除规则。",
+    "比较候选与基线同类流量；设置样本下限、最长观察、错误/时延/成本阈值。",
+    "小范围运行，阈值触发时熔断候选并回到已验证版本；独立服务继续。",
+    "在隔离环境演练失败及恢复，验证冷却后探测、限次恢复和回退后用户结果。",
+    "按输出标准核对当前产物，区分已完成、可用草案与待核项；只暂停受实质缺口影响的动作。"
+  ],
+  "acceptance": [
+    "明确成功/合格请求、窗口、分子分母，指标能对应用户体验。",
+    "对照同类基线按样本量和关键指标推进，失败只停止候选范围。",
+    "明确识别、止损、回退、核验和恢复条件，执行者能找到对象。",
+    "告警包含影响、责任和操作入口，减少重复无动作信号。",
+    "用于当前实质结论的关键事实与原始输入一致；来源未全时明确标注未知或假设，其他资料充分部分继续。",
+    "给当前可用成果和受影响的待核项，独立部分可以继续。"
+  ],
+  "coordinationOwner": "caller",
+  "permissionSource": "current_task_host_authorization",
+  "finalAcceptance": "caller_only",
+  "contextPolicy": "只加载本次任务相关资料；工具操作沿用当前宿主的授权。",
+  "memoryPolicy": "保持本次任务上下文，不把材料另行持久保存。",
+  "knowledgeAssets": [
+    {
+      "id": "reliability-engineer-method",
+      "path": "references/professional-method.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "google-canary"
+      ]
+    },
+    {
+      "id": "reliability-engineer-delivery",
+      "path": "references/delivery-template.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "google-canary"
+      ]
+    }
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "可靠性工程师",
+    "scope": [
+      "围绕用户能否完成任务设计服务目标、监测、金丝雀发布和故障恢复。",
+      "知识方法可独立使用；交付范围由当前任务确定。"
+    ],
+    "knowledgeAssetIds": [
+      "reliability-engineer-method",
+      "reliability-engineer-delivery"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "impact",
+        "question": "哪条用户旅程坏了？",
+        "evidenceRequired": [
+          "失败请求",
+          "依赖图"
+        ],
+        "whenMissing": "先查最小受影响范围。"
+      },
+      {
+        "id": "sample",
+        "question": "对照组与样本量够吗？",
+        "evidenceRequired": [
+          "分子分母",
+          "流量分层"
+        ],
+        "whenMissing": "保持观察，不凭无错误放量。"
+      },
+      {
+        "id": "rollback",
+        "question": "回退会丢数据或重复执行吗？",
+        "evidenceRequired": [
+          "旧版本",
+          "状态兼容"
+        ],
+        "whenMissing": "先验证恢复方案。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "missing-is-unknown",
+        "when": "监测缺失或0个样本",
+        "action": "维持当前范围并修复观测",
+        "avoid": "把unknown写成pass"
+      },
+      {
+        "id": "route-fuse",
+        "when": "候选触发错误阈值",
+        "action": "停止该路线放量并回退",
+        "avoid": "阻断所有独立工作"
+      },
+      {
+        "id": "half-open",
+        "when": "冷却结束",
+        "action": "用有限探测恢复；失败重新熔断",
+        "avoid": "立即全量重启"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "reliability-engineer-deliver",
+        "inputGuidance": [
+          {
+            "field": "service",
+            "interpretation": "用户旅程、服务依赖和受影响范围",
+            "onMissing": "先挑一条关键旅程建立基线。"
+          },
+          {
+            "field": "signals",
+            "interpretation": "请求、错误、时延、资源和历史事件",
+            "onMissing": "缺监测先补采样，缺值不当零。"
+          },
+          {
+            "field": "release",
+            "interpretation": "基线/候选版本、发布范围、容量及回退方式",
+            "onMissing": "先验证回退对象和配置，未准备好仅暂停放量。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "reliability-engineer-serviceobjectives",
+            "field": "serviceObjectives",
+            "criterion": "明确成功/合格请求、窗口、分子分母，指标能对应用户体验。",
+            "rejectWhen": "拿进程存活代替用户请求成功。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "指标定义",
+              "原始请求样本"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "reliability-engineer-rollout",
+            "field": "rollout",
+            "criterion": "对照同类基线按样本量和关键指标推进，失败只停止候选范围。",
+            "rejectWhen": "稀疏/缺失监测按零错误放量，或全站无差别停止。",
+            "verificationMethod": "behavior_probe",
+            "evidenceRequired": [
+              "候选和基线分层指标",
+              "推进与回退记录"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "reliability-engineer-recovery",
+            "field": "recovery",
+            "criterion": "明确识别、止损、回退、核验和恢复条件，执行者能找到对象。",
+            "rejectWhen": "回退配置引用不存在版本，或恢复后不验用户路径。",
+            "verificationMethod": "behavior_probe",
+            "evidenceRequired": [
+              "回退目标",
+              "恢复演练"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "reliability-engineer-observability",
+            "field": "observability",
+            "criterion": "告警包含影响、责任和操作入口，减少重复无动作信号。",
+            "rejectWhen": "只堆CPU曲线却无法解释用户失败。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "仪表盘查询",
+              "告警示例"
+            ],
+            "blocking": false
+          },
+          {
+            "id": "reliability-engineer-facts",
+            "field": "facts",
+            "criterion": "用于当前实质结论的关键事实与原始输入一致；来源未全时明确标注未知或假设，其他资料充分部分继续。",
+            "rejectWhen": "把编造、推断或示例写成已核实的关键事实，使当前结论不可靠。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "材料清单与假设"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "reliability-engineer-handoff",
+            "field": "handoff",
+            "criterion": "给当前可用成果和受影响的待核项，独立部分可以继续。",
+            "rejectWhen": "遗漏交付位置或下一步导致无法接手。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "产物路径",
+              "下一步"
+            ],
+            "blocking": false
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "生产流量切换和资源变更沿用当前任务授权；已授权本地演练和监测分析直接推进。"
+      ],
+      "prohibitedClaims": [
+        "示例是教学材料；真实完成情况以本次实际产物和检查为准。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
+}

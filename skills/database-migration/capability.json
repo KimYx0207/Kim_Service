@@ -1,0 +1,134 @@
+{
+  "schemaVersion": 1,
+  "id": "database-migration",
+  "componentType": "skill",
+  "componentVersion": "0.1.0",
+  "entrypoint": "SKILL.md",
+  "capabilities": [
+    {
+      "id": "database-migration-deliver",
+      "summary": "把数据库结构变更拆成兼容扩展、可重跑回填、切换和清理，保留可恢复路径。 database migration expand contract rollback PostgreSQL",
+      "useWhen": [
+        "给已有大表加字段并迁移旧数据。",
+        "字段改名怎样不影响旧版本？",
+        "检查数据库迁移和回滚方案。"
+      ],
+      "doNotUseWhen": [
+        "纯查询性能分析可交backend-data-engineer。",
+        "未授权生产DDL不由方法执行。",
+        "没有备份恢复条件时先完成可逆准备与演练。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "change": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前/目标schema、数据库版本和业务不变量"
+          },
+          "traffic": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "表规模、读写模式、消费者版本和部署顺序"
+          },
+          "recovery": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "备份、恢复时间目标、回滚和校验方式"
+          }
+        },
+        "required": [
+          "change",
+          "traffic",
+          "recovery"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "sequence": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "扩展到收缩顺序"
+          },
+          "backfill": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "可重跑回填"
+          },
+          "verification": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "锁和数据验证"
+          },
+          "recoveryPlan": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "回退和清理"
+          },
+          "facts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "本次材料、版本、单位和假设"
+          },
+          "handoff": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "产物位置、未完成项和下一步"
+          }
+        },
+        "required": [
+          "sequence",
+          "backfill",
+          "verification",
+          "recoveryPlan",
+          "facts",
+          "handoff"
+        ]
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "生产DDL和不可逆数据删除按已有授权及恢复条件执行；迁移脚本、兼容代码和隔离演练可继续。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

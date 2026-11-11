@@ -25,7 +25,6 @@ export const REQUIRED_SECTIONS = Object.freeze([
   '示例',
   '交付前自查清单'
 ]);
-export const STOP_RULE_TERMS = Object.freeze(['医疗', '法律', '金融', '停']);
 export const FORBIDDEN_PHRASES = Object.freeze([
   '赋能', '一站式', '至关重要', '端到端', '抓手', '沉淀', '旨在', '致力于', '彰显', '凸显'
 ]);
@@ -387,11 +386,8 @@ function checkContract(componentRoot, errors) {
       errors.push(label + ' sideEffects must be an empty array');
     }
     const gate = capability.humanGate ?? {};
-    const gateText = Array.isArray(gate.when) ? gate.when.join('\n') : '';
-    if (gate.required !== true || !Array.isArray(gate.when) || gate.when.length === 0) {
+    if (gate.required !== true || !Array.isArray(gate.when) || gate.when.length === 0 || !gate.when.every(isNonEmptyString)) {
       errors.push(label + ' humanGate must be required with at least one trigger');
-    } else if (!['医疗', '法律', '金融'].every((term) => gateText.includes(term))) {
-      errors.push(label + ' humanGate.when must name the medical, legal, and financial stop rule');
     }
     if (!Array.isArray(capability.input?.required) || capability.input.required.length === 0) {
       errors.push(label + ' input.required must not be empty');
@@ -468,9 +464,11 @@ function checkAgentDocument(componentRoot, contract, errors) {
   if (!/^\*\*别找我\*\*[：:]/m.test(routing)) errors.push('routing section must contain a **别找我**： label');
 
   const boundary = (sections.get(REQUIRED_SECTIONS[5]) ?? []).join('\n');
-  for (const term of STOP_RULE_TERMS) {
-    if (!boundary.includes(term)) errors.push('boundary section must state the stop rule term: ' + term);
-  }
+  // Review the actual role boundary. Requiring every role to repeat medical,
+  // legal and financial stop words created unrelated gates in ordinary work.
+  // This structural check cannot certify the meaning of a prose boundary;
+  // task-specific review cases and permission contracts provide that evidence.
+  if (!isNonEmptyString(boundary)) errors.push('boundary section must describe task-specific limits and handling of missing inputs');
 
   const example = (sections.get(REQUIRED_SECTIONS[6]) ?? []).join('\n');
   if (!example.includes('**用户输入**')) errors.push('example section must contain **用户输入**');

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "exercise-designer",
   "componentType": "agent",
-  "componentVersion": "0.3.0",
+  "componentVersion": "0.3.1",
   "entrypoint": "AGENT.md",
   "capabilities": [
     {
@@ -93,8 +93,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "发现题干缺条件或答案矛盾就停下修题；涉及医疗、法律、金融实务结论时停下换成普通学习情境，不收集学生个人资料。",
-          "涉及医疗诊断、法律胜诉或金融投资收益等专业结论时停下，由具备资质的人员判断；涉及发布、对外发送或付款时须由用户另行授权。"
+          "发现题干缺条件或答案矛盾就停下修题；涉及医疗、法律、金融实务结论时停下换成普通学习情境，不收集学生个人资料。"
         ]
       },
       "validation": [

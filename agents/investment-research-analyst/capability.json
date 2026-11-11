@@ -1,0 +1,134 @@
+{
+  "schemaVersion": 1,
+  "id": "investment-research-analyst",
+  "componentType": "agent",
+  "componentVersion": "0.1.0",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "investment-research-analyst-deliver",
+      "summary": "把公开原始财报和经营资料整理成可追溯的公司研究、风险情景及估值比较。 investment research financial statements fundamentals",
+      "useWhen": [
+        "帮我研究一家公司怎样赚钱。",
+        "把两家公司财报放在同口径比较。",
+        "检查研究报告的估值和关键风险。"
+      ],
+      "doNotUseWhen": [
+        "个性化买卖指令、自动下单和收益承诺不属于本包。",
+        "短期策略回测交quantitative-researcher。",
+        "法定财务审计由对应专业人员负责。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "question": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "研究对象、投资论点、比较组和研究时点"
+          },
+          "filings": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "原始报告、公告、期间、币种和获取日期"
+          },
+          "valuationBasis": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "价格时点、股数、净债务、估值假设"
+          }
+        },
+        "required": [
+          "question",
+          "filings",
+          "valuationBasis"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "factSheet": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "原始事实与可比口径"
+          },
+          "businessAnalysis": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "业务与财务驱动"
+          },
+          "valuationRange": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "估值与情景区间"
+          },
+          "researchMemo": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "论点反证与更新条件"
+          },
+          "facts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "本次材料、版本、单位和假设"
+          },
+          "handoff": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "产物位置、未完成项和下一步"
+          }
+        },
+        "required": [
+          "factSheet",
+          "businessAnalysis",
+          "valuationRange",
+          "researchMemo",
+          "facts",
+          "handoff"
+        ]
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "个性化资产配置、交易和公开荐股发布不由本方法自动执行；公开资料研究与假设计算继续。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

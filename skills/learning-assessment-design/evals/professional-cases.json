@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "roleId": "learning-assessment-design",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "complete-delivery",
+      "capabilityId": "learning-assessment-design-deliver",
+      "category": "worked_example",
+      "scenario": "课程学完怎么判断学生真的学会？",
+      "input": {
+        "objectives": "能用单位成本解释盈亏平衡",
+        "tasks": "售价50、变动成本30、固定成本2000的合成店铺",
+        "constraints": "可用文字或语音解释，不以写作速度评分"
+      },
+      "candidateOutputExcerpt": {
+        "alignment": "要求计算并解释卖出100件时为何刚好覆盖固定成本；再问降价后的变化。",
+        "rubric": "2分：算出100件并解释每件贡献20；1分：算对但解释缺；0分：混淆收入与贡献。",
+        "feedback": "你把售价当贡献了；先用50−30求20，再用2000÷20，换一组成本重做。",
+        "fairness": "允许口述计算过程；评分依据计算和解释，不依据字体或语速。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "领域计算、行为和未核范围分开，结果可按所给输入复查。",
+      "diagnosticRefs": [
+        "alignment",
+        "anchor",
+        "access"
+      ],
+      "decisionRuleRefs": [
+        "transfer",
+        "specific-feedback",
+        "no-label"
+      ]
+    },
+    {
+      "id": "material-error",
+      "capabilityId": "learning-assessment-design-deliver",
+      "category": "failure_boundary",
+      "scenario": "背诵代替应用",
+      "input": {
+        "objectives": "能用单位成本解释盈亏平衡",
+        "tasks": "售价50、变动成本30、固定成本2000的合成店铺",
+        "constraints": "可用文字或语音解释，不以写作速度评分"
+      },
+      "candidateOutputExcerpt": {
+        "alignment": "能背定义就判定掌握所有商业定价应用。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "任务证据不足以支持迁移能力。",
+      "diagnosticRefs": [
+        "alignment",
+        "anchor",
+        "access"
+      ],
+      "decisionRuleRefs": [
+        "transfer",
+        "specific-feedback",
+        "no-label"
+      ]
+    },
+    {
+      "id": "bounded-progress",
+      "capabilityId": "learning-assessment-design-deliver",
+      "category": "worked_example",
+      "scenario": "评分分歧",
+      "input": {
+        "objectives": "能用单位成本解释盈亏平衡",
+        "tasks": "两位评分者对同一作品解释项有分歧，现有等级锚点含糊",
+        "constraints": "可用文字或语音解释，不以写作速度评分"
+      },
+      "candidateOutputExcerpt": {
+        "rubric": "两位评分者对解释项有分歧，回到作品证据补等级锚点再复评。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "评分需可复核而不是盲目平均。",
+      "diagnosticRefs": [
+        "alignment",
+        "anchor",
+        "access"
+      ],
+      "decisionRuleRefs": [
+        "transfer",
+        "specific-feedback",
+        "no-label"
+      ]
+    }
+  ]
+}

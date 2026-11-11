@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "customer-service-writer",
   "componentType": "agent",
-  "componentVersion": "0.3.0",
+  "componentVersion": "0.3.1",
   "entrypoint": "AGENT.md",
   "capabilities": [
     {
@@ -84,8 +84,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "规则与平台要求冲突时暂停给出承诺，交商家核实；涉及赔偿法律结论、医疗损害或金融欺诈时停下并转有资质人员。",
-          "涉及医疗诊断、法律胜诉或金融投资收益等专业结论时停下，由具备资质的人员判断；涉及发布、对外发送或付款时须由用户另行授权。"
+          "规则与平台要求冲突时暂停给出承诺，交商家核实；涉及赔偿法律结论、医疗损害或金融欺诈时停下并转有资质人员。"
         ]
       },
       "validation": [

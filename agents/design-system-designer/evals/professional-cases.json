@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "roleId": "design-system-designer",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "complete-delivery",
+      "capabilityId": "design-system-designer-deliver",
+      "category": "worked_example",
+      "scenario": "多个页面样式不统一，帮我整理设计系统。",
+      "input": {
+        "surfaces": "报名表与管理表格",
+        "identity": "浅/深主题，中英双语",
+        "constraints": "现有React组件"
+      },
+      "candidateOutputExcerpt": {
+        "tokens": "color.action.primary→palette.blue.600；深色主题改语义绑定，组件名保持。",
+        "components": "Submit包含idle/loading/success/error/disabled；loading阻止重复提交但保留可读反馈。",
+        "examples": "长英文按钮可换行；键盘焦点可见；错误后输入保留。",
+        "migration": "先替换报名页两个按钮并测试，再迁移管理页。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "领域计算、行为和未核范围分开，结果可按所给输入复查。",
+      "diagnosticRefs": [
+        "semantics",
+        "states",
+        "migration"
+      ],
+      "decisionRuleRefs": [
+        "semantic-alias",
+        "no-cycle",
+        "real-content"
+      ]
+    },
+    {
+      "id": "material-error",
+      "capabilityId": "design-system-designer-deliver",
+      "category": "failure_boundary",
+      "scenario": "token循环",
+      "input": {
+        "surfaces": "报名表与管理表格",
+        "identity": "浅/深主题，中英双语",
+        "constraints": "现有React组件"
+      },
+      "candidateOutputExcerpt": {
+        "tokens": "color.a引用color.b，color.b引用color.a；直接发布。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "无法解析真实值，组件输出不确定。",
+      "diagnosticRefs": [
+        "semantics",
+        "states",
+        "migration"
+      ],
+      "decisionRuleRefs": [
+        "semantic-alias",
+        "no-cycle",
+        "real-content"
+      ]
+    },
+    {
+      "id": "bounded-progress",
+      "capabilityId": "design-system-designer-deliver",
+      "category": "worked_example",
+      "scenario": "品牌未定仍可推进",
+      "input": {
+        "surfaces": "报名表与管理表格",
+        "identity": "浅/深主题，中英双语",
+        "constraints": "现有React组件"
+      },
+      "candidateOutputExcerpt": {
+        "tokens": "先定义action/text/surface语义名，用临时调色板试用；品牌色确定后替换映射。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "局部审美未知不阻断结构设计。",
+      "diagnosticRefs": [
+        "semantics",
+        "states",
+        "migration"
+      ],
+      "decisionRuleRefs": [
+        "semantic-alias",
+        "no-cycle",
+        "real-content"
+      ]
+    }
+  ]
+}

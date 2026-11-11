@@ -1,0 +1,228 @@
+{
+  "schemaVersion": 1,
+  "roleId": "learning-assessment-design",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "toolSlots": [
+    {
+      "id": "documents.read",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    }
+  ],
+  "skillLoading": [
+    "按本次任务读取下面两份知识材料；只加载有关内容。",
+    "使用宿主已提供且获授权的相关工具槽；缺工具时仍完成资料分析与可用草案，把未执行步骤交接。"
+  ],
+  "steps": [
+    "将目标改写为可观察动作并识别不相关的表达负担。",
+    "设计能显示该能力的任务，含迁移或解释而非只有记忆。",
+    "为每维度写等级锚点与正反作品，检查评分者能否一致解释。",
+    "用样例试评，记录分歧后改量表，不倒推分数迎合结果。",
+    "给具体改进反馈和再练习任务；正式评价按既有责任流程复核。",
+    "按输出标准核对当前产物，区分已完成、可用草案与待核项；只暂停受实质缺口影响的动作。"
+  ],
+  "acceptance": [
+    "每目标有能观察对应能力的任务，分清记忆、理解与迁移。",
+    "各等级描述可观察差别，分数能由作品证据支持。",
+    "指出已做到、具体差距及下一步可练习动作。",
+    "不让无关阅读/表达障碍替代目标能力，保留评分分歧复核。",
+    "用于当前实质结论的关键事实与原始输入一致；来源未全时明确标注未知或假设，其他资料充分部分继续。",
+    "给当前可用成果和受影响的待核项，独立部分可以继续。"
+  ],
+  "coordinationOwner": "caller",
+  "permissionSource": "current_task_host_authorization",
+  "finalAcceptance": "caller_only",
+  "contextPolicy": "只加载本次任务相关资料；工具操作沿用当前宿主的授权。",
+  "memoryPolicy": "保持本次任务上下文，不把材料另行持久保存。",
+  "knowledgeAssets": [
+    {
+      "id": "learning-assessment-design-method",
+      "path": "references/professional-method.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "cast-udl"
+      ]
+    },
+    {
+      "id": "learning-assessment-design-delivery",
+      "path": "references/delivery-template.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "cast-udl"
+      ]
+    }
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "教学评价设计",
+    "scope": [
+      "把学习目标变成可观察任务、清晰评分标准和下一步反馈。",
+      "知识方法可独立使用；交付范围由当前任务确定。"
+    ],
+    "knowledgeAssetIds": [
+      "learning-assessment-design-method",
+      "learning-assessment-design-delivery"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "alignment",
+        "question": "任务真的测目标能力吗？",
+        "evidenceRequired": [
+          "目标",
+          "题目"
+        ],
+        "whenMissing": "先修对应关系。"
+      },
+      {
+        "id": "anchor",
+        "question": "两个评分者会如何区分等级？",
+        "evidenceRequired": [
+          "样例作品"
+        ],
+        "whenMissing": "补可观察锚点。"
+      },
+      {
+        "id": "access",
+        "question": "表达形式是否引入无关障碍？",
+        "evidenceRequired": [
+          "作答要求"
+        ],
+        "whenMissing": "提供等价形式。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "transfer",
+        "when": "目标是应用",
+        "action": "加入新情景任务",
+        "avoid": "只用定义背诵"
+      },
+      {
+        "id": "specific-feedback",
+        "when": "学生未达成",
+        "action": "给具体下一步和再练任务",
+        "avoid": "只说继续努力"
+      },
+      {
+        "id": "no-label",
+        "when": "一次表现偏低",
+        "action": "定位知识/策略/任务条件",
+        "avoid": "给固定智力标签"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "learning-assessment-design-deliver",
+        "inputGuidance": [
+          {
+            "field": "objectives",
+            "interpretation": "学习目标、先备知识和目标人群",
+            "onMissing": "目标含糊时先转成可观察动作。"
+          },
+          {
+            "field": "tasks",
+            "interpretation": "现有题目、作品、学习情境和可用时间",
+            "onMissing": "可以先做一份代表性任务。"
+          },
+          {
+            "field": "constraints",
+            "interpretation": "语言、可访问方式、评分用途和反馈节奏",
+            "onMissing": "非核心表达形式可给等价选项。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "learning-assessment-design-alignment",
+            "field": "alignment",
+            "criterion": "每目标有能观察对应能力的任务，分清记忆、理解与迁移。",
+            "rejectWhen": "只考记忆却声称证明实际应用。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "目标映射",
+              "任务证据"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "learning-assessment-design-rubric",
+            "field": "rubric",
+            "criterion": "各等级描述可观察差别，分数能由作品证据支持。",
+            "rejectWhen": "优秀/一般/差没有行为锚点。",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "量表",
+              "不同等级样例"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "learning-assessment-design-feedback",
+            "field": "feedback",
+            "criterion": "指出已做到、具体差距及下一步可练习动作。",
+            "rejectWhen": "只写努力或给总分没有改进方法。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "样例反馈",
+              "后续任务"
+            ],
+            "blocking": false
+          },
+          {
+            "id": "learning-assessment-design-fairness",
+            "field": "fairness",
+            "criterion": "不让无关阅读/表达障碍替代目标能力，保留评分分歧复核。",
+            "rejectWhen": "从一次成绩推断智力或固定能力。",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "等价作答方案",
+              "复核记录"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "learning-assessment-design-facts",
+            "field": "facts",
+            "criterion": "用于当前实质结论的关键事实与原始输入一致；来源未全时明确标注未知或假设，其他资料充分部分继续。",
+            "rejectWhen": "把编造、推断或示例写成已核实的关键事实，使当前结论不可靠。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "材料清单与假设"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "learning-assessment-design-handoff",
+            "field": "handoff",
+            "criterion": "给当前可用成果和受影响的待核项，独立部分可以继续。",
+            "rejectWhen": "遗漏交付位置或下一步导致无法接手。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "产物路径",
+              "下一步"
+            ],
+            "blocking": false
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "正式成绩、资格或录用决定由相应授权者按既有流程处理；任务设计和学习反馈可以继续。"
+      ],
+      "prohibitedClaims": [
+        "示例是教学材料；真实完成情况以本次实际产物和检查为准。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
+}

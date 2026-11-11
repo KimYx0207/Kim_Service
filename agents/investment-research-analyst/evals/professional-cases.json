@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "roleId": "investment-research-analyst",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "complete-delivery",
+      "capabilityId": "investment-research-analyst-deliver",
+      "category": "worked_example",
+      "scenario": "帮我研究一家公司怎样赚钱。",
+      "input": {
+        "question": "合成公司截至9月的收入趋势",
+        "filings": {
+          "lastYearAnnual": 1200,
+          "currentNineMonths": 1050,
+          "priorNineMonths": 900,
+          "currency": "CNY million"
+        },
+        "valuationBasis": "只分析收入，不给股价建议"
+      },
+      "candidateOutputExcerpt": {
+        "factSheet": "TTM收入=1200+1050−900=1350百万元；不把年报与本年累计直接相加。",
+        "businessAnalysis": "与上一完整年度1200比较增12.5%；还需同口径现金流和分部数据解释增长质量。",
+        "valuationRange": "缺价格、股数和净债务，暂不输出估值；经营事实表可完成。",
+        "researchMemo": "若增长主要来自一次性并购或回款恶化，需要重审可持续增长判断。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "领域计算、行为和未核范围分开，结果可按所给输入复查。",
+      "diagnosticRefs": [
+        "period",
+        "quality",
+        "counter"
+      ],
+      "decisionRuleRefs": [
+        "ttm",
+        "as-of",
+        "negative-base"
+      ]
+    },
+    {
+      "id": "material-error",
+      "capabilityId": "investment-research-analyst-deliver",
+      "category": "failure_boundary",
+      "scenario": "期间重叠",
+      "input": {
+        "question": "合成公司截至9月的收入趋势",
+        "filings": {
+          "lastYearAnnual": 1200,
+          "currentNineMonths": 1050,
+          "priorNineMonths": 900,
+          "currency": "CNY million"
+        },
+        "valuationBasis": "只分析收入，不给股价建议"
+      },
+      "candidateOutputExcerpt": {
+        "factSheet": "1200+1050=2250百万元作为TTM收入。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "重复计入上年部分期间。",
+      "diagnosticRefs": [
+        "period",
+        "quality",
+        "counter"
+      ],
+      "decisionRuleRefs": [
+        "ttm",
+        "as-of",
+        "negative-base"
+      ]
+    },
+    {
+      "id": "bounded-progress",
+      "capabilityId": "investment-research-analyst-deliver",
+      "category": "worked_example",
+      "scenario": "亏损企业PE",
+      "input": {
+        "question": "合成公司截至9月的收入趋势",
+        "filings": "合成公司当期净利润为负，原始披露可定位",
+        "valuationBasis": "不使用负PE给便宜排行，检查替代指标适用性"
+      },
+      "candidateOutputExcerpt": {
+        "valuationRange": "利润为负，PE不用于便宜排序；先分析现金、盈利路径及适合的情景估值。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "指标适用性优先于可计算性。",
+      "diagnosticRefs": [
+        "period",
+        "quality",
+        "counter"
+      ],
+      "decisionRuleRefs": [
+        "ttm",
+        "as-of",
+        "negative-base"
+      ]
+    }
+  ]
+}

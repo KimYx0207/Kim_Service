@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "roleId": "brand-visual-designer",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "complete-delivery",
+      "capabilityId": "brand-visual-designer-deliver",
+      "category": "worked_example",
+      "scenario": "给产品设计一套品牌视觉方向。",
+      "input": {
+        "brief": "面向小团队的可靠自动化工具",
+        "assets": "既有K标志，保留联系二维码",
+        "formats": "中英日三语README横图"
+      },
+      "candidateOutputExcerpt": {
+        "directions": "A以真实任务流程突出可理解；B以模块系统突出扩展性，推荐A用于新用户首页。",
+        "identitySystem": "标题/步骤/结果三层排版，正文使用各语言完整字形字体。",
+        "applications": "分别导出zh-CN/en/ja-JP图内文字版本，手机宽度检查标签完整；二维码保持原始内容。",
+        "assetManifest": "同目录SVG源文件与成品映射，记录字体和截图来源。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "领域计算、行为和未核范围分开，结果可按所给输入复查。",
+      "diagnosticRefs": [
+        "position",
+        "content",
+        "reuse"
+      ],
+      "decisionRuleRefs": [
+        "distinct-directions",
+        "localize-inside-image",
+        "editable-source"
+      ]
+    },
+    {
+      "id": "material-error",
+      "capabilityId": "brand-visual-designer-deliver",
+      "category": "failure_boundary",
+      "scenario": "只翻译alt",
+      "input": {
+        "brief": "面向小团队的可靠自动化工具",
+        "assets": "既有K标志，保留联系二维码",
+        "formats": "中英日三语README横图"
+      },
+      "candidateOutputExcerpt": {
+        "applications": "所有语言页面引用同一张中文图，只改alt为English。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "图内信息没有被本地化。",
+      "diagnosticRefs": [
+        "position",
+        "content",
+        "reuse"
+      ],
+      "decisionRuleRefs": [
+        "distinct-directions",
+        "localize-inside-image",
+        "editable-source"
+      ]
+    },
+    {
+      "id": "bounded-progress",
+      "capabilityId": "brand-visual-designer-deliver",
+      "category": "worked_example",
+      "scenario": "品牌色未定",
+      "input": {
+        "brief": "面向小团队的可靠自动化工具",
+        "assets": "既有K标志，保留联系二维码",
+        "formats": "中英日三语README横图"
+      },
+      "candidateOutputExcerpt": {
+        "directions": "先交黑白结构与两种色彩候选，实际标题和布局可继续评审。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "不确定色值不阻断可逆设计。",
+      "diagnosticRefs": [
+        "position",
+        "content",
+        "reuse"
+      ],
+      "decisionRuleRefs": [
+        "distinct-directions",
+        "localize-inside-image",
+        "editable-source"
+      ]
+    }
+  ]
+}

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "store-performance-analyst",
   "componentType": "agent",
-  "componentVersion": "0.4.0",
+  "componentVersion": "0.4.1",
   "entrypoint": "AGENT.md",
   "capabilities": [
     {
@@ -108,7 +108,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "涉及医疗诊断、法律胜诉或金融投资收益等专业结论时停下，由具备资质的人员判断；涉及发布、对外发送或付款时须由用户另行授权。"
+          "发布、外部消息、付款或生产写入沿用当前任务授权；资料整理、计算和已授权可逆工作继续。"
         ]
       },
       "validation": [

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "application-security-reviewer",
   "componentType": "agent",
-  "componentVersion": "0.1.1",
+  "componentVersion": "0.1.2",
   "entrypoint": "AGENT.md",
   "capabilities": [
     {
@@ -132,8 +132,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "生产安全变更、敏感数据访问和对外安全保证交指定安全责任人复核；材料审查继续。",
-          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+          "生产安全变更、敏感数据访问和对外安全保证交指定安全责任人复核；材料审查继续。"
         ]
       },
       "validation": [

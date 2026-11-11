@@ -1,0 +1,15 @@
+{
+  "repository": "KimYx0207/Kim_Service",
+  "title": "Kim_Service",
+  "releaseTitleEqualsVersion": true,
+  "versionFile": "VERSION",
+  "tagPrefix": "",
+  "workflows": [".github/workflows/validate.yml"],
+  "metaRelease": "v3.10.0",
+  "previousZcodeRelease": "V1.10",
+  "previousZcodeAsset": "Kim-Zcode-Beta-meta-3.7.2-kim-1.10.0.zip",
+  "changelogs": [
+    { "file": "CHANGELOG.md", "language": "English" },
+    { "file": "CHANGELOG.zh-CN.md", "language": "简体中文" }
+  ]
+}

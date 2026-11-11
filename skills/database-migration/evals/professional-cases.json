@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "roleId": "database-migration",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "complete-delivery",
+      "capabilityId": "database-migration-deliver",
+      "category": "worked_example",
+      "scenario": "给已有大表加字段并迁移旧数据。",
+      "input": {
+        "change": "full_name拆为display_name，保留原始值",
+        "traffic": "旧客户端仍读full_name",
+        "recovery": "快照可恢复，先不删旧列"
+      },
+      "candidateOutputExcerpt": {
+        "sequence": "新增display_name可空；兼容读；回填；新读切换；最后再清理full_name。",
+        "backfill": "按id分批，仅更新display_name为空的记录；重跑不覆盖用户新值。",
+        "verification": "核未回填数、空值和旧客户端读取；实际锁耗时在演练库测量。",
+        "recoveryPlan": "切换前可回旧读；删除列后需备份恢复，故收缩另设明确窗口。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "领域计算、行为和未核范围分开，结果可按所给输入复查。",
+      "diagnosticRefs": [
+        "writers",
+        "locking",
+        "restore"
+      ],
+      "decisionRuleRefs": [
+        "expand-first",
+        "resume",
+        "contract-last"
+      ]
+    },
+    {
+      "id": "material-error",
+      "capabilityId": "database-migration-deliver",
+      "category": "failure_boundary",
+      "scenario": "先删后改",
+      "input": {
+        "change": "full_name拆为display_name，保留原始值",
+        "traffic": "旧客户端仍读full_name",
+        "recovery": "快照可恢复，先不删旧列"
+      },
+      "candidateOutputExcerpt": {
+        "sequence": "DROP full_name，然后等待客户端陆续更新。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "旧客户端读写立即断裂。",
+      "diagnosticRefs": [
+        "writers",
+        "locking",
+        "restore"
+      ],
+      "decisionRuleRefs": [
+        "expand-first",
+        "resume",
+        "contract-last"
+      ]
+    },
+    {
+      "id": "bounded-progress",
+      "capabilityId": "database-migration-deliver",
+      "category": "worked_example",
+      "scenario": "回填中断",
+      "input": {
+        "change": "full_name拆为display_name，保留原始值",
+        "traffic": "回填前500条完成，进程中断；部分用户已写入新值",
+        "recovery": "快照可恢复，先不删旧列"
+      },
+      "candidateOutputExcerpt": {
+        "backfill": "前500条已验收，中断后从检查点继续；已新写入值不覆盖。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "成功分批可复用。",
+      "diagnosticRefs": [
+        "writers",
+        "locking",
+        "restore"
+      ],
+      "decisionRuleRefs": [
+        "expand-first",
+        "resume",
+        "contract-last"
+      ]
+    }
+  ]
+}

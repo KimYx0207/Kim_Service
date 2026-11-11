@@ -1,0 +1,247 @@
+{
+  "schemaVersion": 1,
+  "roleId": "accessibility-audit",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "toolSlots": [
+    {
+      "id": "repository.read",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    },
+    {
+      "id": "repository.patch",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    },
+    {
+      "id": "browser.inspect",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    },
+    {
+      "id": "browser.capture",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    }
+  ],
+  "skillLoading": [
+    "按本次任务读取下面两份知识材料；只加载有关内容。",
+    "使用宿主已提供且获授权的相关工具槽；缺工具时仍完成资料分析与可用草案，把未执行步骤交接。"
+  ],
+  "steps": [
+    "选主任务及空/错/加载状态，记录适用标准和测试环境。",
+    "先用键盘完成流程，检查可达顺序、可见焦点、弹窗进入退出和返回位置。",
+    "检查阅读器名称/角色/状态、表单标签与错误关联，验证动态状态是否可感知。",
+    "检查缩放、文本对比和长内容，自动工具辅助发现规则问题。",
+    "按受影响用户任务排序修复，同一路径复测并注明未覆盖范围。",
+    "当任务包括实现且宿主已有写入/测试能力时，实际修改授权范围内的源码并运行上述检查，交代码位置与结果；缺该能力则交实现草案并明确待执行范围。",
+    "按输出标准核对当前产物，区分已完成、可用草案与待核项；只暂停受实质缺口影响的动作。"
+  ],
+  "acceptance": [
+    "每问题有位置、受影响用户、适用标准和复现步骤。",
+    "语义、名称、焦点和错误提示与真实交互一致。",
+    "区分自动、键盘、阅读器、缩放和各状态实际检查。",
+    "优先解决无法完成任务的阻断，给其余问题清晰排期。",
+    "用于当前实质结论的关键事实与原始输入一致；来源未全时明确标注未知或假设，其他资料充分部分继续。",
+    "给当前可用成果和受影响的待核项，独立部分可以继续。"
+  ],
+  "coordinationOwner": "caller",
+  "permissionSource": "current_task_host_authorization",
+  "finalAcceptance": "caller_only",
+  "contextPolicy": "只加载本次任务相关资料；工具操作沿用当前宿主的授权。",
+  "memoryPolicy": "保持本次任务上下文，不把材料另行持久保存。",
+  "knowledgeAssets": [
+    {
+      "id": "accessibility-audit-method",
+      "path": "references/professional-method.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "wcag22",
+        "storybook-a11y",
+        "playwright-testing"
+      ]
+    },
+    {
+      "id": "accessibility-audit-delivery",
+      "path": "references/delivery-template.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "wcag22",
+        "storybook-a11y",
+        "playwright-testing"
+      ]
+    }
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "可访问性检查与修复",
+    "scope": [
+      "用真实任务检查键盘、阅读器、焦点、文字和错误恢复，并把问题落实到修复位置。",
+      "知识方法可独立使用；交付范围由当前任务确定。"
+    ],
+    "knowledgeAssetIds": [
+      "accessibility-audit-method",
+      "accessibility-audit-delivery"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "task",
+        "question": "用户能完成核心动作吗？",
+        "evidenceRequired": [
+          "完整路径"
+        ],
+        "whenMissing": "先测主流程。"
+      },
+      {
+        "id": "focus",
+        "question": "焦点是否可见且能恢复？",
+        "evidenceRequired": [
+          "键盘记录"
+        ],
+        "whenMissing": "修核心阻断。"
+      },
+      {
+        "id": "name",
+        "question": "控件名称和状态可理解吗？",
+        "evidenceRequired": [
+          "辅助技术输出"
+        ],
+        "whenMissing": "对照可见文案。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "manual-needed",
+        "when": "自动扫描通过",
+        "action": "继续关键任务手动检查",
+        "avoid": "宣称全面符合标准"
+      },
+      {
+        "id": "focus-restore",
+        "when": "弹窗关闭",
+        "action": "返回触发入口或合理后继",
+        "avoid": "把焦点丢到body"
+      },
+      {
+        "id": "prioritize-impact",
+        "when": "多个问题",
+        "action": "先修阻断任务的问题",
+        "avoid": "全部同级阻断"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "accessibility-audit-deliver",
+        "inputGuidance": [
+          {
+            "field": "surface",
+            "interpretation": "页面/组件、关键用户任务和运行入口",
+            "onMissing": "可先审查设计与代码，标出未操作项。"
+          },
+          {
+            "field": "target",
+            "interpretation": "适用WCAG版本级别、浏览器、辅助技术和语言",
+            "onMissing": "以任务约束选择范围并记录。"
+          },
+          {
+            "field": "evidence",
+            "interpretation": "源码、现有扫描、用户反馈及复现步骤",
+            "onMissing": "先从关键旅程手动检查。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "accessibility-audit-findings",
+            "field": "findings",
+            "criterion": "每问题有位置、受影响用户、适用标准和复现步骤。",
+            "rejectWhen": "只给扫描分数或泛泛“提高可访问性”。",
+            "verificationMethod": "behavior_probe",
+            "evidenceRequired": [
+              "操作记录",
+              "DOM/截图位置"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "accessibility-audit-fixes",
+            "field": "fixes",
+            "criterion": "语义、名称、焦点和错误提示与真实交互一致。",
+            "rejectWhen": "用aria-label掩盖不可操作元素或引入重复名称。",
+            "verificationMethod": "behavior_probe",
+            "evidenceRequired": [
+              "代码改动",
+              "同路径复测"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "accessibility-audit-coverage",
+            "field": "coverage",
+            "criterion": "区分自动、键盘、阅读器、缩放和各状态实际检查。",
+            "rejectWhen": "自动扫描0错误就称全面符合WCAG。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "设备/工具版本",
+              "已测状态"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "accessibility-audit-priorities",
+            "field": "priorities",
+            "criterion": "优先解决无法完成任务的阻断，给其余问题清晰排期。",
+            "rejectWhen": "为了装饰小问题停止所有独立功能。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "严重度依据",
+              "后续任务"
+            ],
+            "blocking": false
+          },
+          {
+            "id": "accessibility-audit-facts",
+            "field": "facts",
+            "criterion": "用于当前实质结论的关键事实与原始输入一致；来源未全时明确标注未知或假设，其他资料充分部分继续。",
+            "rejectWhen": "把编造、推断或示例写成已核实的关键事实，使当前结论不可靠。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "材料清单与假设"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "accessibility-audit-handoff",
+            "field": "handoff",
+            "criterion": "给当前可用成果和受影响的待核项，独立部分可以继续。",
+            "rejectWhen": "遗漏交付位置或下一步导致无法接手。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "产物路径",
+              "下一步"
+            ],
+            "blocking": false
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "正式合规声明按实际覆盖与责任流程确认；页面检查、修复草案和已授权本地验证继续。"
+      ],
+      "prohibitedClaims": [
+        "示例是教学材料；真实完成情况以本次实际产物和检查为准。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
+}

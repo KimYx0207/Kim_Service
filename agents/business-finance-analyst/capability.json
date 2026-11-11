@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "business-finance-analyst",
   "componentType": "agent",
-  "componentVersion": "0.1.1",
+  "componentVersion": "0.1.2",
   "entrypoint": "AGENT.md",
   "capabilities": [
     {
@@ -132,8 +132,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "外部融资、税务处理、法定报表、重大支出与资金调拨由有权限的负责人或合格专业人员决定。",
-          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+          "外部融资、税务处理、法定报表、重大支出与资金调拨由有权限的负责人或合格专业人员决定。"
         ]
       },
       "validation": [

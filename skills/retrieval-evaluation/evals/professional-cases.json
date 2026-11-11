@@ -1,0 +1,124 @@
+{
+  "schemaVersion": 1,
+  "roleId": "retrieval-evaluation",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "complete-delivery",
+      "capabilityId": "retrieval-evaluation-deliver",
+      "category": "worked_example",
+      "scenario": "RAG回答不好，先查检索。",
+      "input": {
+        "dataset": {
+          "q1": [
+            "a",
+            "c"
+          ],
+          "q2": [
+            "z"
+          ]
+        },
+        "runs": {
+          "q1": [
+            "b",
+            "a",
+            "a"
+          ],
+          "q2": []
+        },
+        "policy": "k=3，P@k分母固定3，重复ID仍占位置"
+      },
+      "candidateOutputExcerpt": {
+        "metrics": "q1命中1，P@3=1/3，Recall@3=1/2，MRR=1/2；q2三项为0。宏平均Recall=0.25，MRR=0.25。",
+        "slices": "2题，仅演示公式；不能推断生产表现。",
+        "diagnosis": "q1缺c且重复a占位；q2无召回，分别查切块/去重与过滤。",
+        "nextExperiment": "保持索引语料固定，先改变去重策略后在留出题复查。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "领域计算、行为和未核范围分开，结果可按所给输入复查。",
+      "diagnosticRefs": [
+        "labels",
+        "ranking",
+        "leak"
+      ],
+      "decisionRuleRefs": [
+        "deduplicate",
+        "empty-gold",
+        "retrieval-not-answer"
+      ]
+    },
+    {
+      "id": "material-error",
+      "capabilityId": "retrieval-evaluation-deliver",
+      "category": "failure_boundary",
+      "scenario": "重复ID虚增召回",
+      "input": {
+        "dataset": {
+          "q1": [
+            "a",
+            "c"
+          ],
+          "q2": [
+            "z"
+          ]
+        },
+        "runs": {
+          "q1": [
+            "b",
+            "a",
+            "a"
+          ],
+          "q2": []
+        },
+        "policy": "k=3，P@k分母固定3，重复ID仍占位置"
+      },
+      "candidateOutputExcerpt": {
+        "metrics": "q1返回两个a，因此命中2/2，召回100%。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "相关文档ID只命中a一个。",
+      "diagnosticRefs": [
+        "labels",
+        "ranking",
+        "leak"
+      ],
+      "decisionRuleRefs": [
+        "deduplicate",
+        "empty-gold",
+        "retrieval-not-answer"
+      ]
+    },
+    {
+      "id": "bounded-progress",
+      "capabilityId": "retrieval-evaluation-deliver",
+      "category": "worked_example",
+      "scenario": "没有标签",
+      "input": {
+        "dataset": {
+          "q1": []
+        },
+        "runs": {
+          "q1": []
+        },
+        "policy": "k=3，P@k分母固定3，重复ID仍占位置"
+      },
+      "candidateOutputExcerpt": {
+        "metrics": "gold为空的题Recall为null，单列无标签数量，不并入宏召回平均。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "未标注不是完美表现。",
+      "diagnosticRefs": [
+        "labels",
+        "ranking",
+        "leak"
+      ],
+      "decisionRuleRefs": [
+        "deduplicate",
+        "empty-gold",
+        "retrieval-not-answer"
+      ]
+    }
+  ]
+}

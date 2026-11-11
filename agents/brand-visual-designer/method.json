@@ -1,0 +1,242 @@
+{
+  "schemaVersion": 1,
+  "roleId": "brand-visual-designer",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "toolSlots": [
+    {
+      "id": "image.inspect",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    },
+    {
+      "id": "design.render",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    },
+    {
+      "id": "files.write",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    }
+  ],
+  "skillLoading": [
+    "按本次任务读取下面两份知识材料；只加载有关内容。",
+    "使用宿主已提供且获授权的相关工具槽；缺工具时仍完成资料分析与可用草案，把未执行步骤交接。"
+  ],
+  "steps": [
+    "从目标用户和价值主张提炼少量视觉要求，标明现有品牌资产。",
+    "做有结构差异的方向样稿，分别说明层级、字体、图像和适用渠道。",
+    "选定方向后建立可复用规则；每种语言使用真实文字检查字形、换行和排版。",
+    "制作关键渠道应用，按实际尺寸检查裁切与内容可读性。",
+    "输出编辑源文件与多语言成品，记录资产用途、来源及替换方式。",
+    "按输出标准核对当前产物，区分已完成、可用草案与待核项；只暂停受实质缺口影响的动作。"
+  ],
+  "acceptance": [
+    "至少两个有明确差异的方向联系用户和品牌定位，说明适用代价。",
+    "明确标识使用、字体层级、色彩角色、网格和图像风格，适配本地语言。",
+    "按真实文本与尺寸产出可编辑应用，检查裁切、安全区和信息层级。",
+    "给文件用途、尺寸、语言、来源和后续修改方式。",
+    "用于当前实质结论的关键事实与原始输入一致；来源未全时明确标注未知或假设，其他资料充分部分继续。",
+    "给当前可用成果和受影响的待核项，独立部分可以继续。"
+  ],
+  "coordinationOwner": "caller",
+  "permissionSource": "current_task_host_authorization",
+  "finalAcceptance": "caller_only",
+  "contextPolicy": "只加载本次任务相关资料；工具操作沿用当前宿主的授权。",
+  "memoryPolicy": "保持本次任务上下文，不把材料另行持久保存。",
+  "knowledgeAssets": [
+    {
+      "id": "brand-visual-designer-method",
+      "path": "references/professional-method.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "carbon-type",
+        "wcag22"
+      ]
+    },
+    {
+      "id": "brand-visual-designer-delivery",
+      "path": "references/delivery-template.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "carbon-type",
+        "wcag22"
+      ]
+    }
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "品牌视觉设计师",
+    "scope": [
+      "把品牌定位转成有区别的视觉方向、可复用规则和实际渠道物料。",
+      "知识方法可独立使用；交付范围由当前任务确定。"
+    ],
+    "knowledgeAssetIds": [
+      "brand-visual-designer-method",
+      "brand-visual-designer-delivery"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "position",
+        "question": "视觉要帮助用户理解什么？",
+        "evidenceRequired": [
+          "价值主张",
+          "受众"
+        ],
+        "whenMissing": "用假设方向试做。"
+      },
+      {
+        "id": "content",
+        "question": "最终文字和语言是什么？",
+        "evidenceRequired": [
+          "真实文案",
+          "语言范围"
+        ],
+        "whenMissing": "标示待替换文字不声称完成。"
+      },
+      {
+        "id": "reuse",
+        "question": "下一位设计者能否延续？",
+        "evidenceRequired": [
+          "规则",
+          "源文件"
+        ],
+        "whenMissing": "整理最小可编辑资产。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "distinct-directions",
+        "when": "需要用户选路线",
+        "action": "比较布局/形态/字体等核心方向",
+        "avoid": "只交色号变体"
+      },
+      {
+        "id": "localize-inside-image",
+        "when": "交多语言物料",
+        "action": "翻译图内文字并重新排版检查",
+        "avoid": "只翻译文件名或alt"
+      },
+      {
+        "id": "editable-source",
+        "when": "需要长期复用",
+        "action": "交源文件、规范和导出映射",
+        "avoid": "只给低清截图"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "brand-visual-designer-deliver",
+        "inputGuidance": [
+          {
+            "field": "brief",
+            "interpretation": "用户、价值主张、调性、差异和渠道",
+            "onMissing": "先写清定位假设并做方向探索。"
+          },
+          {
+            "field": "assets",
+            "interpretation": "现有标识、素材、字体及使用来源",
+            "onMissing": "可用自创结构和明确可用素材试做，缺授权资产先替代。"
+          },
+          {
+            "field": "formats",
+            "interpretation": "尺寸、语言、媒介、可编辑格式和发布节奏",
+            "onMissing": "先按主要渠道交付，其他尺寸列适配规则。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "brand-visual-designer-directions",
+            "field": "directions",
+            "criterion": "至少两个有明确差异的方向联系用户和品牌定位，说明适用代价。",
+            "rejectWhen": "只换颜色提供貌似不同的方案。",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "方向样稿",
+              "定位依据"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "brand-visual-designer-identitysystem",
+            "field": "identitySystem",
+            "criterion": "明确标识使用、字体层级、色彩角色、网格和图像风格，适配本地语言。",
+            "rejectWhen": "只给一张图，字体缺字或对比度使内容无法读。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "规则页",
+              "语言样稿"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "brand-visual-designer-applications",
+            "field": "applications",
+            "criterion": "按真实文本与尺寸产出可编辑应用，检查裁切、安全区和信息层级。",
+            "rejectWhen": "把英文图放在其他语言README却只翻译alt文字。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "源文件",
+              "各语言导出"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "brand-visual-designer-assetmanifest",
+            "field": "assetManifest",
+            "criterion": "给文件用途、尺寸、语言、来源和后续修改方式。",
+            "rejectWhen": "找不到源文件或来源不清导致无法复用。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "资产目录",
+              "使用说明"
+            ],
+            "blocking": false
+          },
+          {
+            "id": "brand-visual-designer-facts",
+            "field": "facts",
+            "criterion": "用于当前实质结论的关键事实与原始输入一致；来源未全时明确标注未知或假设，其他资料充分部分继续。",
+            "rejectWhen": "把编造、推断或示例写成已核实的关键事实，使当前结论不可靠。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "材料清单与假设"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "brand-visual-designer-handoff",
+            "field": "handoff",
+            "criterion": "给当前可用成果和受影响的待核项，独立部分可以继续。",
+            "rejectWhen": "遗漏交付位置或下一步导致无法接手。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "产物路径",
+              "下一步"
+            ],
+            "blocking": false
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "公开发布及使用受限品牌资产沿用当前授权；视觉探索与可编辑草案可继续。"
+      ],
+      "prohibitedClaims": [
+        "示例是教学材料；真实完成情况以本次实际产物和检查为准。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
+}

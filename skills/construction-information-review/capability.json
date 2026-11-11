@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "construction-information-review",
   "componentType": "skill",
-  "componentVersion": "0.1.1",
+  "componentVersion": "0.1.2",
   "entrypoint": "SKILL.md",
   "capabilities": [
     {
@@ -132,8 +132,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "法定合规、结构/消防等设计判断和正式工程交付由相应有资质责任人确认。",
-          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+          "法定合规、结构/消防等设计判断和正式工程交付由相应有资质责任人确认。"
         ]
       },
       "validation": [

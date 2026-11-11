@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "sustainability-analyst",
   "componentType": "agent",
-  "componentVersion": "0.1.1",
+  "componentVersion": "0.1.2",
   "entrypoint": "AGENT.md",
   "capabilities": [
     {
@@ -132,8 +132,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "对外披露、法定报告、抵消/信用主张和实质性边界变更交有资质或授权负责人复核。",
-          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+          "对外披露、法定报告、抵消/信用主张和实质性边界变更交有资质或授权负责人复核。"
         ]
       },
       "validation": [

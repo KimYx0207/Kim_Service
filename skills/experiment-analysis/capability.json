@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "experiment-analysis",
   "componentType": "skill",
-  "componentVersion": "0.1.1",
+  "componentVersion": "0.1.2",
   "entrypoint": "SKILL.md",
   "capabilities": [
     {
@@ -132,8 +132,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "高风险业务变更、患者/学生干预或实质性个人权益影响需相应责任人批准实验与行动。",
-          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+          "高风险业务变更、患者/学生干预或实质性个人权益影响需相应责任人批准实验与行动。"
         ]
       },
       "validation": [

@@ -1,0 +1,235 @@
+{
+  "schemaVersion": 1,
+  "roleId": "energy-project-analyst",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "toolSlots": [
+    {
+      "id": "files.read",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    },
+    {
+      "id": "calculation.run",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    }
+  ],
+  "skillLoading": [
+    "按本次任务读取下面两份知识材料；只加载有关内容。",
+    "使用宿主已提供且获授权的相关工具槽；缺工具时仍完成资料分析与可用草案，把未执行步骤交接。"
+  ],
+  "steps": [
+    "统一时间粒度与kW/kWh单位，核对实际负荷、发电和设备参数。",
+    "按同一时段匹配自用、外送与弃电；储能计算充放电效率和可用容量。",
+    "核当前电价及结算政策，将自用节省、外送收入与费用分别列出。",
+    "建立年度现金流，加入运维、衰减、替换、融资和残值的适用项。",
+    "重算NPV、简单回本及敏感性，说明仍需现场和工程验证的条件。",
+    "按输出标准核对当前产物，区分已完成、可用草案与待核项；只暂停受实质缺口影响的动作。"
+  ],
+  "acceptance": [
+    "容量kW与电量kWh分开，发电=自用+外送+弃电及损耗按定义对齐。",
+    "按自用和外送分别计价，CAPEX/OPEX/替换/衰减和时点明确。",
+    "NPV等指标与折现口径一致，简单回本说明忽略因素。",
+    "把经济假设与工程可行性分开，列下一项现场资料。 可以先交明确范围的草案；只把拒收条件中的实质错误限制在相关结论或动作。",
+    "用于当前实质结论的关键事实与原始输入一致；来源未全时明确标注未知或假设，其他资料充分部分继续。",
+    "给当前可用成果和受影响的待核项，独立部分可以继续。"
+  ],
+  "coordinationOwner": "caller",
+  "permissionSource": "current_task_host_authorization",
+  "finalAcceptance": "caller_only",
+  "contextPolicy": "只加载本次任务相关资料；工具操作沿用当前宿主的授权。",
+  "memoryPolicy": "保持本次任务上下文，不把材料另行持久保存。",
+  "knowledgeAssets": [
+    {
+      "id": "energy-project-analyst-method",
+      "path": "references/professional-method.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "sam-finance"
+      ]
+    },
+    {
+      "id": "energy-project-analyst-delivery",
+      "path": "references/delivery-template.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "sam-finance"
+      ]
+    }
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "能源项目分析师",
+    "scope": [
+      "把发电、用电、时段电价和项目现金流连接起来，比较节能、光伏或储能方案。",
+      "知识方法可独立使用；交付范围由当前任务确定。"
+    ],
+    "knowledgeAssetIds": [
+      "energy-project-analyst-method",
+      "energy-project-analyst-delivery"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "energy",
+        "question": "功率、电量与时段是否一致？",
+        "evidenceRequired": [
+          "kW/kWh",
+          "时间序列"
+        ],
+        "whenMissing": "先统一单位。"
+      },
+      {
+        "id": "tariff",
+        "question": "自用和外送怎样计价？",
+        "evidenceRequired": [
+          "当前电价",
+          "结算规则"
+        ],
+        "whenMissing": "将未核值标为情景。"
+      },
+      {
+        "id": "cost",
+        "question": "哪些成本在后期发生？",
+        "evidenceRequired": [
+          "运维",
+          "更换/退役"
+        ],
+        "whenMissing": "补现金流时点。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "no-double-count",
+        "when": "一度电被自用",
+        "action": "计节省的购电费用",
+        "avoid": "同时再计售电收入"
+      },
+      {
+        "id": "time-match",
+        "when": "比较自用比例",
+        "action": "按可用时间粒度匹配负荷",
+        "avoid": "年总发电小于用电就说100%自用"
+      },
+      {
+        "id": "discount",
+        "when": "评价长期项目",
+        "action": "匹配名义/实际现金流与折现率",
+        "avoid": "混用两种通胀口径"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "energy-project-analyst-deliver",
+        "inputGuidance": [
+          {
+            "field": "energy",
+            "interpretation": "逐时或月度负荷、发电、容量、效率与单位",
+            "onMissing": "可先做简化情景，缺逐时数据不称已验证自用比例。"
+          },
+          {
+            "field": "tariffs",
+            "interpretation": "当前地区电价、结算、需量和政策来源",
+            "onMissing": "来源未核实的参数列假设，不输出确定投资结论。"
+          },
+          {
+            "field": "economics",
+            "interpretation": "CAPEX、运维、寿命、衰减、折现和融资口径",
+            "onMissing": "缺参数给敏感性范围并显示影响。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "energy-project-analyst-energybalance",
+            "field": "energyBalance",
+            "criterion": "容量kW与电量kWh分开，发电=自用+外送+弃电及损耗按定义对齐。",
+            "rejectWhen": "把额定功率直接当全年发电或储能无损循环。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "负荷发电序列",
+              "能量平衡"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "energy-project-analyst-cashflows",
+            "field": "cashFlows",
+            "criterion": "按自用和外送分别计价，CAPEX/OPEX/替换/衰减和时点明确。",
+            "rejectWhen": "同一电量既计节约又计售电收入或默认补贴。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "电价来源",
+              "年度现金流"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "energy-project-analyst-comparison",
+            "field": "comparison",
+            "criterion": "NPV等指标与折现口径一致，简单回本说明忽略因素。",
+            "rejectWhen": "用简单回本替代完整现金流且声称确定收益。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "指标公式",
+              "下行情景"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "energy-project-analyst-nextsteps",
+            "field": "nextSteps",
+            "criterion": "把经济假设与工程可行性分开，列下一项现场资料。 可以先交明确范围的草案；只把拒收条件中的实质错误限制在相关结论或动作。",
+            "rejectWhen": "把纸面收益称为并网或安全认证。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "关键数据缺口",
+              "工程检查范围"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "energy-project-analyst-facts",
+            "field": "facts",
+            "criterion": "用于当前实质结论的关键事实与原始输入一致；来源未全时明确标注未知或假设，其他资料充分部分继续。",
+            "rejectWhen": "把编造、推断或示例写成已核实的关键事实，使当前结论不可靠。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "材料清单与假设"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "energy-project-analyst-handoff",
+            "field": "handoff",
+            "criterion": "给当前可用成果和受影响的待核项，独立部分可以继续。",
+            "rejectWhen": "遗漏交付位置或下一步导致无法接手。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "产物路径",
+              "下一步"
+            ],
+            "blocking": false
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "工程安全、并网、购置和融资承诺由具备权限与能力的负责人决定；资料核对及经济情景计算继续。"
+      ],
+      "prohibitedClaims": [
+        "示例是教学材料；真实完成情况以本次实际产物和检查为准。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
+}

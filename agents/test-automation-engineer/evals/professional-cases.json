@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "roleId": "test-automation-engineer",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "complete-delivery",
+      "capabilityId": "test-automation-engineer-deliver",
+      "category": "worked_example",
+      "scenario": "给关键业务流程补自动化测试。",
+      "input": {
+        "behavior": "用户报名后刷新仍显示报名成功",
+        "system": "本地应用和测试数据库；支付mock",
+        "changes": "报名保存逻辑"
+      },
+      "candidateOutputExcerpt": {
+        "testPlan": "正常保存、重复提交只一条、保存失败保留输入、刷新回读。",
+        "automation": "每例独立账号；点击报名→等回执→刷新→查询相同报名ID。",
+        "results": "报名数据库路径真实联调；支付只模拟，不算真实收单；失败保留trace。",
+        "coverage": "下一项补角色切换后的名单权限检查。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "领域计算、行为和未核范围分开，结果可按所给输入复查。",
+      "diagnosticRefs": [
+        "oracle",
+        "isolation",
+        "fidelity"
+      ],
+      "decisionRuleRefs": [
+        "observe-result",
+        "record-first-run",
+        "no-fixed-sleep"
+      ]
+    },
+    {
+      "id": "material-error",
+      "capabilityId": "test-automation-engineer-deliver",
+      "category": "failure_boundary",
+      "scenario": "按钮点击就算成功",
+      "input": {
+        "behavior": "用户报名后刷新仍显示报名成功",
+        "system": "本地应用和测试数据库；支付mock",
+        "changes": "报名保存逻辑"
+      },
+      "candidateOutputExcerpt": {
+        "results": "按钮click未抛错，因此数据库保存已验证。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "缺少产品结果断言。",
+      "diagnosticRefs": [
+        "oracle",
+        "isolation",
+        "fidelity"
+      ],
+      "decisionRuleRefs": [
+        "observe-result",
+        "record-first-run",
+        "no-fixed-sleep"
+      ]
+    },
+    {
+      "id": "bounded-progress",
+      "capabilityId": "test-automation-engineer-deliver",
+      "category": "worked_example",
+      "scenario": "重试不掩盖首次失败",
+      "input": {
+        "behavior": "用户报名后刷新仍显示报名成功",
+        "system": "本地应用和测试数据库；支付mock",
+        "changes": "报名保存逻辑"
+      },
+      "candidateOutputExcerpt": {
+        "results": "首跑1/10失败，重试通过；保留trace定位响应竞态，状态为不稳定待修。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "重试是诊断信号，不清除失败。",
+      "diagnosticRefs": [
+        "oracle",
+        "isolation",
+        "fidelity"
+      ],
+      "decisionRuleRefs": [
+        "observe-result",
+        "record-first-run",
+        "no-fixed-sleep"
+      ]
+    }
+  ]
+}

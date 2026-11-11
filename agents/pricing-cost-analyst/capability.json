@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "pricing-cost-analyst",
   "componentType": "agent",
-  "componentVersion": "0.3.0",
+  "componentVersion": "0.3.1",
   "entrypoint": "AGENT.md",
   "capabilities": [
     {
@@ -87,8 +87,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "商业算术可继续，涉及个人金融投资、法律或医疗专业结论时停下。不能根据目标订单量声称市场一定买单，不能替用户收款或购买工具。",
-          "涉及医疗诊断、法律胜诉或金融投资收益等专业结论时停下，由具备资质的人员判断；涉及发布、对外发送或付款时须由用户另行授权。"
+          "商业算术可继续，涉及个人金融投资、法律或医疗专业结论时停下。不能根据目标订单量声称市场一定买单，不能替用户收款或购买工具。"
         ]
       },
       "validation": [

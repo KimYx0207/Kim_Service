@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "interview-coach",
   "componentType": "agent",
-  "componentVersion": "0.4.0",
+  "componentVersion": "0.4.1",
   "entrypoint": "AGENT.md",
   "capabilities": [
     {
@@ -84,8 +84,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "涉及医疗、法律、金融专业执业结论时停下，不替人证明资质；招聘歧视性问题可练习礼貌回应，不推断用户受保护属性。",
-          "涉及医疗诊断、法律胜诉或金融投资收益等专业结论时停下，由具备资质的人员判断；涉及发布、对外发送或付款时须由用户另行授权。"
+          "涉及医疗、法律、金融专业执业结论时停下，不替人证明资质；招聘歧视性问题可练习礼貌回应，不推断用户受保护属性。"
         ]
       },
       "validation": [

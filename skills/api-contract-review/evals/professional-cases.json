@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "roleId": "api-contract-review",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "complete-delivery",
+      "capabilityId": "api-contract-review-deliver",
+      "category": "worked_example",
+      "scenario": "前后端要并行，先定接口。",
+      "input": {
+        "contract": "旧创建报名只有name必填；新增加email必填",
+        "consumers": "旧移动端只发送name",
+        "examples": "旧客户端请求{name:\"Kim\"}"
+      },
+      "candidateOutputExcerpt": {
+        "interfaceMap": "POST /registrations由移动端和网页消费。",
+        "compatibility": "新email必填破坏旧客户端；先可选并提供缺省处理或发布新版本迁移。",
+        "behaviorCases": "旧请求在兼容窗口成功；重复操作ID只返回同一报名；权限不足403。",
+        "recommendations": "先修新增必填的兼容方案，再并行前后端实现。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "领域计算、行为和未核范围分开，结果可按所给输入复查。",
+      "diagnosticRefs": [
+        "consumer",
+        "failure",
+        "retry"
+      ],
+      "decisionRuleRefs": [
+        "required-field",
+        "unknown-result",
+        "schema-behavior"
+      ]
+    },
+    {
+      "id": "material-error",
+      "capabilityId": "api-contract-review-deliver",
+      "category": "failure_boundary",
+      "scenario": "新增必填当兼容",
+      "input": {
+        "contract": "旧创建报名只有name必填；新增加email必填",
+        "consumers": "旧移动端只发送name",
+        "examples": "旧客户端请求{name:\"Kim\"}"
+      },
+      "candidateOutputExcerpt": {
+        "compatibility": "只是新增email字段，所有旧客户端无需更新。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "旧请求不满足新约束。",
+      "diagnosticRefs": [
+        "consumer",
+        "failure",
+        "retry"
+      ],
+      "decisionRuleRefs": [
+        "required-field",
+        "unknown-result",
+        "schema-behavior"
+      ]
+    },
+    {
+      "id": "bounded-progress",
+      "capabilityId": "api-contract-review-deliver",
+      "category": "worked_example",
+      "scenario": "缺登录方案",
+      "input": {
+        "contract": "有公共只读端点与受保护写入端点，身份方案未定",
+        "consumers": "读端与写端消费者可独立设计",
+        "examples": "旧客户端请求{name:\"Kim\"}"
+      },
+      "candidateOutputExcerpt": {
+        "recommendations": "可继续设计公共只读端点；受保护写入端点待身份规则确定。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "只暂停受影响接口。",
+      "diagnosticRefs": [
+        "consumer",
+        "failure",
+        "retry"
+      ],
+      "decisionRuleRefs": [
+        "required-field",
+        "unknown-result",
+        "schema-behavior"
+      ]
+    }
+  ]
+}

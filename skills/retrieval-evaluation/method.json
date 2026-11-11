@@ -1,0 +1,235 @@
+{
+  "schemaVersion": 1,
+  "roleId": "retrieval-evaluation",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "toolSlots": [
+    {
+      "id": "dataset.read",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    },
+    {
+      "id": "calculation.run",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    }
+  ],
+  "skillLoading": [
+    "按本次任务读取下面两份知识材料；只加载有关内容。",
+    "使用宿主已提供且获授权的相关工具槽；缺工具时仍完成资料分析与可用草案，把未执行步骤交接。"
+  ],
+  "steps": [
+    "固定问题、语料、权限范围和相关性定义，检查重复或泄漏标签。",
+    "按相同k取得各版本有序结果，记录无结果和异常。",
+    "逐题去重计算命中、召回及首个相关位置，再按约定聚合。",
+    "分语言/任务/难度比较结果，回读失败文档定位原因。",
+    "选择一个最可能原因做下一次试验，保持独立留出集不参与调参。",
+    "按输出标准核对当前产物，区分已完成、可用草案与待核项；只暂停受实质缺口影响的动作。"
+  ],
+  "acceptance": [
+    "明确P@k/Recall@k/MRR定义，去重文档并保留空结果和无标签情况。",
+    "按问题类别、语言和权限比较同题版本，报告分子分母。",
+    "区分缺文档、过滤、召回、排序和标注错误，回读原文。",
+    "每次改变可解释因素，保留基线和独立留出题。 可以先交明确范围的草案；只把拒收条件中的实质错误限制在相关结论或动作。",
+    "用于当前实质结论的关键事实与原始输入一致；来源未全时明确标注未知或假设，其他资料充分部分继续。",
+    "给当前可用成果和受影响的待核项，独立部分可以继续。"
+  ],
+  "coordinationOwner": "caller",
+  "permissionSource": "current_task_host_authorization",
+  "finalAcceptance": "caller_only",
+  "contextPolicy": "只加载本次任务相关资料；工具操作沿用当前宿主的授权。",
+  "memoryPolicy": "保持本次任务上下文，不把材料另行持久保存。",
+  "knowledgeAssets": [
+    {
+      "id": "retrieval-evaluation-method",
+      "path": "references/professional-method.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "ragas-recall",
+        "mlflow-eval"
+      ]
+    },
+    {
+      "id": "retrieval-evaluation-delivery",
+      "path": "references/delivery-template.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "ragas-recall",
+        "mlflow-eval"
+      ]
+    }
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "检索质量评估",
+    "scope": [
+      "用独立标注和固定语料判断检索是否找到了相关材料，区分召回、排序与答案质量。",
+      "知识方法可独立使用；交付范围由当前任务确定。"
+    ],
+    "knowledgeAssetIds": [
+      "retrieval-evaluation-method",
+      "retrieval-evaluation-delivery"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "labels",
+        "question": "相关性标注是否覆盖答案所需事实？",
+        "evidenceRequired": [
+          "原文",
+          "标注准则"
+        ],
+        "whenMissing": "先复核样本标签。"
+      },
+      {
+        "id": "ranking",
+        "question": "相关文档排在第几？",
+        "evidenceRequired": [
+          "有序结果"
+        ],
+        "whenMissing": "区分召回和排序。"
+      },
+      {
+        "id": "leak",
+        "question": "调参与测试共享问题吗？",
+        "evidenceRequired": [
+          "划分记录"
+        ],
+        "whenMissing": "固定独立留出。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "deduplicate",
+        "when": "返回重复文档ID",
+        "action": "只算一次命中但保留位置占用",
+        "avoid": "重复命中增加召回"
+      },
+      {
+        "id": "empty-gold",
+        "when": "没有相关标签",
+        "action": "召回记不可计算并报告数量",
+        "avoid": "记完美召回"
+      },
+      {
+        "id": "retrieval-not-answer",
+        "when": "文档命中",
+        "action": "另检回答引用和事实",
+        "avoid": "宣称回答正确"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "retrieval-evaluation-deliver",
+        "inputGuidance": [
+          {
+            "field": "dataset",
+            "interpretation": "问题、相关文档ID、标注规则与留出划分",
+            "onMissing": "无标注先建设小型分层评价集。"
+          },
+          {
+            "field": "runs",
+            "interpretation": "相同语料版本下各查询返回的有序ID与分数",
+            "onMissing": "缺完整运行记录先按现有样本诊断。"
+          },
+          {
+            "field": "policy",
+            "interpretation": "k值、过滤权限、空结果处理及统计口径",
+            "onMissing": "先声明指标定义；无相关项单列不可计算。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "retrieval-evaluation-metrics",
+            "field": "metrics",
+            "criterion": "明确P@k/Recall@k/MRR定义，去重文档并保留空结果和无标签情况。",
+            "rejectWhen": "重复ID重复计分，或无相关标签强行记100%召回。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "逐题ID",
+              "计算过程"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "retrieval-evaluation-slices",
+            "field": "slices",
+            "criterion": "按问题类别、语言和权限比较同题版本，报告分子分母。",
+            "rejectWhen": "只看平均值掩盖某一群体失效。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "分层表",
+              "固定数据版本"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "retrieval-evaluation-diagnosis",
+            "field": "diagnosis",
+            "criterion": "区分缺文档、过滤、召回、排序和标注错误，回读原文。",
+            "rejectWhen": "仅因ID命中就认定答案正确。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "失败例原文",
+              "索引参数"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "retrieval-evaluation-nextexperiment",
+            "field": "nextExperiment",
+            "criterion": "每次改变可解释因素，保留基线和独立留出题。 可以先交明确范围的草案；只把拒收条件中的实质错误限制在相关结论或动作。",
+            "rejectWhen": "反复对同题调优后称显著泛化。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "试验变量",
+              "留出方案"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "retrieval-evaluation-facts",
+            "field": "facts",
+            "criterion": "用于当前实质结论的关键事实与原始输入一致；来源未全时明确标注未知或假设，其他资料充分部分继续。",
+            "rejectWhen": "把编造、推断或示例写成已核实的关键事实，使当前结论不可靠。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "材料清单与假设"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "retrieval-evaluation-handoff",
+            "field": "handoff",
+            "criterion": "给当前可用成果和受影响的待核项，独立部分可以继续。",
+            "rejectWhen": "遗漏交付位置或下一步导致无法接手。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "产物路径",
+              "下一步"
+            ],
+            "blocking": false
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "使用真实敏感语料或新增模型评分费用依当前授权；离线ID评分和标签审查可继续。"
+      ],
+      "prohibitedClaims": [
+        "示例是教学材料；真实完成情况以本次实际产物和检查为准。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
+}

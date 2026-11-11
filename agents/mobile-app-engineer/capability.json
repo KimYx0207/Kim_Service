@@ -1,0 +1,134 @@
+{
+  "schemaVersion": 1,
+  "id": "mobile-app-engineer",
+  "componentType": "agent",
+  "componentVersion": "0.1.0",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "mobile-app-engineer-deliver",
+      "summary": "把一个移动端用户流程做成可实现的页面、状态与同步方案，重点处理离线、重启和重复提交。 mobile app Flutter offline synchronization",
+      "useWhen": [
+        "做一个支持断网暂存的移动应用。",
+        "修复APP切后台后丢失进度或重复提交。",
+        "制定移动端页面、权限与接口联调方案。"
+      ],
+      "doNotUseWhen": [
+        "仅网站页面实现交frontend-engineer。",
+        "仅服务端数据迁移交backend-data-engineer。",
+        "商店账号、付费签名与正式上架由当前有权限的发布者处理。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "journey": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "目标用户、设备/系统、主流程与成功状态"
+          },
+          "appContext": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "已有仓库、框架版本、页面、存储和接口"
+          },
+          "syncRules": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "服务端身份、离线可用范围、冲突与恢复规则"
+          }
+        },
+        "required": [
+          "journey",
+          "appContext",
+          "syncRules"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "implementation": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "页面与本地状态实现方案"
+          },
+          "syncProtocol": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "离线队列与同步协议"
+          },
+          "deviceChecks": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "设备行为验收"
+          },
+          "handoffPlan": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "联调与发布交接"
+          },
+          "facts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "本次材料、版本、单位和假设"
+          },
+          "handoff": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "产物位置、未完成项和下一步"
+          }
+        },
+        "required": [
+          "implementation",
+          "syncProtocol",
+          "deviceChecks",
+          "handoffPlan",
+          "facts",
+          "handoff"
+        ]
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "正式上架、收费签名或生产推送执行按本次授权；普通已授权开发、分析与本地验证继续。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

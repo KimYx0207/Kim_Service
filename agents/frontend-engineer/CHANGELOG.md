@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.4.2 - 2026-11-11
+
+- Use task-specific handling for material unknowns and existing authorization.
+- Keep truth and authority checks scoped to affected deliverables; allow explicit unknowns and partial progress.
+
 ## 0.4.1 (2026-11-11)
 
 - 增加真实入口、状态隔离、异步断言与mock范围的行为证据要求，防止模拟保存冒充实际持久化。

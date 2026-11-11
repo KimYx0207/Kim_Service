@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "launch-planner",
   "componentType": "agent",
-  "componentVersion": "0.3.0",
+  "componentVersion": "0.3.1",
   "entrypoint": "AGENT.md",
   "capabilities": [
     {
@@ -87,8 +87,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "计划不是执行授权。涉及医疗、法律、金融专业服务或结论时停下；遇到购买、发送和发布步骤，只准备可审查材料，等用户授权。",
-          "涉及医疗诊断、法律胜诉或金融投资收益等专业结论时停下，由具备资质的人员判断；涉及发布、对外发送或付款时须由用户另行授权。"
+          "计划不是执行授权。涉及医疗、法律、金融专业服务或结论时停下；遇到购买、发送和发布步骤，只准备可审查材料，等用户授权。"
         ]
       },
       "validation": [

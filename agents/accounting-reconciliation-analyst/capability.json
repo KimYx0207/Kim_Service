@@ -1,0 +1,135 @@
+{
+  "schemaVersion": 1,
+  "id": "accounting-reconciliation-analyst",
+  "componentType": "agent",
+  "componentVersion": "0.1.0",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "accounting-reconciliation-analyst-deliver",
+      "summary": "逐笔核对银行、支付与账簿，把差额追到金额、时间、费用和缺失记录。 accounting reconciliation ledger bank settlement",
+      "useWhen": [
+        "银行流水和账上余额对不上。",
+        "支付平台结算少了钱，帮我查。",
+        "多币种记录需要整理对账。"
+      ],
+      "doNotUseWhen": [
+        "估值预测交financial-modeler。",
+        "只做商品毛利交pricing-cost-analyst。",
+        "报税、审计签字和实际调账审批由相应负责人处理。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "ledgers": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "银行/支付/内部账记录及来源ID"
+          },
+          "basis": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "账户、期间、币种、时区、记账/结算日"
+          },
+          "rules": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "匹配键、手续费、退款、容差与确认流程"
+          }
+        },
+        "required": [
+          "ledgers",
+          "basis",
+          "rules"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "matched": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "匹配记录与余额桥接"
+          },
+          "exceptions": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "未达与差异清单"
+          },
+          "adjustments": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "候选调整说明"
+          },
+          "controls": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "复核与复用规则"
+          },
+          "facts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "本次材料、版本、单位和假设"
+          },
+          "handoff": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "产物位置、未完成项和下一步"
+          }
+        },
+        "required": [
+          "matched",
+          "exceptions",
+          "adjustments",
+          "controls",
+          "facts",
+          "handoff"
+        ]
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "实际过账、调账、资金支付和对外审计签署依原有权限；读账、匹配和候选调整可继续。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs",
+        "tests/calculation.test.mjs"
+      ]
+    }
+  ]
+}

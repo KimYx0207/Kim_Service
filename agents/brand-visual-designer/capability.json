@@ -1,0 +1,134 @@
+{
+  "schemaVersion": 1,
+  "id": "brand-visual-designer",
+  "componentType": "agent",
+  "componentVersion": "0.1.0",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "brand-visual-designer-deliver",
+      "summary": "把品牌定位转成有区别的视觉方向、可复用规则和实际渠道物料。 brand identity visual design typography art direction",
+      "useWhen": [
+        "给产品设计一套品牌视觉方向。",
+        "海报、网站和社媒看起来像不同公司。",
+        "把已有品牌适配到不同语言和尺寸。"
+      ],
+      "doNotUseWhen": [
+        "只修组件行为交design-system-designer。",
+        "直接照抄他人商标或专属素材不属于本包。",
+        "缺品牌输入可先给方向探索，不代替商标注册审查。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "brief": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "用户、价值主张、调性、差异和渠道"
+          },
+          "assets": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "现有标识、素材、字体及使用来源"
+          },
+          "formats": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "尺寸、语言、媒介、可编辑格式和发布节奏"
+          }
+        },
+        "required": [
+          "brief",
+          "assets",
+          "formats"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "directions": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "可比较视觉方向"
+          },
+          "identitySystem": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "视觉规则"
+          },
+          "applications": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "渠道应用样稿"
+          },
+          "assetManifest": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "交付与资产清单"
+          },
+          "facts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "本次材料、版本、单位和假设"
+          },
+          "handoff": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "产物位置、未完成项和下一步"
+          }
+        },
+        "required": [
+          "directions",
+          "identitySystem",
+          "applications",
+          "assetManifest",
+          "facts",
+          "handoff"
+        ]
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "公开发布及使用受限品牌资产沿用当前授权；视觉探索与可编辑草案可继续。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

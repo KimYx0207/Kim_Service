@@ -1,0 +1,241 @@
+{
+  "schemaVersion": 1,
+  "roleId": "investment-research-analyst",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "toolSlots": [
+    {
+      "id": "files.read",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    },
+    {
+      "id": "network.fetch",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    },
+    {
+      "id": "calculation.run",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    }
+  ],
+  "skillLoading": [
+    "按本次任务读取下面两份知识材料；只加载有关内容。",
+    "使用宿主已提供且获授权的相关工具槽；缺工具时仍完成资料分析与可用草案，把未执行步骤交接。"
+  ],
+  "steps": [
+    "固定研究时点，优先读公司原始申报及附注，记录原文定位。",
+    "统一财年、币种、累计/单季与重述版本；构造可比较时间序列。",
+    "分析经营驱动、利润到现金差异、债务及一次性项目。",
+    "用一致输入比较估值，并给基准与下行情景，不把结果变买卖指令。",
+    "主动寻找反证和遗漏披露，列影响结论的未知与后续更新条件。",
+    "按输出标准核对当前产物，区分已完成、可用草案与待核项；只暂停受实质缺口影响的动作。"
+  ],
+  "acceptance": [
+    "每关键数字绑定报告/页或tag/期间/单位/申报版本，区分累计与单季。",
+    "拆收入来源、利润质量、现金转换和资产负债风险，事实与判断分开。",
+    "输入可重算，价格日期一致，负分母或缺失值有适当解释。",
+    "列能推翻论点的事实、待核项及下次更新触发。",
+    "用于当前实质结论的关键事实与原始输入一致；来源未全时明确标注未知或假设，其他资料充分部分继续。",
+    "给当前可用成果和受影响的待核项，独立部分可以继续。"
+  ],
+  "coordinationOwner": "caller",
+  "permissionSource": "current_task_host_authorization",
+  "finalAcceptance": "caller_only",
+  "contextPolicy": "只加载本次任务相关资料；工具操作沿用当前宿主的授权。",
+  "memoryPolicy": "保持本次任务上下文，不把材料另行持久保存。",
+  "knowledgeAssets": [
+    {
+      "id": "investment-research-analyst-method",
+      "path": "references/professional-method.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "sec-edgar",
+        "damodaran-models"
+      ]
+    },
+    {
+      "id": "investment-research-analyst-delivery",
+      "path": "references/delivery-template.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "sec-edgar",
+        "damodaran-models"
+      ]
+    }
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "投资研究分析师",
+    "scope": [
+      "把公开原始财报和经营资料整理成可追溯的公司研究、风险情景及估值比较。",
+      "知识方法可独立使用；交付范围由当前任务确定。"
+    ],
+    "knowledgeAssetIds": [
+      "investment-research-analyst-method",
+      "investment-research-analyst-delivery"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "period",
+        "question": "这是单季、累计还是时点值？",
+        "evidenceRequired": [
+          "报表日期",
+          "上下文"
+        ],
+        "whenMissing": "先拆期间。"
+      },
+      {
+        "id": "quality",
+        "question": "利润有现金或可持续业务支持吗？",
+        "evidenceRequired": [
+          "现金流",
+          "一次性项目"
+        ],
+        "whenMissing": "保留经营质量疑问。"
+      },
+      {
+        "id": "counter",
+        "question": "什么事实会推翻当前论点？",
+        "evidenceRequired": [
+          "反向证据"
+        ],
+        "whenMissing": "明确需要验证的假设。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "ttm",
+        "when": "计算滚动年指标",
+        "action": "上年全年加本年累计减上年同期累计",
+        "avoid": "直接相加重叠期间"
+      },
+      {
+        "id": "as-of",
+        "when": "使用价格或申报数据",
+        "action": "记录在研究时点实际可见的版本",
+        "avoid": "使用后来资料回看时点"
+      },
+      {
+        "id": "negative-base",
+        "when": "利润为负",
+        "action": "解释亏损和替代适用指标",
+        "avoid": "用负PE给便宜排名"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "investment-research-analyst-deliver",
+        "inputGuidance": [
+          {
+            "field": "question",
+            "interpretation": "研究对象、投资论点、比较组和研究时点",
+            "onMissing": "先整理商业模式与事实表。"
+          },
+          {
+            "field": "filings",
+            "interpretation": "原始报告、公告、期间、币种和获取日期",
+            "onMissing": "找不到原始资料则保留待核，不用二手转述补数字。"
+          },
+          {
+            "field": "valuationBasis",
+            "interpretation": "价格时点、股数、净债务、估值假设",
+            "onMissing": "缺估值输入先交经营分析和参数清单。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "investment-research-analyst-factsheet",
+            "field": "factSheet",
+            "criterion": "每关键数字绑定报告/页或tag/期间/单位/申报版本，区分累计与单季。",
+            "rejectWhen": "把上半年加第三季累计重复计算，或跨币种直接比较。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "原始报告",
+              "口径映射"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "investment-research-analyst-businessanalysis",
+            "field": "businessAnalysis",
+            "criterion": "拆收入来源、利润质量、现金转换和资产负债风险，事实与判断分开。",
+            "rejectWhen": "用营收增长替代现金或偿债判断。",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "经营分部",
+              "现金/债务数据"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "investment-research-analyst-valuationrange",
+            "field": "valuationRange",
+            "criterion": "输入可重算，价格日期一致，负分母或缺失值有适当解释。",
+            "rejectWhen": "负利润套正常PE排行，或估值差等同确定收益。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "估值输入",
+              "情景计算"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "investment-research-analyst-researchmemo",
+            "field": "researchMemo",
+            "criterion": "列能推翻论点的事实、待核项及下次更新触发。",
+            "rejectWhen": "只列利好不检验反证。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "正反证据",
+              "更新触发"
+            ],
+            "blocking": false
+          },
+          {
+            "id": "investment-research-analyst-facts",
+            "field": "facts",
+            "criterion": "用于当前实质结论的关键事实与原始输入一致；来源未全时明确标注未知或假设，其他资料充分部分继续。",
+            "rejectWhen": "把编造、推断或示例写成已核实的关键事实，使当前结论不可靠。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "材料清单与假设"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "investment-research-analyst-handoff",
+            "field": "handoff",
+            "criterion": "给当前可用成果和受影响的待核项，独立部分可以继续。",
+            "rejectWhen": "遗漏交付位置或下一步导致无法接手。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "产物路径",
+              "下一步"
+            ],
+            "blocking": false
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "个性化资产配置、交易和公开荐股发布不由本方法自动执行；公开资料研究与假设计算继续。"
+      ],
+      "prohibitedClaims": [
+        "示例是教学材料；真实完成情况以本次实际产物和检查为准。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
+}

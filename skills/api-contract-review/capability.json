@@ -1,0 +1,134 @@
+{
+  "schemaVersion": 1,
+  "id": "api-contract-review",
+  "componentType": "skill",
+  "componentVersion": "0.1.0",
+  "entrypoint": "SKILL.md",
+  "capabilities": [
+    {
+      "id": "api-contract-review-deliver",
+      "summary": "检查接口是否能被真实调用、正确失败并兼容现有消费者。 API contract OpenAPI compatibility idempotency",
+      "useWhen": [
+        "前后端要并行，先定接口。",
+        "API改版会不会破坏现有客户端？",
+        "接口重试和错误格式需要统一。"
+      ],
+      "doNotUseWhen": [
+        "完整服务实现交backend-data-engineer。",
+        "只做视觉稿交interaction-designer。",
+        "未授权线上请求不由审查方法自动执行。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "contract": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前和候选OpenAPI/接口说明及版本"
+          },
+          "consumers": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "消费者、调用流程和兼容承诺"
+          },
+          "examples": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "真实或合成请求响应、异常和权限场景"
+          }
+        },
+        "required": [
+          "contract",
+          "consumers",
+          "examples"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "interfaceMap": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "接口与消费者映射"
+          },
+          "compatibility": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "兼容性变化"
+          },
+          "behaviorCases": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "行为案例"
+          },
+          "recommendations": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "最小修正建议"
+          },
+          "facts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "本次材料、版本、单位和假设"
+          },
+          "handoff": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "产物位置、未完成项和下一步"
+          }
+        },
+        "required": [
+          "interfaceMap",
+          "compatibility",
+          "behaviorCases",
+          "recommendations",
+          "facts",
+          "handoff"
+        ]
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "线上写入和第三方调用按当前授权；契约分析、样例生成和本地测试继续。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

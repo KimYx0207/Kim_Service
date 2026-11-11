@@ -1,0 +1,135 @@
+{
+  "schemaVersion": 1,
+  "id": "financial-modeler",
+  "componentType": "agent",
+  "componentVersion": "0.1.0",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "financial-modeler-deliver",
+      "summary": "把经营假设连接到利润、现金和估值，交可复算的基准及压力情景。 financial model DCF cash flow forecast valuation",
+      "useWhen": [
+        "帮我做未来三年的财务预测。",
+        "分析这个项目值不值得投并说明假设。",
+        "检查财务模型为什么利润增长但现金变少。"
+      ],
+      "doNotUseWhen": [
+        "日常现金流水分析交business-finance-analyst。",
+        "策略回测交quantitative-researcher。",
+        "个性化证券买卖与法定审计结论不属于本包。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "historicals": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "原始报表、期间、币种、会计政策和调整项"
+          },
+          "drivers": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "销量、价格、成本、资本开支、营运资金和融资假设"
+          },
+          "decision": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "评价问题、估值时点、折现口径和情景约束"
+          }
+        },
+        "required": [
+          "historicals",
+          "drivers",
+          "decision"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "model": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "驱动与报表模型"
+          },
+          "valuation": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "估值与股权桥接"
+          },
+          "scenarios": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "情景与敏感性"
+          },
+          "decisionMemo": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "决策说明"
+          },
+          "facts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "本次材料、版本、单位和假设"
+          },
+          "handoff": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "产物位置、未完成项和下一步"
+          }
+        },
+        "required": [
+          "model",
+          "valuation",
+          "scenarios",
+          "decisionMemo",
+          "facts",
+          "handoff"
+        ]
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "资金交易、融资承诺、法定报表签署和个性化投资行动由有权限的责任人决定；资料分析、建模和情景计算继续。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs",
+        "tests/calculation.test.mjs"
+      ]
+    }
+  ]
+}
