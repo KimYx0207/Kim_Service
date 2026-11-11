@@ -32,8 +32,8 @@
     "每侧记录至多按约定消费一次，金额/币种/标识及期间可核。",
     "区分时点差、费用、退款、重复和未知，保留未配项。",
     "每候选分录有原凭证、账户、金额与原因；未批准状态明确。",
-    "给重复检查、重跑结果和下次对账入口。",
-    "足以让接手者区分输入事实与当前假设。",
+    "给重复检查、重跑结果和下次对账入口。 可以先交明确范围的草案；只把拒收条件中的实质错误限制在相关结论或动作。",
+    "用于当前实质结论的关键事实与原始输入一致；来源未全时明确标注未知或假设，其他资料充分部分继续。",
     "给当前可用成果和受影响的待核项，独立部分可以继续。"
   ],
   "coordinationOwner": "caller",
@@ -185,25 +185,25 @@
           {
             "id": "accounting-reconciliation-analyst-controls",
             "field": "controls",
-            "criterion": "给重复检查、重跑结果和下次对账入口。",
+            "criterion": "给重复检查、重跑结果和下次对账入口。 可以先交明确范围的草案；只把拒收条件中的实质错误限制在相关结论或动作。",
             "rejectWhen": "把一次平衡当长期无误。",
             "verificationMethod": "artifact_inspection",
             "evidenceRequired": [
               "重跑依据",
               "复核清单"
             ],
-            "blocking": false
+            "blocking": true
           },
           {
             "id": "accounting-reconciliation-analyst-facts",
             "field": "facts",
-            "criterion": "足以让接手者区分输入事实与当前假设。",
-            "rejectWhen": "关键业务输入被编造或来源无法定位。",
+            "criterion": "用于当前实质结论的关键事实与原始输入一致；来源未全时明确标注未知或假设，其他资料充分部分继续。",
+            "rejectWhen": "把编造、推断或示例写成已核实的关键事实，使当前结论不可靠。",
             "verificationMethod": "source_check",
             "evidenceRequired": [
               "材料清单与假设"
             ],
-            "blocking": false
+            "blocking": true
           },
           {
             "id": "accounting-reconciliation-analyst-handoff",

@@ -166,14 +166,14 @@
           {
             "id": "limitations-acceptance",
             "field": "limitations",
-            "criterion": "区分编码验证、字体渲染、人工观感、身份和授权缺口，未检查的都可定位。",
+            "criterion": "区分编码验证、字体渲染、人工观感、身份和授权缺口，未检查的都可定位。 未执行或未知可如实保留，不阻断独立成果；只有虚假通过或无依据外推影响相应结论。",
             "rejectWhen": "声明零风险/完全一致或把程序通过当专业表达认可。",
             "verificationMethod": "domain_review",
             "evidenceRequired": [
               "结构检查报告",
               "人工观察范围与授权来源"
             ],
-            "blocking": false
+            "blocking": true
           },
           {
             "id": "approval-state-acceptance",

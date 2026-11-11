@@ -44,7 +44,7 @@
     "语义、名称、焦点和错误提示与真实交互一致。",
     "区分自动、键盘、阅读器、缩放和各状态实际检查。",
     "优先解决无法完成任务的阻断，给其余问题清晰排期。",
-    "足以让接手者区分输入事实与当前假设。",
+    "用于当前实质结论的关键事实与原始输入一致；来源未全时明确标注未知或假设，其他资料充分部分继续。",
     "给当前可用成果和受影响的待核项，独立部分可以继续。"
   ],
   "coordinationOwner": "caller",
@@ -207,13 +207,13 @@
           {
             "id": "accessibility-audit-facts",
             "field": "facts",
-            "criterion": "足以让接手者区分输入事实与当前假设。",
-            "rejectWhen": "关键业务输入被编造或来源无法定位。",
+            "criterion": "用于当前实质结论的关键事实与原始输入一致；来源未全时明确标注未知或假设，其他资料充分部分继续。",
+            "rejectWhen": "把编造、推断或示例写成已核实的关键事实，使当前结论不可靠。",
             "verificationMethod": "source_check",
             "evidenceRequired": [
               "材料清单与假设"
             ],
-            "blocking": false
+            "blocking": true
           },
           {
             "id": "accessibility-audit-handoff",

@@ -48,8 +48,8 @@
     "每用例对应用户结果，覆盖主流程、异常和恢复。",
     "测试各自准备并清理状态，使用语义定位和可等待断言。",
     "记录环境、首跑与重试、trace和失败原因，区分mock与真实服务。",
-    "说明未覆盖路径和最有价值下一项，随产品规则调整。",
-    "足以让接手者区分输入事实与当前假设。",
+    "说明未覆盖路径和最有价值下一项，随产品规则调整。 可以先交明确范围的草案；只把拒收条件中的实质错误限制在相关结论或动作。",
+    "用于当前实质结论的关键事实与原始输入一致；来源未全时明确标注未知或假设，其他资料充分部分继续。",
     "给当前可用成果和受影响的待核项，独立部分可以继续。"
   ],
   "coordinationOwner": "caller",
@@ -199,25 +199,25 @@
           {
             "id": "test-automation-engineer-coverage",
             "field": "coverage",
-            "criterion": "说明未覆盖路径和最有价值下一项，随产品规则调整。",
+            "criterion": "说明未覆盖路径和最有价值下一项，随产品规则调整。 可以先交明确范围的草案；只把拒收条件中的实质错误限制在相关结论或动作。",
             "rejectWhen": "用代码覆盖率100%声称业务无缺陷。",
             "verificationMethod": "artifact_inspection",
             "evidenceRequired": [
               "风险列表",
               "用例所有者"
             ],
-            "blocking": false
+            "blocking": true
           },
           {
             "id": "test-automation-engineer-facts",
             "field": "facts",
-            "criterion": "足以让接手者区分输入事实与当前假设。",
-            "rejectWhen": "关键业务输入被编造或来源无法定位。",
+            "criterion": "用于当前实质结论的关键事实与原始输入一致；来源未全时明确标注未知或假设，其他资料充分部分继续。",
+            "rejectWhen": "把编造、推断或示例写成已核实的关键事实，使当前结论不可靠。",
             "verificationMethod": "source_check",
             "evidenceRequired": [
               "材料清单与假设"
             ],
-            "blocking": false
+            "blocking": true
           },
           {
             "id": "test-automation-engineer-handoff",

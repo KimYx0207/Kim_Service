@@ -33,7 +33,7 @@
     "区分请求约束变严、响应字段变化和业务语义变化，给迁移窗口。",
     "覆盖无权限、重复请求、分页边界、异步结果和错误恢复。",
     "按真实消费者影响排序，先修阻断联调问题。",
-    "足以让接手者区分输入事实与当前假设。",
+    "用于当前实质结论的关键事实与原始输入一致；来源未全时明确标注未知或假设，其他资料充分部分继续。",
     "给当前可用成果和受影响的待核项，独立部分可以继续。"
   ],
   "coordinationOwner": "caller",
@@ -194,13 +194,13 @@
           {
             "id": "api-contract-review-facts",
             "field": "facts",
-            "criterion": "足以让接手者区分输入事实与当前假设。",
-            "rejectWhen": "关键业务输入被编造或来源无法定位。",
+            "criterion": "用于当前实质结论的关键事实与原始输入一致；来源未全时明确标注未知或假设，其他资料充分部分继续。",
+            "rejectWhen": "把编造、推断或示例写成已核实的关键事实，使当前结论不可靠。",
             "verificationMethod": "source_check",
             "evidenceRequired": [
               "材料清单与假设"
             ],
-            "blocking": false
+            "blocking": true
           },
           {
             "id": "api-contract-review-handoff",

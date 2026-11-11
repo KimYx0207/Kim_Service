@@ -3,7 +3,7 @@
 ## 0.5.1 - 2026-11-11
 
 - Use task-specific handling for material unknowns and existing authorization.
-- Treat context and handoff refinements as advisory while keeping core delivery checks.
+- Keep truth and authority checks scoped to affected deliverables; allow explicit unknowns and partial progress.
 
 ## 0.5.0 (2026-11-11)
 

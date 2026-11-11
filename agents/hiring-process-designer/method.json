@@ -27,9 +27,9 @@
     "问题、材料、时间条件与追问规则服务于岗位能力，覆盖允许的合理调整。",
     "评分层级描述实际行为差异，缺证据记未观察，保留评分理由。",
     "用相同样例先独立评分后讨论分歧，记录标准修订与最终人工决策边界。",
-    "列出本次所用材料、日期/版本、分析单位与事实缺口，引用能追溯到原始记录。",
-    "明确说明未执行、未观察和不能外推的范围，并指出其对当前决定的影响。",
-    "交回当前产物、逐项判定、证据位置和待解决事项，调用方保有调度与最终验收。"
+    "列出本次所用材料、日期/版本、分析单位与事实缺口，引用能追溯到原始记录。 只阻断将未核实材料当关键事实的结论；明确标注未知或假设时，其余资料充分部分可继续。",
+    "明确说明未执行、未观察和不能外推的范围，并指出其对当前决定的影响。 未执行或未知可如实保留，不阻断独立成果；只有虚假通过或无依据外推影响相应结论。",
+    "交回当前产物、逐项判定、证据位置和待解决事项，调用方保有调度与最终验收。 交接格式和后续清单可补齐，不要求全任务停止；越权批准或虚报已执行动作影响相应交付。"
   ],
   "coordinationOwner": "caller",
   "permissionSource": "current_task_host_authorization",
@@ -207,38 +207,38 @@
           {
             "id": "hiring-process-designer-facts",
             "field": "facts",
-            "criterion": "列出本次所用材料、日期/版本、分析单位与事实缺口，引用能追溯到原始记录。",
+            "criterion": "列出本次所用材料、日期/版本、分析单位与事实缺口，引用能追溯到原始记录。 只阻断将未核实材料当关键事实的结论；明确标注未知或假设时，其余资料充分部分可继续。",
             "rejectWhen": "把示例、推断或转述当作当前任务已核实事实。",
             "verificationMethod": "source_check",
             "evidenceRequired": [
               "本次输入清单与来源定位",
               "已知/未知/假设的分项记录"
             ],
-            "blocking": false
+            "blocking": true
           },
           {
             "id": "hiring-process-designer-limitations",
             "field": "limitations",
-            "criterion": "明确说明未执行、未观察和不能外推的范围，并指出其对当前决定的影响。",
+            "criterion": "明确说明未执行、未观察和不能外推的范围，并指出其对当前决定的影响。 未执行或未知可如实保留，不阻断独立成果；只有虚假通过或无依据外推影响相应结论。",
             "rejectWhen": "未知被写成通过，或用格式完整声称行业效果已验证。",
             "verificationMethod": "artifact_inspection",
             "evidenceRequired": [
               "缺失条件和受影响结论",
               "实际执行与未执行范围"
             ],
-            "blocking": false
+            "blocking": true
           },
           {
             "id": "hiring-process-designer-handoff",
             "field": "handoff",
-            "criterion": "交回当前产物、逐项判定、证据位置和待解决事项，调用方保有调度与最终验收。",
+            "criterion": "交回当前产物、逐项判定、证据位置和待解决事项，调用方保有调度与最终验收。 交接格式和后续清单可补齐，不要求全任务停止；越权批准或虚报已执行动作影响相应交付。",
             "rejectWhen": "把自检当独立批准，或声称已采取未发生的外部行动。",
             "verificationMethod": "artifact_inspection",
             "evidenceRequired": [
               "交付产物版本及位置",
               "每个阻断项的处理人或下一步"
             ],
-            "blocking": false
+            "blocking": true
           }
         ]
       }

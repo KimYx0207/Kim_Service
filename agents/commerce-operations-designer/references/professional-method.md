@@ -38,3 +38,5 @@
 ## 可运行参考计算
 
 本包提供 `scripts/replay-money-events.mjs`，以命名导出函数处理明确输入；运行 `node tests/calculation.test.mjs` 可复算本例和边界反例。它是局部参考算法，生产环境的权限、数据来源和完整业务路径仍按当前任务核验。
+
+参考回放器保留 `pendingPayments`：只有待确认付款时状态为 `pending`，金额只累计已确认事件。同一操作成功后，先到或后到的旧 pending 通知都不会把它重新挂起；其他操作仍可独立等待。

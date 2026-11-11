@@ -332,7 +332,7 @@
           },
           {
             "field": "handoff",
-            "criterion": "交事实、产物、限制与待决定项；控制权留调用方。",
+            "criterion": "交事实、产物、限制与待决定项；控制权留调用方。 交接格式和后续清单可补齐，不要求全任务停止；越权批准或虚报已执行动作影响相应交付。",
             "rejectWhen": "自行批准下一阶段、调度或高影响操作。",
             "id": "frontend-engineer-handoff",
             "verificationMethod": "artifact_inspection",
@@ -340,7 +340,7 @@
               "下一执行者可用的事实/产物/限制",
               "需要调用方决定的具体事项"
             ],
-            "blocking": false
+            "blocking": true
           },
           {
             "field": "nativeRuntimeVerified",

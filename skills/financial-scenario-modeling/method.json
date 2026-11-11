@@ -32,8 +32,8 @@
     "基准、下行与变化来源清楚，币种期间单位一致。",
     "按真实收付先后定位最低余额和首次缺口。",
     "一次改一个变量做敏感性，情景联动另外说明；NPV时点明确。",
-    "给影响具体缺口的可逆选项和复核点。",
-    "足以让接手者区分输入事实与当前假设。",
+    "给影响具体缺口的可逆选项和复核点。 可以先交明确范围的草案；只把拒收条件中的实质错误限制在相关结论或动作。",
+    "用于当前实质结论的关键事实与原始输入一致；来源未全时明确标注未知或假设，其他资料充分部分继续。",
     "给当前可用成果和受影响的待核项，独立部分可以继续。"
   ],
   "coordinationOwner": "caller",
@@ -182,24 +182,24 @@
           {
             "id": "financial-scenario-modeling-options",
             "field": "options",
-            "criterion": "给影响具体缺口的可逆选项和复核点。",
-            "rejectWhen": "收益承诺或自动支出。",
+            "criterion": "给影响具体缺口的可逆选项和复核点。 可以先交明确范围的草案；只把拒收条件中的实质错误限制在相关结论或动作。",
+            "rejectWhen": "把情景当保证收益，或在当前授权之外执行实际支出。",
             "verificationMethod": "artifact_inspection",
             "evidenceRequired": [
               "选项与约束映射"
             ],
-            "blocking": false
+            "blocking": true
           },
           {
             "id": "financial-scenario-modeling-facts",
             "field": "facts",
-            "criterion": "足以让接手者区分输入事实与当前假设。",
-            "rejectWhen": "关键业务输入被编造或来源无法定位。",
+            "criterion": "用于当前实质结论的关键事实与原始输入一致；来源未全时明确标注未知或假设，其他资料充分部分继续。",
+            "rejectWhen": "把编造、推断或示例写成已核实的关键事实，使当前结论不可靠。",
             "verificationMethod": "source_check",
             "evidenceRequired": [
               "材料清单与假设"
             ],
-            "blocking": false
+            "blocking": true
           },
           {
             "id": "financial-scenario-modeling-handoff",

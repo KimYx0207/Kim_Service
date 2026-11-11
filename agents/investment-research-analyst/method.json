@@ -38,7 +38,7 @@
     "拆收入来源、利润质量、现金转换和资产负债风险，事实与判断分开。",
     "输入可重算，价格日期一致，负分母或缺失值有适当解释。",
     "列能推翻论点的事实、待核项及下次更新触发。",
-    "足以让接手者区分输入事实与当前假设。",
+    "用于当前实质结论的关键事实与原始输入一致；来源未全时明确标注未知或假设，其他资料充分部分继续。",
     "给当前可用成果和受影响的待核项，独立部分可以继续。"
   ],
   "coordinationOwner": "caller",
@@ -201,13 +201,13 @@
           {
             "id": "investment-research-analyst-facts",
             "field": "facts",
-            "criterion": "足以让接手者区分输入事实与当前假设。",
-            "rejectWhen": "关键业务输入被编造或来源无法定位。",
+            "criterion": "用于当前实质结论的关键事实与原始输入一致；来源未全时明确标注未知或假设，其他资料充分部分继续。",
+            "rejectWhen": "把编造、推断或示例写成已核实的关键事实，使当前结论不可靠。",
             "verificationMethod": "source_check",
             "evidenceRequired": [
               "材料清单与假设"
             ],
-            "blocking": false
+            "blocking": true
           },
           {
             "id": "investment-research-analyst-handoff",

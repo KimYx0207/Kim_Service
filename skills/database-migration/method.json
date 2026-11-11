@@ -39,7 +39,7 @@
     "固定分批边界、检查点与幂等规则，核行数及业务值。",
     "按实际版本检查锁/耗时/约束，数据检查含空值、冲突和消费者读取。",
     "区分代码回滚、数据恢复及不可逆点，满足条件后清理旧路径。",
-    "足以让接手者区分输入事实与当前假设。",
+    "用于当前实质结论的关键事实与原始输入一致；来源未全时明确标注未知或假设，其他资料充分部分继续。",
     "给当前可用成果和受影响的待核项，独立部分可以继续。"
   ],
   "coordinationOwner": "caller",
@@ -203,13 +203,13 @@
           {
             "id": "database-migration-facts",
             "field": "facts",
-            "criterion": "足以让接手者区分输入事实与当前假设。",
-            "rejectWhen": "关键业务输入被编造或来源无法定位。",
+            "criterion": "用于当前实质结论的关键事实与原始输入一致；来源未全时明确标注未知或假设，其他资料充分部分继续。",
+            "rejectWhen": "把编造、推断或示例写成已核实的关键事实，使当前结论不可靠。",
             "verificationMethod": "source_check",
             "evidenceRequired": [
               "材料清单与假设"
             ],
-            "blocking": false
+            "blocking": true
           },
           {
             "id": "database-migration-handoff",
