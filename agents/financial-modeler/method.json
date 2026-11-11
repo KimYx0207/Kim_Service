@@ -18,7 +18,8 @@
   ],
   "skillLoading": [
     "按本次任务读取下面两份知识材料；只加载有关内容。",
-    "使用宿主已提供且获授权的相关工具槽；缺工具时仍完成资料分析与可用草案，把未执行步骤交接。"
+    "使用宿主已提供且获授权的相关工具槽；缺工具时仍完成资料分析与可用草案，把未执行步骤交接。",
+    "按需读取 references/operating-forecast.md；样板为合成数据，可用工具和实际任务验收仍由宿主绑定，不默认加载全部示例源码。"
   ],
   "steps": [
     "核对原始报表日期、币种、单位和调整，先用历史数重建简化勾稽。",
@@ -29,7 +30,7 @@
     "按输出标准核对当前产物，区分已完成、可用草案与待核项；只暂停受实质缺口影响的动作。"
   ],
   "acceptance": [
-    "收入成本及现金流按同期间币种连接，公式可追到输入，资产负债核平。",
+    "收入成本及现金流按同期间币种连接，公式可追到输入；完整三表才声明资产负债核平，简化经营模型明确未覆盖项。",
     "FCFF配WACC、FCFE配股权成本；终值条件有效；企业到股权价值调整明确。",
     "变化来自明确驱动，比较关键约束和结果，不用单一乐观值。",
     "指出结论最依赖的假设、需要补的材料和下一步。",
@@ -63,6 +64,16 @@
         "sec-edgar",
         "damodaran-models"
       ]
+    },
+    {
+      "id": "financial-modeler-operating-example",
+      "path": "references/operating-forecast.md",
+      "appliesTo": [
+        "12个月经营预测、现金缺口或可编辑经营模型交付；只在该任务需要时读取"
+      ],
+      "sourceRefs": [
+        "original-editable-sample"
+      ]
     }
   ],
   "expertise": {
@@ -74,7 +85,8 @@
     ],
     "knowledgeAssetIds": [
       "financial-modeler-method",
-      "financial-modeler-delivery"
+      "financial-modeler-delivery",
+      "financial-modeler-operating-example"
     ],
     "diagnosticSequence": [
       {

@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "samples": [
+    {
+      "id": "service-console",
+      "title": "可编辑的预约台设计系统",
+      "description": "切换浅深主题、修改品牌色和密度，体验表单的加载、失败恢复与预约名单，再下载当前设计 tokens。",
+      "capabilityId": "design-system-designer-deliver",
+      "entrypoint": "agents/design-system-designer/examples/service-console/index.html",
+      "inputs": ["语义设计 tokens", "合成预约数据", "本地表单输入"],
+      "outputs": ["可操作的离线页面", "当前主题与组件状态", "可下载的 tokens JSON"],
+      "exampleData": true
+    },
+    {
+      "id": "operating-forecast",
+      "title": "12个月经营预测与现金缺口",
+      "description": "编辑经营假设，比较三种情景下的利润与现金；公式可复算，支持 JSON 导入及月表 CSV 下载。",
+      "capabilityId": "financial-modeler-deliver",
+      "entrypoint": "agents/financial-modeler/examples/operating-forecast/index.html",
+      "inputs": ["合成经营假设", "期初现金与应收应付", "12个月采购及融资安排"],
+      "outputs": ["三情景12个月明细", "现金缺口与回款说明", "可下载的输入/结果 JSON 与月表 CSV"],
+      "exampleData": true
+    }
+  ]
+}

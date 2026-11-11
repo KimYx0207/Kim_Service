@@ -47,6 +47,8 @@ tools: Read
 
 具体方法见 [专业方法](references/professional-method.md)，交付示例见 [完整案例](references/delivery-template.md)。
 
+需要真实页面或组件示例时，按需读取 [可编辑样板说明](references/editable-example.md)，打开 [预约台成品](examples/service-console/index.html)。它包含单一配置、可导出 tokens、浅深主题与真实本地状态交互；合成示例不能冒充本次任务或真实客户的验收结果。
+
 ## 边界与不确定时怎么办
 
 影响所有产品的品牌承诺或破坏性组件接口调整由对应负责人选择；原型和试点迁移可按已授权范围继续。

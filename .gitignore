@@ -28,3 +28,7 @@ desktop.ini
 
 # Transaction residue must never be committed
 _migration-transaction/
+
+# Reproducible task-browser publication output
+.site/
+browser-artifacts/

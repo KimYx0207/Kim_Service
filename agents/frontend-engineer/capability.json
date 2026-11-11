@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "frontend-engineer",
   "componentType": "agent",
-  "componentVersion": "0.4.2",
+  "componentVersion": "0.4.3",
   "entrypoint": "AGENT.md",
   "capabilities": [
     {

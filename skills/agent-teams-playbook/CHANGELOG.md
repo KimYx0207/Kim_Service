@@ -1,3 +1,8 @@
+## 4.9.1 — 2026-11-11
+
+- 统一重试与恢复预算；Meta沿用宿主planning-continuity；独立任务保留等价记录；默认继承模型。
+- 合成样板与结构/工具验证不改变 professionalEffect: not_evaluated。
+
 # Changelog
 
 ## 4.9.0 - 2026-11-11

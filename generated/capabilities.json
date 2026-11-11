@@ -266,12 +266,12 @@
       ]
     },
     {
-      "componentContentSha256": "8882f5668e5d0b9daf51f6c2e4fa23262b74d5e8e55dde18337bc5b9a68b78f4",
+      "componentContentSha256": "6fc6d495839fb8d338764836ab9fd0f3a037a75f7291502797bd103ed9611fad",
       "componentId": "agent-teams-playbook",
       "componentPath": "skills/agent-teams-playbook",
       "componentType": "skill",
-      "componentVersion": "4.9.0",
-      "contractSha256": "e40c5522ada30a0c7d6cdb9a959461fb513b46614291177a7d556951cedbd6d3",
+      "componentVersion": "4.9.1",
+      "contractSha256": "42c408e8650d04f451a968df8a96a9b7b0f86e402d360eaa11e0e43a4ef5fbc0",
       "doNotUseWhen": [
         "单 Agent 可以直接完成的一次性问答或单文件小改动",
         "宿主没有真实的子 Agent 能力且任务也不值得采用分阶段降级流程",
@@ -3074,12 +3074,12 @@
       ]
     },
     {
-      "componentContentSha256": "c6908c41fb5a4d9d260f79950915779b12366ee172ce3e1b4735309f1bf6f84a",
+      "componentContentSha256": "69d12981723c391367809acee4e886fd63d0b616f434007370c2f9dbdac756c9",
       "componentId": "design-system-designer",
       "componentPath": "agents/design-system-designer",
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contractSha256": "2e97d08996ac018785cc65caa5109c4366f2c21e9346263a296b99fd9de97d80",
+      "componentVersion": "0.2.0",
+      "contractSha256": "be05dfa71b67992881c55a3a2494e7541db40f3b50742db7540d0d6794b997c6",
       "doNotUseWhen": [
         "单页流程交interaction-designer。",
         "具体前端实现交frontend-engineer协作。",
@@ -3202,7 +3202,8 @@
         "设计深色模式和多语言组件状态。"
       ],
       "validation": [
-        "tests/contract.test.mjs"
+        "tests/contract.test.mjs",
+        "tests/tokens.test.mjs"
       ]
     },
     {
@@ -3582,12 +3583,12 @@
       ]
     },
     {
-      "componentContentSha256": "99def5388b7736e39e522e19f729be67fe83daba5af1a6d945f252bb5ff8ebff",
+      "componentContentSha256": "3d957579906847477a9677e66c173d649a491731a2821cdb18debe27a7412f02",
       "componentId": "financial-modeler",
       "componentPath": "agents/financial-modeler",
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contractSha256": "d1ee4b6ce7d6ffe84c0a2053f80ccf5fbeed8ecee118fb56492c91ee122f6342",
+      "componentVersion": "0.2.0",
+      "contractSha256": "1dfd4bae2efde8b6d5147adea06c107edf67cc9bb8a8eb656d93b7df3c2004d9",
       "doNotUseWhen": [
         "日常现金流水分析交business-finance-analyst。",
         "策略回测交quantitative-researcher。",
@@ -3711,7 +3712,8 @@
       ],
       "validation": [
         "tests/contract.test.mjs",
-        "tests/calculation.test.mjs"
+        "tests/calculation.test.mjs",
+        "tests/operating-forecast.test.mjs"
       ]
     },
     {
@@ -3848,12 +3850,12 @@
       ]
     },
     {
-      "componentContentSha256": "492f3346d8f6a8b887366c65a22b47eec925280fff572738ef4b5b6077f54646",
+      "componentContentSha256": "91380a7ccae3c2051694290a4b63b6c0853388982a1e0f3a6dc46743fccb4de6",
       "componentId": "frontend-engineer",
       "componentPath": "agents/frontend-engineer",
       "componentType": "agent",
-      "componentVersion": "0.4.2",
-      "contractSha256": "f55aa6e614a7864dc111383b05bbee52e4909f7cd23a8432a2512462681bff06",
+      "componentVersion": "0.4.3",
+      "contractSha256": "5f2e5b2706fd2bcdceeae27ca8aafec4f852f876649530b6d9e0edc1c0f9f204",
       "doNotUseWhen": [
         "未明确产品范围：交 product-architect",
         "更改服务认证和数据库：交 backend-data-engineer",
@@ -13826,14 +13828,15 @@
         "design-system-designer-deliver"
       ],
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contentSha256": "c6908c41fb5a4d9d260f79950915779b12366ee172ce3e1b4735309f1bf6f84a",
-      "contractSha256": "2e97d08996ac018785cc65caa5109c4366f2c21e9346263a296b99fd9de97d80",
+      "componentVersion": "0.2.0",
+      "contentSha256": "69d12981723c391367809acee4e886fd63d0b616f434007370c2f9dbdac756c9",
+      "contractSha256": "be05dfa71b67992881c55a3a2494e7541db40f3b50742db7540d0d6794b997c6",
       "entrypoint": "AGENT.md",
       "id": "design-system-designer",
       "path": "agents/design-system-designer",
       "validation": [
-        "tests/contract.test.mjs"
+        "tests/contract.test.mjs",
+        "tests/tokens.test.mjs"
       ]
     },
     {
@@ -13872,15 +13875,16 @@
         "financial-modeler-deliver"
       ],
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contentSha256": "99def5388b7736e39e522e19f729be67fe83daba5af1a6d945f252bb5ff8ebff",
-      "contractSha256": "d1ee4b6ce7d6ffe84c0a2053f80ccf5fbeed8ecee118fb56492c91ee122f6342",
+      "componentVersion": "0.2.0",
+      "contentSha256": "3d957579906847477a9677e66c173d649a491731a2821cdb18debe27a7412f02",
+      "contractSha256": "1dfd4bae2efde8b6d5147adea06c107edf67cc9bb8a8eb656d93b7df3c2004d9",
       "entrypoint": "AGENT.md",
       "id": "financial-modeler",
       "path": "agents/financial-modeler",
       "validation": [
         "tests/calculation.test.mjs",
-        "tests/contract.test.mjs"
+        "tests/contract.test.mjs",
+        "tests/operating-forecast.test.mjs"
       ]
     },
     {
@@ -13888,9 +13892,9 @@
         "frontend-engineer-deliver"
       ],
       "componentType": "agent",
-      "componentVersion": "0.4.2",
-      "contentSha256": "492f3346d8f6a8b887366c65a22b47eec925280fff572738ef4b5b6077f54646",
-      "contractSha256": "f55aa6e614a7864dc111383b05bbee52e4909f7cd23a8432a2512462681bff06",
+      "componentVersion": "0.4.3",
+      "contentSha256": "91380a7ccae3c2051694290a4b63b6c0853388982a1e0f3a6dc46743fccb4de6",
+      "contractSha256": "5f2e5b2706fd2bcdceeae27ca8aafec4f852f876649530b6d9e0edc1c0f9f204",
       "entrypoint": "AGENT.md",
       "id": "frontend-engineer",
       "path": "agents/frontend-engineer",
@@ -14389,9 +14393,9 @@
         "agent-teams-orchestrate"
       ],
       "componentType": "skill",
-      "componentVersion": "4.9.0",
-      "contentSha256": "8882f5668e5d0b9daf51f6c2e4fa23262b74d5e8e55dde18337bc5b9a68b78f4",
-      "contractSha256": "e40c5522ada30a0c7d6cdb9a959461fb513b46614291177a7d556951cedbd6d3",
+      "componentVersion": "4.9.1",
+      "contentSha256": "6fc6d495839fb8d338764836ab9fd0f3a037a75f7291502797bd103ed9611fad",
+      "contractSha256": "42c408e8650d04f451a968df8a96a9b7b0f86e402d360eaa11e0e43a4ef5fbc0",
       "entrypoint": "SKILL.md",
       "id": "agent-teams-playbook",
       "path": "skills/agent-teams-playbook",

@@ -427,7 +427,7 @@ function isTextFile(relativePath, buffer) {
   ]).has(path.posix.extname(relativePath).toLowerCase()) || path.posix.extname(relativePath) === '';
 }
 
-const credentialAssignmentPattern = /(?:^|[\s,{])["']?([A-Za-z][A-Za-z0-9_-]*)["']?\s*[:=]\s*(?:"([^"\r\n]*)"|'([^'\r\n]*)'|(\$\{[^}\r\n]+\}|[^\s,;#}\]\r\n]+))/gim;
+const credentialAssignmentPattern = /(?:^|[\s,{])["']?([A-Za-z][A-Za-z0-9_-]*)["']?[ \t]*[:=][ \t]*(?:"([^"\r\n]*)"|'([^'\r\n]*)'|(\$\{[^}\r\n]+\}|[^\s,;#}\]\r\n]+))/gim;
 
 function normalizeCredentialKey(key) {
   return key
@@ -453,7 +453,11 @@ function isPlaceholderCredentialValue(rawValue) {
     /^(?:sk-|gh[pousr]_|github_pat_|xox[baprs]-|npm_|hf_|aiza)(?:your|example|sample|dummy|placeholder|test|fake)[-_a-z0-9]*$/i.test(value);
 }
 
-function findCredentialAssignment(text) {
+function findCredentialAssignment(text, { githubWorkflow = false } = {}) {
+  // GitHub's OIDC permission is a schema value, not a stored credential.
+  // Exempt only the exact permission inside a YAML permissions block.
+  if (githubWorkflow) text = text.replace(/^([ ]*)permissions:\s*\n((?:\1[ ]+[^\n]*\n)*)/gm, block =>
+    block.replace(/^[ ]+id-token:[ ]*(?:write|none)[ ]*(?:#.*)?$/gm, ''));
   credentialAssignmentPattern.lastIndex = 0;
   for (const match of text.matchAll(credentialAssignmentPattern)) {
     const [, key, doubleQuoted, singleQuoted, unquoted] = match;
@@ -471,6 +475,12 @@ function assertSensitiveScannerRegressions() {
     'MCPR_TOKEN=REALVALUE123456',
     'clientSecret: abcdefghijklmnop'
   ];
+  if (findCredentialAssignment('permissions:\n  id-token: write\n', { githubWorkflow: true }) ||
+      !findCredentialAssignment('env:\n  id-token: write\n', { githubWorkflow: true }) ||
+      !findCredentialAssignment('permissions:\n  id-token: REALVALUE123456\n', { githubWorkflow: true }) ||
+      !findCredentialAssignment('permissions:\n  id-token: write\n')) {
+    fail('Credential scanner mishandled GitHub OIDC permission scope');
+  }
   const negative = [
     'API_KEY=your_api_key',
     'MCPR_TOKEN=<your-token>',
@@ -543,7 +553,7 @@ function checkSensitiveFiles() {
       }
     }
 
-    const credentialKey = findCredentialAssignment(text);
+    const credentialKey = findCredentialAssignment(text, { githubWorkflow: /^\.github\/workflows\/[^/]+\.ya?ml$/.test(relativePath) });
     if (credentialKey) {
       fail('Credential assignment (' + credentialKey + ') found in ' + relativePath);
     }

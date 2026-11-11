@@ -59,3 +59,34 @@ jobs:
         run: node --test scripts/*.test.mjs
       - name: Run every declared component validation
         run: node scripts/check-components.mjs
+
+  browser:
+    name: Task browser and editable samples
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '24'
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12'
+      - name: Build actual static site
+        run: node scripts/build-site.mjs
+      - name: Install pinned browser test runtime
+        run: python -m pip install -r tests/browser/requirements.txt
+      - name: Install test browser
+        run: python -m playwright install --with-deps chromium-headless-shell
+      - name: Exercise tasks, keyboard, drafts, sample edits and downloads
+        run: python tests/browser/task_browser.py
+      - name: Save actual browser screenshots
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: task-browser-screenshots
+          path: browser-artifacts/
+          if-no-files-found: warn
+          retention-days: 14

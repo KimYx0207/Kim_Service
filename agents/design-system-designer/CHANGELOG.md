@@ -1,3 +1,8 @@
+## 0.2.0 — 2026-11-11
+
+- 增加可编辑预约台样板、单一配置、主题tokens、键盘与失败恢复交互。
+- 合成样板与结构/工具验证不改变 professionalEffect: not_evaluated。
+
 # Changelog
 
 ## 0.1.0 - 2026-11-11

@@ -1,132 +1,10 @@
-/* No fetch, dependencies, analytics, model calls, installation or execution. */
+/* Presentation only: DOM, focus, editable requests and user feedback. */
 (function () {
   'use strict';
-  const TYPE_NAMES = { all: '全部', agent: '专业方法包', skill: '技能包', tool: '工具', hook: 'Hook', app: '应用包' };
-  // Search vocabulary only. Package facts and availability always come from contracts.
-  const SYNONYMS = [
-    ['小红书', 'xiaohongshu', 'rednote'], ['表情包', '贴纸', 'sticker'],
-    ['产品设计', '产品架构', 'product-architect'],
-    ['动效', '动画', 'motion', 'animation'], ['视频', '音视频', 'media', 'video'],
-    ['设计', 'design', 'designer'], ['前端', 'frontend'], ['开发', 'engineer', '代码', 'code'],
-    ['简历', 'resume'], ['面试', 'interview'], ['店铺', 'store'], ['成本', 'cost', 'pricing'],
-    ['供应商', 'supplier'], ['周报', 'workplace'], ['封面', 'cover'], ['选题', 'topic'],
-    ['提示词', 'prompt'], ['记忆', 'memory'], ['搜索', 'search', 'discover'],
-    ['安装', 'install'], ['回滚', 'rollback'], ['安全', 'security', 'semgrep'],
-    ['技能', 'skill'], ['学习', 'tutor', 'lesson', '练习'], ['副业', 'side-business'],
-    ['决策', 'decision'], ['团队', 'teams'], ['交付', 'delivery'], ['量化', 'quantitative']
-  ];
-  const FIELD_NAMES = {
-    task:'任务', prompt:'请求内容', request:'具体需求', brief:'创作需求', topic:'主题', goal:'目标',
-    scope:'范围', source:'来源', skill:'技能', agent:'使用环境', approvedCommand:'已获准命令', apply:'是否执行',
-    rollback:'回滚范围', mode:'模式', target:'目标位置', targetHash:'目标文件哈希', ok:'操作结果', action:'操作说明',
-    content:'交付内容', operations:'操作清单', hostResult:'宿主结果', command:'命令', arguments:'参数',
-    artifacts:'交付文件', limitations:'局限与缺项', stage:'当前阶段', approvalState:'确认状态',
-    evidence:'依据', nextAction:'下一步', passSignal:'检查标准', decisionQuestion:'待决定的问题', continuationNeed:'继续条件',
-    status:'交付状态', artifactRefs:'产物与证据引用', criterionResults:'逐项检查结果', missingCapabilities:'缺少的工具或能力',
-    failures:'失败记录', stopReason:'结束原因', handoff:'交接说明', nativeRuntimeVerified:'原生宿主验证状态',
-    acceptanceCriteria:'验收条件', handoffContext:'任务上下文与授权范围', runtimeBindings:'宿主工具绑定',
-    titleCandidates:'标题候选', recommended:'推荐组合', coverOptions:'封面方案', consistencyCheck:'一致性检查',
-    diagnosis:'账号诊断', topics:'选题', schedule:'排期', reviewRule:'复盘规则', hooks:'开头方案', ending:'结尾', claimsCheck:'说法核对',
-    permissions:'所需权限', summary:'摘要', warnings:'提醒', result:'结果', report:'报告', sourceFrames:'已有动作帧',
-    characterReference:'角色参考', rightsRecord:'素材授权记录', outputSpec:'输出要求', workflow:'现有工作流',
-    assets:'已有素材', constraints:'限制条件', currentSystem:'当前情况', journey:'用户路径', reference:'参考资料'
-  };
-  const COMMON_FIELDS = new Set(['status','artifactRefs','criterionResults','missingCapabilities','failures','stopReason','handoff','nativeRuntimeVerified','acceptanceCriteria','handoffContext','runtimeBindings']);
-
-  function fields(schema) {
-    const required = new Set(schema.required || []);
-    const names = [...required, ...Object.keys(schema.properties || {}).filter((key) => !required.has(key))];
-    return names.map((key) => ({ key, required: required.has(key), description: schema.properties?.[key]?.description || '', label: FIELD_NAMES[key] || key }));
-  }
-
-  function briefLabel(field) {
-    if (field.description) {
-      const lead = field.description.split(/[：:；;。]/)[0];
-      return lead.length <= 36 ? lead : lead.slice(0, 34) + '…';
-    }
-    return field.label;
-  }
-
-  function titleOf(capability) {
-    const summary = capability.summary.trim();
-    const colon = summary.search(/[：（]/);
-    if (colon > 3 && colon < 22) return summary.slice(0, colon);
-    const sentence = summary.split(/[。\n]/)[0];
-    return sentence.length > 56 ? sentence.slice(0, 54) + '…' : sentence;
-  }
-
-  function searchableText(capability) {
-    return [capability.id, capability.componentId, capability.summary, ...(capability.useWhen || []),
-      ...fields(capability.input).flatMap((field) => [field.key, field.label, field.description]),
-      ...fields(capability.output).flatMap((field) => [field.key, field.label, field.description])]
-      .join(' ').normalize('NFKC').toLowerCase();
-  }
-
-  function queryTerms(query) {
-    return query.normalize('NFKC').toLowerCase().trim().split(/[\s，,、；;]+/u).filter(Boolean).map((token) => {
-      const exact = SYNONYMS.find((group) => group.includes(token));
-      if (exact) return exact;
-      // Permit common short requests (e.g. “我想做表情包”), without claiming semantic search.
-      const stripped = token.replace(/^(?:我想|我需要|我要|帮我|请帮我|请)?(?:做一个|做一套|做|写|改|找)?/u, '');
-      const group = SYNONYMS.find((items) => items.includes(stripped));
-      return group || [token];
-    });
-  }
-
-  function filterCapabilities(capabilities, query = '', type = 'all') {
-    const terms = queryTerms(query);
-    return capabilities.filter((capability) => {
-      if (type !== 'all' && capability.componentType !== type) return false;
-      const text = searchableText(capability);
-      return terms.every((alternatives) => alternatives.some((word) => {
-        if (/^[a-z0-9][a-z0-9 -]*$/u.test(word)) {
-          // English aliases are words, not substrings: media != immediate,
-          // store != restore, cover != discover. Hyphenated IDs remain searchable.
-          const escaped = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-          return new RegExp('(?:^|[^a-z0-9])' + escaped + '(?:$|[^a-z0-9])', 'u').test(text);
-        }
-        return text.includes(word);
-      }));
-    });
-  }
-
-  function buildRequest(capability) {
-    const entry = `${capability.componentPath}/${capability.entrypoint}`;
-    const inputs = fields(capability.input).filter((field) => field.required);
-    const outputs = fields(capability.output);
-    const lines = [
-      '请在已克隆的 Kim_Service 仓库上下文中处理以下任务。下面的相对路径都以 Kim_Service 仓库根目录为基准；若当前目录不是仓库根目录，请先定位仓库，不要猜测已经安装。',
-      '', `先阅读：${entry}`, ...(capability.readme && capability.readme !== entry ? [`使用说明：${capability.readme}`] : []),
-      `目标能力：${capability.id}`, `包版本：${capability.componentVersion}`, '',
-      `这项能力的声明：${capability.summary}`, '', '我的目标：【填写这次要完成的事】', '', '我提供的材料：',
-      ...inputs.map((field) => `- ${field.description || field.label}（${field.key}）：【填写；不清楚的标为待确认】`),
-      ...(inputs.length ? [] : ['- 【填写任务材料；按入口说明补充】']),
-      '', '请按入口要求与本次材料交付：',
-      ...(outputs.length ? outputs.map((field) => `- ${field.description || field.label}（${field.key}${field.required ? '，合同要求' : '，按需提供'}）`) : ['- 按入口说明交付，包合同没有逐项列出输出字段。']),
-      '', '先核对本次已具备的工具、材料和授权；只补问阻塞任务的缺项。普通已授权工作继续执行。',
-      '缺少工具或证据时明确标记未执行和剩余工作。不要把读取入口、示例或静态检查写成已安装、已原生加载、已实际执行或已通过最终验收。',
-      '需要新增安装、外部发布、付费或扩大访问范围时，按包内规则和本次授权处理。'
-    ];
-    return lines.join('\n');
-  }
-
-  async function copyRequest(textarea, clipboard) {
-    try {
-      if (!clipboard || typeof clipboard.writeText !== 'function') throw new Error('Clipboard unavailable');
-      await clipboard.writeText(textarea.value);
-      return true;
-    } catch {
-      textarea.focus();
-      textarea.select();
-      return false;
-    }
-  }
-
-  // The same pure functions run in browser and targeted Node regression tests.
-  globalThis.KimStart = Object.freeze({ filterCapabilities, buildRequest, fields, copyRequest, titleOf });
-  if (typeof document === 'undefined') return;
-
   const data = JSON.parse(document.getElementById('capability-data').textContent);
+  const app = createTaskBrowser(data.ui);
+  const {filterCapabilities,buildRequest,fields,titleOf,briefLabel,sourceUrl,sampleUrl,commonFields:COMMON_FIELDS,typeNames:TYPE_NAMES}=app;
+  const drafts=new Map();
   const search = document.getElementById('search');
   const cards = document.getElementById('cards');
   const dialog = document.getElementById('detail');
@@ -134,7 +12,7 @@
   let selectedType = 'all';
   let lastTrigger = null;
   let activeId = null;
-  const types = ['all', ...['agent','skill','tool','hook','app'].filter((type) => data.capabilities.some((capability) => capability.componentType === type))];
+  const types = ['all', ...data.ui.typeOrder.filter((type) => data.capabilities.some((capability) => capability.componentType === type))];
   // Match the visible type order; within each type use a name sort, not a recommendation score.
   const browsingOrder = [...data.capabilities].sort((left,right) =>
     types.indexOf(left.componentType)-types.indexOf(right.componentType) || titleOf(left).localeCompare(titleOf(right),'zh-CN'));
@@ -149,7 +27,7 @@
   function fileLink(relative, text, className) {
     const link = element('a', className, text);
     // Contracts are already path-validated by the catalog builder.
-    link.href = '../' + relative.split('/').map(encodeURIComponent).join('/');
+    link.href = sourceUrl(relative,location.protocol);
     link.target = '_blank';
     link.rel = 'noopener noreferrer';
     return link;
@@ -227,10 +105,12 @@
 
   function openDetail(capability, trigger, updateHash) {
     activeId = capability.id;
+    const draft = drafts.get(capability.id) || {goal:'',materials:'',host:data.ui.hosts[0].id,request:'',manual:false};
     if (trigger) lastTrigger = trigger;
     document.getElementById('detail-type').textContent = `${TYPE_NAMES[capability.componentType]} · v${capability.componentVersion}`;
     const heading = element('h2','detail-title',titleOf(capability));
     heading.id = 'detail-title';
+    heading.tabIndex = -1;
     const runtime = element('div','runtime-note');
     const [runtimeTitle,runtimeDescription] = runtimeCopy(capability);
     runtime.append(element('strong','',runtimeTitle),element('p','',runtimeDescription));
@@ -273,7 +153,24 @@
     const request = element('textarea');
     request.setAttribute('aria-label','可编辑的使用请求');
     request.spellcheck = false;
-    request.value = buildRequest(capability);
+    request.value = draft.request || buildRequest(capability,draft);
+    const hostLabel=element('label','request-field','交给哪个环境');
+    const host=element('select'); host.id='request-host'; hostLabel.htmlFor=host.id;
+    data.ui.hosts.forEach(item=>{const option=element('option','',item.label);option.value=item.id;host.append(option);});
+    host.value=draft.host;
+    const goalLabel=element('label','request-field','这次想得到什么');
+    const goal=element('input'); goal.id='request-goal'; goalLabel.htmlFor=goal.id;
+    goal.type='text';goal.placeholder='例如：把这页的报名流程改清楚，保留现有品牌风格';goal.value=draft.goal;
+    const materialLabel=element('label','request-field','已有材料和限制');
+    const materials=element('textarea');materials.id='request-materials';materialLabel.htmlFor=materials.id;
+    materials.className='materials-input';materials.placeholder='文件名、链接、已有内容、交付格式或截止时间';materials.value=draft.materials;
+    const update=element('button','secondary','更新请求'); update.type='button';
+    const editor=element('details','request-editor');editor.append(element('summary','','查看或编辑完整请求'),request,update);
+    function saveDraft(){draft.goal=goal.value;draft.materials=materials.value;draft.host=host.value;draft.request=request.value;drafts.set(capability.id,{...draft});}
+    function refreshRequest(){saveDraft();if(!draft.manual){request.value=buildRequest(capability,draft);saveDraft();}else{copyStatus.textContent='材料已更新。点击「更新请求」将它们写入你手动编辑的文本。';}}
+    goal.addEventListener('input',refreshRequest);materials.addEventListener('input',refreshRequest);host.addEventListener('change',refreshRequest);
+    request.addEventListener('input',()=>{draft.manual=true;saveDraft();});
+    update.addEventListener('click',()=>{saveDraft();request.value=buildRequest(capability,draft);draft.manual=false;saveDraft();copyStatus.textContent='请求已按当前目标、材料和环境更新。';});
     const copyActions = element('div','copy-actions');
     const copy = element('button','primary','复制请求');
     copy.type = 'button';
@@ -283,20 +180,22 @@
     copyStatus.setAttribute('role','status');
     copyStatus.setAttribute('aria-live','polite');
     copy.addEventListener('click',async()=>{
-      copy.disabled = true;
+      saveDraft();
+      copy.disabled = true;copy.textContent='复制中…';
       const success = await copyRequest(request,navigator.clipboard);
-      copy.disabled = false;
-      copyStatus.textContent = success ? '已复制。补齐材料后，交给已克隆仓库的 Agent。' : '浏览器未允许复制，已选中文本。请按 Ctrl/Cmd+C 或长按复制。';
+      copy.disabled = false;copy.textContent='复制请求';
+      copyStatus.textContent = success ? '已复制。粘贴到'+data.ui.hosts.find(item=>item.id===host.value).label+'中，完成后可在原对话继续修改。' : '浏览器未允许复制，已选中文本。请按 Ctrl/Cmd+C 或长按复制。';
     });
-    select.addEventListener('click',()=>{request.focus();request.select();copyStatus.textContent='已全选。请按 Ctrl/Cmd+C 或长按复制。';});
+    select.addEventListener('click',()=>{editor.open=true;request.focus();request.select();copyStatus.textContent='已全选。请按 Ctrl/Cmd+C 或长按复制。';});
     copyActions.append(copy,select,copyStatus);
-    requestBox.append(requestHeading,element('p','','相对路径以 Kim_Service 仓库根目录为准。把占位内容替换成你的材料；复制本身不会安装或执行能力。'),request,copyActions);
+    requestBox.append(requestHeading,element('p','','填好目标和材料，复制到你正在使用的 Agent。任务在该环境中执行。'),hostLabel,host,goalLabel,goal,materialLabel,materials,editor,copyActions);
     const note = element('p','source-note','声明来源：');
     note.append(fileLink(`${capability.componentPath}/capability.json`,`${capability.componentPath}/capability.json`));
     note.append(document.createTextNode('。包内示例可能是合成或未运行示例，请以原文件标注为准。'));
     detailContent.replaceChildren(heading,element('p','component-name',capability.id),element('p','detail-summary',capability.summary),runtime,listBlock('适用情况',capability.useWhen),io,extra,links,validation,requestBox,note);
     if (!dialog.open) dialog.showModal();
     dialog.scrollTop = 0;
+    heading.focus({preventScroll:true});
     if (updateHash) {
       try { history.replaceState(null,'','#capability='+encodeURIComponent(capability.id)); } catch { /* file URL history may be restricted */ }
     }
@@ -319,6 +218,7 @@
   });
   search.addEventListener('input',renderResults);
   document.getElementById('clear-search').addEventListener('click',()=>{search.value='';renderResults();search.focus();});
+  for(const query of data.ui.suggestions){const button=element('button','',query);button.type='button';button.dataset.query=query;document.getElementById('suggestions').append(button);}
   document.querySelectorAll('[data-query]').forEach((button)=>button.addEventListener('click',()=>{search.value=button.dataset.query;selectedType='all';renderResults();search.focus();}));
   document.getElementById('reset').addEventListener('click',()=>{search.value='';selectedType='all';renderResults();search.focus();});
   document.getElementById('close-detail').addEventListener('click',closeDetail);
@@ -326,7 +226,7 @@
   dialog.addEventListener('close',()=>{
     activeId=null;
     if(location.hash.startsWith('#capability=')){try{history.replaceState(null,'','#catalog');}catch{/* local history may be restricted */}}
-    if(lastTrigger?.isConnected)lastTrigger.focus();
+    if(lastTrigger?.isConnected)lastTrigger.focus();else search.focus();
   });
   document.addEventListener('keydown',(event)=>{
     if(event.key==='/'&&!dialog.open&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName)&&!event.ctrlKey&&!event.metaKey&&!event.altKey){event.preventDefault();search.focus();}
@@ -339,6 +239,17 @@
     if(capability&&capability.id!==activeId)openDetail(capability,null,false);
   }
   window.addEventListener('hashchange',openFromHash);
+  for(const sample of data.showcases){
+    const article=element('article','showcase-card');
+    article.append(element('p','eyebrow',sample.exampleData?'合成示例 · 可交互体验':'可交互体验'),element('h3','',sample.title),element('p','',sample.description));
+    const io=element('dl','showcase-io');
+    for(const [label,values] of [['你给',sample.inputs],['拿到',sample.outputs]]){const row=element('div');row.append(element('dt','',label),element('dd','',values.join('、')));io.append(row);}
+    const actions=element('div','showcase-actions');
+    const preview=element('a','primary','打开成品示例 ↗');preview.href=sampleUrl(sample.entrypoint,location.protocol);preview.target='_blank';preview.rel='noopener noreferrer';
+    const use=element('button','secondary','用我的材料做');use.type='button';use.addEventListener('click',()=>openDetail(data.capabilities.find(item=>item.id===sample.capabilityId),use,true));
+    actions.append(preview,use);article.append(io,actions);document.getElementById('showcase-cards').append(article);
+  }
+  document.getElementById('showcases').hidden=data.showcases.length===0;
   renderResults();
   openFromHash();
 })();

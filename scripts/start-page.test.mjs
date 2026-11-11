@@ -2,18 +2,17 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import vm from 'node:vm';
 import { spawnSync } from 'node:child_process';
 import test from 'node:test';
 import { buildCapabilityIndex } from './capability-catalog.mjs';
 import { buildStartPageData, renderStartPage, serializePageData } from './start-page.mjs';
 
+import { createTaskBrowser } from '../src/application/task-browser/model.mjs';
+import { copyRequest } from '../src/presentation/task-browser/copy-request.mjs';
 const root = path.resolve(import.meta.dirname,'..');
-const client = fs.readFileSync(path.join(root,'scripts/start-page/page.js'),'utf8');
-const context = vm.createContext({});
-vm.runInContext(client,context);
-const { filterCapabilities,buildRequest,copyRequest,fields } = context.KimStart;
+const client = fs.readFileSync(path.join(root,'src/presentation/task-browser/page.js'),'utf8');
 const data = buildStartPageData(root);
+const { filterCapabilities,buildRequest,fields } = createTaskBrowser(data.ui);
 
 test('the offline page retains every capability, schema and real source link from the canonical builder',()=>{
   const canonical=buildCapabilityIndex(root);
@@ -82,7 +81,8 @@ test('copied requests include the exact selected contract, required materials an
 
 test('copy uses the currently edited request and selects text when browser clipboard is denied or absent',async()=>{
   let copied,focused=0,selected=0;
-  const textarea={value:'用户已经补好的真实材料',focus(){focused++},select(){selected++}};
+  const editor={open:false};
+  const textarea={value:'用户已经补好的真实材料',closest(){return editor},focus(){focused++},select(){selected++}};
   assert.equal(await copyRequest(textarea,{async writeText(text){copied=text}}),true);
   assert.equal(copied,textarea.value);
   assert.equal(selected,0);
@@ -90,6 +90,35 @@ test('copy uses the currently edited request and selects text when browser clipb
   assert.equal(await copyRequest(textarea,undefined),false);
   assert.equal(focused,2);
   assert.equal(selected,2);
+  assert.equal(editor.open,true);
+});
+
+test('goals, supplied materials and host selection reach the actual copied request',()=>{
+  const capability=data.capabilities.find(item=>item.id==='financial-modeler-deliver');
+  const request=buildRequest(capability,{goal:'比较三种回款情景',materials:'输入文件：经营假设.json；只计算12个月',host:'meta-kim'});
+  assert.ok(request.startsWith('/meta-theory '));
+  assert.ok(request.includes('我的目标：比较三种回款情景'));
+  assert.ok(request.includes('输入文件：经营假设.json；只计算12个月'));
+  assert.ok(!request.includes('我的目标：【填写'));
+  assert.ok(buildRequest(capability,{host:'codex'}).startsWith('请在'));
+});
+
+test('published source links resolve to the configured repository while local samples remain portable',()=>{
+  const app=createTaskBrowser({...data.ui,repository:{...data.ui.repository,ref:'tested-commit'}});
+  assert.equal(app.sourceUrl('agents/design-system-designer/AGENT.md'),'https://github.com/KimYx0207/Kim_Service/blob/tested-commit/agents/design-system-designer/AGENT.md');
+  assert.equal(app.sourceUrl('agents/x/AGENT.md','file:'),'../agents/x/AGENT.md');
+  assert.equal(app.sampleUrl('agents/x/examples/index.html'),'./agents/x/examples/index.html');
+  assert.equal(app.sampleUrl('agents/x/examples/index.html','file:'),'../agents/x/examples/index.html');
+});
+
+test('showcases bind an existing capability to a real editable entrypoint without changing evaluation claims',()=>{
+  assert.equal(data.showcases.length,2);
+  for(const sample of data.showcases){
+    assert.ok(data.capabilities.some(item=>item.id===sample.capabilityId));
+    assert.equal(sample.exampleData,true);
+    assert.ok(fs.lstatSync(path.join(root,sample.entrypoint)).isFile());
+  }
+  assert.doesNotMatch(fs.readFileSync(path.join(root,'src/application/task-browser/model.mjs'),'utf8'),/node:fs|document\.|localStorage|readFile/);
 });
 
 test('contract strings cannot escape the embedded JSON or become HTML',()=>{

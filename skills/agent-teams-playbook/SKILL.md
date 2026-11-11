@@ -1,7 +1,7 @@
 ---
 name: agent-teams-playbook
 metadata:
-  version: "4.9.0"
+  version: "4.9.1"
 description: |
   Cross-runtime playbook for multi-agent collaboration, agent teams, swarm orchestration, parallel task distribution, capability discovery, and quality gates on Claude Code, Codex, OpenClaw, and Cursor. Use for 多agent、agent协作、agent编排、并行agent、分工协作、拉团队、多代理协作 or complex work needing independent roles and review. Map the six-stage workflow to the active host's actual capabilities; report sequential degradation when parallel agents are unavailable.
 ---
@@ -31,7 +31,7 @@ description: |
 | 启动独立 Subagent | 使用宿主当前暴露的 `Agent` / `Task`，至少携带必填 `prompt`，并按当前 schema 提供 `subagent_type`、`description`/`name` 和边界 | 使用当前宿主暴露的原生 spawn schema（见下方 profiles） | workspace / agent 调度能力；不可用则主线程分阶段执行 | background agent / agent mode；不可用则主线程分阶段执行 |
 | 组建 Agent Team | 宿主暴露时使用 `TeamCreate` + `Agent` / `Task(team_name)` | 同一轮并发调用多个宿主原生 spawn 调用，由主线程汇总；不伪装共享团队总线 | team / workspace 能力存在时使用；否则多个任务或主线程 | background agents / team-like workflow 存在时使用；否则多个任务或主线程 |
 | 成员通信/进度 | `SendMessage` 或 Agent/Task result | 子任务结果回报；只有宿主暴露 agent I/O 时才中途通信 | 平台消息/日志；不可用时用阶段性文本汇报 | IDE/agent 日志；不可用时用阶段性文本汇报 |
-| 规划文件 | `planning-with-files` skill | 若本地 skill/tool 存在则使用；否则使用内联计划或平台计划工具 | 若本地 planning skill 存在则使用；否则维护可见计划记录 | 若本地 planning skill 存在则使用；否则维护可见计划记录 |
+| 规划与续做 | 按阶段0选择宿主已有记录；Meta 使用 `planning-continuity` | 按阶段0选择宿主已有记录；Meta 使用 `planning-continuity` | 使用已有计划或等价任务记录 | 使用已有计划或等价任务记录 |
 
 **平台适配底线**：
 1. 写计划时使用抽象动作名；执行时使用当前平台真实工具名。
@@ -84,8 +84,8 @@ description: |
 
 1. 每个阶段启动前输出计划，完成后输出结果
 2. 子agent在后台执行，但进度必须汇报给用户
-3. 任务拆分计划必须经用户确认后再执行；若宿主平台或项目指令要求直接执行，则说明采用的默认假设
-4. 失败时立即通知：`❌ [角色名] 失败: [原因]`，提供重试/跳过/终止选项
+3. 沿用当前任务授权执行拆分；需要新的范围、关键取舍或额外权限时，先给具体方案与证据再请用户决定
+4. 失败时报告原因与受影响范围，按阶段4的任务预算和进展规则处理；无关分支继续
 5. 全部完成后输出汇总报告（见阶段5格式），并说明真实使用的平台工具和任何降级路径
 
 ## 场景决策树
@@ -108,12 +108,12 @@ description: |
 |---|------|---------|---------|
 | 1 | 提示增强 | 简单任务，1-2步 | 优化单agent提示词，不拆分不组队 |
 | 2 | Provider直接复用 | 任务可由单个现有 Agent / Skill / Tool 完全解决 | 直接绑定已发现 provider，无需外部搜索或组建Agent Teams |
-| 3 | 计划+评审 | 中等/复杂任务（**默认**） | 出计划 → 用户确认 → 并行执行 → Review验收 |
+| 3 | 计划+评审 | 中等/复杂任务（**默认**） | 出计划 → 沿用授权执行 → Review验收；新增关键决定才询问 |
 | 4 | Lead-Member | 需要明确团队分工 | Leader协调分配，Member并行执行，通过TaskList协同 |
 | 5 | 复合编排 | 复杂任务，无固定模式 | 动态组合上述场景，按阶段切换策略 |
 
 
-**模型分工**（所有场景通用）：通过平台支持的模型选择能力按任务复杂度分配；Claude Code 可通过 Task 工具的 `model` 参数分配——`opus`处理复杂推理，`haiku`处理简单任务，`sonnet`处理常规任务。平台不支持模型选择时，不要写死模型承诺。
+**模型分工**（所有场景通用）：默认继承当前宿主模型和推理设置。只有用户、项目或宿主已明确要求差异化模型且当前 schema 允许时才选择其他模型；不按角色名自动降级，也不承诺平台未提供的模型。
 
 ## 协作模式
 
@@ -130,28 +130,13 @@ description: |
 
 ### 阶段0：规划准备（Planning Setup）**【硬性标准 - 所有场景必经】**
 
-**优先使用当前平台的 Skill 工具调用 planning-with-files**：
-```
-Skill(skill="planning-with-files")
-```
+先读取已有任务目标、约束、进度、产物位置与未解决事项，继续当前记录，不另建相互漂移的计划真源。
 
-跨平台适配：
-- Claude Code：优先使用 `Skill(skill="planning-with-files")`
-- Codex：若本地 skill/tool 可用则使用；否则使用平台计划工具或内联计划，并明确说明没有创建 planning files
-- OpenClaw/Cursor：若本地 planning skill 可用则使用；否则维护平台可见计划记录
+- **在 Meta_Kim 中**：使用宿主已提供的 `planning-continuity` 能力及当前任务记录；其具体路径和操作由宿主发现并绑定。本包不重新寻找、安装或优先调用已退休的外部 `planning-with-files`。
+- **独立使用本包时**：优先复用当前宿主已有计划机制。若项目已采用 `planning-with-files` 且本地实际可用，可以继续原记录；无需为本包额外安装。没有文件型工具时用平台计划或内联记录，明确说明采用的方式。
+- **需要文件续做且尚无记录时**：按获准任务范围维护等价的 `task_plan.md`（目标、当前阶段、验收）、`findings.md`（事实、来源与决定）、`progress.md`（已做、回执、下一步）。这些是任务材料，不是本包新增的规划组件。
 
-这将在项目目录创建三个核心文件（当 planning-with-files 可用时）：
-- `task_plan.md` - 任务计划和阶段追踪
-- `findings.md` - 研究发现和知识积累
-- `progress.md` - 执行日志和进度记录
-
-**关键规则**（规划文件创建后遵循）：
-- 每个阶段开始前读取task_plan.md，完成后更新状态
-- 每2次搜索/浏览操作后立即保存发现到findings.md
-- 所有错误必须记录到task_plan.md的"Errors Encountered"表格
-- 3次失败后升级给用户
-
-> **铁律**：复杂任务不能没有计划就开始执行。若平台没有 planning-with-files，也必须使用等价计划记录或内联计划，不能跳过规划阶段。
+阶段开始或恢复时读取当前检查点；有实质发现、决定、失败、交接或上下文将切换时更新对应记录，不按浏览次数制造重复日志。失败记录沿用阶段4的预算和进展规则，不另设固定三次升级线。小任务可用一段可见计划，不强迫创建三个空文件。
 
 ### 阶段1：任务分析 + 能力发现（Discovery）**【硬性标准 - 所有场景必经】**
 
@@ -189,7 +174,7 @@ Skill(skill="planning-with-files")
 
 | 编号 | 角色 | 职责 | 模型 | ownerAgent / subagent_type | Capability Binding | 平台工具/降级 |
 |------|------|------|------|---------------|------------|---------------|
-| 1 | [角色名] | [具体职责] | [opus/sonnet/haiku/平台默认] | [已发现 owner] | [Agent / Skill / Tool / Command / MCP] | [Claude Agent/Task、Codex spawn_agent、其他原生表面或显式 degraded] |
+| 1 | [角色名] | [具体职责] | [继承当前模型，或已获准的选择] | [已发现 owner] | [Agent / Skill / Tool / Command / MCP] | [Claude Agent/Task、Codex spawn_agent、其他原生表面或显式 degraded] |
 
 > **说明**：最后两列标注已匹配的专业 provider/capability，以及当前平台真实使用的工具或有证据的降级路径。
 
@@ -224,7 +209,14 @@ Skill(skill="planning-with-files")
 - 完整性：文档、配置说明、使用示例是否齐全
 - 平台诚实性：是否准确说明了真实调用的工具和降级行为
 
-全部必需条件通过 → 进入阶段5。不通过 → 先诊断失败原因、已发生副作用和可改变的条件，再按当前任务的资源/次数预算重试；没有新进展或预算耗尽时交回可恢复检查点与具体待决定项，不机械固定两轮，也不跳过验收。其他独立任务继续。
+全部必需条件通过 → 进入阶段5。未通过时，以下规则是本包唯一的重试依据，故障表和规划记录引用本节：
+
+1. 记录失败原因、实际副作用、当前产物版本、已用资源和下一次可改变的条件。
+2. 在当前授权与宿主的时间、费用、次数预算内，有新证据或可验证的改动才继续；普通可逆修复不重复审批。不重试同一输入和条件来凑轮数。
+3. 每次尝试后更新同一进度记录：尝试结果、是否有进展、剩余预算与下一步。恢复任务沿用已用预算，不清零计数；宿主未给数值预算时说明这一事实，不虚构固定额度。
+4. 无新进展、预算耗尽或遇到明确拒绝时停止受影响分支，交回可恢复检查点、失败证据和具体待决定项；没有通过的验收不记为成功。其他独立任务继续。
+
+本包不机械规定两轮或三次，也不把失败自动升级为增加权限、换工具绕过拒绝或重跑全部检查。
 
 ### 阶段5：结果交付 & 部署移交
 
@@ -246,7 +238,7 @@ Skill(skill="planning-with-files")
 ## 执行底线
 
 **【硬性标准】**：
-0. **强制使用 planning-with-files 或平台等价计划机制**：任何复杂任务必须先创建/维护 task_plan.md、findings.md、progress.md，或显式说明使用了平台等价计划记录
+0. **沿用阶段0的规划与续做规则**：Meta 使用已绑定的 `planning-continuity`；独立使用保留现有计划或等价记录，不重新引入外部规划依赖
 1. **强制执行能力命中即停止**：本地多类型 provider 命中后直接使用；仅真实能力缺口才外部搜索；仅真实宿主/权限/owner 缺口才显式降级
 
 **【其他原则】**：
@@ -263,9 +255,9 @@ Skill(skill="planning-with-files")
 
 | 故障类型 | 处理策略 |
 |---------|---------|
-| Agent执行失败 | 通知用户，提供重试/跳过/终止/降级选项 |
+| Agent执行失败 | 报告受影响范围，按阶段4的进展与预算规则修复或交接；独立分支继续 |
 | Skill不可用 | 先检查现有 Agent/Tool/Command/MCP 是否已覆盖；只有真实能力缺口才外部搜索，只有真实执行表面缺失才显式降级 |
 | 平台工具缺失 | 改用该平台可用工具，并明确说明降级路径 |
 | 模型超时 | 调整任务复杂度或拆分为更小的子任务 |
-| 质量不达标 | 打回修改最多2轮，仍不通过则人工介入 |
+| 质量不达标 | 按阶段4的唯一重试规则处理，保留已用预算与真实失败，不设另一套轮数上限 |
 | 上下文溢出 | 拆分为更小的子任务，分批执行 |

@@ -1,0 +1,2 @@
+# Dev-only browser acceptance; not part of any installed capability package.
+playwright==1.62.0

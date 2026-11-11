@@ -26,6 +26,15 @@ Kim Service 是老金（KimYx0207）维护的专业能力库。这里的每个 A
 
 完整目录：[专业角色](agents/README.md) · [任务浏览器](docs/start.html) · [能力索引](generated/capabilities.json)。下载仓库后，`docs/start.html` 可以直接在浏览器中离线打开。
 
+## 先体验两个可修改的成品
+
+下载仓库后，打开 [任务浏览器](docs/start.html)，可以直接进入：
+
+- **预约台设计系统**：换主题、品牌色和信息密度，体验表单报错、失败重试和新增记录，下载当前 tokens。
+- **12个月经营预测**：修改销量、成本、回款与现金假设，对比三种情景，下载输入、结果和月表。
+
+这些是可操作的合成示例。选中能力后，填入自己的目标与材料，再复制请求到当前 Agent 继续。实现结构、配置与发布方法见 [任务入口说明](docs/task-browser.md)。
+
 ## 交出来的应该是什么？
 
 | 任务 | 可检查的交付 |
@@ -91,6 +100,7 @@ dsh --profile meta-kim
 ```bash
 node scripts/catalog-automation.mjs build
 node scripts/start-page.mjs build
+node scripts/build-site.mjs
 node scripts/check-repository.mjs
 node --test scripts/*.test.mjs
 ```

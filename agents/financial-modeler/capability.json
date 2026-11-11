@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "financial-modeler",
   "componentType": "agent",
-  "componentVersion": "0.1.0",
+  "componentVersion": "0.2.0",
   "entrypoint": "AGENT.md",
   "capabilities": [
     {
@@ -128,7 +128,8 @@
       },
       "validation": [
         "tests/contract.test.mjs",
-        "tests/calculation.test.mjs"
+        "tests/calculation.test.mjs",
+        "tests/operating-forecast.test.mjs"
       ]
     }
   ]

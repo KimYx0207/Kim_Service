@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "agent-teams-playbook",
   "componentType": "skill",
-  "componentVersion": "4.9.0",
+  "componentVersion": "4.9.1",
   "entrypoint": "SKILL.md",
   "capabilities": [
     {

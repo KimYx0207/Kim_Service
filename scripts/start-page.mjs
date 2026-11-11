@@ -1,54 +1,24 @@
 #!/usr/bin/env node
-
-// This is a view of the existing contracts, not another capability registry.
+// CLI adapter. Business rules, source reads and presentation have separate owners.
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { buildCapabilityIndex, writeOutputAtomically } from './capability-catalog.mjs';
-
+import { writeOutputAtomically } from '../src/data/capability-catalog.mjs';
+import { buildStartPageData } from '../src/data/task-browser.mjs';
+import { renderPage } from '../src/presentation/task-browser/render-page.mjs';
+export { buildStartPageData } from '../src/data/task-browser.mjs';
+export { serializePageData } from '../src/presentation/task-browser/render-page.mjs';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const TEMPLATE = path.join(ROOT, 'scripts', 'start-page');
-const EXAMPLE_FILES = ['example.json', 'examples/example-input.md', 'examples/example-output.md', 'docs/examples.md', 'assets/case-study.md'];
-
-function existsFile(root, relative) {
-  const file = path.join(root, ...relative.split('/'));
-  if (!fs.existsSync(file)) return false;
-  const stat = fs.lstatSync(file);
-  if (stat.isSymbolicLink() || !stat.isFile()) throw new Error(`Start-page source must be a regular file: ${relative}`);
-  return true;
-}
-
-export function buildStartPageData(root = ROOT) {
-  const index = buildCapabilityIndex(root);
-  return {
-    componentCount: index.componentCount,
-    capabilityCount: index.capabilityCount,
-    capabilities: index.capabilities.map((capability) => {
-      const base = capability.componentPath;
-      const readme = `${base}/README.md`;
-      const examples = EXAMPLE_FILES.filter((file) => existsFile(root, `${base}/${file}`)).map((file) => `${base}/${file}`);
-      return {
-        ...capability,
-        readme: existsFile(root, readme) ? readme : null,
-        examples
-      };
-    })
-  };
-}
-
-export function serializePageData(data) {
-  // Source text is untrusted HTML input, including inside a JSON script element.
-  return JSON.stringify(data).replaceAll('<', '\\u003c').replaceAll('>', '\\u003e').replaceAll('&', '\\u0026').replaceAll('\u2028', '\\u2028').replaceAll('\u2029', '\\u2029');
-}
-
-export function renderStartPage(root = ROOT) {
+const VIEW = path.join(ROOT, 'src/presentation/task-browser');
+export function renderStartPage(root = ROOT, { sourceRef } = {}) {
   const data = buildStartPageData(root);
-  const template = fs.readFileSync(path.join(TEMPLATE, 'page.html'), 'utf8');
-  const css = fs.readFileSync(path.join(TEMPLATE, 'page.css'), 'utf8');
-  const script = fs.readFileSync(path.join(TEMPLATE, 'page.js'), 'utf8');
-  return template.replace('/* PAGE_STYLE */', () => css)
-    .replace('/* PAGE_DATA */', () => serializePageData(data))
-    .replace('/* PAGE_SCRIPT */', () => script);
+  if (sourceRef) data.ui.repository.ref = sourceRef;
+  const scripts = ['src/application/task-browser/model.mjs',
+    'src/presentation/task-browser/copy-request.mjs', 'src/presentation/task-browser/page.js'];
+  return renderPage({ data,
+    template: fs.readFileSync(path.join(VIEW, 'page.html'), 'utf8'),
+    css: fs.readFileSync(path.join(VIEW, 'page.css'), 'utf8'),
+    script: scripts.map(file => fs.readFileSync(path.join(ROOT, file), 'utf8')).join('\n') });
 }
 
 function outputPath(root, create) {

@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "taskId": "design-states",
+  "reviewer": {
+    "id": "replace-with-actual-reviewer-or-context",
+    "relationship": "state-whether-independent-context-or-host-review",
+    "blinded": false
+  },
+  "checks": [
+    { "id": "design-usable", "status": "not_run", "evidence": "" },
+    { "id": "design-states", "status": "not_run", "evidence": "" },
+    { "id": "design-keyboard", "status": "not_run", "evidence": "" },
+    { "id": "design-editable", "status": "not_run", "evidence": "" }
+  ]
+}

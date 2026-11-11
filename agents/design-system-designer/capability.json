@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "design-system-designer",
   "componentType": "agent",
-  "componentVersion": "0.1.0",
+  "componentVersion": "0.2.0",
   "entrypoint": "AGENT.md",
   "capabilities": [
     {
@@ -127,7 +127,8 @@
         ]
       },
       "validation": [
-        "tests/contract.test.mjs"
+        "tests/contract.test.mjs",
+        "tests/tokens.test.mjs"
       ]
     }
   ]

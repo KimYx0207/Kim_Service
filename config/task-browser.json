@@ -1,0 +1,290 @@
+{
+  "typeNames": {
+    "all": "全部",
+    "agent": "专业方法包",
+    "skill": "技能包",
+    "tool": "工具",
+    "hook": "Hook",
+    "app": "应用包"
+  },
+  "synonyms": [
+    [
+      "小红书",
+      "xiaohongshu",
+      "rednote"
+    ],
+    [
+      "表情包",
+      "贴纸",
+      "sticker"
+    ],
+    [
+      "产品设计",
+      "产品架构",
+      "product-architect"
+    ],
+    [
+      "动效",
+      "动画",
+      "motion",
+      "animation"
+    ],
+    [
+      "视频",
+      "音视频",
+      "media",
+      "video"
+    ],
+    [
+      "设计",
+      "design",
+      "designer"
+    ],
+    [
+      "前端",
+      "frontend"
+    ],
+    [
+      "开发",
+      "engineer",
+      "代码",
+      "code"
+    ],
+    [
+      "简历",
+      "resume"
+    ],
+    [
+      "面试",
+      "interview"
+    ],
+    [
+      "店铺",
+      "store"
+    ],
+    [
+      "成本",
+      "cost",
+      "pricing"
+    ],
+    [
+      "供应商",
+      "supplier"
+    ],
+    [
+      "周报",
+      "workplace"
+    ],
+    [
+      "封面",
+      "cover"
+    ],
+    [
+      "选题",
+      "topic"
+    ],
+    [
+      "提示词",
+      "prompt"
+    ],
+    [
+      "记忆",
+      "memory"
+    ],
+    [
+      "搜索",
+      "search",
+      "discover"
+    ],
+    [
+      "安装",
+      "install"
+    ],
+    [
+      "回滚",
+      "rollback"
+    ],
+    [
+      "安全",
+      "security",
+      "semgrep"
+    ],
+    [
+      "技能",
+      "skill"
+    ],
+    [
+      "学习",
+      "tutor",
+      "lesson",
+      "练习"
+    ],
+    [
+      "副业",
+      "side-business"
+    ],
+    [
+      "决策",
+      "decision"
+    ],
+    [
+      "团队",
+      "teams"
+    ],
+    [
+      "交付",
+      "delivery"
+    ],
+    [
+      "量化",
+      "quantitative"
+    ],
+    [
+      "经营预测",
+      "现金流",
+      "financial-modeler"
+    ],
+    [
+      "设计系统",
+      "design-system-designer"
+    ]
+  ],
+  "fieldNames": {
+    "task": "任务",
+    "prompt": "请求内容",
+    "request": "具体需求",
+    "brief": "创作需求",
+    "topic": "主题",
+    "goal": "目标",
+    "scope": "范围",
+    "source": "来源",
+    "skill": "技能",
+    "agent": "使用环境",
+    "approvedCommand": "已获准命令",
+    "apply": "是否执行",
+    "rollback": "回滚范围",
+    "mode": "模式",
+    "target": "目标位置",
+    "targetHash": "目标文件哈希",
+    "ok": "操作结果",
+    "action": "操作说明",
+    "content": "交付内容",
+    "operations": "操作清单",
+    "hostResult": "宿主结果",
+    "command": "命令",
+    "arguments": "参数",
+    "artifacts": "交付文件",
+    "limitations": "局限与缺项",
+    "stage": "当前阶段",
+    "approvalState": "确认状态",
+    "evidence": "依据",
+    "nextAction": "下一步",
+    "passSignal": "检查标准",
+    "decisionQuestion": "待决定的问题",
+    "continuationNeed": "继续条件",
+    "status": "交付状态",
+    "artifactRefs": "产物与证据引用",
+    "criterionResults": "逐项检查结果",
+    "missingCapabilities": "缺少的工具或能力",
+    "failures": "失败记录",
+    "stopReason": "结束原因",
+    "handoff": "交接说明",
+    "nativeRuntimeVerified": "原生宿主验证状态",
+    "acceptanceCriteria": "验收条件",
+    "handoffContext": "任务上下文与授权范围",
+    "runtimeBindings": "宿主工具绑定",
+    "titleCandidates": "标题候选",
+    "recommended": "推荐组合",
+    "coverOptions": "封面方案",
+    "consistencyCheck": "一致性检查",
+    "diagnosis": "账号诊断",
+    "topics": "选题",
+    "schedule": "排期",
+    "reviewRule": "复盘规则",
+    "hooks": "开头方案",
+    "ending": "结尾",
+    "claimsCheck": "说法核对",
+    "permissions": "所需权限",
+    "summary": "摘要",
+    "warnings": "提醒",
+    "result": "结果",
+    "report": "报告",
+    "sourceFrames": "已有动作帧",
+    "characterReference": "角色参考",
+    "rightsRecord": "素材授权记录",
+    "outputSpec": "输出要求",
+    "workflow": "现有工作流",
+    "assets": "已有素材",
+    "constraints": "限制条件",
+    "currentSystem": "当前情况",
+    "journey": "用户路径",
+    "reference": "参考资料"
+  },
+  "commonFields": [
+    "status",
+    "artifactRefs",
+    "criterionResults",
+    "missingCapabilities",
+    "failures",
+    "stopReason",
+    "handoff",
+    "nativeRuntimeVerified",
+    "acceptanceCriteria",
+    "handoffContext",
+    "runtimeBindings"
+  ],
+  "schemaVersion": 1,
+  "repository": {
+    "url": "https://github.com/KimYx0207/Kim_Service",
+    "ref": "main",
+    "publishedUrl": "https://kimyx0207.github.io/Kim_Service/"
+  },
+  "typeOrder": [
+    "agent",
+    "skill",
+    "tool",
+    "hook",
+    "app"
+  ],
+  "suggestions": [
+    "产品设计",
+    "设计系统",
+    "经营预测",
+    "表情包",
+    "视频",
+    "简历",
+    "店铺"
+  ],
+  "hosts": [
+    {
+      "id": "existing",
+      "label": "我正在用的 Agent",
+      "prefix": ""
+    },
+    {
+      "id": "meta-kim",
+      "label": "Meta_Kim",
+      "prefix": "/meta-theory "
+    },
+    {
+      "id": "codex",
+      "label": "Codex",
+      "prefix": ""
+    },
+    {
+      "id": "claude",
+      "label": "Claude Code",
+      "prefix": ""
+    },
+    {
+      "id": "zcode",
+      "label": "ZCode",
+      "prefix": ""
+    },
+    {
+      "id": "dsh",
+      "label": "DeepSeek Harness",
+      "prefix": ""
+    }
+  ]
+}

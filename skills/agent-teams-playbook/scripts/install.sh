@@ -17,7 +17,7 @@ TX_OLD_MOVED=0
 TX_PROMOTED=0
 TX_COMMITTED=0
 
-VERSION="V4.9.0"
+VERSION="V4.9.1"
 SKILL_NAME="agent-teams-playbook"
 INSTALL_FILES=(
     "SKILL.md" "README.md" "README_EN.md" "capability.json" "method.json"

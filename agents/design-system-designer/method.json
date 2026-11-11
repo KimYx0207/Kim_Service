@@ -33,7 +33,8 @@
   ],
   "skillLoading": [
     "按本次任务读取下面两份知识材料；只加载有关内容。",
-    "使用宿主已提供且获授权的相关工具槽；缺工具时仍完成资料分析与可用草案，把未执行步骤交接。"
+    "使用宿主已提供且获授权的相关工具槽；缺工具时仍完成资料分析与可用草案，把未执行步骤交接。",
+    "按需读取 references/editable-example.md；样板为合成数据，可用工具和实际任务验收仍由宿主绑定，不默认加载全部示例源码。"
   ],
   "steps": [
     "盘点现有组件和页面，用截图及代码位置合并真正同义的模式。",
@@ -81,6 +82,16 @@
         "storybook-a11y",
         "wcag22"
       ]
+    },
+    {
+      "id": "design-system-editable-example",
+      "path": "references/editable-example.md",
+      "appliesTo": [
+        "需要可打开页面、组件状态或可编辑tokens示例时读取"
+      ],
+      "sourceRefs": [
+        "original-editable-sample"
+      ]
     }
   ],
   "expertise": {
@@ -92,7 +103,8 @@
     ],
     "knowledgeAssetIds": [
       "design-system-designer-method",
-      "design-system-designer-delivery"
+      "design-system-designer-delivery",
+      "design-system-editable-example"
     ],
     "diagnosticSequence": [
       {
