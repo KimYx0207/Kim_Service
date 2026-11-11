@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "status": "failed",
+  "checks": [],
+  "pageErrors": [],
+  "notPerformed": [
+    "real_business_acceptance",
+    "professional_effect_evaluation"
+  ],
+  "error": "browserType.launch: Executable doesn't exist at <local-path>\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝\n    at <local-path>\n    at Object.<anonymous> (<local-path>"
+}

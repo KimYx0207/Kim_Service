@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 2,
+  "taskId": "finance-conflict",
+  "reviewer": {
+    "id": "/root/finance_v2_review",
+    "relationship": "independent_context_not_external_audit",
+    "blinded": false
+  },
+  "binding": {
+    "runId": "8b0976c5-2c81-4653-8af1-63657f069923",
+    "taskSha256": "92bf0089571f02efc598c62a9069cfa14474f2b0c707637d653e8caf59b9f254",
+    "outputFiles": {
+      "build_forecast.mjs": "32d62259e9d6723d9e9c1f6aab7b1ff18aa0d0b364a6145332f3251a24c1bae1",
+      "decision.md": "0c27a188520e155c3a524e1b9e411ba651d7c4a044017feb40e34ac1d182a8b1",
+      "facts.json": "00754b75ac18ab89144a8b8df59ebdb5b9bac7800af18a02eebe6b9b515cbf3a",
+      "forecast.json": "b075a7eadc7decbaf838a085d46f52e599fe67a6adec006f76fdb47fa3e297d3",
+      "source-integrity.json": "700302b54e247bb16c5dabf03650a989111010773e111b01773e3fadfe13fe1a",
+      "submission.json": "7e013b2c29879245537dc76fa24806f33e5fa42cdfc00fdcfe9b37596c218698",
+      "validate_forecast.mjs": "b17bec71daabcbaaf7dfdad2379a5cab01879e499bc892f67493e8472cc26440",
+      "validation.json": "a36e5312e8184af1841914c0ca040932c9fcea8568ce5d105be8e51f872dd1b4"
+    }
+  },
+  "checks": [
+    {
+      "id": "finance-explanation",
+      "status": "pass",
+      "evidence": "实际阅读 output/decision.md 全文及 output/forecast.json。decision 的“为什么利润与现金不同”明确区分收入与回款、利润与现金；逐项说明当月收 65%、次月收 35%，首月收期初应收 2400、付期初应付 1200，2 月 capex 12000 与每月非现金折旧 200 的处理。\n\n独立依据 inputs/confirmed-budget.json 与 inputs/calculation-policy.md 编写 recompute.mjs，未读取或调用生产计算脚本、仓库评分器或参考实现。复算全部 36 个月并比较 783 个已交付字段值，无差异；结果在 audit_20261111/finance-v2-independent-review/baseline-recalculation.json。\n\n基准关键月现金桥：2027-01 为 12000 + 11760 - 14760 + 0 = 9000；2027-02 为 9000 + 14692.50 - 25830 + 0 = -2137.50，2 月净利润仍为 820。基准年度现金桥 12000 + 199828.50 - 194874 + 0 = 16954.50；利润桥 12000 + 20316 + 2400 - 4561.50 - 1200 - 12000 = 16954.50，均与 forecast 和解释吻合。\n\ndecision 准确列出基准负现金月份 2–3 月、乐观 2 月、保守 2–12 月，首次缺口均为 2027-02；最大月末资金需要分别 2137.50、483.56、8701.79，最深月份分别为 2 月、2 月、10 月。三情景主表融资均为 0，未把资金需要塞入融资。\n\ndecision 明确全部为合成数据、非实际客户业绩；税率 20% 和每月折旧 200 是模型假设；正利润当月交税、亏损不结转；月度模型不覆盖月中收付压力。资金缺口定义是最低月末现金的负数，不是负数月份相加。"
+    },
+    {
+      "id": "finance-conflict",
+      "status": "pass",
+      "evidence": "inputs/confirmed-budget.json 的基础变动成本为 45；inputs/supplier-proposal.md 明确 50 尚未签约且经营者尚未接受。output/facts.json 的唯一冲突保留 sources 两个输入路径、status=pending、appliedValue=45、alternateValue=50、unit=CNY/order。\n\noutput/decision.md 首段及“尚待决定的事项”说明主预测沿用 45 及既定情景成本系数，50 未替换预算。独立重算全部 36 月的成本、利润及现金均与以 45 为基础的结果一致，未发现提议成本偷换进主预测。\n\ndecision 明确经营者仍需决定是否接受及生效月份；融资金额、到位月份、来源、利率、还款条件没有被杜撰；2 月设备投入继续执行输入的 12000，不擅自延期。\n\ndecision 如实说明“未另外进行 50 元/单的敏感性测算”，没有把未测影响写成已验证结果。本项通过基于冲突保留和未知项处理；未声称 baseline 已量化 50 的年度影响。独立审阅另算的全年 50 假设仅存审阅目录，不视作 baseline 的交付内容。"
+    }
+  ],
+  "limitations": [
+    "这是已知分组标签的独立上下文审阅，不是外部审计或盲审。只使用给定合成材料，不验证真实业务、税法或实际融资可得性。",
+    "未执行作者自带验证脚本，未认证其 validation.json 所称 1686 项检查的历史执行；通过结论依据本审阅实际完成的独立复算和文本核对。",
+    "未进行日内现金预测、供应商沟通、采购签约或融资执行。"
+  ]
+}

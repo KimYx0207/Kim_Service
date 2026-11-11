@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "taskId": "frontend-resume",
+  "condition": "baseline",
+  "attempt": 1,
+  "model": "Astra session inherited",
+  "createdAt": "2026-11-11T07:05:01.932Z",
+  "taskSha256": "4761bf394f6c9e0b10da7ffb97194235ea29416efa23e1de066a32de78d66f67",
+  "inputFiles": {
+    "checkpoint.md": "479984c85a37b291b09001f44171630435eeb35e16a3d11434975f2595f4daaf",
+    "index.html": "2ced4b4ed9836bb469029ff9e49b2d087cdcbf8bbcbc58d2db170451a8d11292"
+  },
+  "method": null,
+  "durationMs": null,
+  "totalTokens": null,
+  "measurement": "not_supplied_by_host",
+  "inputProvenance": "original_synthetic_file_tasks"
+}

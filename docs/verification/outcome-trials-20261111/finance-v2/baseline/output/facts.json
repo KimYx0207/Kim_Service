@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "conflicts": [
+    {
+      "issue": "同规格每单变动成本：已确认预算为 45 元，供应商新提议为 50 元；新提议尚未签约、尚未被经营者接受。",
+      "sources": [
+        "inputs/confirmed-budget.json",
+        "inputs/supplier-proposal.md"
+      ],
+      "status": "pending",
+      "appliedValue": 45,
+      "alternateValue": 50,
+      "unit": "CNY/order",
+      "treatment": "全部主预测沿用已确认的基础成本 45 元/单，再分别乘以既定情景成本系数；50 元/单未进入主预测。",
+      "decisionNeeded": "经营者是否接受供应商新报价及何时生效。"
+    }
+  ]
+}

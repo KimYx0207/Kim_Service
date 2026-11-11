@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+    <meta name="description" content="门店报名离线演示：录入合成报名者，查看本地名单更新。">
+    <title>门店报名 · 离线演示</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">跳到报名表单</a>
+    <div class="app-shell">
+      <header class="site-header">
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M5 9h14v11H5zM4 9l2-5h12l2 5M9 20v-6h6v6M9 4v5m6-5v5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <span>门店报名<span class="brand-caption">示例工作台</span></span>
+        </div>
+        <button class="theme-toggle" id="theme-toggle" type="button" aria-pressed="false">
+          <span>深色外观</span><span class="toggle-track" aria-hidden="true"><span></span></span>
+        </button>
+      </header>
+
+      <main id="main" tabindex="-1">
+        <div class="page-heading">
+          <div>
+            <p class="eyebrow"><span class="demo-dot" aria-hidden="true"></span>离线演示 · 合成数据</p>
+            <h1>报名信息</h1>
+            <p class="page-description">录入一位报名者，清楚看到每一次名单更新。</p>
+          </div>
+          <p class="demo-note">仅供体验，请填写虚构信息。<br>所有操作都在本页模拟完成。</p>
+        </div>
+
+        <noscript><p class="noscript-note">此演示需要启用 JavaScript 才能录入和切换状态。当前表单已停用，不会提交任何信息。</p></noscript>
+
+        <div class="workspace">
+          <section class="panel form-panel" aria-labelledby="form-heading">
+            <div class="section-heading">
+              <div class="heading-group"><span class="step-number" aria-hidden="true">01</span><h2 id="form-heading">添加报名者</h2></div>
+              <button class="text-button" id="sample-button" type="button" disabled>
+                <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M6 3v6m-3-3h6m5 5v6m-3-3h6M13 3v3m-1.5-1.5h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                填入示例
+              </button>
+            </div>
+            <p class="section-description">填写以下两项，确认后加入演示名单。</p>
+
+            <form id="signup-form" novalidate aria-busy="false">
+              <fieldset id="entry-fields" class="entry-fields" disabled>
+                <legend class="sr-only">报名者信息与演示结果</legend>
+                <div class="field">
+                  <label for="name">姓名<span class="required-label">必填</span></label>
+                  <input id="name" name="name" type="text" maxlength="40" autocomplete="off" placeholder="例如：林予安" required aria-describedby="name-hint name-error">
+                  <p class="field-hint" id="name-hint">支持中文姓名，请使用虚构信息。</p>
+                  <p class="field-error" id="name-error" hidden></p>
+                </div>
+                <div class="field">
+                  <label for="email">邮箱<span class="required-label">必填</span></label>
+                  <input id="email" name="email" type="email" maxlength="254" inputmode="email" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="例如：lin.yuan@example.com" required aria-describedby="email-hint email-error">
+                  <p class="field-hint" id="email-hint">演示不会发送邮件。</p>
+                  <p class="field-error" id="email-error" hidden></p>
+                </div>
+
+                <fieldset class="outcome-control">
+                  <legend>本次演示结果</legend>
+                  <div class="outcome-options">
+                    <label class="outcome-option"><input type="radio" name="outcome" value="success" checked><span>成功</span></label>
+                    <label class="outcome-option"><input type="radio" name="outcome" value="failure"><span>失败</span></label>
+                  </div>
+                  <p class="field-hint">选择「失败」可体验输入保留与重试。</p>
+                </fieldset>
+              </fieldset>
+
+              <button class="submit-button" id="submit-button" type="submit" disabled>
+                <span id="submit-label">Confirm this appointment and keep my details</span>
+                <svg class="submit-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-5-5 5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span class="spinner" aria-hidden="true" hidden></span>
+              </button>
+              <p class="submit-note">仅更新本地演示名单，不会进行真实预约或提交。</p>
+            </form>
+
+            <div class="feedback-wrap">
+              <div id="feedback" class="feedback" data-tone="neutral" role="status" aria-live="polite" aria-atomic="true" tabindex="-1">
+                <span class="feedback-symbol" id="feedback-symbol" aria-hidden="true">i</span>
+                <div><p class="feedback-title" id="feedback-title">等待录入</p><p class="feedback-body" id="feedback-body">确认后，操作结果会显示在这里。</p></div>
+              </div>
+              <button class="retry-button" id="retry-button" type="button" hidden>以成功结果重试<span aria-hidden="true"> →</span></button>
+              <a class="view-list-link" id="view-list-link" href="#roster-heading" hidden>查看更新后的名单<span aria-hidden="true"> ↓</span></a>
+            </div>
+          </section>
+
+          <section class="panel roster-panel" aria-labelledby="roster-heading">
+            <div class="section-heading">
+              <div class="heading-group"><span class="step-number" aria-hidden="true">02</span><h2 id="roster-heading" tabindex="-1">报名名单</h2></div>
+              <span class="count-badge"><span id="participant-count">1</span> 位</span>
+            </div>
+            <p class="section-description">成功添加后，新记录会出现在最上方。</p>
+            <div class="roster-summary"><span class="small-dot" aria-hidden="true"></span><span id="roster-summary">已载入初始合成示例</span></div>
+            <ul class="participant-list" id="participant-list" aria-label="合成报名者名单" aria-busy="false">
+              <li class="participant">
+                <span class="avatar" aria-hidden="true">A</span>
+                <div class="participant-content">
+                  <div class="participant-heading"><h3>示例用户A</h3><span class="status-pill status-pending">待确认</span></div>
+                  <p class="participant-email">user.a@example.com</p>
+                  <p class="participant-meta">合成示例 · 初始名单</p>
+                </div>
+              </li>
+            </ul>
+            <div class="roster-footer">
+              <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 2.5 16 5v4.5c0 3.7-6 7.5-6 7.5s-6-3.8-6-7.5V5l6-2.5Z" stroke="currentColor" stroke-width="1.4"/><path d="m7.5 9.5 1.7 1.7 3.3-3.4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <p>数据只保留在当前页面。<br>刷新后恢复初始示例。</p>
+            </div>
+          </section>
+        </div>
+      </main>
+
+      <footer class="site-footer"><span>门店报名 · 演示工作台</span><span>合成示例，没有真实客户数据</span></footer>
+    </div>
+  </body>
+</html>

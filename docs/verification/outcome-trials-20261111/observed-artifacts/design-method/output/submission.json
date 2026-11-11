@@ -1,0 +1,29 @@
+{
+  "artifacts": {
+    "page": "index.html",
+    "tokens": "tokens.json",
+    "handoff": "handoff.md"
+  },
+  "supportingFiles": [
+    "styles.css",
+    "tokens.css",
+    "registration.js",
+    "app.js",
+    "sync-tokens.mjs",
+    "verify.mjs",
+    "checks.json"
+  ],
+  "status": "implemented_with_browser_verification_pending",
+  "checks": {
+    "staticAndNode": {
+      "passed": 12,
+      "failed": 0,
+      "report": "checks.json"
+    },
+    "browser": {
+      "status": "not_run",
+      "reason": "Local Chromium is known blocked by socket permissions; no retry was attempted in this trial."
+    }
+  },
+  "dataBoundary": "Synthetic local-only demonstration; no network submission or persistence."
+}

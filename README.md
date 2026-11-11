@@ -91,7 +91,7 @@ dsh --profile meta-kim
 | `scripts/` / `tests/` | 计算、校验或可复现的组件检查 |
 | `PROVENANCE.md` / `LICENSE` | 来源与许可证 |
 
-测试分别覆盖文件合同、确定性工具、安装加载和实际任务表现。案例帮助理解标准，实际效果由当前产物评价。研究来源、行业范围和验证结果见[行业覆盖说明](docs/research/industry-coverage-2026-11-11.md)及[验证记录](docs/verification/dsh-professional-quality-2026-11-11.md)。
+测试分别覆盖文件合同、确定性工具、安装加载和实际任务表现。案例帮助理解标准，实际效果由当前产物评价。研究来源、行业范围和验证结果见[行业覆盖说明](docs/research/industry-coverage-2026-11-11.md)及[验证记录](docs/verification/dsh-professional-quality-2026-11-11.md)。本轮修正、分层和实际成果试跑见[迭代记录](docs/verification/iteration-20261111.md)。
 
 ## 维护与参与
 

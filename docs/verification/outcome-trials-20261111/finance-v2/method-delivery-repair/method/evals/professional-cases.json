@@ -1,0 +1,132 @@
+{
+  "schemaVersion": 1,
+  "roleId": "financial-modeler",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "complete-delivery",
+      "capabilityId": "financial-modeler-deliver",
+      "category": "worked_example",
+      "scenario": "用两年的自由现金流预测和终值，比较基准、下行情景及估值敏感性。",
+      "input": {
+        "historicals": "合成项目，单位万元，年末现金流",
+        "drivers": {
+          "fcff": [
+            100,
+            110
+          ],
+          "wacc": 0.1,
+          "terminalGrowth": 0.02,
+          "debt": 300,
+          "cash": 50,
+          "downsideFcff": [
+            80,
+            80
+          ],
+          "sensitivityWacc": 0.12
+        },
+        "decision": "计算企业价值到股权价值"
+      },
+      "candidateOutputExcerpt": {
+        "model": "两年FCFF为100、110；估值时点t0，现金流均在年末。",
+        "valuation": "第二年终值=110×1.02/(0.10−0.02)=1402.5；企业价值=100/1.1+(110+1402.5)/1.1²=1340.9091；股权价值=1090.9091万元。",
+        "scenarios": "基准企业/股权价值1340.9091/1090.9091万元。下行FCFF改80、80，其余不变，企业/股权价值981.8182/731.8182。单因素敏感性只将WACC从10%改12%，仍用100、110及g=2%，企业/股权价值1071.4286/821.4286万元。",
+        "decisionMemo": "这是合成假设估值，不是证券报价；需核实实际净债务和稳定期条件。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "领域计算、行为和未核范围分开，结果可按所给输入复查。",
+      "diagnosticRefs": [
+        "basis",
+        "cash",
+        "discount"
+      ],
+      "decisionRuleRefs": [
+        "match-cash-rate",
+        "terminal-condition",
+        "noncash"
+      ]
+    },
+    {
+      "id": "material-error",
+      "capabilityId": "financial-modeler-deliver",
+      "category": "failure_boundary",
+      "scenario": "增长率超过折现率",
+      "input": {
+        "historicals": "合成项目，单位万元，年末现金流",
+        "drivers": {
+          "fcff": [
+            100,
+            110
+          ],
+          "wacc": 0.1,
+          "terminalGrowth": 0.02,
+          "debt": 300,
+          "cash": 50,
+          "downsideFcff": [
+            80,
+            80
+          ],
+          "sensitivityWacc": 0.12
+        },
+        "decision": "计算企业价值到股权价值"
+      },
+      "candidateOutputExcerpt": {
+        "valuation": "r=2%、g=3%，照常使用终值公式并给可投资结论。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "该永续模型在此条件不适用。",
+      "diagnosticRefs": [
+        "basis",
+        "cash",
+        "discount"
+      ],
+      "decisionRuleRefs": [
+        "match-cash-rate",
+        "terminal-condition",
+        "noncash"
+      ]
+    },
+    {
+      "id": "bounded-progress",
+      "capabilityId": "financial-modeler-deliver",
+      "category": "worked_example",
+      "scenario": "缺品牌参数不相关",
+      "input": {
+        "historicals": "合成项目，单位万元，年末现金流",
+        "drivers": {
+          "fcff": [
+            100,
+            110
+          ],
+          "wacc": 0.1,
+          "terminalGrowth": 0.02,
+          "debt": 300,
+          "cash": 50,
+          "downsideFcff": [
+            80,
+            80
+          ],
+          "sensitivityWacc": 0.12
+        },
+        "decision": "计算企业价值到股权价值"
+      },
+      "candidateOutputExcerpt": {
+        "model": "客户暂未确定报告配色，公式和现金流情景照常完成。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "展示偏好不阻断财务计算。",
+      "diagnosticRefs": [
+        "basis",
+        "cash",
+        "discount"
+      ],
+      "decisionRuleRefs": [
+        "match-cash-rate",
+        "terminal-condition",
+        "noncash"
+      ]
+    }
+  ]
+}

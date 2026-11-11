@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "artifactPathsRelativeTo": "output-directory",
+  "artifacts": {
+    "forecast": "forecast.json",
+    "decision": "decision.md",
+    "facts": "facts.json"
+  }
+}

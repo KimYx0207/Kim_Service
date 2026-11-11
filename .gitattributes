@@ -8,3 +8,6 @@
 *.ico binary
 *.pdf binary
 *.zip binary
+
+# Frozen trial evidence is byte-bound, including original CSV line endings.
+docs/verification/outcome-trials-20261111/** -text

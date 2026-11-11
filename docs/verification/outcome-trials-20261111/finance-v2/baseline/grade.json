@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 2,
+  "reviewBinding": {
+    "runId": "8b0976c5-2c81-4653-8af1-63657f069923",
+    "taskSha256": "92bf0089571f02efc598c62a9069cfa14474f2b0c707637d653e8caf59b9f254",
+    "outputFiles": {
+      "build_forecast.mjs": "32d62259e9d6723d9e9c1f6aab7b1ff18aa0d0b364a6145332f3251a24c1bae1",
+      "decision.md": "0c27a188520e155c3a524e1b9e411ba651d7c4a044017feb40e34ac1d182a8b1",
+      "facts.json": "00754b75ac18ab89144a8b8df59ebdb5b9bac7800af18a02eebe6b9b515cbf3a",
+      "forecast.json": "b075a7eadc7decbaf838a085d46f52e599fe67a6adec006f76fdb47fa3e297d3",
+      "source-integrity.json": "700302b54e247bb16c5dabf03650a989111010773e111b01773e3fadfe13fe1a",
+      "submission.json": "7e013b2c29879245537dc76fa24806f33e5fa42cdfc00fdcfe9b37596c218698",
+      "validate_forecast.mjs": "b17bec71daabcbaaf7dfdad2379a5cab01879e499bc892f67493e8472cc26440",
+      "validation.json": "a36e5312e8184af1841914c0ca040932c9fcea8568ce5d105be8e51f872dd1b4"
+    }
+  },
+  "evaluationFingerprint": {
+    "grader": "837603f69fac0e4e851fe0d536ba74eb98bdc14774dc01438d84fc3a5d9b6b4b",
+    "financialReference": "0823eef720ea9b9724bf02c07db504bf14631259a23d39ce291fabf05e4581bc"
+  },
+  "taskId": "finance-conflict",
+  "condition": "baseline",
+  "attempt": 1,
+  "model": "gpt-6-astra",
+  "status": "task_pass",
+  "professionalEffect": "not_evaluated",
+  "comparativeEffect": "not_measured",
+  "inputProvenance": "original_synthetic_file_tasks",
+  "taskSha256": "92bf0089571f02efc598c62a9069cfa14474f2b0c707637d653e8caf59b9f254",
+  "methodVersion": null,
+  "methodSnapshotSha256": null,
+  "durationMs": null,
+  "totalTokens": null,
+  "measurement": "not_supplied_by_host",
+  "automaticChecks": [
+    {
+      "id": "frozen-evaluation",
+      "status": "pass",
+      "evidence": "Grader and financial reference fingerprint compared with preparation"
+    },
+    {
+      "id": "frozen-task-and-inputs",
+      "status": "pass",
+      "evidence": [
+        "inputs/calculation-policy.md",
+        "inputs/confirmed-budget.json",
+        "inputs/supplier-proposal.md"
+      ]
+    },
+    {
+      "id": "submission-manifest",
+      "status": "pass",
+      "evidence": "output/submission.json"
+    },
+    {
+      "id": "artifact-forecast",
+      "status": "pass",
+      "evidence": {
+        "path": "forecast.json",
+        "bytes": 27785,
+        "sha256": "b075a7eadc7decbaf838a085d46f52e599fe67a6adec006f76fdb47fa3e297d3"
+      }
+    },
+    {
+      "id": "artifact-decision",
+      "status": "pass",
+      "evidence": {
+        "path": "decision.md",
+        "bytes": 5524,
+        "sha256": "0c27a188520e155c3a524e1b9e411ba651d7c4a044017feb40e34ac1d182a8b1"
+      }
+    },
+    {
+      "id": "artifact-facts",
+      "status": "pass",
+      "evidence": {
+        "path": "facts.json",
+        "bytes": 671,
+        "sha256": "00754b75ac18ab89144a8b8df59ebdb5b9bac7800af18a02eebe6b9b515cbf3a"
+      }
+    },
+    {
+      "id": "finance-12-month-arithmetic",
+      "status": "pass",
+      "evidence": {
+        "numericComparisons": 216,
+        "reference": "pure operating forecast, fixed confirmed input; not an independent financial audit"
+      }
+    },
+    {
+      "id": "finance-conflicting-source-kept-explicit",
+      "status": "pass",
+      "evidence": {
+        "issue": "同规格每单变动成本：已确认预算为 45 元，供应商新提议为 50 元；新提议尚未签约、尚未被经营者接受。",
+        "sources": [
+          "inputs/confirmed-budget.json",
+          "inputs/supplier-proposal.md"
+        ],
+        "status": "pending",
+        "appliedValue": 45,
+        "alternateValue": 50,
+        "unit": "CNY/order",
+        "treatment": "全部主预测沿用已确认的基础成本 45 元/单，再分别乘以既定情景成本系数；50 元/单未进入主预测。",
+        "decisionNeeded": "经营者是否接受供应商新报价及何时生效。"
+      }
+    }
+  ],
+  "humanChecks": [
+    {
+      "id": "finance-explanation",
+      "description": "说明利润与现金的区别、缺口的期间及简化假设，不把示例当真实收益。",
+      "status": "pass",
+      "evidence": "实际阅读 output/decision.md 全文及 output/forecast.json。decision 的“为什么利润与现金不同”明确区分收入与回款、利润与现金；逐项说明当月收 65%、次月收 35%，首月收期初应收 2400、付期初应付 1200，2 月 capex 12000 与每月非现金折旧 200 的处理。\n\n独立依据 inputs/confirmed-budget.json 与 inputs/calculation-policy.md 编写 recompute.mjs，未读取或调用生产计算脚本、仓库评分器或参考实现。复算全部 36 个月并比较 783 个已交付字段值，无差异；结果在 audit_20261111/finance-v2-independent-review/baseline-recalculation.json。\n\n基准关键月现金桥：2027-01 为 12000 + 11760 - 14760 + 0 = 9000；2027-02 为 9000 + 14692.50 - 25830 + 0 = -2137.50，2 月净利润仍为 820。基准年度现金桥 12000 + 199828.50 - 194874 + 0 = 16954.50；利润桥 12000 + 20316 + 2400 - 4561.50 - 1200 - 12000 = 16954.50，均与 forecast 和解释吻合。\n\ndecision 准确列出基准负现金月份 2–3 月、乐观 2 月、保守 2–12 月，首次缺口均为 2027-02；最大月末资金需要分别 2137.50、483.56、8701.79，最深月份分别为 2 月、2 月、10 月。三情景主表融资均为 0，未把资金需要塞入融资。\n\ndecision 明确全部为合成数据、非实际客户业绩；税率 20% 和每月折旧 200 是模型假设；正利润当月交税、亏损不结转；月度模型不覆盖月中收付压力。资金缺口定义是最低月末现金的负数，不是负数月份相加。"
+    },
+    {
+      "id": "finance-conflict",
+      "description": "正确保留已确认预算，明确新报价未接受及其影响，不编造决定或其他费用已知。",
+      "status": "pass",
+      "evidence": "inputs/confirmed-budget.json 的基础变动成本为 45；inputs/supplier-proposal.md 明确 50 尚未签约且经营者尚未接受。output/facts.json 的唯一冲突保留 sources 两个输入路径、status=pending、appliedValue=45、alternateValue=50、unit=CNY/order。\n\noutput/decision.md 首段及“尚待决定的事项”说明主预测沿用 45 及既定情景成本系数，50 未替换预算。独立重算全部 36 月的成本、利润及现金均与以 45 为基础的结果一致，未发现提议成本偷换进主预测。\n\ndecision 明确经营者仍需决定是否接受及生效月份；融资金额、到位月份、来源、利率、还款条件没有被杜撰；2 月设备投入继续执行输入的 12000，不擅自延期。\n\ndecision 如实说明“未另外进行 50 元/单的敏感性测算”，没有把未测影响写成已验证结果。本项通过基于冲突保留和未知项处理；未声称 baseline 已量化 50 的年度影响。独立审阅另算的全年 50 假设仅存审阅目录，不视作 baseline 的交付内容。"
+    }
+  ],
+  "reviewer": {
+    "id": "/root/finance_v2_review",
+    "relationship": "independent_context_not_external_audit",
+    "blinded": false
+  },
+  "limitations": [
+    "This is one synthetic file task, not package-wide professional certification.",
+    "No model is called by this script. Missing host timing or token data stays null.",
+    "A submitted review is a recorded reviewer declaration; this script cannot independently prove reviewer identity or blinding.",
+    "Artifact files and deterministic calculations do not prove native-host execution or user acceptance."
+  ]
+}

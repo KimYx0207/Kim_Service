@@ -1,0 +1,60 @@
+{
+  "reviewer": "/root/finance_v2_review",
+  "basis": "Expected rows were independently computed from supplied inputs. Aliases normalize output field names only; no producer script or repository scoring code loaded.",
+  "comparedValues": {
+    "main": 711,
+    "sensitivity": 237,
+    "sensitivityComparisonValues": 21
+  },
+  "mismatches": [],
+  "sensitivityInputEconomicChanges": {
+    "variableCostPerUnit": {
+      "confirmed": 45,
+      "sensitivity": 50
+    }
+  },
+  "bindingCopiedFrom": "grade.json#/reviewBinding",
+  "binding": {
+    "runId": "c7e1dfa5-ff1f-4858-8e48-1f62d16be897",
+    "taskSha256": "92bf0089571f02efc598c62a9069cfa14474f2b0c707637d653e8caf59b9f254",
+    "outputFiles": {
+      "build-delivery.mjs": "2e4990829896e6973742d0ea973f97d6e8b793b1f114a17c535279f3dc643df5",
+      "decision.md": "79db0db567ae8ab66a64b8a57776dce3a5a4146a5ab32cd42a56cd93de4882a7",
+      "facts.json": "17a73ba190605be7f081ad43dafa9f405be246a3db1b8fc2646d75cdf7061343",
+      "forecast-months.csv": "046f99fe56cd896b32548533d53e921be765bf252f403989b01a1e740e404869",
+      "forecast.json": "2d138ac1857c5e4372f5d9f33d5cbffabf52f9d0a9e04af6708aaa58c6cb02ce",
+      "package-test-results.txt": "ea853b7ed435112d146e5f440ae97c7da2a0e5af485fedcc5e5eca466fb42085",
+      "page-verification.json": "b38431db474635f72f150d34dc52b988c8f080c59e479765a930c5425df93645",
+      "sensitivity-comparison.json": "b1f6b80a96c2a6914b71a02a37738ba22afb3fd439ecf570f58c17130eeb9350",
+      "sensitivity-input.json": "551dbb815b96099ac0430ea90f4a8c90a769922f4962733aeffe18d17a3a5253",
+      "sensitivity.json": "599e71e82ae0baeb859a8ef2e4391e2d69f909f6bf2f9ba91557a182e2f01b81",
+      "source-checksums.json": "f7f71caf05e9933ba5abe1a1cbedeca6e7e5293b2c686695d62eeb04edf9471e",
+      "submission.json": "45dd62b26bbc443a469ab911e15d1a8f22679e01cc6f1e77b4f3a4eed9267627",
+      "verification.json": "d21d7732cc8d2234cc19c1a4de73a348930ec79977d2a014bc2e59d0127bc8d4",
+      "verify-forecast.mjs": "46809a1c9587097d41f7a458cfee9ab490ea911fd0103545a42d02ecfefb9a1d",
+      "verify-page.mjs": "ed8a95cd39abb89655c386f42361a1e7d2804a2ea690b1012eb9e9dd2d7e8692"
+    }
+  },
+  "outputHashMismatches": [],
+  "submissionPathObservations": [
+    {
+      "artifact": "forecast",
+      "submittedPath": "output/forecast.json",
+      "existsRelativeToOutput": false,
+      "existsRelativeToTaskDirectory": true
+    },
+    {
+      "artifact": "decision",
+      "submittedPath": "output/decision.md",
+      "existsRelativeToOutput": false,
+      "existsRelativeToTaskDirectory": true
+    },
+    {
+      "artifact": "facts",
+      "submittedPath": "output/facts.json",
+      "existsRelativeToOutput": false,
+      "existsRelativeToTaskDirectory": true
+    }
+  ],
+  "deliveryWarning": "Original submission uses output/ prefixes and declares task-directory. The parent evaluator reports that the required artifact contract resolves relative to output/. All three submitted paths are absent under that root. Financial-content pass is not overall task_pass."
+}

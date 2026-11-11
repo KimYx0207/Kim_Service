@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "status": "not_completed_environment_blocked",
+  "executedAttempts": [
+    {
+      "attempt": "Playwright default headless Chromium launch",
+      "result": "failed",
+      "reason": "Bundled headless Chromium executable unavailable.",
+      "evidence": "page-verification-launch-attempt.json"
+    },
+    {
+      "attempt": "Launch installed /usr/bin/chromium",
+      "result": "failed",
+      "reason": "Operating system denied socket(): Operation not permitted; browser exited before opening page.",
+      "evidence": "page-verification-system-chromium-attempt.json"
+    }
+  ],
+  "completedPageChecks": [],
+  "notPerformed": [
+    "actual_page_open",
+    "page_budget_import",
+    "page_parameter_change",
+    "page_download_checks",
+    "visual_screenshot_review",
+    "real_business_acceptance",
+    "professional_effect_evaluation"
+  ],
+  "scopeImpact": "Required financial files were generated and independently recalculated locally. Page rendering and download behavior remain unverified; no UI pass is claimed.",
+  "nextAction": "When an allowed browser runtime is available, rerun node output/verify_page.cjs."
+}

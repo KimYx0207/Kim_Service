@@ -26,6 +26,15 @@ Kim Service is a professional capability library maintained by Lao Jin (KimYx020
 
 Browse the [role directory](agents/README.md), [Chinese task browser](docs/start.html) or [capability index](generated/capabilities.json). After downloading the repository, `docs/start.html` works offline in a browser.
 
+## Try two editable examples
+
+Open the task browser after downloading the repository:
+
+- **Booking design system:** change theme, brand color and density; try validation, failure recovery and new entries; export the current tokens.
+- **12-month operating forecast:** edit sales, costs, collections and cash assumptions; compare three scenarios; download inputs, results and monthly tables.
+
+Both use synthetic data. Select a capability, enter your goal and materials, and copy the request to your current Agent. The [task browser guide](docs/task-browser.md) describes configuration, architecture and publication.
+
 ## What should the result look like?
 
 | Job | A deliverable you can inspect |

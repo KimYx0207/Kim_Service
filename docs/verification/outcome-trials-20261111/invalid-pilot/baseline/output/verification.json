@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "status": "local_checks_passed",
+  "executedAtUtc": "2026-11-11T07:10:14.958244+00:00",
+  "method": "本次会话实际运行本地Python检查；没有读取外部评分器。",
+  "checks": [
+    {
+      "check": "artifact_structure",
+      "status": "passed",
+      "detail": "三份实际文件存在；submission映射有效；forecast schemaVersion=1、CNY、三个指定情景；冲突记录包含全部必需字段。"
+    },
+    {
+      "check": "input_integrity",
+      "status": "passed",
+      "detail": "两份输入在生成前后的SHA-256一致。未对run.json执行写入。"
+    },
+    {
+      "check": "monthly_financial_calculation",
+      "status": "passed",
+      "detail": "已核对36个月行的情景驱动、收入、利润、税额、回款、付款、期初结算、应收应付与零融资。"
+    },
+    {
+      "check": "independent_accounting_bridge",
+      "status": "passed",
+      "detail": "用累计利润＋折旧－应收增加＋应付增加－设备采购＋融资，独立核对全部36个月末现金。"
+    },
+    {
+      "check": "summaries_and_cash_gaps",
+      "status": "passed",
+      "detail": "核对三个情景的合计、收入等比数列闭式公式、全年现金衔接、最低现金月份和融资缺口。"
+    },
+    {
+      "check": "anchor_months_and_narrative",
+      "status": "passed",
+      "detail": "手算锚点与表内结果一致：基准1月现金9000、2月现金-2138.40；正文所述负现金月份和保守情景盈利月份准确。"
+    },
+    {
+      "check": "supplier_conflict_and_sensitivity",
+      "status": "passed",
+      "detail": "45元用于三情景；50元保留为待决定提议，单独敏感性分析的利润、年末现金与现金缺口已重算核对。"
+    },
+    {
+      "check": "cross_file_consistency",
+      "status": "passed",
+      "detail": "decision中的三情景关键金额与forecast按分四舍五入后的数值一致；facts与forecast使用相同来源哈希。"
+    }
+  ],
+  "notRun": [
+    "外部领域专家审阅",
+    "真实经营数据核验",
+    "真实融资或供应商确认",
+    "浏览器或人工视觉验收"
+  ],
+  "scope": "仅检验合成输入下的产物结构、来源选择、算术与文档一致性；不是实际经营结果或外部认证。"
+}

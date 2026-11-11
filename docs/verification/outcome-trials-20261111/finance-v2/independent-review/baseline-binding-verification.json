@@ -1,0 +1,20 @@
+{
+  "reviewer": "/root/finance_v2_review",
+  "run": "finance-v2-baseline",
+  "bindingCopiedFrom": "grade.json#/reviewBinding",
+  "binding": {
+    "runId": "8b0976c5-2c81-4653-8af1-63657f069923",
+    "taskSha256": "92bf0089571f02efc598c62a9069cfa14474f2b0c707637d653e8caf59b9f254",
+    "outputFiles": {
+      "build_forecast.mjs": "32d62259e9d6723d9e9c1f6aab7b1ff18aa0d0b364a6145332f3251a24c1bae1",
+      "decision.md": "0c27a188520e155c3a524e1b9e411ba651d7c4a044017feb40e34ac1d182a8b1",
+      "facts.json": "00754b75ac18ab89144a8b8df59ebdb5b9bac7800af18a02eebe6b9b515cbf3a",
+      "forecast.json": "b075a7eadc7decbaf838a085d46f52e599fe67a6adec006f76fdb47fa3e297d3",
+      "source-integrity.json": "700302b54e247bb16c5dabf03650a989111010773e111b01773e3fadfe13fe1a",
+      "submission.json": "7e013b2c29879245537dc76fa24806f33e5fa42cdfc00fdcfe9b37596c218698",
+      "validate_forecast.mjs": "b17bec71daabcbaaf7dfdad2379a5cab01879e499bc892f67493e8472cc26440",
+      "validation.json": "a36e5312e8184af1841914c0ca040932c9fcea8568ce5d105be8e51f872dd1b4"
+    }
+  },
+  "outputHashMismatches": {}
+}

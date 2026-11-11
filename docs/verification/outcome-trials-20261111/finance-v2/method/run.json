@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 2,
+  "runId": "c7e1dfa5-ff1f-4858-8e48-1f62d16be897",
+  "evaluationFingerprint": {
+    "grader": "837603f69fac0e4e851fe0d536ba74eb98bdc14774dc01438d84fc3a5d9b6b4b",
+    "financialReference": "0823eef720ea9b9724bf02c07db504bf14631259a23d39ce291fabf05e4581bc"
+  },
+  "taskId": "finance-conflict",
+  "condition": "with_method",
+  "attempt": 1,
+  "model": "gpt-6-astra",
+  "createdAt": "2026-11-11T11:57:17.267Z",
+  "taskSha256": "92bf0089571f02efc598c62a9069cfa14474f2b0c707637d653e8caf59b9f254",
+  "inputFiles": {
+    "calculation-policy.md": "f0ac99009833927f599f2813748f31c1864356dd06ef5b2b740cf782c41c2873",
+    "confirmed-budget.json": "8f65f64cd74c89189a0ab3e7f307f1d24c321854dc71cbb782cf773d1169eb49",
+    "supplier-proposal.md": "5f8bc954ec117e4635f537fe444b635564c2c2c78747ed236302823805143b30"
+  },
+  "method": {
+    "componentId": "financial-modeler",
+    "version": "0.2.0",
+    "files": {
+      "AGENT.md": "3858f1ee91a29ed2e6e38ec66ed5e2bc04d6f970accfd7741cd6ee013b6947e7",
+      "capability.json": "7dbc6498e9907bd51d74c048dad623739aa9bd4e276ecab5c4a9c2082a2ae5de",
+      "CHANGELOG.md": "f69df95966b248f605c1b672fa9bac5b5a5a81f99e0ea30cdedcbffbf06a725f",
+      "evals/professional-cases.json": "305feaff07fbdb8baf912c0e9877bb610a5eb111e85b1293891e288ee97971c3",
+      "examples/operating-forecast/app.js": "8d20749fa152ab3a45386ba98360d13e53659294ac09a89ec91c755261931f25",
+      "examples/operating-forecast/index.html": "aa392e21ed8729ab18230fc02e1233fc2d0906ce2aee9de3e56d0359e11d39a4",
+      "examples/operating-forecast/sample-data.js": "d9341091b69d4f90f53688903deb45ab73bccd8cb38e6f20ddca077554a630ea",
+      "examples/operating-forecast/styles.css": "b0ee12e5e1acf8964248c0ac61a130d0a9806502362f7c5061f2b5469e074558",
+      "LICENSE": "70feaa9dba9a4b99e43499a9ffa09388348772d536df825fb14a2efbc7a08d39",
+      "method.json": "53b50973353c21bf5cbf58c0c8e9c7e85034750a0b6317e92b7d0aa22eae3379",
+      "NOTICE": "2f821b0479ee4874b5babc91d5fad5d0989ddc8152a8fd4c0fbc38f6efd3f046",
+      "PROVENANCE.md": "d4c247a8fec030b22ab72106bad74e0b1939d399e68a428879bfeeb083a6f847",
+      "README.md": "0c1bfad29578d0119d664fc42a841311924b7688ba0cd7dd372cd20db36f1f23",
+      "references/delivery-template.md": "1e6ea2977448b1dc10d9685fb69b2d0df77ee7b9721e306197d7fe885fad8982",
+      "references/operating-forecast.md": "5d77e3a524a2594829751471fca12fe1b6170b47c65790a513679502fd1e2df3",
+      "references/professional-method.md": "13157d5c5a7c115171089353075f0cc6eaac49d168341ec110af4946249d525a",
+      "scripts/forecast-cli.mjs": "596d8afaa267e99abac8c86f506a53304aa4af851d8fef699d3cb02ff8ec8aa8",
+      "scripts/model.mjs": "e464debf45fdd2df3d9e44e793056c1ca63ecec6487bc6b77ba5f49290411fc5",
+      "scripts/operating-forecast.js": "0823eef720ea9b9724bf02c07db504bf14631259a23d39ce291fabf05e4581bc",
+      "tests/calculation.test.mjs": "4bea519201cfef8aedbbf3eed137b9cfcf4ac3edad8581aa4a6b49d60675889e",
+      "tests/contract.test.mjs": "130dd39dcd2341aff0d2b9004ae3eb600759b96a480df772cdbd92c6b1f00269",
+      "tests/operating-forecast.test.mjs": "72942978269a23e64518fda264d18c0c9617a17e5a665c81e6d78b21539a4eac"
+    }
+  },
+  "durationMs": null,
+  "totalTokens": null,
+  "measurement": "not_supplied_by_host",
+  "inputProvenance": "original_synthetic_file_tasks",
+  "taskTextSha256": "019c55cc7f3ed0326e9138af3f38794ac5aa565b58e49c5b0a369ad17fe19166"
+}

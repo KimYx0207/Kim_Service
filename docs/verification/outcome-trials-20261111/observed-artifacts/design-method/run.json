@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "taskId": "design-states",
+  "condition": "with_method",
+  "attempt": 1,
+  "model": "Astra session inherited",
+  "createdAt": "2026-11-11T07:05:02.247Z",
+  "taskSha256": "4b378b6541770a372f7405ed7b8d0237b973363d64493458b4cd7b1bb1dea70b",
+  "inputFiles": {
+    "brief.md": "ffc22877d74013c1a2ef9f67226fdba80b9b384f8d2d9dd9eb25b146371cfc6b",
+    "index.html": "6f61fdd8b802da274d26bb111657845a9f1981868723d8694a1610b5c9ab98d8"
+  },
+  "method": {
+    "componentId": "design-system-designer",
+    "version": "0.2.0",
+    "files": {
+      "AGENT.md": "2e405d912d517e2d8d8595cf90e74ad7230035519306b713cc5c58a952ab8375",
+      "capability.json": "2c38d19c2a32ee1d744225be72f1743b72bb3e0d0c043d863ee71b0261d5fcff",
+      "CHANGELOG.md": "15e8dfbbf068dc1a019f20e4e50c525d31246f7ec9a9e526ccb8fe5b68319532",
+      "evals/professional-cases.json": "10b65f064e01e166dcbe44b9fbd25a5b92a0c1031c896f6e78c15a5b7beda9d1",
+      "examples/service-console/app.js": "97202b8c6f4c205f75d1638e8242a5862bc1909c84563f5cd9ec2d26574a7ea1",
+      "examples/service-console/config.js": "ded0fa5246d8a97e4162d0d679ffe1bd1922fabf62e0e5db9953866335a84e33",
+      "examples/service-console/index.html": "f0b51efda9949f2e124918730c0675fb8800c50d60ac99b7a8f9673d81584b5e",
+      "examples/service-console/styles.css": "4a8f71da52c2c29604f90eb8f0c41b17794f68b215768a0fe55770fcc3cb4c55",
+      "examples/service-console/tokens.js": "eccd43aaa46d17cfb3cfe4cffd34a9752612d5ea9a0e78b164a4681489a44b4e",
+      "LICENSE": "70feaa9dba9a4b99e43499a9ffa09388348772d536df825fb14a2efbc7a08d39",
+      "method.json": "56833146ecee09b0fd4671a92fa6f60a9cfeffc79f2f2c2a7a509993572721a9",
+      "NOTICE": "6f496e56e2954aed00fa5df8d20f72673380aa3faa07ea5881709b7225a8523b",
+      "PROVENANCE.md": "bb125f6d9c2f2a9840ec01696e7b67bafa1e78fc4101010da608474fd3122479",
+      "README.md": "e4275725ea474a38bc287f8c86fcfeef650cdd8a3880df68b5b149966a1447f9",
+      "references/delivery-template.md": "295cc0a10ca11610471aaa5ec08d621f30e63e2826e16f6432fb7a7386d3cfce",
+      "references/editable-example.md": "a4151d5aa8ee355ffbb0cbafca14e8351ca80423ef19c10f17fcb7d73256e1e9",
+      "references/professional-method.md": "6855953f4ed5f537d9a3d54a373f42daac14238ca004e13bcdaf94115be87bbe",
+      "tests/contract.test.mjs": "130dd39dcd2341aff0d2b9004ae3eb600759b96a480df772cdbd92c6b1f00269",
+      "tests/tokens.test.mjs": "d5ba10c214ced9da3ca1eff03fed5cb87b521809e4fef1c1779a2ea062f6c38f"
+    }
+  },
+  "durationMs": null,
+  "totalTokens": null,
+  "measurement": "not_supplied_by_host",
+  "inputProvenance": "original_synthetic_file_tasks"
+}

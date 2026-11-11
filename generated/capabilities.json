@@ -3583,12 +3583,12 @@
       ]
     },
     {
-      "componentContentSha256": "e3cd8e4855a876c59d6916597e3c4d6c432c708bfbfae280dead453dd8f4d59f",
+      "componentContentSha256": "d7dccffe2834d783222cc0cdc049fed60159c6ef08bbdd81330a77159884fa51",
       "componentId": "financial-modeler",
       "componentPath": "agents/financial-modeler",
       "componentType": "agent",
-      "componentVersion": "0.2.0",
-      "contractSha256": "1dfd4bae2efde8b6d5147adea06c107edf67cc9bb8a8eb656d93b7df3c2004d9",
+      "componentVersion": "0.2.1",
+      "contractSha256": "486f086542d8c0f924b006a05d2bb5d41b5c4742dfa8b7d6e8617876e837f7ba",
       "doNotUseWhen": [
         "日常现金流水分析交business-finance-analyst。",
         "策略回测交quantitative-researcher。",
@@ -13875,9 +13875,9 @@
         "financial-modeler-deliver"
       ],
       "componentType": "agent",
-      "componentVersion": "0.2.0",
-      "contentSha256": "e3cd8e4855a876c59d6916597e3c4d6c432c708bfbfae280dead453dd8f4d59f",
-      "contractSha256": "1dfd4bae2efde8b6d5147adea06c107edf67cc9bb8a8eb656d93b7df3c2004d9",
+      "componentVersion": "0.2.1",
+      "contentSha256": "d7dccffe2834d783222cc0cdc049fed60159c6ef08bbdd81330a77159884fa51",
+      "contractSha256": "486f086542d8c0f924b006a05d2bb5d41b5c4742dfa8b7d6e8617876e837f7ba",
       "entrypoint": "AGENT.md",
       "id": "financial-modeler",
       "path": "agents/financial-modeler",

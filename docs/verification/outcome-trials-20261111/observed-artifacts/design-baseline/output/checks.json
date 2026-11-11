@@ -1,0 +1,265 @@
+{
+  "checkedAt": "2026-11-11T11:43:42.402Z",
+  "mode": "Local source checks, Node VM with a minimal DOM stub, and numerical color calculations. No browser was launched.",
+  "checks": [
+    {
+      "name": "JavaScript parses",
+      "kind": "source",
+      "status": "passed"
+    },
+    {
+      "name": "HTML IDs are unique and required accessibility references exist",
+      "kind": "source",
+      "status": "passed"
+    },
+    {
+      "name": "Only existing local dependencies and anchors are referenced",
+      "kind": "source",
+      "status": "passed"
+    },
+    {
+      "name": "Original Chinese example and long English action are retained",
+      "kind": "source",
+      "status": "passed"
+    },
+    {
+      "name": "Responsive rules, flexible form sizing, wrapping, and reduced motion are present (source only)",
+      "kind": "source",
+      "status": "passed"
+    },
+    {
+      "name": "Exported design variables match the CSS",
+      "kind": "source",
+      "status": "passed"
+    },
+    {
+      "name": "Startup enables the form after attaching handlers",
+      "kind": "DOM stub",
+      "status": "passed"
+    },
+    {
+      "name": "Empty fields show associated errors and focus the first invalid field",
+      "kind": "DOM stub",
+      "status": "passed"
+    },
+    {
+      "name": "Invalid email preserves entered values; correction clears the field error",
+      "kind": "DOM stub",
+      "status": "passed"
+    },
+    {
+      "name": "Loading locks controls and rejects repeated submit events",
+      "kind": "DOM stub",
+      "status": "passed"
+    },
+    {
+      "name": "Simulated failure retains inputs and does not change the roster",
+      "kind": "DOM stub",
+      "status": "passed"
+    },
+    {
+      "name": "Retry succeeds once, inserts the Chinese name, updates count, and resets the form",
+      "kind": "DOM stub",
+      "status": "passed"
+    },
+    {
+      "name": "Repeated successful entries retain earlier records and put the newest first",
+      "kind": "DOM stub",
+      "status": "passed"
+    },
+    {
+      "name": "User text is inserted as text and does not create HTML elements",
+      "kind": "DOM stub",
+      "status": "passed"
+    },
+    {
+      "name": "Theme toggle changes theme and aria-pressed, persisting only the preference",
+      "kind": "DOM stub",
+      "status": "passed"
+    },
+    {
+      "name": "System preference works until overridden; storage denial does not block the form",
+      "kind": "DOM stub",
+      "status": "passed"
+    },
+    {
+      "name": "20 declared foreground/background contrast pairs meet their stated thresholds",
+      "kind": "color calculation",
+      "status": "passed"
+    }
+  ],
+  "contrast": [
+    {
+      "theme": "light",
+      "foreground": "text",
+      "background": "surface",
+      "ratio": 14.31,
+      "minimum": 4.5,
+      "status": "passed"
+    },
+    {
+      "theme": "light",
+      "foreground": "muted",
+      "background": "surface",
+      "ratio": 5.3,
+      "minimum": 4.5,
+      "status": "passed"
+    },
+    {
+      "theme": "light",
+      "foreground": "muted",
+      "background": "canvas",
+      "ratio": 4.83,
+      "minimum": 4.5,
+      "status": "passed"
+    },
+    {
+      "theme": "light",
+      "foreground": "muted",
+      "background": "surface-subtle",
+      "ratio": 4.96,
+      "minimum": 4.5,
+      "status": "passed"
+    },
+    {
+      "theme": "light",
+      "foreground": "accent",
+      "background": "accent-soft",
+      "ratio": 6.33,
+      "minimum": 4.5,
+      "status": "passed"
+    },
+    {
+      "theme": "light",
+      "foreground": "on-accent",
+      "background": "accent",
+      "ratio": 7.2,
+      "minimum": 4.5,
+      "status": "passed"
+    },
+    {
+      "theme": "light",
+      "foreground": "danger",
+      "background": "danger-soft",
+      "ratio": 5.59,
+      "minimum": 4.5,
+      "status": "passed"
+    },
+    {
+      "theme": "light",
+      "foreground": "warning",
+      "background": "warning-soft",
+      "ratio": 5.96,
+      "minimum": 4.5,
+      "status": "passed"
+    },
+    {
+      "theme": "light",
+      "foreground": "input-border",
+      "background": "surface",
+      "ratio": 3.28,
+      "minimum": 3,
+      "status": "passed"
+    },
+    {
+      "theme": "light",
+      "foreground": "focus",
+      "background": "surface",
+      "ratio": 7.2,
+      "minimum": 3,
+      "status": "passed"
+    },
+    {
+      "theme": "dark",
+      "foreground": "text",
+      "background": "surface",
+      "ratio": 13.72,
+      "minimum": 4.5,
+      "status": "passed"
+    },
+    {
+      "theme": "dark",
+      "foreground": "muted",
+      "background": "surface",
+      "ratio": 8.25,
+      "minimum": 4.5,
+      "status": "passed"
+    },
+    {
+      "theme": "dark",
+      "foreground": "muted",
+      "background": "canvas",
+      "ratio": 9.49,
+      "minimum": 4.5,
+      "status": "passed"
+    },
+    {
+      "theme": "dark",
+      "foreground": "muted",
+      "background": "surface-subtle",
+      "ratio": 7.36,
+      "minimum": 4.5,
+      "status": "passed"
+    },
+    {
+      "theme": "dark",
+      "foreground": "accent",
+      "background": "accent-soft",
+      "ratio": 6.76,
+      "minimum": 4.5,
+      "status": "passed"
+    },
+    {
+      "theme": "dark",
+      "foreground": "on-accent",
+      "background": "accent",
+      "ratio": 9.63,
+      "minimum": 4.5,
+      "status": "passed"
+    },
+    {
+      "theme": "dark",
+      "foreground": "danger",
+      "background": "danger-soft",
+      "ratio": 7.48,
+      "minimum": 4.5,
+      "status": "passed"
+    },
+    {
+      "theme": "dark",
+      "foreground": "warning",
+      "background": "warning-soft",
+      "ratio": 7.08,
+      "minimum": 4.5,
+      "status": "passed"
+    },
+    {
+      "theme": "dark",
+      "foreground": "input-border",
+      "background": "surface",
+      "ratio": 3.96,
+      "minimum": 3,
+      "status": "passed"
+    },
+    {
+      "theme": "dark",
+      "foreground": "focus",
+      "background": "surface",
+      "ratio": 10.01,
+      "minimum": 3,
+      "status": "passed"
+    }
+  ],
+  "actualBrowser": {
+    "status": "not run",
+    "reason": "The current local Chromium environment was already reported blocked by socket permissions. This trial did not retry the blocked launch.",
+    "unverified": [
+      "Actual layout at 390px",
+      "Visual rendering in light and dark themes",
+      "Real keyboard traversal",
+      "Native email validation behavior",
+      "Screen-reader announcements",
+      "Browser zoom, forced colors, and reduced-motion rendering"
+    ]
+  }
+}

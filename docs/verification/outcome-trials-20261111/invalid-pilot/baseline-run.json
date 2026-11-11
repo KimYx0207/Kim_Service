@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "taskId": "finance-conflict",
+  "condition": "baseline",
+  "attempt": 1,
+  "model": "Astra session inherited",
+  "createdAt": "2026-11-11T07:05:01.702Z",
+  "taskSha256": "ff6658bcc2b90506c3f8208e93eca97f20a27155bd33d6170ea65a333e8c6c0a",
+  "inputFiles": {
+    "confirmed-budget.json": "8f65f64cd74c89189a0ab3e7f307f1d24c321854dc71cbb782cf773d1169eb49",
+    "supplier-proposal.md": "5f8bc954ec117e4635f537fe444b635564c2c2c78747ed236302823805143b30"
+  },
+  "method": null,
+  "durationMs": null,
+  "totalTokens": null,
+  "measurement": "not_supplied_by_host",
+  "inputProvenance": "original_synthetic_file_tasks"
+}

@@ -453,7 +453,7 @@ function isPlaceholderCredentialValue(rawValue) {
     /^(?:sk-|gh[pousr]_|github_pat_|xox[baprs]-|npm_|hf_|aiza)(?:your|example|sample|dummy|placeholder|test|fake)[-_a-z0-9]*$/i.test(value);
 }
 
-function findCredentialAssignment(text, { githubWorkflow = false } = {}) {
+function findCredentialAssignment(text, { githubWorkflow = false, javascript = false } = {}) {
   // GitHub's OIDC permission is a schema value, not a stored credential.
   // Exempt only the exact permission inside a YAML permissions block.
   if (githubWorkflow) text = text.replace(/^([ ]*)permissions:\s*\n((?:\1[ ]+[^\n]*\n)*)/gm, block =>
@@ -462,6 +462,8 @@ function findCredentialAssignment(text, { githubWorkflow = false } = {}) {
   for (const match of text.matchAll(credentialAssignmentPattern)) {
     const [, key, doubleQuoted, singleQuoted, unquoted] = match;
     const value = doubleQuoted ?? singleQuoted ?? unquoted ?? '';
+    // A JS member/index access contains a variable reference, not literal credential bytes.
+    if (javascript && unquoted && /^[A-Za-z_$][\w$]*(?:\.[A-Za-z_$]|\[)/.test(unquoted)) continue;
     if (isCredentialKey(key) && !isPlaceholderCredentialValue(value)) {
       return key;
     }
@@ -480,6 +482,11 @@ function assertSensitiveScannerRegressions() {
       !findCredentialAssignment('permissions:\n  id-token: REALVALUE123456\n', { githubWorkflow: true }) ||
       !findCredentialAssignment('permissions:\n  id-token: write\n')) {
     fail('Credential scanner mishandled GitHub OIDC permission scope');
+  }
+  if (findCredentialAssignment('const token = all[name];', { javascript: true }) ||
+      !findCredentialAssignment('const token = "REALVALUE123456";', { javascript: true }) ||
+      !findCredentialAssignment('token=all[name]')) {
+    fail('Credential scanner confused JS design-token references with literal values');
   }
   const negative = [
     'API_KEY=your_api_key',
@@ -553,7 +560,7 @@ function checkSensitiveFiles() {
       }
     }
 
-    const credentialKey = findCredentialAssignment(text, { githubWorkflow: /^\.github\/workflows\/[^/]+\.ya?ml$/.test(relativePath) });
+    const credentialKey = findCredentialAssignment(text, { githubWorkflow: /^\.github\/workflows\/[^/]+\.ya?ml$/.test(relativePath), javascript: /\.(?:[cm]?js|tsx?)$/.test(relativePath) });
     if (credentialKey) {
       fail('Credential assignment (' + credentialKey + ') found in ' + relativePath);
     }

@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "exampleData": true,
+  "title": "合成工作室经营预算",
+  "currency": "CNY",
+  "startMonth": "2027-01",
+  "openingCash": 12000,
+  "openingReceivables": 2400,
+  "openingPayables": 1200,
+  "drivers": {
+    "initialUnits": 160,
+    "monthlyGrowth": 0.03,
+    "unitPrice": 90,
+    "variableCostPerUnit": 45,
+    "fixedCostPerMonth": 6200,
+    "depreciationPerMonth": 200,
+    "taxRate": 0.2,
+    "collectionShare": 0.65,
+    "paymentShare": 1,
+    "capexByMonth": [
+      0,
+      12000,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "financingByMonth": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "base",
+      "label": "基准",
+      "unitsMultiplier": 1,
+      "priceMultiplier": 1,
+      "costMultiplier": 1,
+      "growthDelta": 0
+    },
+    {
+      "id": "upside",
+      "label": "乐观",
+      "unitsMultiplier": 1.12,
+      "priceMultiplier": 1.03,
+      "costMultiplier": 0.98,
+      "growthDelta": 0.01
+    },
+    {
+      "id": "downside",
+      "label": "保守",
+      "unitsMultiplier": 0.82,
+      "priceMultiplier": 0.98,
+      "costMultiplier": 1.08,
+      "growthDelta": -0.01
+    }
+  ],
+  "assumptions": [
+    "合成预算数据，所有金额为CNY元，数量为单；不是客户结果。",
+    "这是经营者确认的预算版本。税率20%、每月折旧200元均是模型假设，不是法定税务判断。",
+    "期初应收与应付在首月结清；采购随销量发生，无库存变化。"
+  ]
+}

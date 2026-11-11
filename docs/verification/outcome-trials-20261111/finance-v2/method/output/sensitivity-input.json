@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "exampleData": true,
+  "title": "未接受供应商报价的单因素敏感性",
+  "currency": "CNY",
+  "startMonth": "2027-01",
+  "openingCash": 12000,
+  "openingReceivables": 2400,
+  "openingPayables": 1200,
+  "drivers": {
+    "initialUnits": 160,
+    "monthlyGrowth": 0.03,
+    "unitPrice": 90,
+    "variableCostPerUnit": 50,
+    "fixedCostPerMonth": 6200,
+    "depreciationPerMonth": 200,
+    "taxRate": 0.2,
+    "collectionShare": 0.65,
+    "paymentShare": 1,
+    "capexByMonth": [
+      0,
+      12000,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "financingByMonth": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "base",
+      "label": "基准",
+      "unitsMultiplier": 1,
+      "priceMultiplier": 1,
+      "costMultiplier": 1,
+      "growthDelta": 0
+    }
+  ],
+  "assumptions": [
+    "合成预算数据，所有金额为CNY元，数量为单；不是客户结果。",
+    "这是经营者确认的预算版本。税率20%、每月折旧200元均是模型假设，不是法定税务判断。",
+    "期初应收与应付在首月结清；采购随销量发生，无库存变化。",
+    "仅作假设：每单变动成本从45元调至50元；此报价尚未被经营者接受，主预测不采用。",
+    "其余输入与已确认预算的基准情景完全相同。"
+  ]
+}

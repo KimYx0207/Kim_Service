@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "taskId": "design-states",
   "reviewer": {
     "id": "replace-with-actual-reviewer-or-context",
@@ -7,9 +7,30 @@
     "blinded": false
   },
   "checks": [
-    { "id": "design-usable", "status": "not_run", "evidence": "" },
-    { "id": "design-states", "status": "not_run", "evidence": "" },
-    { "id": "design-keyboard", "status": "not_run", "evidence": "" },
-    { "id": "design-editable", "status": "not_run", "evidence": "" }
-  ]
+    {
+      "id": "design-usable",
+      "status": "not_run",
+      "evidence": ""
+    },
+    {
+      "id": "design-states",
+      "status": "not_run",
+      "evidence": ""
+    },
+    {
+      "id": "design-keyboard",
+      "status": "not_run",
+      "evidence": ""
+    },
+    {
+      "id": "design-editable",
+      "status": "not_run",
+      "evidence": ""
+    }
+  ],
+  "binding": {
+    "runId": "copy-current-grade.reviewBinding.runId",
+    "taskSha256": "copy-current-grade.reviewBinding.taskSha256",
+    "outputFiles": {}
+  }
 }

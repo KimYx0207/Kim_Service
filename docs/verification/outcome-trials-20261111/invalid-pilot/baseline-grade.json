@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "taskId": "finance-conflict",
+  "condition": "baseline",
+  "attempt": 1,
+  "model": "Astra session inherited",
+  "status": "fail",
+  "professionalEffect": "not_evaluated",
+  "comparativeEffect": "not_measured",
+  "inputProvenance": "original_synthetic_file_tasks",
+  "taskSha256": "ff6658bcc2b90506c3f8208e93eca97f20a27155bd33d6170ea65a333e8c6c0a",
+  "methodVersion": null,
+  "methodSnapshotSha256": null,
+  "durationMs": null,
+  "totalTokens": null,
+  "measurement": "not_supplied_by_host",
+  "automaticChecks": [
+    {
+      "id": "frozen-task-and-inputs",
+      "status": "pass",
+      "evidence": [
+        "inputs/confirmed-budget.json",
+        "inputs/supplier-proposal.md"
+      ]
+    },
+    {
+      "id": "submission-manifest",
+      "status": "pass",
+      "evidence": "output/submission.json"
+    },
+    {
+      "id": "artifact-forecast",
+      "status": "pass",
+      "evidence": {
+        "path": "forecast.json",
+        "bytes": 54053,
+        "sha256": "fa574cc5e623aaabc4de12802b544358eb468b669d1420bd1cf1680ec8f59919"
+      }
+    },
+    {
+      "id": "artifact-decision",
+      "status": "pass",
+      "evidence": {
+        "path": "decision.md",
+        "bytes": 8561,
+        "sha256": "55757ae30c83dbe5ee78f7031b4547ebf5437817ecf418a342132931d6d00ad5"
+      }
+    },
+    {
+      "id": "artifact-facts",
+      "status": "pass",
+      "evidence": {
+        "path": "facts.json",
+        "bytes": 3169,
+        "sha256": "5014c96ce19a7b42dd30ab9c54fb4a36ce39441eaa938ebe2859dcbc3965d51e"
+      }
+    },
+    {
+      "id": "finance-12-month-arithmetic",
+      "status": "fail",
+      "evidence": "base/2027-02/revenue: wrong or missing amount"
+    },
+    {
+      "id": "finance-conflicting-source-kept-explicit",
+      "status": "fail",
+      "evidence": "Unapproved supplier proposal must remain unresolved, not silently replace the confirmed budget"
+    }
+  ],
+  "humanChecks": [
+    {
+      "id": "finance-explanation",
+      "description": "说明利润与现金的区别、缺口的期间及简化假设，不把示例当真实收益。",
+      "status": "not_run",
+      "evidence": "Needs an actual artifact/browser review by the host or a separate reviewer"
+    },
+    {
+      "id": "finance-conflict",
+      "description": "正确保留已确认预算，明确新报价未接受及其影响，不编造决定或其他费用已知。",
+      "status": "not_run",
+      "evidence": "Needs an actual artifact/browser review by the host or a separate reviewer"
+    }
+  ],
+  "reviewer": null,
+  "limitations": [
+    "This is one synthetic file task, not package-wide professional certification.",
+    "No model is called by this script. Missing host timing or token data stays null.",
+    "A submitted review is a recorded reviewer declaration; this script cannot independently prove reviewer identity or blinding.",
+    "Artifact files and deterministic calculations do not prove native-host execution or user acceptance."
+  ]
+}

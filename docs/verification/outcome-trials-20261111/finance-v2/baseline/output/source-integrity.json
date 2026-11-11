@@ -1,0 +1,9 @@
+{
+  "algorithm": "sha256",
+  "beforeGeneration": {
+    "task.md": "ef0f461774fe0ec55d68dd1bcc57d56a3312a29a29bb2e972947f6f85bc65e5b",
+    "inputs/confirmed-budget.json": "8f65f64cd74c89189a0ab3e7f307f1d24c321854dc71cbb782cf773d1169eb49",
+    "inputs/calculation-policy.md": "f0ac99009833927f599f2813748f31c1864356dd06ef5b2b740cf782c41c2873",
+    "inputs/supplier-proposal.md": "5f8bc954ec117e4635f537fe444b635564c2c2c78747ed236302823805143b30"
+  }
+}

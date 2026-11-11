@@ -1,0 +1,13 @@
+✔ profit, first-month balances, delayed cash and year-end bridge reconcile independently (3.651646ms)
+✔ negative cash remains a visible gap; no automatic financing or absolute-value repair (0.510043ms)
+✔ malformed, ambiguous and out-of-range inputs cannot return a forecast (1.242497ms)
+✔ CSV protects user-supplied labels from spreadsheet formulas and preserves negative numbers (1.009574ms)
+✔ explicit CLI accepts stdin and rejects invalid input without emitting a result (187.186622ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 315.482204

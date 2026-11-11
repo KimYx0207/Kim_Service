@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 2,
+  "runId": "8b0976c5-2c81-4653-8af1-63657f069923",
+  "evaluationFingerprint": {
+    "grader": "837603f69fac0e4e851fe0d536ba74eb98bdc14774dc01438d84fc3a5d9b6b4b",
+    "financialReference": "0823eef720ea9b9724bf02c07db504bf14631259a23d39ce291fabf05e4581bc"
+  },
+  "taskId": "finance-conflict",
+  "condition": "baseline",
+  "attempt": 1,
+  "model": "gpt-6-astra",
+  "createdAt": "2026-11-11T11:57:17.277Z",
+  "taskSha256": "92bf0089571f02efc598c62a9069cfa14474f2b0c707637d653e8caf59b9f254",
+  "inputFiles": {
+    "calculation-policy.md": "f0ac99009833927f599f2813748f31c1864356dd06ef5b2b740cf782c41c2873",
+    "confirmed-budget.json": "8f65f64cd74c89189a0ab3e7f307f1d24c321854dc71cbb782cf773d1169eb49",
+    "supplier-proposal.md": "5f8bc954ec117e4635f537fe444b635564c2c2c78747ed236302823805143b30"
+  },
+  "method": null,
+  "durationMs": null,
+  "totalTokens": null,
+  "measurement": "not_supplied_by_host",
+  "inputProvenance": "original_synthetic_file_tasks",
+  "taskTextSha256": "ef0f461774fe0ec55d68dd1bcc57d56a3312a29a29bb2e972947f6f85bc65e5b"
+}

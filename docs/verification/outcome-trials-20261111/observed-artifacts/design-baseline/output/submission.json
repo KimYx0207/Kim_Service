@@ -1,0 +1,7 @@
+{
+  "artifacts": {
+    "page": "index.html",
+    "tokens": "tokens.json",
+    "handoff": "handoff.md"
+  }
+}

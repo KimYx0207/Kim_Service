@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>12个月经营预测 · Kim Service 示例</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="../../scripts/operating-forecast.js"></script>
+  <script defer src="sample-data.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <a class="skip" href="#results">跳到预测结果</a>
+  <header class="page-header">
+    <div><span class="eyebrow">KIM SERVICE / 可复算样板</span><h1>生意有利润，现金够用吗？</h1><p>改几个经营假设，看看未来 12 个月的收入、利润与现金缺口。</p></div>
+    <span class="sample-badge">合成示例数据</span>
+  </header>
+  <main class="workspace">
+    <aside class="inputs" aria-labelledby="inputs-title">
+      <div class="section-heading"><h2 id="inputs-title">你的经营假设</h2><button id="reset" class="text-button" type="button">恢复示例</button></div>
+      <p class="muted">修改后立即重算。数据留在当前页面，不会上传。</p>
+      <form id="assumptions-form" novalidate>
+        <label>起始月份<input id="startMonth" type="month" required></label>
+        <div class="pair"><label>期初现金（元）<input id="openingCash" type="number" min="0" step="100" required></label><label>首月销量（单）<input id="initialUnits" type="number" min="0" step="1" required></label></div>
+        <div class="pair"><label>单价（元）<input id="unitPrice" type="number" min="0" step="0.1" required></label><label>每单变动成本（元）<input id="variableCostPerUnit" type="number" min="0" step="0.1" required></label></div>
+        <label>每月固定费用（元）<input id="fixedCostPerMonth" type="number" min="0" step="100" required></label>
+        <div class="pair"><label>销量月增长（%）<input id="monthlyGrowth" type="number" min="-99" max="100" step="0.5" required></label><label>当月回款（%）<input id="collectionShare" type="number" min="0" max="100" step="5" required></label></div>
+        <p class="field-help">未在当月收到的货款在次月收回。期初应收、应付、税率、设备采购与情景倍率可在完整假设里编辑。</p>
+      </form>
+      <details class="advanced"><summary>编辑完整假设 / 导入 JSON</summary>
+        <label for="json-input">全部输入（JSON）</label><textarea id="json-input" spellcheck="false" rows="16"></textarea>
+        <div class="actions"><button id="apply-json" type="button">应用完整假设</button><label class="file-label">导入文件<input id="import-json" type="file" accept="application/json,.json"></label></div>
+      </details>
+      <div id="input-error" class="error" role="alert" hidden></div>
+      <p id="input-status" class="muted" role="status" aria-live="polite"></p>
+    </aside>
+    <section id="results" class="results" tabindex="-1" aria-labelledby="results-title">
+      <div class="section-heading"><div><span id="period" class="eyebrow"></span><h2 id="results-title">先看现金，再看增长</h2></div><span id="currency" class="unit"></span></div>
+      <div id="scenario-cards" class="scenario-cards"></div>
+      <section class="chart-panel" aria-labelledby="chart-title"><div class="section-heading"><h3 id="chart-title">月末现金变化</h3><span class="muted">虚线为零余额</span></div><div id="chart-legend" class="legend"></div><svg id="cash-chart" viewBox="0 0 900 260" role="img" aria-label="各情景月末现金折线图；完整数值见下方月度明细"></svg></section>
+      <section class="table-panel" aria-labelledby="table-title">
+        <div class="section-heading"><h3 id="table-title">每笔结果都能复算</h3><label class="inline-label">情景<select id="scenario-select"></select></label></div>
+        <div class="table-scroll" tabindex="0" role="region" aria-label="可横向滚动的12个月明细">
+          <table><caption>金额按输入币种，单位为元。净现金流已计入设备采购与融资。</caption><thead><tr><th scope="col">月份</th><th scope="col">收入</th><th scope="col">净利润</th><th scope="col">实际回款</th><th scope="col">现金支出</th><th scope="col">融资</th><th scope="col">月末现金</th></tr></thead><tbody id="monthly-rows"></tbody></table>
+        </div>
+      </section>
+      <div class="download-bar"><div><strong>把模型带走</strong><p class="muted">JSON 保留所有假设和公式结果；CSV 可在表格软件打开。</p></div><div class="actions"><button id="download-input" type="button">下载输入 JSON</button><button id="download-result" type="button">下载结果 JSON</button><button id="download-csv" type="button" class="primary">下载月表 CSV</button></div></div>
+      <details class="notes" open><summary>模型怎么计算，哪些还没有覆盖</summary><p><strong>净利润</strong> = 收入 − 变动成本 − 固定费用 − 折旧 − 所得税。<br><strong>月末现金</strong> = 月初现金 + 实际回款 − 供应商付款 − 固定费用 − 所得税 − 设备采购 + 明确融资。</p><ul id="assumption-notes"></ul><ul id="model-limitations"></ul></details>
+    </section>
+  </main>
+  <footer>这是可编辑、可复算的教学样板。页面和计算检查不代表模型专业效果已评测，也不代表任何真实客户结果。</footer>
+</body>
+</html>

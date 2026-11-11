@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "artifacts": {
+    "forecast": "forecast.json",
+    "decision": "decision.md",
+    "facts": "facts.json"
+  }
+}

@@ -82,6 +82,8 @@ jobs:
         run: python -m playwright install --with-deps chromium-headless-shell
       - name: Exercise tasks, keyboard, drafts, sample edits and downloads
         run: python tests/browser/task_browser.py
+      - name: Observe preserved independent task outputs
+        run: python tests/browser/outcome_trials.py
       - name: Save actual browser screenshots
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4

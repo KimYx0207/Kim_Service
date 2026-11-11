@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "exampleData": true,
+  "currency": "CNY",
+  "conflicts": [
+    {
+      "issue": "同规格、同币种的每单变动成本：已确认预算45元与供应商未接受提议50元存在差异。",
+      "sources": [
+        {
+          "path": "../inputs/confirmed-budget.json",
+          "field": "drivers.variableCostPerUnit",
+          "value": 45,
+          "status": "confirmed_budget",
+          "description": "经营者确认的预算版本，基础每单变动成本45元。"
+        },
+        {
+          "path": "../inputs/supplier-proposal.md",
+          "date": "2026-11-10",
+          "value": 50,
+          "status": "proposed_unsigned_unaccepted",
+          "description": "供应商建议50元/单，尚未签约且经营者尚未接受。"
+        }
+      ],
+      "status": "pending_owner_decision_confirmed_budget_retained",
+      "appliedValue": 45,
+      "alternateValue": 50,
+      "unit": "CNY/单",
+      "resolution": "批准状态优先于材料日期；50元新提议不覆盖45元已确认预算。",
+      "appliedScope": "三情景基础成本45元；情景有效成本分别45、44.10、48.60元。",
+      "alternateScope": "仅在forecast.json的supplierCostSensitivity测算；不计入主预测。",
+      "decisionNeeded": "经营者决定是否接受50元、开始月份和合同付款条款。"
+    }
+  ],
+  "confirmedBudgetFacts": {
+    "period": {
+      "start": "2027-01",
+      "end": "2027-12"
+    },
+    "openingCash": 12000,
+    "openingReceivables": 2400,
+    "openingPayables": 1200,
+    "collectionShare": 0.65,
+    "paymentShare": 1,
+    "capex": {
+      "month": "2027-02",
+      "amount": 12000
+    },
+    "financingByMonth": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "source": "../inputs/confirmed-budget.json",
+    "status": "confirmed_budget_assumptions_not_actual_results"
+  },
+  "unresolved": [
+    {
+      "issue": "供应商50元报价是否接受及生效日期",
+      "status": "not_approved",
+      "treatment": "主模型维持45元，单独测算全期50元的假设影响。"
+    },
+    {
+      "issue": "如何填补逐月现金缺口",
+      "status": "no_confirmed_financing",
+      "treatment": "融资仍为0；资金需求只报告，不自动补入。"
+    },
+    {
+      "issue": "实际税务口径、折旧及设备使用寿命",
+      "status": "model_assumptions_only",
+      "treatment": "沿用20%税率和每月200元折旧；资本开支不自动增加折旧。"
+    },
+    {
+      "issue": "实际销量、回款表现和完整历史报表",
+      "status": "not_provided",
+      "treatment": "使用已确认预算的情景驱动，不声称真实业务预测准确性已验证。"
+    },
+    {
+      "issue": "月内收付款时点及安全现金储备",
+      "status": "not_modeled",
+      "treatment": "月末缺口为资金需求下界，无法证明月内不会断现金。"
+    }
+  ]
+}

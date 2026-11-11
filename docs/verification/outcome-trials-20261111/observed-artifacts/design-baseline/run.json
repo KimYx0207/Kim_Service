@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "taskId": "design-states",
+  "condition": "baseline",
+  "attempt": 1,
+  "model": "Astra session inherited",
+  "createdAt": "2026-11-11T07:05:02.137Z",
+  "taskSha256": "4b378b6541770a372f7405ed7b8d0237b973363d64493458b4cd7b1bb1dea70b",
+  "inputFiles": {
+    "brief.md": "ffc22877d74013c1a2ef9f67226fdba80b9b384f8d2d9dd9eb25b146371cfc6b",
+    "index.html": "6f61fdd8b802da274d26bb111657845a9f1981868723d8694a1610b5c9ab98d8"
+  },
+  "method": null,
+  "durationMs": null,
+  "totalTokens": null,
+  "measurement": "not_supplied_by_host",
+  "inputProvenance": "original_synthetic_file_tasks"
+}

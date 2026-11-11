@@ -12,3 +12,9 @@ Inspected 2026-11-11. Kim Service authored the workflows, examples and acceptanc
 | 来源ID | 来源与范围 | 采用方式 |
 | --- | --- | --- |
 | original-editable-sample | 本包原创合成数据、计算或交互示例，2026-11-11 | 数据配置、纯工具与展示分层；不复制第三方源码，不声称客户成果或专业效果已通过。 |
+
+## 消费目录验收修订（0.2.1）
+
+| 来源ID | 来源与范围 | 采用方式 |
+| --- | --- | --- |
+| observed-consumer-path-feedback | 本次实际经营预测文件任务的消费者反馈：数值正确，但索引把相对于任务根的路径交给以输出目录为根的消费者，造成目录前缀重复。 | 将路径基准与实际打开验收统一写入method.json的financial-modeler-handoff；不改冻结评分器或首次试验记录，不把后续格式修复算作首次成功或专业效果证明。 |

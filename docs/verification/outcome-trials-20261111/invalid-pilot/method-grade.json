@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "taskId": "finance-conflict",
+  "condition": "with_method",
+  "attempt": 1,
+  "model": "Astra session inherited",
+  "status": "fail",
+  "professionalEffect": "not_evaluated",
+  "comparativeEffect": "not_measured",
+  "inputProvenance": "original_synthetic_file_tasks",
+  "taskSha256": "ff6658bcc2b90506c3f8208e93eca97f20a27155bd33d6170ea65a333e8c6c0a",
+  "methodVersion": "0.2.0",
+  "methodSnapshotSha256": "6d859d90670e87aa7fa14d3c16ad7f87f16066b873c97ded9b271cb38b87e125",
+  "durationMs": null,
+  "totalTokens": null,
+  "measurement": "not_supplied_by_host",
+  "automaticChecks": [
+    {
+      "id": "frozen-task-and-inputs",
+      "status": "pass",
+      "evidence": [
+        "inputs/confirmed-budget.json",
+        "inputs/supplier-proposal.md"
+      ]
+    },
+    {
+      "id": "submission-manifest",
+      "status": "pass",
+      "evidence": "output/submission.json"
+    },
+    {
+      "id": "artifact-forecast",
+      "status": "pass",
+      "evidence": {
+        "path": "forecast.json",
+        "bytes": 31536,
+        "sha256": "9cb5e4c00e247e4d3ddc078b00cd8fc7c794b16f89008417dbe6c43c7c587337"
+      }
+    },
+    {
+      "id": "artifact-decision",
+      "status": "pass",
+      "evidence": {
+        "path": "decision.md",
+        "bytes": 9305,
+        "sha256": "a1387f965b3a7566112ad9591da323daf6731a59bd4aa3c1627165b279fa201e"
+      }
+    },
+    {
+      "id": "artifact-facts",
+      "status": "pass",
+      "evidence": {
+        "path": "facts.json",
+        "bytes": 2981,
+        "sha256": "26c48121fabbaa5c8730b82b725be292ba0b4251a00690273e177f5502144951"
+      }
+    },
+    {
+      "id": "finance-12-month-arithmetic",
+      "status": "pass",
+      "evidence": {
+        "numericComparisons": 216,
+        "reference": "pure operating forecast, fixed confirmed input; not an independent financial audit"
+      }
+    },
+    {
+      "id": "finance-conflicting-source-kept-explicit",
+      "status": "fail",
+      "evidence": "Unapproved supplier proposal must remain unresolved, not silently replace the confirmed budget"
+    }
+  ],
+  "humanChecks": [
+    {
+      "id": "finance-explanation",
+      "description": "说明利润与现金的区别、缺口的期间及简化假设，不把示例当真实收益。",
+      "status": "not_run",
+      "evidence": "Needs an actual artifact/browser review by the host or a separate reviewer"
+    },
+    {
+      "id": "finance-conflict",
+      "description": "正确保留已确认预算，明确新报价未接受及其影响，不编造决定或其他费用已知。",
+      "status": "not_run",
+      "evidence": "Needs an actual artifact/browser review by the host or a separate reviewer"
+    }
+  ],
+  "reviewer": null,
+  "limitations": [
+    "This is one synthetic file task, not package-wide professional certification.",
+    "No model is called by this script. Missing host timing or token data stays null.",
+    "A submitted review is a recorded reviewer declaration; this script cannot independently prove reviewer identity or blinding.",
+    "Artifact files and deterministic calculations do not prove native-host execution or user acceptance."
+  ]
+}

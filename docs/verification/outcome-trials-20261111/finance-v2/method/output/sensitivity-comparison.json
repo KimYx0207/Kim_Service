@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "currency": "CNY",
+  "status": "pending",
+  "appliedToMainForecast": false,
+  "source": "inputs/supplier-proposal.md",
+  "changedDriver": "drivers.variableCostPerUnit",
+  "appliedValue": 45,
+  "alternateValue": 50,
+  "unit": "CNY/order",
+  "baselineScenario": "base",
+  "baselineSummary": {
+    "totalRevenue": 204390,
+    "totalNetIncome": 20316,
+    "endingCash": 16954.5,
+    "minimumCash": -2137.5,
+    "minimumCashMonth": "2027-02",
+    "firstGapMonth": "2027-02",
+    "fundingRequired": 2137.5,
+    "closingReceivables": 6961.5,
+    "closingPayables": 0
+  },
+  "proposedSummary": {
+    "totalRevenue": 204390,
+    "totalNetIncome": 11232,
+    "endingCash": 7870.5,
+    "minimumCash": -3437.5,
+    "minimumCashMonth": "2027-02",
+    "firstGapMonth": "2027-02",
+    "fundingRequired": 3437.5,
+    "closingReceivables": 6961.5,
+    "closingPayables": 0
+  },
+  "impact": {
+    "totalNetIncomeChange": -9084,
+    "endingCashChange": -9084,
+    "fundingRequiredChange": 1300
+  }
+}

@@ -1,0 +1,376 @@
+{
+  "checkedAt": "2026-11-11T11:43:28.484Z",
+  "environment": "Node v24.22.1",
+  "scope": "Source checks, deterministic state logic, actual app callbacks with a minimal DOM substitute, token contrast math. No browser executed.",
+  "results": [
+    {
+      "name": "Typed tokens: both themes resolve; generated CSS is current",
+      "status": "pass"
+    },
+    {
+      "name": "Every CSS token reference resolves in both themes",
+      "status": "pass"
+    },
+    {
+      "name": "Token color contrast: text ≥ 4.5:1; focus and input border ≥ 3:1",
+      "status": "pass"
+    },
+    {
+      "name": "Local dependencies, accessible field relationships and original content",
+      "status": "pass"
+    },
+    {
+      "name": "Responsive and keyboard source safeguards are present (not a rendering test)",
+      "status": "pass"
+    },
+    {
+      "name": "Validation handles empty, malformed, Chinese, Japanese and long values",
+      "status": "pass"
+    },
+    {
+      "name": "Model blocks concurrent submits and commits an operation only once",
+      "status": "pass"
+    },
+    {
+      "name": "Failed model operation preserves data and list; next attempt succeeds",
+      "status": "pass"
+    },
+    {
+      "name": "App callbacks: blank submit focuses the first error without scheduling work",
+      "status": "pass"
+    },
+    {
+      "name": "App callbacks: failed submit retains exact input; next submit updates once",
+      "status": "pass"
+    },
+    {
+      "name": "App callbacks: HTML-like names stay plain text; long names are not truncated",
+      "status": "pass"
+    },
+    {
+      "name": "App callbacks: theme follows initial preference and toggle updates its name",
+      "status": "pass"
+    }
+  ],
+  "contrast": [
+    {
+      "theme": "light",
+      "foreground": "text",
+      "background": "canvas",
+      "ratio": 13.88,
+      "minimum": 4.5
+    },
+    {
+      "theme": "light",
+      "foreground": "text",
+      "background": "surface",
+      "ratio": 15.08,
+      "minimum": 4.5
+    },
+    {
+      "theme": "light",
+      "foreground": "muted",
+      "background": "surface",
+      "ratio": 6.54,
+      "minimum": 4.5
+    },
+    {
+      "theme": "light",
+      "foreground": "muted",
+      "background": "canvas",
+      "ratio": 6.02,
+      "minimum": 4.5
+    },
+    {
+      "theme": "light",
+      "foreground": "muted",
+      "background": "subtle",
+      "ratio": 5.85,
+      "minimum": 4.5
+    },
+    {
+      "theme": "light",
+      "foreground": "placeholder",
+      "background": "surface",
+      "ratio": 4.96,
+      "minimum": 4.5
+    },
+    {
+      "theme": "light",
+      "foreground": "action-text",
+      "background": "action",
+      "ratio": 7.22,
+      "minimum": 4.5
+    },
+    {
+      "theme": "light",
+      "foreground": "action-text",
+      "background": "action-hover",
+      "ratio": 9.84,
+      "minimum": 4.5
+    },
+    {
+      "theme": "light",
+      "foreground": "action-text",
+      "background": "action-active",
+      "ratio": 12.4,
+      "minimum": 4.5
+    },
+    {
+      "theme": "light",
+      "foreground": "action",
+      "background": "surface",
+      "ratio": 7.22,
+      "minimum": 4.5
+    },
+    {
+      "theme": "light",
+      "foreground": "action",
+      "background": "action-soft",
+      "ratio": 6.24,
+      "minimum": 4.5
+    },
+    {
+      "theme": "light",
+      "foreground": "action",
+      "background": "avatar",
+      "ratio": 5.97,
+      "minimum": 4.5
+    },
+    {
+      "theme": "light",
+      "foreground": "success-text",
+      "background": "success-surface",
+      "ratio": 6.62,
+      "minimum": 4.5
+    },
+    {
+      "theme": "light",
+      "foreground": "muted",
+      "background": "success-surface",
+      "ratio": 5.8,
+      "minimum": 4.5
+    },
+    {
+      "theme": "light",
+      "foreground": "danger-text",
+      "background": "danger-surface",
+      "ratio": 6.28,
+      "minimum": 4.5
+    },
+    {
+      "theme": "light",
+      "foreground": "danger-text",
+      "background": "surface",
+      "ratio": 6.96,
+      "minimum": 4.5
+    },
+    {
+      "theme": "light",
+      "foreground": "disabled-text",
+      "background": "disabled-background",
+      "ratio": 5.01,
+      "minimum": 4.5
+    },
+    {
+      "theme": "light",
+      "foreground": "focus",
+      "background": "surface",
+      "ratio": 6.07,
+      "minimum": 3
+    },
+    {
+      "theme": "light",
+      "foreground": "focus",
+      "background": "canvas",
+      "ratio": 5.59,
+      "minimum": 3
+    },
+    {
+      "theme": "light",
+      "foreground": "focus",
+      "background": "success-surface",
+      "ratio": 5.38,
+      "minimum": 3
+    },
+    {
+      "theme": "light",
+      "foreground": "control-border",
+      "background": "surface",
+      "ratio": 3.17,
+      "minimum": 3
+    },
+    {
+      "theme": "light",
+      "foreground": "danger-border",
+      "background": "surface",
+      "ratio": 4.95,
+      "minimum": 3
+    },
+    {
+      "theme": "dark",
+      "foreground": "text",
+      "background": "canvas",
+      "ratio": 16.01,
+      "minimum": 4.5
+    },
+    {
+      "theme": "dark",
+      "foreground": "text",
+      "background": "surface",
+      "ratio": 13.92,
+      "minimum": 4.5
+    },
+    {
+      "theme": "dark",
+      "foreground": "muted",
+      "background": "surface",
+      "ratio": 8.17,
+      "minimum": 4.5
+    },
+    {
+      "theme": "dark",
+      "foreground": "muted",
+      "background": "canvas",
+      "ratio": 9.39,
+      "minimum": 4.5
+    },
+    {
+      "theme": "dark",
+      "foreground": "muted",
+      "background": "subtle",
+      "ratio": 6.92,
+      "minimum": 4.5
+    },
+    {
+      "theme": "dark",
+      "foreground": "placeholder",
+      "background": "surface",
+      "ratio": 7.35,
+      "minimum": 4.5
+    },
+    {
+      "theme": "dark",
+      "foreground": "action-text",
+      "background": "action",
+      "ratio": 9.82,
+      "minimum": 4.5
+    },
+    {
+      "theme": "dark",
+      "foreground": "action-text",
+      "background": "action-hover",
+      "ratio": 11.34,
+      "minimum": 4.5
+    },
+    {
+      "theme": "dark",
+      "foreground": "action-text",
+      "background": "action-active",
+      "ratio": 8.16,
+      "minimum": 4.5
+    },
+    {
+      "theme": "dark",
+      "foreground": "action",
+      "background": "surface",
+      "ratio": 9.24,
+      "minimum": 4.5
+    },
+    {
+      "theme": "dark",
+      "foreground": "action",
+      "background": "action-soft",
+      "ratio": 6.86,
+      "minimum": 4.5
+    },
+    {
+      "theme": "dark",
+      "foreground": "action",
+      "background": "avatar",
+      "ratio": 5.77,
+      "minimum": 4.5
+    },
+    {
+      "theme": "dark",
+      "foreground": "success-text",
+      "background": "success-surface",
+      "ratio": 9.23,
+      "minimum": 4.5
+    },
+    {
+      "theme": "dark",
+      "foreground": "muted",
+      "background": "success-surface",
+      "ratio": 6.44,
+      "minimum": 4.5
+    },
+    {
+      "theme": "dark",
+      "foreground": "danger-text",
+      "background": "danger-surface",
+      "ratio": 8.05,
+      "minimum": 4.5
+    },
+    {
+      "theme": "dark",
+      "foreground": "danger-text",
+      "background": "surface",
+      "ratio": 9.2,
+      "minimum": 4.5
+    },
+    {
+      "theme": "dark",
+      "foreground": "disabled-text",
+      "background": "disabled-background",
+      "ratio": 4.97,
+      "minimum": 4.5
+    },
+    {
+      "theme": "dark",
+      "foreground": "focus",
+      "background": "surface",
+      "ratio": 8.2,
+      "minimum": 3
+    },
+    {
+      "theme": "dark",
+      "foreground": "focus",
+      "background": "canvas",
+      "ratio": 9.43,
+      "minimum": 3
+    },
+    {
+      "theme": "dark",
+      "foreground": "focus",
+      "background": "success-surface",
+      "ratio": 6.46,
+      "minimum": 3
+    },
+    {
+      "theme": "dark",
+      "foreground": "control-border",
+      "background": "surface",
+      "ratio": 4.9,
+      "minimum": 3
+    },
+    {
+      "theme": "dark",
+      "foreground": "danger-border",
+      "background": "surface",
+      "ratio": 5.89,
+      "minimum": 3
+    }
+  ],
+  "notVerified": [
+    "Real browser layout at 390px or desktop",
+    "Real keyboard Tab and Enter/Space dispatch",
+    "200% / 400% browser zoom and text resizing",
+    "Screen-reader announcements",
+    "Platform fonts and cross-browser rendering"
+  ],
+  "totals": {
+    "pass": 12,
+    "fail": 0
+  }
+}

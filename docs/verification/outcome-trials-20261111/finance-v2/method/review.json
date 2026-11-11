@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 2,
+  "taskId": "finance-conflict",
+  "reviewer": {
+    "id": "/root/finance_v2_review",
+    "relationship": "independent_context_not_external_audit",
+    "blinded": false
+  },
+  "binding": {
+    "runId": "c7e1dfa5-ff1f-4858-8e48-1f62d16be897",
+    "taskSha256": "92bf0089571f02efc598c62a9069cfa14474f2b0c707637d653e8caf59b9f254",
+    "outputFiles": {
+      "build-delivery.mjs": "2e4990829896e6973742d0ea973f97d6e8b793b1f114a17c535279f3dc643df5",
+      "decision.md": "79db0db567ae8ab66a64b8a57776dce3a5a4146a5ab32cd42a56cd93de4882a7",
+      "facts.json": "17a73ba190605be7f081ad43dafa9f405be246a3db1b8fc2646d75cdf7061343",
+      "forecast-months.csv": "046f99fe56cd896b32548533d53e921be765bf252f403989b01a1e740e404869",
+      "forecast.json": "2d138ac1857c5e4372f5d9f33d5cbffabf52f9d0a9e04af6708aaa58c6cb02ce",
+      "package-test-results.txt": "ea853b7ed435112d146e5f440ae97c7da2a0e5af485fedcc5e5eca466fb42085",
+      "page-verification.json": "b38431db474635f72f150d34dc52b988c8f080c59e479765a930c5425df93645",
+      "sensitivity-comparison.json": "b1f6b80a96c2a6914b71a02a37738ba22afb3fd439ecf570f58c17130eeb9350",
+      "sensitivity-input.json": "551dbb815b96099ac0430ea90f4a8c90a769922f4962733aeffe18d17a3a5253",
+      "sensitivity.json": "599e71e82ae0baeb859a8ef2e4391e2d69f909f6bf2f9ba91557a182e2f01b81",
+      "source-checksums.json": "f7f71caf05e9933ba5abe1a1cbedeca6e7e5293b2c686695d62eeb04edf9471e",
+      "submission.json": "45dd62b26bbc443a469ab911e15d1a8f22679e01cc6f1e77b4f3a4eed9267627",
+      "verification.json": "d21d7732cc8d2234cc19c1a4de73a348930ec79977d2a014bc2e59d0127bc8d4",
+      "verify-forecast.mjs": "46809a1c9587097d41f7a458cfee9ab490ea911fd0103545a42d02ecfefb9a1d",
+      "verify-page.mjs": "ed8a95cd39abb89655c386f42361a1e7d2804a2ea690b1012eb9e9dd2d7e8692"
+    }
+  },
+  "checks": [
+    {
+      "id": "finance-explanation",
+      "status": "pass",
+      "evidence": "直接阅读 output/decision.md、forecast.json 及 facts.json，评价的是这些实际文件的专业内容。独立按三个输入计算 36 个月；对产物字段名做别名映射后比较主预测的全部 711 个已交付月行/汇总字段值，均无差异。复算和比较结果位于 audit_20261111/finance-v2-independent-review/method-recalculation.json 及 method-artifact-comparison.json；未加载作者计算代码、仓库评分器或参考实现。\n\ndecision 的“为什么有利润仍会缺钱”准确给出基准 1 月末现金 9000、2 月回款 14692.50、付款 25830（含设备 12000）、2 月净利润 820 而现金 -2137.50；3 月仍 -1095，4 月回到 127.50。与独立复算全部吻合。\n\ndecision 的基准年度利润到现金表逐项列出：净利润 20316 + 折旧 2400 - 设备投入 12000 - 应收净增加 4561.50 - 应付净减少 1200 = 现金增加 4954.50；加期初现金 12000 得 16954.50。直接现金桥 12000 + 199828.50 - 194874 + 0 也得 16954.50。三情景年度现金桥均闭合。\n\ndecision 三情景表准确列出首个缺口均为 2027-02，最低月份依次为 2 月、2 月、10 月，资金需要为 2137.50、483.56、8701.79。对保守情景明确 2 月初次缺口 4842.58 不足覆盖 10 月最大缺口。主表融资全部 0，缺口不被当成实际融资或获批透支。\n\ndecision 与 forecast 明确合成数据、非真实客户结果；20% 税率、固定折旧、当月/次月回款、首月结清期初应收应付、无库存变化、无坏账以及税损不结转等为模型口径。说明月末缺口不覆盖月中更高资金需要、未做法定税务或完整三表。未把未成功的浏览器页面检查写成通过。"
+    },
+    {
+      "id": "finance-conflict",
+      "status": "pass",
+      "evidence": "inputs/confirmed-budget.json 确认基础成本 45；supplier-proposal.md 说 50 尚未签约、尚未被经营者接受。facts.conflicts 保留两个来源路径、pending、appliedValue 45、alternateValue 50、CNY/order。decision 明确乐观 44.10 与保守 48.60 只是 45 乘情景倍率，不是另有已签约报价。\n\n独立复算主预测全部 36 月，成本、净利润及现金均吻合 45 基数；50 没有混入主表。敏感性单列 sensitivity.json，仅基准情景；对 sensitivity-input 的经济驱动逐项检查，唯一变化为 variableCostPerUnit 45→50。\n\n独立核对 sensitivity 的全部 237 个字段值与 sensitivity-comparison 的 21 个汇总/变化值，无差异。全年 2271 单使变动成本增 11355，净利润从 20316 降为 11232，年末现金从 16954.50 降为 7870.50，各降 9084；最大缺口从 2137.50 增至 3437.50，增加 1300。\n\ndecision 的“需要做的决定”明确敏感性演示是假设 50 覆盖整个预测期，不能当作实施计划；接受金额、生效月份需确认后只更新受影响期间。没有杜撰已签合同、融资来源、到账日或利率条款。该条件说明限制了前文“报价一旦被接受”一句的适用范围；可继续改进为在该句就重复全年适用前提，但现有全文未将其冒充已确认安排。"
+    }
+  ],
+  "limitations": [
+    "专业内容的两项 pass 不是整体 task_pass。原始 output/submission.json 将三条路径写成 output/forecast.json、output/decision.md、output/facts.json，并自行声明 task-directory；它们相对于要求的 output 根均不存在。根线程报告原始自动评分因该路径合同失败。审阅保留该失败，未修改或修复作者产物。",
+    "这是已知分组标签的独立上下文审阅，不是外部审计或盲审；只使用给定合成材料，不验证实际经营、税法或融资可得性。",
+    "未重新执行作者的包内 5 项测试、1066 项字段比较、104 项桥接或浏览器脚本；本审阅结论依据自己实际运行的独立复算。实际读到 page-verification.json 为 failed、checks 为空，decision 同样明确页面未打开、未改参、未下载、无截图，不能视为页面验收通过。",
+    "同一财务题的一对成果可观察到解释方式及额外敏感性差异，不能据此证明方法包普遍提高专业水平，也不能把生成文件较多当作质量更高。"
+  ]
+}

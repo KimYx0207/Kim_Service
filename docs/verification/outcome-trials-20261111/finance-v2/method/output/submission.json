@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "artifactPathsRelativeTo": "task-directory",
+  "artifacts": {
+    "forecast": "output/forecast.json",
+    "decision": "output/decision.md",
+    "facts": "output/facts.json"
+  }
+}

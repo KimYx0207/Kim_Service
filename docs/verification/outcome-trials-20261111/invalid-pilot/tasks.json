@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "inputProvenance": "original_synthetic_file_tasks",
+  "professionalEffect": "not_evaluated",
+  "tasks": [
+    {
+      "id": "finance-conflict",
+      "componentId": "financial-modeler",
+      "capabilityId": "financial-modeler-deliver",
+      "inputDir": "inputs/finance-conflict",
+      "prompt": "请用给定的已确认预算和供应商补充，做未来12个月的经营预测与三情景对照。对矛盾报价说明采用哪一个、哪个尚待决定；不要把提议当作已批准事实。交实际文件，不只写方法。\n输出到output/：forecast.json（schemaVersion:1，currency，scenarios，逐情景包含id、months的12行，月行至少含month/revenue/netIncome/receipts/payments/financing/endingCash，以及summary）；decision.md（用人话解释利润、现金缺口和未确定项）；facts.json（conflicts数组，每项包含issue、sources、status、appliedValue、alternateValue、unit）。最后写submission.json，artifacts映射forecast、decision、facts到以上相对文件路径。没有实际发生的调用和验收不要写成通过。",
+      "artifacts": {
+        "forecast": "json",
+        "decision": "text",
+        "facts": "json"
+      },
+      "humanCriteria": [
+        {
+          "id": "finance-explanation",
+          "description": "说明利润与现金的区别、缺口的期间及简化假设，不把示例当真实收益。"
+        },
+        {
+          "id": "finance-conflict",
+          "description": "正确保留已确认预算，明确新报价未接受及其影响，不编造决定或其他费用已知。"
+        }
+      ]
+    },
+    {
+      "id": "design-states",
+      "componentId": "design-system-designer",
+      "capabilityId": "design-system-designer-deliver",
+      "inputDir": "inputs/design-states",
+      "prompt": "根据brief.md改进给定的门店报名页面，直接做出能打开、能操作的成品。保留示例数据边界；优先把表单任务、状态与窄屏体验做好。可用包内样板作起点，但根据本次材料交自己的文件。\n输出到output/：index.html及实际需要的本地CSS/JS文件、tokens.json（当前设计变量）、handoff.md（操作方式、检查过的内容、未验证边界）。最后写submission.json，artifacts映射page、tokens、handoff到相对文件路径。页面不可依赖外部CDN或运行中的开发服务器。",
+      "artifacts": {
+        "page": "html",
+        "tokens": "json",
+        "handoff": "text"
+      },
+      "humanCriteria": [
+        {
+          "id": "design-usable",
+          "description": "390px与桌面均可完成报名，没有遮挡主操作或整页横向溢出。"
+        },
+        {
+          "id": "design-states",
+          "description": "实际操作验证必填、加载防重、失败保留输入、重试成功；合成数据边界可见。"
+        },
+        {
+          "id": "design-keyboard",
+          "description": "Tab可达全部操作、焦点可见、错误可读；浅深主题和长文字可用。"
+        },
+        {
+          "id": "design-editable",
+          "description": "交付源码与tokens确实改变页面；没有只交截图或写“已实现”的文字。"
+        }
+      ]
+    },
+    {
+      "id": "frontend-resume",
+      "componentId": "frontend-engineer",
+      "capabilityId": "frontend-engineer-deliver",
+      "inputDir": "inputs/frontend-resume",
+      "prompt": "按checkpoint.md继续已授权任务。只改用户要改的地方，保留已经完成的行为和用户正文。\n输出到output/：可直接打开的index.html与handoff.md（改了什么、实际检查、未运行范围）。最后写submission.json，artifacts映射page、handoff到相对文件路径。不声称运行不存在的测试。",
+      "artifacts": {
+        "page": "html",
+        "handoff": "text"
+      },
+      "humanCriteria": [
+        {
+          "id": "resume-scope",
+          "description": "读取检查点后直接完成已授权的小改，没有重新规划整套项目、清空正文或增添无关测试工程。"
+        },
+        {
+          "id": "resume-verification",
+          "description": "实际展示或等价检查被准确报告，未跑检查不冒充已通过。"
+        }
+      ]
+    }
+  ]
+}

@@ -344,9 +344,9 @@
       "source": "canonical:agents/financial-modeler",
       "revision": "995db5f26dfffd6247e2a913aee2f730908a04a2",
       "snapshot": "committed-component-tree",
-      "version": "0.2.0",
-      "contractSha256": "1dfd4bae2efde8b6d5147adea06c107edf67cc9bb8a8eb656d93b7df3c2004d9",
-      "contentSha256": "e3cd8e4855a876c59d6916597e3c4d6c432c708bfbfae280dead453dd8f4d59f",
+      "version": "0.2.1",
+      "contractSha256": "486f086542d8c0f924b006a05d2bb5d41b5c4742dfa8b7d6e8617876e837f7ba",
+      "contentSha256": "d7dccffe2834d783222cc0cdc049fed60159c6ef08bbdd81330a77159884fa51",
       "required": [
         "AGENT.md",
         "capability.json",

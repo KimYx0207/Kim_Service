@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "status": "passed",
+  "coverage": {
+    "primaryScenarios": 3,
+    "primaryMonthlyRows": 36,
+    "sensitivityScenarios": 1,
+    "sensitivityMonthlyRows": 12,
+    "fieldComparisons": 1066,
+    "cashBridgeComparisons": 104,
+    "sourceFilesUnchanged": 26
+  },
+  "checks": [
+    "统一计算口径独立复算（Math.round，无EPSILON）",
+    "12个月完整性及金额精度",
+    "每月利润到现金桥接",
+    "每月现金滚动与年度直接/间接现金勾稽",
+    "应收应付滚动",
+    "资金需求、最低现金和首次缺口复算",
+    "主表融资全为0",
+    "报价冲突状态、来源、金额与单位",
+    "50元敏感性仅改变单一经济驱动",
+    "源文件SHA-256前后未变"
+  ],
+  "annualBridges": [
+    {
+      "id": "base",
+      "revenue": 204390,
+      "netIncome": 20316,
+      "receipts": 199828.5,
+      "payments": 194874,
+      "financing": 0,
+      "depreciation": 2400,
+      "capex": 12000,
+      "changeInReceivables": 4561.5,
+      "changeInPayables": -1200,
+      "changeInCash": 4954.5,
+      "endingCash": 16954.5
+    },
+    {
+      "id": "upside",
+      "revenue": 249641.1,
+      "netIncome": 43263.84,
+      "receipts": 243086.31,
+      "payments": 217177.26,
+      "financing": 0,
+      "depreciation": 2400,
+      "capex": 12000,
+      "changeInReceivables": 6554.79,
+      "changeInPayables": -1200,
+      "changeInCash": 25909.05,
+      "endingCash": 37909.05
+    },
+    {
+      "id": "downside",
+      "revenue": 155320.2,
+      "netIncome": -7075.36,
+      "receipts": 152688.39,
+      "payments": 173195.56,
+      "financing": 0,
+      "depreciation": 2400,
+      "capex": 12000,
+      "changeInReceivables": 2631.81,
+      "changeInPayables": -1200,
+      "changeInCash": -20507.17,
+      "endingCash": -8507.17
+    }
+  ],
+  "notPerformed": [
+    "外部真实业务资料核验",
+    "月内现金峰值及最低现金测算",
+    "完整资产负债表/三表核平",
+    "DCF估值",
+    "本方法相对其他方法的真实专业增益评估"
+  ],
+  "professionalEffect": "not_evaluated"
+}

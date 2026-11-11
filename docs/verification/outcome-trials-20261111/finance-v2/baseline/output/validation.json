@@ -1,0 +1,29 @@
+{
+  "status": "passed",
+  "executedCommand": "node output/validate_forecast.mjs",
+  "assertionsExecuted": 1686,
+  "failures": [],
+  "scenariosChecked": 3,
+  "monthlyRowsChecked": 36,
+  "checks": [
+    "JSON parsing, required fields, numeric types, units, 3 scenarios and 12 monthly rows per scenario",
+    "All monthly sales volumes, revenue, approved cost, taxes, collection timing, payment timing and capex",
+    "Month-by-month cumulative cash, receivables and payables reconciliation using integer cents",
+    "Annual totals, annual profit-to-cash reconciliation, ending balances and deepest cash deficit",
+    "No automatic financing; unapproved 50 CNY/order quote stays pending and outside the main forecast",
+    "Decision document contains generated profit, funding requirement and ending cash for each scenario",
+    "SHA-256 comparison of task.md and all three provided inputs before generation and after validation"
+  ],
+  "inputHashesAfterValidation": {
+    "task.md": "ef0f461774fe0ec55d68dd1bcc57d56a3312a29a29bb2e972947f6f85bc65e5b",
+    "inputs/confirmed-budget.json": "8f65f64cd74c89189a0ab3e7f307f1d24c321854dc71cbb782cf773d1169eb49",
+    "inputs/calculation-policy.md": "f0ac99009833927f599f2813748f31c1864356dd06ef5b2b740cf782c41c2873",
+    "inputs/supplier-proposal.md": "5f8bc954ec117e4635f537fe444b635564c2c2c78747ed236302823805143b30"
+  },
+  "notPerformed": [
+    "External financial, legal or tax fact verification: all calculations use only the supplied synthetic assumptions.",
+    "A separate sensitivity run at the proposed 50 CNY/order cost.",
+    "Daily or intramonth cash scheduling, financing execution, or supplier negotiation/acceptance.",
+    "A repository grader, external acceptance test, paid model call, or model CLI call."
+  ]
+}

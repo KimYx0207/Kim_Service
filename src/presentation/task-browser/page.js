@@ -164,13 +164,15 @@
     const materialLabel=element('label','request-field','已有材料和限制');
     const materials=element('textarea');materials.id='request-materials';materialLabel.htmlFor=materials.id;
     materials.className='materials-input';materials.placeholder='文件名、链接、已有内容、交付格式或截止时间';materials.value=draft.materials;
-    const update=element('button','secondary','更新请求'); update.type='button';
-    const editor=element('details','request-editor');editor.append(element('summary','','查看或编辑完整请求'),request,update);
+    const update=element('button','secondary','按表单重新生成'); update.type='button';
+    const undo=element('button','secondary','恢复上一版');undo.type='button';undo.disabled=!draft.previousRequest;
+    const editor=element('details','request-editor');editor.append(element('summary','','查看或编辑完整请求'),request,update,undo);
     function saveDraft(){draft.goal=goal.value;draft.materials=materials.value;draft.host=host.value;draft.request=request.value;drafts.set(capability.id,{...draft});}
-    function refreshRequest(){saveDraft();if(!draft.manual){request.value=buildRequest(capability,draft);saveDraft();}else{copyStatus.textContent='材料已更新。点击「更新请求」将它们写入你手动编辑的文本。';}}
+    function refreshRequest(){saveDraft();if(!draft.manual){request.value=buildRequest(capability,draft);saveDraft();}else{copyStatus.textContent='表单已更新，完整请求保留你的手动内容。按表单重新生成会替换文本，之后可恢复上一版。';}}
     goal.addEventListener('input',refreshRequest);materials.addEventListener('input',refreshRequest);host.addEventListener('change',refreshRequest);
     request.addEventListener('input',()=>{draft.manual=true;saveDraft();});
-    update.addEventListener('click',()=>{saveDraft();request.value=buildRequest(capability,draft);draft.manual=false;saveDraft();copyStatus.textContent='请求已按当前目标、材料和环境更新。';});
+    update.addEventListener('click',()=>{saveDraft();draft.previousRequest=request.value;request.value=buildRequest(capability,draft);draft.manual=false;undo.disabled=false;saveDraft();copyStatus.textContent='已按表单重新生成。需要保留先前手动内容时，可恢复上一版。';});
+    undo.addEventListener('click',()=>{if(!draft.previousRequest)return;const current=request.value;request.value=draft.previousRequest;draft.previousRequest=current;draft.manual=true;saveDraft();copyStatus.textContent='已恢复上一版完整请求。';});
     const copyActions = element('div','copy-actions');
     const copy = element('button','primary','复制请求');
     copy.type = 'button';

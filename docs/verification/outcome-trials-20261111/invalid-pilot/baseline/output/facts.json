@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "exampleData": true,
+  "currency": "CNY",
+  "sourceFiles": [
+    "inputs/confirmed-budget.json",
+    "inputs/supplier-proposal.md"
+  ],
+  "sourceSha256": {
+    "inputs/confirmed-budget.json": "8f65f64cd74c89189a0ab3e7f307f1d24c321854dc71cbb782cf773d1169eb49",
+    "inputs/supplier-proposal.md": "5f8bc954ec117e4635f537fe444b635564c2c2c78747ed236302823805143b30"
+  },
+  "conflicts": [
+    {
+      "issue": "同规格单位变动成本：已确认预算45元与尚未接受的供应商报价50元不一致。",
+      "sources": [
+        "inputs/confirmed-budget.json",
+        "inputs/supplier-proposal.md"
+      ],
+      "status": "pending_decision",
+      "appliedValue": 45,
+      "alternateValue": 50,
+      "unit": "CNY/单",
+      "appliedSource": "inputs/confirmed-budget.json#/drivers/variableCostPerUnit",
+      "alternateSource": "inputs/supplier-proposal.md",
+      "alternateStatus": "proposed_unsigned_unaccepted",
+      "reason": "经营者确认的预算优先；新报价尚未签约、尚未被经营者接受，不能视为已批准的预算变更。",
+      "appliedScope": "三情景都从45元开始，再分别应用预算已有的costMultiplier：基准45、乐观44.10、保守48.60元/单。",
+      "pendingDecision": "经营者决定是否接受供应商50元报价；若接受，更新预算并重新计算三情景。",
+      "sensitivityTreatment": "50元仅在forecast.json的supplementalSensitivity及decision.md中作为未批准的假设单独展示。"
+    }
+  ],
+  "confirmedFacts": [
+    {
+      "item": "期初现金/应收/应付",
+      "value": {
+        "cash": 12000,
+        "receivables": 2400,
+        "payables": 1200
+      },
+      "unit": "CNY元",
+      "source": "inputs/confirmed-budget.json"
+    },
+    {
+      "item": "设备采购",
+      "value": 12000,
+      "month": "2027-02",
+      "unit": "CNY元",
+      "source": "inputs/confirmed-budget.json#/drivers/capexByMonth"
+    },
+    {
+      "item": "融资计划",
+      "value": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "unit": "CNY元/月",
+      "source": "inputs/confirmed-budget.json#/drivers/financingByMonth",
+      "note": "没有新增已确认融资；不会为消除负现金自动补款。"
+    },
+    {
+      "item": "税率与折旧",
+      "value": {
+        "taxRate": 0.2,
+        "depreciationPerMonth": 200
+      },
+      "source": "inputs/confirmed-budget.json",
+      "note": "两者为预算的模型假设，不作法定税务或资产寿命认定。"
+    }
+  ],
+  "modelConventionsRequiringConfirmation": [
+    {
+      "issue": "收款比例未给出剩余款项的准确账期",
+      "usedConvention": "未当月收回的35%在次月全额收回。"
+    },
+    {
+      "issue": "costMultiplier未写明覆盖哪些成本",
+      "usedConvention": "只作用于单位变动成本，固定费用与折旧不变。"
+    },
+    {
+      "issue": "固定费与税款的付款时点未给明细",
+      "usedConvention": "固定费用与当月计算所得税当月支付；不使用亏损抵扣。"
+    }
+  ]
+}

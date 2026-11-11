@@ -1,0 +1,14 @@
+[
+  {
+    "file": "page-verification-system-chromium-attempt.json",
+    "originalSha256": "d9cca74bfe84501876b2e51563eebe4209242241b595bee25990169ba4e65883",
+    "publishedSha256": "872a185c4730d10f60ee70589975f2aff652667b2f2801a9c8c75abe0270f409",
+    "change": "Local machine paths redacted; failure status and error type retained."
+  },
+  {
+    "file": "page-verification-launch-attempt.json",
+    "originalSha256": "2535673c39bc07e2bec82c9c65e52e8bbe15326044830a02418f019e389e4820",
+    "publishedSha256": "5b997853b824b6ceefa6d2ee1ecbab49bc493997205a2aeb35abd48e21fa5226",
+    "change": "Local machine paths redacted; failure status and error type retained."
+  }
+]

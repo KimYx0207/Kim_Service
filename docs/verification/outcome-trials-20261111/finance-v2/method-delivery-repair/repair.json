@@ -1,0 +1,34 @@
+{
+  "recordType": "host_packaging_repair_not_a_model_trial",
+  "sourceRunId": "c7e1dfa5-ff1f-4858-8e48-1f62d16be897",
+  "scope": "Only submission.json path base and three artifact paths changed; all other output bytes unchanged",
+  "reason": "Original task did not spell out the consumer path base; the consumer requires paths relative to output/. The original failed grade is preserved. Future prompts include exact mapping examples.",
+  "originalManifestSha256": "45dd62b26bbc443a469ab911e15d1a8f22679e01cc6f1e77b4f3a4eed9267627",
+  "repairedManifestSha256": "8a523fe088427a1d7d78735e8aa7de3d37de9759b2ee6da5af1d7b6eb5e6229a",
+  "artifactReadback": [
+    {
+      "artifact": "forecast",
+      "path": "forecast.json",
+      "bytes": 23650,
+      "sha256": "2d138ac1857c5e4372f5d9f33d5cbffabf52f9d0a9e04af6708aaa58c6cb02ce",
+      "readFromDeclaredConsumerRoot": true
+    },
+    {
+      "artifact": "decision",
+      "path": "decision.md",
+      "bytes": 9579,
+      "sha256": "79db0db567ae8ab66a64b8a57776dce3a5a4146a5ab32cd42a56cd93de4882a7",
+      "readFromDeclaredConsumerRoot": true
+    },
+    {
+      "artifact": "facts",
+      "path": "facts.json",
+      "bytes": 2609,
+      "sha256": "17a73ba190605be7f081ad43dafa9f405be246a3db1b8fc2646d75cdf7061343",
+      "readFromDeclaredConsumerRoot": true
+    }
+  ],
+  "comparisonEligible": false,
+  "professionalEffect": "not_evaluated",
+  "originalTrialChanged": false
+}

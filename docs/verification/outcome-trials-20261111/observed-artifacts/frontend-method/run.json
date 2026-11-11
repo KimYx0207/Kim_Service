@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "taskId": "frontend-resume",
+  "condition": "with_method",
+  "attempt": 1,
+  "model": "Astra session inherited",
+  "createdAt": "2026-11-11T07:05:02.040Z",
+  "taskSha256": "4761bf394f6c9e0b10da7ffb97194235ea29416efa23e1de066a32de78d66f67",
+  "inputFiles": {
+    "checkpoint.md": "479984c85a37b291b09001f44171630435eeb35e16a3d11434975f2595f4daaf",
+    "index.html": "2ced4b4ed9836bb469029ff9e49b2d087cdcbf8bbcbc58d2db170451a8d11292"
+  },
+  "method": {
+    "componentId": "frontend-engineer",
+    "version": "0.4.3",
+    "files": {
+      "AGENT.md": "df71d8d9aa177bcde359f4ea50933b36618b596544f179b93d3360586a1e1a13",
+      "capability.json": "e46779209805c0bd541b299e6ac6bf62bd0feb8201030ec615eab837ff479535",
+      "CHANGELOG.md": "d3c17d54a6861e979c328fa09c95ed1abff528c43d73661f78656e831c4925ab",
+      "evals/professional-cases.json": "002b960942c1c9d087981017c1e0606ee149719b450956d59c11bf7595f9a87a",
+      "example.json": "b8be00afd03f91e5d41978cedd81a930dfb5373bf7706cd57979cdbef0cc4a3b",
+      "LICENSE": "70feaa9dba9a4b99e43499a9ffa09388348772d536df825fb14a2efbc7a08d39",
+      "method.json": "7eb28855bf8592a4949fbf8e99832c694692b4501eea617abb6d946f580eebfd",
+      "NOTICE": "fcfde8a15dc31d28abc23939f739acb5af27f6735b7489101777cf912231d493",
+      "PROVENANCE.md": "8a72e58b4291a4861c896cc365660b45f7be80d50d9c6845509406409bc2c9a5",
+      "README.md": "08170d69096229e6bde94b7eff3e3929aec6c8df34e02fd62d197b4ee7a1a60c",
+      "references/professional-method.md": "319623f8d56ae951707cc0088369ba9f426d32ffb9ba3d6f125caea9f93ae31b",
+      "references/worked-delivery.md": "3738dfd68e5832a1634ac9a58be7d33a3ec87a6758064f07449885ceec891933",
+      "tests/contract.test.mjs": "e5f858b3df924779618ead826c443fa84a8204ce1ee55adc00a5124e3eff894c"
+    }
+  },
+  "durationMs": null,
+  "totalTokens": null,
+  "measurement": "not_supplied_by_host",
+  "inputProvenance": "original_synthetic_file_tasks"
+}
