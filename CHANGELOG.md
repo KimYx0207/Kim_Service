@@ -9,8 +9,10 @@ Kim Service collection releases use `V<major>.<minor>`. Each component keeps its
 - Separate the task browser into data, application and presentation layers. Configure search, host choices and sample entries while preserving existing command entrypoints.
 - Add an editable booking design system and a 12-month operating forecast with real interactions, recovery and downloads. Contain forecast grids on narrow screens.
 - Include user goals and materials in copied requests, preserve manual edits, and allow undo after regeneration. Improve keyboard focus, empty results and clipboard failure feedback.
+- Restore per-task drafts after refresh, download/import drafts across sessions, and retain current edits when browser storage is denied or full. Keep older package requests and deliberately empty manual edits intact.
 - Unify frontend verification by task risk and team retry budgets. Meta mode uses its native planning and checkpoints instead of preferring a retired planning package.
 - Add file-based outcome trials, frozen graders and inputs, artifact-bound reviews and actual browser CI. Publish a common finance calculation policy; preserve zero-difference results and invalid pilots without recasting them as skill gains.
+- Check outcome-summary freshness against current trial files and evaluation code; retain past grades as history and require regrading after changes instead of displaying stale acceptance.
 
 ## V1.11 - 2026-11-11
 

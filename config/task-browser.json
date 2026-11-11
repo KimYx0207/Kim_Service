@@ -234,6 +234,10 @@
     "runtimeBindings"
   ],
   "schemaVersion": 1,
+  "drafts": {
+    "storageKeyPrefix": "kim-service.task-draft",
+    "maxImportBytes": 1048576
+  },
   "repository": {
     "url": "https://github.com/KimYx0207/Kim_Service",
     "ref": "main",

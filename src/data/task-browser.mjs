@@ -31,7 +31,9 @@ export function readBrowserConfig(root = ROOT) {
   if (ui.schemaVersion !== 1 || !Array.isArray(ui.hosts) || !ui.hosts.length ||
       !Array.isArray(ui.synonyms) || !Array.isArray(ui.typeOrder) ||
       !Array.isArray(ui.commonFields) || !Array.isArray(ui.suggestions) ||
-      !ui.typeNames || !ui.fieldNames || !ui.repository?.ref) throw new Error('Invalid task-browser configuration');
+      !ui.typeNames || !ui.fieldNames || !ui.repository?.ref ||
+      typeof ui.drafts?.storageKeyPrefix !== 'string' || !ui.drafts.storageKeyPrefix ||
+      !Number.isSafeInteger(ui.drafts.maxImportBytes) || ui.drafts.maxImportBytes < 1) throw new Error('Invalid task-browser configuration');
   for (const value of [ui.repository.url, ui.repository.publishedUrl]) {
     const url = new URL(value);
     if (url.protocol !== 'https:' || url.username || url.password || url.search || url.hash) {

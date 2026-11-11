@@ -2,6 +2,7 @@
 import functools
 import http.server
 import json
+import os
 import pathlib
 import threading
 import unittest
@@ -25,7 +26,7 @@ class BrowserAcceptance(unittest.TestCase):
         cls.thread.start()
         cls.url = f'http://127.0.0.1:{cls.server.server_port}'
         cls.playwright = sync_playwright().start()
-        cls.browser = cls.playwright.chromium.launch()
+        cls.browser = cls.playwright.chromium.launch(executable_path=os.environ.get('PLAYWRIGHT_CHROMIUM_EXECUTABLE') or None)
 
     @classmethod
     def tearDownClass(cls):
@@ -111,6 +112,76 @@ class BrowserAcceptance(unittest.TestCase):
         tokens = json.loads(pathlib.Path(download.value.path()).read_text())
         self.assertIn('palette', tokens)
         self.assert_page_fits()
+
+    def test_drafts_survive_reload_export_import_and_intentionally_empty_text(self):
+        self.page.goto(self.url + '/#capability=financial-modeler-deliver')
+        self.page.locator('#request-goal').fill('恢复上一轮的经营预测')
+        self.page.locator('#request-materials').fill('营业额.csv；原授权仍然有效')
+        self.page.locator('#request-host').select_option('meta-kim')
+        self.page.locator('.request-editor summary').click()
+        editor = self.page.get_by_label('可编辑的使用请求')
+        editor.fill('保留手工修改，只继续未完成部分')
+        self.page.get_by_role('button', name='按表单重新生成').click()
+        self.page.reload()
+        expect(self.page.locator('#request-goal')).to_have_value('恢复上一轮的经营预测')
+        expect(self.page.locator('#request-host')).to_have_value('meta-kim')
+        self.page.locator('.request-editor summary').click()
+        self.page.get_by_role('button', name='恢复上一版').click()
+        expect(editor).to_have_value('保留手工修改，只继续未完成部分')
+        with self.page.expect_download() as downloaded:
+            self.page.get_by_role('button', name='下载草稿').click()
+        saved = pathlib.Path(downloaded.value.path()).read_bytes()
+        self.page.get_by_role('button', name='清空草稿', exact=True).click()
+        expect(self.page.locator('#request-goal')).to_have_value('')
+        self.page.locator('#import-draft').set_input_files({'name': 'draft.json', 'mimeType': 'application/json', 'buffer': saved})
+        expect(self.page.locator('#request-goal')).to_have_value('恢复上一轮的经营预测')
+        self.page.locator('.request-editor summary').click()
+        expect(editor).to_have_value('保留手工修改，只继续未完成部分')
+        editor.fill('')
+        self.page.reload()
+        self.page.locator('.request-editor summary').click()
+        expect(editor).to_have_value('')
+        self.page.get_by_role('button', name='按表单重新生成').click()
+        self.page.get_by_role('button', name='恢复上一版').click()
+        expect(editor).to_have_value('')
+        self.page.set_viewport_size({'width': 375, 'height': 812})
+        self.assert_page_fits()
+
+    def test_storage_denial_and_bad_import_keep_current_draft_available(self):
+        self.context.add_init_script("Storage.prototype.setItem = function(){ throw new DOMException('Full','QuotaExceededError'); };")
+        self.page.goto(self.url + '/#capability=financial-modeler-deliver')
+        self.page.locator('#request-goal').fill('存储失败后仍可继续')
+        expect(self.page.locator('.draft-status')).to_contain_text('暂时无法保存')
+        self.page.locator('.request-editor summary').click()
+        editor = self.page.get_by_label('可编辑的使用请求')
+        editor.fill('最新内容保留在内存，允许下载')
+        self.page.locator('#import-draft').set_input_files({'name': 'bad.json', 'mimeType': 'application/json', 'buffer': b'{broken'})
+        expect(self.page.locator('.copy-status')).to_contain_text('当前草稿已保留')
+        expect(editor).to_have_value('最新内容保留在内存，允许下载')
+        with self.page.expect_download() as downloaded:
+            self.page.get_by_role('button', name='下载草稿').click()
+        saved = json.loads(pathlib.Path(downloaded.value.path()).read_text())
+        self.assertEqual(saved['draft']['request'], '最新内容保留在内存，允许下载')
+        self.page.keyboard.press('Escape')
+        self.page.locator('[data-capability="financial-modeler-deliver"] button.details-button').click()
+        expect(editor).to_have_value('最新内容保留在内存，允许下载')
+
+    def test_changed_capability_or_host_restores_text_for_review(self):
+        saved = {'schemaVersion': 1, 'capabilityId': 'financial-modeler-deliver', 'draft': {
+            'goal': '已有目标', 'materials': '原始资料', 'host': 'retired-host',
+            'request': '以前生成的完整请求', 'manual': False, 'componentVersion': '0.0.1'}}
+        self.context.add_init_script('localStorage.setItem("kim-service.task-draft:financial-modeler-deliver", ' + json.dumps(json.dumps(saved, ensure_ascii=False)) + ');')
+        self.page.goto(self.url + '/#capability=financial-modeler-deliver')
+        expect(self.page.locator('#request-host')).to_have_value('existing')
+        expect(self.page.locator('.draft-status')).to_contain_text('已从 v0.0.1 更新')
+        expect(self.page.locator('.draft-status')).to_contain_text('原来的使用环境')
+        self.page.locator('#request-goal').fill('补充目标')
+        self.page.locator('.request-editor summary').click()
+        editor = self.page.get_by_label('可编辑的使用请求')
+        expect(editor).to_have_value('以前生成的完整请求')
+        self.page.get_by_role('button', name='按表单重新生成').click()
+        self.assertIn('补充目标', editor.input_value())
+        expect(self.page.locator('.draft-status')).not_to_contain_text('v0.0.1')
 
     def test_operating_forecast_recalculation_invalid_input_and_exports(self):
         self.page.goto(self.url + '/agents/financial-modeler/examples/operating-forecast/index.html')

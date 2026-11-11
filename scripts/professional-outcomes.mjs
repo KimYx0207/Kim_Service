@@ -31,7 +31,7 @@ function safeFile(root, relative, limit = 1024 * 1024) {
   return current;
 }
 function fileHashes(root) {
-  const entries = {};
+  const entries = Object.create(null);
   function walk(relative = '') {
     for (const entry of fs.readdirSync(path.join(root, relative), { withFileTypes: true }).sort((a,b)=>a.name.localeCompare(b.name))) {
       const name = [relative, entry.name].filter(Boolean).join('/');
@@ -41,6 +41,20 @@ function fileHashes(root) {
     }
   }
   walk(); return entries;
+}
+// Bind a displayed grade to the files and evaluation code actually inspected.
+// This is separate from frozen trial inputs: a correctly recorded failure must
+// also remain a current failure until its evidence changes.
+function acceptanceSnapshot(directory) {
+  const optionalFile = name => fs.existsSync(path.join(directory,name))
+    ? sha(fs.readFileSync(safeFile(directory,name))) : null;
+  return sha(JSON.stringify({
+    run: sha(fs.readFileSync(safeFile(directory,'run.json'))),
+    task: optionalFile('task.json'), prompt: optionalFile('task.md'),
+    inputs: fileHashes(path.join(directory,'inputs')),
+    method: fs.existsSync(path.join(directory,'method')) ? fileHashes(path.join(directory,'method')) : null,
+    output: fileHashes(path.join(directory,'output')), evaluation: evaluationFingerprint()
+  }));
 }
 export function prepareTrial({ taskId, destination, condition = 'with_method', model = 'unexposed', attempt = 1 }) {
   if (!['baseline', 'with_method'].includes(condition) || !Number.isInteger(attempt) || attempt < 1) throw new Error('Invalid condition or attempt');
@@ -320,7 +334,8 @@ export function gradeTrial(directory, { reviewFile } = {}) {
   const failed = [...checks,...humanChecks].some(item => item.status === 'fail');
   const pending = [...checks,...humanChecks].some(item => item.status === 'not_run');
   const report = {
-    schemaVersion: 2, reviewBinding, evaluationFingerprint: frozenEvaluation ?? null, taskId: task.id, condition: run.condition, attempt: run.attempt, model: run.model,
+    schemaVersion: 2, reviewBinding, acceptanceSnapshotSha256: acceptanceSnapshot(directory),
+    evaluationFingerprint: frozenEvaluation ?? null, taskId: task.id, condition: run.condition, attempt: run.attempt, model: run.model,
     status: failed ? 'fail' : pending ? 'needs_review' : 'task_pass',
     professionalEffect: 'not_evaluated', comparativeEffect: 'not_measured',
     inputProvenance: run.inputProvenance, taskSha256: run.taskSha256,
@@ -338,13 +353,25 @@ export function gradeTrial(directory, { reviewFile } = {}) {
   return report;
 }
 export function summarizeTrials(directories) {
-  const runs = directories.map(directory => readJson(path.join(path.resolve(directory), 'grade.json')));
+  const runs = directories.map(directory => {
+    directory=path.resolve(directory);
+    const run=readJson(safeFile(directory,'grade.json'));
+    let freshness='unverifiable';
+    if(run.acceptanceSnapshotSha256){
+      try { freshness=run.acceptanceSnapshotSha256===acceptanceSnapshot(directory)?'current':'changed'; }
+      catch { freshness='unavailable'; }
+    }
+    return {run,freshness};
+  });
   return { schemaVersion: 1, professionalEffect: 'not_evaluated',
-    runs: runs.map(run => ({ taskId: run.taskId, condition: run.condition, attempt: run.attempt, model: run.model, status: run.status,
-      automaticPasses: run.automaticChecks.filter(item=>item.status==='pass').length, automaticTotal: run.automaticChecks.length,
-      humanPasses: run.humanChecks.filter(item=>item.status==='pass').length, humanTotal: run.humanChecks.length,
-      durationMs: run.durationMs, totalTokens: run.totalTokens })),
-    comparison: runs.some(run=>run.condition==='baseline') && runs.some(run=>run.condition==='with_method') ? 'observed_runs_only_check_same_task_model_attempts_before_comparing' : 'insufficient_conditions',
+    runs: runs.map(({run,freshness}) => ({ taskId: run.taskId, condition: run.condition, attempt: run.attempt, model: run.model,
+      status: freshness==='current'?run.status:'needs_regrade', recordedStatus: run.status, freshness,
+      automaticPasses: freshness==='current'?run.automaticChecks.filter(item=>item.status==='pass').length:null, automaticTotal: run.automaticChecks.length,
+      humanPasses: freshness==='current'?run.humanChecks.filter(item=>item.status==='pass').length:null, humanTotal: run.humanChecks.length,
+      durationMs: run.durationMs, totalTokens: run.totalTokens,
+      nextAction: freshness==='current'?null:'Grade the current trial files; obtain a current artifact-bound review before accepting them.' })),
+    comparison: runs.some(item=>item.freshness!=='current')?'needs_regrade':
+      runs.some(({run})=>run.condition==='baseline') && runs.some(({run})=>run.condition==='with_method') ? 'observed_runs_only_check_same_task_model_attempts_before_comparing' : 'insufficient_conditions',
     conclusion: 'Do not infer a causal or general skill improvement from these rows; inspect actual files, task coverage, repeated attempts and costs.' };
 }
 function cli() {
@@ -363,6 +390,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   try {
     const result=cli();process.stdout.write(JSON.stringify(result,null,2)+'\n');
     if(process.argv[2]==='grade') process.exitCode=result.status==='task_pass'?0:result.status==='needs_review'?3:1;
+    if(process.argv[2]==='summarize'&&result.runs.some(run=>run.status==='needs_regrade'))process.exitCode=3;
   }
   catch(error) { process.stderr.write(error.message+'\n'); process.exitCode=2; }
 }

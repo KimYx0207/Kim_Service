@@ -4,7 +4,7 @@
   const data = JSON.parse(document.getElementById('capability-data').textContent);
   const app = createTaskBrowser(data.ui);
   const {filterCapabilities,buildRequest,fields,titleOf,briefLabel,sourceUrl,sampleUrl,commonFields:COMMON_FIELDS,typeNames:TYPE_NAMES}=app;
-  const drafts=new Map();
+  const drafts=createTaskDraftStore({getStorage:()=>window.localStorage,keyPrefix:data.ui.drafts.storageKeyPrefix});
   const search = document.getElementById('search');
   const cards = document.getElementById('cards');
   const dialog = document.getElementById('detail');
@@ -105,7 +105,16 @@
 
   function openDetail(capability, trigger, updateHash) {
     activeId = capability.id;
-    const draft = drafts.get(capability.id) || {goal:'',materials:'',host:data.ui.hosts[0].id,request:'',manual:false};
+    const draft = drafts.get(capability.id) || {goal:'',materials:'',host:data.ui.hosts[0].id,request:'',manual:false,componentVersion:capability.componentVersion};
+    const notices=[];
+    if(draft.componentVersion!==capability.componentVersion){
+      draft.manual=true;
+      notices.push(`能力包已从 v${draft.componentVersion} 更新至 v${capability.componentVersion}，完整请求已保留；核对交付约定后可重新生成。`);
+    }
+    if(!data.ui.hosts.some(item=>item.id===draft.host)){
+      draft.host=data.ui.hosts[0].id;draft.manual=true;
+      notices.push('原来的使用环境已不在列表中，请重新选择；完整请求已保留。');
+    }
     if (trigger) lastTrigger = trigger;
     document.getElementById('detail-type').textContent = `${TYPE_NAMES[capability.componentType]} · v${capability.componentVersion}`;
     const heading = element('h2','detail-title',titleOf(capability));
@@ -153,7 +162,7 @@
     const request = element('textarea');
     request.setAttribute('aria-label','可编辑的使用请求');
     request.spellcheck = false;
-    request.value = draft.request || buildRequest(capability,draft);
+    request.value = draft.manual ? draft.request : draft.request || buildRequest(capability,draft);
     const hostLabel=element('label','request-field','交给哪个环境');
     const host=element('select'); host.id='request-host'; hostLabel.htmlFor=host.id;
     data.ui.hosts.forEach(item=>{const option=element('option','',item.label);option.value=item.id;host.append(option);});
@@ -165,14 +174,49 @@
     const materials=element('textarea');materials.id='request-materials';materialLabel.htmlFor=materials.id;
     materials.className='materials-input';materials.placeholder='文件名、链接、已有内容、交付格式或截止时间';materials.value=draft.materials;
     const update=element('button','secondary','按表单重新生成'); update.type='button';
-    const undo=element('button','secondary','恢复上一版');undo.type='button';undo.disabled=!draft.previousRequest;
+    const undo=element('button','secondary','恢复上一版');undo.type='button';undo.disabled=typeof draft.previousRequest!=='string';
     const editor=element('details','request-editor');editor.append(element('summary','','查看或编辑完整请求'),request,update,undo);
-    function saveDraft(){draft.goal=goal.value;draft.materials=materials.value;draft.host=host.value;draft.request=request.value;drafts.set(capability.id,{...draft});}
-    function refreshRequest(){saveDraft();if(!draft.manual){request.value=buildRequest(capability,draft);saveDraft();}else{copyStatus.textContent='表单已更新，完整请求保留你的手动内容。按表单重新生成会替换文本，之后可恢复上一版。';}}
+    const draftStatus=element('p','draft-status');draftStatus.setAttribute('role','status');
+    function renderDraftStatus(){
+      const state=drafts.status(capability.id);
+      const text=state==='unavailable'?'浏览器暂时无法保存，最新内容保留在本页；请下载草稿后再关闭。':
+        state==='unreadable'?'已有草稿格式无法读取，原数据已保留；当前编辑只留在本页，请下载草稿。':
+        state==='delete_failed'?'浏览器暂时无法清除草稿，当前内容已保留。':
+        state==='saved'||state==='restored'?'草稿已保存在此浏览器，刷新后可以继续；也可下载后在另一处导入。':
+        '编辑后自动保存在此浏览器。可下载草稿，也可清空本机记录。';
+      draftStatus.textContent=[text,...notices].join(' ');
+    }
+    function saveDraft(){draft.goal=goal.value;draft.materials=materials.value;draft.host=host.value;draft.request=request.value;drafts.set(capability.id,{...draft});renderDraftStatus();}
+    function refreshRequest(){draft.goal=goal.value;draft.materials=materials.value;draft.host=host.value;if(!draft.manual){request.value=buildRequest(capability,draft);}else{copyStatus.textContent='表单已更新，完整请求保留你的手动内容。按表单重新生成会替换文本，之后可恢复上一版。';}saveDraft();}
     goal.addEventListener('input',refreshRequest);materials.addEventListener('input',refreshRequest);host.addEventListener('change',refreshRequest);
     request.addEventListener('input',()=>{draft.manual=true;saveDraft();});
-    update.addEventListener('click',()=>{saveDraft();draft.previousRequest=request.value;request.value=buildRequest(capability,draft);draft.manual=false;undo.disabled=false;saveDraft();copyStatus.textContent='已按表单重新生成。需要保留先前手动内容时，可恢复上一版。';});
-    undo.addEventListener('click',()=>{if(!draft.previousRequest)return;const current=request.value;request.value=draft.previousRequest;draft.previousRequest=current;draft.manual=true;saveDraft();copyStatus.textContent='已恢复上一版完整请求。';});
+    update.addEventListener('click',()=>{draft.previousRequest=request.value;request.value=buildRequest(capability,draft);draft.manual=false;draft.componentVersion=capability.componentVersion;notices.length=0;undo.disabled=false;saveDraft();copyStatus.textContent='已按表单重新生成。需要保留先前手动内容时，可恢复上一版。';});
+    undo.addEventListener('click',()=>{if(typeof draft.previousRequest!=='string')return;const current=request.value;request.value=draft.previousRequest;draft.previousRequest=current;draft.manual=true;saveDraft();copyStatus.textContent='已恢复上一版完整请求。';});
+    const draftActions=element('div','draft-actions');
+    const download=element('button','secondary','下载草稿');download.type='button';
+    const restore=element('button','secondary','导入草稿');restore.type='button';
+    const clear=element('button','secondary','清空草稿');clear.type='button';
+    const file=element('input');file.type='file';file.accept='.json,application/json';file.hidden=true;file.id='import-draft';
+    download.addEventListener('click',()=>{
+      saveDraft();
+      const url=URL.createObjectURL(new Blob([serializeTaskDraft(capability.id,draft)],{type:'application/json'}));
+      const link=element('a');link.href=url;link.download=capability.id+'-draft.json';link.click();
+      setTimeout(()=>URL.revokeObjectURL(url),1000);
+    });
+    restore.addEventListener('click',()=>file.click());
+    file.addEventListener('change',async()=>{
+      const selected=file.files[0];if(!selected)return;
+      try{
+        if(selected.size>data.ui.drafts.maxImportBytes)throw new Error('草稿文件过大，请选择本页下载的草稿 JSON。');
+        const restored=parseTaskDraft(await selected.text(),capability.id);
+        drafts.set(capability.id,restored);
+        if(activeId===capability.id)openDetail(capability,null,false);
+      }catch(error){copyStatus.textContent='导入未完成，当前草稿已保留。'+error.message;}
+      finally{file.value='';}
+    });
+    clear.addEventListener('click',()=>{if(drafts.remove(capability.id))openDetail(capability,null,false);else renderDraftStatus();});
+    draftActions.append(download,restore,clear,file);
+    renderDraftStatus();
     const copyActions = element('div','copy-actions');
     const copy = element('button','primary','复制请求');
     copy.type = 'button';
@@ -190,7 +234,7 @@
     });
     select.addEventListener('click',()=>{editor.open=true;request.focus();request.select();copyStatus.textContent='已全选。请按 Ctrl/Cmd+C 或长按复制。';});
     copyActions.append(copy,select,copyStatus);
-    requestBox.append(requestHeading,element('p','','填好目标和材料，复制到你正在使用的 Agent。任务在该环境中执行。'),hostLabel,host,goalLabel,goal,materialLabel,materials,editor,copyActions);
+    requestBox.append(requestHeading,element('p','','填好目标和材料，复制到你正在使用的 Agent。任务在该环境中执行。'),hostLabel,host,goalLabel,goal,materialLabel,materials,editor,copyActions,draftActions,draftStatus);
     const note = element('p','source-note','声明来源：');
     note.append(fileLink(`${capability.componentPath}/capability.json`,`${capability.componentPath}/capability.json`));
     note.append(document.createTextNode('。包内示例可能是合成或未运行示例，请以原文件标注为准。'));

@@ -36,6 +36,8 @@ node scripts/professional-outcomes.mjs summarize /path/to/baseline /path/to/with
 
 `grade` 命令对应退出码为：通过0、失败1、参数或读取错误2、待实际评审3。产生评分文件不等于验收通过，自动化不要把 `needs_review` 当绿色成功。
 
+`summarize` 回读当前运行、题目、输入、方法、全部产物和评分器的指纹。任一内容在评分后改变，或旧记录缺少完整快照，汇总行显示 `needs_regrade`，`recordedStatus` 保留历史状态；旧通过数不计为当前通过。当前文件不可读时同样保留历史并给出复核动作，不改写原 `grade.json`。存在待重评行时，汇总退出码为3。先对当前文件重新评分，再绑定当前产物进行必要审阅；旧试跑的原始评分只能按其对应版本回读，不能修改历史记录把它变成新版本验收。
+
 时间和 token 只采用宿主实测：在 `run.json` 记录 `durationMs`、`totalTokens` 与 `measurement` 的来源。宿主没暴露就留 null；不要用答案字数冒充 token，用准备到评分的含等待时长冒充模型耗时。模型内部版本未暴露时写 `unexposed` 或准确的继承说明。
 
 ## 怎样避免又测成“都满分”

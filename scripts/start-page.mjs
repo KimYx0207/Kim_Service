@@ -13,7 +13,7 @@ const VIEW = path.join(ROOT, 'src/presentation/task-browser');
 export function renderStartPage(root = ROOT, { sourceRef } = {}) {
   const data = buildStartPageData(root);
   if (sourceRef) data.ui.repository.ref = sourceRef;
-  const scripts = ['src/application/task-browser/model.mjs',
+  const scripts = ['src/application/task-browser/model.mjs', 'src/data/task-drafts.mjs',
     'src/presentation/task-browser/copy-request.mjs', 'src/presentation/task-browser/page.js'];
   return renderPage({ data,
     template: fs.readFileSync(path.join(VIEW, 'page.html'), 'utf8'),

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { prepareTrial, gradeTrial } from './professional-outcomes.mjs';
+import { prepareTrial, gradeTrial, summarizeTrials } from './professional-outcomes.mjs';
 import operating from '../agents/financial-modeler/scripts/operating-forecast.js';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 function trial(t,id='finance-conflict'){
@@ -158,4 +158,60 @@ test('visible task.md and frozen task.json changes fail their recorded task fing
     else {const value=JSON.parse(fs.readFileSync(file,'utf8'));value.prompt+=' Changed rubric prompt.';fs.writeFileSync(file,JSON.stringify(value));}
     const report=gradeTrial(dir);assert.equal(report.automaticChecks.find(item=>item.id==='frozen-task-and-inputs').status,'fail');assert.equal(report.status,'fail');
   }
+});
+
+test('summaries retain recorded grades but never reuse acceptance after artifact changes',t=>{
+  const dir=trial(t);completeFinance(dir);const review=reviewFor(dir);
+  gradeTrial(dir,{reviewFile:review});
+  assert.equal(summarizeTrials([dir]).runs[0].status,'task_pass');
+  const gradePath=path.join(dir,'grade.json'),recorded=fs.readFileSync(gradePath,'utf8');
+  const file=path.join(dir,'output/forecast.json'),forecast=JSON.parse(fs.readFileSync(file,'utf8'));
+  forecast.scenarios[0].months[1].endingCash+=100;fs.writeFileSync(file,JSON.stringify(forecast));
+  const summary=summarizeTrials([dir]).runs[0];
+  assert.equal(summary.status,'needs_regrade');assert.equal(summary.recordedStatus,'task_pass');
+  assert.equal(summary.freshness,'changed');assert.equal(summary.automaticPasses,null);
+  assert.equal(fs.readFileSync(gradePath,'utf8'),recorded,'Summarizing must not rewrite historical evidence');
+  assert.equal(gradeTrial(dir).status,'fail');
+  assert.equal(summarizeTrials([dir]).runs[0].status,'fail');
+});
+
+test('summary freshness covers task, inputs, method, model metadata and added supporting files',t=>{
+  const changes=[
+    dir=>fs.appendFileSync(path.join(dir,'task.md'),'Changed task'),
+    dir=>fs.appendFileSync(path.join(dir,'inputs/supplier-proposal.md'),'Changed input'),
+    dir=>fs.appendFileSync(path.join(dir,'method/AGENT.md'),'Changed method'),
+    dir=>{const file=path.join(dir,'run.json'),run=JSON.parse(fs.readFileSync(file,'utf8'));run.model='different-model';fs.writeFileSync(file,JSON.stringify(run));},
+    dir=>fs.writeFileSync(path.join(dir,'output/new-context.md'),'New supporting artifact')
+  ];
+  for(const change of changes){
+    const base=fs.mkdtempSync(path.join(root,'.outcome-test-'));t.after(()=>fs.rmSync(base,{recursive:true,force:true}));
+    const dir=path.join(base,'trial');prepareTrial({taskId:'finance-conflict',destination:dir,condition:'with_method',model:'test-fixture'});completeFinance(dir);
+    gradeTrial(dir,{reviewFile:reviewFor(dir)});change(dir);
+    assert.equal(summarizeTrials([dir]).runs[0].status,'needs_regrade');
+  }
+});
+
+test('missing old snapshots and unreadable current evidence remain reviewable history',t=>{
+  const dir=trial(t);completeFinance(dir);gradeTrial(dir,{reviewFile:reviewFor(dir)});
+  const file=path.join(dir,'grade.json'),grade=JSON.parse(fs.readFileSync(file,'utf8'));
+  delete grade.acceptanceSnapshotSha256;fs.writeFileSync(file,JSON.stringify(grade));
+  const before=fs.readFileSync(file,'utf8'),legacy=summarizeTrials([dir]).runs[0];
+  assert.equal(legacy.status,'needs_regrade');assert.equal(legacy.freshness,'unverifiable');
+  assert.equal(fs.readFileSync(file,'utf8'),before);
+  gradeTrial(dir,{reviewFile:reviewFor(dir)});fs.rmSync(path.join(dir,'inputs'),{recursive:true});
+  const missing=summarizeTrials([dir]).runs[0];
+  assert.equal(missing.status,'needs_regrade');assert.equal(missing.freshness,'unavailable');
+});
+
+test('prototype-named supporting files participate in artifact review and summary freshness',t=>{
+  const dir=trial(t);completeFinance(dir);
+  const support=path.join(dir,'output','__proto__');fs.writeFileSync(support,'Supporting evidence before review');
+  const report=gradeTrial(dir);
+  assert.ok(Object.hasOwn(report.reviewBinding.outputFiles,'__proto__'));
+  gradeTrial(dir,{reviewFile:reviewFor(dir,report)});
+  assert.equal(summarizeTrials([dir]).runs[0].status,'task_pass');
+  fs.writeFileSync(support,'Changed supporting evidence after review');
+  const summary=summarizeTrials([dir]).runs[0];
+  assert.equal(summary.status,'needs_regrade');assert.equal(summary.freshness,'changed');
+  assert.equal(summary.recordedStatus,'task_pass');
 });
