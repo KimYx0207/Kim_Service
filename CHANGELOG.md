@@ -19,6 +19,7 @@ The task browser, editable design-system and financial-modeling examples, shared
 - **Keep your progress.** Save a separate request draft for each capability, restore it after refresh, move it with download/import, preserve manual additions, and undo request regeneration. Storage and clipboard feedback explain the next available action.
 - **Use clearer task and review guidance.** Frontend checks follow the size and risk of the change, team retries share the task budget, and Meta_Kim uses its existing planning and continuation.
 - **Start from readable product documentation.** Chinese and English homepages connect tasks to deliverables, explain the examples and client choices, and retain the contact and support information.
+- **Preview the actual product.** The README now includes four unmodified browser screenshots of the catalog, request form, and editable examples, with [source and image records](docs/images/readme-screenshots.json).
 
 ### Breaking changes and migration
 

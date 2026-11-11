@@ -11,8 +11,18 @@ Kim Service 是老金（KimYx0207）维护的专业能力库。每个能力包�
 **[打开任务浏览器](https://kimyx0207.github.io/Kim_Service/)** · [下载最新版本](https://github.com/KimYx0207/Kim_Service/releases/latest) · [专业角色目录](agents/README.md) · [更新日志](CHANGELOG.zh-CN.md)
 
 <p align="center">
+  <img src="docs/images/task-browser.png" alt="Kim Service 任务浏览器实拍：使用流程与两个可编辑示例入口" width="900">
+</p>
+<p align="center">先体验可编辑示例，再搜索任务，查看需要的材料和交付内容。</p>
+
+<details>
+<summary>查看从任务到交付流程</summary>
+
+<p align="center">
   <img src="docs/images/intent-to-delivery.zh-CN.svg" alt="选任务、补材料、复制请求、查看交付：产品工作流程示意" width="900">
 </p>
+
+</details>
 
 ## 从你想拿到的结果开始
 
@@ -50,6 +60,28 @@ Kim Service 是老金（KimYx0207）维护的专业能力库。每个能力包�
 | **预约台设计系统** | 切换浅深主题、品牌色、字号和密度；填写预约表单，体验报错、重试与新增记录 | 当前设计变量的 tokens JSON，以及可继续修改的[页面源码](agents/design-system-designer/examples/service-console/) |
 | **12 个月经营预测** | 修改销量、价格、成本与回款假设；比较基础、乐观、保守情景，查看利润和现金变化 | 输入 JSON、计算结果 JSON、可在表格软件中打开的月表 CSV，以及[模型源码](agents/financial-modeler/examples/operating-forecast/) |
 
+<details>
+<summary>查看预约台设计系统</summary>
+
+<p align="center">
+  <img src="docs/images/design-system-example.png" alt="预约台设计系统实拍：主题与密度控制、预约表单和合成示例记录" width="900">
+</p>
+
+调整主题、品牌色和密度，在同一页面体验表单与列表；图中为默认合成示例数据。
+
+</details>
+
+<details>
+<summary>查看 12 个月经营预测</summary>
+
+<p align="center">
+  <img src="docs/images/operating-forecast-example.png" alt="经营预测实拍：可编辑假设、三情景结果与月末现金曲线" width="900">
+</p>
+
+用合成经营假设比较三种情景，查看利润与现金变化，再下载输入、结果或月表。
+
+</details>
+
 例如，先打开经营预测，修改一项成本假设，观察现金曲线和月表，再下载 CSV。想把它用于自己的业务，就在财务建模能力页填入目标和真实数据，生成下一步请求。
 
 下载仓库后，也可以直接在浏览器打开 `docs/start.html`，离线浏览能力和两个示例。
@@ -76,6 +108,17 @@ cd Kim_Service
 <p align="center">
   <img src="docs/images/browser-walkthrough.zh-CN.svg" alt="查找能力、填写目标和材料、复制请求的操作示意" width="900">
 </p>
+
+<details>
+<summary>查看填写好的任务请求</summary>
+
+<p align="center">
+  <img src="docs/images/task-request.png" alt="财务建模任务请求实拍：填入合成演示目标与材料，并选择 Meta_Kim" width="900">
+</p>
+
+这个演示使用仓库自带的合成数据，填写目标与材料后选择 Meta_Kim，即可复制请求继续。
+
+</details>
 
 ### 3. 先用仓库内示例跑通一次
 

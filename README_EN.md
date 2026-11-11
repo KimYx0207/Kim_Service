@@ -11,8 +11,18 @@ Kim Service is a professional capability library maintained by Lao Jin (KimYx020
 **[Open the task browser](https://kimyx0207.github.io/Kim_Service/)** · [Download the latest release](https://github.com/KimYx0207/Kim_Service/releases/latest) · [Browse specialist roles](agents/README.md) · [Changelog](CHANGELOG.md)
 
 <p align="center">
+  <img src="docs/images/task-browser.png" alt="Actual Kim Service task browser showing the workflow and two editable example cards" width="900">
+</p>
+<p align="center">The task browser in its current Chinese interface: try an example, then choose a task.</p>
+
+<details>
+<summary>See the workflow</summary>
+
+<p align="center">
   <img src="docs/images/intent-to-delivery.svg" alt="Choose a task, add material, copy a request and review the result — workflow illustration" width="900">
 </p>
+
+</details>
 
 ## Start with the result you need
 
@@ -43,12 +53,34 @@ The current [component catalog](catalog.json) contains **71 components: 48 profe
 
 ## Try two examples you can edit and download
 
-Open the [task browser](https://kimyx0207.github.io/Kim_Service/) and choose an example card at the top. Both examples use synthetic data, so you can explore the output before bringing your own materials. The browser and example interfaces use Chinese; the actions are described below.
+Open the [task browser](https://kimyx0207.github.io/Kim_Service/) and choose an example card at the top. Both examples use synthetic data, so you can explore the output before bringing your own materials.
 
 | Example | What you can try | What you can take away |
 | --- | --- | --- |
 | **Booking design system** | Change light/dark theme, brand color, type size, and density; submit the booking form and try validation, retry, and new entries | The current design tokens as JSON, plus editable [page source](agents/design-system-designer/examples/service-console/) |
 | **12-month operating forecast** | Change sales, price, cost, and collection assumptions; compare base, upside, and downside scenarios and inspect profit and cash | Input JSON, calculated results as JSON, monthly CSV for a spreadsheet, and the [model source](agents/financial-modeler/examples/operating-forecast/) |
+
+<details>
+<summary>See the booking design system</summary>
+
+<p align="center">
+  <img src="docs/images/design-system-example.png" alt="Actual booking design-system example with theme and density controls, a booking form, and synthetic records" width="900">
+</p>
+
+Change theme, brand color, and density while trying the form and list together. This is the default example with synthetic data.
+
+</details>
+
+<details>
+<summary>See the 12-month operating forecast</summary>
+
+<p align="center">
+  <img src="docs/images/operating-forecast-example.png" alt="Actual operating forecast showing editable assumptions, three scenarios, and monthly cash balances" width="900">
+</p>
+
+Compare three scenarios using synthetic operating assumptions, inspect profit and cash, then download the inputs, results, or monthly table.
+
+</details>
 
 For a quick first run, change a cost assumption in the forecast, inspect the cash chart and monthly table, and download the CSV. To adapt it to your business, select financial modeling in the catalog and enter your goal and actual data.
 
@@ -76,6 +108,17 @@ Copy the request and paste it into your current AI conversation. Drafts are save
 <p align="center">
   <img src="docs/images/browser-walkthrough.svg" alt="Illustrated walkthrough of finding a capability and preparing a request" width="900">
 </p>
+
+<details>
+<summary>See a prepared task request</summary>
+
+<p align="center">
+  <img src="docs/images/task-request.png" alt="Actual financial-modeling request form with a synthetic demo goal and materials, and Meta_Kim selected" width="900">
+</p>
+
+This demo uses the repository's synthetic sample data. Enter the goal and materials, choose Meta_Kim, and copy the request to continue.
+
+</details>
 
 ### 3. Run a first task with the included example
 

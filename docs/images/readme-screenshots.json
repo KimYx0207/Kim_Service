@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "sourceCommit": "2e56f70a7b3e9c81ff23b41d357720ea7304b23d",
+  "sourceDirectory": ".site",
+  "captureKind": "actual browser screenshot",
+  "dataKind": "synthetic demo data",
+  "uiLanguage": "zh-CN",
+  "status": "complete",
+  "screenshots": [
+    {
+      "file": "task-browser.png",
+      "urlPath": "/",
+      "viewport": {
+        "width": 1440,
+        "height": 1050
+      },
+      "description": "Default task browser, including the two editable example cards.",
+      "sha256": "55052dd16871ef3e166216adae889515ec7abcc831e1903f196d92e8f1ec450d",
+      "originalFile": "catalog.png"
+    },
+    {
+      "file": "task-request.png",
+      "urlPath": "/#capability=financial-modeler-deliver",
+      "viewport": {
+        "width": 1280,
+        "height": 1000
+      },
+      "description": "Financial-modeling request form filled with a synthetic demo brief and Meta_Kim selected; the task is ready to copy.",
+      "sha256": "20b5c9d743765ec17df6188eb7d8c2b4b4b4de10a42fdb8e206fa3a634dbf2ba",
+      "originalFile": "financial-task.png"
+    },
+    {
+      "file": "design-system-example.png",
+      "urlPath": "/agents/design-system-designer/examples/service-console/index.html",
+      "viewport": {
+        "width": 1440,
+        "height": 1050
+      },
+      "description": "Default booking design-system example with its original theme controls and synthetic booking data.",
+      "sha256": "1a0ce712ca61fadaea3df458b9bd7eb544f43ab4a1b19ccc136112b67370c021",
+      "originalFile": "design-system.png"
+    },
+    {
+      "file": "operating-forecast-example.png",
+      "urlPath": "/agents/financial-modeler/examples/operating-forecast/index.html",
+      "viewport": {
+        "width": 1440,
+        "height": 1050
+      },
+      "description": "Default 12-month operating forecast with the original synthetic assumptions and calculated scenarios.",
+      "sha256": "37a013a5f9ee342c49d9b5d1fad52397258387913ed6a9e8d12022e5a13e93be",
+      "originalFile": "operating-forecast.png"
+    }
+  ],
+  "browserVersion": "151.0.7922.34",
+  "sourceArtifact": {
+    "repository": "KimYx0207/Kim_Service",
+    "workflowRunId": 43116420620,
+    "artifactId": 13898552015,
+    "artifactName": "task-browser-screenshots"
+  }
+}
