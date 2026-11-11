@@ -4,3 +4,5 @@
 
 - Add 自动测试工程师 methods, concrete deliverables, source references and review cases.
 - Continue useful reversible work when optional inputs are missing; isolate material failures.
+
+- Canonical source: `agents/test-automation-engineer`; release provenance is bound to the committed component tree.

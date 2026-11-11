@@ -4,3 +4,5 @@
 
 - Add 能源项目分析师 methods, concrete deliverables, source references and review cases.
 - Continue useful reversible work when optional inputs are missing; isolate material failures.
+
+- Canonical source: `agents/energy-project-analyst`; release provenance is bound to the committed component tree.

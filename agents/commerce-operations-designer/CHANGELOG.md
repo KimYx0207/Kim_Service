@@ -4,3 +4,5 @@
 
 - Add 商业订单运营设计师 methods, concrete deliverables, source references and review cases.
 - Continue useful reversible work when optional inputs are missing; isolate material failures.
+
+- Canonical source: `agents/commerce-operations-designer`; release provenance is bound to the committed component tree.

@@ -4,3 +4,5 @@
 
 - Add 财务情景与压力分析 methods, concrete deliverables, source references and review cases.
 - Continue useful reversible work when optional inputs are missing; isolate material failures.
+
+- Canonical source: `skills/financial-scenario-modeling`; release provenance is bound to the committed component tree.
