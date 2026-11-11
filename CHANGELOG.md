@@ -4,15 +4,33 @@
 
 Kim Service collection releases use `V<major>.<minor>`. Each component keeps its own version and source history. Detailed past checks are in the [testing record](docs/verification-history.md).
 
-## Unreleased
+## V1.12 - 2026-11-12
 
-- Separate the task browser into data, application and presentation layers. Configure search, host choices and sample entries while preserving existing command entrypoints.
-- Add an editable booking design system and a 12-month operating forecast with real interactions, recovery and downloads. Contain forecast grids on narrow screens.
-- Include user goals and materials in copied requests, preserve manual edits, and allow undo after regeneration. Improve keyboard focus, empty results and clipboard failure feedback.
-- Restore per-task drafts after refresh, download/import drafts across sessions, and retain current edits when browser storage is denied or full. Keep older package requests and deliberately empty manual edits intact.
-- Unify frontend verification by task risk and team retry budgets. Meta mode uses its native planning and checkpoints instead of preferring a retired planning package.
-- Add file-based outcome trials, frozen graders and inputs, artifact-bound reviews and actual browser CI. Publish a common finance calculation policy; preserve zero-difference results and invalid pilots without recasting them as skill gains.
-- Check outcome-summary freshness against current trial files and evaluation code; retain past grades as history and require regrading after changes instead of displaying stale acceptance.
+### Affected components
+
+The task browser, editable design-system and financial-modeling examples, shared request drafts, professional workflow guidance, and product documentation. The collection contains 71 components and 86 capability entries, including 48 professional Agents and 21 Skills.
+
+### User-visible changes
+
+- **Choose by the result you need.** Browse concrete tasks, required materials, expected deliverables, and the relevant package from one starting page.
+- **Try the output before adapting it.** Edit the booking design system's theme, brand color, density, and form states; change the 12-month forecast's assumptions and compare three scenarios.
+- **Take useful files into your project.** Export design tokens, forecast inputs and results as JSON, and monthly tables as CSV. Forecast tables also stay usable on narrow screens.
+- **Turn your brief into a working request.** Add a goal and materials, choose a client, edit the generated request, and copy it into the AI conversation where you work.
+- **Keep your progress.** Save a separate request draft for each capability, restore it after refresh, move it with download/import, preserve manual additions, and undo request regeneration. Storage and clipboard feedback explain the next available action.
+- **Use clearer task and review guidance.** Frontend checks follow the size and risk of the change, team retries share the task budget, and Meta_Kim uses its existing planning and continuation.
+- **Start from readable product documentation.** Chinese and English homepages connect tasks to deliverables, explain the examples and client choices, and retain the contact and support information.
+
+### Breaking changes and migration
+
+Existing component IDs and command entrypoints remain compatible. Update the checkout with `git pull --ff-only`, reopen the task browser, and refresh any packages installed in your client using the [DSH](docs/dsh.md) or [ZCode](docs/zcode-beta.md) guide as appropriate. The Kim ZCode plugin version follows the collection version: V1.12 maps to 1.12.0.
+
+### Verification
+
+The checks cover catalog freshness, package contracts, calculation helpers, and actual Chromium interactions with task selection, drafts, keyboard navigation, example editing, and downloads. File-based outcome reviews bind the inputs, grading rules, and artifacts to the reviewed result; changed files require a current review. Implementation details and historical findings remain in the [task browser guide](docs/task-browser.md) and [iteration record](docs/verification/iteration-20261111.md). Final release checks and asset identities are recorded with the GitHub Release.
+
+### Source revisions
+
+The previous public collection is [V1.11](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.11). The new release tag and package manifests identify their source commits. Individual components retain their own versions, licenses, and provenance records.
 
 ## V1.11 - 2026-11-11
 

@@ -1,6 +1,6 @@
 # Zcode Beta 内容包
 
-这是可下载、可重建的原生插件内容分发。它包含 9 个 Meta canonical agents、完整 meta-theory，并从选定 Kim_Service 提交的标准能力合同中发现全部专业 Agent 和 Skill，连同其完整方法、知识、输出检查、案例、脚本及许可一起打包。当前目录为 36 个专业 Agent、15 个 Skill，实际数量由构建结果报告。Meta_Kim 的调度、权限和最终验收仍由宿主真实接入，不因内容包存在而自动启用。
+这是可下载、可重建的原生插件内容分发。它包含 9 个 Meta canonical agents、完整 meta-theory，并从选定 Kim_Service 提交的标准能力合同中发现全部专业 Agent 和 Skill，连同其完整方法、知识、输出检查、案例、脚本及许可一起打包。当前目录为 48 个专业 Agent、21 个 Skill；构建清单记录所选源码提交的实际组件。Kim_Service V1.12 对应的 Kim 插件版本为 1.12.0。Meta_Kim 的调度、权限和最终验收由宿主接入，完整内容包为这些工作提供专业资料。
 
 ## 重建
 
@@ -61,7 +61,7 @@ zcode plugins install kim-service-local@kim-local-reviewed -s user
 zcode plugins list --json
 ```
 
-这些是用户正常 CLI 操作，builder 不会代为执行。既有同名插件使用正常 marketplace refresh / plugins update 路线，先查看现有来源和状态，不覆盖未知个人 Agent。两插件/marketplace ID 保持既有名称；Kim V1.10 的插件版本为 `1.10.0`，Meta 插件版本来自绑定 source 的 package.json。
+这些是用户正常 CLI 操作，builder 不会代为执行。既有同名插件使用正常 marketplace refresh / plugins update 路线，先查看现有来源和状态，不覆盖未知个人 Agent。两插件/marketplace ID 保持既有名称；Kim 插件版本由根目录 `VERSION` 派生，V1.12 对应 `1.12.0`，Meta 插件版本来自绑定 source 的 package.json。
 
 Meta 入口用 `meta-kim-local:meta-warden` 等 qualified name；Kim 使用实际发现的 `kim-service-local:<角色>`，例如 `kim-service-local:frontend-engineer` 或 `kim-service-local:business-finance-analyst`。完整角色资料位于各自 `components/agents/<角色>/`，生成入口明确要求从那里读取方法、所需知识与验收条件；Skill 使用 `skills/<名称>/SKILL.md`。安装并不证明模型自动读取了 method、已绑定工具槽或完成业务任务。
 

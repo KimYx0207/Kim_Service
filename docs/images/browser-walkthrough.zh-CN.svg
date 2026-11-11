@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="860" viewBox="0 0 1000 860" lang="zh-CN" xml:lang="zh-CN" role="img" aria-labelledby="title desc">
+<title id="title">从选中任务，到一份能直接用的请求。</title><desc id="desc">操作示例：给一家门店做未来 12 个月的现金预测。</desc>
+<style>text{font-family:Noto Sans CJK SC, Microsoft YaHei,sans-serif} path{stroke-linecap:round;stroke-linejoin:round}</style>
+<rect x="0" y="0" width="1000" height="860" rx="26" fill="#f3f6fb" stroke="none"/>
+<text x="42" y="48" font-size="22" font-weight="750" fill="#13775b">KIM SERVICE</text>
+<text x="958" text-anchor="end" y="48" font-size="17" font-weight="500" fill="#435169">浏览器操作示意</text>
+<text x="42" y="108" font-size="38" font-weight="750" fill="#11243b">从选中任务，到一份能直接用的请求。</text>
+<text x="42" y="151" font-size="23" font-weight="400" fill="#435169">操作示例：给一家门店做未来 12 个月的现金预测。</text>
+<rect x="42" y="190" width="436" height="420" rx="22" fill="#fff" stroke="#dce4ef"/>
+<text x="66" y="235" font-size="28" font-weight="700" fill="#11243b">01  找到对应能力</text>
+<rect x="66" y="267" width="388" height="61" rx="13" fill="#f3f6fb" stroke="none"/>
+<text x="86" y="306" font-size="23" font-weight="400" fill="#435169">搜索“经营预测”</text>
+<rect x="66" y="354" width="388" height="161" rx="16" fill="#eaf5ed" stroke="#c7dfd0"/>
+<text x="88" y="398" font-size="27" font-weight="700" fill="#17624b">经营预测方法</text>
+<text x="88" y="438" font-size="22" font-weight="400" fill="#435169">12 个月预测 · 多种经营情景</text>
+<text x="88" y="480" font-size="21" font-weight="400" fill="#435169">查看输入材料、方法与交付物</text>
+<text x="66" y="571" font-size="18" font-weight="600" fill="#13775b">把草稿留下来 · 保存、导出，下次继续</text>
+<rect x="520" y="190" width="436" height="420" rx="22" fill="#fff" stroke="#dce4ef"/>
+<text x="544" y="235" font-size="28" font-weight="700" fill="#11243b">02  补上自己的任务</text>
+<text x="544" y="276" font-size="21" font-weight="600" fill="#435169">这次的目标</text>
+<rect x="544" y="293" width="388" height="56" rx="10" fill="#f8fafc" stroke="#d6dfe8"/>
+<text x="560" y="330" font-size="22" font-weight="450" fill="#223850">预测门店未来一年的现金变化</text>
+<text x="544" y="384" font-size="21" font-weight="600" fill="#435169">已有材料</text>
+<rect x="544" y="401" width="388" height="56" rx="10" fill="#f8fafc" stroke="#d6dfe8"/>
+<text x="560" y="438" font-size="22" font-weight="450" fill="#223850">营业额、成本与期初现金</text>
+<text x="544" y="492" font-size="21" font-weight="600" fill="#435169">使用环境</text>
+<rect x="544" y="509" width="388" height="56" rx="10" fill="#f8fafc" stroke="#d6dfe8"/>
+<text x="560" y="546" font-size="22" font-weight="450" fill="#223850">Meta_Kim / 自己常用的工具</text>
+<rect x="42" y="644" width="914" height="119" rx="20" fill="#123f35" stroke="none"/>
+<text x="66" y="682" font-size="27" font-weight="700" fill="#eafff4">03  复制，继续完成任务</text>
+<text x="66" y="716" font-size="27" font-weight="650" fill="#fff">复制请求 → 粘贴到常用 AI 工具</text>
+<text x="66" y="746" font-size="19" font-weight="400" fill="#c5e6d9">请求带上对应方法入口和本次材料，便于直接接着做。</text>
+<text x="42" y="815" font-size="24" font-weight="650" fill="#17624b">先试可编辑样例  /  调整输入 · 下载 JSON / CSV</text>
+</svg>
