@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "sop-runbook",
   "componentType": "skill",
-  "componentVersion": "0.1.1",
+  "componentVersion": "0.1.2",
   "entrypoint": "SKILL.md",
   "capabilities": [
     {
@@ -132,8 +132,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "不可逆动作、生产变更和对外通告按本任务已有授权及相应责任流程处理；文档完善与只读核查继续。",
-          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+          "不可逆动作、生产变更和对外通告按本任务已有授权及相应责任流程处理；文档完善与只读核查继续。"
         ]
       },
       "validation": [

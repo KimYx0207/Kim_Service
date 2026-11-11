@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "agronomy-planner",
   "componentType": "agent",
-  "componentVersion": "0.1.1",
+  "componentVersion": "0.1.2",
   "entrypoint": "AGENT.md",
   "capabilities": [
     {
@@ -132,8 +132,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "实际灌溉策略、植保施药、肥料与重大作物风险由当地具备相应能力和权限的农技人员复核。",
-          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+          "实际灌溉策略、植保施药、肥料与重大作物风险由当地具备相应能力和权限的农技人员复核。"
         ]
       },
       "validation": [

@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "roleId": "accessibility-audit",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "complete-delivery",
+      "capabilityId": "accessibility-audit-deliver",
+      "category": "worked_example",
+      "scenario": "检查页面能否用键盘和阅读器操作。",
+      "input": {
+        "surface": "报名表错误提示与确认弹窗",
+        "target": "WCAG2.2 AA，Chrome键盘",
+        "evidence": "无标签输入框、弹窗关闭焦点丢失"
+      },
+      "candidateOutputExcerpt": {
+        "findings": "姓名框缺可访问名称；关闭弹窗后Tab从页面顶部重新开始。",
+        "fixes": "关联label；错误用aria-describedby；关闭弹窗恢复触发按钮焦点。",
+        "coverage": "键盘路径复测完成；阅读器与其他浏览器另测，自动扫描结果单列。",
+        "priorities": "先修无法输入辨认与焦点恢复；色彩细节按任务影响排期。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "领域计算、行为和未核范围分开，结果可按所给输入复查。",
+      "diagnosticRefs": [
+        "task",
+        "focus",
+        "name"
+      ],
+      "decisionRuleRefs": [
+        "manual-needed",
+        "focus-restore",
+        "prioritize-impact"
+      ]
+    },
+    {
+      "id": "material-error",
+      "capabilityId": "accessibility-audit-deliver",
+      "category": "failure_boundary",
+      "scenario": "扫描替代任务",
+      "input": {
+        "surface": "报名表错误提示与确认弹窗",
+        "target": "WCAG2.2 AA，Chrome键盘",
+        "evidence": "无标签输入框、弹窗关闭焦点丢失"
+      },
+      "candidateOutputExcerpt": {
+        "coverage": "axe零错误，所以所有残障用户都能完成所有任务。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "自动规则没有覆盖全部实际体验。",
+      "diagnosticRefs": [
+        "task",
+        "focus",
+        "name"
+      ],
+      "decisionRuleRefs": [
+        "manual-needed",
+        "focus-restore",
+        "prioritize-impact"
+      ]
+    },
+    {
+      "id": "bounded-progress",
+      "capabilityId": "accessibility-audit-deliver",
+      "category": "worked_example",
+      "scenario": "局部缺环境",
+      "input": {
+        "surface": "报名表错误提示与确认弹窗",
+        "target": "当前有Chrome键盘和源码，无屏幕阅读器",
+        "evidence": "无标签输入框、弹窗关闭焦点丢失"
+      },
+      "candidateOutputExcerpt": {
+        "coverage": "当前无阅读器，先完成键盘/语义检查并列阅读器路径待测；其他修复继续。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "工具缺口不应阻断独立检查。",
+      "diagnosticRefs": [
+        "task",
+        "focus",
+        "name"
+      ],
+      "decisionRuleRefs": [
+        "manual-needed",
+        "focus-restore",
+        "prioritize-impact"
+      ]
+    }
+  ]
+}

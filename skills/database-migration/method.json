@@ -1,0 +1,243 @@
+{
+  "schemaVersion": 1,
+  "roleId": "database-migration",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "toolSlots": [
+    {
+      "id": "repository.read",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    },
+    {
+      "id": "repository.patch",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    },
+    {
+      "id": "database.test",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    }
+  ],
+  "skillLoading": [
+    "按本次任务读取下面两份知识材料；只加载有关内容。",
+    "使用宿主已提供且获授权的相关工具槽；缺工具时仍完成资料分析与可用草案，把未执行步骤交接。"
+  ],
+  "steps": [
+    "定位所有读写者与schema约束，确认数据库版本和变更影响。",
+    "设计expand阶段让旧新客户端共存，保持旧行为可用。",
+    "按稳定主键分批回填并保存进度，更新条件避免覆盖新写入。",
+    "检查锁、时延、数据完整及新旧读路径，再切换消费者。",
+    "确认旧写入者消失且恢复路径可用后收缩；记录不可逆点和恢复步骤。",
+    "当任务包括实现且宿主已有写入/测试能力时，实际修改授权范围内的源码并运行上述检查，交代码位置与结果；缺该能力则交实现草案并明确待执行范围。",
+    "按输出标准核对当前产物，区分已完成、可用草案与待核项；只暂停受实质缺口影响的动作。"
+  ],
+  "acceptance": [
+    "旧新版本共存时先扩展并双读/双写或兼容映射，校验后才删旧。",
+    "固定分批边界、检查点与幂等规则，核行数及业务值。",
+    "按实际版本检查锁/耗时/约束，数据检查含空值、冲突和消费者读取。",
+    "区分代码回滚、数据恢复及不可逆点，满足条件后清理旧路径。",
+    "足以让接手者区分输入事实与当前假设。",
+    "给当前可用成果和受影响的待核项，独立部分可以继续。"
+  ],
+  "coordinationOwner": "caller",
+  "permissionSource": "current_task_host_authorization",
+  "finalAcceptance": "caller_only",
+  "contextPolicy": "只加载本次任务相关资料；工具操作沿用当前宿主的授权。",
+  "memoryPolicy": "保持本次任务上下文，不把材料另行持久保存。",
+  "knowledgeAssets": [
+    {
+      "id": "database-migration-method",
+      "path": "references/professional-method.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "postgres-alter",
+        "airflow-practices"
+      ]
+    },
+    {
+      "id": "database-migration-delivery",
+      "path": "references/delivery-template.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "postgres-alter",
+        "airflow-practices"
+      ]
+    }
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "数据库渐进迁移",
+    "scope": [
+      "把数据库结构变更拆成兼容扩展、可重跑回填、切换和清理，保留可恢复路径。",
+      "知识方法可独立使用；交付范围由当前任务确定。"
+    ],
+    "knowledgeAssetIds": [
+      "database-migration-method",
+      "database-migration-delivery"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "writers",
+        "question": "还有旧版本写入吗？",
+        "evidenceRequired": [
+          "部署版本",
+          "写入入口"
+        ],
+        "whenMissing": "保留兼容字段。"
+      },
+      {
+        "id": "locking",
+        "question": "具体DDL会持何种锁？",
+        "evidenceRequired": [
+          "数据库版本",
+          "演练"
+        ],
+        "whenMissing": "限定观察后放大。"
+      },
+      {
+        "id": "restore",
+        "question": "删除后如何恢复真实数据？",
+        "evidenceRequired": [
+          "备份",
+          "恢复验证"
+        ],
+        "whenMissing": "先保留旧数据。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "expand-first",
+        "when": "改名或替换字段",
+        "action": "先新增兼容字段及映射",
+        "avoid": "直接删除旧字段"
+      },
+      {
+        "id": "resume",
+        "when": "回填中断",
+        "action": "从检查点继续且不覆盖新值",
+        "avoid": "从头盲目覆盖"
+      },
+      {
+        "id": "contract-last",
+        "when": "准备删旧结构",
+        "action": "确认消费者迁移和恢复条件",
+        "avoid": "只因新版本发布就删除"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "database-migration-deliver",
+        "inputGuidance": [
+          {
+            "field": "change",
+            "interpretation": "当前/目标schema、数据库版本和业务不变量",
+            "onMissing": "先找受影响入口与写入者。"
+          },
+          {
+            "field": "traffic",
+            "interpretation": "表规模、读写模式、消费者版本和部署顺序",
+            "onMissing": "缺规模先做小样本演练，估计项写明。"
+          },
+          {
+            "field": "recovery",
+            "interpretation": "备份、恢复时间目标、回滚和校验方式",
+            "onMissing": "先确认能恢复何种数据，再决定删旧字段时机。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "database-migration-sequence",
+            "field": "sequence",
+            "criterion": "旧新版本共存时先扩展并双读/双写或兼容映射，校验后才删旧。",
+            "rejectWhen": "先DROP旧字段再发布新代码。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "版本矩阵",
+              "迁移步骤"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "database-migration-backfill",
+            "field": "backfill",
+            "criterion": "固定分批边界、检查点与幂等规则，核行数及业务值。",
+            "rejectWhen": "无上限全表更新或重跑破坏新数据。",
+            "verificationMethod": "behavior_probe",
+            "evidenceRequired": [
+              "回填脚本",
+              "两次运行差异"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "database-migration-verification",
+            "field": "verification",
+            "criterion": "按实际版本检查锁/耗时/约束，数据检查含空值、冲突和消费者读取。",
+            "rejectWhen": "仅SQL语法通过就宣布无锁无损。",
+            "verificationMethod": "behavior_probe",
+            "evidenceRequired": [
+              "演练日志",
+              "数据对账"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "database-migration-recoveryplan",
+            "field": "recoveryPlan",
+            "criterion": "区分代码回滚、数据恢复及不可逆点，满足条件后清理旧路径。",
+            "rejectWhen": "以ROLLBACK命令替代已提交删列后的恢复。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "恢复演练",
+              "清理条件"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "database-migration-facts",
+            "field": "facts",
+            "criterion": "足以让接手者区分输入事实与当前假设。",
+            "rejectWhen": "关键业务输入被编造或来源无法定位。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "材料清单与假设"
+            ],
+            "blocking": false
+          },
+          {
+            "id": "database-migration-handoff",
+            "field": "handoff",
+            "criterion": "给当前可用成果和受影响的待核项，独立部分可以继续。",
+            "rejectWhen": "遗漏交付位置或下一步导致无法接手。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "产物路径",
+              "下一步"
+            ],
+            "blocking": false
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "生产DDL和不可逆数据删除按已有授权及恢复条件执行；迁移脚本、兼容代码和隔离演练可继续。"
+      ],
+      "prohibitedClaims": [
+        "示例是教学材料；真实完成情况以本次实际产物和检查为准。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
+}

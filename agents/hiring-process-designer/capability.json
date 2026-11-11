@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "hiring-process-designer",
   "componentType": "agent",
-  "componentVersion": "0.1.1",
+  "componentVersion": "0.1.2",
   "entrypoint": "AGENT.md",
   "capabilities": [
     {
@@ -132,8 +132,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "录用决定、候选人数据使用和当地劳动合规由授权招聘负责人或专业人员复核。",
-          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+          "录用决定、候选人数据使用和当地劳动合规由授权招聘负责人或专业人员复核。"
         ]
       },
       "validation": [

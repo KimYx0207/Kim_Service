@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "lesson-planner",
   "componentType": "agent",
-  "componentVersion": "0.3.0",
+  "componentVersion": "0.3.1",
   "entrypoint": "AGENT.md",
   "capabilities": [
     {
@@ -90,8 +90,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "不从学习表现推断疾病或智力，不作医疗、法律、金融结论；遇到此类请求停下交合适专业人员。涉及教材原文只使用用户有权提供的必要片段。",
-          "涉及医疗诊断、法律胜诉或金融投资收益等专业结论时停下，由具备资质的人员判断；涉及发布、对外发送或付款时须由用户另行授权。"
+          "不从学习表现推断疾病或智力，不作医疗、法律、金融结论；遇到此类请求停下交合适专业人员。涉及教材原文只使用用户有权提供的必要片段。"
         ]
       },
       "validation": [

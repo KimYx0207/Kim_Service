@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.2 - 2026-11-11
+
+- Use task-specific handling for material unknowns and existing authorization.
+- Treat context and handoff refinements as advisory while keeping core delivery checks.
+
 ## 0.1.1 — 2026-11-11
 
 - 补充检查覆盖、空输入、引用规则排除NULL及多规则失败计数的明确拒收条件和原创案例。

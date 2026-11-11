@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "roleId": "commerce-operations-designer",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "complete-delivery",
+      "capabilityId": "commerce-operations-designer-deliver",
+      "category": "worked_example",
+      "scenario": "订单、退款和库存经常对不上。",
+      "input": {
+        "journey": "电商订单含部分退款",
+        "records": "实付10000分，退款R1=2500分成功，重复通知R1再次到达",
+        "policies": "重复事件去重，退货验收后入可售"
+      },
+      "candidateOutputExcerpt": {
+        "stateModel": "订单已付款，部分退款成功；退款状态独立于发货。",
+        "eventHandling": "R1通知两次仅一项退款效果，累计退款2500分。",
+        "reconciliation": "净收10000−2500=7500分；退回商品仍待验，不增加可售数。",
+        "operationsPlaybook": "退款回执未知时查询R1状态；不生成新退款ID。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "领域计算、行为和未核范围分开，结果可按所给输入复查。",
+      "diagnosticRefs": [
+        "authority",
+        "duplicates",
+        "inventory"
+      ],
+      "decisionRuleRefs": [
+        "event-id",
+        "partial-refund",
+        "return-inspection"
+      ]
+    },
+    {
+      "id": "material-error",
+      "capabilityId": "commerce-operations-designer-deliver",
+      "category": "failure_boundary",
+      "scenario": "重复退款",
+      "input": {
+        "journey": "电商订单含部分退款",
+        "records": "实付10000分，退款R1=2500分成功，重复通知R1再次到达",
+        "policies": "重复事件去重，退货验收后入可售"
+      },
+      "candidateOutputExcerpt": {
+        "reconciliation": "R1到两次，退款累计5000分，净收5000分。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "重复通知被当作两次业务效果。",
+      "diagnosticRefs": [
+        "authority",
+        "duplicates",
+        "inventory"
+      ],
+      "decisionRuleRefs": [
+        "event-id",
+        "partial-refund",
+        "return-inspection"
+      ]
+    },
+    {
+      "id": "bounded-progress",
+      "capabilityId": "commerce-operations-designer-deliver",
+      "category": "worked_example",
+      "scenario": "晚到旧事件",
+      "input": {
+        "journey": "电商订单含部分退款",
+        "records": "支付P1已成功，之后收到同P1较早的pending通知",
+        "policies": "重复事件去重，退货验收后入可售"
+      },
+      "candidateOutputExcerpt": {
+        "eventHandling": "已支付后收到旧pending事件，保存通知但不把支付状态倒退。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "事件发生时间和状态规则共同决定更新。",
+      "diagnosticRefs": [
+        "authority",
+        "duplicates",
+        "inventory"
+      ],
+      "decisionRuleRefs": [
+        "event-id",
+        "partial-refund",
+        "return-inspection"
+      ]
+    }
+  ]
+}

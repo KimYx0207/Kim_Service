@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 1,
+  "roleId": "accounting-reconciliation-analyst",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "complete-delivery",
+      "capabilityId": "accounting-reconciliation-analyst-deliver",
+      "category": "worked_example",
+      "scenario": "银行流水和账上余额对不上。",
+      "input": {
+        "ledgers": {
+          "bookReceipts": 10000,
+          "bankSettlement": 9700,
+          "documentedFee": 300
+        },
+        "basis": "同结算批次CNY，以分计量",
+        "rules": "费用有平台账单凭证"
+      },
+      "candidateOutputExcerpt": {
+        "matched": "应收10000分=银行入账9700分+手续费300分，批次ID一致。",
+        "exceptions": "差额300分对应已提供手续费凭证；无未解释差额。",
+        "adjustments": "若账簿尚未登记费用，列手续费300分的候选分录供既有流程确认，不自动过账。",
+        "controls": "同批次再次对账复用相同记录，不能重复记费用。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "领域计算、行为和未核范围分开，结果可按所给输入复查。",
+      "diagnosticRefs": [
+        "unit",
+        "matching",
+        "difference"
+      ],
+      "decisionRuleRefs": [
+        "no-netting",
+        "currency",
+        "no-plug"
+      ]
+    },
+    {
+      "id": "material-error",
+      "capabilityId": "accounting-reconciliation-analyst-deliver",
+      "category": "failure_boundary",
+      "scenario": "无凭证配平",
+      "input": {
+        "ledgers": {
+          "bookReceipts": 10000,
+          "bankSettlement": 9700,
+          "documentedFee": 300
+        },
+        "basis": "同结算批次CNY，以分计量",
+        "rules": "费用有平台账单凭证"
+      },
+      "candidateOutputExcerpt": {
+        "exceptions": "银行少300分，直接记其他费用就对平。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "缺凭证不能把未知差额变已知费用。",
+      "diagnosticRefs": [
+        "unit",
+        "matching",
+        "difference"
+      ],
+      "decisionRuleRefs": [
+        "no-netting",
+        "currency",
+        "no-plug"
+      ]
+    },
+    {
+      "id": "bounded-progress",
+      "capabilityId": "accounting-reconciliation-analyst-deliver",
+      "category": "worked_example",
+      "scenario": "总额相同仍未配",
+      "input": {
+        "ledgers": {
+          "bank": [
+            {
+              "id": "A",
+              "amount": 100
+            },
+            {
+              "id": "B",
+              "amount": 200
+            }
+          ],
+          "book": [
+            {
+              "id": "X",
+              "amount": 150
+            },
+            {
+              "id": "Y",
+              "amount": 150
+            }
+          ]
+        },
+        "basis": "同月CNY，以元计量，交易ID不一致",
+        "rules": "费用有平台账单凭证"
+      },
+      "candidateOutputExcerpt": {
+        "matched": "银行A=100、B=200；账簿X=150、Y=150，总额都300但ID不同，全部保留待匹配。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "净额一致不证明逐笔正确。",
+      "diagnosticRefs": [
+        "unit",
+        "matching",
+        "difference"
+      ],
+      "decisionRuleRefs": [
+        "no-netting",
+        "currency",
+        "no-plug"
+      ]
+    }
+  ]
+}

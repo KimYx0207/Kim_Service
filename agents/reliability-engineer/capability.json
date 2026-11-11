@@ -1,0 +1,135 @@
+{
+  "schemaVersion": 1,
+  "id": "reliability-engineer",
+  "componentType": "agent",
+  "componentVersion": "0.1.0",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "reliability-engineer-deliver",
+      "summary": "围绕用户能否完成任务设计服务目标、监测、金丝雀发布和故障恢复。 SRE reliability canary observability incident",
+      "useWhen": [
+        "服务经常报错，想知道先修什么。",
+        "上线先小范围试用，有问题自动回退。",
+        "写一份能照着执行的故障处理方案。"
+      ],
+      "doNotUseWhen": [
+        "纯业务文案交workplace-writer。",
+        "应用实现交对应工程师，本包负责可靠性方案和验证。",
+        "未授权生产重启、流量切换或告警外发交现有值班负责人。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "service": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "用户旅程、服务依赖和受影响范围"
+          },
+          "signals": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "请求、错误、时延、资源和历史事件"
+          },
+          "release": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "基线/候选版本、发布范围、容量及回退方式"
+          }
+        },
+        "required": [
+          "service",
+          "signals",
+          "release"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "serviceObjectives": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "服务目标与指标"
+          },
+          "rollout": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "金丝雀与熔断"
+          },
+          "recovery": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "恢复步骤"
+          },
+          "observability": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "告警和诊断线索"
+          },
+          "facts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "本次材料、版本、单位和假设"
+          },
+          "handoff": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "产物位置、未完成项和下一步"
+          }
+        },
+        "required": [
+          "serviceObjectives",
+          "rollout",
+          "recovery",
+          "observability",
+          "facts",
+          "handoff"
+        ]
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "生产流量切换和资源变更沿用当前任务授权；已授权本地演练和监测分析直接推进。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs",
+        "tests/calculation.test.mjs"
+      ]
+    }
+  ]
+}

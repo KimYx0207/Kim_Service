@@ -1,0 +1,247 @@
+{
+  "schemaVersion": 1,
+  "roleId": "mobile-app-engineer",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "toolSlots": [
+    {
+      "id": "repository.read",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    },
+    {
+      "id": "repository.patch",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    },
+    {
+      "id": "test.run",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    },
+    {
+      "id": "device.inspect",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    }
+  ],
+  "skillLoading": [
+    "按本次任务读取下面两份知识材料；只加载有关内容。",
+    "使用宿主已提供且获授权的相关工具槽；缺工具时仍完成资料分析与可用草案，把未执行步骤交接。"
+  ],
+  "steps": [
+    "读入口、路由、存储和API，画出用户动作到持久状态的对应关系。",
+    "先完成单条完整旅程，再拆组件；每页明确离线时可读、可改和需等待的部分。",
+    "为可重试写入保留操作ID和本地队列，服务端回执后再确认同步；未知结果先查询。",
+    "以版本号或业务冲突规则处理多端修改，提供保留草稿、重试或人工选择。",
+    "重启应用和切换网络重放流程，确认未丢草稿、未重复提交，记录实际设备范围。",
+    "当任务包括实现且宿主已有写入/测试能力时，实际修改授权范围内的源码并运行上述检查，交代码位置与结果；缺该能力则交实现草案并明确待执行范围。",
+    "按输出标准核对当前产物，区分已完成、可用草案与待核项；只暂停受实质缺口影响的动作。"
+  ],
+  "acceptance": [
+    "标明页面进入退出、加载/空/失败/成功状态以及本地与服务端责任。",
+    "同一操作稳定ID；区分pending、acknowledged、conflict并可查询未知结果。",
+    "按实际设备范围检查后台恢复、弱网、权限变化与可访问性。",
+    "给接口依赖、构建步骤和下一项最小验收。",
+    "足以让接手者区分输入事实与当前假设。",
+    "给当前可用成果和受影响的待核项，独立部分可以继续。"
+  ],
+  "coordinationOwner": "caller",
+  "permissionSource": "current_task_host_authorization",
+  "finalAcceptance": "caller_only",
+  "contextPolicy": "只加载本次任务相关资料；工具操作沿用当前宿主的授权。",
+  "memoryPolicy": "保持本次任务上下文，不把材料另行持久保存。",
+  "knowledgeAssets": [
+    {
+      "id": "mobile-app-engineer-method",
+      "path": "references/professional-method.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "flutter-offline",
+        "stripe-idempotency"
+      ]
+    },
+    {
+      "id": "mobile-app-engineer-delivery",
+      "path": "references/delivery-template.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "flutter-offline",
+        "stripe-idempotency"
+      ]
+    }
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "移动应用工程师",
+    "scope": [
+      "把一个移动端用户流程做成可实现的页面、状态与同步方案，重点处理离线、重启和重复提交。",
+      "知识方法可独立使用；交付范围由当前任务确定。"
+    ],
+    "knowledgeAssetIds": [
+      "mobile-app-engineer-method",
+      "mobile-app-engineer-delivery"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "journey",
+        "question": "用户什么时候认为已经保存？",
+        "evidenceRequired": [
+          "入口/成功状态"
+        ],
+        "whenMissing": "先区分本地草稿与远端确认。"
+      },
+      {
+        "id": "identity",
+        "question": "同一写入重试怎样识别？",
+        "evidenceRequired": [
+          "操作ID",
+          "服务端回执"
+        ],
+        "whenMissing": "先完成只读和草稿流程。"
+      },
+      {
+        "id": "lifecycle",
+        "question": "进程被杀和权限撤销后会怎样？",
+        "evidenceRequired": [
+          "队列位置",
+          "恢复入口"
+        ],
+        "whenMissing": "给可执行恢复路径待设备检查。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "stable-id",
+        "when": "网络超时但操作可能已完成",
+        "action": "查询同一操作ID并复用身份重试",
+        "avoid": "生成新ID再次扣款或报名"
+      },
+      {
+        "id": "draft-is-local",
+        "when": "离线写入只到达本机",
+        "action": "显示待同步并保留可恢复草稿",
+        "avoid": "显示已上传"
+      },
+      {
+        "id": "conflict",
+        "when": "服务端版本已变化",
+        "action": "保留双方版本并按规则解决",
+        "avoid": "静默覆盖另一端修改"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "mobile-app-engineer-deliver",
+        "inputGuidance": [
+          {
+            "field": "journey",
+            "interpretation": "目标用户、设备/系统、主流程与成功状态",
+            "onMissing": "平台未知时先给可移植流程，标出平台相关项。"
+          },
+          {
+            "field": "appContext",
+            "interpretation": "已有仓库、框架版本、页面、存储和接口",
+            "onMissing": "先读可用代码；没有仓库时交架构与原型说明。"
+          },
+          {
+            "field": "syncRules",
+            "interpretation": "服务端身份、离线可用范围、冲突与恢复规则",
+            "onMissing": "先提出并比较可选同步语义，只暂停依赖最终规则的提交。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "mobile-app-engineer-implementation",
+            "field": "implementation",
+            "criterion": "标明页面进入退出、加载/空/失败/成功状态以及本地与服务端责任。",
+            "rejectWhen": "只给正常截图，保存状态与真实持久化不一致。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "页面状态表",
+              "相关代码和接口"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "mobile-app-engineer-syncprotocol",
+            "field": "syncProtocol",
+            "criterion": "同一操作稳定ID；区分pending、acknowledged、conflict并可查询未知结果。",
+            "rejectWhen": "超时后新建操作导致重复，或把本地保存称服务端成功。",
+            "verificationMethod": "behavior_probe",
+            "evidenceRequired": [
+              "队列日志",
+              "重启和重复重放记录"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "mobile-app-engineer-devicechecks",
+            "field": "deviceChecks",
+            "criterion": "按实际设备范围检查后台恢复、弱网、权限变化与可访问性。",
+            "rejectWhen": "把浏览器模拟器检查称真机全部通过。",
+            "verificationMethod": "behavior_probe",
+            "evidenceRequired": [
+              "设备版本",
+              "执行路径与实际状态"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "mobile-app-engineer-handoffplan",
+            "field": "handoffPlan",
+            "criterion": "给接口依赖、构建步骤和下一项最小验收。",
+            "rejectWhen": "缺工程接入口导致无法继续实现。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "构建说明",
+              "未完成项"
+            ],
+            "blocking": false
+          },
+          {
+            "id": "mobile-app-engineer-facts",
+            "field": "facts",
+            "criterion": "足以让接手者区分输入事实与当前假设。",
+            "rejectWhen": "关键业务输入被编造或来源无法定位。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "材料清单与假设"
+            ],
+            "blocking": false
+          },
+          {
+            "id": "mobile-app-engineer-handoff",
+            "field": "handoff",
+            "criterion": "给当前可用成果和受影响的待核项，独立部分可以继续。",
+            "rejectWhen": "遗漏交付位置或下一步导致无法接手。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "产物路径",
+              "下一步"
+            ],
+            "blocking": false
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "正式上架、收费签名或生产推送执行按本次授权；普通已授权开发、分析与本地验证继续。"
+      ],
+      "prohibitedClaims": [
+        "示例是教学材料；真实完成情况以本次实际产物和检查为准。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
+}

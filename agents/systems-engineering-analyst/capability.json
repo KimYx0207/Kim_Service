@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "systems-engineering-analyst",
   "componentType": "agent",
-  "componentVersion": "0.1.1",
+  "componentVersion": "0.1.2",
   "entrypoint": "AGENT.md",
   "capabilities": [
     {
@@ -132,8 +132,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "安全相关要求、不可逆接口变更和最终系统接受交指定工程与业务负责人确认。",
-          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+          "安全相关要求、不可逆接口变更和最终系统接受交指定工程与业务负责人确认。"
         ]
       },
       "validation": [

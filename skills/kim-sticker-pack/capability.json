@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "kim-sticker-pack",
   "componentType": "skill",
-  "componentVersion": "0.3.0",
+  "componentVersion": "0.3.1",
   "entrypoint": "SKILL.md",
   "capabilities": [
     {

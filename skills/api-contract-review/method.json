@@ -1,0 +1,234 @@
+{
+  "schemaVersion": 1,
+  "roleId": "api-contract-review",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "toolSlots": [
+    {
+      "id": "repository.read",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    },
+    {
+      "id": "test.run",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    }
+  ],
+  "skillLoading": [
+    "按本次任务读取下面两份知识材料；只加载有关内容。",
+    "使用宿主已提供且获授权的相关工具槽；缺工具时仍完成资料分析与可用草案，把未执行步骤交接。"
+  ],
+  "steps": [
+    "读取当前接口和消费者，按用户动作定位实际调用链。",
+    "校验字段、可空性、枚举、状态码、分页和安全方案，再检查语义缺口。",
+    "比较旧新版本，标出请求新增必填、响应移除或权限语义变化。",
+    "对幂等、未知结果和异步接口写具体请求响应序列。",
+    "交修正清单与最小契约用例，独立消费者可据此并行。",
+    "按输出标准核对当前产物，区分已完成、可用草案与待核项；只暂停受实质缺口影响的动作。"
+  ],
+  "acceptance": [
+    "每关键动作有请求、响应、身份、错误和版本关系。",
+    "区分请求约束变严、响应字段变化和业务语义变化，给迁移窗口。",
+    "覆盖无权限、重复请求、分页边界、异步结果和错误恢复。",
+    "按真实消费者影响排序，先修阻断联调问题。",
+    "足以让接手者区分输入事实与当前假设。",
+    "给当前可用成果和受影响的待核项，独立部分可以继续。"
+  ],
+  "coordinationOwner": "caller",
+  "permissionSource": "current_task_host_authorization",
+  "finalAcceptance": "caller_only",
+  "contextPolicy": "只加载本次任务相关资料；工具操作沿用当前宿主的授权。",
+  "memoryPolicy": "保持本次任务上下文，不把材料另行持久保存。",
+  "knowledgeAssets": [
+    {
+      "id": "api-contract-review-method",
+      "path": "references/professional-method.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "openapi31",
+        "stripe-idempotency"
+      ]
+    },
+    {
+      "id": "api-contract-review-delivery",
+      "path": "references/delivery-template.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "openapi31",
+        "stripe-idempotency"
+      ]
+    }
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "API 契约审查",
+    "scope": [
+      "检查接口是否能被真实调用、正确失败并兼容现有消费者。",
+      "知识方法可独立使用；交付范围由当前任务确定。"
+    ],
+    "knowledgeAssetIds": [
+      "api-contract-review-method",
+      "api-contract-review-delivery"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "consumer",
+        "question": "谁实际消费这项字段？",
+        "evidenceRequired": [
+          "调用点"
+        ],
+        "whenMissing": "先定位消费。"
+      },
+      {
+        "id": "failure",
+        "question": "失败后客户端能继续吗？",
+        "evidenceRequired": [
+          "错误响应"
+        ],
+        "whenMissing": "补恢复动作。"
+      },
+      {
+        "id": "retry",
+        "question": "同动作重试会重复吗？",
+        "evidenceRequired": [
+          "操作ID",
+          "回执"
+        ],
+        "whenMissing": "定义幂等边界。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "required-field",
+        "when": "请求新增必填",
+        "action": "按兼容变更处理并安排迁移",
+        "avoid": "称只是加字段"
+      },
+      {
+        "id": "unknown-result",
+        "when": "写入超时",
+        "action": "先按操作ID查询",
+        "avoid": "直接创建新操作"
+      },
+      {
+        "id": "schema-behavior",
+        "when": "规范解析通过",
+        "action": "继续检查真实行为",
+        "avoid": "宣布业务正确"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "api-contract-review-deliver",
+        "inputGuidance": [
+          {
+            "field": "contract",
+            "interpretation": "当前和候选OpenAPI/接口说明及版本",
+            "onMissing": "缺规范可从真实调用归纳草案。"
+          },
+          {
+            "field": "consumers",
+            "interpretation": "消费者、调用流程和兼容承诺",
+            "onMissing": "先识别已知消费者，未知项单列。"
+          },
+          {
+            "field": "examples",
+            "interpretation": "真实或合成请求响应、异常和权限场景",
+            "onMissing": "可先写可执行契约样例，标明合成。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "api-contract-review-interfacemap",
+            "field": "interfaceMap",
+            "criterion": "每关键动作有请求、响应、身份、错误和版本关系。",
+            "rejectWhen": "只列成功200或遗漏租户边界。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "接口定义",
+              "消费者清单"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "api-contract-review-compatibility",
+            "field": "compatibility",
+            "criterion": "区分请求约束变严、响应字段变化和业务语义变化，给迁移窗口。",
+            "rejectWhen": "必填字段增加仍称无破坏变化。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "旧新差异",
+              "消费者影响"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "api-contract-review-behaviorcases",
+            "field": "behaviorCases",
+            "criterion": "覆盖无权限、重复请求、分页边界、异步结果和错误恢复。",
+            "rejectWhen": "schema通过就当业务行为已通过。",
+            "verificationMethod": "behavior_probe",
+            "evidenceRequired": [
+              "请求响应样例",
+              "重试结果"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "api-contract-review-recommendations",
+            "field": "recommendations",
+            "criterion": "按真实消费者影响排序，先修阻断联调问题。",
+            "rejectWhen": "无差别要求所有接口重写。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "问题与修正映射"
+            ],
+            "blocking": false
+          },
+          {
+            "id": "api-contract-review-facts",
+            "field": "facts",
+            "criterion": "足以让接手者区分输入事实与当前假设。",
+            "rejectWhen": "关键业务输入被编造或来源无法定位。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "材料清单与假设"
+            ],
+            "blocking": false
+          },
+          {
+            "id": "api-contract-review-handoff",
+            "field": "handoff",
+            "criterion": "给当前可用成果和受影响的待核项，独立部分可以继续。",
+            "rejectWhen": "遗漏交付位置或下一步导致无法接手。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "产物路径",
+              "下一步"
+            ],
+            "blocking": false
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "线上写入和第三方调用按当前授权；契约分析、样例生成和本地测试继续。"
+      ],
+      "prohibitedClaims": [
+        "示例是教学材料；真实完成情况以本次实际产物和检查为准。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
+}

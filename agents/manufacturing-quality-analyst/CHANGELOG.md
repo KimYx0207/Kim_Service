@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.3 - 2026-11-11
+
+- Use task-specific handling for material unknowns and existing authorization.
+- Treat context and handoff refinements as advisory while keeping core delivery checks.
+
 ## 0.1.2 — 2026-11-11
 
 - 补齐能力指数的有限值、正变差、有效规格顺序和单侧规格边界；保留越界均值导致的负Cpk，不用绝对值或截断掩盖风险。

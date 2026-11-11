@@ -1,0 +1,135 @@
+{
+  "schemaVersion": 1,
+  "id": "retrieval-evaluation",
+  "componentType": "skill",
+  "componentVersion": "0.1.0",
+  "entrypoint": "SKILL.md",
+  "capabilities": [
+    {
+      "id": "retrieval-evaluation-deliver",
+      "summary": "用独立标注和固定语料判断检索是否找到了相关材料，区分召回、排序与答案质量。 retrieval evaluation RAG recall precision MRR",
+      "useWhen": [
+        "RAG回答不好，先查检索。",
+        "比较两个检索器或切块方案。",
+        "给企业搜索建立评价集。"
+      ],
+      "doNotUseWhen": [
+        "答案事实评估需另读答案与原文。",
+        "未授权数据采集不属于本包。",
+        "不能用本次调参样本证明泛化提升。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "dataset": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "问题、相关文档ID、标注规则与留出划分"
+          },
+          "runs": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "相同语料版本下各查询返回的有序ID与分数"
+          },
+          "policy": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "k值、过滤权限、空结果处理及统计口径"
+          }
+        },
+        "required": [
+          "dataset",
+          "runs",
+          "policy"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "metrics": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "召回与排序指标"
+          },
+          "slices": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "分层和回归结果"
+          },
+          "diagnosis": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "错误归因"
+          },
+          "nextExperiment": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "下次试验"
+          },
+          "facts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "本次材料、版本、单位和假设"
+          },
+          "handoff": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "产物位置、未完成项和下一步"
+          }
+        },
+        "required": [
+          "metrics",
+          "slices",
+          "diagnosis",
+          "nextExperiment",
+          "facts",
+          "handoff"
+        ]
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "使用真实敏感语料或新增模型评分费用依当前授权；离线ID评分和标签审查可继续。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs",
+        "tests/calculation.test.mjs"
+      ]
+    }
+  ]
+}

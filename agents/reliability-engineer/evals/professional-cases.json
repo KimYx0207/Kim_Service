@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "roleId": "reliability-engineer",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "complete-delivery",
+      "capabilityId": "reliability-engineer-deliver",
+      "category": "worked_example",
+      "scenario": "服务经常报错，想知道先修什么。",
+      "input": {
+        "service": "活动报名API",
+        "signals": {
+          "baseline": {
+            "requests": 10000,
+            "errors": 20
+          },
+          "canary": {
+            "requests": 200,
+            "errors": 6
+          }
+        },
+        "release": "同时间同类型请求，错误率上限1%，最少100请求"
+      },
+      "candidateOutputExcerpt": {
+        "serviceObjectives": "基线0.2%，候选3%；候选200请求达到本次下限。",
+        "rollout": "3%超过1%，停止候选放量并回退报名API；导出接口不受影响。",
+        "recovery": "保留已完成报名回执，回退后用同操作ID查询状态；冷却后5条探测通过才恢复观察。",
+        "observability": "记录版本、路由、错误分类和请求ID。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "领域计算、行为和未核范围分开，结果可按所给输入复查。",
+      "diagnosticRefs": [
+        "impact",
+        "sample",
+        "rollback"
+      ],
+      "decisionRuleRefs": [
+        "missing-is-unknown",
+        "route-fuse",
+        "half-open"
+      ]
+    },
+    {
+      "id": "material-error",
+      "capabilityId": "reliability-engineer-deliver",
+      "category": "failure_boundary",
+      "scenario": "无请求直接推广",
+      "input": {
+        "service": "活动报名API",
+        "signals": {
+          "baseline": {
+            "requests": 10000,
+            "errors": 20
+          },
+          "canary": {
+            "requests": 200,
+            "errors": 6
+          }
+        },
+        "release": "同时间同类型请求，错误率上限1%，最少100请求"
+      },
+      "candidateOutputExcerpt": {
+        "rollout": "候选0次请求0错误，所以错误率0%，全量上线。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "零分母没有提供质量证据。",
+      "diagnosticRefs": [
+        "impact",
+        "sample",
+        "rollback"
+      ],
+      "decisionRuleRefs": [
+        "missing-is-unknown",
+        "route-fuse",
+        "half-open"
+      ]
+    },
+    {
+      "id": "bounded-progress",
+      "capabilityId": "reliability-engineer-deliver",
+      "category": "worked_example",
+      "scenario": "资源指标与体验分开",
+      "input": {
+        "service": "活动报名API",
+        "signals": "CPU正常但报名接口返回500错误增加；其他接口正常",
+        "release": "同时间同类型请求，错误率上限1%，最少100请求"
+      },
+      "candidateOutputExcerpt": {
+        "serviceObjectives": "CPU正常但报名500错误增加，按报名失败计入SLO；CPU只作诊断线索。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "用户结果是评价对象。",
+      "diagnosticRefs": [
+        "impact",
+        "sample",
+        "rollback"
+      ],
+      "decisionRuleRefs": [
+        "missing-is-unknown",
+        "route-fuse",
+        "half-open"
+      ]
+    }
+  ]
+}

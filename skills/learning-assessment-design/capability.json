@@ -1,0 +1,134 @@
+{
+  "schemaVersion": 1,
+  "id": "learning-assessment-design",
+  "componentType": "skill",
+  "componentVersion": "0.1.0",
+  "entrypoint": "SKILL.md",
+  "capabilities": [
+    {
+      "id": "learning-assessment-design-deliver",
+      "summary": "把学习目标变成可观察任务、清晰评分标准和下一步反馈。 learning assessment rubric formative feedback education",
+      "useWhen": [
+        "课程学完怎么判断学生真的学会？",
+        "设计评分量表和形成性评价。",
+        "学生分数相同但问题不同，怎么反馈？"
+      ],
+      "doNotUseWhen": [
+        "完整课程安排交lesson-planner。",
+        "单题生成交exercise-designer。",
+        "正式升学录用和个人能力诊断不由本方法自动决定。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "objectives": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "学习目标、先备知识和目标人群"
+          },
+          "tasks": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "现有题目、作品、学习情境和可用时间"
+          },
+          "constraints": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "语言、可访问方式、评分用途和反馈节奏"
+          }
+        },
+        "required": [
+          "objectives",
+          "tasks",
+          "constraints"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "alignment": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "目标任务映射"
+          },
+          "rubric": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "评分量表与样例"
+          },
+          "feedback": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "形成性反馈"
+          },
+          "fairness": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "表达方式与复核"
+          },
+          "facts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "本次材料、版本、单位和假设"
+          },
+          "handoff": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "产物位置、未完成项和下一步"
+          }
+        },
+        "required": [
+          "alignment",
+          "rubric",
+          "feedback",
+          "fairness",
+          "facts",
+          "handoff"
+        ]
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "正式成绩、资格或录用决定由相应授权者按既有流程处理；任务设计和学习反馈可以继续。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

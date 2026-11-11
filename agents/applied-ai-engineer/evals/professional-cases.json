@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "roleId": "applied-ai-engineer",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "complete-delivery",
+      "capabilityId": "applied-ai-engineer-deliver",
+      "category": "worked_example",
+      "scenario": "做一个基于企业文档的问答助手。",
+      "input": {
+        "task": "企业制度问答",
+        "materials": "20道未调试问题，固定索引v3",
+        "budget": "比较两个版本，离线记录"
+      },
+      "candidateOutputExcerpt": {
+        "architecture": "先按用户权限检索，再引用来源回答；资料不足可说缺少哪份制度。",
+        "evaluation": "基线14/20答对=70%；候选16/20=80%，差10个百分点；同20题检索18/20，不能代替答案结果。",
+        "releasePolicy": "暂不声称显著提升；先覆盖不同部门的小范围试用，越权引用触发该路线回退。",
+        "failureAnalysis": "2题未召回、2题读到但答错，分别修索引和生成。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "领域计算、行为和未核范围分开，结果可按所给输入复查。",
+      "diagnosticRefs": [
+        "outcome",
+        "dataset",
+        "trace"
+      ],
+      "decisionRuleRefs": [
+        "separate-metrics",
+        "holdout",
+        "bounded-rollout"
+      ]
+    },
+    {
+      "id": "material-error",
+      "capabilityId": "applied-ai-engineer-deliver",
+      "category": "failure_boundary",
+      "scenario": "命中冒充正确",
+      "input": {
+        "task": "企业制度问答",
+        "materials": "20道未调试问题，固定索引v3",
+        "budget": "比较两个版本，离线记录"
+      },
+      "candidateOutputExcerpt": {
+        "evaluation": "检索18/20，所以回答正确率90%。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "分母对应不同对象，不能互换指标。",
+      "diagnosticRefs": [
+        "outcome",
+        "dataset",
+        "trace"
+      ],
+      "decisionRuleRefs": [
+        "separate-metrics",
+        "holdout",
+        "bounded-rollout"
+      ]
+    },
+    {
+      "id": "bounded-progress",
+      "capabilityId": "applied-ai-engineer-deliver",
+      "category": "worked_example",
+      "scenario": "没有观察样本",
+      "input": {
+        "task": "企业制度问答",
+        "materials": "20道未调试问题，固定索引v3",
+        "budget": "候选尚无真实试用请求，当前0条观察；离线开发可继续"
+      },
+      "candidateOutputExcerpt": {
+        "releasePolicy": "试用0条，结果未观察；保持原路线并继续采样，独立开发可继续。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "没有失败不等于成功。",
+      "diagnosticRefs": [
+        "outcome",
+        "dataset",
+        "trace"
+      ],
+      "decisionRuleRefs": [
+        "separate-metrics",
+        "holdout",
+        "bounded-rollout"
+      ]
+    }
+  ]
+}

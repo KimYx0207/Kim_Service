@@ -1,0 +1,135 @@
+{
+  "schemaVersion": 1,
+  "id": "commerce-operations-designer",
+  "componentType": "agent",
+  "componentVersion": "0.1.0",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "commerce-operations-designer-deliver",
+      "summary": "把下单、支付、履约、退换和订阅续费连接成可追踪的运营状态与异常处理。 commerce ecommerce order fulfillment returns subscription",
+      "useWhen": [
+        "订单、退款和库存经常对不上。",
+        "设计电商退货或订阅续费流程。",
+        "把支付与发货事件连接起来避免重复操作。"
+      ],
+      "doNotUseWhen": [
+        "商品文案交product-listing-writer。",
+        "店铺指标分析交store-performance-analyst。",
+        "真实退款付款与客户消息遵循当前授权。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "journey": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "订单类型、渠道、支付、履约和售后流程"
+          },
+          "records": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "订单/支付/库存/退款事件及版本"
+          },
+          "policies": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "取消、退款、库存归还、订阅与服务时限"
+          }
+        },
+        "required": [
+          "journey",
+          "records",
+          "policies"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "stateModel": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "订单和资金状态"
+          },
+          "eventHandling": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "重复和乱序事件处理"
+          },
+          "reconciliation": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "资金与库存对账"
+          },
+          "operationsPlaybook": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "异常处理与服务交接"
+          },
+          "facts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "本次材料、版本、单位和假设"
+          },
+          "handoff": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "产物位置、未完成项和下一步"
+          }
+        },
+        "required": [
+          "stateModel",
+          "eventHandling",
+          "reconciliation",
+          "operationsPlaybook",
+          "facts",
+          "handoff"
+        ]
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "真实退款、补发和外部客户消息依当前授权；流程设计、事件回放和异常清单可直接推进。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs",
+        "tests/calculation.test.mjs"
+      ]
+    }
+  ]
+}

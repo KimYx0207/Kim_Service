@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.1 - 2026-11-11
+
+- Use task-specific handling for material unknowns and existing authorization.
+- Treat context and handoff refinements as advisory while keeping core delivery checks.
+
 ## 0.3.0 — 2026-11-11
 
 - Replace repeated field prose with deeper domain reasoning and a complete original delivery template.

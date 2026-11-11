@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "roleId": "data-pipeline-engineer",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "complete-delivery",
+      "capabilityId": "data-pipeline-engineer-deliver",
+      "category": "worked_example",
+      "scenario": "把订单和支付数据每天同步到报表。",
+      "input": {
+        "sources": "订单O1=100,O2=200；重复O1=100",
+        "target": "每日订单ID唯一，CNY",
+        "operations": "回放2026-11-10分区"
+      },
+      "candidateOutputExcerpt": {
+        "pipeline": "固定11月10日快照，暂存去重后按订单ID合并。",
+        "replayProof": "第一次O1/O2共2行300元；同快照第二次仍2行300元。",
+        "dataChecks": "主键唯一且源唯一订单对账300元，重复O1单独记录。",
+        "operationsPlan": "O3迟到时仅回补所属日期，再比较主键与金额。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "领域计算、行为和未核范围分开，结果可按所给输入复查。",
+      "diagnosticRefs": [
+        "grain",
+        "replay",
+        "completeness"
+      ],
+      "decisionRuleRefs": [
+        "fixed-partition",
+        "idempotent-write",
+        "isolate-batch"
+      ]
+    },
+    {
+      "id": "material-error",
+      "capabilityId": "data-pipeline-engineer-deliver",
+      "category": "failure_boundary",
+      "scenario": "重跑盲目追加",
+      "input": {
+        "sources": "订单O1=100,O2=200；重复O1=100",
+        "target": "每日订单ID唯一，CNY",
+        "operations": "回放2026-11-10分区"
+      },
+      "candidateOutputExcerpt": {
+        "replayProof": "第二次4行600元，任务退出码0所以成功。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "退出码不能证明幂等，重复扩大金额。",
+      "diagnosticRefs": [
+        "grain",
+        "replay",
+        "completeness"
+      ],
+      "decisionRuleRefs": [
+        "fixed-partition",
+        "idempotent-write",
+        "isolate-batch"
+      ]
+    },
+    {
+      "id": "bounded-progress",
+      "capabilityId": "data-pipeline-engineer-deliver",
+      "category": "worked_example",
+      "scenario": "空批次不等于正确",
+      "input": {
+        "sources": "源预计订单O1/O2共2条，目标分区实际0条",
+        "target": "每日订单ID唯一，CNY",
+        "operations": "回放2026-11-10分区"
+      },
+      "candidateOutputExcerpt": {
+        "dataChecks": "源预计2笔而目标0笔；完整性失败，暂停该分区发布，其他日期保留。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "完整性独立于唯一/非空规则。",
+      "diagnosticRefs": [
+        "grain",
+        "replay",
+        "completeness"
+      ],
+      "decisionRuleRefs": [
+        "fixed-partition",
+        "idempotent-write",
+        "isolate-batch"
+      ]
+    }
+  ]
+}

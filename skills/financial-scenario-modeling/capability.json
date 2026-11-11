@@ -1,0 +1,135 @@
+{
+  "schemaVersion": 1,
+  "id": "financial-scenario-modeling",
+  "componentType": "skill",
+  "componentVersion": "0.1.0",
+  "entrypoint": "SKILL.md",
+  "capabilities": [
+    {
+      "id": "financial-scenario-modeling-deliver",
+      "summary": "把不确定经营条件变成可调整情景，定位现金缺口与改变结论的关键假设。 financial scenarios cash runway sensitivity NPV",
+      "useWhen": [
+        "收入下降会不会导致现金断裂？",
+        "比较三种定价或成本方案。",
+        "检查NPV和现金跑道的算法。"
+      ],
+      "doNotUseWhen": [
+        "证券交易执行不属于本包。",
+        "完整公司研究交investment-research-analyst。",
+        "法律税务参数由适用来源与专业责任人确认。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "baseline": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "期初现金和按日期列出的收付款"
+          },
+          "drivers": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "变化因素、范围、依赖和币种"
+          },
+          "constraints": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "最低现金、期限、折现口径和决策目标"
+          }
+        },
+        "required": [
+          "baseline",
+          "drivers",
+          "constraints"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "scenarioInputs": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "情景输入"
+          },
+          "cashTimeline": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "日期现金轨迹"
+          },
+          "sensitivity": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "敏感性计算"
+          },
+          "options": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "行动选项"
+          },
+          "facts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "本次材料、版本、单位和假设"
+          },
+          "handoff": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "产物位置、未完成项和下一步"
+          }
+        },
+        "required": [
+          "scenarioInputs",
+          "cashTimeline",
+          "sensitivity",
+          "options",
+          "facts",
+          "handoff"
+        ]
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "实际融资、资金调拨和个性化投资选择按责任权限处理；模型和情景计算可直接继续。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs",
+        "tests/calculation.test.mjs"
+      ]
+    }
+  ]
+}

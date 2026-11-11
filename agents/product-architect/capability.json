@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "product-architect",
   "componentType": "agent",
-  "componentVersion": "0.5.0",
+  "componentVersion": "0.5.1",
   "entrypoint": "AGENT.md",
   "capabilities": [
     {
@@ -941,7 +941,6 @@
       "humanGate": {
         "required": true,
         "when": [
-          "涉及医疗、法律、金融高影响结论或行动，停下交调用方按适用权限处理",
           "新的发布、生产变更、付费执行、敏感数据传输或持久访问由调用方确认；普通已授权可逆工作不重复确认",
           "任何明确拒绝均停止该目标，不切换工具、路由或Agent绕过"
         ]

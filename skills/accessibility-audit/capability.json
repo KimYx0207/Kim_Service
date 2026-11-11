@@ -1,0 +1,134 @@
+{
+  "schemaVersion": 1,
+  "id": "accessibility-audit",
+  "componentType": "skill",
+  "componentVersion": "0.1.0",
+  "entrypoint": "SKILL.md",
+  "capabilities": [
+    {
+      "id": "accessibility-audit-deliver",
+      "summary": "用真实任务检查键盘、阅读器、焦点、文字和错误恢复，并把问题落实到修复位置。 accessibility WCAG keyboard screen reader audit",
+      "useWhen": [
+        "检查页面能否用键盘和阅读器操作。",
+        "帮我修表单和弹窗的可访问性。",
+        "自动扫描过了，实际用户仍用不了。"
+      ],
+      "doNotUseWhen": [
+        "品牌方向交brand-visual-designer。",
+        "不以单次扫描出具覆盖所有内容的合规认证。",
+        "缺真实页面可先做设计检查，执行项标待测。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "surface": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "页面/组件、关键用户任务和运行入口"
+          },
+          "target": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "适用WCAG版本级别、浏览器、辅助技术和语言"
+          },
+          "evidence": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "源码、现有扫描、用户反馈及复现步骤"
+          }
+        },
+        "required": [
+          "surface",
+          "target",
+          "evidence"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "findings": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "可复现问题"
+          },
+          "fixes": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "修复与回归"
+          },
+          "coverage": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "覆盖范围"
+          },
+          "priorities": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "修复顺序"
+          },
+          "facts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "本次材料、版本、单位和假设"
+          },
+          "handoff": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "产物位置、未完成项和下一步"
+          }
+        },
+        "required": [
+          "findings",
+          "fixes",
+          "coverage",
+          "priorities",
+          "facts",
+          "handoff"
+        ]
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "正式合规声明按实际覆盖与责任流程确认；页面检查、修复草案和已授权本地验证继续。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

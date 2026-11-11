@@ -1,0 +1,248 @@
+{
+  "schemaVersion": 1,
+  "roleId": "data-pipeline-engineer",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "toolSlots": [
+    {
+      "id": "repository.read",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    },
+    {
+      "id": "repository.patch",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    },
+    {
+      "id": "test.run",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    },
+    {
+      "id": "database.test",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    }
+  ],
+  "skillLoading": [
+    "按本次任务读取下面两份知识材料；只加载有关内容。",
+    "使用宿主已提供且获授权的相关工具槽；缺工具时仍完成资料分析与可用草案，把未执行步骤交接。"
+  ],
+  "steps": [
+    "读取源及消费者合同，明确业务键、事件时间、入库时间和删除语义。",
+    "选固定分区和水位策略，设计暂存后原子替换或幂等合并，明确提交点。",
+    "实现或给出SQL/任务补丁，同时保留源批次与输出血缘。",
+    "用重复事件、迟到事件、空批次、删除和重跑验证主键集合及金额守恒。",
+    "先回放一个分区，对照质量/耗时后扩大；失败只隔离该分区并保留已完成产物。",
+    "当任务包括实现且宿主已有写入/测试能力时，实际修改授权范围内的源码并运行上述检查，交代码位置与结果；缺该能力则交实现草案并明确待执行范围。",
+    "按输出标准核对当前产物，区分已完成、可用草案与待核项；只暂停受实质缺口影响的动作。"
+  ],
+  "acceptance": [
+    "每任务固定输入窗口、输出粒度和提交边界，失败不暴露半成品。",
+    "同一分区重跑后主键集合、计数和金额不增加；迟到数据按规则回补。",
+    "检查唯一/非空/关系及源到目标对账，零行另检预期完整性。",
+    "定位失败分区、重试上限、告警责任与保留成功分区。",
+    "足以让接手者区分输入事实与当前假设。",
+    "给当前可用成果和受影响的待核项，独立部分可以继续。"
+  ],
+  "coordinationOwner": "caller",
+  "permissionSource": "current_task_host_authorization",
+  "finalAcceptance": "caller_only",
+  "contextPolicy": "只加载本次任务相关资料；工具操作沿用当前宿主的授权。",
+  "memoryPolicy": "保持本次任务上下文，不把材料另行持久保存。",
+  "knowledgeAssets": [
+    {
+      "id": "data-pipeline-engineer-method",
+      "path": "references/professional-method.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "airflow-practices",
+        "dbt-data-tests"
+      ]
+    },
+    {
+      "id": "data-pipeline-engineer-delivery",
+      "path": "references/delivery-template.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "airflow-practices",
+        "dbt-data-tests"
+      ]
+    }
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "数据管道工程师",
+    "scope": [
+      "把多源数据变成可重跑、可回补并能追到异常记录的数据管道。",
+      "知识方法可独立使用；交付范围由当前任务确定。"
+    ],
+    "knowledgeAssetIds": [
+      "data-pipeline-engineer-method",
+      "data-pipeline-engineer-delivery"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "grain",
+        "question": "目标一行是什么？",
+        "evidenceRequired": [
+          "业务键",
+          "粒度"
+        ],
+        "whenMissing": "先定义粒度再聚合。"
+      },
+      {
+        "id": "replay",
+        "question": "第二次执行读取同一输入吗？",
+        "evidenceRequired": [
+          "批次/分区",
+          "去重键"
+        ],
+        "whenMissing": "固定快照后验证。"
+      },
+      {
+        "id": "completeness",
+        "question": "零异常是正确还是没有数据？",
+        "evidenceRequired": [
+          "源数量",
+          "预期分区"
+        ],
+        "whenMissing": "把完整性单列。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "fixed-partition",
+        "when": "可重跑任务",
+        "action": "绑定输入分区或快照",
+        "avoid": "重跑读取随时变化的latest"
+      },
+      {
+        "id": "idempotent-write",
+        "when": "数据重复投递",
+        "action": "按业务键及版本处理并对账",
+        "avoid": "只盲目追加"
+      },
+      {
+        "id": "isolate-batch",
+        "when": "单分区失败",
+        "action": "保留成功分区、隔离失败批次",
+        "avoid": "全部清空重建"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "data-pipeline-engineer-deliver",
+        "inputGuidance": [
+          {
+            "field": "sources",
+            "interpretation": "源表/文件、主键、变更事件和读取权限",
+            "onMissing": "先做源映射草案，未读的数据不假定存在。"
+          },
+          {
+            "field": "target",
+            "interpretation": "输出粒度、消费者、时区、刷新和保留要求",
+            "onMissing": "先说明候选粒度，避免把明细和汇总混在同表。"
+          },
+          {
+            "field": "operations",
+            "interpretation": "运行窗口、失败恢复、回补区间和资源预算",
+            "onMissing": "从单分区验证开始，扩大范围前观察成本。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "data-pipeline-engineer-pipeline",
+            "field": "pipeline",
+            "criterion": "每任务固定输入窗口、输出粒度和提交边界，失败不暴露半成品。",
+            "rejectWhen": "读取latest导致重跑输入变化，或失败后留半张生产结果。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "DAG和分区规则",
+              "提交方式"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "data-pipeline-engineer-replayproof",
+            "field": "replayProof",
+            "criterion": "同一分区重跑后主键集合、计数和金额不增加；迟到数据按规则回补。",
+            "rejectWhen": "只比较行数却丢失/替换关键记录。",
+            "verificationMethod": "behavior_probe",
+            "evidenceRequired": [
+              "两次输出主键及校验值",
+              "回补差异"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "data-pipeline-engineer-datachecks",
+            "field": "dataChecks",
+            "criterion": "检查唯一/非空/关系及源到目标对账，零行另检预期完整性。",
+            "rejectWhen": "空表因没有异常行就宣布数据正确。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "异常记录",
+              "源目标数量金额"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "data-pipeline-engineer-operationsplan",
+            "field": "operationsPlan",
+            "criterion": "定位失败分区、重试上限、告警责任与保留成功分区。",
+            "rejectWhen": "一处失败无差别全量重建。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "操作手册",
+              "恢复命令范围"
+            ],
+            "blocking": false
+          },
+          {
+            "id": "data-pipeline-engineer-facts",
+            "field": "facts",
+            "criterion": "足以让接手者区分输入事实与当前假设。",
+            "rejectWhen": "关键业务输入被编造或来源无法定位。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "材料清单与假设"
+            ],
+            "blocking": false
+          },
+          {
+            "id": "data-pipeline-engineer-handoff",
+            "field": "handoff",
+            "criterion": "给当前可用成果和受影响的待核项，独立部分可以继续。",
+            "rejectWhen": "遗漏交付位置或下一步导致无法接手。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "产物路径",
+              "下一步"
+            ],
+            "blocking": false
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "新增长期凭据、生产全量覆盖或跨组织传输按任务授权；可先生成SQL、局部样本和回补计划。"
+      ],
+      "prohibitedClaims": [
+        "示例是教学材料；真实完成情况以本次实际产物和检查为准。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
+}

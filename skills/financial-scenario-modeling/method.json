@@ -1,0 +1,233 @@
+{
+  "schemaVersion": 1,
+  "roleId": "financial-scenario-modeling",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "toolSlots": [
+    {
+      "id": "files.read",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    },
+    {
+      "id": "calculation.run",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    }
+  ],
+  "skillLoading": [
+    "按本次任务读取下面两份知识材料；只加载有关内容。",
+    "使用宿主已提供且获授权的相关工具槽；缺工具时仍完成资料分析与可用草案，把未执行步骤交接。"
+  ],
+  "steps": [
+    "统一现金口径、币种和时间粒度，区分实付与预计。",
+    "按日期排列收付，计算滚动余额及首次低于约束的时点。",
+    "建立基准和下行情景，将每个变化映射回原始驱动。",
+    "单独运行敏感性，按明确现金流时点重算NPV或简单跑道。",
+    "提出延后支出、分阶段投入等可审查选项，显示各自影响和依赖。",
+    "按输出标准核对当前产物，区分已完成、可用草案与待核项；只暂停受实质缺口影响的动作。"
+  ],
+  "acceptance": [
+    "基准、下行与变化来源清楚，币种期间单位一致。",
+    "按真实收付先后定位最低余额和首次缺口。",
+    "一次改一个变量做敏感性，情景联动另外说明；NPV时点明确。",
+    "给影响具体缺口的可逆选项和复核点。",
+    "足以让接手者区分输入事实与当前假设。",
+    "给当前可用成果和受影响的待核项，独立部分可以继续。"
+  ],
+  "coordinationOwner": "caller",
+  "permissionSource": "current_task_host_authorization",
+  "finalAcceptance": "caller_only",
+  "contextPolicy": "只加载本次任务相关资料；工具操作沿用当前宿主的授权。",
+  "memoryPolicy": "保持本次任务上下文，不把材料另行持久保存。",
+  "knowledgeAssets": [
+    {
+      "id": "financial-scenario-modeling-method",
+      "path": "references/professional-method.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "damodaran-models",
+        "sec-edgar"
+      ]
+    },
+    {
+      "id": "financial-scenario-modeling-delivery",
+      "path": "references/delivery-template.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "damodaran-models",
+        "sec-edgar"
+      ]
+    }
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "财务情景与压力分析",
+    "scope": [
+      "把不确定经营条件变成可调整情景，定位现金缺口与改变结论的关键假设。",
+      "知识方法可独立使用；交付范围由当前任务确定。"
+    ],
+    "knowledgeAssetIds": [
+      "financial-scenario-modeling-method",
+      "financial-scenario-modeling-delivery"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "timing",
+        "question": "钱何时到账和支付？",
+        "evidenceRequired": [
+          "收付日期"
+        ],
+        "whenMissing": "未知日期作区间分支。"
+      },
+      {
+        "id": "constraints",
+        "question": "什么余额才可接受？",
+        "evidenceRequired": [
+          "最低储备"
+        ],
+        "whenMissing": "只报告轨迹不替用户决定。"
+      },
+      {
+        "id": "dependence",
+        "question": "变量会一起变吗？",
+        "evidenceRequired": [
+          "驱动关联"
+        ],
+        "whenMissing": "分别做敏感性和情景。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "lowest-point",
+        "when": "期末余额为正",
+        "action": "仍检查途中最低点",
+        "avoid": "只看期末"
+      },
+      {
+        "id": "explicit-time",
+        "when": "计算NPV",
+        "action": "t0与未来期末分开",
+        "avoid": "把期初投入再次折现"
+      },
+      {
+        "id": "no-infinite-runway",
+        "when": "流出变化",
+        "action": "按当前情景和期限估算",
+        "avoid": "用一个月净值保证长期生存"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "financial-scenario-modeling-deliver",
+        "inputGuidance": [
+          {
+            "field": "baseline",
+            "interpretation": "期初现金和按日期列出的收付款",
+            "onMissing": "可先交现金流结构，未知到账不能当已收。"
+          },
+          {
+            "field": "drivers",
+            "interpretation": "变化因素、范围、依赖和币种",
+            "onMissing": "标明独立敏感性与联动情景。"
+          },
+          {
+            "field": "constraints",
+            "interpretation": "最低现金、期限、折现口径和决策目标",
+            "onMissing": "缺阈值可报告结果范围，不擅自认定可承受。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "financial-scenario-modeling-scenarioinputs",
+            "field": "scenarioInputs",
+            "criterion": "基准、下行与变化来源清楚，币种期间单位一致。",
+            "rejectWhen": "假设藏在公式中或跨币种相加。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "输入表",
+              "来源/假设"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "financial-scenario-modeling-cashtimeline",
+            "field": "cashTimeline",
+            "criterion": "按真实收付先后定位最低余额和首次缺口。",
+            "rejectWhen": "用期末正余额掩盖途中无法支付。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "日期流水",
+              "余额轨迹"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "financial-scenario-modeling-sensitivity",
+            "field": "sensitivity",
+            "criterion": "一次改一个变量做敏感性，情景联动另外说明；NPV时点明确。",
+            "rejectWhen": "多个变量同时改却解释为单因素影响。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "公式",
+              "情景比较"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "financial-scenario-modeling-options",
+            "field": "options",
+            "criterion": "给影响具体缺口的可逆选项和复核点。",
+            "rejectWhen": "收益承诺或自动支出。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "选项与约束映射"
+            ],
+            "blocking": false
+          },
+          {
+            "id": "financial-scenario-modeling-facts",
+            "field": "facts",
+            "criterion": "足以让接手者区分输入事实与当前假设。",
+            "rejectWhen": "关键业务输入被编造或来源无法定位。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "材料清单与假设"
+            ],
+            "blocking": false
+          },
+          {
+            "id": "financial-scenario-modeling-handoff",
+            "field": "handoff",
+            "criterion": "给当前可用成果和受影响的待核项，独立部分可以继续。",
+            "rejectWhen": "遗漏交付位置或下一步导致无法接手。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "产物路径",
+              "下一步"
+            ],
+            "blocking": false
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "实际融资、资金调拨和个性化投资选择按责任权限处理；模型和情景计算可直接继续。"
+      ],
+      "prohibitedClaims": [
+        "示例是教学材料；真实完成情况以本次实际产物和检查为准。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
+}

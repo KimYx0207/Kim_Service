@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.5.1 - 2026-11-11
+
+- Use task-specific handling for material unknowns and existing authorization.
+- Treat context and handoff refinements as advisory while keeping core delivery checks.
+
 ## 0.5.0 (2026-11-11)
 
 - 增加完整实务交付、专业错误反例和跨情境处理，保持原有专业知识可按需装入。

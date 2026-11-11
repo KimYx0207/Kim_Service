@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "healthcare-operations-analyst",
   "componentType": "agent",
-  "componentVersion": "0.1.1",
+  "componentVersion": "0.1.2",
   "entrypoint": "AGENT.md",
   "capabilities": [
     {
@@ -132,8 +132,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "可能改变临床优先级、患者安全或真实服务流程的方案由医疗和运营负责人共同复核。",
-          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+          "可能改变临床优先级、患者安全或真实服务流程的方案由医疗和运营负责人共同复核。"
         ]
       },
       "validation": [

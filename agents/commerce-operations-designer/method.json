@@ -1,0 +1,240 @@
+{
+  "schemaVersion": 1,
+  "roleId": "commerce-operations-designer",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "toolSlots": [
+    {
+      "id": "files.read",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    },
+    {
+      "id": "calculation.run",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    },
+    {
+      "id": "test.run",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    }
+  ],
+  "skillLoading": [
+    "按本次任务读取下面两份知识材料；只加载有关内容。",
+    "使用宿主已提供且获授权的相关工具槽；缺工具时仍完成资料分析与可用草案，把未执行步骤交接。"
+  ],
+  "steps": [
+    "分别梳理订单、资金、履约与库存状态，标出各系统权威来源。",
+    "定义事件ID、业务操作ID和转换条件，区分通知已接收与业务已完成。",
+    "处理重复、乱序、部分退款和回执丢失；先查询真实状态再重试。",
+    "按金额和实物状态对账，退货验收前不恢复可售库存。",
+    "用一批合成异常事件回放流程，给人工队列和可恢复操作入口。",
+    "按输出标准核对当前产物，区分已完成、可用草案与待核项；只暂停受实质缺口影响的动作。"
+  ],
+  "acceptance": [
+    "订单、支付、履约、退款分开建模，定义允许转换和金额上限。",
+    "稳定事件身份去重，未知结果查询，乱序不使状态倒退。",
+    "已付减成功退款等于净收，实物状态与可售库存分别核对。",
+    "明确超时、缺货、部分退款和取消入口及责任。",
+    "足以让接手者区分输入事实与当前假设。",
+    "给当前可用成果和受影响的待核项，独立部分可以继续。"
+  ],
+  "coordinationOwner": "caller",
+  "permissionSource": "current_task_host_authorization",
+  "finalAcceptance": "caller_only",
+  "contextPolicy": "只加载本次任务相关资料；工具操作沿用当前宿主的授权。",
+  "memoryPolicy": "保持本次任务上下文，不把材料另行持久保存。",
+  "knowledgeAssets": [
+    {
+      "id": "commerce-operations-designer-method",
+      "path": "references/professional-method.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "shopify-webhooks",
+        "stripe-idempotency"
+      ]
+    },
+    {
+      "id": "commerce-operations-designer-delivery",
+      "path": "references/delivery-template.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "shopify-webhooks",
+        "stripe-idempotency"
+      ]
+    }
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "商业订单运营设计师",
+    "scope": [
+      "把下单、支付、履约、退换和订阅续费连接成可追踪的运营状态与异常处理。",
+      "知识方法可独立使用；交付范围由当前任务确定。"
+    ],
+    "knowledgeAssetIds": [
+      "commerce-operations-designer-method",
+      "commerce-operations-designer-delivery"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "authority",
+        "question": "谁确认支付、发货和退款完成？",
+        "evidenceRequired": [
+          "权威回执"
+        ],
+        "whenMissing": "先定义不同状态。"
+      },
+      {
+        "id": "duplicates",
+        "question": "事件可能重复或乱序吗？",
+        "evidenceRequired": [
+          "事件ID",
+          "投递规则"
+        ],
+        "whenMissing": "先建立幂等消费。"
+      },
+      {
+        "id": "inventory",
+        "question": "商品真的回到可售状态了吗？",
+        "evidenceRequired": [
+          "退货验收"
+        ],
+        "whenMissing": "区分在途、待验和可售。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "event-id",
+        "when": "收到重复事件",
+        "action": "只消费一次且可查询处理结果",
+        "avoid": "再次触发发货"
+      },
+      {
+        "id": "partial-refund",
+        "when": "发生部分退款",
+        "action": "累计成功退款不超过实付并保留行项目",
+        "avoid": "按请求金额当成功金额"
+      },
+      {
+        "id": "return-inspection",
+        "when": "退货在途",
+        "action": "记待验库存，验收后决定可售",
+        "avoid": "直接加可售库存"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "commerce-operations-designer-deliver",
+        "inputGuidance": [
+          {
+            "field": "journey",
+            "interpretation": "订单类型、渠道、支付、履约和售后流程",
+            "onMissing": "先建立一条订单完整状态表。"
+          },
+          {
+            "field": "records",
+            "interpretation": "订单/支付/库存/退款事件及版本",
+            "onMissing": "没有生产记录可用合成事件验证流程。"
+          },
+          {
+            "field": "policies",
+            "interpretation": "取消、退款、库存归还、订阅与服务时限",
+            "onMissing": "政策待定时列选项，不阻断独立订单流设计。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "commerce-operations-designer-statemodel",
+            "field": "stateModel",
+            "criterion": "订单、支付、履约、退款分开建模，定义允许转换和金额上限。",
+            "rejectWhen": "退款请求当退款到账，或已发货订单直接回可售库存。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "状态表",
+              "事件映射"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "commerce-operations-designer-eventhandling",
+            "field": "eventHandling",
+            "criterion": "稳定事件身份去重，未知结果查询，乱序不使状态倒退。",
+            "rejectWhen": "同一支付通知重复发货或退款。",
+            "verificationMethod": "behavior_probe",
+            "evidenceRequired": [
+              "重放事件",
+              "业务效果计数"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "commerce-operations-designer-reconciliation",
+            "field": "reconciliation",
+            "criterion": "已付减成功退款等于净收，实物状态与可售库存分别核对。",
+            "rejectWhen": "仅按订单数量估资金，或未验货即加库存。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "事件明细",
+              "金额库存桥接"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "commerce-operations-designer-operationsplaybook",
+            "field": "operationsPlaybook",
+            "criterion": "明确超时、缺货、部分退款和取消入口及责任。",
+            "rejectWhen": "只有正常订单流程。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "异常案例",
+              "下一步操作"
+            ],
+            "blocking": false
+          },
+          {
+            "id": "commerce-operations-designer-facts",
+            "field": "facts",
+            "criterion": "足以让接手者区分输入事实与当前假设。",
+            "rejectWhen": "关键业务输入被编造或来源无法定位。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "材料清单与假设"
+            ],
+            "blocking": false
+          },
+          {
+            "id": "commerce-operations-designer-handoff",
+            "field": "handoff",
+            "criterion": "给当前可用成果和受影响的待核项，独立部分可以继续。",
+            "rejectWhen": "遗漏交付位置或下一步导致无法接手。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "产物路径",
+              "下一步"
+            ],
+            "blocking": false
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "真实退款、补发和外部客户消息依当前授权；流程设计、事件回放和异常清单可直接推进。"
+      ],
+      "prohibitedClaims": [
+        "示例是教学材料；真实完成情况以本次实际产物和检查为准。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
+}

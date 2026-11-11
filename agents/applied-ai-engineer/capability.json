@@ -1,0 +1,134 @@
+{
+  "schemaVersion": 1,
+  "id": "applied-ai-engineer",
+  "componentType": "agent",
+  "componentVersion": "0.1.0",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "applied-ai-engineer-deliver",
+      "summary": "把检索、模型和工具连成可评价的AI功能，并用基线、失败样本和成本预算决定是否扩大使用。 applied AI RAG evaluation agent LLM",
+      "useWhen": [
+        "做一个基于企业文档的问答助手。",
+        "AI功能经常胡说，帮我定位和评估。",
+        "比较两个提示词或模型版本的实际表现。"
+      ],
+      "doNotUseWhen": [
+        "纯数据管道交data-pipeline-engineer。",
+        "训练底层大模型或采集无授权语料不属于本包。",
+        "新增付费模型调用或生产数据外发由当前授权决定。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "task": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "用户任务、可接受回答、拒答/转交场景"
+          },
+          "materials": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "数据源、访问范围、模型/索引版本"
+          },
+          "budget": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "延迟、成本、工具范围与已有基线"
+          }
+        },
+        "required": [
+          "task",
+          "materials",
+          "budget"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "architecture": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "AI应用与工具边界"
+          },
+          "evaluation": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "固定数据集与分项结果"
+          },
+          "releasePolicy": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "小范围试用与熔断策略"
+          },
+          "failureAnalysis": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "失败归因与改进顺序"
+          },
+          "facts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "本次材料、版本、单位和假设"
+          },
+          "handoff": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "产物位置、未完成项和下一步"
+          }
+        },
+        "required": [
+          "architecture",
+          "evaluation",
+          "releasePolicy",
+          "failureAnalysis",
+          "facts",
+          "handoff"
+        ]
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "真实个人数据外发、新增费用和生产工具写入依本次授权；离线评价、原型和已授权调用继续。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

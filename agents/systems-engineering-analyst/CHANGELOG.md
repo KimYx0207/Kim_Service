@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.2 - 2026-11-11
+
+- Use task-specific handling for material unknowns and existing authorization.
+- Treat context and handoff refinements as advisory while keeping core delivery checks.
+
 ## 0.1.1 — 2026-11-11
 
 - 将诊断问题与执行步骤分开：步骤明确本领域输入、具体操作、交付字段、进入条件和缺失/失败处理。

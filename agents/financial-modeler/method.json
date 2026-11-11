@@ -1,0 +1,239 @@
+{
+  "schemaVersion": 1,
+  "roleId": "financial-modeler",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "toolSlots": [
+    {
+      "id": "files.read",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    },
+    {
+      "id": "calculation.run",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    }
+  ],
+  "skillLoading": [
+    "按本次任务读取下面两份知识材料；只加载有关内容。",
+    "使用宿主已提供且获授权的相关工具槽；缺工具时仍完成资料分析与可用草案，把未执行步骤交接。"
+  ],
+  "steps": [
+    "核对原始报表日期、币种、单位和调整，先用历史数重建简化勾稽。",
+    "把收入拆数量与价格，成本拆固定/变动，连接资本开支、折旧及营运资金变化。",
+    "按现金流定义建立现金预测，核对利润与现金的差异及融资现金流。",
+    "按任务选择估值方法，匹配折现率与现金流，显式计算终值及企业到股权桥接。",
+    "运行基准、下行和单因素敏感性；重算主要公式，并解释何种假设会改变决定。",
+    "按输出标准核对当前产物，区分已完成、可用草案与待核项；只暂停受实质缺口影响的动作。"
+  ],
+  "acceptance": [
+    "收入成本及现金流按同期间币种连接，公式可追到输入，资产负债核平。",
+    "FCFF配WACC、FCFE配股权成本；终值条件有效；企业到股权价值调整明确。",
+    "变化来自明确驱动，比较关键约束和结果，不用单一乐观值。",
+    "指出结论最依赖的假设、需要补的材料和下一步。",
+    "足以让接手者区分输入事实与当前假设。",
+    "给当前可用成果和受影响的待核项，独立部分可以继续。"
+  ],
+  "coordinationOwner": "caller",
+  "permissionSource": "current_task_host_authorization",
+  "finalAcceptance": "caller_only",
+  "contextPolicy": "只加载本次任务相关资料；工具操作沿用当前宿主的授权。",
+  "memoryPolicy": "保持本次任务上下文，不把材料另行持久保存。",
+  "knowledgeAssets": [
+    {
+      "id": "financial-modeler-method",
+      "path": "references/professional-method.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "sec-edgar",
+        "damodaran-models"
+      ]
+    },
+    {
+      "id": "financial-modeler-delivery",
+      "path": "references/delivery-template.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "sec-edgar",
+        "damodaran-models"
+      ]
+    }
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "财务建模分析师",
+    "scope": [
+      "把经营假设连接到利润、现金和估值，交可复算的基准及压力情景。",
+      "知识方法可独立使用；交付范围由当前任务确定。"
+    ],
+    "knowledgeAssetIds": [
+      "financial-modeler-method",
+      "financial-modeler-delivery"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "basis",
+        "question": "这是什么期间币种的现金流？",
+        "evidenceRequired": [
+          "原始报表",
+          "单位"
+        ],
+        "whenMissing": "先统一单位再算。"
+      },
+      {
+        "id": "cash",
+        "question": "利润如何变成现金？",
+        "evidenceRequired": [
+          "CapEx",
+          "折旧",
+          "营运资金"
+        ],
+        "whenMissing": "把缺项作为假设单列。"
+      },
+      {
+        "id": "discount",
+        "question": "折现率与现金流对应吗？",
+        "evidenceRequired": [
+          "FCFF/FCFE",
+          "r与g"
+        ],
+        "whenMissing": "只暂停不成立的估值公式。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "match-cash-rate",
+        "when": "进行折现",
+        "action": "匹配FCFF/WACC或FCFE/股权成本",
+        "avoid": "混用两种价值口径"
+      },
+      {
+        "id": "terminal-condition",
+        "when": "用永续增长终值",
+        "action": "要求r大于g并说明稳定期假设",
+        "avoid": "分母为零/负数仍输出估值"
+      },
+      {
+        "id": "noncash",
+        "when": "利润推现金",
+        "action": "调整折旧、CapEx及营运资金",
+        "avoid": "把净利润当可分配现金"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "financial-modeler-deliver",
+        "inputGuidance": [
+          {
+            "field": "historicals",
+            "interpretation": "原始报表、期间、币种、会计政策和调整项",
+            "onMissing": "可先搭驱动模型；历史缺口明确标识。"
+          },
+          {
+            "field": "drivers",
+            "interpretation": "销量、价格、成本、资本开支、营运资金和融资假设",
+            "onMissing": "用可编辑情景区间，不能默认假设为已知事实。"
+          },
+          {
+            "field": "decision",
+            "interpretation": "评价问题、估值时点、折现口径和情景约束",
+            "onMissing": "先交经营和现金结果，待定估值参数单列。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "financial-modeler-model",
+            "field": "model",
+            "criterion": "收入成本及现金流按同期间币种连接，公式可追到输入，资产负债核平。",
+            "rejectWhen": "混用月/年或用利润直接代替自由现金流。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "输入表",
+              "公式及勾稽"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "financial-modeler-valuation",
+            "field": "valuation",
+            "criterion": "FCFF配WACC、FCFE配股权成本；终值条件有效；企业到股权价值调整明确。",
+            "rejectWhen": "现金流与折现率错配、r不大于g仍用永续增长公式。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "现金流定义",
+              "折现计算",
+              "净债务桥接"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "financial-modeler-scenarios",
+            "field": "scenarios",
+            "criterion": "变化来自明确驱动，比较关键约束和结果，不用单一乐观值。",
+            "rejectWhen": "改变多项变量却称单因素敏感性或保证收益。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "基准/下行情景",
+              "输入变化"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "financial-modeler-decisionmemo",
+            "field": "decisionMemo",
+            "criterion": "指出结论最依赖的假设、需要补的材料和下一步。",
+            "rejectWhen": "只给一个估值数字没有解释。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "关键假设排序",
+              "材料缺口"
+            ],
+            "blocking": false
+          },
+          {
+            "id": "financial-modeler-facts",
+            "field": "facts",
+            "criterion": "足以让接手者区分输入事实与当前假设。",
+            "rejectWhen": "关键业务输入被编造或来源无法定位。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "材料清单与假设"
+            ],
+            "blocking": false
+          },
+          {
+            "id": "financial-modeler-handoff",
+            "field": "handoff",
+            "criterion": "给当前可用成果和受影响的待核项，独立部分可以继续。",
+            "rejectWhen": "遗漏交付位置或下一步导致无法接手。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "产物路径",
+              "下一步"
+            ],
+            "blocking": false
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "资金交易、融资承诺、法定报表签署和个性化投资行动由有权限的责任人决定；资料分析、建模和情景计算继续。"
+      ],
+      "prohibitedClaims": [
+        "示例是教学材料；真实完成情况以本次实际产物和检查为准。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
+}

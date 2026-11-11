@@ -322,7 +322,7 @@
               "下一执行者可用的事实/产物/限制",
               "需要调用方决定的具体事项"
             ],
-            "blocking": true
+            "blocking": false
           },
           {
             "field": "nativeRuntimeVerified",

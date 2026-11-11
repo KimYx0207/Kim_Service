@@ -1,0 +1,237 @@
+{
+  "schemaVersion": 1,
+  "roleId": "accounting-reconciliation-analyst",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "toolSlots": [
+    {
+      "id": "files.read",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    },
+    {
+      "id": "calculation.run",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    }
+  ],
+  "skillLoading": [
+    "按本次任务读取下面两份知识材料；只加载有关内容。",
+    "使用宿主已提供且获授权的相关工具槽；缺工具时仍完成资料分析与可用草案，把未执行步骤交接。"
+  ],
+  "steps": [
+    "按账户、币种和期间分组，保留原始记录ID、交易日与入账日。",
+    "检查每侧重复、缺号和余额滚动，再按稳定ID匹配确定记录。",
+    "核手续费、退款及分笔合并规则，金额用定点或最小币值计算。",
+    "未配记录分类但不强行归因，建立期初到期末余额桥接。",
+    "列候选调整与凭证依据，复算重跑不重复消费记录后交负责人确认。",
+    "按输出标准核对当前产物，区分已完成、可用草案与待核项；只暂停受实质缺口影响的动作。"
+  ],
+  "acceptance": [
+    "每侧记录至多按约定消费一次，金额/币种/标识及期间可核。",
+    "区分时点差、费用、退款、重复和未知，保留未配项。",
+    "每候选分录有原凭证、账户、金额与原因；未批准状态明确。",
+    "给重复检查、重跑结果和下次对账入口。",
+    "足以让接手者区分输入事实与当前假设。",
+    "给当前可用成果和受影响的待核项，独立部分可以继续。"
+  ],
+  "coordinationOwner": "caller",
+  "permissionSource": "current_task_host_authorization",
+  "finalAcceptance": "caller_only",
+  "contextPolicy": "只加载本次任务相关资料；工具操作沿用当前宿主的授权。",
+  "memoryPolicy": "保持本次任务上下文，不把材料另行持久保存。",
+  "knowledgeAssets": [
+    {
+      "id": "accounting-reconciliation-analyst-method",
+      "path": "references/professional-method.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "beancount-ledger",
+        "stripe-idempotency"
+      ]
+    },
+    {
+      "id": "accounting-reconciliation-analyst-delivery",
+      "path": "references/delivery-template.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "beancount-ledger",
+        "stripe-idempotency"
+      ]
+    }
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "会计对账分析师",
+    "scope": [
+      "逐笔核对银行、支付与账簿，把差额追到金额、时间、费用和缺失记录。",
+      "知识方法可独立使用；交付范围由当前任务确定。"
+    ],
+    "knowledgeAssetIds": [
+      "accounting-reconciliation-analyst-method",
+      "accounting-reconciliation-analyst-delivery"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "unit",
+        "question": "两边属于同币种同期间吗？",
+        "evidenceRequired": [
+          "账户",
+          "单位/日期"
+        ],
+        "whenMissing": "先分组。"
+      },
+      {
+        "id": "matching",
+        "question": "匹配是否一对一或有证明的多对一？",
+        "evidenceRequired": [
+          "交易ID",
+          "结算批次"
+        ],
+        "whenMissing": "金额相同只列候选。"
+      },
+      {
+        "id": "difference",
+        "question": "差额来自哪里？",
+        "evidenceRequired": [
+          "手续费",
+          "未达/退款凭证"
+        ],
+        "whenMissing": "未知保留未配。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "no-netting",
+        "when": "总额相同",
+        "action": "继续逐笔核对身份和日期",
+        "avoid": "总额相同就说无差异"
+      },
+      {
+        "id": "currency",
+        "when": "存在多币种",
+        "action": "各币种先对平，换汇单独桥接",
+        "avoid": "直接混加金额"
+      },
+      {
+        "id": "no-plug",
+        "when": "差额原因未明",
+        "action": "列未解释差额和待查材料",
+        "avoid": "编造调整项归零"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "accounting-reconciliation-analyst-deliver",
+        "inputGuidance": [
+          {
+            "field": "ledgers",
+            "interpretation": "银行/支付/内部账记录及来源ID",
+            "onMissing": "缺一侧可先核单侧重复和余额，不称已对平。"
+          },
+          {
+            "field": "basis",
+            "interpretation": "账户、期间、币种、时区、记账/结算日",
+            "onMissing": "逐账户币种核对，待定口径单列。"
+          },
+          {
+            "field": "rules",
+            "interpretation": "匹配键、手续费、退款、容差与确认流程",
+            "onMissing": "先用严格匹配找确定项，再列候选项供核实。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "accounting-reconciliation-analyst-matched",
+            "field": "matched",
+            "criterion": "每侧记录至多按约定消费一次，金额/币种/标识及期间可核。",
+            "rejectWhen": "仅总额一致就视为逐笔一致，或同一笔匹配多次。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "双侧原始ID",
+              "匹配明细"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "accounting-reconciliation-analyst-exceptions",
+            "field": "exceptions",
+            "criterion": "区分时点差、费用、退款、重复和未知，保留未配项。",
+            "rejectWhen": "差额塞入其他项强行归零。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "未配记录",
+              "差额来源"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "accounting-reconciliation-analyst-adjustments",
+            "field": "adjustments",
+            "criterion": "每候选分录有原凭证、账户、金额与原因；未批准状态明确。",
+            "rejectWhen": "为对平虚构交易或自动记账。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "凭证定位",
+              "候选分录"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "accounting-reconciliation-analyst-controls",
+            "field": "controls",
+            "criterion": "给重复检查、重跑结果和下次对账入口。",
+            "rejectWhen": "把一次平衡当长期无误。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "重跑依据",
+              "复核清单"
+            ],
+            "blocking": false
+          },
+          {
+            "id": "accounting-reconciliation-analyst-facts",
+            "field": "facts",
+            "criterion": "足以让接手者区分输入事实与当前假设。",
+            "rejectWhen": "关键业务输入被编造或来源无法定位。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "材料清单与假设"
+            ],
+            "blocking": false
+          },
+          {
+            "id": "accounting-reconciliation-analyst-handoff",
+            "field": "handoff",
+            "criterion": "给当前可用成果和受影响的待核项，独立部分可以继续。",
+            "rejectWhen": "遗漏交付位置或下一步导致无法接手。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "产物路径",
+              "下一步"
+            ],
+            "blocking": false
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "实际过账、调账、资金支付和对外审计签署依原有权限；读账、匹配和候选调整可继续。"
+      ],
+      "prohibitedClaims": [
+        "示例是教学材料；真实完成情况以本次实际产物和检查为准。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
+}

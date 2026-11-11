@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "roleId": "financial-scenario-modeling",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "complete-delivery",
+      "capabilityId": "financial-scenario-modeling-deliver",
+      "category": "worked_example",
+      "scenario": "收入下降会不会导致现金断裂？",
+      "input": {
+        "baseline": "期初10000，5日付12000，10日收8000",
+        "drivers": "收款可能延迟",
+        "constraints": "最低现金0元"
+      },
+      "candidateOutputExcerpt": {
+        "scenarioInputs": "同月CNY，所有日期均为本例假设。",
+        "cashTimeline": "5日余额−2000，10日6000；最早缺口5日2000元。",
+        "sensitivity": "收款延迟使负余额持续更久；不能因月末6000而说全月可支付。",
+        "options": "比较经授权延期部分付款或提前回款，先核真实到账可能性。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "领域计算、行为和未核范围分开，结果可按所给输入复查。",
+      "diagnosticRefs": [
+        "timing",
+        "constraints",
+        "dependence"
+      ],
+      "decisionRuleRefs": [
+        "lowest-point",
+        "explicit-time",
+        "no-infinite-runway"
+      ]
+    },
+    {
+      "id": "material-error",
+      "capabilityId": "financial-scenario-modeling-deliver",
+      "category": "failure_boundary",
+      "scenario": "期末遮盖缺口",
+      "input": {
+        "baseline": "期初10000，5日付12000，10日收8000",
+        "drivers": "收款可能延迟",
+        "constraints": "最低现金0元"
+      },
+      "candidateOutputExcerpt": {
+        "cashTimeline": "10000−12000+8000=6000，全月无风险。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "漏掉支付先于收款的中途缺口。",
+      "diagnosticRefs": [
+        "timing",
+        "constraints",
+        "dependence"
+      ],
+      "decisionRuleRefs": [
+        "lowest-point",
+        "explicit-time",
+        "no-infinite-runway"
+      ]
+    },
+    {
+      "id": "bounded-progress",
+      "capabilityId": "financial-scenario-modeling-deliver",
+      "category": "worked_example",
+      "scenario": "不完整输入继续结构",
+      "input": {
+        "baseline": "期初10000，5日付12000，预计收8000但到账日未知",
+        "drivers": "收款可能延迟",
+        "constraints": "最低现金0元"
+      },
+      "candidateOutputExcerpt": {
+        "scenarioInputs": "缺到账日期时先列5日前/后到账两支，显示各支结果并待核日期。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "局部未知可用情景表达。",
+      "diagnosticRefs": [
+        "timing",
+        "constraints",
+        "dependence"
+      ],
+      "decisionRuleRefs": [
+        "lowest-point",
+        "explicit-time",
+        "no-infinite-runway"
+      ]
+    }
+  ]
+}

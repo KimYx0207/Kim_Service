@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "roleId": "mobile-app-engineer",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "complete-delivery",
+      "capabilityId": "mobile-app-engineer-deliver",
+      "category": "worked_example",
+      "scenario": "做一个支持断网暂存的移动应用。",
+      "input": {
+        "journey": "活动报名手机端",
+        "appContext": "本地数据库+报名API",
+        "syncRules": "同一报名操作ID固定，离线可存草稿"
+      },
+      "candidateOutputExcerpt": {
+        "implementation": "草稿页可离线修改；提交后显示待同步，远端回执才进入成功页。",
+        "syncProtocol": "op-42本地入队→超时→重启→查询op-42已完成→记录报名R7并出队，只生成1次报名。",
+        "deviceChecks": "先在本地测试断网/重启回放；iOS/Android真机结果待实际运行。",
+        "handoffPlan": "服务端补查询操作状态端点，再做真机恢复验收。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "领域计算、行为和未核范围分开，结果可按所给输入复查。",
+      "diagnosticRefs": [
+        "journey",
+        "identity",
+        "lifecycle"
+      ],
+      "decisionRuleRefs": [
+        "stable-id",
+        "draft-is-local",
+        "conflict"
+      ]
+    },
+    {
+      "id": "material-error",
+      "capabilityId": "mobile-app-engineer-deliver",
+      "category": "failure_boundary",
+      "scenario": "超时后换ID再提交",
+      "input": {
+        "journey": "活动报名手机端",
+        "appContext": "本地数据库+报名API",
+        "syncRules": "同一报名操作ID固定，离线可存草稿"
+      },
+      "candidateOutputExcerpt": {
+        "syncProtocol": "第一次超时就创建op-43重发，最终两条报名。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "同一业务动作产生重复效果。",
+      "diagnosticRefs": [
+        "journey",
+        "identity",
+        "lifecycle"
+      ],
+      "decisionRuleRefs": [
+        "stable-id",
+        "draft-is-local",
+        "conflict"
+      ]
+    },
+    {
+      "id": "bounded-progress",
+      "capabilityId": "mobile-app-engineer-deliver",
+      "category": "worked_example",
+      "scenario": "发生版本冲突",
+      "input": {
+        "journey": "活动报名手机端",
+        "appContext": "本地数据库+报名API",
+        "syncRules": "本地草稿基于版本5，服务端已为版本7，需显式合并"
+      },
+      "candidateOutputExcerpt": {
+        "syncProtocol": "服务器版本7、本地基于5，保留草稿并提示合并；不覆盖7。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "冲突只影响当前记录，其他已同步内容可继续。",
+      "diagnosticRefs": [
+        "journey",
+        "identity",
+        "lifecycle"
+      ],
+      "decisionRuleRefs": [
+        "stable-id",
+        "draft-is-local",
+        "conflict"
+      ]
+    }
+  ]
+}

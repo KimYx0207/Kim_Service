@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "game-design-playtest",
   "componentType": "skill",
-  "componentVersion": "0.1.1",
+  "componentVersion": "0.1.2",
   "entrypoint": "SKILL.md",
   "capabilities": [
     {
@@ -132,8 +132,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "上线、付费与重要玩家权益变更交项目负责人确认；涉及未成年人数据或商业化规则另核适用要求。",
-          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+          "上线、付费与重要玩家权益变更交项目负责人确认；涉及未成年人数据或商业化规则另核适用要求。"
         ]
       },
       "validation": [

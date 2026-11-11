@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "metric-contract",
   "componentType": "skill",
-  "componentVersion": "0.1.1",
+  "componentVersion": "0.1.2",
   "entrypoint": "SKILL.md",
   "capabilities": [
     {
@@ -132,8 +132,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "经营结算、对外财务披露、考核奖惩或影响个人权益的指标由相应业务与数据责任人确认。",
-          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+          "经营结算、对外财务披露、考核奖惩或影响个人权益的指标由相应业务与数据责任人确认。"
         ]
       },
       "validation": [

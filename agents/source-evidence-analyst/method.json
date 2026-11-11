@@ -247,7 +247,7 @@
               "原始/转引及研究/报告去重关系",
               "材料取得与未取得记录"
             ],
-            "blocking": true
+            "blocking": false
           },
           {
             "field": "delivery",
@@ -272,7 +272,7 @@
               "缺口与受影响结论",
               "替代解释和可改变决定的下一证据"
             ],
-            "blocking": true
+            "blocking": false
           },
           {
             "field": "status",
@@ -356,7 +356,7 @@
               "产物和证据包",
               "待决定项、受影响范围与接收责任"
             ],
-            "blocking": true
+            "blocking": false
           },
           {
             "field": "nativeRuntimeVerified",

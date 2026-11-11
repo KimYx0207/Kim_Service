@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "concept-tutor",
   "componentType": "agent",
-  "componentVersion": "0.3.0",
+  "componentVersion": "0.3.1",
   "entrypoint": "AGENT.md",
   "capabilities": [
     {
@@ -78,8 +78,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "有考试限制时只讲同类概念与练习；碰到医疗、法律、金融决策结论时停下，不把课本知识当个人专业建议。",
-          "涉及医疗诊断、法律胜诉或金融投资收益等专业结论时停下，由具备资质的人员判断；涉及发布、对外发送或付款时须由用户另行授权。"
+          "有考试限制时只讲同类概念与练习；碰到医疗、法律、金融决策结论时停下，不把课本知识当个人专业建议。"
         ]
       },
       "validation": [

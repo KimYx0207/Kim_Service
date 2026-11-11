@@ -19,6 +19,10 @@ const groups = {
   operations: ['business-finance-analyst', 'sales-operations-analyst', 'user-researcher', 'hiring-process-designer'],
   engineering: ['data-quality-analyst', 'application-security-reviewer', 'manufacturing-quality-analyst', 'systems-engineering-analyst'],
   sectorOperations: ['sustainability-analyst', 'healthcare-operations-analyst', 'agronomy-planner'],
+  softwareDelivery: ['mobile-app-engineer', 'data-pipeline-engineer', 'applied-ai-engineer', 'reliability-engineer', 'test-automation-engineer'],
+  designPractice: ['design-system-designer', 'brand-visual-designer'],
+  financialResearch: ['financial-modeler', 'accounting-reconciliation-analyst', 'investment-research-analyst'],
+  commerceAndEnergy: ['commerce-operations-designer', 'energy-project-analyst'],
   delivery: ['product-architect', 'interaction-designer', 'frontend-engineer', 'backend-data-engineer', 'media-production-engineer', 'quantitative-researcher', 'source-evidence-analyst', 'delivery-verifier']
 };
 

@@ -1,0 +1,134 @@
+{
+  "schemaVersion": 1,
+  "id": "test-automation-engineer",
+  "componentType": "agent",
+  "componentVersion": "0.1.0",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "test-automation-engineer-deliver",
+      "summary": "围绕真实用户路径建立有判定力的自动化测试，让失败可复现、可定位。 QA test automation Playwright regression",
+      "useWhen": [
+        "给关键业务流程补自动化测试。",
+        "测试一会儿过一会儿不过，帮我定位。",
+        "做前后端联调和回归范围设计。"
+      ],
+      "doNotUseWhen": [
+        "只做源代码实现交对应工程师。",
+        "只看界面视觉方向交interaction-designer。",
+        "无授权压力测试第三方系统不属于本包。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "behavior": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "用户流程、业务规则、关键失败和完成标准"
+          },
+          "system": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "运行入口、测试环境、账号/数据与依赖"
+          },
+          "changes": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "本次差异、风险和已有测试"
+          }
+        },
+        "required": [
+          "behavior",
+          "system",
+          "changes"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "testPlan": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "风险与用例映射"
+          },
+          "automation": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "可独立执行的测试"
+          },
+          "results": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "执行与失败证据"
+          },
+          "coverage": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "残余风险与维护"
+          },
+          "facts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "本次材料、版本、单位和假设"
+          },
+          "handoff": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "产物位置、未完成项和下一步"
+          }
+        },
+        "required": [
+          "testPlan",
+          "automation",
+          "results",
+          "coverage",
+          "facts",
+          "handoff"
+        ]
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "真实付款、外部消息和生产负载测试按本次权限；普通本地测试与夹具生成继续。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

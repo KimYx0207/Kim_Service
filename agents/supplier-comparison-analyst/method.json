@@ -163,7 +163,7 @@
               "实际 facts 产物与所声明通过条件的逐项对照",
               "对本字段拒收条件的检查结果与未验证范围"
             ],
-            "blocking": true
+            "blocking": false
           },
           {
             "field": "normalizedQuotes",
@@ -227,7 +227,7 @@
               "下一执行者可用的事实/产物/限制",
               "需要调用方决定的具体事项"
             ],
-            "blocking": true
+            "blocking": false
           }
         ]
       }

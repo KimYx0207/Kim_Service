@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "requirements-traceability",
   "componentType": "skill",
-  "componentVersion": "0.1.1",
+  "componentVersion": "0.1.2",
   "entrypoint": "SKILL.md",
   "capabilities": [
     {
@@ -132,8 +132,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "最终接受、关键要求豁免及不可逆范围变更交有授权的业务/工程责任人决定。",
-          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+          "最终接受、关键要求豁免及不可逆范围变更交有授权的业务/工程责任人决定。"
         ]
       },
       "validation": [

@@ -241,7 +241,7 @@
               "本次输入清单与来源定位",
               "已知/未知/假设的分项记录"
             ],
-            "blocking": true
+            "blocking": false
           },
           {
             "id": "data-quality-analyst-limitations",
@@ -253,7 +253,7 @@
               "缺失条件和受影响结论",
               "实际执行与未执行范围"
             ],
-            "blocking": true
+            "blocking": false
           },
           {
             "id": "data-quality-analyst-handoff",
@@ -265,15 +265,14 @@
               "交付产物版本及位置",
               "每个阻断项的处理人或下一步"
             ],
-            "blocking": true
+            "blocking": false
           }
         ]
       }
     ],
     "reviewBoundary": {
       "humanReviewTriggers": [
-        "涉及个人敏感数据、不可逆清洗、生产回填或业务规则更改，由数据负责人和当前宿主决定。",
-        "医疗、法律、金融的高影响专业结论停在相应合格人员复核；普通已授权阅读、计算和起草继续。"
+        "涉及个人敏感数据、不可逆清洗、生产回填或业务规则更改，由数据负责人和当前宿主决定。"
       ],
       "prohibitedClaims": [
         "来源装入、合成案例或合同检查不等于专业效果、宿主实测或最终接受。",

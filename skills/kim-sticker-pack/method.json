@@ -173,7 +173,7 @@
               "结构检查报告",
               "人工观察范围与授权来源"
             ],
-            "blocking": true
+            "blocking": false
           },
           {
             "id": "approval-state-acceptance",

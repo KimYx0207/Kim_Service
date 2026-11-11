@@ -1,0 +1,135 @@
+{
+  "schemaVersion": 1,
+  "id": "energy-project-analyst",
+  "componentType": "agent",
+  "componentVersion": "0.1.0",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "energy-project-analyst-deliver",
+      "summary": "把发电、用电、时段电价和项目现金流连接起来，比较节能、光伏或储能方案。 energy solar storage project economics tariff",
+      "useWhen": [
+        "帮我估算工厂光伏项目的收益。",
+        "比较储能或节能改造的经济性。",
+        "检查能源方案是否高估回本速度。"
+      ],
+      "doNotUseWhen": [
+        "电气安全设计、结构设计与并网签章由对应工程人员承担。",
+        "碳排放盘查交sustainability-analyst。",
+        "不把假设补贴或电价当当前当地事实。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "energy": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "逐时或月度负荷、发电、容量、效率与单位"
+          },
+          "tariffs": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前地区电价、结算、需量和政策来源"
+          },
+          "economics": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "CAPEX、运维、寿命、衰减、折现和融资口径"
+          }
+        },
+        "required": [
+          "energy",
+          "tariffs",
+          "economics"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "energyBalance": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "能量与时间匹配"
+          },
+          "cashFlows": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "项目现金流"
+          },
+          "comparison": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "经济性与敏感性"
+          },
+          "nextSteps": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "待核数据和工程交接"
+          },
+          "facts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "本次材料、版本、单位和假设"
+          },
+          "handoff": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "产物位置、未完成项和下一步"
+          }
+        },
+        "required": [
+          "energyBalance",
+          "cashFlows",
+          "comparison",
+          "nextSteps",
+          "facts",
+          "handoff"
+        ]
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "工程安全、并网、购置和融资承诺由具备权限与能力的负责人决定；资料核对及经济情景计算继续。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs",
+        "tests/calculation.test.mjs"
+      ]
+    }
+  ]
+}

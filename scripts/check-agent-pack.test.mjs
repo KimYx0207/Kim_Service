@@ -122,11 +122,22 @@ test('every required section must exist and the refusal label must be bold', (t)
   assert.equal(errorsMatching(checkAgentPack(plain), /\*\*别找我\*\*/).length, 1);
 });
 
-test('the human gate must be required and name the medical, legal, financial stop rule', (t) => {
+test('the human gate requires a nonempty task-specific trigger without unrelated industry keywords', (t) => {
   const optional = writePack(temporaryRoot(t), { pack: contract({ capability: { humanGate: { required: false, when: [] } } }) });
   assert.equal(errorsMatching(checkAgentPack(optional), /humanGate must be required/).length, 1);
-  const vague = writePack(temporaryRoot(t), { pack: contract({ capability: { humanGate: { required: true, when: ['涉及敏感话题时停下'] } } }) });
-  assert.equal(errorsMatching(checkAgentPack(vague), /medical, legal, and financial stop rule/).length, 1);
+  const empty = writePack(temporaryRoot(t), { pack: contract({ capability: { humanGate: { required: true, when: ['   '] } } }) });
+  assert.equal(errorsMatching(checkAgentPack(empty), /humanGate must be required/).length, 1);
+  const scoped = writePack(temporaryRoot(t), {
+    agent: agentDocument().replace('- **停机规则**：涉及医疗、法律、金融结论时我停下。', '已授权的本地原型继续；正式商店上架与收费签名使用当前任务已有授权，缺少时只暂停该动作。'),
+    pack: contract({ capability: { humanGate: { required: true, when: ['正式商店上架及收费签名需要当前任务对应授权。'] } } })
+  });
+  assert.deepEqual(checkAgentPack(scoped), []);
+});
+
+test('an empty boundary is still rejected while domain-specific limits remain readable', (t) => {
+  const source = agentDocument().replace(/## 边界与不确定时怎么办[\s\S]*?(?=## 示例)/, '## 边界与不确定时怎么办\n\n');
+  const componentRoot = writePack(temporaryRoot(t), { agent: source });
+  assert.equal(errorsMatching(checkAgentPack(componentRoot), /boundary section must describe/).length, 1);
 });
 
 test('side effects, thin routing lists, and oversized documents are rejected', (t) => {

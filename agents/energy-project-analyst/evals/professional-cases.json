@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "roleId": "energy-project-analyst",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "complete-delivery",
+      "capabilityId": "energy-project-analyst-deliver",
+      "category": "worked_example",
+      "scenario": "帮我估算工厂光伏项目的收益。",
+      "input": {
+        "energy": {
+          "generationKwh": 10000,
+          "selfConsumedKwh": 6000,
+          "exportedKwh": 4000
+        },
+        "tariffs": {
+          "buyRate": 0.8,
+          "exportRate": 0.3,
+          "currency": "CNY"
+        },
+        "economics": {
+          "capex": 20000,
+          "annualOpex": 1000
+        }
+      },
+      "candidateOutputExcerpt": {
+        "energyBalance": "10000=6000自用+4000外送，简化年度输入，未验证逐时匹配。",
+        "cashFlows": "年收益6000×0.8+4000×0.3=6000元，减运维1000得5000元。",
+        "comparison": "简单回本20000/5000=4年；不含衰减、替换、税和折现，不能作为完整收益承诺。",
+        "nextSteps": "获取逐时负荷/发电、当地结算文件和工程可行性资料再完善。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "领域计算、行为和未核范围分开，结果可按所给输入复查。",
+      "diagnosticRefs": [
+        "energy",
+        "tariff",
+        "cost"
+      ],
+      "decisionRuleRefs": [
+        "no-double-count",
+        "time-match",
+        "discount"
+      ]
+    },
+    {
+      "id": "material-error",
+      "capabilityId": "energy-project-analyst-deliver",
+      "category": "failure_boundary",
+      "scenario": "电量重复计价",
+      "input": {
+        "energy": {
+          "generationKwh": 10000,
+          "selfConsumedKwh": 6000,
+          "exportedKwh": 4000
+        },
+        "tariffs": {
+          "buyRate": 0.8,
+          "exportRate": 0.3,
+          "currency": "CNY"
+        },
+        "economics": {
+          "capex": 20000,
+          "annualOpex": 1000
+        }
+      },
+      "candidateOutputExcerpt": {
+        "cashFlows": "10000度全部按0.8节省，再加4000度售电1200元。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "外送4000度重复计算。",
+      "diagnosticRefs": [
+        "energy",
+        "tariff",
+        "cost"
+      ],
+      "decisionRuleRefs": [
+        "no-double-count",
+        "time-match",
+        "discount"
+      ]
+    },
+    {
+      "id": "bounded-progress",
+      "capabilityId": "energy-project-analyst-deliver",
+      "category": "worked_example",
+      "scenario": "没有逐时数据",
+      "input": {
+        "energy": {
+          "generationKwh": 10000,
+          "selfConsumedKwh": 6000,
+          "exportedKwh": 4000
+        },
+        "tariffs": {
+          "buyRate": 0.8,
+          "exportRate": 0.3,
+          "currency": "CNY"
+        },
+        "economics": {
+          "capex": 20000,
+          "annualOpex": 1000
+        }
+      },
+      "candidateOutputExcerpt": {
+        "energyBalance": "年用电大于年发电仍不能证明全额自用，先比较不同自用比例情景。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "平均值不能代替时段匹配。",
+      "diagnosticRefs": [
+        "energy",
+        "tariff",
+        "cost"
+      ],
+      "decisionRuleRefs": [
+        "no-double-count",
+        "time-match",
+        "discount"
+      ]
+    }
+  ]
+}
