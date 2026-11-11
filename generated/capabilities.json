@@ -3583,7 +3583,7 @@
       ]
     },
     {
-      "componentContentSha256": "3d957579906847477a9677e66c173d649a491731a2821cdb18debe27a7412f02",
+      "componentContentSha256": "e3cd8e4855a876c59d6916597e3c4d6c432c708bfbfae280dead453dd8f4d59f",
       "componentId": "financial-modeler",
       "componentPath": "agents/financial-modeler",
       "componentType": "agent",
@@ -13876,7 +13876,7 @@
       ],
       "componentType": "agent",
       "componentVersion": "0.2.0",
-      "contentSha256": "3d957579906847477a9677e66c173d649a491731a2821cdb18debe27a7412f02",
+      "contentSha256": "e3cd8e4855a876c59d6916597e3c4d6c432c708bfbfae280dead453dd8f4d59f",
       "contractSha256": "1dfd4bae2efde8b6d5147adea06c107edf67cc9bb8a8eb656d93b7df3c2004d9",
       "entrypoint": "AGENT.md",
       "id": "financial-modeler",
