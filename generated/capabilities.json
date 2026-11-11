@@ -1,6 +1,271 @@
 {
   "capabilities": [
     {
+      "componentContentSha256": "5d77579bbd3597b3fb40be603090a819ce173224804f535616b35fd031493a11",
+      "componentId": "accessibility-audit",
+      "componentPath": "skills/accessibility-audit",
+      "componentType": "skill",
+      "componentVersion": "0.1.0",
+      "contractSha256": "024883fcc3c843460540cfe5c572203f64cd906d83a1a5bbd2965a6ac91ce226",
+      "doNotUseWhen": [
+        "品牌方向交brand-visual-designer。",
+        "不以单次扫描出具覆盖所有内容的合规认证。",
+        "缺真实页面可先做设计检查，执行项标待测。"
+      ],
+      "entrypoint": "SKILL.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "正式合规声明按实际覆盖与责任流程确认；页面检查、修复草案和已授权本地验证继续。"
+        ]
+      },
+      "id": "accessibility-audit-deliver",
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "evidence": {
+            "description": "源码、现有扫描、用户反馈及复现步骤",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "surface": {
+            "description": "页面/组件、关键用户任务和运行入口",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "target": {
+            "description": "适用WCAG版本级别、浏览器、辅助技术和语言",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "surface",
+          "target",
+          "evidence"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "coverage": {
+            "description": "覆盖范围",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "facts": {
+            "description": "本次材料、版本、单位和假设",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "findings": {
+            "description": "可复现问题",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "fixes": {
+            "description": "修复与回归",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "handoff": {
+            "description": "产物位置、未完成项和下一步",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "priorities": {
+            "description": "修复顺序",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "findings",
+          "fixes",
+          "coverage",
+          "priorities",
+          "facts",
+          "handoff"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "用真实任务检查键盘、阅读器、焦点、文字和错误恢复，并把问题落实到修复位置。 accessibility WCAG keyboard screen reader audit",
+      "useWhen": [
+        "检查页面能否用键盘和阅读器操作。",
+        "帮我修表单和弹窗的可访问性。",
+        "自动扫描过了，实际用户仍用不了。"
+      ],
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "42a87ea18d044d8cbd78e93ac5d747beb983ff28fc2a8621e851b515a0b9fe1f",
+      "componentId": "accounting-reconciliation-analyst",
+      "componentPath": "agents/accounting-reconciliation-analyst",
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contractSha256": "133a857f0edaae591a26b7c568763199864585334df42650ddb5aeb9ac566533",
+      "doNotUseWhen": [
+        "估值预测交financial-modeler。",
+        "只做商品毛利交pricing-cost-analyst。",
+        "报税、审计签字和实际调账审批由相应负责人处理。"
+      ],
+      "entrypoint": "AGENT.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "实际过账、调账、资金支付和对外审计签署依原有权限；读账、匹配和候选调整可继续。"
+        ]
+      },
+      "id": "accounting-reconciliation-analyst-deliver",
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "basis": {
+            "description": "账户、期间、币种、时区、记账/结算日",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "ledgers": {
+            "description": "银行/支付/内部账记录及来源ID",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "rules": {
+            "description": "匹配键、手续费、退款、容差与确认流程",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "ledgers",
+          "basis",
+          "rules"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "adjustments": {
+            "description": "候选调整说明",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "controls": {
+            "description": "复核与复用规则",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "exceptions": {
+            "description": "未达与差异清单",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "facts": {
+            "description": "本次材料、版本、单位和假设",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "handoff": {
+            "description": "产物位置、未完成项和下一步",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "matched": {
+            "description": "匹配记录与余额桥接",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "matched",
+          "exceptions",
+          "adjustments",
+          "controls",
+          "facts",
+          "handoff"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "逐笔核对银行、支付与账簿，把差额追到金额、时间、费用和缺失记录。 accounting reconciliation ledger bank settlement",
+      "useWhen": [
+        "银行流水和账上余额对不上。",
+        "支付平台结算少了钱，帮我查。",
+        "多币种记录需要整理对账。"
+      ],
+      "validation": [
+        "tests/contract.test.mjs",
+        "tests/calculation.test.mjs"
+      ]
+    },
+    {
       "componentContentSha256": "8882f5668e5d0b9daf51f6c2e4fa23262b74d5e8e55dde18337bc5b9a68b78f4",
       "componentId": "agent-teams-playbook",
       "componentPath": "skills/agent-teams-playbook",
@@ -98,12 +363,12 @@
       ]
     },
     {
-      "componentContentSha256": "7ffecd2e5ff33f3498aafbcbee7cedd410a6a15ec37d95cee37af5a0687a2446",
+      "componentContentSha256": "44919971d3db8dae572e33003315fd314c8cc485533cbc871a616f07c187a21e",
       "componentId": "agronomy-planner",
       "componentPath": "agents/agronomy-planner",
       "componentType": "agent",
-      "componentVersion": "0.1.1",
-      "contractSha256": "a74270858fa23dd63a35d7b56cdeee0d8a137bb4b40399f8e5d7e9554a2c4b5c",
+      "componentVersion": "0.1.2",
+      "contractSha256": "e65fe73ecc6121a91df88095fc0be4a030e4b7f7471d07736eeeaf2c19e752c2",
       "doNotUseWhen": [
         "不凭通用知识开农药/肥料剂量或保证产量，不把区域模型直接当特定地块灌溉处方。",
         "要求自动发布、付款、修改生产系统或联系第三方时交调用方授权处理。",
@@ -113,8 +378,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "实际灌溉策略、植保施药、肥料与重大作物风险由当地具备相应能力和权限的农技人员复核。",
-          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+          "实际灌溉策略、植保施药、肥料与重大作物风险由当地具备相应能力和权限的农技人员复核。"
         ]
       },
       "id": "agronomy-planner-deliver",
@@ -240,12 +504,144 @@
       ]
     },
     {
-      "componentContentSha256": "a629233f4a4bdc4c805f21fae728fd5321a59bfef9342960873209cd18e6402a",
+      "componentContentSha256": "7d61327c776c45f0c4040f75ff0fbefea81cf7a8bb656d494da787357047414d",
+      "componentId": "api-contract-review",
+      "componentPath": "skills/api-contract-review",
+      "componentType": "skill",
+      "componentVersion": "0.1.0",
+      "contractSha256": "7924450cf755da0cdbf8e24f2b3a9b0b1432f1df56e5c7b7441f9a6c162bc602",
+      "doNotUseWhen": [
+        "完整服务实现交backend-data-engineer。",
+        "只做视觉稿交interaction-designer。",
+        "未授权线上请求不由审查方法自动执行。"
+      ],
+      "entrypoint": "SKILL.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "线上写入和第三方调用按当前授权；契约分析、样例生成和本地测试继续。"
+        ]
+      },
+      "id": "api-contract-review-deliver",
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "consumers": {
+            "description": "消费者、调用流程和兼容承诺",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "contract": {
+            "description": "当前和候选OpenAPI/接口说明及版本",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "examples": {
+            "description": "真实或合成请求响应、异常和权限场景",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "contract",
+          "consumers",
+          "examples"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "behaviorCases": {
+            "description": "行为案例",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "compatibility": {
+            "description": "兼容性变化",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "facts": {
+            "description": "本次材料、版本、单位和假设",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "handoff": {
+            "description": "产物位置、未完成项和下一步",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "interfaceMap": {
+            "description": "接口与消费者映射",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "recommendations": {
+            "description": "最小修正建议",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "interfaceMap",
+          "compatibility",
+          "behaviorCases",
+          "recommendations",
+          "facts",
+          "handoff"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "检查接口是否能被真实调用、正确失败并兼容现有消费者。 API contract OpenAPI compatibility idempotency",
+      "useWhen": [
+        "前后端要并行，先定接口。",
+        "API改版会不会破坏现有客户端？",
+        "接口重试和错误格式需要统一。"
+      ],
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "f3ac4c2ba69e15498d950cc763a73f24743bcaf8e05bd805ad8b178a081c2565",
       "componentId": "application-security-reviewer",
       "componentPath": "agents/application-security-reviewer",
       "componentType": "agent",
-      "componentVersion": "0.1.1",
-      "contractSha256": "fcda878cd897eb7cf155e4f359b575db55317a983fe20a3c2baf53ecbf716aa4",
+      "componentVersion": "0.1.2",
+      "contractSha256": "202a7e1b47af154b0d96ec9ee0314fb30c4c2a9468c87e3ade779106c0d24ba5",
       "doNotUseWhen": [
         "不进行未授权渗透、外部扫描、凭证收集或真实数据攻击，不签发安全认证。",
         "要求自动发布、付款、修改生产系统或联系第三方时交调用方授权处理。",
@@ -255,8 +651,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "生产安全变更、敏感数据访问和对外安全保证交指定安全责任人复核；材料审查继续。",
-          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+          "生产安全变更、敏感数据访问和对外安全保证交指定安全责任人复核；材料审查继续。"
         ]
       },
       "id": "application-security-reviewer-deliver",
@@ -376,6 +771,138 @@
         "上线前核查认证、授权、租户隔离与数据流。",
         "判断扫描结果是否适用并补足证据。",
         "修复后确定正常与拒绝路径的回归验收。"
+      ],
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "bb7c2766fd0e5029dd544fdf9e189940f5577f58eeba23970b7d74e8abf30556",
+      "componentId": "applied-ai-engineer",
+      "componentPath": "agents/applied-ai-engineer",
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contractSha256": "0dd096d25ac8773a8897ba5b6a03289d425235646070060256ae01db6f28b80e",
+      "doNotUseWhen": [
+        "纯数据管道交data-pipeline-engineer。",
+        "训练底层大模型或采集无授权语料不属于本包。",
+        "新增付费模型调用或生产数据外发由当前授权决定。"
+      ],
+      "entrypoint": "AGENT.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "真实个人数据外发、新增费用和生产工具写入依本次授权；离线评价、原型和已授权调用继续。"
+        ]
+      },
+      "id": "applied-ai-engineer-deliver",
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "budget": {
+            "description": "延迟、成本、工具范围与已有基线",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "materials": {
+            "description": "数据源、访问范围、模型/索引版本",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "task": {
+            "description": "用户任务、可接受回答、拒答/转交场景",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "task",
+          "materials",
+          "budget"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "architecture": {
+            "description": "AI应用与工具边界",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "evaluation": {
+            "description": "固定数据集与分项结果",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "facts": {
+            "description": "本次材料、版本、单位和假设",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "failureAnalysis": {
+            "description": "失败归因与改进顺序",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "handoff": {
+            "description": "产物位置、未完成项和下一步",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "releasePolicy": {
+            "description": "小范围试用与熔断策略",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "architecture",
+          "evaluation",
+          "releasePolicy",
+          "failureAnalysis",
+          "facts",
+          "handoff"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "把检索、模型和工具连成可评价的AI功能，并用基线、失败样本和成本预算决定是否扩大使用。 applied AI RAG evaluation agent LLM",
+      "useWhen": [
+        "做一个基于企业文档的问答助手。",
+        "AI功能经常胡说，帮我定位和评估。",
+        "比较两个提示词或模型版本的实际表现。"
       ],
       "validation": [
         "tests/contract.test.mjs"
@@ -628,12 +1155,12 @@
       ]
     },
     {
-      "componentContentSha256": "f8841773fee8066329f9ac7b344d4fa3b0fdd1f1d44f83f0dcd2f4dcf4b1dd76",
+      "componentContentSha256": "d7ec54c9ba51a3c03d1c38eb041b10d3d54e18673289410de609ba090b4e8ea5",
       "componentId": "backend-data-engineer",
       "componentPath": "agents/backend-data-engineer",
       "componentType": "agent",
-      "componentVersion": "0.4.0",
-      "contractSha256": "06b43208e8d2446cfe428f22e6cbdc7c4a5cad34b3c3e383656a6d1086d7253b",
+      "componentVersion": "0.4.1",
+      "contractSha256": "e4563877f661f7e855cf675bbf3706fd3510f66c9d57051e5bbd4c729e8cfd42",
       "doNotUseWhen": [
         "量化策略评价：交 quantitative-researcher",
         "仅视觉布局：交 interaction-designer",
@@ -643,7 +1170,6 @@
       "humanGate": {
         "required": true,
         "when": [
-          "涉及医疗、法律、金融高影响结论或行动，停下交调用方按适用权限处理",
           "新的发布、生产变更、付费执行、敏感数据传输或持久访问由调用方确认；普通已授权可逆工作不重复确认",
           "任何明确拒绝均停止该目标，不切换工具、路由或Agent绕过"
         ]
@@ -1191,6 +1717,138 @@
       ]
     },
     {
+      "componentContentSha256": "2a364d922bd2e69691341f74aebe957dc303f004276b8ab1a1ebd0c1a29583fe",
+      "componentId": "brand-visual-designer",
+      "componentPath": "agents/brand-visual-designer",
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contractSha256": "b4b0f6d0e150259e499a0098eb48df0975f01677ec547f86101f7c62e1713bd8",
+      "doNotUseWhen": [
+        "只修组件行为交design-system-designer。",
+        "直接照抄他人商标或专属素材不属于本包。",
+        "缺品牌输入可先给方向探索，不代替商标注册审查。"
+      ],
+      "entrypoint": "AGENT.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "公开发布及使用受限品牌资产沿用当前授权；视觉探索与可编辑草案可继续。"
+        ]
+      },
+      "id": "brand-visual-designer-deliver",
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "assets": {
+            "description": "现有标识、素材、字体及使用来源",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "brief": {
+            "description": "用户、价值主张、调性、差异和渠道",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "formats": {
+            "description": "尺寸、语言、媒介、可编辑格式和发布节奏",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "brief",
+          "assets",
+          "formats"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "applications": {
+            "description": "渠道应用样稿",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "assetManifest": {
+            "description": "交付与资产清单",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "directions": {
+            "description": "可比较视觉方向",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "facts": {
+            "description": "本次材料、版本、单位和假设",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "handoff": {
+            "description": "产物位置、未完成项和下一步",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "identitySystem": {
+            "description": "视觉规则",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "directions",
+          "identitySystem",
+          "applications",
+          "assetManifest",
+          "facts",
+          "handoff"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "把品牌定位转成有区别的视觉方向、可复用规则和实际渠道物料。 brand identity visual design typography art direction",
+      "useWhen": [
+        "给产品设计一套品牌视觉方向。",
+        "海报、网站和社媒看起来像不同公司。",
+        "把已有品牌适配到不同语言和尺寸。"
+      ],
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
       "componentContentSha256": "88e1211b094ed701da53b32daf0f11a582ee1cf031761a3d94a5f88b92c4799a",
       "componentId": "claudecode-codex-gemini",
       "componentPath": "tools/claudecode-codex-gemini",
@@ -1286,12 +1944,12 @@
       ]
     },
     {
-      "componentContentSha256": "9ab1cce580bd719c79b21177c288fd1b4c32e3fcbe71328ad453e9ad527ab1d9",
+      "componentContentSha256": "6754bd04f9109bc19b1a531b5decbe69693e6802006b6b4a24d0e72e0a4b1396",
       "componentId": "business-finance-analyst",
       "componentPath": "agents/business-finance-analyst",
       "componentType": "agent",
-      "componentVersion": "0.1.1",
-      "contractSha256": "57d1e2375d6502852a8173d560e46709d30bb3167874e66a2e532ad205a51ac3",
+      "componentVersion": "0.1.2",
+      "contractSha256": "0b3d834ffd6e6dd767108fc7a9349b0c04221eed602f5dbf9333ab5f9fa2908a",
       "doNotUseWhen": [
         "不提供证券买卖建议、税务申报或审计意见；单项商品定价仍可交pricing-cost-analyst。",
         "要求自动发布、付款、修改生产系统或联系第三方时交调用方授权处理。",
@@ -1301,8 +1959,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "外部融资、税务处理、法定报表、重大支出与资金调拨由有权限的负责人或合格专业人员决定。",
-          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+          "外部融资、税务处理、法定报表、重大支出与资金调拨由有权限的负责人或合格专业人员决定。"
         ]
       },
       "id": "business-finance-analyst-deliver",
@@ -1428,12 +2085,145 @@
       ]
     },
     {
-      "componentContentSha256": "fd14df5eaa6eca7c1fc1fa40d5881e2eddffd591e0563f0606c3aa0880e17ab0",
+      "componentContentSha256": "7797eee7eb8a362fd2f2df76ecb72f69967edb8853bcc5fa9f7793c85e367a83",
+      "componentId": "commerce-operations-designer",
+      "componentPath": "agents/commerce-operations-designer",
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contractSha256": "446a79685678b4c1fbe637e15774b83aac05af879f4aee4dd32e2b440ae41343",
+      "doNotUseWhen": [
+        "商品文案交product-listing-writer。",
+        "店铺指标分析交store-performance-analyst。",
+        "真实退款付款与客户消息遵循当前授权。"
+      ],
+      "entrypoint": "AGENT.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "真实退款、补发和外部客户消息依当前授权；流程设计、事件回放和异常清单可直接推进。"
+        ]
+      },
+      "id": "commerce-operations-designer-deliver",
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "journey": {
+            "description": "订单类型、渠道、支付、履约和售后流程",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "policies": {
+            "description": "取消、退款、库存归还、订阅与服务时限",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "records": {
+            "description": "订单/支付/库存/退款事件及版本",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "journey",
+          "records",
+          "policies"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "eventHandling": {
+            "description": "重复和乱序事件处理",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "facts": {
+            "description": "本次材料、版本、单位和假设",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "handoff": {
+            "description": "产物位置、未完成项和下一步",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "operationsPlaybook": {
+            "description": "异常处理与服务交接",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "reconciliation": {
+            "description": "资金与库存对账",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "stateModel": {
+            "description": "订单和资金状态",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "stateModel",
+          "eventHandling",
+          "reconciliation",
+          "operationsPlaybook",
+          "facts",
+          "handoff"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "把下单、支付、履约、退换和订阅续费连接成可追踪的运营状态与异常处理。 commerce ecommerce order fulfillment returns subscription",
+      "useWhen": [
+        "订单、退款和库存经常对不上。",
+        "设计电商退货或订阅续费流程。",
+        "把支付与发货事件连接起来避免重复操作。"
+      ],
+      "validation": [
+        "tests/contract.test.mjs",
+        "tests/calculation.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "f7f7767870d62a560090bb9904fc905489a54ad7159ef84a679cc6f9115479f5",
       "componentId": "concept-tutor",
       "componentPath": "agents/concept-tutor",
       "componentType": "agent",
-      "componentVersion": "0.3.0",
-      "contractSha256": "eb1d25d3b12d8b84dffd3cde6616fbe4a44919cdc6d6f42ccfe8f28ef5470717",
+      "componentVersion": "0.3.1",
+      "contractSha256": "62dbba67e38c9f99dc6188d7de429089aa4dc145c8b95b33c06a120ca0e92e86",
       "doNotUseWhen": [
         "整节课教案交给 lesson-planner。",
         "批量出题交给 exercise-designer。",
@@ -1443,8 +2233,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "有考试限制时只讲同类概念与练习；碰到医疗、法律、金融决策结论时停下，不把课本知识当个人专业建议。",
-          "涉及医疗诊断、法律胜诉或金融投资收益等专业结论时停下，由具备资质的人员判断；涉及发布、对外发送或付款时须由用户另行授权。"
+          "有考试限制时只讲同类概念与练习；碰到医疗、法律、金融决策结论时停下，不把课本知识当个人专业建议。"
         ]
       },
       "id": "concept-tutor-assist",
@@ -1516,12 +2305,12 @@
       ]
     },
     {
-      "componentContentSha256": "00a29be48f3d7817885bd907441fef10cb7d6a46b3c11e4f5c4f79dd564c92e1",
+      "componentContentSha256": "95bb44347a966ea0e3037f70e3108038336fcd41807811d1e9a50684121e5a4c",
       "componentId": "construction-information-review",
       "componentPath": "skills/construction-information-review",
       "componentType": "skill",
-      "componentVersion": "0.1.1",
-      "contractSha256": "0ff7d78510f62a92bc04ba9b25e75b5b9ed7b4ab17df6d667e4946617a89a5e9",
+      "componentVersion": "0.1.2",
+      "contractSha256": "df5e9b34981610bf3432b9237739056481dc5297fbfaef2a98ad4c0a54414fd4",
       "doNotUseWhen": [
         "信息完整不等于结构、消防、几何碰撞或施工安全合格；不提供持证设计签章。",
         "要求自动发布、付款、修改生产系统或联系第三方时交调用方授权处理。",
@@ -1531,8 +2320,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "法定合规、结构/消防等设计判断和正式工程交付由相应有资质责任人确认。",
-          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+          "法定合规、结构/消防等设计判断和正式工程交付由相应有资质责任人确认。"
         ]
       },
       "id": "construction-information-review-deliver",
@@ -1658,12 +2446,12 @@
       ]
     },
     {
-      "componentContentSha256": "599984ca93bb07ed7881222caa9f1dd9bde88f1ffa4565cfddd0f0b780ff4d31",
+      "componentContentSha256": "853eebd58b5602831ff6d8d8dc4371efae773763e7e40d3647de3a7277fc2fec",
       "componentId": "customer-service-writer",
       "componentPath": "agents/customer-service-writer",
       "componentType": "agent",
-      "componentVersion": "0.3.0",
-      "contractSha256": "8dc8fa82e9f18d927d47e65aa238e2a3415c6d32dbea1eb76c06809cfee2239a",
+      "componentVersion": "0.3.1",
+      "contractSha256": "9231ae9855ffd2da5e8cd35a83c446ae656068ae4fc5a62673caca08f18e3067",
       "doNotUseWhen": [
         "商品页文案交给 product-listing-writer。",
         "店铺转化与退款数据分析交给 store-performance-analyst。",
@@ -1673,8 +2461,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "规则与平台要求冲突时暂停给出承诺，交商家核实；涉及赔偿法律结论、医疗损害或金融欺诈时停下并转有资质人员。",
-          "涉及医疗诊断、法律胜诉或金融投资收益等专业结论时停下，由具备资质的人员判断；涉及发布、对外发送或付款时须由用户另行授权。"
+          "规则与平台要求冲突时暂停给出承诺，交商家核实；涉及赔偿法律结论、医疗损害或金融欺诈时停下并转有资质人员。"
         ]
       },
       "id": "customer-service-writer-assist",
@@ -1752,12 +2539,145 @@
       ]
     },
     {
-      "componentContentSha256": "8ff930a26ae5ffbf048f5faa04729be69ee80b8be33e3ca3076bccefd16f0d41",
+      "componentContentSha256": "b853f6942ce94f6b17e4029b951f8577258510a0d8079c399dc0adfcc253ed40",
+      "componentId": "data-pipeline-engineer",
+      "componentPath": "agents/data-pipeline-engineer",
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contractSha256": "478b1065570eadb6426176fb3470e628dc1433ce3aa4a8317459550faed30213",
+      "doNotUseWhen": [
+        "单接口实现交backend-data-engineer。",
+        "只做数据质量诊断交data-quality-analyst。",
+        "生产凭据和跨组织数据传输由现有宿主授权。"
+      ],
+      "entrypoint": "AGENT.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "新增长期凭据、生产全量覆盖或跨组织传输按任务授权；可先生成SQL、局部样本和回补计划。"
+        ]
+      },
+      "id": "data-pipeline-engineer-deliver",
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "operations": {
+            "description": "运行窗口、失败恢复、回补区间和资源预算",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "sources": {
+            "description": "源表/文件、主键、变更事件和读取权限",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "target": {
+            "description": "输出粒度、消费者、时区、刷新和保留要求",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "sources",
+          "target",
+          "operations"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "dataChecks": {
+            "description": "质量和血缘检查",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "facts": {
+            "description": "本次材料、版本、单位和假设",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "handoff": {
+            "description": "产物位置、未完成项和下一步",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "operationsPlan": {
+            "description": "运行与故障处理",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "pipeline": {
+            "description": "分区与依赖方案",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "replayProof": {
+            "description": "重跑与回补证据",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "pipeline",
+          "replayProof",
+          "dataChecks",
+          "operationsPlan",
+          "facts",
+          "handoff"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "把多源数据变成可重跑、可回补并能追到异常记录的数据管道。 data pipeline ETL ELT Airflow dbt",
+      "useWhen": [
+        "把订单和支付数据每天同步到报表。",
+        "ETL重跑出现重复数据，帮我修。",
+        "设计迟到数据回补和数据质量检查。"
+      ],
+      "validation": [
+        "tests/contract.test.mjs",
+        "tests/calculation.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "faa37bd4b5c1a57c6cd7da3e4b8b4d000ee70ce2be90484bbba1f5803738a50a",
       "componentId": "data-quality-analyst",
       "componentPath": "agents/data-quality-analyst",
       "componentType": "agent",
-      "componentVersion": "0.1.1",
-      "contractSha256": "3b2f1bdff858ccbeeac76549b5e02efeae3fdc579439a34ae07039b2d617e9f4",
+      "componentVersion": "0.1.2",
+      "contractSha256": "01afa9294d5897b9f4dc0a05c01e69181b82909119527c2c9b00c8790c38ae9a",
       "doNotUseWhen": [
         "不未经授权改写数据、删除记录或推断缺失真实值；生产迁移由backend-data-engineer等执行角色处理。",
         "要求自动发布、付款、修改生产系统或联系第三方时交调用方授权处理。",
@@ -1767,8 +2687,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "涉及个人敏感数据、不可逆清洗、生产回填或业务规则更改，由数据负责人和当前宿主决定。",
-          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+          "涉及个人敏感数据、不可逆清洗、生产回填或业务规则更改，由数据负责人和当前宿主决定。"
         ]
       },
       "id": "data-quality-analyst-deliver",
@@ -1894,12 +2813,144 @@
       ]
     },
     {
-      "componentContentSha256": "423ff1247d8eebbb80a6e1eb7f823fbe0cfe3a7ebbc8efaddf0607d1374088bd",
+      "componentContentSha256": "dd6ec865188b08320e80a6e30b5664fc63d6c897bb9ae96915079b06e43b7c3e",
+      "componentId": "database-migration",
+      "componentPath": "skills/database-migration",
+      "componentType": "skill",
+      "componentVersion": "0.1.0",
+      "contractSha256": "6e004a2658703280d5b09f4d948577cc517a588a7465ed2fd1e425ada54f6258",
+      "doNotUseWhen": [
+        "纯查询性能分析可交backend-data-engineer。",
+        "未授权生产DDL不由方法执行。",
+        "没有备份恢复条件时先完成可逆准备与演练。"
+      ],
+      "entrypoint": "SKILL.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "生产DDL和不可逆数据删除按已有授权及恢复条件执行；迁移脚本、兼容代码和隔离演练可继续。"
+        ]
+      },
+      "id": "database-migration-deliver",
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "change": {
+            "description": "当前/目标schema、数据库版本和业务不变量",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "recovery": {
+            "description": "备份、恢复时间目标、回滚和校验方式",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "traffic": {
+            "description": "表规模、读写模式、消费者版本和部署顺序",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "change",
+          "traffic",
+          "recovery"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "backfill": {
+            "description": "可重跑回填",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "facts": {
+            "description": "本次材料、版本、单位和假设",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "handoff": {
+            "description": "产物位置、未完成项和下一步",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "recoveryPlan": {
+            "description": "回退和清理",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "sequence": {
+            "description": "扩展到收缩顺序",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "verification": {
+            "description": "锁和数据验证",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "sequence",
+          "backfill",
+          "verification",
+          "recoveryPlan",
+          "facts",
+          "handoff"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "把数据库结构变更拆成兼容扩展、可重跑回填、切换和清理，保留可恢复路径。 database migration expand contract rollback PostgreSQL",
+      "useWhen": [
+        "给已有大表加字段并迁移旧数据。",
+        "字段改名怎样不影响旧版本？",
+        "检查数据库迁移和回滚方案。"
+      ],
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "fcc3b215e79fc364a76c1f0e50f288e01b86bad77d75425f92283c661374ac78",
       "componentId": "delivery-verifier",
       "componentPath": "agents/delivery-verifier",
       "componentType": "agent",
-      "componentVersion": "0.3.0",
-      "contractSha256": "c74908f9091fbdba915e4ec258d89094c232bff43c0b148bb606ecd73f14e4ee",
+      "componentVersion": "0.3.1",
+      "contractSha256": "91b9991f3734cd24231571b64064aed83db195032a04a5df53b702f45fa1ee64",
       "deliveryContract": "delivery-tool.json",
       "doNotUseWhen": [
         "需要调度、权限、锁或最终裁决时交回调用方或 Meta。",
@@ -2023,12 +3074,277 @@
       ]
     },
     {
-      "componentContentSha256": "ea46d997edbb95db9c7a3370d5a2e12931460d55e6147df99b09da20c5d44b0e",
+      "componentContentSha256": "c6908c41fb5a4d9d260f79950915779b12366ee172ce3e1b4735309f1bf6f84a",
+      "componentId": "design-system-designer",
+      "componentPath": "agents/design-system-designer",
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contractSha256": "2e97d08996ac018785cc65caa5109c4366f2c21e9346263a296b99fd9de97d80",
+      "doNotUseWhen": [
+        "单页流程交interaction-designer。",
+        "具体前端实现交frontend-engineer协作。",
+        "完整品牌定位交brand-visual-designer。"
+      ],
+      "entrypoint": "AGENT.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "影响所有产品的品牌承诺或破坏性组件接口调整由对应负责人选择；原型和试点迁移可按已授权范围继续。"
+        ]
+      },
+      "id": "design-system-designer-deliver",
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "constraints": {
+            "description": "框架、兼容范围、可访问性目标和迁移节奏",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "identity": {
+            "description": "品牌色、字体、语言、密度和平台",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "surfaces": {
+            "description": "已有页面、组件、真实内容和用户任务",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "surfaces",
+          "identity",
+          "constraints"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "components": {
+            "description": "组件行为与状态",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "examples": {
+            "description": "真实页面与多语言示例",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "facts": {
+            "description": "本次材料、版本、单位和假设",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "handoff": {
+            "description": "产物位置、未完成项和下一步",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "migration": {
+            "description": "迁移和版本方案",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "tokens": {
+            "description": "语义token与引用",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "tokens",
+          "components",
+          "examples",
+          "migration",
+          "facts",
+          "handoff"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "把分散页面整理成一致的语义token、组件状态和可迁移的设计系统。 design system tokens component library",
+      "useWhen": [
+        "多个页面样式不统一，帮我整理设计系统。",
+        "把Figma或Penpot规范转成组件规则。",
+        "设计深色模式和多语言组件状态。"
+      ],
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "37400ee065cd3e605c0311a9af0bab33e748b994cb8a954ac3e423c348e8b157",
+      "componentId": "energy-project-analyst",
+      "componentPath": "agents/energy-project-analyst",
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contractSha256": "682cbab15a442dfa54cabe67fc3058f733b8234fa1d3a63be906018b53c7ad5f",
+      "doNotUseWhen": [
+        "电气安全设计、结构设计与并网签章由对应工程人员承担。",
+        "碳排放盘查交sustainability-analyst。",
+        "不把假设补贴或电价当当前当地事实。"
+      ],
+      "entrypoint": "AGENT.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "工程安全、并网、购置和融资承诺由具备权限与能力的负责人决定；资料核对及经济情景计算继续。"
+        ]
+      },
+      "id": "energy-project-analyst-deliver",
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "economics": {
+            "description": "CAPEX、运维、寿命、衰减、折现和融资口径",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "energy": {
+            "description": "逐时或月度负荷、发电、容量、效率与单位",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "tariffs": {
+            "description": "当前地区电价、结算、需量和政策来源",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "energy",
+          "tariffs",
+          "economics"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "cashFlows": {
+            "description": "项目现金流",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "comparison": {
+            "description": "经济性与敏感性",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "energyBalance": {
+            "description": "能量与时间匹配",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "facts": {
+            "description": "本次材料、版本、单位和假设",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "handoff": {
+            "description": "产物位置、未完成项和下一步",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "nextSteps": {
+            "description": "待核数据和工程交接",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "energyBalance",
+          "cashFlows",
+          "comparison",
+          "nextSteps",
+          "facts",
+          "handoff"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "把发电、用电、时段电价和项目现金流连接起来，比较节能、光伏或储能方案。 energy solar storage project economics tariff",
+      "useWhen": [
+        "帮我估算工厂光伏项目的收益。",
+        "比较储能或节能改造的经济性。",
+        "检查能源方案是否高估回本速度。"
+      ],
+      "validation": [
+        "tests/contract.test.mjs",
+        "tests/calculation.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "1636b2b78fef8b3f2112640f1dd43b71a18c2528f44a1192e68f4a2cb39d3107",
       "componentId": "exercise-designer",
       "componentPath": "agents/exercise-designer",
       "componentType": "agent",
-      "componentVersion": "0.3.0",
-      "contractSha256": "f344265b312d6e2cca9f7afa6532cd215329fc659ac7c46a765966354a7e07a3",
+      "componentVersion": "0.3.1",
+      "contractSha256": "bc2f3e9a1d86a6d2ac5f43348a1f4b6c6eea9a852020383527fdb64fd1c2e08a",
       "doNotUseWhen": [
         "单题理解困难交给 concept-tutor。",
         "课堂整体安排交给 lesson-planner。",
@@ -2038,8 +3354,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "发现题干缺条件或答案矛盾就停下修题；涉及医疗、法律、金融实务结论时停下换成普通学习情境，不收集学生个人资料。",
-          "涉及医疗诊断、法律胜诉或金融投资收益等专业结论时停下，由具备资质的人员判断；涉及发布、对外发送或付款时须由用户另行授权。"
+          "发现题干缺条件或答案矛盾就停下修题；涉及医疗、法律、金融实务结论时停下换成普通学习情境，不收集学生个人资料。"
         ]
       },
       "id": "exercise-designer-assist",
@@ -2126,12 +3441,12 @@
       ]
     },
     {
-      "componentContentSha256": "f6ddb089726f68f7309f6d7439795b96221bad321fb984f09beacaa6a1f98f7a",
+      "componentContentSha256": "be2725a2ed4c2f04ee4ee7b8df6b6aa9d721d6762baacc7506e722917282f56e",
       "componentId": "experiment-analysis",
       "componentPath": "skills/experiment-analysis",
       "componentType": "skill",
-      "componentVersion": "0.1.1",
-      "contractSha256": "ba005269a9d91baab69e8c936891e364e3447a4e6bcf429e89c52293eca2f758",
+      "componentVersion": "0.1.2",
+      "contractSha256": "1080921b35200d5b88e82433d8083ce38e3b300c526c651fdf6cb2c754ac5709",
       "doNotUseWhen": [
         "不将观察相关性包装成随机实验，不在无数据时给统计显著或业务收益保证。",
         "要求自动发布、付款、修改生产系统或联系第三方时交调用方授权处理。",
@@ -2141,8 +3456,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "高风险业务变更、患者/学生干预或实质性个人权益影响需相应责任人批准实验与行动。",
-          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+          "高风险业务变更、患者/学生干预或实质性个人权益影响需相应责任人批准实验与行动。"
         ]
       },
       "id": "experiment-analysis-deliver",
@@ -2268,12 +3582,278 @@
       ]
     },
     {
-      "componentContentSha256": "0ca5fc3d644958097213f29c4161faa3af51a993362ae6210ebb5ab853cecb1c",
+      "componentContentSha256": "81cac509d8d7c28456709e8326724edd60d6a984b1835885de4af7b7da62bf61",
+      "componentId": "financial-modeler",
+      "componentPath": "agents/financial-modeler",
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contractSha256": "d1ee4b6ce7d6ffe84c0a2053f80ccf5fbeed8ecee118fb56492c91ee122f6342",
+      "doNotUseWhen": [
+        "日常现金流水分析交business-finance-analyst。",
+        "策略回测交quantitative-researcher。",
+        "个性化证券买卖与法定审计结论不属于本包。"
+      ],
+      "entrypoint": "AGENT.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "资金交易、融资承诺、法定报表签署和个性化投资行动由有权限的责任人决定；资料分析、建模和情景计算继续。"
+        ]
+      },
+      "id": "financial-modeler-deliver",
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "decision": {
+            "description": "评价问题、估值时点、折现口径和情景约束",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "drivers": {
+            "description": "销量、价格、成本、资本开支、营运资金和融资假设",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "historicals": {
+            "description": "原始报表、期间、币种、会计政策和调整项",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "historicals",
+          "drivers",
+          "decision"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "decisionMemo": {
+            "description": "决策说明",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "facts": {
+            "description": "本次材料、版本、单位和假设",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "handoff": {
+            "description": "产物位置、未完成项和下一步",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "model": {
+            "description": "驱动与报表模型",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "scenarios": {
+            "description": "情景与敏感性",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "valuation": {
+            "description": "估值与股权桥接",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "model",
+          "valuation",
+          "scenarios",
+          "decisionMemo",
+          "facts",
+          "handoff"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "把经营假设连接到利润、现金和估值，交可复算的基准及压力情景。 financial model DCF cash flow forecast valuation",
+      "useWhen": [
+        "帮我做未来三年的财务预测。",
+        "分析这个项目值不值得投并说明假设。",
+        "检查财务模型为什么利润增长但现金变少。"
+      ],
+      "validation": [
+        "tests/contract.test.mjs",
+        "tests/calculation.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "cd7c377a1683c10d910132bc2a85af69c7ec94b2379f35510ac9850bee39a4ec",
+      "componentId": "financial-scenario-modeling",
+      "componentPath": "skills/financial-scenario-modeling",
+      "componentType": "skill",
+      "componentVersion": "0.1.0",
+      "contractSha256": "8d4deb5e09dfe11b74e202804e08043e6b166b00efb8b1de018c74302ae5f191",
+      "doNotUseWhen": [
+        "证券交易执行不属于本包。",
+        "完整公司研究交investment-research-analyst。",
+        "法律税务参数由适用来源与专业责任人确认。"
+      ],
+      "entrypoint": "SKILL.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "实际融资、资金调拨和个性化投资选择按责任权限处理；模型和情景计算可直接继续。"
+        ]
+      },
+      "id": "financial-scenario-modeling-deliver",
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "baseline": {
+            "description": "期初现金和按日期列出的收付款",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "constraints": {
+            "description": "最低现金、期限、折现口径和决策目标",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "drivers": {
+            "description": "变化因素、范围、依赖和币种",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "baseline",
+          "drivers",
+          "constraints"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "cashTimeline": {
+            "description": "日期现金轨迹",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "facts": {
+            "description": "本次材料、版本、单位和假设",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "handoff": {
+            "description": "产物位置、未完成项和下一步",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "options": {
+            "description": "行动选项",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "scenarioInputs": {
+            "description": "情景输入",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "sensitivity": {
+            "description": "敏感性计算",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "scenarioInputs",
+          "cashTimeline",
+          "sensitivity",
+          "options",
+          "facts",
+          "handoff"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "把不确定经营条件变成可调整情景，定位现金缺口与改变结论的关键假设。 financial scenarios cash runway sensitivity NPV",
+      "useWhen": [
+        "收入下降会不会导致现金断裂？",
+        "比较三种定价或成本方案。",
+        "检查NPV和现金跑道的算法。"
+      ],
+      "validation": [
+        "tests/contract.test.mjs",
+        "tests/calculation.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "492f3346d8f6a8b887366c65a22b47eec925280fff572738ef4b5b6077f54646",
       "componentId": "frontend-engineer",
       "componentPath": "agents/frontend-engineer",
       "componentType": "agent",
-      "componentVersion": "0.4.1",
-      "contractSha256": "c43f624e364d24d26297aa4b471db3d5fe641e72c6c75186d81fe4a05ab15afc",
+      "componentVersion": "0.4.2",
+      "contractSha256": "f55aa6e614a7864dc111383b05bbee52e4909f7cd23a8432a2512462681bff06",
       "doNotUseWhen": [
         "未明确产品范围：交 product-architect",
         "更改服务认证和数据库：交 backend-data-engineer",
@@ -2283,7 +3863,6 @@
       "humanGate": {
         "required": true,
         "when": [
-          "涉及医疗、法律、金融高影响结论或行动，停下交调用方按适用权限处理",
           "新的发布、生产变更、付费执行、敏感数据传输或持久访问由调用方确认；普通已授权可逆工作不重复确认",
           "任何明确拒绝均停止该目标，不切换工具、路由或Agent绕过"
         ]
@@ -2832,12 +4411,12 @@
       ]
     },
     {
-      "componentContentSha256": "08b88bf5aede8c38de6b7231e59c35a3b1c75a5c0d9374f2c34e0a4f9426e927",
+      "componentContentSha256": "4520a9a3b067dba9f7fe3ccf8dacb16eef6d9d9aa530712fbd27211bec3f7dc4",
       "componentId": "game-design-playtest",
       "componentPath": "skills/game-design-playtest",
       "componentType": "skill",
-      "componentVersion": "0.1.1",
-      "contractSha256": "fedadc36fb2cc80c3b75bdcc2e0f5ee462aa1c43baf9cc5d90ad0bb298c15352",
+      "componentVersion": "0.1.2",
+      "contractSha256": "1a1874cb7e8a1962001ececfe6b8e9ee344f452f5e5de4ad9059a5794190fd46",
       "doNotUseWhen": [
         "不虚构玩家测试、留存或营收效果，不以少量主观好玩评价证明市场成功。",
         "要求自动发布、付款、修改生产系统或联系第三方时交调用方授权处理。",
@@ -2847,8 +4426,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "上线、付费与重要玩家权益变更交项目负责人确认；涉及未成年人数据或商业化规则另核适用要求。",
-          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+          "上线、付费与重要玩家权益变更交项目负责人确认；涉及未成年人数据或商业化规则另核适用要求。"
         ]
       },
       "id": "game-design-playtest-deliver",
@@ -3349,12 +4927,12 @@
       ]
     },
     {
-      "componentContentSha256": "e193dbaaaa3fc107d91ecce706b8cf7536e6a6ffa9755ff9713bf6fd6944b081",
+      "componentContentSha256": "b5ee9dc70a590f60a8d1be341ffaf17c8062e177c469ed4bf1ba3fd653d8857b",
       "componentId": "healthcare-operations-analyst",
       "componentPath": "agents/healthcare-operations-analyst",
       "componentType": "agent",
-      "componentVersion": "0.1.1",
-      "contractSha256": "54d36f396db8ba1fc98a7061acbaa258ce71fa72337754c01c5e38234c2bb80a",
+      "componentVersion": "0.1.2",
+      "contractSha256": "ec6a1e26803eeda461109407399a45a5bbcc4b6b12a10fa1c00d0b4496d30b34",
       "doNotUseWhen": [
         "不诊断、不处方、不做个体临床分诊，不替代医疗质量或患者安全决策。",
         "要求自动发布、付款、修改生产系统或联系第三方时交调用方授权处理。",
@@ -3364,8 +4942,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "可能改变临床优先级、患者安全或真实服务流程的方案由医疗和运营负责人共同复核。",
-          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+          "可能改变临床优先级、患者安全或真实服务流程的方案由医疗和运营负责人共同复核。"
         ]
       },
       "id": "healthcare-operations-analyst-deliver",
@@ -3491,12 +5068,12 @@
       ]
     },
     {
-      "componentContentSha256": "b44430408d6ee20b634d7784ec40b89924cf2926e51189dec5ab30f556d08781",
+      "componentContentSha256": "f6e60f4e6a20e0b3a1f411240e2873e9067b44cac617507b2da15505f4b843d7",
       "componentId": "hiring-process-designer",
       "componentPath": "agents/hiring-process-designer",
       "componentType": "agent",
-      "componentVersion": "0.1.1",
-      "contractSha256": "5eac0e403df005d3aeecf67d69d6888b37492cad4391ec03f72052a248bfd07d",
+      "componentVersion": "0.1.2",
+      "contractSha256": "f3917539f28c5f29e1cb17f65509b08246463d3dd8faff9e16ffe3c8e5d1d8a0",
       "doNotUseWhen": [
         "不自动决定录用/淘汰，不推断受保护个人特征，不把学校、年龄或无依据人格标签代替工作能力。",
         "要求自动发布、付款、修改生产系统或联系第三方时交调用方授权处理。",
@@ -3506,8 +5083,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "录用决定、候选人数据使用和当地劳动合规由授权招聘负责人或专业人员复核。",
-          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+          "录用决定、候选人数据使用和当地劳动合规由授权招聘负责人或专业人员复核。"
         ]
       },
       "id": "hiring-process-designer-deliver",
@@ -3683,12 +5259,12 @@
       ]
     },
     {
-      "componentContentSha256": "867b7b00eee3334931adad943996906507faa10541cdf94877fc2ec36b777893",
+      "componentContentSha256": "6c7a4265b2b9e85affaefc9578379eb86b21cbd7b1b26931d98d0fde4fb38843",
       "componentId": "interaction-designer",
       "componentPath": "agents/interaction-designer",
       "componentType": "agent",
-      "componentVersion": "0.5.0",
-      "contractSha256": "c6278d1c0611f38360ef13befe9b058c1a8d914d50338982247fa1d4c8a874fe",
+      "componentVersion": "0.5.1",
+      "contractSha256": "9fd28ee39d92382ccbbe4d6cf7cfd1e9552fa201ff4de0e37ede7aef3dbe66ac",
       "doNotUseWhen": [
         "需要改后端权限：交 backend-data-engineer",
         "纯代码实现：交 frontend-engineer",
@@ -3698,7 +5274,6 @@
       "humanGate": {
         "required": true,
         "when": [
-          "涉及医疗、法律、金融高影响结论或行动，停下交调用方按适用权限处理",
           "新的发布、生产变更、付费执行、敏感数据传输或持久访问由调用方确认；普通已授权可逆工作不重复确认",
           "任何明确拒绝均停止该目标，不切换工具、路由或Agent绕过"
         ]
@@ -4617,12 +6192,12 @@
       ]
     },
     {
-      "componentContentSha256": "c7bf64f898ac9e66ee3cc2224917cdcb8f59bf863d7a67162547f4b65c816f71",
+      "componentContentSha256": "551838f62c91ba8d3745481f3c50d4990a35555fc6e7214706c38bcf507462d0",
       "componentId": "interview-coach",
       "componentPath": "agents/interview-coach",
       "componentType": "agent",
-      "componentVersion": "0.4.0",
-      "contractSha256": "ad3c20b13633815180854b26c1439233bad933563f2039816af85ac8017b5e94",
+      "componentVersion": "0.4.1",
+      "contractSha256": "120d37144fa019fb559986566e53fcfe4c1a1f5356cf6b4ba891b31c63cf2f9a",
       "doNotUseWhen": [
         "简历内容修改交给 resume-editor。",
         "日常工作沟通交给 workplace-writer。",
@@ -4632,8 +6207,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "涉及医疗、法律、金融专业执业结论时停下，不替人证明资质；招聘歧视性问题可练习礼貌回应，不推断用户受保护属性。",
-          "涉及医疗诊断、法律胜诉或金融投资收益等专业结论时停下，由具备资质的人员判断；涉及发布、对外发送或付款时须由用户另行授权。"
+          "涉及医疗、法律、金融专业执业结论时停下，不替人证明资质；招聘歧视性问题可练习礼貌回应，不推断用户受保护属性。"
         ]
       },
       "id": "interview-coach-assist",
@@ -4705,6 +6279,138 @@
         "用户说「陪我练一次面试」",
         "用户说「这个面试问题我不知道怎么答」",
         "用户说「我的回答太散帮我改一下」"
+      ],
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "65bf99c92ec3f11e39fabb8f8d5835c9320de59839aa94420158e493cb6b1a86",
+      "componentId": "investment-research-analyst",
+      "componentPath": "agents/investment-research-analyst",
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contractSha256": "44a7b0c4b5777ac18ea9b80303820da66e18a3266684b2639cf0d0ea7c683157",
+      "doNotUseWhen": [
+        "个性化买卖指令、自动下单和收益承诺不属于本包。",
+        "短期策略回测交quantitative-researcher。",
+        "法定财务审计由对应专业人员负责。"
+      ],
+      "entrypoint": "AGENT.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "个性化资产配置、交易和公开荐股发布不由本方法自动执行；公开资料研究与假设计算继续。"
+        ]
+      },
+      "id": "investment-research-analyst-deliver",
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "filings": {
+            "description": "原始报告、公告、期间、币种和获取日期",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "question": {
+            "description": "研究对象、投资论点、比较组和研究时点",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "valuationBasis": {
+            "description": "价格时点、股数、净债务、估值假设",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "question",
+          "filings",
+          "valuationBasis"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "businessAnalysis": {
+            "description": "业务与财务驱动",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "factSheet": {
+            "description": "原始事实与可比口径",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "facts": {
+            "description": "本次材料、版本、单位和假设",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "handoff": {
+            "description": "产物位置、未完成项和下一步",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "researchMemo": {
+            "description": "论点反证与更新条件",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "valuationRange": {
+            "description": "估值与情景区间",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "factSheet",
+          "businessAnalysis",
+          "valuationRange",
+          "researchMemo",
+          "facts",
+          "handoff"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "把公开原始财报和经营资料整理成可追溯的公司研究、风险情景及估值比较。 investment research financial statements fundamentals",
+      "useWhen": [
+        "帮我研究一家公司怎样赚钱。",
+        "把两家公司财报放在同口径比较。",
+        "检查研究报告的估值和关键风险。"
       ],
       "validation": [
         "tests/contract.test.mjs"
@@ -4885,12 +6591,12 @@
       ]
     },
     {
-      "componentContentSha256": "c730b08b17d245f33d2d4db0084f279e0fadc6ace1db77eecaced72fb7c132de",
+      "componentContentSha256": "7dd4c3ae21785543b708b906bad880947c84542b15c798f5890123f2d63ac3e4",
       "componentId": "kim-sticker-pack",
       "componentPath": "skills/kim-sticker-pack",
       "componentType": "skill",
-      "componentVersion": "0.3.0",
-      "contractSha256": "959ab7ca8865a52e035b69553caf33a466430eb712baf38a3f9cedb2201830a6",
+      "componentVersion": "0.3.1",
+      "contractSha256": "3ed6d22919182bc1a6f52f73a0fe596f36f7a3fc500fce308bd6d704a8d51717",
       "doNotUseWhen": [
         "The task requires this helper to generate natural character motion, rigging, interpolation or identity repair.",
         "The task is automatic publishing, rights clearance, sale or platform certification."
@@ -4977,12 +6683,12 @@
       ]
     },
     {
-      "componentContentSha256": "66c2e7ae4e0181ef46ebfe957f40a5e1b3eb0f0e0df89499a1611d356d6cfa6f",
+      "componentContentSha256": "91f5070cbb87318e1224cb1bd6dd52797010d866605f425f4ff41d001b8d87b6",
       "componentId": "launch-planner",
       "componentPath": "agents/launch-planner",
       "componentType": "agent",
-      "componentVersion": "0.3.0",
-      "contractSha256": "a1d84a9c8deeaa0767d774d2b014a83748af0b123065296219bdf4dfc416e16f",
+      "componentVersion": "0.3.1",
+      "contractSha256": "867e9d9b504208eb36e86ad8b0ff179438e040d2326be9d1ff77d61a744e9c30",
       "doNotUseWhen": [
         "还没选方向先找 side-business-evaluator。",
         "价格与成本计算交给 pricing-cost-analyst。",
@@ -4992,8 +6698,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "计划不是执行授权。涉及医疗、法律、金融专业服务或结论时停下；遇到购买、发送和发布步骤，只准备可审查材料，等用户授权。",
-          "涉及医疗诊断、法律胜诉或金融投资收益等专业结论时停下，由具备资质的人员判断；涉及发布、对外发送或付款时须由用户另行授权。"
+          "计划不是执行授权。涉及医疗、法律、金融专业服务或结论时停下；遇到购买、发送和发布步骤，只准备可审查材料，等用户授权。"
         ]
       },
       "id": "launch-planner-assist",
@@ -5074,12 +6779,144 @@
       ]
     },
     {
-      "componentContentSha256": "cb78a6a5167330a9229121a349156fad68d0673e9edfa8c0a8eaa9eaccb263c2",
+      "componentContentSha256": "482992fb4d7f2e611f6199e3e7a316000b21dbabe256c2ac3b2bba8f87266528",
+      "componentId": "learning-assessment-design",
+      "componentPath": "skills/learning-assessment-design",
+      "componentType": "skill",
+      "componentVersion": "0.1.0",
+      "contractSha256": "65ffea5d10aecfb076eff0dfde500932666eba229f12f2205e6a4e3b2cb42830",
+      "doNotUseWhen": [
+        "完整课程安排交lesson-planner。",
+        "单题生成交exercise-designer。",
+        "正式升学录用和个人能力诊断不由本方法自动决定。"
+      ],
+      "entrypoint": "SKILL.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "正式成绩、资格或录用决定由相应授权者按既有流程处理；任务设计和学习反馈可以继续。"
+        ]
+      },
+      "id": "learning-assessment-design-deliver",
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "constraints": {
+            "description": "语言、可访问方式、评分用途和反馈节奏",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "objectives": {
+            "description": "学习目标、先备知识和目标人群",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "tasks": {
+            "description": "现有题目、作品、学习情境和可用时间",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "objectives",
+          "tasks",
+          "constraints"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "alignment": {
+            "description": "目标任务映射",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "facts": {
+            "description": "本次材料、版本、单位和假设",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "fairness": {
+            "description": "表达方式与复核",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "feedback": {
+            "description": "形成性反馈",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "handoff": {
+            "description": "产物位置、未完成项和下一步",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "rubric": {
+            "description": "评分量表与样例",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "alignment",
+          "rubric",
+          "feedback",
+          "fairness",
+          "facts",
+          "handoff"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "把学习目标变成可观察任务、清晰评分标准和下一步反馈。 learning assessment rubric formative feedback education",
+      "useWhen": [
+        "课程学完怎么判断学生真的学会？",
+        "设计评分量表和形成性评价。",
+        "学生分数相同但问题不同，怎么反馈？"
+      ],
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "26bb657abc76a405edad33c98e2bd56309e70fb82add5248391cf8fcc4a2aa8f",
       "componentId": "lesson-planner",
       "componentPath": "agents/lesson-planner",
       "componentType": "agent",
-      "componentVersion": "0.3.0",
-      "contractSha256": "0450232bc776490316becaab34d95b5d4c523ab2e8c6dc6a2aff4265ced083fb",
+      "componentVersion": "0.3.1",
+      "contractSha256": "6365e390ca12d7436a1f1e1c0600c186a3901bacfb557d8933a8960515d70094",
       "doNotUseWhen": [
         "单题讲解交给 concept-tutor。",
         "成套原创练习与答案交给 exercise-designer。",
@@ -5089,8 +6926,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "不从学习表现推断疾病或智力，不作医疗、法律、金融结论；遇到此类请求停下交合适专业人员。涉及教材原文只使用用户有权提供的必要片段。",
-          "涉及医疗诊断、法律胜诉或金融投资收益等专业结论时停下，由具备资质的人员判断；涉及发布、对外发送或付款时须由用户另行授权。"
+          "不从学习表现推断疾病或智力，不作医疗、法律、金融结论；遇到此类请求停下交合适专业人员。涉及教材原文只使用用户有权提供的必要片段。"
         ]
       },
       "id": "lesson-planner-assist",
@@ -5416,12 +7252,12 @@
       ]
     },
     {
-      "componentContentSha256": "f490d4d269d63b3d7f9d14e9d6de1300346ce3a02c0700885264e27ae6d0a663",
+      "componentContentSha256": "ce9c8b515ce477f2ce046c4ed71ef4382854fa7a617daf07425d41cf1575978c",
       "componentId": "manufacturing-quality-analyst",
       "componentPath": "agents/manufacturing-quality-analyst",
       "componentType": "agent",
-      "componentVersion": "0.1.2",
-      "contractSha256": "b0ea73731f10c1db3b5cedf4f4d2d5a673c31fd6e3c259ed82314c03e0b4d2da",
+      "componentVersion": "0.1.3",
+      "contractSha256": "e252fa842ec1e6dc69d99723c01ca54e77f66d5d4d4a88c5eec6583fb2aaead1",
       "doNotUseWhen": [
         "不替代出厂放行、安全工程签章或质量体系认证；无过程前提不宣布能力达标。",
         "要求自动发布、付款、修改生产系统或联系第三方时交调用方授权处理。",
@@ -5431,8 +7267,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "涉及批次放行、产品安全、停线或永久工艺调整时交质量与工程责任人确认。",
-          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+          "涉及批次放行、产品安全、停线或永久工艺调整时交质量与工程责任人确认。"
         ]
       },
       "id": "manufacturing-quality-analyst-deliver",
@@ -5558,12 +7393,12 @@
       ]
     },
     {
-      "componentContentSha256": "90c537ed6ddd94a98f630e64b4a2718d31122ccf01010404990c5b107581d238",
+      "componentContentSha256": "cdc66f64dc4efcc2444586fe7b06f64100827fc39ad00436d6cd70f3520a67b8",
       "componentId": "media-production-engineer",
       "componentPath": "agents/media-production-engineer",
       "componentType": "agent",
-      "componentVersion": "0.3.0",
-      "contractSha256": "3f95a41183bc484e0f3dd16a0ed684a685ea971396e1a15d94f4de0f5e904f40",
+      "componentVersion": "0.3.1",
+      "contractSha256": "49ad02c49c4d056135bd62249eb62e03d30d7bb790843ab13924e215b8599dd4",
       "doNotUseWhen": [
         "只要正文：使用 script-writer",
         "缺素材授权或真人声音肖像许可：交调用方",
@@ -5573,7 +7408,6 @@
       "humanGate": {
         "required": true,
         "when": [
-          "涉及医疗、法律、金融高影响结论或行动，停下交调用方按适用权限处理",
           "新的发布、生产变更、付费执行、敏感数据传输或持久访问由调用方确认；普通已授权可逆工作不重复确认",
           "任何明确拒绝均停止该目标，不切换工具、路由或Agent绕过"
         ]
@@ -6673,12 +8507,12 @@
       ]
     },
     {
-      "componentContentSha256": "933609972e062b7b2592eb83f54ee9f8f9869167e86047fd7e2215a0879e6694",
+      "componentContentSha256": "a7bbd3cb6adf7d825342427b3256390145e25a4a9b87d93e630a44ce1d365e24",
       "componentId": "metric-contract",
       "componentPath": "skills/metric-contract",
       "componentType": "skill",
-      "componentVersion": "0.1.1",
-      "contractSha256": "644608b7cff260e71cf75ffb6ffab3e9bce00e168acb3301c0dbb5fe1561d135",
+      "componentVersion": "0.1.2",
+      "contractSha256": "e77220eaf38ebd3f849b2727046ad6eea9cdfd20bcf31578989710a8b2dc492b",
       "doNotUseWhen": [
         "不把指标命名当真实数据正确，也不替代数据所有者批准生产口径或财务披露。",
         "要求自动发布、付款、修改生产系统或联系第三方时交调用方授权处理。",
@@ -6688,8 +8522,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "经营结算、对外财务披露、考核奖惩或影响个人权益的指标由相应业务与数据责任人确认。",
-          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+          "经营结算、对外财务披露、考核奖惩或影响个人权益的指标由相应业务与数据责任人确认。"
         ]
       },
       "id": "metric-contract-deliver",
@@ -6815,6 +8648,138 @@
       ]
     },
     {
+      "componentContentSha256": "9e6027d21a77453c829bb3e651ad8776b131ffb735c7f190842bd841940c9422",
+      "componentId": "mobile-app-engineer",
+      "componentPath": "agents/mobile-app-engineer",
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contractSha256": "f1144eda40fd12602eb8dc3c91f0093d162e2c29857344d17e8df8a4234a76de",
+      "doNotUseWhen": [
+        "仅网站页面实现交frontend-engineer。",
+        "仅服务端数据迁移交backend-data-engineer。",
+        "商店账号、付费签名与正式上架由当前有权限的发布者处理。"
+      ],
+      "entrypoint": "AGENT.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "正式上架、收费签名或生产推送执行按本次授权；普通已授权开发、分析与本地验证继续。"
+        ]
+      },
+      "id": "mobile-app-engineer-deliver",
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "appContext": {
+            "description": "已有仓库、框架版本、页面、存储和接口",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "journey": {
+            "description": "目标用户、设备/系统、主流程与成功状态",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "syncRules": {
+            "description": "服务端身份、离线可用范围、冲突与恢复规则",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "journey",
+          "appContext",
+          "syncRules"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "deviceChecks": {
+            "description": "设备行为验收",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "facts": {
+            "description": "本次材料、版本、单位和假设",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "handoff": {
+            "description": "产物位置、未完成项和下一步",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "handoffPlan": {
+            "description": "联调与发布交接",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "implementation": {
+            "description": "页面与本地状态实现方案",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "syncProtocol": {
+            "description": "离线队列与同步协议",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "implementation",
+          "syncProtocol",
+          "deviceChecks",
+          "handoffPlan",
+          "facts",
+          "handoff"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "把一个移动端用户流程做成可实现的页面、状态与同步方案，重点处理离线、重启和重复提交。 mobile app Flutter offline synchronization",
+      "useWhen": [
+        "做一个支持断网暂存的移动应用。",
+        "修复APP切后台后丢失进度或重复提交。",
+        "制定移动端页面、权限与接口联调方案。"
+      ],
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
       "componentContentSha256": "ab9babf43fffef4ab753ffa95973bcb926803995cfdafd34090eb88a9a14c317",
       "componentId": "semgrep-skill",
       "componentPath": "skills/semgrep-skill",
@@ -6893,12 +8858,12 @@
       ]
     },
     {
-      "componentContentSha256": "e3c46101a8b47c5bb09de21cf25f4d46d7ac0b79015717814d6702720324bbda",
+      "componentContentSha256": "ceaf26c587df5d1f4e360f91afe7dff2a77a3b3739dc205d414af53314bedef8",
       "componentId": "pricing-cost-analyst",
       "componentPath": "agents/pricing-cost-analyst",
       "componentType": "agent",
-      "componentVersion": "0.3.0",
-      "contractSha256": "d80d217f4d6f1ccf78b10d5072fec8e64eb5b3f0a673dc6110fc774b691d8d29",
+      "componentVersion": "0.3.1",
+      "contractSha256": "0a1980b4a088b24d0cfdceef3f32903e2e4ce19b07a676056f853a10fa7b4b5f",
       "doNotUseWhen": [
         "副业方向选择交给 side-business-evaluator。",
         "第一周任务安排交给 launch-planner。",
@@ -6908,8 +8873,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "商业算术可继续，涉及个人金融投资、法律或医疗专业结论时停下。不能根据目标订单量声称市场一定买单，不能替用户收款或购买工具。",
-          "涉及医疗诊断、法律胜诉或金融投资收益等专业结论时停下，由具备资质的人员判断；涉及发布、对外发送或付款时须由用户另行授权。"
+          "商业算术可继续，涉及个人金融投资、法律或医疗专业结论时停下。不能根据目标订单量声称市场一定买单，不能替用户收款或购买工具。"
         ]
       },
       "id": "pricing-cost-analyst-assist",
@@ -6990,12 +8954,12 @@
       ]
     },
     {
-      "componentContentSha256": "3595e122f1b8aa2b67d291f4b7709dc1bc68520a51640dcbf031465dcf99d430",
+      "componentContentSha256": "37aef092ac95f75a5f2ca54197b50c25b843a4a8b02b9c21a66e3858b6d7cb38",
       "componentId": "product-architect",
       "componentPath": "agents/product-architect",
       "componentType": "agent",
-      "componentVersion": "0.5.0",
-      "contractSha256": "8afb090cd7271ed7ea2946df8481e78e685c995c6b0745483ae4dd0bb1e3edea",
+      "componentVersion": "0.5.1",
+      "contractSha256": "b01ea07f0f75557468412c9c35dc728cee59443d221ee94b6224585559298e6f",
       "doNotUseWhen": [
         "只要短文改稿：使用 script-writer",
         "只要界面视觉：交 interaction-designer",
@@ -7006,7 +8970,6 @@
       "humanGate": {
         "required": true,
         "when": [
-          "涉及医疗、法律、金融高影响结论或行动，停下交调用方按适用权限处理",
           "新的发布、生产变更、付费执行、敏感数据传输或持久访问由调用方确认；普通已授权可逆工作不重复确认",
           "任何明确拒绝均停止该目标，不切换工具、路由或Agent绕过"
         ]
@@ -7944,12 +9907,12 @@
       ]
     },
     {
-      "componentContentSha256": "859407c643fdd6deb982303595e344f5cfb39bb42290456338f4af967275d293",
+      "componentContentSha256": "c2a11d4b81742252828d615f594e01590ae9a451a1ff6efbf5f9fd3b19cbbb6a",
       "componentId": "product-listing-writer",
       "componentPath": "agents/product-listing-writer",
       "componentType": "agent",
-      "componentVersion": "0.3.0",
-      "contractSha256": "6f4dcfecfaebe40e3dc7df51368ca0518239686cd39fb417bd3a8e71b7ced6ef",
+      "componentVersion": "0.3.1",
+      "contractSha256": "35773b5b0a4110181c14e746e85fe7cfb9154957e17d524a750760866081570d",
       "doNotUseWhen": [
         "客服咨询与售后回复交给 customer-service-writer。",
         "店铺数据诊断交给 store-performance-analyst。",
@@ -7959,8 +9922,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "承重、防水、食品接触、医疗功效等没有依据时不写；缺资料可以交待补位，不能把愿望当商品事实。",
-          "涉及医疗诊断、法律胜诉或金融投资收益等专业结论时停下，由具备资质的人员判断；涉及发布、对外发送或付款时须由用户另行授权。"
+          "承重、防水、食品接触、医疗功效等没有依据时不写；缺资料可以交待补位，不能把愿望当商品事实。"
         ]
       },
       "id": "product-listing-writer-assist",
@@ -8171,12 +10133,12 @@
       ]
     },
     {
-      "componentContentSha256": "5c558ffefb49632dce756571d9d561e78e7d39a8e175d11f0404065fd2919d25",
+      "componentContentSha256": "18ab6dc67b2fc0d5d1e8beec53ac4b5909574a4944d004c41f8cd8a6716dc483",
       "componentId": "quantitative-researcher",
       "componentPath": "agents/quantitative-researcher",
       "componentType": "agent",
-      "componentVersion": "0.3.0",
-      "contractSha256": "fd47ab4c66a1e2d80c2a72b956f99e4dd580a4febe9cd02b50b44e3f3eb71fdd",
+      "componentVersion": "0.3.1",
+      "contractSha256": "dc01077286eafdfaa175cd1c34e6fd42e54ba9d23366bfa31e9d2cda2701c9f6",
       "doNotUseWhen": [
         "代下单、转账或交易账户操作：交用户本人",
         "要求保证收益或捏造历史数据：拒绝",
@@ -8187,7 +10149,6 @@
       "humanGate": {
         "required": true,
         "when": [
-          "涉及医疗、法律、金融高影响结论或行动，停下交调用方按适用权限处理",
           "新的发布、生产变更、付费执行、敏感数据传输或持久访问由调用方确认；普通已授权可逆工作不重复确认",
           "任何明确拒绝均停止该目标，不切换工具、路由或Agent绕过"
         ]
@@ -8570,12 +10531,145 @@
       ]
     },
     {
-      "componentContentSha256": "5c28ee8220e8c9981d750a2d52438c3eacb2a05ed180cb951c0f166e7eb0ec61",
+      "componentContentSha256": "23aede66980d7460b220e1e47752df969f42e24fbae855c77399556b26192f92",
+      "componentId": "reliability-engineer",
+      "componentPath": "agents/reliability-engineer",
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contractSha256": "57305c60e98544a196213b3a284f04f5d6701e80c4daa153f96f4c3209fea709",
+      "doNotUseWhen": [
+        "纯业务文案交workplace-writer。",
+        "应用实现交对应工程师，本包负责可靠性方案和验证。",
+        "未授权生产重启、流量切换或告警外发交现有值班负责人。"
+      ],
+      "entrypoint": "AGENT.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "生产流量切换和资源变更沿用当前任务授权；已授权本地演练和监测分析直接推进。"
+        ]
+      },
+      "id": "reliability-engineer-deliver",
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "release": {
+            "description": "基线/候选版本、发布范围、容量及回退方式",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "service": {
+            "description": "用户旅程、服务依赖和受影响范围",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "signals": {
+            "description": "请求、错误、时延、资源和历史事件",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "service",
+          "signals",
+          "release"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "facts": {
+            "description": "本次材料、版本、单位和假设",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "handoff": {
+            "description": "产物位置、未完成项和下一步",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "observability": {
+            "description": "告警和诊断线索",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "recovery": {
+            "description": "恢复步骤",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "rollout": {
+            "description": "金丝雀与熔断",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "serviceObjectives": {
+            "description": "服务目标与指标",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "serviceObjectives",
+          "rollout",
+          "recovery",
+          "observability",
+          "facts",
+          "handoff"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "围绕用户能否完成任务设计服务目标、监测、金丝雀发布和故障恢复。 SRE reliability canary observability incident",
+      "useWhen": [
+        "服务经常报错，想知道先修什么。",
+        "上线先小范围试用，有问题自动回退。",
+        "写一份能照着执行的故障处理方案。"
+      ],
+      "validation": [
+        "tests/contract.test.mjs",
+        "tests/calculation.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "199bc8c14fa9b2e2759a4b22f9b6deb39e6d8d45a823a344ac521b631219e995",
       "componentId": "requirements-traceability",
       "componentPath": "skills/requirements-traceability",
       "componentType": "skill",
-      "componentVersion": "0.1.1",
-      "contractSha256": "76a72206c98fe7cc10d9b24eb09bdef91026b1b03f6d74c004b04ab418be39fb",
+      "componentVersion": "0.1.2",
+      "contractSha256": "6de495556b12820d0ac03a6e26efa83be659ac5a2c97e411215c10714a3e483e",
       "doNotUseWhen": [
         "追踪表不替代实际测试或人工接受；本包不决定跨模块调度和最终批准。",
         "要求自动发布、付款、修改生产系统或联系第三方时交调用方授权处理。",
@@ -8585,8 +10679,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "最终接受、关键要求豁免及不可逆范围变更交有授权的业务/工程责任人决定。",
-          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+          "最终接受、关键要求豁免及不可逆范围变更交有授权的业务/工程责任人决定。"
         ]
       },
       "id": "requirements-traceability-deliver",
@@ -8712,12 +10805,12 @@
       ]
     },
     {
-      "componentContentSha256": "ee88d040e6045a8d1764ce9d31adb2261b3affe5e1a103eb407ec6788e040b69",
+      "componentContentSha256": "2b1cf7db2b549162ee9fde36ea858b521a1f72ab9d89363a05f78321516d6c8e",
       "componentId": "resume-editor",
       "componentPath": "agents/resume-editor",
       "componentType": "agent",
-      "componentVersion": "0.3.0",
-      "contractSha256": "a557221194f43c14faca2f2939767f1682f2c0b1fb473cd8fd440bd73f01c03e",
+      "componentVersion": "0.3.1",
+      "contractSha256": "b9a867770abd04e3629b35b7228c3c002254aa1ce6896c220887b74f27faabbd",
       "doNotUseWhen": [
         "面试练习交给 interview-coach。",
         "工作周报和邮件交给 workplace-writer。",
@@ -8727,8 +10820,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "只使用用户主动提供的经历，不按年龄、婚育等属性推断能力；涉及劳动法律、医疗或金融资质判断时停下并交专业人员。",
-          "涉及医疗诊断、法律胜诉或金融投资收益等专业结论时停下，由具备资质的人员判断；涉及发布、对外发送或付款时须由用户另行授权。"
+          "只使用用户主动提供的经历，不按年龄、婚育等属性推断能力；涉及劳动法律、医疗或金融资质判断时停下并交专业人员。"
         ]
       },
       "id": "resume-editor-assist",
@@ -8809,12 +10901,145 @@
       ]
     },
     {
-      "componentContentSha256": "b329abe1e2b465d97a5eeacf991bf1dc43497b94bd06d245dcc228b258e00e79",
+      "componentContentSha256": "3b1441765b9121a1e72edf9fc7534433fd73dd8ff9940bb7b661b4d6284a48c0",
+      "componentId": "retrieval-evaluation",
+      "componentPath": "skills/retrieval-evaluation",
+      "componentType": "skill",
+      "componentVersion": "0.1.0",
+      "contractSha256": "513e412226c7a3d77b6645aed12599572252bf775bb28ccad8f8d55279e88acd",
+      "doNotUseWhen": [
+        "答案事实评估需另读答案与原文。",
+        "未授权数据采集不属于本包。",
+        "不能用本次调参样本证明泛化提升。"
+      ],
+      "entrypoint": "SKILL.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "使用真实敏感语料或新增模型评分费用依当前授权；离线ID评分和标签审查可继续。"
+        ]
+      },
+      "id": "retrieval-evaluation-deliver",
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "dataset": {
+            "description": "问题、相关文档ID、标注规则与留出划分",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "policy": {
+            "description": "k值、过滤权限、空结果处理及统计口径",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "runs": {
+            "description": "相同语料版本下各查询返回的有序ID与分数",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "dataset",
+          "runs",
+          "policy"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "diagnosis": {
+            "description": "错误归因",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "facts": {
+            "description": "本次材料、版本、单位和假设",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "handoff": {
+            "description": "产物位置、未完成项和下一步",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "metrics": {
+            "description": "召回与排序指标",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "nextExperiment": {
+            "description": "下次试验",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "slices": {
+            "description": "分层和回归结果",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "metrics",
+          "slices",
+          "diagnosis",
+          "nextExperiment",
+          "facts",
+          "handoff"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "用独立标注和固定语料判断检索是否找到了相关材料，区分召回、排序与答案质量。 retrieval evaluation RAG recall precision MRR",
+      "useWhen": [
+        "RAG回答不好，先查检索。",
+        "比较两个检索器或切块方案。",
+        "给企业搜索建立评价集。"
+      ],
+      "validation": [
+        "tests/contract.test.mjs",
+        "tests/calculation.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "66869a18624a759206f4bd894d1fe81aa6e187d6f0bd326f1dee4379f49df95f",
       "componentId": "sales-operations-analyst",
       "componentPath": "agents/sales-operations-analyst",
       "componentType": "agent",
-      "componentVersion": "0.1.1",
-      "contractSha256": "f971ddecfaf97298b599f85b4fbbe94d86ef679169514e8ee8d7f586997a92bb",
+      "componentVersion": "0.1.2",
+      "contractSha256": "8c1ebb59841042deafd470e3f4ea05f411affb37ec61d7e9db2b66fe0b45d794",
       "doNotUseWhen": [
         "不自动联系客户、修改CRM或承诺成交；营销内容制作由相应内容角色处理。",
         "要求自动发布、付款、修改生产系统或联系第三方时交调用方授权处理。",
@@ -8824,8 +11049,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "合同承诺、报价变更、客户联系和个人绩效处置由授权负责人决定，分析材料不得自动触发这些动作。",
-          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+          "合同承诺、报价变更、客户联系和个人绩效处置由授权负责人决定，分析材料不得自动触发这些动作。"
         ]
       },
       "id": "sales-operations-analyst-deliver",
@@ -9176,12 +11400,12 @@
       ]
     },
     {
-      "componentContentSha256": "6b991f4ab3b7ab576a4e1452947f002eebfcc5c0d71fa706e827c97baf7cbb7c",
+      "componentContentSha256": "6a9b6d3b3d080bd1c8a9f61f84e959868e607339fca2432af371dccc1beb4776",
       "componentId": "side-business-evaluator",
       "componentPath": "agents/side-business-evaluator",
       "componentType": "agent",
-      "componentVersion": "0.3.0",
-      "contractSha256": "1a6f11c14c66b122b2218145df29921156cef788c757129cb3fd4c6a7712d04e",
+      "componentVersion": "0.3.1",
+      "contractSha256": "f66acc9358b5430b416c05f86d7c21aeb07ee66257855fb3b95b79625319d163",
       "doNotUseWhen": [
         "已选方向的开工安排交给 launch-planner。",
         "报价与收支测算交给 pricing-cost-analyst。",
@@ -9191,8 +11415,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "医疗、法律、金融专业服务或投资结论不在范围，遇到时停下；不提出刷单、侵权搬运、拉人头或未经同意收集个人信息的方案。",
-          "涉及医疗诊断、法律胜诉或金融投资收益等专业结论时停下，由具备资质的人员判断；涉及发布、对外发送或付款时须由用户另行授权。"
+          "医疗、法律、金融专业服务或投资结论不在范围，遇到时停下；不提出刷单、侵权搬运、拉人头或未经同意收集个人信息的方案。"
         ]
       },
       "id": "side-business-evaluator-assist",
@@ -9515,12 +11738,12 @@
       ]
     },
     {
-      "componentContentSha256": "8b224d4c0e0de776252ca49bd7934ffc05f7ec44f3556be41632c58c4f355fca",
+      "componentContentSha256": "33749e147947b56190fc551e0f05a839ca89df0ebc7972325397bef7f917ef91",
       "componentId": "sop-runbook",
       "componentPath": "skills/sop-runbook",
       "componentType": "skill",
-      "componentVersion": "0.1.1",
-      "contractSha256": "952c884ffbf09a644f6f4a623fbc3bec54e288a03aee4911b4711f432db1152c",
+      "componentVersion": "0.1.2",
+      "contractSha256": "42b689d6ff5575af40619017d58592e5c8b280cb0f2d4cf03f97d042f5a07bba",
       "doNotUseWhen": [
         "编写规程不授予生产、付款、发送消息或危险操作权限；演练记录不能冒充真实恢复。",
         "要求自动发布、付款、修改生产系统或联系第三方时交调用方授权处理。",
@@ -9530,8 +11753,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "不可逆动作、生产变更和对外通告按本任务已有授权及相应责任流程处理；文档完善与只读核查继续。",
-          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+          "不可逆动作、生产变更和对外通告按本任务已有授权及相应责任流程处理；文档完善与只读核查继续。"
         ]
       },
       "id": "sop-runbook-deliver",
@@ -9657,12 +11879,12 @@
       ]
     },
     {
-      "componentContentSha256": "b0691a6c3a8c7683da83e7b908022c487f22056bca714082fb7718eeba87deca",
+      "componentContentSha256": "92cb93fd9833ae9ca3e8f12f5e832f40e4b7b00549cbb76b8cbb402e7aaf2e05",
       "componentId": "source-evidence-analyst",
       "componentPath": "agents/source-evidence-analyst",
       "componentType": "agent",
-      "componentVersion": "0.3.0",
-      "contractSha256": "ca4de1cfe93179fdbd515e2748c1ba6e27d621f69abfd302081166d3e338691b",
+      "componentVersion": "0.3.1",
+      "contractSha256": "bd741aad3ca085fec59ac05b905c5a6c7c87ecc3ea07109a03e0657e777c7bc5",
       "doNotUseWhen": [
         "需要未经批准发布、申诉或联系他人：交调用方",
         "需要绕站点安全拒绝、登录或读取秘密：停止",
@@ -9672,7 +11894,6 @@
       "humanGate": {
         "required": true,
         "when": [
-          "涉及医疗、法律、金融高影响结论或行动，停下交调用方按适用权限处理",
           "新的发布、生产变更、付费执行、敏感数据传输或持久访问由调用方确认；普通已授权可逆工作不重复确认",
           "任何明确拒绝均停止该目标，不切换工具、路由或Agent绕过"
         ]
@@ -10053,12 +12274,12 @@
       ]
     },
     {
-      "componentContentSha256": "db316f52fc8fd44abaeff8b9622d75bd465924e2ffabddcd4f638fa30a68bb59",
+      "componentContentSha256": "75c5645b1dbfdf657306a0ed9572a24df39263ee372d4117100da1fb1551fd66",
       "componentId": "store-performance-analyst",
       "componentPath": "agents/store-performance-analyst",
       "componentType": "agent",
-      "componentVersion": "0.4.0",
-      "contractSha256": "be1260b6ebbbf92e41da855404f8abe011424561235a691a02dd33475637a4d0",
+      "componentVersion": "0.4.1",
+      "contractSha256": "8028dc8e4c62ea9bc8dd4369d937cbb955fb6c61251564ccc04ff17a9836e141",
       "deliveryContract": "delivery-tool.json",
       "doNotUseWhen": [
         "商品文案交给 product-listing-writer。",
@@ -10070,7 +12291,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "涉及医疗诊断、法律胜诉或金融投资收益等专业结论时停下，由具备资质的人员判断；涉及发布、对外发送或付款时须由用户另行授权。"
+          "发布、外部消息、付款或生产写入沿用当前任务授权；资料整理、计算和已授权可逆工作继续。"
         ]
       },
       "id": "store-performance-analyst-assist",
@@ -10173,12 +12394,12 @@
       ]
     },
     {
-      "componentContentSha256": "3e6443c7cd9bf56ab55fa5a5a066fbcd77b4ef329fdc1134257a009bc03e2a6a",
+      "componentContentSha256": "fef66ec7c6c9176b6b32e4ea9f05f437bac76f5e2055f621ce0725694b0f836b",
       "componentId": "supplier-comparison-analyst",
       "componentPath": "agents/supplier-comparison-analyst",
       "componentType": "agent",
-      "componentVersion": "0.3.0",
-      "contractSha256": "d857136fc0648b6af4e5203e2ac592b1f30e32c1a95b65ba7539d51fb9eab3a3",
+      "componentVersion": "0.3.1",
+      "contractSha256": "1153b06f1ab8910d35bcb0efc652e7af922c9dbc4bee7fa58f457fc4e5662b71",
       "deliveryContract": "delivery-tool.json",
       "doNotUseWhen": [
         "服务报价、单笔经营利润或固定成本覆盖测算交给 pricing-cost-analyst；经营期间复盘交给 store-performance-analyst。",
@@ -10306,12 +12527,12 @@
       ]
     },
     {
-      "componentContentSha256": "b1e0f3e8aa4eee3c8b6f68e83d5e7632e324f426cfaa54dfcdfb26b6f2d1a5e3",
+      "componentContentSha256": "04949273c9f518f58800a4e405e632ee2f61a633600cc4517d71bb6c495149a2",
       "componentId": "supply-chain-planner",
       "componentPath": "agents/supply-chain-planner",
       "componentType": "agent",
-      "componentVersion": "0.1.1",
-      "contractSha256": "04f87ea88b492cfc93cd7f0887897113ab05533e286ea022b487af621493a2aa",
+      "componentVersion": "0.1.2",
+      "contractSha256": "160fc9171cfdd385d36509aead6ff93699a138995fd1ef79cd585382ac9cb810",
       "doNotUseWhen": [
         "不自动下单或承诺供应商交期；没有依据时不编造需求、安全库存和采购审批。",
         "要求自动发布、付款、修改生产系统或联系第三方时交调用方授权处理。",
@@ -10321,8 +12542,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "采购承诺、供应商选择和重大库存政策由业务负责人确认；计算与方案准备继续。",
-          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+          "采购承诺、供应商选择和重大库存政策由业务负责人确认；计算与方案准备继续。"
         ]
       },
       "id": "supply-chain-planner-deliver",
@@ -10448,12 +12668,12 @@
       ]
     },
     {
-      "componentContentSha256": "7b519f14aa1967b2b7315b98ba5af65a24fc1e504d531a92ef12ff33bd76eb72",
+      "componentContentSha256": "4b1a5ca4c034ccdab8504ad46a2a4d9129415f14218c23b1c593d90aceaaa77b",
       "componentId": "sustainability-analyst",
       "componentPath": "agents/sustainability-analyst",
       "componentType": "agent",
-      "componentVersion": "0.1.1",
-      "contractSha256": "60a5db788e62e2b5a01aaf510647f79a433de575cdad6733d05a1d19600f8d68",
+      "componentVersion": "0.1.2",
+      "contractSha256": "ee82199950bd1b4c483d4bd0bb8c94ef804f30376834d7f24b40d6acc3aeac7f",
       "doNotUseWhen": [
         "不核发碳信用、不作碳中和或法定审定认证；库存草案不能替代独立核查。",
         "要求自动发布、付款、修改生产系统或联系第三方时交调用方授权处理。",
@@ -10463,8 +12683,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "对外披露、法定报告、抵消/信用主张和实质性边界变更交有资质或授权负责人复核。",
-          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+          "对外披露、法定报告、抵消/信用主张和实质性边界变更交有资质或授权负责人复核。"
         ]
       },
       "id": "sustainability-analyst-deliver",
@@ -10590,12 +12809,12 @@
       ]
     },
     {
-      "componentContentSha256": "ee51e41aa02c80ce616b015712ffa5b07d46c5bd8f294211b6009eb2e6491c56",
+      "componentContentSha256": "bfb78004ff77a2744975f4945b0734938c2e566b25e482bf106401cc4be0432b",
       "componentId": "systems-engineering-analyst",
       "componentPath": "agents/systems-engineering-analyst",
       "componentType": "agent",
-      "componentVersion": "0.1.1",
-      "contractSha256": "a83b3df3b8a76ceb272b83a47c2d6aac90481c001ce130b7f20223403364bec7",
+      "componentVersion": "0.1.2",
+      "contractSha256": "1c66aafab1cf9bc7d4f7d3fbe60000c31a1d517e3203b5561ee9df80b64526e4",
       "doNotUseWhen": [
         "不替代结构、电气、安全等持证设计签章；不以需求表齐全宣称系统实测完成。",
         "要求自动发布、付款、修改生产系统或联系第三方时交调用方授权处理。",
@@ -10605,8 +12824,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "安全相关要求、不可逆接口变更和最终系统接受交指定工程与业务负责人确认。",
-          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+          "安全相关要求、不可逆接口变更和最终系统接受交指定工程与业务负责人确认。"
         ]
       },
       "id": "systems-engineering-analyst-deliver",
@@ -10726,6 +12944,138 @@
         "多模块项目需要明确系统要求与接口责任。",
         "模块各自完成但系统目标未满足，需要查追踪缺口。",
         "需求变更后需要定位受影响实现与验收。"
+      ],
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "c589219ec2b614caaa04ff473c033b64d9b31a1175fb211ca674af0936f8e02e",
+      "componentId": "test-automation-engineer",
+      "componentPath": "agents/test-automation-engineer",
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contractSha256": "abb87d3b722e08fc97db31858f753e52328154bd54a1bc2bc4964fb17efef925",
+      "doNotUseWhen": [
+        "只做源代码实现交对应工程师。",
+        "只看界面视觉方向交interaction-designer。",
+        "无授权压力测试第三方系统不属于本包。"
+      ],
+      "entrypoint": "AGENT.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "真实付款、外部消息和生产负载测试按本次权限；普通本地测试与夹具生成继续。"
+        ]
+      },
+      "id": "test-automation-engineer-deliver",
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "behavior": {
+            "description": "用户流程、业务规则、关键失败和完成标准",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "changes": {
+            "description": "本次差异、风险和已有测试",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "system": {
+            "description": "运行入口、测试环境、账号/数据与依赖",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "behavior",
+          "system",
+          "changes"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "automation": {
+            "description": "可独立执行的测试",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "coverage": {
+            "description": "残余风险与维护",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "facts": {
+            "description": "本次材料、版本、单位和假设",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "handoff": {
+            "description": "产物位置、未完成项和下一步",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "results": {
+            "description": "执行与失败证据",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "testPlan": {
+            "description": "风险与用例映射",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "testPlan",
+          "automation",
+          "results",
+          "coverage",
+          "facts",
+          "handoff"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "围绕真实用户路径建立有判定力的自动化测试，让失败可复现、可定位。 QA test automation Playwright regression",
+      "useWhen": [
+        "给关键业务流程补自动化测试。",
+        "测试一会儿过一会儿不过，帮我定位。",
+        "做前后端联调和回归范围设计。"
       ],
       "validation": [
         "tests/contract.test.mjs"
@@ -10912,12 +13262,12 @@
       ]
     },
     {
-      "componentContentSha256": "8477515fac3282af34c078e4f17d77bcd7f1f63af2dddeff6d7a17c7f44be11c",
+      "componentContentSha256": "8cd3bed9226f19f3c8dd78be7e29aa36953b21f502f1bbebc2303525db894720",
       "componentId": "user-researcher",
       "componentPath": "agents/user-researcher",
       "componentType": "agent",
-      "componentVersion": "0.1.1",
-      "contractSha256": "e263ac0286789d03ff71bdff1bb6a85a9118d871e74ac4bcd53207f2eae3df29",
+      "componentVersion": "0.1.2",
+      "contractSha256": "631459fcc86a20ebd33d5bc6127be65cad5a5fb0e44cae8d79eb4e151859640b",
       "doNotUseWhen": [
         "不把虚构访谈当真人记录，不自动招募或联系用户；页面方案由interaction-designer等角色承接。",
         "要求自动发布、付款、修改生产系统或联系第三方时交调用方授权处理。",
@@ -10927,8 +13277,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "涉及录音、敏感材料、未成年人或招募报酬时由当前宿主核实授权与适用规则，研究分析可在已获准材料内继续。",
-          "涉及医疗、法律、金融高影响结论或行动时停下交合格人员复核；普通已授权可逆分析继续。"
+          "涉及录音、敏感材料、未成年人或招募报酬时由当前宿主核实授权与适用规则，研究分析可在已获准材料内继续。"
         ]
       },
       "id": "user-researcher-deliver",
@@ -11054,12 +13403,12 @@
       ]
     },
     {
-      "componentContentSha256": "2e86de19ac4a298b7fb069c180f05b483670bdae6665b83f8f25561df85505fc",
+      "componentContentSha256": "31579c26c8afa9edbca4208a2a38b87fdaae9bb4a23490ed1dc98013dd229513",
       "componentId": "workplace-writer",
       "componentPath": "agents/workplace-writer",
       "componentType": "agent",
-      "componentVersion": "0.3.0",
-      "contractSha256": "7971e46f655f8f3436ad67a703c6655ba10f33b9711a38ef850bcfc277c2eec8",
+      "componentVersion": "0.3.1",
+      "contractSha256": "23a2041577c12fb3406b73fa1e0e32d029276e3d15934024b66c603a56d61953",
       "doNotUseWhen": [
         "求职材料交给 resume-editor。",
         "顾客售后话术交给 customer-service-writer。",
@@ -11069,8 +13418,7 @@
       "humanGate": {
         "required": true,
         "when": [
-          "不代写虚假考勤、冒名承诺或隐瞒事故；涉及劳动法律、医疗隐私、金融披露结论时停下，保留事实摘要。",
-          "涉及医疗诊断、法律胜诉或金融投资收益等专业结论时停下，由具备资质的人员判断；涉及发布、对外发送或付款时须由用户另行授权。"
+          "不代写虚假考勤、冒名承诺或隐瞒事故；涉及劳动法律、医疗隐私、金融披露结论时停下，保留事实摘要。"
         ]
       },
       "id": "workplace-writer-assist",
@@ -11271,17 +13619,33 @@
       ]
     }
   ],
-  "capabilityCount": 68,
-  "componentCount": 53,
+  "capabilityCount": 86,
+  "componentCount": 71,
   "components": [
+    {
+      "capabilityIds": [
+        "accounting-reconciliation-analyst-deliver"
+      ],
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contentSha256": "42a87ea18d044d8cbd78e93ac5d747beb983ff28fc2a8621e851b515a0b9fe1f",
+      "contractSha256": "133a857f0edaae591a26b7c568763199864585334df42650ddb5aeb9ac566533",
+      "entrypoint": "AGENT.md",
+      "id": "accounting-reconciliation-analyst",
+      "path": "agents/accounting-reconciliation-analyst",
+      "validation": [
+        "tests/calculation.test.mjs",
+        "tests/contract.test.mjs"
+      ]
+    },
     {
       "capabilityIds": [
         "agronomy-planner-deliver"
       ],
       "componentType": "agent",
-      "componentVersion": "0.1.1",
-      "contentSha256": "7ffecd2e5ff33f3498aafbcbee7cedd410a6a15ec37d95cee37af5a0687a2446",
-      "contractSha256": "a74270858fa23dd63a35d7b56cdeee0d8a137bb4b40399f8e5d7e9554a2c4b5c",
+      "componentVersion": "0.1.2",
+      "contentSha256": "44919971d3db8dae572e33003315fd314c8cc485533cbc871a616f07c187a21e",
+      "contractSha256": "e65fe73ecc6121a91df88095fc0be4a030e4b7f7471d07736eeeaf2c19e752c2",
       "entrypoint": "AGENT.md",
       "id": "agronomy-planner",
       "path": "agents/agronomy-planner",
@@ -11294,9 +13658,9 @@
         "application-security-reviewer-deliver"
       ],
       "componentType": "agent",
-      "componentVersion": "0.1.1",
-      "contentSha256": "a629233f4a4bdc4c805f21fae728fd5321a59bfef9342960873209cd18e6402a",
-      "contractSha256": "fcda878cd897eb7cf155e4f359b575db55317a983fe20a3c2baf53ecbf716aa4",
+      "componentVersion": "0.1.2",
+      "contentSha256": "f3ac4c2ba69e15498d950cc763a73f24743bcaf8e05bd805ad8b178a081c2565",
+      "contractSha256": "202a7e1b47af154b0d96ec9ee0314fb30c4c2a9468c87e3ade779106c0d24ba5",
       "entrypoint": "AGENT.md",
       "id": "application-security-reviewer",
       "path": "agents/application-security-reviewer",
@@ -11306,12 +13670,27 @@
     },
     {
       "capabilityIds": [
+        "applied-ai-engineer-deliver"
+      ],
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contentSha256": "bb7c2766fd0e5029dd544fdf9e189940f5577f58eeba23970b7d74e8abf30556",
+      "contractSha256": "0dd096d25ac8773a8897ba5b6a03289d425235646070060256ae01db6f28b80e",
+      "entrypoint": "AGENT.md",
+      "id": "applied-ai-engineer",
+      "path": "agents/applied-ai-engineer",
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
         "backend-data-engineer-deliver"
       ],
       "componentType": "agent",
-      "componentVersion": "0.4.0",
-      "contentSha256": "f8841773fee8066329f9ac7b344d4fa3b0fdd1f1d44f83f0dcd2f4dcf4b1dd76",
-      "contractSha256": "06b43208e8d2446cfe428f22e6cbdc7c4a5cad34b3c3e383656a6d1086d7253b",
+      "componentVersion": "0.4.1",
+      "contentSha256": "d7ec54c9ba51a3c03d1c38eb041b10d3d54e18673289410de609ba090b4e8ea5",
+      "contractSha256": "e4563877f661f7e855cf675bbf3706fd3510f66c9d57051e5bbd4c729e8cfd42",
       "entrypoint": "AGENT.md",
       "id": "backend-data-engineer",
       "path": "agents/backend-data-engineer",
@@ -11321,12 +13700,27 @@
     },
     {
       "capabilityIds": [
+        "brand-visual-designer-deliver"
+      ],
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contentSha256": "2a364d922bd2e69691341f74aebe957dc303f004276b8ab1a1ebd0c1a29583fe",
+      "contractSha256": "b4b0f6d0e150259e499a0098eb48df0975f01677ec547f86101f7c62e1713bd8",
+      "entrypoint": "AGENT.md",
+      "id": "brand-visual-designer",
+      "path": "agents/brand-visual-designer",
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
         "business-finance-analyst-deliver"
       ],
       "componentType": "agent",
-      "componentVersion": "0.1.1",
-      "contentSha256": "9ab1cce580bd719c79b21177c288fd1b4c32e3fcbe71328ad453e9ad527ab1d9",
-      "contractSha256": "57d1e2375d6502852a8173d560e46709d30bb3167874e66a2e532ad205a51ac3",
+      "componentVersion": "0.1.2",
+      "contentSha256": "6754bd04f9109bc19b1a531b5decbe69693e6802006b6b4a24d0e72e0a4b1396",
+      "contractSha256": "0b3d834ffd6e6dd767108fc7a9349b0c04221eed602f5dbf9333ab5f9fa2908a",
       "entrypoint": "AGENT.md",
       "id": "business-finance-analyst",
       "path": "agents/business-finance-analyst",
@@ -11336,12 +13730,28 @@
     },
     {
       "capabilityIds": [
+        "commerce-operations-designer-deliver"
+      ],
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contentSha256": "7797eee7eb8a362fd2f2df76ecb72f69967edb8853bcc5fa9f7793c85e367a83",
+      "contractSha256": "446a79685678b4c1fbe637e15774b83aac05af879f4aee4dd32e2b440ae41343",
+      "entrypoint": "AGENT.md",
+      "id": "commerce-operations-designer",
+      "path": "agents/commerce-operations-designer",
+      "validation": [
+        "tests/calculation.test.mjs",
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
         "concept-tutor-assist"
       ],
       "componentType": "agent",
-      "componentVersion": "0.3.0",
-      "contentSha256": "fd14df5eaa6eca7c1fc1fa40d5881e2eddffd591e0563f0606c3aa0880e17ab0",
-      "contractSha256": "eb1d25d3b12d8b84dffd3cde6616fbe4a44919cdc6d6f42ccfe8f28ef5470717",
+      "componentVersion": "0.3.1",
+      "contentSha256": "f7f7767870d62a560090bb9904fc905489a54ad7159ef84a679cc6f9115479f5",
+      "contractSha256": "62dbba67e38c9f99dc6188d7de429089aa4dc145c8b95b33c06a120ca0e92e86",
       "entrypoint": "AGENT.md",
       "id": "concept-tutor",
       "path": "agents/concept-tutor",
@@ -11354,9 +13764,9 @@
         "customer-service-writer-assist"
       ],
       "componentType": "agent",
-      "componentVersion": "0.3.0",
-      "contentSha256": "599984ca93bb07ed7881222caa9f1dd9bde88f1ffa4565cfddd0f0b780ff4d31",
-      "contractSha256": "8dc8fa82e9f18d927d47e65aa238e2a3415c6d32dbea1eb76c06809cfee2239a",
+      "componentVersion": "0.3.1",
+      "contentSha256": "853eebd58b5602831ff6d8d8dc4371efae773763e7e40d3647de3a7277fc2fec",
+      "contractSha256": "9231ae9855ffd2da5e8cd35a83c446ae656068ae4fc5a62673caca08f18e3067",
       "entrypoint": "AGENT.md",
       "id": "customer-service-writer",
       "path": "agents/customer-service-writer",
@@ -11366,12 +13776,28 @@
     },
     {
       "capabilityIds": [
+        "data-pipeline-engineer-deliver"
+      ],
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contentSha256": "b853f6942ce94f6b17e4029b951f8577258510a0d8079c399dc0adfcc253ed40",
+      "contractSha256": "478b1065570eadb6426176fb3470e628dc1433ce3aa4a8317459550faed30213",
+      "entrypoint": "AGENT.md",
+      "id": "data-pipeline-engineer",
+      "path": "agents/data-pipeline-engineer",
+      "validation": [
+        "tests/calculation.test.mjs",
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
         "data-quality-analyst-deliver"
       ],
       "componentType": "agent",
-      "componentVersion": "0.1.1",
-      "contentSha256": "8ff930a26ae5ffbf048f5faa04729be69ee80b8be33e3ca3076bccefd16f0d41",
-      "contractSha256": "3b2f1bdff858ccbeeac76549b5e02efeae3fdc579439a34ae07039b2d617e9f4",
+      "componentVersion": "0.1.2",
+      "contentSha256": "faa37bd4b5c1a57c6cd7da3e4b8b4d000ee70ce2be90484bbba1f5803738a50a",
+      "contractSha256": "01afa9294d5897b9f4dc0a05c01e69181b82909119527c2c9b00c8790c38ae9a",
       "entrypoint": "AGENT.md",
       "id": "data-quality-analyst",
       "path": "agents/data-quality-analyst",
@@ -11384,9 +13810,9 @@
         "delivery-evidence-verify"
       ],
       "componentType": "agent",
-      "componentVersion": "0.3.0",
-      "contentSha256": "423ff1247d8eebbb80a6e1eb7f823fbe0cfe3a7ebbc8efaddf0607d1374088bd",
-      "contractSha256": "c74908f9091fbdba915e4ec258d89094c232bff43c0b148bb606ecd73f14e4ee",
+      "componentVersion": "0.3.1",
+      "contentSha256": "fcc3b215e79fc364a76c1f0e50f288e01b86bad77d75425f92283c661374ac78",
+      "contractSha256": "91b9991f3734cd24231571b64064aed83db195032a04a5df53b702f45fa1ee64",
       "entrypoint": "AGENT.md",
       "id": "delivery-verifier",
       "path": "agents/delivery-verifier",
@@ -11397,12 +13823,43 @@
     },
     {
       "capabilityIds": [
+        "design-system-designer-deliver"
+      ],
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contentSha256": "c6908c41fb5a4d9d260f79950915779b12366ee172ce3e1b4735309f1bf6f84a",
+      "contractSha256": "2e97d08996ac018785cc65caa5109c4366f2c21e9346263a296b99fd9de97d80",
+      "entrypoint": "AGENT.md",
+      "id": "design-system-designer",
+      "path": "agents/design-system-designer",
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "energy-project-analyst-deliver"
+      ],
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contentSha256": "37400ee065cd3e605c0311a9af0bab33e748b994cb8a954ac3e423c348e8b157",
+      "contractSha256": "682cbab15a442dfa54cabe67fc3058f733b8234fa1d3a63be906018b53c7ad5f",
+      "entrypoint": "AGENT.md",
+      "id": "energy-project-analyst",
+      "path": "agents/energy-project-analyst",
+      "validation": [
+        "tests/calculation.test.mjs",
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
         "exercise-designer-assist"
       ],
       "componentType": "agent",
-      "componentVersion": "0.3.0",
-      "contentSha256": "ea46d997edbb95db9c7a3370d5a2e12931460d55e6147df99b09da20c5d44b0e",
-      "contractSha256": "f344265b312d6e2cca9f7afa6532cd215329fc659ac7c46a765966354a7e07a3",
+      "componentVersion": "0.3.1",
+      "contentSha256": "1636b2b78fef8b3f2112640f1dd43b71a18c2528f44a1192e68f4a2cb39d3107",
+      "contractSha256": "bc2f3e9a1d86a6d2ac5f43348a1f4b6c6eea9a852020383527fdb64fd1c2e08a",
       "entrypoint": "AGENT.md",
       "id": "exercise-designer",
       "path": "agents/exercise-designer",
@@ -11412,12 +13869,28 @@
     },
     {
       "capabilityIds": [
+        "financial-modeler-deliver"
+      ],
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contentSha256": "81cac509d8d7c28456709e8326724edd60d6a984b1835885de4af7b7da62bf61",
+      "contractSha256": "d1ee4b6ce7d6ffe84c0a2053f80ccf5fbeed8ecee118fb56492c91ee122f6342",
+      "entrypoint": "AGENT.md",
+      "id": "financial-modeler",
+      "path": "agents/financial-modeler",
+      "validation": [
+        "tests/calculation.test.mjs",
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
         "frontend-engineer-deliver"
       ],
       "componentType": "agent",
-      "componentVersion": "0.4.1",
-      "contentSha256": "0ca5fc3d644958097213f29c4161faa3af51a993362ae6210ebb5ab853cecb1c",
-      "contractSha256": "c43f624e364d24d26297aa4b471db3d5fe641e72c6c75186d81fe4a05ab15afc",
+      "componentVersion": "0.4.2",
+      "contentSha256": "492f3346d8f6a8b887366c65a22b47eec925280fff572738ef4b5b6077f54646",
+      "contractSha256": "f55aa6e614a7864dc111383b05bbee52e4909f7cd23a8432a2512462681bff06",
       "entrypoint": "AGENT.md",
       "id": "frontend-engineer",
       "path": "agents/frontend-engineer",
@@ -11445,9 +13918,9 @@
         "healthcare-operations-analyst-deliver"
       ],
       "componentType": "agent",
-      "componentVersion": "0.1.1",
-      "contentSha256": "e193dbaaaa3fc107d91ecce706b8cf7536e6a6ffa9755ff9713bf6fd6944b081",
-      "contractSha256": "54d36f396db8ba1fc98a7061acbaa258ce71fa72337754c01c5e38234c2bb80a",
+      "componentVersion": "0.1.2",
+      "contentSha256": "b5ee9dc70a590f60a8d1be341ffaf17c8062e177c469ed4bf1ba3fd653d8857b",
+      "contractSha256": "ec6a1e26803eeda461109407399a45a5bbcc4b6b12a10fa1c00d0b4496d30b34",
       "entrypoint": "AGENT.md",
       "id": "healthcare-operations-analyst",
       "path": "agents/healthcare-operations-analyst",
@@ -11460,9 +13933,9 @@
         "hiring-process-designer-deliver"
       ],
       "componentType": "agent",
-      "componentVersion": "0.1.1",
-      "contentSha256": "b44430408d6ee20b634d7784ec40b89924cf2926e51189dec5ab30f556d08781",
-      "contractSha256": "5eac0e403df005d3aeecf67d69d6888b37492cad4391ec03f72052a248bfd07d",
+      "componentVersion": "0.1.2",
+      "contentSha256": "f6e60f4e6a20e0b3a1f411240e2873e9067b44cac617507b2da15505f4b843d7",
+      "contractSha256": "f3917539f28c5f29e1cb17f65509b08246463d3dd8faff9e16ffe3c8e5d1d8a0",
       "entrypoint": "AGENT.md",
       "id": "hiring-process-designer",
       "path": "agents/hiring-process-designer",
@@ -11475,9 +13948,9 @@
         "interaction-designer-deliver"
       ],
       "componentType": "agent",
-      "componentVersion": "0.5.0",
-      "contentSha256": "867b7b00eee3334931adad943996906507faa10541cdf94877fc2ec36b777893",
-      "contractSha256": "c6278d1c0611f38360ef13befe9b058c1a8d914d50338982247fa1d4c8a874fe",
+      "componentVersion": "0.5.1",
+      "contentSha256": "6c7a4265b2b9e85affaefc9578379eb86b21cbd7b1b26931d98d0fde4fb38843",
+      "contractSha256": "9fd28ee39d92382ccbbe4d6cf7cfd1e9552fa201ff4de0e37ede7aef3dbe66ac",
       "entrypoint": "AGENT.md",
       "id": "interaction-designer",
       "path": "agents/interaction-designer",
@@ -11490,9 +13963,9 @@
         "interview-coach-assist"
       ],
       "componentType": "agent",
-      "componentVersion": "0.4.0",
-      "contentSha256": "c7bf64f898ac9e66ee3cc2224917cdcb8f59bf863d7a67162547f4b65c816f71",
-      "contractSha256": "ad3c20b13633815180854b26c1439233bad933563f2039816af85ac8017b5e94",
+      "componentVersion": "0.4.1",
+      "contentSha256": "551838f62c91ba8d3745481f3c50d4990a35555fc6e7214706c38bcf507462d0",
+      "contractSha256": "120d37144fa019fb559986566e53fcfe4c1a1f5356cf6b4ba891b31c63cf2f9a",
       "entrypoint": "AGENT.md",
       "id": "interview-coach",
       "path": "agents/interview-coach",
@@ -11502,12 +13975,27 @@
     },
     {
       "capabilityIds": [
+        "investment-research-analyst-deliver"
+      ],
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contentSha256": "65bf99c92ec3f11e39fabb8f8d5835c9320de59839aa94420158e493cb6b1a86",
+      "contractSha256": "44a7b0c4b5777ac18ea9b80303820da66e18a3266684b2639cf0d0ea7c683157",
+      "entrypoint": "AGENT.md",
+      "id": "investment-research-analyst",
+      "path": "agents/investment-research-analyst",
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
         "launch-planner-assist"
       ],
       "componentType": "agent",
-      "componentVersion": "0.3.0",
-      "contentSha256": "66c2e7ae4e0181ef46ebfe957f40a5e1b3eb0f0e0df89499a1611d356d6cfa6f",
-      "contractSha256": "a1d84a9c8deeaa0767d774d2b014a83748af0b123065296219bdf4dfc416e16f",
+      "componentVersion": "0.3.1",
+      "contentSha256": "91f5070cbb87318e1224cb1bd6dd52797010d866605f425f4ff41d001b8d87b6",
+      "contractSha256": "867e9d9b504208eb36e86ad8b0ff179438e040d2326be9d1ff77d61a744e9c30",
       "entrypoint": "AGENT.md",
       "id": "launch-planner",
       "path": "agents/launch-planner",
@@ -11520,9 +14008,9 @@
         "lesson-planner-assist"
       ],
       "componentType": "agent",
-      "componentVersion": "0.3.0",
-      "contentSha256": "cb78a6a5167330a9229121a349156fad68d0673e9edfa8c0a8eaa9eaccb263c2",
-      "contractSha256": "0450232bc776490316becaab34d95b5d4c523ab2e8c6dc6a2aff4265ced083fb",
+      "componentVersion": "0.3.1",
+      "contentSha256": "26bb657abc76a405edad33c98e2bd56309e70fb82add5248391cf8fcc4a2aa8f",
+      "contractSha256": "6365e390ca12d7436a1f1e1c0600c186a3901bacfb557d8933a8960515d70094",
       "entrypoint": "AGENT.md",
       "id": "lesson-planner",
       "path": "agents/lesson-planner",
@@ -11535,9 +14023,9 @@
         "manufacturing-quality-analyst-deliver"
       ],
       "componentType": "agent",
-      "componentVersion": "0.1.2",
-      "contentSha256": "f490d4d269d63b3d7f9d14e9d6de1300346ce3a02c0700885264e27ae6d0a663",
-      "contractSha256": "b0ea73731f10c1db3b5cedf4f4d2d5a673c31fd6e3c259ed82314c03e0b4d2da",
+      "componentVersion": "0.1.3",
+      "contentSha256": "ce9c8b515ce477f2ce046c4ed71ef4382854fa7a617daf07425d41cf1575978c",
+      "contractSha256": "e252fa842ec1e6dc69d99723c01ca54e77f66d5d4d4a88c5eec6583fb2aaead1",
       "entrypoint": "AGENT.md",
       "id": "manufacturing-quality-analyst",
       "path": "agents/manufacturing-quality-analyst",
@@ -11550,9 +14038,9 @@
         "media-production-engineer-deliver"
       ],
       "componentType": "agent",
-      "componentVersion": "0.3.0",
-      "contentSha256": "90c537ed6ddd94a98f630e64b4a2718d31122ccf01010404990c5b107581d238",
-      "contractSha256": "3f95a41183bc484e0f3dd16a0ed684a685ea971396e1a15d94f4de0f5e904f40",
+      "componentVersion": "0.3.1",
+      "contentSha256": "cdc66f64dc4efcc2444586fe7b06f64100827fc39ad00436d6cd70f3520a67b8",
+      "contractSha256": "49ad02c49c4d056135bd62249eb62e03d30d7bb790843ab13924e215b8599dd4",
       "entrypoint": "AGENT.md",
       "id": "media-production-engineer",
       "path": "agents/media-production-engineer",
@@ -11562,12 +14050,27 @@
     },
     {
       "capabilityIds": [
+        "mobile-app-engineer-deliver"
+      ],
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contentSha256": "9e6027d21a77453c829bb3e651ad8776b131ffb735c7f190842bd841940c9422",
+      "contractSha256": "f1144eda40fd12602eb8dc3c91f0093d162e2c29857344d17e8df8a4234a76de",
+      "entrypoint": "AGENT.md",
+      "id": "mobile-app-engineer",
+      "path": "agents/mobile-app-engineer",
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
         "pricing-cost-analyst-assist"
       ],
       "componentType": "agent",
-      "componentVersion": "0.3.0",
-      "contentSha256": "e3c46101a8b47c5bb09de21cf25f4d46d7ac0b79015717814d6702720324bbda",
-      "contractSha256": "d80d217f4d6f1ccf78b10d5072fec8e64eb5b3f0a673dc6110fc774b691d8d29",
+      "componentVersion": "0.3.1",
+      "contentSha256": "ceaf26c587df5d1f4e360f91afe7dff2a77a3b3739dc205d414af53314bedef8",
+      "contractSha256": "0a1980b4a088b24d0cfdceef3f32903e2e4ce19b07a676056f853a10fa7b4b5f",
       "entrypoint": "AGENT.md",
       "id": "pricing-cost-analyst",
       "path": "agents/pricing-cost-analyst",
@@ -11580,9 +14083,9 @@
         "product-architect-deliver"
       ],
       "componentType": "agent",
-      "componentVersion": "0.5.0",
-      "contentSha256": "3595e122f1b8aa2b67d291f4b7709dc1bc68520a51640dcbf031465dcf99d430",
-      "contractSha256": "8afb090cd7271ed7ea2946df8481e78e685c995c6b0745483ae4dd0bb1e3edea",
+      "componentVersion": "0.5.1",
+      "contentSha256": "37aef092ac95f75a5f2ca54197b50c25b843a4a8b02b9c21a66e3858b6d7cb38",
+      "contractSha256": "b01ea07f0f75557468412c9c35dc728cee59443d221ee94b6224585559298e6f",
       "entrypoint": "AGENT.md",
       "id": "product-architect",
       "path": "agents/product-architect",
@@ -11596,9 +14099,9 @@
         "product-listing-writer-assist"
       ],
       "componentType": "agent",
-      "componentVersion": "0.3.0",
-      "contentSha256": "859407c643fdd6deb982303595e344f5cfb39bb42290456338f4af967275d293",
-      "contractSha256": "6f4dcfecfaebe40e3dc7df51368ca0518239686cd39fb417bd3a8e71b7ced6ef",
+      "componentVersion": "0.3.1",
+      "contentSha256": "c2a11d4b81742252828d615f594e01590ae9a451a1ff6efbf5f9fd3b19cbbb6a",
+      "contractSha256": "35773b5b0a4110181c14e746e85fe7cfb9154957e17d524a750760866081570d",
       "entrypoint": "AGENT.md",
       "id": "product-listing-writer",
       "path": "agents/product-listing-writer",
@@ -11611,9 +14114,9 @@
         "quantitative-researcher-deliver"
       ],
       "componentType": "agent",
-      "componentVersion": "0.3.0",
-      "contentSha256": "5c558ffefb49632dce756571d9d561e78e7d39a8e175d11f0404065fd2919d25",
-      "contractSha256": "fd47ab4c66a1e2d80c2a72b956f99e4dd580a4febe9cd02b50b44e3f3eb71fdd",
+      "componentVersion": "0.3.1",
+      "contentSha256": "18ab6dc67b2fc0d5d1e8beec53ac4b5909574a4944d004c41f8cd8a6716dc483",
+      "contractSha256": "dc01077286eafdfaa175cd1c34e6fd42e54ba9d23366bfa31e9d2cda2701c9f6",
       "entrypoint": "AGENT.md",
       "id": "quantitative-researcher",
       "path": "agents/quantitative-researcher",
@@ -11624,12 +14127,28 @@
     },
     {
       "capabilityIds": [
+        "reliability-engineer-deliver"
+      ],
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contentSha256": "23aede66980d7460b220e1e47752df969f42e24fbae855c77399556b26192f92",
+      "contractSha256": "57305c60e98544a196213b3a284f04f5d6701e80c4daa153f96f4c3209fea709",
+      "entrypoint": "AGENT.md",
+      "id": "reliability-engineer",
+      "path": "agents/reliability-engineer",
+      "validation": [
+        "tests/calculation.test.mjs",
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
         "resume-editor-assist"
       ],
       "componentType": "agent",
-      "componentVersion": "0.3.0",
-      "contentSha256": "ee88d040e6045a8d1764ce9d31adb2261b3affe5e1a103eb407ec6788e040b69",
-      "contractSha256": "a557221194f43c14faca2f2939767f1682f2c0b1fb473cd8fd440bd73f01c03e",
+      "componentVersion": "0.3.1",
+      "contentSha256": "2b1cf7db2b549162ee9fde36ea858b521a1f72ab9d89363a05f78321516d6c8e",
+      "contractSha256": "b9a867770abd04e3629b35b7228c3c002254aa1ce6896c220887b74f27faabbd",
       "entrypoint": "AGENT.md",
       "id": "resume-editor",
       "path": "agents/resume-editor",
@@ -11642,9 +14161,9 @@
         "sales-operations-analyst-deliver"
       ],
       "componentType": "agent",
-      "componentVersion": "0.1.1",
-      "contentSha256": "b329abe1e2b465d97a5eeacf991bf1dc43497b94bd06d245dcc228b258e00e79",
-      "contractSha256": "f971ddecfaf97298b599f85b4fbbe94d86ef679169514e8ee8d7f586997a92bb",
+      "componentVersion": "0.1.2",
+      "contentSha256": "66869a18624a759206f4bd894d1fe81aa6e187d6f0bd326f1dee4379f49df95f",
+      "contractSha256": "8c1ebb59841042deafd470e3f4ea05f411affb37ec61d7e9db2b66fe0b45d794",
       "entrypoint": "AGENT.md",
       "id": "sales-operations-analyst",
       "path": "agents/sales-operations-analyst",
@@ -11672,9 +14191,9 @@
         "side-business-evaluator-assist"
       ],
       "componentType": "agent",
-      "componentVersion": "0.3.0",
-      "contentSha256": "6b991f4ab3b7ab576a4e1452947f002eebfcc5c0d71fa706e827c97baf7cbb7c",
-      "contractSha256": "1a6f11c14c66b122b2218145df29921156cef788c757129cb3fd4c6a7712d04e",
+      "componentVersion": "0.3.1",
+      "contentSha256": "6a9b6d3b3d080bd1c8a9f61f84e959868e607339fca2432af371dccc1beb4776",
+      "contractSha256": "f66acc9358b5430b416c05f86d7c21aeb07ee66257855fb3b95b79625319d163",
       "entrypoint": "AGENT.md",
       "id": "side-business-evaluator",
       "path": "agents/side-business-evaluator",
@@ -11687,9 +14206,9 @@
         "source-evidence-analyst-deliver"
       ],
       "componentType": "agent",
-      "componentVersion": "0.3.0",
-      "contentSha256": "b0691a6c3a8c7683da83e7b908022c487f22056bca714082fb7718eeba87deca",
-      "contractSha256": "ca4de1cfe93179fdbd515e2748c1ba6e27d621f69abfd302081166d3e338691b",
+      "componentVersion": "0.3.1",
+      "contentSha256": "92cb93fd9833ae9ca3e8f12f5e832f40e4b7b00549cbb76b8cbb402e7aaf2e05",
+      "contractSha256": "bd741aad3ca085fec59ac05b905c5a6c7c87ecc3ea07109a03e0657e777c7bc5",
       "entrypoint": "AGENT.md",
       "id": "source-evidence-analyst",
       "path": "agents/source-evidence-analyst",
@@ -11702,9 +14221,9 @@
         "store-performance-analyst-assist"
       ],
       "componentType": "agent",
-      "componentVersion": "0.4.0",
-      "contentSha256": "db316f52fc8fd44abaeff8b9622d75bd465924e2ffabddcd4f638fa30a68bb59",
-      "contractSha256": "be1260b6ebbbf92e41da855404f8abe011424561235a691a02dd33475637a4d0",
+      "componentVersion": "0.4.1",
+      "contentSha256": "75c5645b1dbfdf657306a0ed9572a24df39263ee372d4117100da1fb1551fd66",
+      "contractSha256": "8028dc8e4c62ea9bc8dd4369d937cbb955fb6c61251564ccc04ff17a9836e141",
       "entrypoint": "AGENT.md",
       "id": "store-performance-analyst",
       "path": "agents/store-performance-analyst",
@@ -11718,9 +14237,9 @@
         "supplier-comparison-analyze"
       ],
       "componentType": "agent",
-      "componentVersion": "0.3.0",
-      "contentSha256": "3e6443c7cd9bf56ab55fa5a5a066fbcd77b4ef329fdc1134257a009bc03e2a6a",
-      "contractSha256": "d857136fc0648b6af4e5203e2ac592b1f30e32c1a95b65ba7539d51fb9eab3a3",
+      "componentVersion": "0.3.1",
+      "contentSha256": "fef66ec7c6c9176b6b32e4ea9f05f437bac76f5e2055f621ce0725694b0f836b",
+      "contractSha256": "1153b06f1ab8910d35bcb0efc652e7af922c9dbc4bee7fa58f457fc4e5662b71",
       "entrypoint": "AGENT.md",
       "id": "supplier-comparison-analyst",
       "path": "agents/supplier-comparison-analyst",
@@ -11734,9 +14253,9 @@
         "supply-chain-planner-deliver"
       ],
       "componentType": "agent",
-      "componentVersion": "0.1.1",
-      "contentSha256": "b1e0f3e8aa4eee3c8b6f68e83d5e7632e324f426cfaa54dfcdfb26b6f2d1a5e3",
-      "contractSha256": "04f87ea88b492cfc93cd7f0887897113ab05533e286ea022b487af621493a2aa",
+      "componentVersion": "0.1.2",
+      "contentSha256": "04949273c9f518f58800a4e405e632ee2f61a633600cc4517d71bb6c495149a2",
+      "contractSha256": "160fc9171cfdd385d36509aead6ff93699a138995fd1ef79cd585382ac9cb810",
       "entrypoint": "AGENT.md",
       "id": "supply-chain-planner",
       "path": "agents/supply-chain-planner",
@@ -11749,9 +14268,9 @@
         "sustainability-analyst-deliver"
       ],
       "componentType": "agent",
-      "componentVersion": "0.1.1",
-      "contentSha256": "7b519f14aa1967b2b7315b98ba5af65a24fc1e504d531a92ef12ff33bd76eb72",
-      "contractSha256": "60a5db788e62e2b5a01aaf510647f79a433de575cdad6733d05a1d19600f8d68",
+      "componentVersion": "0.1.2",
+      "contentSha256": "4b1a5ca4c034ccdab8504ad46a2a4d9129415f14218c23b1c593d90aceaaa77b",
+      "contractSha256": "ee82199950bd1b4c483d4bd0bb8c94ef804f30376834d7f24b40d6acc3aeac7f",
       "entrypoint": "AGENT.md",
       "id": "sustainability-analyst",
       "path": "agents/sustainability-analyst",
@@ -11764,12 +14283,27 @@
         "systems-engineering-analyst-deliver"
       ],
       "componentType": "agent",
-      "componentVersion": "0.1.1",
-      "contentSha256": "ee51e41aa02c80ce616b015712ffa5b07d46c5bd8f294211b6009eb2e6491c56",
-      "contractSha256": "a83b3df3b8a76ceb272b83a47c2d6aac90481c001ce130b7f20223403364bec7",
+      "componentVersion": "0.1.2",
+      "contentSha256": "bfb78004ff77a2744975f4945b0734938c2e566b25e482bf106401cc4be0432b",
+      "contractSha256": "1c66aafab1cf9bc7d4f7d3fbe60000c31a1d517e3203b5561ee9df80b64526e4",
       "entrypoint": "AGENT.md",
       "id": "systems-engineering-analyst",
       "path": "agents/systems-engineering-analyst",
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "test-automation-engineer-deliver"
+      ],
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contentSha256": "c589219ec2b614caaa04ff473c033b64d9b31a1175fb211ca674af0936f8e02e",
+      "contractSha256": "abb87d3b722e08fc97db31858f753e52328154bd54a1bc2bc4964fb17efef925",
+      "entrypoint": "AGENT.md",
+      "id": "test-automation-engineer",
+      "path": "agents/test-automation-engineer",
       "validation": [
         "tests/contract.test.mjs"
       ]
@@ -11794,9 +14328,9 @@
         "user-researcher-deliver"
       ],
       "componentType": "agent",
-      "componentVersion": "0.1.1",
-      "contentSha256": "8477515fac3282af34c078e4f17d77bcd7f1f63af2dddeff6d7a17c7f44be11c",
-      "contractSha256": "e263ac0286789d03ff71bdff1bb6a85a9118d871e74ac4bcd53207f2eae3df29",
+      "componentVersion": "0.1.2",
+      "contentSha256": "8cd3bed9226f19f3c8dd78be7e29aa36953b21f502f1bbebc2303525db894720",
+      "contractSha256": "631459fcc86a20ebd33d5bc6127be65cad5a5fb0e44cae8d79eb4e151859640b",
       "entrypoint": "AGENT.md",
       "id": "user-researcher",
       "path": "agents/user-researcher",
@@ -11809,9 +14343,9 @@
         "workplace-writer-assist"
       ],
       "componentType": "agent",
-      "componentVersion": "0.3.0",
-      "contentSha256": "2e86de19ac4a298b7fb069c180f05b483670bdae6665b83f8f25561df85505fc",
-      "contractSha256": "7971e46f655f8f3436ad67a703c6655ba10f33b9711a38ef850bcfc277c2eec8",
+      "componentVersion": "0.3.1",
+      "contentSha256": "31579c26c8afa9edbca4208a2a38b87fdaae9bb4a23490ed1dc98013dd229513",
+      "contractSha256": "23a2041577c12fb3406b73fa1e0e32d029276e3d15934024b66c603a56d61953",
       "entrypoint": "AGENT.md",
       "id": "workplace-writer",
       "path": "agents/workplace-writer",
@@ -11837,6 +14371,21 @@
     },
     {
       "capabilityIds": [
+        "accessibility-audit-deliver"
+      ],
+      "componentType": "skill",
+      "componentVersion": "0.1.0",
+      "contentSha256": "5d77579bbd3597b3fb40be603090a819ce173224804f535616b35fd031493a11",
+      "contractSha256": "024883fcc3c843460540cfe5c572203f64cd906d83a1a5bbd2965a6ac91ce226",
+      "entrypoint": "SKILL.md",
+      "id": "accessibility-audit",
+      "path": "skills/accessibility-audit",
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
         "agent-teams-orchestrate"
       ],
       "componentType": "skill",
@@ -11853,12 +14402,27 @@
     },
     {
       "capabilityIds": [
+        "api-contract-review-deliver"
+      ],
+      "componentType": "skill",
+      "componentVersion": "0.1.0",
+      "contentSha256": "7d61327c776c45f0c4040f75ff0fbefea81cf7a8bb656d494da787357047414d",
+      "contractSha256": "7924450cf755da0cdbf8e24f2b3a9b0b1432f1df56e5c7b7441f9a6c162bc602",
+      "entrypoint": "SKILL.md",
+      "id": "api-contract-review",
+      "path": "skills/api-contract-review",
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
         "construction-information-review-deliver"
       ],
       "componentType": "skill",
-      "componentVersion": "0.1.1",
-      "contentSha256": "00a29be48f3d7817885bd907441fef10cb7d6a46b3c11e4f5c4f79dd564c92e1",
-      "contractSha256": "0ff7d78510f62a92bc04ba9b25e75b5b9ed7b4ab17df6d667e4946617a89a5e9",
+      "componentVersion": "0.1.2",
+      "contentSha256": "95bb44347a966ea0e3037f70e3108038336fcd41807811d1e9a50684121e5a4c",
+      "contractSha256": "df5e9b34981610bf3432b9237739056481dc5297fbfaef2a98ad4c0a54414fd4",
       "entrypoint": "SKILL.md",
       "id": "construction-information-review",
       "path": "skills/construction-information-review",
@@ -11868,16 +14432,47 @@
     },
     {
       "capabilityIds": [
+        "database-migration-deliver"
+      ],
+      "componentType": "skill",
+      "componentVersion": "0.1.0",
+      "contentSha256": "dd6ec865188b08320e80a6e30b5664fc63d6c897bb9ae96915079b06e43b7c3e",
+      "contractSha256": "6e004a2658703280d5b09f4d948577cc517a588a7465ed2fd1e425ada54f6258",
+      "entrypoint": "SKILL.md",
+      "id": "database-migration",
+      "path": "skills/database-migration",
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
         "experiment-analysis-deliver"
       ],
       "componentType": "skill",
-      "componentVersion": "0.1.1",
-      "contentSha256": "f6ddb089726f68f7309f6d7439795b96221bad321fb984f09beacaa6a1f98f7a",
-      "contractSha256": "ba005269a9d91baab69e8c936891e364e3447a4e6bcf429e89c52293eca2f758",
+      "componentVersion": "0.1.2",
+      "contentSha256": "be2725a2ed4c2f04ee4ee7b8df6b6aa9d721d6762baacc7506e722917282f56e",
+      "contractSha256": "1080921b35200d5b88e82433d8083ce38e3b300c526c651fdf6cb2c754ac5709",
       "entrypoint": "SKILL.md",
       "id": "experiment-analysis",
       "path": "skills/experiment-analysis",
       "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "financial-scenario-modeling-deliver"
+      ],
+      "componentType": "skill",
+      "componentVersion": "0.1.0",
+      "contentSha256": "cd7c377a1683c10d910132bc2a85af69c7ec94b2379f35510ac9850bee39a4ec",
+      "contractSha256": "8d4deb5e09dfe11b74e202804e08043e6b166b00efb8b1de018c74302ae5f191",
+      "entrypoint": "SKILL.md",
+      "id": "financial-scenario-modeling",
+      "path": "skills/financial-scenario-modeling",
+      "validation": [
+        "tests/calculation.test.mjs",
         "tests/contract.test.mjs"
       ]
     },
@@ -11903,9 +14498,9 @@
         "game-design-playtest-deliver"
       ],
       "componentType": "skill",
-      "componentVersion": "0.1.1",
-      "contentSha256": "08b88bf5aede8c38de6b7231e59c35a3b1c75a5c0d9374f2c34e0a4f9426e927",
-      "contractSha256": "fedadc36fb2cc80c3b75bdcc2e0f5ee462aa1c43baf9cc5d90ad0bb298c15352",
+      "componentVersion": "0.1.2",
+      "contentSha256": "4520a9a3b067dba9f7fe3ccf8dacb16eef6d9d9aa530712fbd27211bec3f7dc4",
+      "contractSha256": "1a1874cb7e8a1962001ececfe6b8e9ee344f452f5e5de4ad9059a5794190fd46",
       "entrypoint": "SKILL.md",
       "id": "game-design-playtest",
       "path": "skills/game-design-playtest",
@@ -11952,15 +14547,30 @@
         "kim-sticker-pack-produce"
       ],
       "componentType": "skill",
-      "componentVersion": "0.3.0",
-      "contentSha256": "c730b08b17d245f33d2d4db0084f279e0fadc6ace1db77eecaced72fb7c132de",
-      "contractSha256": "959ab7ca8865a52e035b69553caf33a466430eb712baf38a3f9cedb2201830a6",
+      "componentVersion": "0.3.1",
+      "contentSha256": "7dd4c3ae21785543b708b906bad880947c84542b15c798f5890123f2d63ac3e4",
+      "contractSha256": "3ed6d22919182bc1a6f52f73a0fe596f36f7a3fc500fce308bd6d704a8d51717",
       "entrypoint": "SKILL.md",
       "id": "kim-sticker-pack",
       "path": "skills/kim-sticker-pack",
       "validation": [
         "evals/test_finish_frames.py",
         "evals/test_install_skill.py"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "learning-assessment-design-deliver"
+      ],
+      "componentType": "skill",
+      "componentVersion": "0.1.0",
+      "contentSha256": "482992fb4d7f2e611f6199e3e7a316000b21dbabe256c2ac3b2bba8f87266528",
+      "contractSha256": "65ffea5d10aecfb076eff0dfde500932666eba229f12f2205e6a4e3b2cb42830",
+      "entrypoint": "SKILL.md",
+      "id": "learning-assessment-design",
+      "path": "skills/learning-assessment-design",
+      "validation": [
+        "tests/contract.test.mjs"
       ]
     },
     {
@@ -12008,9 +14618,9 @@
         "metric-contract-deliver"
       ],
       "componentType": "skill",
-      "componentVersion": "0.1.1",
-      "contentSha256": "933609972e062b7b2592eb83f54ee9f8f9869167e86047fd7e2215a0879e6694",
-      "contractSha256": "644608b7cff260e71cf75ffb6ffab3e9bce00e168acb3301c0dbb5fe1561d135",
+      "componentVersion": "0.1.2",
+      "contentSha256": "a7bbd3cb6adf7d825342427b3256390145e25a4a9b87d93e630a44ce1d365e24",
+      "contractSha256": "e77220eaf38ebd3f849b2727046ad6eea9cdfd20bcf31578989710a8b2dc492b",
       "entrypoint": "SKILL.md",
       "id": "metric-contract",
       "path": "skills/metric-contract",
@@ -12023,13 +14633,29 @@
         "requirements-traceability-deliver"
       ],
       "componentType": "skill",
-      "componentVersion": "0.1.1",
-      "contentSha256": "5c28ee8220e8c9981d750a2d52438c3eacb2a05ed180cb951c0f166e7eb0ec61",
-      "contractSha256": "76a72206c98fe7cc10d9b24eb09bdef91026b1b03f6d74c004b04ab418be39fb",
+      "componentVersion": "0.1.2",
+      "contentSha256": "199bc8c14fa9b2e2759a4b22f9b6deb39e6d8d45a823a344ac521b631219e995",
+      "contractSha256": "6de495556b12820d0ac03a6e26efa83be659ac5a2c97e411215c10714a3e483e",
       "entrypoint": "SKILL.md",
       "id": "requirements-traceability",
       "path": "skills/requirements-traceability",
       "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "retrieval-evaluation-deliver"
+      ],
+      "componentType": "skill",
+      "componentVersion": "0.1.0",
+      "contentSha256": "3b1441765b9121a1e72edf9fc7534433fd73dd8ff9940bb7b661b4d6284a48c0",
+      "contractSha256": "513e412226c7a3d77b6645aed12599572252bf775bb28ccad8f8d55279e88acd",
+      "entrypoint": "SKILL.md",
+      "id": "retrieval-evaluation",
+      "path": "skills/retrieval-evaluation",
+      "validation": [
+        "tests/calculation.test.mjs",
         "tests/contract.test.mjs"
       ]
     },
@@ -12058,9 +14684,9 @@
         "sop-runbook-deliver"
       ],
       "componentType": "skill",
-      "componentVersion": "0.1.1",
-      "contentSha256": "8b224d4c0e0de776252ca49bd7934ffc05f7ec44f3556be41632c58c4f355fca",
-      "contractSha256": "952c884ffbf09a644f6f4a623fbc3bec54e288a03aee4911b4711f432db1152c",
+      "componentVersion": "0.1.2",
+      "contentSha256": "33749e147947b56190fc551e0f05a839ca89df0ebc7972325397bef7f917ef91",
+      "contractSha256": "42b689d6ff5575af40619017d58592e5c8b280cb0f2d4cf03f97d042f5a07bba",
       "entrypoint": "SKILL.md",
       "id": "sop-runbook",
       "path": "skills/sop-runbook",

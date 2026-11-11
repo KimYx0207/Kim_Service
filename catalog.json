@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "repository": "KimYx0207/Kim_Service",
-  "componentCount": 53,
+  "componentCount": 71,
   "release": {
     "repository": "KimYx0207/Kim_Service",
     "remoteName": "origin",
@@ -22,15 +22,36 @@
   ],
   "components": [
     {
+      "id": "accounting-reconciliation-analyst",
+      "kind": "agent",
+      "path": "agents/accounting-reconciliation-analyst",
+      "source": "canonical:agents/accounting-reconciliation-analyst",
+      "revision": "38cc340bb6225666f7fa1637aa70d2db39936a52",
+      "snapshot": "committed-component-tree",
+      "version": "0.1.0",
+      "contractSha256": "133a857f0edaae591a26b7c568763199864585334df42650ddb5aeb9ac566533",
+      "contentSha256": "42a87ea18d044d8cbd78e93ac5d747beb983ff28fc2a8621e851b515a0b9fe1f",
+      "required": [
+        "AGENT.md",
+        "capability.json",
+        "tests/calculation.test.mjs",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/calculation.test.mjs",
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
       "id": "agronomy-planner",
       "kind": "agent",
       "path": "agents/agronomy-planner",
       "source": "canonical:agents/agronomy-planner",
-      "revision": "c4dcec8a7fefaae6fdc0934d4de30fe2b2d7fc91",
+      "revision": "2ced5b407c206072041dae4604352eb13715ba9d",
       "snapshot": "committed-component-tree",
-      "version": "0.1.1",
-      "contractSha256": "a74270858fa23dd63a35d7b56cdeee0d8a137bb4b40399f8e5d7e9554a2c4b5c",
-      "contentSha256": "7ffecd2e5ff33f3498aafbcbee7cedd410a6a15ec37d95cee37af5a0687a2446",
+      "version": "0.1.2",
+      "contractSha256": "e65fe73ecc6121a91df88095fc0be4a030e4b7f7471d07736eeeaf2c19e752c2",
+      "contentSha256": "44919971d3db8dae572e33003315fd314c8cc485533cbc871a616f07c187a21e",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -45,11 +66,30 @@
       "kind": "agent",
       "path": "agents/application-security-reviewer",
       "source": "canonical:agents/application-security-reviewer",
-      "revision": "c4dcec8a7fefaae6fdc0934d4de30fe2b2d7fc91",
+      "revision": "2ced5b407c206072041dae4604352eb13715ba9d",
       "snapshot": "committed-component-tree",
-      "version": "0.1.1",
-      "contractSha256": "fcda878cd897eb7cf155e4f359b575db55317a983fe20a3c2baf53ecbf716aa4",
-      "contentSha256": "a629233f4a4bdc4c805f21fae728fd5321a59bfef9342960873209cd18e6402a",
+      "version": "0.1.2",
+      "contractSha256": "202a7e1b47af154b0d96ec9ee0314fb30c4c2a9468c87e3ade779106c0d24ba5",
+      "contentSha256": "f3ac4c2ba69e15498d950cc763a73f24743bcaf8e05bd805ad8b178a081c2565",
+      "required": [
+        "AGENT.md",
+        "capability.json",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
+      "id": "applied-ai-engineer",
+      "kind": "agent",
+      "path": "agents/applied-ai-engineer",
+      "source": "canonical:agents/applied-ai-engineer",
+      "revision": "38cc340bb6225666f7fa1637aa70d2db39936a52",
+      "snapshot": "committed-component-tree",
+      "version": "0.1.0",
+      "contractSha256": "0dd096d25ac8773a8897ba5b6a03289d425235646070060256ae01db6f28b80e",
+      "contentSha256": "bb7c2766fd0e5029dd544fdf9e189940f5577f58eeba23970b7d74e8abf30556",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -64,11 +104,30 @@
       "kind": "agent",
       "path": "agents/backend-data-engineer",
       "source": "canonical:agents/backend-data-engineer",
-      "revision": "c4dcec8a7fefaae6fdc0934d4de30fe2b2d7fc91",
+      "revision": "2ced5b407c206072041dae4604352eb13715ba9d",
       "snapshot": "committed-component-tree",
-      "version": "0.4.0",
-      "contractSha256": "06b43208e8d2446cfe428f22e6cbdc7c4a5cad34b3c3e383656a6d1086d7253b",
-      "contentSha256": "f8841773fee8066329f9ac7b344d4fa3b0fdd1f1d44f83f0dcd2f4dcf4b1dd76",
+      "version": "0.4.1",
+      "contractSha256": "e4563877f661f7e855cf675bbf3706fd3510f66c9d57051e5bbd4c729e8cfd42",
+      "contentSha256": "d7ec54c9ba51a3c03d1c38eb041b10d3d54e18673289410de609ba090b4e8ea5",
+      "required": [
+        "AGENT.md",
+        "capability.json",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
+      "id": "brand-visual-designer",
+      "kind": "agent",
+      "path": "agents/brand-visual-designer",
+      "source": "canonical:agents/brand-visual-designer",
+      "revision": "38cc340bb6225666f7fa1637aa70d2db39936a52",
+      "snapshot": "committed-component-tree",
+      "version": "0.1.0",
+      "contractSha256": "b4b0f6d0e150259e499a0098eb48df0975f01677ec547f86101f7c62e1713bd8",
+      "contentSha256": "2a364d922bd2e69691341f74aebe957dc303f004276b8ab1a1ebd0c1a29583fe",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -83,11 +142,11 @@
       "kind": "agent",
       "path": "agents/business-finance-analyst",
       "source": "canonical:agents/business-finance-analyst",
-      "revision": "c4dcec8a7fefaae6fdc0934d4de30fe2b2d7fc91",
+      "revision": "2ced5b407c206072041dae4604352eb13715ba9d",
       "snapshot": "committed-component-tree",
-      "version": "0.1.1",
-      "contractSha256": "57d1e2375d6502852a8173d560e46709d30bb3167874e66a2e532ad205a51ac3",
-      "contentSha256": "9ab1cce580bd719c79b21177c288fd1b4c32e3fcbe71328ad453e9ad527ab1d9",
+      "version": "0.1.2",
+      "contractSha256": "0b3d834ffd6e6dd767108fc7a9349b0c04221eed602f5dbf9333ab5f9fa2908a",
+      "contentSha256": "6754bd04f9109bc19b1a531b5decbe69693e6802006b6b4a24d0e72e0a4b1396",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -98,15 +157,36 @@
       ]
     },
     {
+      "id": "commerce-operations-designer",
+      "kind": "agent",
+      "path": "agents/commerce-operations-designer",
+      "source": "canonical:agents/commerce-operations-designer",
+      "revision": "38cc340bb6225666f7fa1637aa70d2db39936a52",
+      "snapshot": "committed-component-tree",
+      "version": "0.1.0",
+      "contractSha256": "446a79685678b4c1fbe637e15774b83aac05af879f4aee4dd32e2b440ae41343",
+      "contentSha256": "7797eee7eb8a362fd2f2df76ecb72f69967edb8853bcc5fa9f7793c85e367a83",
+      "required": [
+        "AGENT.md",
+        "capability.json",
+        "tests/calculation.test.mjs",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/calculation.test.mjs",
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
       "id": "concept-tutor",
       "kind": "agent",
       "path": "agents/concept-tutor",
       "source": "canonical:agents/concept-tutor",
-      "revision": "c4dcec8a7fefaae6fdc0934d4de30fe2b2d7fc91",
+      "revision": "2ced5b407c206072041dae4604352eb13715ba9d",
       "snapshot": "committed-component-tree",
-      "version": "0.3.0",
-      "contractSha256": "eb1d25d3b12d8b84dffd3cde6616fbe4a44919cdc6d6f42ccfe8f28ef5470717",
-      "contentSha256": "fd14df5eaa6eca7c1fc1fa40d5881e2eddffd591e0563f0606c3aa0880e17ab0",
+      "version": "0.3.1",
+      "contractSha256": "62dbba67e38c9f99dc6188d7de429089aa4dc145c8b95b33c06a120ca0e92e86",
+      "contentSha256": "f7f7767870d62a560090bb9904fc905489a54ad7159ef84a679cc6f9115479f5",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -121,11 +201,11 @@
       "kind": "agent",
       "path": "agents/customer-service-writer",
       "source": "canonical:agents/customer-service-writer",
-      "revision": "c4dcec8a7fefaae6fdc0934d4de30fe2b2d7fc91",
+      "revision": "2ced5b407c206072041dae4604352eb13715ba9d",
       "snapshot": "committed-component-tree",
-      "version": "0.3.0",
-      "contractSha256": "8dc8fa82e9f18d927d47e65aa238e2a3415c6d32dbea1eb76c06809cfee2239a",
-      "contentSha256": "599984ca93bb07ed7881222caa9f1dd9bde88f1ffa4565cfddd0f0b780ff4d31",
+      "version": "0.3.1",
+      "contractSha256": "9231ae9855ffd2da5e8cd35a83c446ae656068ae4fc5a62673caca08f18e3067",
+      "contentSha256": "853eebd58b5602831ff6d8d8dc4371efae773763e7e40d3647de3a7277fc2fec",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -136,15 +216,36 @@
       ]
     },
     {
+      "id": "data-pipeline-engineer",
+      "kind": "agent",
+      "path": "agents/data-pipeline-engineer",
+      "source": "canonical:agents/data-pipeline-engineer",
+      "revision": "38cc340bb6225666f7fa1637aa70d2db39936a52",
+      "snapshot": "committed-component-tree",
+      "version": "0.1.0",
+      "contractSha256": "478b1065570eadb6426176fb3470e628dc1433ce3aa4a8317459550faed30213",
+      "contentSha256": "b853f6942ce94f6b17e4029b951f8577258510a0d8079c399dc0adfcc253ed40",
+      "required": [
+        "AGENT.md",
+        "capability.json",
+        "tests/calculation.test.mjs",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/calculation.test.mjs",
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
       "id": "data-quality-analyst",
       "kind": "agent",
       "path": "agents/data-quality-analyst",
       "source": "canonical:agents/data-quality-analyst",
-      "revision": "c4dcec8a7fefaae6fdc0934d4de30fe2b2d7fc91",
+      "revision": "2ced5b407c206072041dae4604352eb13715ba9d",
       "snapshot": "committed-component-tree",
-      "version": "0.1.1",
-      "contractSha256": "3b2f1bdff858ccbeeac76549b5e02efeae3fdc579439a34ae07039b2d617e9f4",
-      "contentSha256": "8ff930a26ae5ffbf048f5faa04729be69ee80b8be33e3ca3076bccefd16f0d41",
+      "version": "0.1.2",
+      "contractSha256": "01afa9294d5897b9f4dc0a05c01e69181b82909119527c2c9b00c8790c38ae9a",
+      "contentSha256": "faa37bd4b5c1a57c6cd7da3e4b8b4d000ee70ce2be90484bbba1f5803738a50a",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -159,11 +260,11 @@
       "kind": "agent",
       "path": "agents/delivery-verifier",
       "source": "canonical:agents/delivery-verifier",
-      "revision": "c4dcec8a7fefaae6fdc0934d4de30fe2b2d7fc91",
+      "revision": "2ced5b407c206072041dae4604352eb13715ba9d",
       "snapshot": "committed-component-tree",
-      "version": "0.3.0",
-      "contractSha256": "c74908f9091fbdba915e4ec258d89094c232bff43c0b148bb606ecd73f14e4ee",
-      "contentSha256": "423ff1247d8eebbb80a6e1eb7f823fbe0cfe3a7ebbc8efaddf0607d1374088bd",
+      "version": "0.3.1",
+      "contractSha256": "91b9991f3734cd24231571b64064aed83db195032a04a5df53b702f45fa1ee64",
+      "contentSha256": "fcc3b215e79fc364a76c1f0e50f288e01b86bad77d75425f92283c661374ac78",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -176,15 +277,15 @@
       ]
     },
     {
-      "id": "exercise-designer",
+      "id": "design-system-designer",
       "kind": "agent",
-      "path": "agents/exercise-designer",
-      "source": "canonical:agents/exercise-designer",
-      "revision": "c4dcec8a7fefaae6fdc0934d4de30fe2b2d7fc91",
+      "path": "agents/design-system-designer",
+      "source": "canonical:agents/design-system-designer",
+      "revision": "38cc340bb6225666f7fa1637aa70d2db39936a52",
       "snapshot": "committed-component-tree",
-      "version": "0.3.0",
-      "contractSha256": "f344265b312d6e2cca9f7afa6532cd215329fc659ac7c46a765966354a7e07a3",
-      "contentSha256": "ea46d997edbb95db9c7a3370d5a2e12931460d55e6147df99b09da20c5d44b0e",
+      "version": "0.1.0",
+      "contractSha256": "2e97d08996ac018785cc65caa5109c4366f2c21e9346263a296b99fd9de97d80",
+      "contentSha256": "c6908c41fb5a4d9d260f79950915779b12366ee172ce3e1b4735309f1bf6f84a",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -195,15 +296,76 @@
       ]
     },
     {
+      "id": "energy-project-analyst",
+      "kind": "agent",
+      "path": "agents/energy-project-analyst",
+      "source": "canonical:agents/energy-project-analyst",
+      "revision": "38cc340bb6225666f7fa1637aa70d2db39936a52",
+      "snapshot": "committed-component-tree",
+      "version": "0.1.0",
+      "contractSha256": "682cbab15a442dfa54cabe67fc3058f733b8234fa1d3a63be906018b53c7ad5f",
+      "contentSha256": "37400ee065cd3e605c0311a9af0bab33e748b994cb8a954ac3e423c348e8b157",
+      "required": [
+        "AGENT.md",
+        "capability.json",
+        "tests/calculation.test.mjs",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/calculation.test.mjs",
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
+      "id": "exercise-designer",
+      "kind": "agent",
+      "path": "agents/exercise-designer",
+      "source": "canonical:agents/exercise-designer",
+      "revision": "2ced5b407c206072041dae4604352eb13715ba9d",
+      "snapshot": "committed-component-tree",
+      "version": "0.3.1",
+      "contractSha256": "bc2f3e9a1d86a6d2ac5f43348a1f4b6c6eea9a852020383527fdb64fd1c2e08a",
+      "contentSha256": "1636b2b78fef8b3f2112640f1dd43b71a18c2528f44a1192e68f4a2cb39d3107",
+      "required": [
+        "AGENT.md",
+        "capability.json",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
+      "id": "financial-modeler",
+      "kind": "agent",
+      "path": "agents/financial-modeler",
+      "source": "canonical:agents/financial-modeler",
+      "revision": "38cc340bb6225666f7fa1637aa70d2db39936a52",
+      "snapshot": "committed-component-tree",
+      "version": "0.1.0",
+      "contractSha256": "d1ee4b6ce7d6ffe84c0a2053f80ccf5fbeed8ecee118fb56492c91ee122f6342",
+      "contentSha256": "81cac509d8d7c28456709e8326724edd60d6a984b1835885de4af7b7da62bf61",
+      "required": [
+        "AGENT.md",
+        "capability.json",
+        "tests/calculation.test.mjs",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/calculation.test.mjs",
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
       "id": "frontend-engineer",
       "kind": "agent",
       "path": "agents/frontend-engineer",
       "source": "canonical:agents/frontend-engineer",
-      "revision": "c4dcec8a7fefaae6fdc0934d4de30fe2b2d7fc91",
+      "revision": "2ced5b407c206072041dae4604352eb13715ba9d",
       "snapshot": "committed-component-tree",
-      "version": "0.4.1",
-      "contractSha256": "c43f624e364d24d26297aa4b471db3d5fe641e72c6c75186d81fe4a05ab15afc",
-      "contentSha256": "0ca5fc3d644958097213f29c4161faa3af51a993362ae6210ebb5ab853cecb1c",
+      "version": "0.4.2",
+      "contractSha256": "f55aa6e614a7864dc111383b05bbee52e4909f7cd23a8432a2512462681bff06",
+      "contentSha256": "492f3346d8f6a8b887366c65a22b47eec925280fff572738ef4b5b6077f54646",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -237,11 +399,11 @@
       "kind": "agent",
       "path": "agents/healthcare-operations-analyst",
       "source": "canonical:agents/healthcare-operations-analyst",
-      "revision": "c4dcec8a7fefaae6fdc0934d4de30fe2b2d7fc91",
+      "revision": "2ced5b407c206072041dae4604352eb13715ba9d",
       "snapshot": "committed-component-tree",
-      "version": "0.1.1",
-      "contractSha256": "54d36f396db8ba1fc98a7061acbaa258ce71fa72337754c01c5e38234c2bb80a",
-      "contentSha256": "e193dbaaaa3fc107d91ecce706b8cf7536e6a6ffa9755ff9713bf6fd6944b081",
+      "version": "0.1.2",
+      "contractSha256": "ec6a1e26803eeda461109407399a45a5bbcc4b6b12a10fa1c00d0b4496d30b34",
+      "contentSha256": "b5ee9dc70a590f60a8d1be341ffaf17c8062e177c469ed4bf1ba3fd653d8857b",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -256,11 +418,11 @@
       "kind": "agent",
       "path": "agents/hiring-process-designer",
       "source": "canonical:agents/hiring-process-designer",
-      "revision": "c4dcec8a7fefaae6fdc0934d4de30fe2b2d7fc91",
+      "revision": "2ced5b407c206072041dae4604352eb13715ba9d",
       "snapshot": "committed-component-tree",
-      "version": "0.1.1",
-      "contractSha256": "5eac0e403df005d3aeecf67d69d6888b37492cad4391ec03f72052a248bfd07d",
-      "contentSha256": "b44430408d6ee20b634d7784ec40b89924cf2926e51189dec5ab30f556d08781",
+      "version": "0.1.2",
+      "contractSha256": "f3917539f28c5f29e1cb17f65509b08246463d3dd8faff9e16ffe3c8e5d1d8a0",
+      "contentSha256": "f6e60f4e6a20e0b3a1f411240e2873e9067b44cac617507b2da15505f4b843d7",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -275,11 +437,11 @@
       "kind": "agent",
       "path": "agents/interaction-designer",
       "source": "canonical:agents/interaction-designer",
-      "revision": "c4dcec8a7fefaae6fdc0934d4de30fe2b2d7fc91",
+      "revision": "2ced5b407c206072041dae4604352eb13715ba9d",
       "snapshot": "committed-component-tree",
-      "version": "0.5.0",
-      "contractSha256": "c6278d1c0611f38360ef13befe9b058c1a8d914d50338982247fa1d4c8a874fe",
-      "contentSha256": "867b7b00eee3334931adad943996906507faa10541cdf94877fc2ec36b777893",
+      "version": "0.5.1",
+      "contractSha256": "9fd28ee39d92382ccbbe4d6cf7cfd1e9552fa201ff4de0e37ede7aef3dbe66ac",
+      "contentSha256": "6c7a4265b2b9e85affaefc9578379eb86b21cbd7b1b26931d98d0fde4fb38843",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -294,11 +456,30 @@
       "kind": "agent",
       "path": "agents/interview-coach",
       "source": "canonical:agents/interview-coach",
-      "revision": "c4dcec8a7fefaae6fdc0934d4de30fe2b2d7fc91",
+      "revision": "2ced5b407c206072041dae4604352eb13715ba9d",
       "snapshot": "committed-component-tree",
-      "version": "0.4.0",
-      "contractSha256": "ad3c20b13633815180854b26c1439233bad933563f2039816af85ac8017b5e94",
-      "contentSha256": "c7bf64f898ac9e66ee3cc2224917cdcb8f59bf863d7a67162547f4b65c816f71",
+      "version": "0.4.1",
+      "contractSha256": "120d37144fa019fb559986566e53fcfe4c1a1f5356cf6b4ba891b31c63cf2f9a",
+      "contentSha256": "551838f62c91ba8d3745481f3c50d4990a35555fc6e7214706c38bcf507462d0",
+      "required": [
+        "AGENT.md",
+        "capability.json",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
+      "id": "investment-research-analyst",
+      "kind": "agent",
+      "path": "agents/investment-research-analyst",
+      "source": "canonical:agents/investment-research-analyst",
+      "revision": "38cc340bb6225666f7fa1637aa70d2db39936a52",
+      "snapshot": "committed-component-tree",
+      "version": "0.1.0",
+      "contractSha256": "44a7b0c4b5777ac18ea9b80303820da66e18a3266684b2639cf0d0ea7c683157",
+      "contentSha256": "65bf99c92ec3f11e39fabb8f8d5835c9320de59839aa94420158e493cb6b1a86",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -313,11 +494,11 @@
       "kind": "agent",
       "path": "agents/launch-planner",
       "source": "canonical:agents/launch-planner",
-      "revision": "c4dcec8a7fefaae6fdc0934d4de30fe2b2d7fc91",
+      "revision": "2ced5b407c206072041dae4604352eb13715ba9d",
       "snapshot": "committed-component-tree",
-      "version": "0.3.0",
-      "contractSha256": "a1d84a9c8deeaa0767d774d2b014a83748af0b123065296219bdf4dfc416e16f",
-      "contentSha256": "66c2e7ae4e0181ef46ebfe957f40a5e1b3eb0f0e0df89499a1611d356d6cfa6f",
+      "version": "0.3.1",
+      "contractSha256": "867e9d9b504208eb36e86ad8b0ff179438e040d2326be9d1ff77d61a744e9c30",
+      "contentSha256": "91f5070cbb87318e1224cb1bd6dd52797010d866605f425f4ff41d001b8d87b6",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -332,11 +513,11 @@
       "kind": "agent",
       "path": "agents/lesson-planner",
       "source": "canonical:agents/lesson-planner",
-      "revision": "c4dcec8a7fefaae6fdc0934d4de30fe2b2d7fc91",
+      "revision": "2ced5b407c206072041dae4604352eb13715ba9d",
       "snapshot": "committed-component-tree",
-      "version": "0.3.0",
-      "contractSha256": "0450232bc776490316becaab34d95b5d4c523ab2e8c6dc6a2aff4265ced083fb",
-      "contentSha256": "cb78a6a5167330a9229121a349156fad68d0673e9edfa8c0a8eaa9eaccb263c2",
+      "version": "0.3.1",
+      "contractSha256": "6365e390ca12d7436a1f1e1c0600c186a3901bacfb557d8933a8960515d70094",
+      "contentSha256": "26bb657abc76a405edad33c98e2bd56309e70fb82add5248391cf8fcc4a2aa8f",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -351,11 +532,11 @@
       "kind": "agent",
       "path": "agents/manufacturing-quality-analyst",
       "source": "canonical:agents/manufacturing-quality-analyst",
-      "revision": "c4dcec8a7fefaae6fdc0934d4de30fe2b2d7fc91",
+      "revision": "2ced5b407c206072041dae4604352eb13715ba9d",
       "snapshot": "committed-component-tree",
-      "version": "0.1.2",
-      "contractSha256": "b0ea73731f10c1db3b5cedf4f4d2d5a673c31fd6e3c259ed82314c03e0b4d2da",
-      "contentSha256": "f490d4d269d63b3d7f9d14e9d6de1300346ce3a02c0700885264e27ae6d0a663",
+      "version": "0.1.3",
+      "contractSha256": "e252fa842ec1e6dc69d99723c01ca54e77f66d5d4d4a88c5eec6583fb2aaead1",
+      "contentSha256": "ce9c8b515ce477f2ce046c4ed71ef4382854fa7a617daf07425d41cf1575978c",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -370,11 +551,30 @@
       "kind": "agent",
       "path": "agents/media-production-engineer",
       "source": "canonical:agents/media-production-engineer",
-      "revision": "c4dcec8a7fefaae6fdc0934d4de30fe2b2d7fc91",
+      "revision": "2ced5b407c206072041dae4604352eb13715ba9d",
       "snapshot": "committed-component-tree",
-      "version": "0.3.0",
-      "contractSha256": "3f95a41183bc484e0f3dd16a0ed684a685ea971396e1a15d94f4de0f5e904f40",
-      "contentSha256": "90c537ed6ddd94a98f630e64b4a2718d31122ccf01010404990c5b107581d238",
+      "version": "0.3.1",
+      "contractSha256": "49ad02c49c4d056135bd62249eb62e03d30d7bb790843ab13924e215b8599dd4",
+      "contentSha256": "cdc66f64dc4efcc2444586fe7b06f64100827fc39ad00436d6cd70f3520a67b8",
+      "required": [
+        "AGENT.md",
+        "capability.json",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
+      "id": "mobile-app-engineer",
+      "kind": "agent",
+      "path": "agents/mobile-app-engineer",
+      "source": "canonical:agents/mobile-app-engineer",
+      "revision": "38cc340bb6225666f7fa1637aa70d2db39936a52",
+      "snapshot": "committed-component-tree",
+      "version": "0.1.0",
+      "contractSha256": "f1144eda40fd12602eb8dc3c91f0093d162e2c29857344d17e8df8a4234a76de",
+      "contentSha256": "9e6027d21a77453c829bb3e651ad8776b131ffb735c7f190842bd841940c9422",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -389,11 +589,11 @@
       "kind": "agent",
       "path": "agents/pricing-cost-analyst",
       "source": "canonical:agents/pricing-cost-analyst",
-      "revision": "c4dcec8a7fefaae6fdc0934d4de30fe2b2d7fc91",
+      "revision": "2ced5b407c206072041dae4604352eb13715ba9d",
       "snapshot": "committed-component-tree",
-      "version": "0.3.0",
-      "contractSha256": "d80d217f4d6f1ccf78b10d5072fec8e64eb5b3f0a673dc6110fc774b691d8d29",
-      "contentSha256": "e3c46101a8b47c5bb09de21cf25f4d46d7ac0b79015717814d6702720324bbda",
+      "version": "0.3.1",
+      "contractSha256": "0a1980b4a088b24d0cfdceef3f32903e2e4ce19b07a676056f853a10fa7b4b5f",
+      "contentSha256": "ceaf26c587df5d1f4e360f91afe7dff2a77a3b3739dc205d414af53314bedef8",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -408,11 +608,11 @@
       "kind": "agent",
       "path": "agents/product-architect",
       "source": "canonical:agents/product-architect",
-      "revision": "c4dcec8a7fefaae6fdc0934d4de30fe2b2d7fc91",
+      "revision": "2ced5b407c206072041dae4604352eb13715ba9d",
       "snapshot": "committed-component-tree",
-      "version": "0.5.0",
-      "contractSha256": "8afb090cd7271ed7ea2946df8481e78e685c995c6b0745483ae4dd0bb1e3edea",
-      "contentSha256": "3595e122f1b8aa2b67d291f4b7709dc1bc68520a51640dcbf031465dcf99d430",
+      "version": "0.5.1",
+      "contractSha256": "b01ea07f0f75557468412c9c35dc728cee59443d221ee94b6224585559298e6f",
+      "contentSha256": "37aef092ac95f75a5f2ca54197b50c25b843a4a8b02b9c21a66e3858b6d7cb38",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -429,11 +629,11 @@
       "kind": "agent",
       "path": "agents/product-listing-writer",
       "source": "canonical:agents/product-listing-writer",
-      "revision": "c4dcec8a7fefaae6fdc0934d4de30fe2b2d7fc91",
+      "revision": "2ced5b407c206072041dae4604352eb13715ba9d",
       "snapshot": "committed-component-tree",
-      "version": "0.3.0",
-      "contractSha256": "6f4dcfecfaebe40e3dc7df51368ca0518239686cd39fb417bd3a8e71b7ced6ef",
-      "contentSha256": "859407c643fdd6deb982303595e344f5cfb39bb42290456338f4af967275d293",
+      "version": "0.3.1",
+      "contractSha256": "35773b5b0a4110181c14e746e85fe7cfb9154957e17d524a750760866081570d",
+      "contentSha256": "c2a11d4b81742252828d615f594e01590ae9a451a1ff6efbf5f9fd3b19cbbb6a",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -448,11 +648,32 @@
       "kind": "agent",
       "path": "agents/quantitative-researcher",
       "source": "canonical:agents/quantitative-researcher",
-      "revision": "c4dcec8a7fefaae6fdc0934d4de30fe2b2d7fc91",
+      "revision": "2ced5b407c206072041dae4604352eb13715ba9d",
       "snapshot": "committed-component-tree",
-      "version": "0.3.0",
-      "contractSha256": "fd47ab4c66a1e2d80c2a72b956f99e4dd580a4febe9cd02b50b44e3f3eb71fdd",
-      "contentSha256": "5c558ffefb49632dce756571d9d561e78e7d39a8e175d11f0404065fd2919d25",
+      "version": "0.3.1",
+      "contractSha256": "dc01077286eafdfaa175cd1c34e6fd42e54ba9d23366bfa31e9d2cda2701c9f6",
+      "contentSha256": "18ab6dc67b2fc0d5d1e8beec53ac4b5909574a4944d004c41f8cd8a6716dc483",
+      "required": [
+        "AGENT.md",
+        "capability.json",
+        "tests/calculation.test.mjs",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/calculation.test.mjs",
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
+      "id": "reliability-engineer",
+      "kind": "agent",
+      "path": "agents/reliability-engineer",
+      "source": "canonical:agents/reliability-engineer",
+      "revision": "38cc340bb6225666f7fa1637aa70d2db39936a52",
+      "snapshot": "committed-component-tree",
+      "version": "0.1.0",
+      "contractSha256": "57305c60e98544a196213b3a284f04f5d6701e80c4daa153f96f4c3209fea709",
+      "contentSha256": "23aede66980d7460b220e1e47752df969f42e24fbae855c77399556b26192f92",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -469,11 +690,11 @@
       "kind": "agent",
       "path": "agents/resume-editor",
       "source": "canonical:agents/resume-editor",
-      "revision": "c4dcec8a7fefaae6fdc0934d4de30fe2b2d7fc91",
+      "revision": "2ced5b407c206072041dae4604352eb13715ba9d",
       "snapshot": "committed-component-tree",
-      "version": "0.3.0",
-      "contractSha256": "a557221194f43c14faca2f2939767f1682f2c0b1fb473cd8fd440bd73f01c03e",
-      "contentSha256": "ee88d040e6045a8d1764ce9d31adb2261b3affe5e1a103eb407ec6788e040b69",
+      "version": "0.3.1",
+      "contractSha256": "b9a867770abd04e3629b35b7228c3c002254aa1ce6896c220887b74f27faabbd",
+      "contentSha256": "2b1cf7db2b549162ee9fde36ea858b521a1f72ab9d89363a05f78321516d6c8e",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -488,11 +709,11 @@
       "kind": "agent",
       "path": "agents/sales-operations-analyst",
       "source": "canonical:agents/sales-operations-analyst",
-      "revision": "c4dcec8a7fefaae6fdc0934d4de30fe2b2d7fc91",
+      "revision": "2ced5b407c206072041dae4604352eb13715ba9d",
       "snapshot": "committed-component-tree",
-      "version": "0.1.1",
-      "contractSha256": "f971ddecfaf97298b599f85b4fbbe94d86ef679169514e8ee8d7f586997a92bb",
-      "contentSha256": "b329abe1e2b465d97a5eeacf991bf1dc43497b94bd06d245dcc228b258e00e79",
+      "version": "0.1.2",
+      "contractSha256": "8c1ebb59841042deafd470e3f4ea05f411affb37ec61d7e9db2b66fe0b45d794",
+      "contentSha256": "66869a18624a759206f4bd894d1fe81aa6e187d6f0bd326f1dee4379f49df95f",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -526,11 +747,11 @@
       "kind": "agent",
       "path": "agents/side-business-evaluator",
       "source": "canonical:agents/side-business-evaluator",
-      "revision": "c4dcec8a7fefaae6fdc0934d4de30fe2b2d7fc91",
+      "revision": "2ced5b407c206072041dae4604352eb13715ba9d",
       "snapshot": "committed-component-tree",
-      "version": "0.3.0",
-      "contractSha256": "1a6f11c14c66b122b2218145df29921156cef788c757129cb3fd4c6a7712d04e",
-      "contentSha256": "6b991f4ab3b7ab576a4e1452947f002eebfcc5c0d71fa706e827c97baf7cbb7c",
+      "version": "0.3.1",
+      "contractSha256": "f66acc9358b5430b416c05f86d7c21aeb07ee66257855fb3b95b79625319d163",
+      "contentSha256": "6a9b6d3b3d080bd1c8a9f61f84e959868e607339fca2432af371dccc1beb4776",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -545,11 +766,11 @@
       "kind": "agent",
       "path": "agents/source-evidence-analyst",
       "source": "canonical:agents/source-evidence-analyst",
-      "revision": "c4dcec8a7fefaae6fdc0934d4de30fe2b2d7fc91",
+      "revision": "2ced5b407c206072041dae4604352eb13715ba9d",
       "snapshot": "committed-component-tree",
-      "version": "0.3.0",
-      "contractSha256": "ca4de1cfe93179fdbd515e2748c1ba6e27d621f69abfd302081166d3e338691b",
-      "contentSha256": "b0691a6c3a8c7683da83e7b908022c487f22056bca714082fb7718eeba87deca",
+      "version": "0.3.1",
+      "contractSha256": "bd741aad3ca085fec59ac05b905c5a6c7c87ecc3ea07109a03e0657e777c7bc5",
+      "contentSha256": "92cb93fd9833ae9ca3e8f12f5e832f40e4b7b00549cbb76b8cbb402e7aaf2e05",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -564,11 +785,11 @@
       "kind": "agent",
       "path": "agents/store-performance-analyst",
       "source": "canonical:agents/store-performance-analyst",
-      "revision": "6940a7e4e315c6585ad96403c387a57fab50cf71",
+      "revision": "2ced5b407c206072041dae4604352eb13715ba9d",
       "snapshot": "committed-component-tree",
-      "version": "0.4.0",
-      "contractSha256": "be1260b6ebbbf92e41da855404f8abe011424561235a691a02dd33475637a4d0",
-      "contentSha256": "db316f52fc8fd44abaeff8b9622d75bd465924e2ffabddcd4f638fa30a68bb59",
+      "version": "0.4.1",
+      "contractSha256": "8028dc8e4c62ea9bc8dd4369d937cbb955fb6c61251564ccc04ff17a9836e141",
+      "contentSha256": "75c5645b1dbfdf657306a0ed9572a24df39263ee372d4117100da1fb1551fd66",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -585,11 +806,11 @@
       "kind": "agent",
       "path": "agents/supplier-comparison-analyst",
       "source": "canonical:agents/supplier-comparison-analyst",
-      "revision": "6940a7e4e315c6585ad96403c387a57fab50cf71",
+      "revision": "2ced5b407c206072041dae4604352eb13715ba9d",
       "snapshot": "committed-component-tree",
-      "version": "0.3.0",
-      "contractSha256": "d857136fc0648b6af4e5203e2ac592b1f30e32c1a95b65ba7539d51fb9eab3a3",
-      "contentSha256": "3e6443c7cd9bf56ab55fa5a5a066fbcd77b4ef329fdc1134257a009bc03e2a6a",
+      "version": "0.3.1",
+      "contractSha256": "1153b06f1ab8910d35bcb0efc652e7af922c9dbc4bee7fa58f457fc4e5662b71",
+      "contentSha256": "fef66ec7c6c9176b6b32e4ea9f05f437bac76f5e2055f621ce0725694b0f836b",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -606,11 +827,11 @@
       "kind": "agent",
       "path": "agents/supply-chain-planner",
       "source": "canonical:agents/supply-chain-planner",
-      "revision": "c4dcec8a7fefaae6fdc0934d4de30fe2b2d7fc91",
+      "revision": "2ced5b407c206072041dae4604352eb13715ba9d",
       "snapshot": "committed-component-tree",
-      "version": "0.1.1",
-      "contractSha256": "04f87ea88b492cfc93cd7f0887897113ab05533e286ea022b487af621493a2aa",
-      "contentSha256": "b1e0f3e8aa4eee3c8b6f68e83d5e7632e324f426cfaa54dfcdfb26b6f2d1a5e3",
+      "version": "0.1.2",
+      "contractSha256": "160fc9171cfdd385d36509aead6ff93699a138995fd1ef79cd585382ac9cb810",
+      "contentSha256": "04949273c9f518f58800a4e405e632ee2f61a633600cc4517d71bb6c495149a2",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -625,11 +846,11 @@
       "kind": "agent",
       "path": "agents/sustainability-analyst",
       "source": "canonical:agents/sustainability-analyst",
-      "revision": "c4dcec8a7fefaae6fdc0934d4de30fe2b2d7fc91",
+      "revision": "2ced5b407c206072041dae4604352eb13715ba9d",
       "snapshot": "committed-component-tree",
-      "version": "0.1.1",
-      "contractSha256": "60a5db788e62e2b5a01aaf510647f79a433de575cdad6733d05a1d19600f8d68",
-      "contentSha256": "7b519f14aa1967b2b7315b98ba5af65a24fc1e504d531a92ef12ff33bd76eb72",
+      "version": "0.1.2",
+      "contractSha256": "ee82199950bd1b4c483d4bd0bb8c94ef804f30376834d7f24b40d6acc3aeac7f",
+      "contentSha256": "4b1a5ca4c034ccdab8504ad46a2a4d9129415f14218c23b1c593d90aceaaa77b",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -644,11 +865,30 @@
       "kind": "agent",
       "path": "agents/systems-engineering-analyst",
       "source": "canonical:agents/systems-engineering-analyst",
-      "revision": "c4dcec8a7fefaae6fdc0934d4de30fe2b2d7fc91",
+      "revision": "2ced5b407c206072041dae4604352eb13715ba9d",
       "snapshot": "committed-component-tree",
-      "version": "0.1.1",
-      "contractSha256": "a83b3df3b8a76ceb272b83a47c2d6aac90481c001ce130b7f20223403364bec7",
-      "contentSha256": "ee51e41aa02c80ce616b015712ffa5b07d46c5bd8f294211b6009eb2e6491c56",
+      "version": "0.1.2",
+      "contractSha256": "1c66aafab1cf9bc7d4f7d3fbe60000c31a1d517e3203b5561ee9df80b64526e4",
+      "contentSha256": "bfb78004ff77a2744975f4945b0734938c2e566b25e482bf106401cc4be0432b",
+      "required": [
+        "AGENT.md",
+        "capability.json",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
+      "id": "test-automation-engineer",
+      "kind": "agent",
+      "path": "agents/test-automation-engineer",
+      "source": "canonical:agents/test-automation-engineer",
+      "revision": "38cc340bb6225666f7fa1637aa70d2db39936a52",
+      "snapshot": "committed-component-tree",
+      "version": "0.1.0",
+      "contractSha256": "abb87d3b722e08fc97db31858f753e52328154bd54a1bc2bc4964fb17efef925",
+      "contentSha256": "c589219ec2b614caaa04ff473c033b64d9b31a1175fb211ca674af0936f8e02e",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -682,11 +922,11 @@
       "kind": "agent",
       "path": "agents/user-researcher",
       "source": "canonical:agents/user-researcher",
-      "revision": "c4dcec8a7fefaae6fdc0934d4de30fe2b2d7fc91",
+      "revision": "2ced5b407c206072041dae4604352eb13715ba9d",
       "snapshot": "committed-component-tree",
-      "version": "0.1.1",
-      "contractSha256": "e263ac0286789d03ff71bdff1bb6a85a9118d871e74ac4bcd53207f2eae3df29",
-      "contentSha256": "8477515fac3282af34c078e4f17d77bcd7f1f63af2dddeff6d7a17c7f44be11c",
+      "version": "0.1.2",
+      "contractSha256": "631459fcc86a20ebd33d5bc6127be65cad5a5fb0e44cae8d79eb4e151859640b",
+      "contentSha256": "8cd3bed9226f19f3c8dd78be7e29aa36953b21f502f1bbebc2303525db894720",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -701,11 +941,11 @@
       "kind": "agent",
       "path": "agents/workplace-writer",
       "source": "canonical:agents/workplace-writer",
-      "revision": "c4dcec8a7fefaae6fdc0934d4de30fe2b2d7fc91",
+      "revision": "2ced5b407c206072041dae4604352eb13715ba9d",
       "snapshot": "committed-component-tree",
-      "version": "0.3.0",
-      "contractSha256": "7971e46f655f8f3436ad67a703c6655ba10f33b9711a38ef850bcfc277c2eec8",
-      "contentSha256": "2e86de19ac4a298b7fb069c180f05b483670bdae6665b83f8f25561df85505fc",
+      "version": "0.3.1",
+      "contractSha256": "23a2041577c12fb3406b73fa1e0e32d029276e3d15934024b66c603a56d61953",
+      "contentSha256": "31579c26c8afa9edbca4208a2a38b87fdaae9bb4a23490ed1dc98013dd229513",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -748,6 +988,29 @@
       ]
     },
     {
+      "id": "accessibility-audit",
+      "kind": "skill",
+      "path": "skills/accessibility-audit",
+      "source": "canonical:skills/accessibility-audit",
+      "revision": "38cc340bb6225666f7fa1637aa70d2db39936a52",
+      "snapshot": "committed-component-tree",
+      "version": "0.1.0",
+      "contractSha256": "024883fcc3c843460540cfe5c572203f64cd906d83a1a5bbd2965a6ac91ce226",
+      "contentSha256": "5d77579bbd3597b3fb40be603090a819ce173224804f535616b35fd031493a11",
+      "required": [
+        "capability.json",
+        "CHANGELOG.md",
+        "LICENSE",
+        "NOTICE",
+        "README.md",
+        "SKILL.md",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
       "id": "agent-teams-playbook",
       "kind": "skill",
       "path": "skills/agent-teams-playbook",
@@ -774,15 +1037,61 @@
       ]
     },
     {
+      "id": "api-contract-review",
+      "kind": "skill",
+      "path": "skills/api-contract-review",
+      "source": "canonical:skills/api-contract-review",
+      "revision": "38cc340bb6225666f7fa1637aa70d2db39936a52",
+      "snapshot": "committed-component-tree",
+      "version": "0.1.0",
+      "contractSha256": "7924450cf755da0cdbf8e24f2b3a9b0b1432f1df56e5c7b7441f9a6c162bc602",
+      "contentSha256": "7d61327c776c45f0c4040f75ff0fbefea81cf7a8bb656d494da787357047414d",
+      "required": [
+        "capability.json",
+        "CHANGELOG.md",
+        "LICENSE",
+        "NOTICE",
+        "README.md",
+        "SKILL.md",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
       "id": "construction-information-review",
       "kind": "skill",
       "path": "skills/construction-information-review",
       "source": "canonical:skills/construction-information-review",
-      "revision": "c4dcec8a7fefaae6fdc0934d4de30fe2b2d7fc91",
+      "revision": "2ced5b407c206072041dae4604352eb13715ba9d",
       "snapshot": "committed-component-tree",
-      "version": "0.1.1",
-      "contractSha256": "0ff7d78510f62a92bc04ba9b25e75b5b9ed7b4ab17df6d667e4946617a89a5e9",
-      "contentSha256": "00a29be48f3d7817885bd907441fef10cb7d6a46b3c11e4f5c4f79dd564c92e1",
+      "version": "0.1.2",
+      "contractSha256": "df5e9b34981610bf3432b9237739056481dc5297fbfaef2a98ad4c0a54414fd4",
+      "contentSha256": "95bb44347a966ea0e3037f70e3108038336fcd41807811d1e9a50684121e5a4c",
+      "required": [
+        "capability.json",
+        "CHANGELOG.md",
+        "LICENSE",
+        "NOTICE",
+        "README.md",
+        "SKILL.md",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
+      "id": "database-migration",
+      "kind": "skill",
+      "path": "skills/database-migration",
+      "source": "canonical:skills/database-migration",
+      "revision": "38cc340bb6225666f7fa1637aa70d2db39936a52",
+      "snapshot": "committed-component-tree",
+      "version": "0.1.0",
+      "contractSha256": "6e004a2658703280d5b09f4d948577cc517a588a7465ed2fd1e425ada54f6258",
+      "contentSha256": "dd6ec865188b08320e80a6e30b5664fc63d6c897bb9ae96915079b06e43b7c3e",
       "required": [
         "capability.json",
         "CHANGELOG.md",
@@ -801,11 +1110,11 @@
       "kind": "skill",
       "path": "skills/experiment-analysis",
       "source": "canonical:skills/experiment-analysis",
-      "revision": "c4dcec8a7fefaae6fdc0934d4de30fe2b2d7fc91",
+      "revision": "2ced5b407c206072041dae4604352eb13715ba9d",
       "snapshot": "committed-component-tree",
-      "version": "0.1.1",
-      "contractSha256": "ba005269a9d91baab69e8c936891e364e3447a4e6bcf429e89c52293eca2f758",
-      "contentSha256": "f6ddb089726f68f7309f6d7439795b96221bad321fb984f09beacaa6a1f98f7a",
+      "version": "0.1.2",
+      "contractSha256": "1080921b35200d5b88e82433d8083ce38e3b300c526c651fdf6cb2c754ac5709",
+      "contentSha256": "be2725a2ed4c2f04ee4ee7b8df6b6aa9d721d6762baacc7506e722917282f56e",
       "required": [
         "capability.json",
         "CHANGELOG.md",
@@ -816,6 +1125,31 @@
         "tests/contract.test.mjs"
       ],
       "validation": [
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
+      "id": "financial-scenario-modeling",
+      "kind": "skill",
+      "path": "skills/financial-scenario-modeling",
+      "source": "canonical:skills/financial-scenario-modeling",
+      "revision": "38cc340bb6225666f7fa1637aa70d2db39936a52",
+      "snapshot": "committed-component-tree",
+      "version": "0.1.0",
+      "contractSha256": "8d4deb5e09dfe11b74e202804e08043e6b166b00efb8b1de018c74302ae5f191",
+      "contentSha256": "cd7c377a1683c10d910132bc2a85af69c7ec94b2379f35510ac9850bee39a4ec",
+      "required": [
+        "capability.json",
+        "CHANGELOG.md",
+        "LICENSE",
+        "NOTICE",
+        "README.md",
+        "SKILL.md",
+        "tests/calculation.test.mjs",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/calculation.test.mjs",
         "node tests/contract.test.mjs"
       ]
     },
@@ -848,11 +1182,11 @@
       "kind": "skill",
       "path": "skills/game-design-playtest",
       "source": "canonical:skills/game-design-playtest",
-      "revision": "c4dcec8a7fefaae6fdc0934d4de30fe2b2d7fc91",
+      "revision": "2ced5b407c206072041dae4604352eb13715ba9d",
       "snapshot": "committed-component-tree",
-      "version": "0.1.1",
-      "contractSha256": "fedadc36fb2cc80c3b75bdcc2e0f5ee462aa1c43baf9cc5d90ad0bb298c15352",
-      "contentSha256": "08b88bf5aede8c38de6b7231e59c35a3b1c75a5c0d9374f2c34e0a4f9426e927",
+      "version": "0.1.2",
+      "contractSha256": "1a1874cb7e8a1962001ececfe6b8e9ee344f452f5e5de4ad9059a5794190fd46",
+      "contentSha256": "4520a9a3b067dba9f7fe3ccf8dacb16eef6d9d9aa530712fbd27211bec3f7dc4",
       "required": [
         "capability.json",
         "CHANGELOG.md",
@@ -929,11 +1263,11 @@
       "kind": "skill",
       "path": "skills/kim-sticker-pack",
       "source": "canonical:skills/kim-sticker-pack",
-      "revision": "c4dcec8a7fefaae6fdc0934d4de30fe2b2d7fc91",
+      "revision": "2ced5b407c206072041dae4604352eb13715ba9d",
       "snapshot": "committed-component-tree",
-      "version": "0.3.0",
-      "contractSha256": "959ab7ca8865a52e035b69553caf33a466430eb712baf38a3f9cedb2201830a6",
-      "contentSha256": "c730b08b17d245f33d2d4db0084f279e0fadc6ace1db77eecaced72fb7c132de",
+      "version": "0.3.1",
+      "contractSha256": "3ed6d22919182bc1a6f52f73a0fe596f36f7a3fc500fce308bd6d704a8d51717",
+      "contentSha256": "7dd4c3ae21785543b708b906bad880947c84542b15c798f5890123f2d63ac3e4",
       "required": [
         "capability.json",
         "CHANGELOG.md",
@@ -947,6 +1281,29 @@
       "validation": [
         "python evals/test_finish_frames.py",
         "python evals/test_install_skill.py"
+      ]
+    },
+    {
+      "id": "learning-assessment-design",
+      "kind": "skill",
+      "path": "skills/learning-assessment-design",
+      "source": "canonical:skills/learning-assessment-design",
+      "revision": "38cc340bb6225666f7fa1637aa70d2db39936a52",
+      "snapshot": "committed-component-tree",
+      "version": "0.1.0",
+      "contractSha256": "65ffea5d10aecfb076eff0dfde500932666eba229f12f2205e6a4e3b2cb42830",
+      "contentSha256": "482992fb4d7f2e611f6199e3e7a316000b21dbabe256c2ac3b2bba8f87266528",
+      "required": [
+        "capability.json",
+        "CHANGELOG.md",
+        "LICENSE",
+        "NOTICE",
+        "README.md",
+        "SKILL.md",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs"
       ]
     },
     {
@@ -1020,11 +1377,11 @@
       "kind": "skill",
       "path": "skills/metric-contract",
       "source": "canonical:skills/metric-contract",
-      "revision": "c4dcec8a7fefaae6fdc0934d4de30fe2b2d7fc91",
+      "revision": "2ced5b407c206072041dae4604352eb13715ba9d",
       "snapshot": "committed-component-tree",
-      "version": "0.1.1",
-      "contractSha256": "644608b7cff260e71cf75ffb6ffab3e9bce00e168acb3301c0dbb5fe1561d135",
-      "contentSha256": "933609972e062b7b2592eb83f54ee9f8f9869167e86047fd7e2215a0879e6694",
+      "version": "0.1.2",
+      "contractSha256": "e77220eaf38ebd3f849b2727046ad6eea9cdfd20bcf31578989710a8b2dc492b",
+      "contentSha256": "a7bbd3cb6adf7d825342427b3256390145e25a4a9b87d93e630a44ce1d365e24",
       "required": [
         "capability.json",
         "CHANGELOG.md",
@@ -1043,11 +1400,11 @@
       "kind": "skill",
       "path": "skills/requirements-traceability",
       "source": "canonical:skills/requirements-traceability",
-      "revision": "c4dcec8a7fefaae6fdc0934d4de30fe2b2d7fc91",
+      "revision": "2ced5b407c206072041dae4604352eb13715ba9d",
       "snapshot": "committed-component-tree",
-      "version": "0.1.1",
-      "contractSha256": "76a72206c98fe7cc10d9b24eb09bdef91026b1b03f6d74c004b04ab418be39fb",
-      "contentSha256": "5c28ee8220e8c9981d750a2d52438c3eacb2a05ed180cb951c0f166e7eb0ec61",
+      "version": "0.1.2",
+      "contractSha256": "6de495556b12820d0ac03a6e26efa83be659ac5a2c97e411215c10714a3e483e",
+      "contentSha256": "199bc8c14fa9b2e2759a4b22f9b6deb39e6d8d45a823a344ac521b631219e995",
       "required": [
         "capability.json",
         "CHANGELOG.md",
@@ -1058,6 +1415,31 @@
         "tests/contract.test.mjs"
       ],
       "validation": [
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
+      "id": "retrieval-evaluation",
+      "kind": "skill",
+      "path": "skills/retrieval-evaluation",
+      "source": "canonical:skills/retrieval-evaluation",
+      "revision": "38cc340bb6225666f7fa1637aa70d2db39936a52",
+      "snapshot": "committed-component-tree",
+      "version": "0.1.0",
+      "contractSha256": "513e412226c7a3d77b6645aed12599572252bf775bb28ccad8f8d55279e88acd",
+      "contentSha256": "3b1441765b9121a1e72edf9fc7534433fd73dd8ff9940bb7b661b4d6284a48c0",
+      "required": [
+        "capability.json",
+        "CHANGELOG.md",
+        "LICENSE",
+        "NOTICE",
+        "README.md",
+        "SKILL.md",
+        "tests/calculation.test.mjs",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/calculation.test.mjs",
         "node tests/contract.test.mjs"
       ]
     },
@@ -1096,11 +1478,11 @@
       "kind": "skill",
       "path": "skills/sop-runbook",
       "source": "canonical:skills/sop-runbook",
-      "revision": "c4dcec8a7fefaae6fdc0934d4de30fe2b2d7fc91",
+      "revision": "2ced5b407c206072041dae4604352eb13715ba9d",
       "snapshot": "committed-component-tree",
-      "version": "0.1.1",
-      "contractSha256": "952c884ffbf09a644f6f4a623fbc3bec54e288a03aee4911b4711f432db1152c",
-      "contentSha256": "8b224d4c0e0de776252ca49bd7934ffc05f7ec44f3556be41632c58c4f355fca",
+      "version": "0.1.2",
+      "contractSha256": "42b689d6ff5575af40619017d58592e5c8b280cb0f2d4cf03f97d042f5a07bba",
+      "contentSha256": "33749e147947b56190fc551e0f05a839ca89df0ebc7972325397bef7f917ef91",
       "required": [
         "capability.json",
         "CHANGELOG.md",

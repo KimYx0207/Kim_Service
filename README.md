@@ -4,88 +4,89 @@
   <a href="README.md">简体中文</a> · <a href="README_EN.md">English</a>
 </p>
 
-**给 AI Agent 配上做事的方法、专业资料和明确的交付标准。**
+**让 AI 知道这项工作怎么做、交什么、怎样算做好。**
 
-Kim Service 是老金（KimYx0207）维护的专业能力库。每个 Agent、Skill、Hook 或 Tool 解决一个明确问题，带有入口、方法、输入输出约定、示例和验证方式。你可以单独使用，也可以由 [Meta_Kim](https://github.com/KimYx0207/Meta_Kim) 发现和调用。
+Kim Service 是老金（KimYx0207）维护的专业能力库。这里的每个 Agent 和 Skill 都围绕具体任务提供方法、专业资料、完整示例和交付标准。你可以让客户端直接读取一个包，也可以配合 [Meta_Kim](https://github.com/KimYx0207/Meta_Kim) 自动选择和组织执行。
 
-**Meta_Kim 管整件事怎么往前走，Kim Service 提供每项工作需要的专业方法。** 例如，前端包要说明页面出错后怎么恢复；库存包要找出哪一天会缺货；成本包要让每一步计算都能复算。
+**48 个专业 Agent，21 个 Skill**，另有 Hook 和 Tool。当前版本：**[V1.11](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.11)**。
 
-## 先从你要做的事开始
+## 找到你要做的事
 
-> “我有一个报名产品的想法。请先帮我比较系统方案，再细化用户流程、异常状态、前后端接口和验收。沿用当前项目已经合适的技术，不要只列岗位名字。”
-
-打开[中文任务入口](docs/start.html)，按关键词找到能力，查看所需资料与交付内容，然后复制请求。下载完整仓库后，可以直接在浏览器打开 `docs/start.html` 离线浏览；GitHub 文件页显示的是源码。浏览目录本身不会安装或执行任何组件。
-
-| 你要做的事 | 可以先看 |
+| 领域 | 典型任务与能力入口 |
 | --- | --- |
-| 从模糊想法走到系统方案和模块 PRD | [产品架构](agents/product-architect/) |
-| 把用户动机变成流程、界面状态与恢复路径 | [交互设计](agents/interaction-designer/) |
-| 把设计落实到当前前端技术和可用界面 | [前端工程](agents/frontend-engineer/) |
-| 定义数据、接口、事务、权限和迁移行为 | [后端与数据工程](agents/backend-data-engineer/) |
-| 核对交付物和实际检查证据 | [交付验证](agents/delivery-verifier/) |
-| 内容、教学、运营、分析等其他任务 | [完整专业角色目录](agents/README.md) |
+| **软件开发** | [前端](agents/frontend-engineer/)、[后端与数据](agents/backend-data-engineer/)、[移动应用](agents/mobile-app-engineer/)、[数据管道](agents/data-pipeline-engineer/)、[自动测试](agents/test-automation-engineer/)、[可靠性](agents/reliability-engineer/) |
+| **AI 应用** | [AI 产品实现与评测](agents/applied-ai-engineer/)、[检索质量评估](skills/retrieval-evaluation/) |
+| **产品与设计** | [产品架构和 PRD](agents/product-architect/)、[交互设计](agents/interaction-designer/)、[设计系统](agents/design-system-designer/)、[品牌视觉](agents/brand-visual-designer/)、[可访问性](skills/accessibility-audit/) |
+| **金融与经营** | [财务建模](agents/financial-modeler/)、[会计对账](agents/accounting-reconciliation-analyst/)、[投资研究](agents/investment-research-analyst/)、[经营财务](agents/business-finance-analyst/)、[定价成本](agents/pricing-cost-analyst/) |
+| **电商与销售** | [订单运营](agents/commerce-operations-designer/)、[商品文案](agents/product-listing-writer/)、[销售运营](agents/sales-operations-analyst/)、[门店分析](agents/store-performance-analyst/) |
+| **内容与营销** | [选题](agents/topic-planner/)、[脚本](agents/script-writer/)、[标题封面](agents/headline-cover-optimizer/)、[媒体制作](agents/media-production-engineer/) |
+| **教育与人才** | [课程设计](agents/lesson-planner/)、[学习评价](skills/learning-assessment-design/)、[招聘流程](agents/hiring-process-designer/) |
+| **工业与能源** | [制造质量](agents/manufacturing-quality-analyst/)、[供应链](agents/supply-chain-planner/)、[系统工程](agents/systems-engineering-analyst/)、[能源项目](agents/energy-project-analyst/)、[碳核算](agents/sustainability-analyst/) |
+| **更多行业** | [医疗运营](agents/healthcare-operations-analyst/)、[农业规划](agents/agronomy-planner/)、[建筑信息](skills/construction-information-review/)、[游戏试玩](skills/game-design-playtest/) |
 
-## 一个专业包里有什么？
+完整目录：[专业角色](agents/README.md) · [任务浏览器](docs/start.html) · [能力索引](generated/capabilities.json)。下载仓库后，`docs/start.html` 可以直接在浏览器中离线打开。
 
-| 文件 | 用途 |
+## 交出来的应该是什么？
+
+| 任务 | 可检查的交付 |
 | --- | --- |
-| `AGENT.md` / `SKILL.md` / `README.md` | 入口、适用任务、执行方法与边界 |
-| `capability.json` | 可发现的能力、输入、输出、权限和副作用约定 |
-| `method.json`（所有专业 Agent 与 Skill 均提供） | 领域步骤、工具需求、交接方式；`expertise` 绑定诊断、决策与现有输入输出 |
-| `references/`（按需） | 实际专业资料；由 `knowledgeAssets` 声明适用范围和来源 |
-| `example.json` / `AGENT.md` 内示例 | 按包提供的完整示例；示例数据与真实回执分开 |
-| `evals/professional-cases.json`（Agent） | 合成正例、失败反例与评审依据；不是模型运行结果 |
-| `tests/`、`scripts/`（按包提供） | 组件检查或范围明确的确定性工具 |
-| `PROVENANCE.md`、`LICENSE` | 资料来源、改造边界与许可证 |
+| 做一个报名产品 | 系统方案、模块 PRD、完整交互状态、前后端契约和演示路径 |
+| 上线一个 API | 请求与错误定义、权限行为、测试结果、发布观察项和回退步骤 |
+| 做财务方案 | 标明币种和期间的模型、可复算的公式、情景比较和敏感因素 |
+| 建设计系统 | 设计变量、组件状态、键盘操作和可访问性检查 |
+| 管库存和订单 | 按时间追踪库存、缺货点、订单异常与恢复动作 |
 
-专业包覆盖软件、产品、研究、内容、电商、采购、教育和职场；这次继续扩展经营财务、销售运营、用户研究、数据质量、应用安全、库存供应、制造质量、系统工程、招聘、碳核算、医疗运营和农业水量分析。另有实验分析、指标口径、SOP、需求追踪、建筑信息核验与游戏试玩等可组合 Skill。具体覆盖范围以[自动能力目录](generated/capabilities.json)为准，角色边界写在每个包里。
+每个包都说明所需输入、操作步骤、判断依据和验收方法。普通资料缺项可以先写明假设、形成草稿；影响金额、权限、发布或专业结论的关键未知，需要在对应动作前补齐。
 
-每包都要讲清领域知识、如何诊断、怎样选择、完整交付长什么样、哪些错误必须拒收。比如库存不能只看期末总量，成本不能混用月份与年份，安全扫描不能替代真实漏洞验证，课程不能只交活动清单。旧包的可用方法和工具保留，失实的通用规则修正；详细来源和采用范围见[本轮研究记录](docs/research/professional-expansion-2026-11-11.md)。
+## 三步使用
 
-选中的 Agent 资料会随 Meta_Kim 工单进入实际执行上下文，并校验完整字节。Skill 入口显式链接对应方法与资料。每项输出有通过条件、拒收条件、验证方法、所需证据和是否阻断；关键错误不能靠其他项得分抵消。自报“通过”不会替代独立核验。
+1. 从上面的任务入口选择一个包，让你的 AI 客户端读取它的 `AGENT.md` 或 `SKILL.md`。
+2. 提供目标、当前项目或业务资料，以及希望拿到的结果。
+3. 按包里的交付标准检查结果；使用 Meta_Kim 时，方法与资料会随任务一起交给执行者。
 
-合成正反例用于解释标准，保持 `not_evaluated`；结构检查只能证明合同和文件一致。实际专业效果须以当前任务产物评审。本轮的检查、独立试题和未测范围见[验证记录](docs/verification/dsh-professional-quality-2026-11-11.md)。
+例如：
 
-## 与 Meta_Kim 的关系
+> “读取 `agents/financial-modeler/`，把这份销售、成本和回款数据做成未来 12 个月的经营模型。说明假设，给出基础、乐观、保守三个情景，并检查现金缺口。”
 
-<p align="center">
-  <img src="docs/images/intent-to-delivery.svg" alt="Meta_Kim 与 Kim Service 的职责，以及从意图到交付的关系" width="1000">
-</p>
+安装源就是本仓库中选定的组件目录。Codex、Claude Code、Cursor、Gemini CLI 和 ZCode 的路径与调用方式由客户端或 Meta_Kim 的适配层处理。更新仓库使用 `git pull --ff-only`，再按所用客户端更新能力包。
 
-*架构示意图。Meta_Kim 负责决策、编排和连续性，Kim Service 提供专业方法与能力。*
+### DSH（DeepSeek Harness）
 
-系统和技术栈先形成基线，再细化模块、接口、状态和验收。两层设计属于同一份 PRD。模块对应实际交付任务；能否并行由调用方的依赖、资源和权限决定。Kim Service 不另建调度器、权限系统或最终验收状态。
-
-## 使用与更新
-
-1. 从任务入口或索引选包，阅读其入口和必要资料。
-2. 提供当前目标、项目事实、验收条件和相关上游产物。单独使用时，让你的客户端读取选中的组件目录；集成使用时由 Meta_Kim 校验并绑定该来源。
-3. 宿主提供真实可用工具及已授权范围。缺少工具时，组件交付可用材料和明确缺口，不宣称已写入、已部署或已通过验收。
-
-当前组件安装源就是 **Kim_Service 内选中的目录**。`catalog.json` 的 `source` / `revision` 记录历史来源，不是要求重新克隆旧独立仓库。已有同类能力先核对来源与版本，复用或升级一个入口。
-
-已发布基线：[V1.10](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.10)。[Unreleased](CHANGELOG.md#unreleased) 与各包 CHANGELOG 记录这次源码变化和组件版本；尚未作为新的合集 Release 发布。
-
-这些包采用可移植内容与显式合同。**Codex、Claude Code、Cursor、Gemini CLI、ZCode 的路径、工具和 Hook 由各宿主或 Meta_Kim 适配层处理。** ZCode 构建会从当前能力目录发现全部专业 Agent 与 Skill，并带上每个包的完整方法、资料、样例和许可。更新路径见 [ZCode 指南](docs/zcode-beta.md)。
-
-### 用在 DSH（DeepSeek Harness）
-
-在本仓库构建原生 Skills，再通过 Meta_Kim 安装：
+DSH 需要 Node.js 24.9.0+；当前适配按 `0.2.2-rc.1` 检查。构建完整原生 Skills，再通过 Meta_Kim 安装：
 
 ```sh
 node scripts/build-dsh-package.mjs --output /path/to/kim-service-dsh
-meta-kim dsh install --service-package /path/to/kim-service-dsh
-meta-kim dsh check
+node /path/to/Meta_Kim/bin/meta-kim.mjs dsh install --service-package /path/to/kim-service-dsh
+node /path/to/Meta_Kim/bin/meta-kim.mjs dsh check
 dsh --profile meta-kim
 ```
 
-输出目录须尚不存在。DSH 本身要求 Node >=24.9.0；本适配核对 `0.2.2-rc.1`。包内保留完整方法、参考、验证脚本和许可证，较长正文分段读取。实际子 Agent 继承宿主当前 preset，专业角色以 Skill 装入。更新、项目安装与能力边界见 [DSH 使用指南](docs/dsh.md)。原生配置、Skill 加载和 MCP 连接与模型业务表现分别验收。
+把 `/path/to/Meta_Kim` 换成你的 Meta_Kim 仓库路径；已全局安装 CLI 时可以直接使用 `meta-kim`。选择一个尚不存在的输出目录。更新与项目安装见 [DSH 指南](docs/dsh.md)；ZCode 使用 [完整内容包指南](docs/zcode-beta.md)。
 
-## 维护与目录
+## 与 Meta_Kim 配合
 
-[Agent](agents/) · [Skill](skills/) · [Hook](hooks/) · [Tool](tools/) · [组件目录](catalog.json) · [自动能力索引](generated/capabilities.json)
+<p align="center">
+  <img src="docs/images/intent-to-delivery.zh-CN.svg" alt="Meta_Kim 组织整体工作，Kim Service 提供专业方法和资料" width="760">
+</p>
 
-修改包内源文件后，用同一套生成器维护目录，不手工维护第二份能力总表：
+**Meta_Kim 负责研究、决策、编排和连续性；Kim Service 提供专业方法。** 先确定系统方案，再细化模块。执行者按当前项目需要读取资料，模块按实际依赖协作。
+
+## 一个专业包里有什么？
+
+| 内容 | 作用 |
+| --- | --- |
+| `AGENT.md` / `SKILL.md` | 入口、适用任务和操作方法 |
+| `capability.json` / `method.json` | 输入、输出、方法和逐项交付检查 |
+| `references/` | 按需读取的专业知识与出处 |
+| 完整案例与正反例 | 展示合格结果和需要修正的问题 |
+| `scripts/` / `tests/` | 计算、校验或可复现的组件检查 |
+| `PROVENANCE.md` / `LICENSE` | 来源与许可证 |
+
+测试分别覆盖文件合同、确定性工具、安装加载和实际任务表现。案例帮助理解标准，实际效果由当前产物评价。研究来源、行业范围和验证结果见[行业覆盖说明](docs/research/industry-coverage-2026-11-11.md)及[验证记录](docs/verification/dsh-professional-quality-2026-11-11.md)。
+
+## 维护与参与
+
+修改组件后，重新生成目录并运行检查：
 
 ```bash
 node scripts/catalog-automation.mjs build
@@ -94,7 +95,7 @@ node scripts/check-repository.mjs
 node --test scripts/*.test.mjs
 ```
 
-深入阅读：[任务交付指南](docs/task-agent-delivery.md) · [能力包约定](docs/agent-pack-contract.md) · [专家资料作者指南](docs/expert-package-authoring.md) · [上一轮角色审计](docs/expertise-coverage-2026-11-10.md) · [变更记录](CHANGELOG.md)。
+[Agent](agents/) · [Skill](skills/) · [Hook](hooks/) · [Tool](tools/) · [能力包约定](docs/agent-pack-contract.md) · [作者指南](docs/expert-package-authoring.md) · [中文更新日志](CHANGELOG.zh-CN.md)
 
 ## 联系与支持
 

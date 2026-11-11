@@ -1,43 +1,37 @@
 # Changelog
 
-Kim Service uses one repository-level two-part public version (`V<major>.<minor>`) and one GitHub Release for the professional-capability dependency repository. Component CHANGELOG files record component provenance; this file is the release-note authority. Historical verification and source notes are kept in the [testing record](./docs/verification-history.md).
+[English](CHANGELOG.md) · [简体中文](CHANGELOG.zh-CN.md)
 
-## Unreleased
+Kim Service collection releases use `V<major>.<minor>`. Each component keeps its own version and source history. Detailed past checks are in the [testing record](docs/verification-history.md).
 
-### DSH, deeper existing methods and additional professional domains
+## V1.11 - 2026-11-11
 
-- Standardize the public display name as DSH (DeepSeek Harness). Keep the original lowercase `dsh` commands, package/API identifiers and paths, and preserve historical verification records.
-- Close the real consumer package boundaries: DSH now preserves the canonical contact/payment images referenced by component documents, and ZCode discovers every declared Agent/Skill from the current capability catalog with its complete source tree. Per-role resource bindings, exact Git blobs, licenses and the existing permissions remain intact. ZCode also rejects missing declared knowledge before packaging.
-- Add a dynamically discovered DSH native Skills builder. Complete Agent/Skill methods, resources, scripts and licenses remain available; bounded lossless resource views support the reviewed host's result limits. Meta_Kim supplies the existing manifest-backed install/update/check/uninstall lifecycle. Native loading and MCP observations remain separate from model/delegation/business quality.
-- Add 12 bounded professional Agents covering business finance, sales operations, user research, data quality, application security, supply planning, manufacturing quality, systems engineering, hiring, sustainability, healthcare operations and agronomy. Add six composable Skills for experiments, metric contracts, SOPs, requirements traceability, construction information and game playtests. Each declares domain decisions, complete worked material and substantive rejection cases.
-- Deepen all 24 existing Agents and all nine existing Skills. Preserve useful methods, helpers, assets and licenses while repairing unsupported general rules and adding task-specific evidence, recovery and delivery guidance. Component changelogs record their individual versions.
-- Require every published professional output to state a stable check ID, pass/reject conditions, verification method, evidence requirements and blocking behavior. The existing method contract remains the source; no parallel scheduler, permission authority or acceptance store is introduced. Historical external methods require explicit legacy compatibility and remain incomplete.
-- Replace arbitrary Agent entry line counts with a bounded context size while retaining substantive package/contract checks. Case formatting, package counts and self-reported scores never establish expert performance. Research decisions, independent task trials and actual validation limits are recorded separately.
-- Validate JSON uniqueness by value, bound method JSON before recursive checks, and require both acceptable and rejection examples for every published capability. Manufacturing analysis explicitly rejects zero/invalid variation and inverted specifications, supports one-sided indices, and preserves negative Cpk values.
-- Expand the task directory and explain DSH setup in Chinese and English. Preserve all contact/payment sections and assets. Restore Linux/macOS/Windows CI and keep maintenance guidance aligned with the actual matrix.
+### Affected components
 
-The following sections record the preceding source iteration; their role versions and case counts describe that iteration, not the current inventory.
+The collection now contains 48 professional Agents and 21 Skills, plus its existing Hook and Tool. This release includes the professional-method and DSH work accumulated since V1.10.
 
-### Reusable professional material across 24 Agents
+### User-visible changes
 
-- All 24 existing Agents now carry a structured method, bounded source-attributed knowledge and the same optional `expertise` contract. This adds 20 original knowledge resources and 17 structured methods while preserving the four software-role core documents and existing calculation/verification helpers.
-- The contract describes domain diagnostics, conditional decisions, required input guidance, output checks and human professional review boundaries. Authors extend package data and the existing capability contract, without adding role switches, a second provider registry or a separate scheduler.
-- Each Agent supplies two synthetic review cases (48 total), including a substantive failure example. They remain `not_evaluated`: structural checks and complete-byte handoff do not certify expert judgment, native model execution or user acceptance.
-- The existing package checker rejects dangling asset/decision/field references, malformed example inputs/outputs, unsafe case resources and metadata that pretends to be quality evidence. Existing methods without the new optional metadata remain compatible.
-- Product Architect, Interaction Designer and Script Writer are now 0.4.0; Frontend Engineer, Backend Data Engineer, Store Performance Analyst and Interview Coach are 0.3.0; other Agents are 0.2.0. Component changelogs record the individual additions. Primary-source adoption, non-adoption, licensing limits and the full gap audit are documented.
-- The headline/cover role no longer asserts that inaccurate titles universally trigger platform demotion. Its method distinguishes content accuracy, audience/traffic composition and actual experiment evidence.
+- Add practical software capabilities for mobile apps, data pipelines, applied AI, reliability and test automation. Add API-contract review, database migration and retrieval-evaluation Skills.
+- Add design-system and brand-visual specialists, plus an accessibility-audit Skill. Their output criteria cover component states, keyboard behavior, contrast and real interaction paths.
+- Add financial modeling, accounting reconciliation and investment research. Financial scenarios state currency, periods, assumptions and calculations so the result can be checked.
+- Add commerce-order operations and energy-project analysis, plus learning assessment. Existing capabilities already cover content, education, sales, supply chains, manufacturing, healthcare operations, agriculture and construction information.
+- Include the preceding 12-Agent/six-Skill expansion and deepen existing methods with source-backed knowledge, worked examples and explicit output checks. Every professional method supplies concrete acceptance and correction criteria.
+- Build complete native DSH Skills and complete ZCode professional packages from the catalog. Methods, references, scripts, examples and licenses travel with the selected packages; long DSH material is read in complete parts.
+- Fix value-based array comparisons in validation and improve quantitative examples. Preserve useful helpers, original licenses and source history while consolidating repeated material.
+- Organize the Chinese and English READMEs by user task, translate explanatory diagrams, and add a Chinese changelog. Contact information and payment QR assets are preserved.
 
-### Professional knowledge and two-level software design
+### Breaking changes and migration
 
-- The initial software-method update introduced Product Architect / Interaction Designer 0.3.0 and Frontend / Backend Data Engineer 0.2.0; the all-role expertise additions above advance those versions. Their original source-attributed professional material keeps explicit applicability in `method.json.knowledgeAssets`.
-- Architecture exploration can precede detailed modules. Software delivery describes the system/technology baseline and module purpose, interactions, business rules, contracts, state, implementation approach and acceptance through the existing `productDesign` output. The current design identity and related project context can travel through handoffs without creating a second task authority.
-- Frontend and backend methods preserve the actual project stack and add concrete guidance for interaction states, accessibility, data invariants, concurrency, authorization, testing and migration. Examples remain synthetic; package quality checks do not imply a successful native model task.
-- The Product Architect adds a bounded `design-handoff-check-v1` helper for candidate structure and reference checks. It does not authenticate user decisions, certify digest provenance or accept the product, and it is not silently added to Meta_Kim's calculation-tool allowlist.
-- Package validation now checks optional method knowledge declarations, package-local files, provenance references, UTF-8 text and bounded byte budgets. Existing methods without knowledge declarations remain compatible. Generated catalog and task-browser content are rebuilt from the same component sources.
-- Chinese and English READMEs explain the job-to-capability path, the relationship with Meta_Kim, concrete package contents and current evidence limits. An original architecture illustration is included. All existing contact content and payment QR images are preserved.
+Update the repository with `git pull --ff-only`, then refresh your client's package. DSH users rebuild to a new output directory and run `node /path/to/Meta_Kim/bin/meta-kim.mjs dsh update --service-package <directory>`. Existing tools and permissions keep their current scope. The collection version is V1.11; the ZCode content plugin version is 1.11.0.
 
-These are source changes for review, not a newly published repository Release or ZCode marketplace version. Codex, Claude Code, Cursor, Gemini CLI and ZCode still require their host-specific installation, tool and native-execution checks. No new permissions or external side effects are granted by these professional packages.
+### Verification
 
+Package checks cover input/output contracts, examples, deterministic helpers and installation/loading. Professional output quality is assessed on actual task artifacts. The [industry coverage record](docs/research/industry-coverage-2026-11-11.md) maps fields to concrete tasks and sources; the [DSH/professional verification record](docs/verification/dsh-professional-quality-2026-11-11.md) retains the measured scope. Publication checks and asset identities are recorded with this GitHub Release.
+
+### Source revisions
+
+The previous public collection is [V1.10](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.10). The V1.11 tag identifies this release's source. Component `PROVENANCE.md` files and changelogs retain original sources and component revisions; generated bundles record their exact source commits.
 
 ## V1.10 - 2026-10-23
 
