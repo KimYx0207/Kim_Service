@@ -9,7 +9,7 @@
       "id": "complete-delivery",
       "capabilityId": "financial-modeler-deliver",
       "category": "worked_example",
-      "scenario": "帮我做未来三年的财务预测。",
+      "scenario": "用两年的自由现金流预测和终值，比较基准、下行情景及估值敏感性。",
       "input": {
         "historicals": "合成项目，单位万元，年末现金流",
         "drivers": {
