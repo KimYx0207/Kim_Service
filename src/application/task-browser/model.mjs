@@ -1,22 +1,58 @@
-/** Pure application model. Vocabulary, repository and host choices are injected. */
-export function createTaskBrowser(config) {
-  const TYPE_NAMES=config.typeNames, SYNONYMS=config.synonyms, FIELD_NAMES=config.fieldNames;
-  const COMMON_FIELDS=new Set(config.commonFields);
-  function fields(schema) {
+/** Pure application model. Vocabulary, translations and host choices are injected. */
+export function createTaskBrowser(config, { locale: requestedLocale = config.defaultLocale || 'zh-CN' } = {}) {
+  const locale = requestedLocale === 'en' ? 'en' : 'zh-CN';
+  const english = locale === 'en';
+  const language = config.locales?.[locale] || {};
+  const TYPE_NAMES = language.typeNames || config.typeNames;
+  const SYNONYMS = config.synonyms;
+  const FIELD_NAMES = language.fieldNames || config.fieldNames;
+  const COMMON_FIELDS = new Set(config.commonFields);
+  const hosts = config.hosts.map(host => ({ ...host, label: language.hostLabels?.[host.id] || host.label }));
+  const suggestions = language.suggestions || config.suggestions;
+  const text = (key, values = {}) => (language.messages?.[key] || key)
+    .replace(/\{([a-zA-Z0-9_]+)\}/gu, (_, name) => String(values[name] ?? ''));
+  const humanize = value => String(value).replace(/([a-z0-9])([A-Z])/gu, '$1 $2')
+    .replace(/([A-Z])([A-Z][a-z])/gu, '$1 $2').replace(/[_-]+/gu, ' ')
+    .replace(/^./u, character => character.toUpperCase());
+  const hasChinese = value => /[\u3400-\u9fff]/u.test(value);
+  function translationOf(capability) {
+    const translation = config.capabilityTranslations?.[capability.id];
+    return english && translation?.sourceSummary === capability.summary ? translation : null;
+  }
+  function detailOf(capability) {
+    const detail = translationOf(capability)?.detail;
+    return detail?.sourceContractSha256 === capability.contractSha256 ? detail : null;
+  }
+  function summaryOf(capability) {
+    if (!english) return capability.summary;
+    return translationOf(capability)?.summary || (!hasChinese(capability.summary)
+      ? capability.summary : 'Read the original package specification for this task.');
+  }
+  function fields(schema, { capability = null, original = false } = {}) {
     const required = new Set(schema.required || []);
-    const names = [...required, ...Object.keys(schema.properties || {}).filter((key) => !required.has(key))];
-    return names.map((key) => ({ key, required: required.has(key), description: schema.properties?.[key]?.description || '', label: FIELD_NAMES[key] || key }));
+    const names = [...required, ...Object.keys(schema.properties || {}).filter(key => !required.has(key))];
+    const detail = capability && !original ? detailOf(capability) : null;
+    return names.map(key => {
+      const sourceDescription = schema.properties?.[key]?.description || '';
+      const description = !english || original ? sourceDescription
+        : detail?.fields?.[key] || (hasChinese(sourceDescription) ? '' : sourceDescription);
+      const label = original ? config.fieldNames[key] || key
+        : FIELD_NAMES[key] || (english ? humanize(key) : key);
+      return { key, required: required.has(key), description, label };
+    });
   }
 
   function briefLabel(field) {
     if (field.description) {
       const lead = field.description.split(/[：:；;。]/)[0];
-      return lead.length <= 36 ? lead : lead.slice(0, 34) + '…';
+      const limit = english ? 70 : 36;
+      return lead.length <= limit ? lead : lead.slice(0, limit - 2) + '…';
     }
     return field.label;
   }
 
   function titleOf(capability) {
+    if (english) return translationOf(capability)?.title || humanize(capability.id);
     const summary = capability.summary.trim();
     const colon = summary.search(/[：（]/);
     if (colon > 3 && colon < 22) return summary.slice(0, colon);
@@ -25,69 +61,86 @@ export function createTaskBrowser(config) {
   }
 
   function searchableText(capability) {
-    return [capability.id, capability.componentId, capability.summary, ...(capability.useWhen || []),
-      ...fields(capability.input).flatMap((field) => [field.key, field.label, field.description]),
-      ...fields(capability.output).flatMap((field) => [field.key, field.label, field.description])]
+    return [capability.id, capability.componentId, capability.summary, summaryOf(capability), titleOf(capability),
+      ...(capability.useWhen || []), ...(detailOf(capability)?.useWhen || []),
+      ...fields(capability.input, { capability }).flatMap(field => [field.key, field.label, field.description]),
+      ...fields(capability.output, { capability }).flatMap(field => [field.key, field.label, field.description])]
       .join(' ').normalize('NFKC').toLowerCase();
   }
 
   function queryTerms(query) {
-    return query.normalize('NFKC').toLowerCase().trim().split(/[\s，,、；;]+/u).filter(Boolean).map((token) => {
-      const exact = SYNONYMS.find((group) => group.includes(token));
+    return query.normalize('NFKC').toLowerCase().trim().split(/[\s，,、；;]+/u).filter(Boolean).map(token => {
+      const exact = SYNONYMS.find(group => group.includes(token));
       if (exact) return exact;
-      // Permit common short requests (e.g. “我想做表情包”), without claiming semantic search.
+      // These are explicit aliases, not model-based recommendations.
       const stripped = token.replace(/^(?:我想|我需要|我要|帮我|请帮我|请)?(?:做一个|做一套|做|写|改|找)?/u, '');
-      const group = SYNONYMS.find((items) => items.includes(stripped));
-      return group || [token];
+      return SYNONYMS.find(items => items.includes(stripped)) || [token];
     });
   }
 
   function filterCapabilities(capabilities, query = '', type = 'all') {
     const terms = queryTerms(query);
-    return capabilities.filter((capability) => {
+    return capabilities.filter(capability => {
       if (type !== 'all' && capability.componentType !== type) return false;
-      const text = searchableText(capability);
-      return terms.every((alternatives) => alternatives.some((word) => {
+      const value = searchableText(capability);
+      return terms.every(alternatives => alternatives.some(word => {
         if (/^[a-z0-9][a-z0-9 -]*$/u.test(word)) {
-          // English aliases are words, not substrings: media != immediate,
-          // store != restore, cover != discover. Hyphenated IDs remain searchable.
+          // Match whole English words while retaining searchable hyphenated IDs.
           const escaped = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-          return new RegExp('(?:^|[^a-z0-9])' + escaped + '(?:$|[^a-z0-9])', 'u').test(text);
+          return new RegExp('(?:^|[^a-z0-9])' + escaped + '(?:$|[^a-z0-9])', 'u').test(value);
         }
-        return text.includes(word);
+        return value.includes(word);
       }));
     });
   }
 
   function buildRequest(capability, { goal = '', materials = '', host = 'existing' } = {}) {
     const entry = `${capability.componentPath}/${capability.entrypoint}`;
-    const inputs = fields(capability.input).filter((field) => field.required);
-    const outputs = fields(capability.output);
+    const inputs = fields(capability.input, { capability }).filter(field => field.required);
+    const outputs = fields(capability.output, { capability });
+    const fieldName = field => `${field.description || field.label}${english ? ' (' : '（'}${field.key}${english ? ')' : '）'}`;
     const lines = [
-      '请在已克隆的 Kim_Service 仓库上下文中处理以下任务。下面的相对路径都以 Kim_Service 仓库根目录为基准；若当前目录不是仓库根目录，请先定位仓库，不要猜测已经安装。',
-      '', `先阅读：${entry}`, ...(capability.readme && capability.readme !== entry ? [`使用说明：${capability.readme}`] : []),
-      `目标能力：${capability.id}`, `包版本：${capability.componentVersion}`, '',
-      `这项能力的声明：${capability.summary}`, '', `我的目标：${goal.trim() || '【填写这次要完成的事】'}`, '', '我提供的材料：', ...(materials.trim() ? [materials.trim(), ''] : []),
-      ...inputs.map((field) => `- ${field.description || field.label}（${field.key}）：【填写；不清楚的标为待确认】`),
-      ...(inputs.length ? [] : ['- 【填写任务材料；按入口说明补充】']),
-      '', '请按入口要求与本次材料交付：',
-      ...(outputs.length ? outputs.map((field) => `- ${field.description || field.label}（${field.key}${field.required ? '，合同要求' : '，按需提供'}）`) : ['- 按入口说明交付，包合同没有逐项列出输出字段。']),
-      '', '先核对本次已具备的工具、材料和授权；只补问阻塞任务的缺项。普通已授权工作继续执行。',
-      '缺少工具或证据时明确标记未执行和剩余工作。不要把读取入口、示例或静态检查写成已安装、已原生加载、已实际执行或已通过最终验收。',
-      '需要新增安装、外部发布、付费或扩大访问范围时，按包内规则和本次授权处理。'
+      text('request.repositoryIntro'), '', text('request.readFirst', { entry }),
+      ...(capability.readme && capability.readme !== entry ? [text('request.readme', { readme: capability.readme })] : []),
+      text('request.capability', { id: capability.id }), text('request.version', { version: capability.componentVersion }), '',
+      text('request.declaration', { summary: summaryOf(capability) }), '',
+      text('request.goal', { goal: goal.trim() || text('request.goalPlaceholder') }), '',
+      text('request.materials'), ...(materials.trim() ? [materials.trim(), ''] : []),
+      ...inputs.map(field => `- ${fieldName(field)}${english ? ': ' : '：'}${text('request.requiredUnknown')}`),
+      ...(inputs.length ? [] : [text('request.emptyMaterials')]), '',
+      text('request.deliver'),
+      ...(outputs.length ? outputs.map(field => `- ${field.description || field.label}${english ? ' (' : '（'}${field.key}${english ? ', ' : '，'}${text(field.required ? 'request.outputRequired' : 'request.outputOptional')}${english ? ')' : '）'}`) : [text('request.outputUnspecified')]),
+      '', text('request.toolsAndScope'), text('request.unexecuted'), text('request.permissions')
     ];
-    const selected = config.hosts.find((item) => item.id === host) || config.hosts[0];
+    const selected = hosts.find(item => item.id === host) || hosts[0];
     return (selected.prefix || '') + lines.join('\n');
   }
 
+  function requestForDraft(capability, draft) {
+    if (draft.manual) return { request: draft.request, manual: true };
+    const request = buildRequest(capability, draft);
+    if (!draft.request || draft.request === request) return { request, manual: false };
+    const otherLanguage = createTaskBrowser(config, { locale: english ? 'zh-CN' : 'en' });
+    if (draft.request === otherLanguage.buildRequest(capability, draft)) return { request, manual: false };
+    // Imported or older text may contain additions even without the manual flag.
+    // Only a byte-identical authored template is safe to regenerate on a language change.
+    return { request: draft.request, manual: true };
+  }
 
   function sourceUrl(relative, protocol = 'https:') {
-    const encoded=relative.split('/').map(encodeURIComponent).join('/');
+    const encoded = relative.split('/').map(encodeURIComponent).join('/');
     return protocol === 'file:' ? '../' + encoded : config.repository.url + '/blob/' + encodeURIComponent(config.repository.ref) + '/' + encoded;
   }
   function sampleUrl(relative, protocol = 'https:') {
-    const encoded=relative.split('/').map(encodeURIComponent).join('/');
-    return (protocol === 'file:' ? '../' : './') + encoded;
+    const encoded = relative.split('/').map(encodeURIComponent).join('/');
+    return (protocol === 'file:' ? '../' : './') + encoded + (english ? '?lang=en' : '');
   }
-  return Object.freeze({filterCapabilities,buildRequest,fields,titleOf,briefLabel,sourceUrl,sampleUrl,commonFields:COMMON_FIELDS,typeNames:TYPE_NAMES});
+  function showcaseOf(sample) {
+    const translated = language.showcases?.[sample.id];
+    return translated ? { ...sample, title: translated.title, description: translated.description,
+      inputs: translated.inputs, outputs: translated.outputs } : sample;
+  }
+  return Object.freeze({ locale, text, hosts, suggestions, detailOf, summaryOf, showcaseOf,
+    filterCapabilities, buildRequest, requestForDraft, fields, titleOf, briefLabel, sourceUrl, sampleUrl,
+    commonFields: COMMON_FIELDS, typeNames: TYPE_NAMES });
 }

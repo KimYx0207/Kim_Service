@@ -2,10 +2,27 @@
 (function () {
   'use strict';
   const data = JSON.parse(document.getElementById('capability-data').textContent);
-  const app = createTaskBrowser(data.ui);
-  const {filterCapabilities,buildRequest,fields,titleOf,briefLabel,sourceUrl,sampleUrl,commonFields:COMMON_FIELDS,typeNames:TYPE_NAMES}=app;
+  const pageUrl = new URL(location.href);
+  let app = createTaskBrowser(data.ui, { locale: pageUrl.searchParams.get('lang') });
+  let {filterCapabilities,buildRequest,requestForDraft,fields,titleOf,briefLabel,sourceUrl,sampleUrl,
+    commonFields:COMMON_FIELDS,typeNames:TYPE_NAMES,locale,text:t,hosts,suggestions,
+    detailOf,summaryOf,showcaseOf}=app;
+  function applyStaticLanguage() {
+    // Explicit template keys select authored messages; source text is never searched or replaced.
+    document.documentElement.lang = locale;
+    document.title = t('page.title');
+    document.querySelector('meta[name="description"]').content = t('page.description');
+    for (const node of document.querySelectorAll('[data-i18n]')) node.textContent = t(node.dataset.i18n);
+    for (const node of document.querySelectorAll('[data-i18n-aria]')) node.setAttribute('aria-label',t(node.dataset.i18nAria));
+    for (const node of document.querySelectorAll('[data-i18n-placeholder]')) node.placeholder = t(node.dataset.i18nPlaceholder);
+    for (const link of document.querySelectorAll('[data-root-readme]')) link.href = sourceUrl(locale==='en'?'README_EN.md':'README.md',location.protocol);
+    for (const picker of document.querySelectorAll('.language-select')) picker.value = locale;
+    document.getElementById('inventory').textContent = t('ui.inventory',{components:data.componentCount,capabilities:data.capabilityCount});
+  }
+  for (const picker of document.querySelectorAll('.language-select')) picker.addEventListener('change',()=>switchLanguage(picker.value));
   const drafts=createTaskDraftStore({getStorage:()=>window.localStorage,keyPrefix:data.ui.drafts.storageKeyPrefix});
   const search = document.getElementById('search');
+  search.value = pageUrl.searchParams.get('q') || '';
   const cards = document.getElementById('cards');
   const dialog = document.getElementById('detail');
   const detailContent = document.getElementById('detail-content');
@@ -15,7 +32,27 @@
   const types = ['all', ...data.ui.typeOrder.filter((type) => data.capabilities.some((capability) => capability.componentType === type))];
   // Match the visible type order; within each type use a name sort, not a recommendation score.
   const browsingOrder = [...data.capabilities].sort((left,right) =>
-    types.indexOf(left.componentType)-types.indexOf(right.componentType) || titleOf(left).localeCompare(titleOf(right),'zh-CN'));
+    types.indexOf(left.componentType)-types.indexOf(right.componentType) || titleOf(left).localeCompare(titleOf(right),locale));
+
+  function switchLanguage(value) {
+    app = createTaskBrowser(data.ui,{locale:value});
+    ({filterCapabilities,buildRequest,requestForDraft,fields,titleOf,briefLabel,sourceUrl,sampleUrl,
+      commonFields:COMMON_FIELDS,typeNames:TYPE_NAMES,locale,text:t,hosts,suggestions,
+      detailOf,summaryOf,showcaseOf}=app);
+    applyStaticLanguage();
+    browsingOrder.sort((left,right)=>types.indexOf(left.componentType)-types.indexOf(right.componentType)||titleOf(left).localeCompare(titleOf(right),locale));
+    renderTypeFilters();renderSuggestions();renderShowcases();renderResults();
+    if(activeId){
+      const capability=data.capabilities.find(item=>item.id===activeId);
+      lastTrigger=[...cards.querySelectorAll('.details-button')].find(button=>button.closest('[data-capability]').dataset.capability===activeId)||null;
+      if(capability)openDetail(capability,null,false);
+    }
+    const next = new URL(location.href);
+    next.searchParams.set('lang',locale);
+    if(search.value)next.searchParams.set('q',search.value);else next.searchParams.delete('q');
+    // No reload: even a storage-denied draft stays in the existing in-memory store.
+    try{history.replaceState(null,'',next.href);}catch{/* A restricted file URL still retains the chosen in-page language. */}
+  }
 
   function element(tag, className, text) {
     const node = document.createElement(tag);
@@ -34,15 +71,14 @@
   }
 
   function runtimeCopy(capability) {
-    if (capability.componentType === 'agent') return ['专业方法包 · 需宿主工具', '提供角色方法与交付约定。实际读写、浏览器检查或媒体渲染，需要使用它的 Agent 环境提供工具与权限。页面未验证你的宿主是否已加载或运行此角色。'];
-    if (capability.componentType === 'skill') return ['技能包 · 按入口接入', '提供任务流程及包内工具。需在支持的 Agent 环境按说明使用；模型、素材和外部服务是否可用，须在本次任务中核对。'];
-    if (capability.componentType === 'tool') return ['工具 · 按说明配置', '需要按包内说明配置依赖与使用范围。本页仅展示声明和入口，没有安装或执行工具。'];
-    return ['按包内说明接入', '需要按包内说明核对支持的环境与接入方式。本页没有安装、启用或执行此能力。'];
+    const kind = ['agent','skill','tool'].includes(capability.componentType) ? capability.componentType : 'other';
+    return [t('runtime.'+kind+'Title'),t('runtime.'+kind+'Description')];
   }
 
-  function ioPreview(schema) {
-    const primary = fields(schema).filter((field) => !COMMON_FIELDS.has(field.key)).slice(0, 2);
-    return primary.length ? primary.map(briefLabel).join(' · ') : (schema.description || '具体内容见入口说明');
+  function ioPreview(schema, capability) {
+    const primary = fields(schema,{capability}).filter(field => !COMMON_FIELDS.has(field.key)).slice(0, 2);
+    return primary.length ? primary.map(briefLabel).join(' · ')
+      : (locale==='en' ? t('ui.unspecified') : schema.description || t('ui.unspecified'));
   }
 
   function renderCard(capability) {
@@ -53,20 +89,20 @@
     label.dataset.type = capability.componentType;
     meta.append(label,element('span','version','v'+capability.componentVersion));
     const title = element('h3','',titleOf(capability));
-    const description = element('p','card-description',capability.useWhen[0]);
+    const description = element('p','card-description',locale==='en'?summaryOf(capability):capability.useWhen[0]);
     const io = element('dl','card-io');
-    for (const [name,schema] of [['你给',capability.input],['交付',capability.output]]) {
+    for (const [name,schema] of [[t('ui.youProvide'),capability.input],[t('ui.deliver'),capability.output]]) {
       const row = element('div');
-      row.append(element('dt','',name),element('dd','',ioPreview(schema)));
+      row.append(element('dt','',name),element('dd','',ioPreview(schema,capability)));
       io.append(row);
     }
     const actions = element('div','card-actions');
-    const button = element('button','details-button','查看输入与交付');
+    const button = element('button','details-button',t('ui.details'));
     button.type = 'button';
-    button.setAttribute('aria-label','查看输入与交付：'+titleOf(capability));
+    button.setAttribute('aria-label',t('ui.detailsAria',{title:titleOf(capability)}));
     button.append(element('span','','→'));
     button.addEventListener('click',()=>openDetail(capability,button,true));
-    actions.append(button,fileLink(`${capability.componentPath}/${capability.entrypoint}`,'打开入口 ↗','entry-link'));
+    actions.append(button,fileLink(`${capability.componentPath}/${capability.entrypoint}`,t('ui.openEntry'),'entry-link'));
     article.append(meta,title,element('p','component-name',capability.componentId),description,io,element('p','card-status',runtimeCopy(capability)[0]),actions);
     return article;
   }
@@ -76,7 +112,7 @@
     cards.replaceChildren(...filtered.map(renderCard));
     document.getElementById('empty').hidden = filtered.length !== 0;
     document.getElementById('clear-search').hidden = !search.value;
-    document.getElementById('result-count').textContent = `${filtered.length} / ${data.capabilityCount} 项能力`;
+    document.getElementById('result-count').textContent = t('ui.resultCount',{count:filtered.length,total:data.capabilityCount});
     document.querySelectorAll('#types button').forEach((button)=>button.setAttribute('aria-pressed',String(button.dataset.type===selectedType)));
   }
 
@@ -85,7 +121,7 @@
     for (const field of list) {
       const li = element('li');
       const label = element('strong','',field.description ? briefLabel(field) : field.label);
-      label.append(element('span','field-badge',field.required ? (direction==='output' ? '合同要求' : '必填') : '按需'));
+      label.append(element('span','field-badge',field.required ? (direction==='output' ? t('ui.outputRequired') : t('ui.inputRequired')) : t('ui.optional')));
       li.append(label);
       if (field.description && briefLabel(field) !== field.description) li.append(element('p','',field.description));
       li.append(element('code','',field.key));
@@ -105,15 +141,15 @@
 
   function openDetail(capability, trigger, updateHash) {
     activeId = capability.id;
-    const draft = drafts.get(capability.id) || {goal:'',materials:'',host:data.ui.hosts[0].id,request:'',manual:false,componentVersion:capability.componentVersion};
+    const draft = drafts.get(capability.id) || {goal:'',materials:'',host:hosts[0].id,request:'',manual:false,componentVersion:capability.componentVersion};
     const notices=[];
     if(draft.componentVersion!==capability.componentVersion){
       draft.manual=true;
-      notices.push(`能力包已从 v${draft.componentVersion} 更新至 v${capability.componentVersion}，完整请求已保留；核对交付约定后可重新生成。`);
+      notices.push(t('ui.versionChanged',{from:draft.componentVersion,to:capability.componentVersion}));
     }
-    if(!data.ui.hosts.some(item=>item.id===draft.host)){
-      draft.host=data.ui.hosts[0].id;draft.manual=true;
-      notices.push('原来的使用环境已不在列表中，请重新选择；完整请求已保留。');
+    if(!hosts.some(item=>item.id===draft.host)){
+      draft.host=hosts[0].id;draft.manual=true;
+      notices.push(t('ui.hostRemoved'));
     }
     if (trigger) lastTrigger = trigger;
     document.getElementById('detail-type').textContent = `${TYPE_NAMES[capability.componentType]} · v${capability.componentVersion}`;
@@ -124,78 +160,90 @@
     const [runtimeTitle,runtimeDescription] = runtimeCopy(capability);
     runtime.append(element('strong','',runtimeTitle),element('p','',runtimeDescription));
     const io = element('div','detail-io');
-    for (const [title,schema] of [['需要你提供',capability.input],['包内声明的交付',capability.output]]) {
+    for (const [title,schema] of [[t('ui.needInputs'),capability.input],[t('ui.declaredOutputs'),capability.output]]) {
       const section = element('section');
       section.append(element('h3','',title));
-      const mainFields = fields(schema).filter((field)=>!COMMON_FIELDS.has(field.key));
-      section.append(mainFields.length ? renderFields(mainFields,schema===capability.output?'output':'input') : element('p','detail-summary','合同未逐项列出字段，请查看入口说明。'));
+      const mainFields = fields(schema,{capability}).filter((field)=>!COMMON_FIELDS.has(field.key));
+      section.append(mainFields.length ? renderFields(mainFields,schema===capability.output?'output':'input') : element('p','detail-summary',t('ui.noFields')));
       io.append(section);
     }
+    const translatedDetail = detailOf(capability);
+    const originalSpecification = locale==='en' && !translatedDetail;
     const extra = element('details');
-    extra.append(element('summary','','完整交付约定与使用边界'));
-    for (const [name,schema] of [['任务上下文',capability.input],['状态与证据字段',capability.output]]) {
-      const common = fields(schema).filter((field)=>COMMON_FIELDS.has(field.key));
-      if (common.length) { extra.append(element('h4','',name),renderFields(common,schema===capability.output?'output':'input')); }
+    extra.append(element('summary','',t(originalSpecification?'ui.originalContract':'ui.fullContract')));
+    if(originalSpecification){
+      extra.append(element('p','detail-summary',t('ui.originalNote')),
+        element('p','detail-summary',capability.summary),listBlock(t('ui.useWhen'),capability.useWhen));
+      for(const [name,schema] of [[t('ui.sourceInputs'),capability.input],[t('ui.sourceOutputs'),capability.output]]){
+        extra.append(element('h4','',name),renderFields(fields(schema,{original:true}),schema===capability.output?'output':'input'));
+      }
+    }else{
+      for (const [name,schema] of [[t('ui.taskContext'),capability.input],[t('ui.statusEvidence'),capability.output]]) {
+        const common = fields(schema,{capability}).filter(field=>COMMON_FIELDS.has(field.key));
+        if (common.length) extra.append(element('h4','',name),renderFields(common,schema===capability.output?'output':'input'));
+      }
     }
-    extra.append(listBlock('不适用的情况',capability.doNotUseWhen));
-    if (capability.permissions.length) extra.append(listBlock('包声明的权限需求',capability.permissions));
-    if (capability.sideEffects.length) extra.append(listBlock('可能的改动',capability.sideEffects));
-    if (capability.humanGate.required) extra.append(listBlock('包声明的确认条件',capability.humanGate.when));
+    extra.append(listBlock(t('ui.doNotUseWhen'),translatedDetail?.doNotUseWhen||capability.doNotUseWhen));
+    if (capability.permissions.length) extra.append(listBlock(t('ui.permissions'),capability.permissions));
+    if (capability.sideEffects.length) extra.append(listBlock(t('ui.sideEffects'),capability.sideEffects));
+    if (capability.humanGate.required) extra.append(listBlock(t('ui.humanGate'),translatedDetail?.humanGate||capability.humanGate.when));
     if (capability.output.description) extra.append(element('p','detail-summary',capability.output.description));
 
     const links = element('div','source-links');
     const entry = `${capability.componentPath}/${capability.entrypoint}`;
-    links.append(fileLink(entry,'打开入口 ↗'));
-    if (capability.readme && capability.readme !== entry) links.append(fileLink(capability.readme,'使用 / 安装说明 ↗'));
-    capability.examples.forEach((file,index)=>links.append(fileLink(file,`包内示例${capability.examples.length>1 ? ' '+(index+1) : ''} ↗`)));
-    if (capability.deliveryContract) links.append(fileLink(`${capability.componentPath}/${capability.deliveryContract}`,'交付工具约定 ↗'));
+    links.append(fileLink(entry,t('ui.openEntry')));
+    if (capability.readme && capability.readme !== entry) links.append(fileLink(capability.readme,t('ui.readmeLink')));
+    capability.examples.forEach((file,index)=>links.append(fileLink(file,t('ui.exampleLink',{index:capability.examples.length>1?' '+(index+1):''}))));
+    if (capability.deliveryContract) links.append(fileLink(`${capability.componentPath}/${capability.deliveryContract}`,t('ui.deliveryContractLink')));
     const validation = element('details');
-    validation.append(element('summary','','查看已有验证入口'));
-    validation.append(element('p','detail-summary','以下链接是包内声明的验证文件，不表示本页执行过测试，也不等于模型或业务结果已经验收。'));
+    validation.append(element('summary','',t('ui.validationSummary')));
+    validation.append(element('p','detail-summary',t('ui.validationNote')));
     const validations = element('div','source-links');
     capability.validation.forEach((file)=>validations.append(fileLink(`${capability.componentPath}/${file}`,file)));
     validation.append(validations);
 
     const requestBox = element('section','request-box');
     const requestHeading = element('div','request-heading');
-    requestHeading.append(element('h3','','带着这段请求继续'));
+    requestHeading.append(element('h3','',t('ui.requestHeading')));
     const request = element('textarea');
-    request.setAttribute('aria-label','可编辑的使用请求');
+    request.setAttribute('aria-label',t('ui.requestAria'));
     request.spellcheck = false;
-    request.value = draft.manual ? draft.request : draft.request || buildRequest(capability,draft);
-    const hostLabel=element('label','request-field','交给哪个环境');
+    const preparedRequest = requestForDraft(capability,draft);
+    request.value = preparedRequest.request;
+    draft.manual = preparedRequest.manual;
+    const hostLabel=element('label','request-field',t('ui.requestHost'));
     const host=element('select'); host.id='request-host'; hostLabel.htmlFor=host.id;
-    data.ui.hosts.forEach(item=>{const option=element('option','',item.label);option.value=item.id;host.append(option);});
+    hosts.forEach(item=>{const option=element('option','',item.label);option.value=item.id;host.append(option);});
     host.value=draft.host;
-    const goalLabel=element('label','request-field','这次想得到什么');
+    const goalLabel=element('label','request-field',t('ui.requestGoal'));
     const goal=element('input'); goal.id='request-goal'; goalLabel.htmlFor=goal.id;
-    goal.type='text';goal.placeholder='例如：把这页的报名流程改清楚，保留现有品牌风格';goal.value=draft.goal;
-    const materialLabel=element('label','request-field','已有材料和限制');
+    goal.type='text';goal.placeholder=t('ui.goalPlaceholder');goal.value=draft.goal;
+    const materialLabel=element('label','request-field',t('ui.requestMaterials'));
     const materials=element('textarea');materials.id='request-materials';materialLabel.htmlFor=materials.id;
-    materials.className='materials-input';materials.placeholder='文件名、链接、已有内容、交付格式或截止时间';materials.value=draft.materials;
-    const update=element('button','secondary','按表单重新生成'); update.type='button';
-    const undo=element('button','secondary','恢复上一版');undo.type='button';undo.disabled=typeof draft.previousRequest!=='string';
-    const editor=element('details','request-editor');editor.append(element('summary','','查看或编辑完整请求'),request,update,undo);
+    materials.className='materials-input';materials.placeholder=t('ui.materialsPlaceholder');materials.value=draft.materials;
+    const update=element('button','secondary',t('ui.regenerate')); update.type='button';
+    const undo=element('button','secondary',t('ui.undo'));undo.type='button';undo.disabled=typeof draft.previousRequest!=='string';
+    const editor=element('details','request-editor');editor.append(element('summary','',t('ui.editorSummary')),request,update,undo);
     const draftStatus=element('p','draft-status');draftStatus.setAttribute('role','status');
     function renderDraftStatus(){
       const state=drafts.status(capability.id);
-      const text=state==='unavailable'?'浏览器暂时无法保存，最新内容保留在本页；请下载草稿后再关闭。':
-        state==='unreadable'?'已有草稿格式无法读取，原数据已保留；当前编辑只留在本页，请下载草稿。':
-        state==='delete_failed'?'浏览器暂时无法清除草稿，当前内容已保留。':
-        state==='saved'||state==='restored'?'草稿已保存在此浏览器，刷新后可以继续；也可下载后在另一处导入。':
-        '编辑后自动保存在此浏览器。可下载草稿，也可清空本机记录。';
+      const text=state==='unavailable'?t('ui.draftUnavailable'):
+        state==='unreadable'?t('ui.draftUnreadable'):
+        state==='delete_failed'?t('ui.draftDeleteFailed'):
+        state==='saved'||state==='restored'?t('ui.draftSaved'):
+        t('ui.draftEmpty');
       draftStatus.textContent=[text,...notices].join(' ');
     }
     function saveDraft(){draft.goal=goal.value;draft.materials=materials.value;draft.host=host.value;draft.request=request.value;drafts.set(capability.id,{...draft});renderDraftStatus();}
-    function refreshRequest(){draft.goal=goal.value;draft.materials=materials.value;draft.host=host.value;if(!draft.manual){request.value=buildRequest(capability,draft);}else{copyStatus.textContent='表单已更新，完整请求保留你的手动内容。按表单重新生成会替换文本，之后可恢复上一版。';}saveDraft();}
+    function refreshRequest(){draft.goal=goal.value;draft.materials=materials.value;draft.host=host.value;if(!draft.manual){request.value=buildRequest(capability,draft);}else{copyStatus.textContent=t('ui.manualPreserved');}saveDraft();}
     goal.addEventListener('input',refreshRequest);materials.addEventListener('input',refreshRequest);host.addEventListener('change',refreshRequest);
     request.addEventListener('input',()=>{draft.manual=true;saveDraft();});
-    update.addEventListener('click',()=>{draft.previousRequest=request.value;request.value=buildRequest(capability,draft);draft.manual=false;draft.componentVersion=capability.componentVersion;notices.length=0;undo.disabled=false;saveDraft();copyStatus.textContent='已按表单重新生成。需要保留先前手动内容时，可恢复上一版。';});
-    undo.addEventListener('click',()=>{if(typeof draft.previousRequest!=='string')return;const current=request.value;request.value=draft.previousRequest;draft.previousRequest=current;draft.manual=true;saveDraft();copyStatus.textContent='已恢复上一版完整请求。';});
+    update.addEventListener('click',()=>{draft.previousRequest=request.value;request.value=buildRequest(capability,draft);draft.manual=false;draft.componentVersion=capability.componentVersion;notices.length=0;undo.disabled=false;saveDraft();copyStatus.textContent=t('ui.regenerated');});
+    undo.addEventListener('click',()=>{if(typeof draft.previousRequest!=='string')return;const current=request.value;request.value=draft.previousRequest;draft.previousRequest=current;draft.manual=true;saveDraft();copyStatus.textContent=t('ui.undone');});
     const draftActions=element('div','draft-actions');
-    const download=element('button','secondary','下载草稿');download.type='button';
-    const restore=element('button','secondary','导入草稿');restore.type='button';
-    const clear=element('button','secondary','清空草稿');clear.type='button';
+    const download=element('button','secondary',t('ui.downloadDraft'));download.type='button';
+    const restore=element('button','secondary',t('ui.importDraft'));restore.type='button';
+    const clear=element('button','secondary',t('ui.clearDraft'));clear.type='button';
     const file=element('input');file.type='file';file.accept='.json,application/json';file.hidden=true;file.id='import-draft';
     download.addEventListener('click',()=>{
       saveDraft();
@@ -207,38 +255,44 @@
     file.addEventListener('change',async()=>{
       const selected=file.files[0];if(!selected)return;
       try{
-        if(selected.size>data.ui.drafts.maxImportBytes)throw new Error('草稿文件过大，请选择本页下载的草稿 JSON。');
+        if(selected.size>data.ui.drafts.maxImportBytes)throw Object.assign(new Error('Draft too large'),{code:'DRAFT_TOO_LARGE'});
         const restored=parseTaskDraft(await selected.text(),capability.id);
         drafts.set(capability.id,restored);
         if(activeId===capability.id)openDetail(capability,null,false);
-      }catch(error){copyStatus.textContent='导入未完成，当前草稿已保留。'+error.message;}
+      }catch(error){
+        const key=error instanceof SyntaxError?'ui.importSyntax':
+          {DRAFT_FORMAT:'ui.importFormat',DRAFT_FIELDS:'ui.importMissing',DRAFT_HISTORY:'ui.importHistory',DRAFT_TOO_LARGE:'ui.draftTooLarge'}[error.code]||'ui.importUnknown';
+        copyStatus.textContent=t('ui.importFailed',{reason:t(key)});
+      }
       finally{file.value='';}
     });
     clear.addEventListener('click',()=>{if(drafts.remove(capability.id))openDetail(capability,null,false);else renderDraftStatus();});
     draftActions.append(download,restore,clear,file);
     renderDraftStatus();
     const copyActions = element('div','copy-actions');
-    const copy = element('button','primary','复制请求');
+    const copy = element('button','primary',t('ui.copy'));
     copy.type = 'button';
-    const select = element('button','secondary','全选文本');
+    const select = element('button','secondary',t('ui.selectAll'));
     select.type = 'button';
     const copyStatus = element('p','copy-status');
     copyStatus.setAttribute('role','status');
     copyStatus.setAttribute('aria-live','polite');
     copy.addEventListener('click',async()=>{
       saveDraft();
-      copy.disabled = true;copy.textContent='复制中…';
+      copy.disabled = true;copy.textContent=t('ui.copying');
       const success = await copyRequest(request,navigator.clipboard);
-      copy.disabled = false;copy.textContent='复制请求';
-      copyStatus.textContent = success ? '已复制。粘贴到'+data.ui.hosts.find(item=>item.id===host.value).label+'中，完成后可在原对话继续修改。' : '浏览器未允许复制，已选中文本。请按 Ctrl/Cmd+C 或长按复制。';
+      copy.disabled = false;copy.textContent=t('ui.copy');
+      copyStatus.textContent = success ? t('ui.copySuccess',{host:hosts.find(item=>item.id===host.value).label}) : t('ui.copyFailure');
     });
-    select.addEventListener('click',()=>{editor.open=true;request.focus();request.select();copyStatus.textContent='已全选。请按 Ctrl/Cmd+C 或长按复制。';});
+    select.addEventListener('click',()=>{editor.open=true;request.focus();request.select();copyStatus.textContent=t('ui.selected');});
     copyActions.append(copy,select,copyStatus);
-    requestBox.append(requestHeading,element('p','','填好目标和材料，复制到你正在使用的 Agent。任务在该环境中执行。'),hostLabel,host,goalLabel,goal,materialLabel,materials,editor,copyActions,draftActions,draftStatus);
-    const note = element('p','source-note','声明来源：');
+    requestBox.append(requestHeading,element('p','',t('ui.requestIntro')),hostLabel,host,goalLabel,goal,materialLabel,materials,editor,copyActions,draftActions,draftStatus);
+    const note = element('p','source-note',t('ui.sourcePrefix'));
     note.append(fileLink(`${capability.componentPath}/capability.json`,`${capability.componentPath}/capability.json`));
-    note.append(document.createTextNode('。包内示例可能是合成或未运行示例，请以原文件标注为准。'));
-    detailContent.replaceChildren(heading,element('p','component-name',capability.id),element('p','detail-summary',capability.summary),runtime,listBlock('适用情况',capability.useWhen),io,extra,links,validation,requestBox,note);
+    note.append(document.createTextNode(t('ui.sourceSuffix')));
+    const useWhen=locale==='en'?translatedDetail?.useWhen||[]:capability.useWhen;
+    detailContent.replaceChildren(heading,element('p','component-name',capability.id),element('p','detail-summary',summaryOf(capability)),runtime,
+      ...(useWhen.length?[listBlock(t('ui.useWhen'),useWhen)]:[]),io,extra,links,validation,requestBox,note);
     if (!dialog.open) dialog.showModal();
     dialog.scrollTop = 0;
     heading.focus({preventScroll:true});
@@ -251,21 +305,30 @@
     dialog.close();
   }
 
-  document.getElementById('inventory').textContent = `${data.componentCount} 个独立能力包　/　${data.capabilityCount} 项能力　/　全部来自仓库内声明`;
-  const filters = document.getElementById('types');
-  types.forEach((type)=>{
-    const button = element('button','',TYPE_NAMES[type]);
-    button.type = 'button';
-    button.dataset.type = type;
-    button.setAttribute('aria-pressed',String(type==='all'));
-    button.append(element('span','',String(type==='all' ? data.capabilityCount : data.capabilities.filter((capability)=>capability.componentType===type).length)));
-    button.addEventListener('click',()=>{selectedType=type;renderResults();});
-    filters.append(button);
-  });
+  function renderTypeFilters(){
+    const filters = document.getElementById('types');
+    filters.replaceChildren();
+    types.forEach((type)=>{
+      const button = element('button','',TYPE_NAMES[type]);
+      button.type = 'button';
+      button.dataset.type = type;
+      button.setAttribute('aria-pressed',String(type===selectedType));
+      button.append(element('span','',String(type==='all' ? data.capabilityCount : data.capabilities.filter((capability)=>capability.componentType===type).length)));
+      button.addEventListener('click',()=>{selectedType=type;renderResults();});
+      filters.append(button);
+    });
+  }
   search.addEventListener('input',renderResults);
   document.getElementById('clear-search').addEventListener('click',()=>{search.value='';renderResults();search.focus();});
-  for(const query of data.ui.suggestions){const button=element('button','',query);button.type='button';button.dataset.query=query;document.getElementById('suggestions').append(button);}
-  document.querySelectorAll('[data-query]').forEach((button)=>button.addEventListener('click',()=>{search.value=button.dataset.query;selectedType='all';renderResults();search.focus();}));
+  function renderSuggestions(){
+    const container=document.getElementById('suggestions');
+    container.replaceChildren(element('span','',t('page.suggestionsLabel')));
+    for(const query of suggestions){
+      const button=element('button','',query);button.type='button';button.dataset.query=query;
+      button.addEventListener('click',()=>{search.value=query;selectedType='all';renderResults();search.focus();});
+      container.append(button);
+    }
+  }
   document.getElementById('reset').addEventListener('click',()=>{search.value='';selectedType='all';renderResults();search.focus();});
   document.getElementById('close-detail').addEventListener('click',closeDetail);
   dialog.addEventListener('click',(event)=>{if(event.target===dialog){const box=dialog.getBoundingClientRect();if(event.clientX<box.left||event.clientX>box.right||event.clientY<box.top||event.clientY>box.bottom)closeDetail();}});
@@ -285,17 +348,25 @@
     if(capability&&capability.id!==activeId)openDetail(capability,null,false);
   }
   window.addEventListener('hashchange',openFromHash);
-  for(const sample of data.showcases){
-    const article=element('article','showcase-card');
-    article.append(element('p','eyebrow',sample.exampleData?'合成示例 · 可交互体验':'可交互体验'),element('h3','',sample.title),element('p','',sample.description));
-    const io=element('dl','showcase-io');
-    for(const [label,values] of [['你给',sample.inputs],['拿到',sample.outputs]]){const row=element('div');row.append(element('dt','',label),element('dd','',values.join('、')));io.append(row);}
-    const actions=element('div','showcase-actions');
-    const preview=element('a','primary','打开成品示例 ↗');preview.href=sampleUrl(sample.entrypoint,location.protocol);preview.target='_blank';preview.rel='noopener noreferrer';
-    const use=element('button','secondary','用我的材料做');use.type='button';use.addEventListener('click',()=>openDetail(data.capabilities.find(item=>item.id===sample.capabilityId),use,true));
-    actions.append(preview,use);article.append(io,actions);document.getElementById('showcase-cards').append(article);
+  function renderShowcases(){
+    document.getElementById('showcase-cards').replaceChildren();
+    for(const originalSample of data.showcases){
+      const sample=showcaseOf(originalSample);
+      const article=element('article','showcase-card');
+      article.append(element('p','eyebrow',sample.exampleData?t('ui.sampleSynthetic'):t('ui.sampleInteractive')),element('h3','',sample.title),element('p','',sample.description));
+      const io=element('dl','showcase-io');
+      for(const [label,values] of [[t('ui.youProvide'),sample.inputs],[t('ui.takeAway'),sample.outputs]]){const row=element('div');row.append(element('dt','',label),element('dd','',values.join(t('ui.listSeparator'))));io.append(row);}
+      const actions=element('div','showcase-actions');
+      const preview=element('a','primary',t('ui.samplePreview'));preview.href=sampleUrl(sample.entrypoint,location.protocol);preview.target='_blank';preview.rel='noopener noreferrer';
+      const use=element('button','secondary',t('ui.sampleUseOwn'));use.type='button';use.addEventListener('click',()=>openDetail(data.capabilities.find(item=>item.id===sample.capabilityId),use,true));
+      actions.append(preview,use);article.append(io,actions);document.getElementById('showcase-cards').append(article);
+    }
+    document.getElementById('showcases').hidden=data.showcases.length===0;
   }
-  document.getElementById('showcases').hidden=data.showcases.length===0;
+  applyStaticLanguage();
+  renderTypeFilters();
+  renderSuggestions();
+  renderShowcases();
   renderResults();
   openFromHash();
 })();

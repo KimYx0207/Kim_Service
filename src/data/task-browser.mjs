@@ -47,7 +47,23 @@ export function readBrowserConfig(root = ROOT) {
     }
     ids.add(host.id);
   }
-  return ui;
+  const readLocaleFile = relative => JSON.parse(fs.readFileSync(
+    regularFile(fs.existsSync(path.join(root, relative)) ? root : ROOT, relative), 'utf8'));
+  const languagePack = readLocaleFile('config/task-browser-locales.json');
+  const translations = readLocaleFile('config/task-browser-capabilities.en.json');
+  if (languagePack.schemaVersion !== 1 || languagePack.defaultLocale !== 'zh-CN' ||
+      !languagePack.locales?.['zh-CN']?.messages || !languagePack.locales?.en?.messages ||
+      translations.schemaVersion !== 1 || translations.locale !== 'en' ||
+      !translations.capabilities || typeof translations.capabilities !== 'object') {
+    throw new Error('Invalid task-browser localization configuration');
+  }
+  const sourceKeys = Object.keys(languagePack.locales['zh-CN'].messages).sort();
+  if (JSON.stringify(sourceKeys) !== JSON.stringify(Object.keys(languagePack.locales.en.messages).sort()) ||
+      Object.values(languagePack.locales).some(locale => Object.values(locale.messages).some(value => typeof value !== 'string'))) {
+    throw new Error('Task-browser languages must contain the same UI message keys');
+  }
+  return { ...ui, defaultLocale: languagePack.defaultLocale,
+    locales: languagePack.locales, capabilityTranslations: translations.capabilities };
 }
 
 export function readShowcases(root, capabilities) {

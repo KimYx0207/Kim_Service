@@ -3,3 +3,5 @@
 /* Grid children must shrink before their internal table scrolls on mobile. */
 .workspace>*{min-width:0}.pair>*{min-width:0}input,select,textarea{min-width:0;max-width:100%}
 @media(max-width:700px){input:not([type=file]),select,textarea{font-size:16px}button,.file-label{min-height:44px}.scenario-card .row{flex-wrap:wrap}}
+
+.header-tools{display:flex;flex-direction:column;align-items:flex-end;gap:12px}.language-switch{display:flex;gap:12px;font-size:12px}.language-switch a{color:inherit;text-underline-offset:4px}.language-switch [aria-current]{font-weight:750;text-decoration-thickness:2px}html[lang=en] .page-header h1{max-width:800px}html[lang=en] .scenario-card .row{align-items:flex-start;gap:12px}html[lang=en] .download-bar{flex-wrap:wrap}@media(max-width:600px){.header-tools{align-items:flex-start}}

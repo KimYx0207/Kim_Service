@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "design-system-designer",
   "componentType": "agent",
-  "componentVersion": "0.2.0",
+  "componentVersion": "0.2.1",
   "entrypoint": "AGENT.md",
   "capabilities": [
     {

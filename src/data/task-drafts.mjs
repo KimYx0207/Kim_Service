@@ -1,16 +1,17 @@
 /* Browser storage adapter. Failures retain the live draft and expose a status;
  * one key per capability keeps edits to other tasks independent. */
+const draftError = (message, code) => Object.assign(new Error(message), { code });
 function taskDraftRecord(value, capabilityId) {
   if (!value || value.schemaVersion !== 1 || typeof value.capabilityId !== 'string' ||
       value.capabilityId !== capabilityId || !value.draft || typeof value.draft !== 'object') {
-    throw new Error('草稿格式或所属能力不匹配，请选择原来的能力或使用对应版本。');
+    throw draftError('草稿格式或所属能力不匹配，请选择原来的能力或使用对应版本。', 'DRAFT_FORMAT');
   }
   const draft=value.draft;
   for(const key of ['goal','materials','host','request','componentVersion']) {
-    if(typeof draft[key]!=='string')throw new Error('草稿缺少完整内容，原草稿已保留。');
+    if(typeof draft[key]!=='string')throw draftError('草稿缺少完整内容，原草稿已保留。', 'DRAFT_FIELDS');
   }
   if(typeof draft.manual!=='boolean'||(draft.previousRequest!==undefined&&typeof draft.previousRequest!=='string')) {
-    throw new Error('草稿编辑记录不完整，原草稿已保留。');
+    throw draftError('草稿编辑记录不完整，原草稿已保留。', 'DRAFT_HISTORY');
   }
   return {goal:draft.goal,materials:draft.materials,host:draft.host,request:draft.request,
     componentVersion:draft.componentVersion,manual:draft.manual,

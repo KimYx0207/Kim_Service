@@ -1,0 +1,490 @@
+{
+  "schemaVersion": 1,
+  "locale": "en",
+  "capabilities": {
+    "accessibility-audit-deliver": {
+      "sourceSummary": "用真实任务检查键盘、阅读器、焦点、文字和错误恢复，并把问题落实到修复位置。 accessibility WCAG keyboard screen reader audit",
+      "title": "Check a real task for accessibility",
+      "summary": "Test keyboard, screen-reader, focus, text, and error-recovery behavior, with specific locations to fix."
+    },
+    "accounting-reconciliation-analyst-deliver": {
+      "sourceSummary": "逐笔核对银行、支付与账簿，把差额追到金额、时间、费用和缺失记录。 accounting reconciliation ledger bank settlement",
+      "title": "Reconcile accounts and payments",
+      "summary": "Match bank, payment, and ledger records and trace differences to amounts, dates, fees, or missing entries."
+    },
+    "agent-teams-orchestrate": {
+      "sourceSummary": "为复杂任务设计并执行跨宿主的多 Agent 分工、并行协作、结果汇总与质量闸门。",
+      "title": "Coordinate a team of AI agents",
+      "summary": "Plan and run work across supported agent hosts, with clear roles, parallel tasks, combined results, and quality checks."
+    },
+    "agronomy-planner-deliver": {
+      "sourceSummary": "整理地块、作物阶段、天气土壤证据，计算条件水量与农事约束 agronomy irrigation water balance planning",
+      "title": "Plan irrigation and field work",
+      "summary": "Organize field, crop-stage, weather, and soil evidence to calculate conditional water needs and farming constraints."
+    },
+    "api-contract-review-deliver": {
+      "sourceSummary": "检查接口是否能被真实调用、正确失败并兼容现有消费者。 API contract OpenAPI compatibility idempotency",
+      "title": "Review an API contract",
+      "summary": "Check that real clients can call an API, handle its failures, and remain compatible with changes."
+    },
+    "application-security-reviewer-deliver": {
+      "sourceSummary": "对已授权材料做威胁建模、身份与租户边界核查、修复验证 application security review threat modeling authorization",
+      "title": "Review application security",
+      "summary": "Use authorized materials to examine threats, identity and tenant boundaries, and evidence for proposed fixes."
+    },
+    "applied-ai-engineer-deliver": {
+      "sourceSummary": "把检索、模型和工具连成可评价的AI功能，并用基线、失败样本和成本预算决定是否扩大使用。 applied AI RAG evaluation agent LLM",
+      "title": "Build and evaluate an AI feature",
+      "summary": "Connect retrieval, models, and tools, then use baselines, failure cases, and costs to decide whether to expand use."
+    },
+    "apply-skill-installation": {
+      "sourceSummary": "Install or upgrade the Skill projection at an explicitly selected project or user scope after approval; this does not install Semgrep.",
+      "title": "Install or update a Skill projection",
+      "summary": "Apply an approved change to a selected project or user scope. This installs the Skill projection, not Semgrep."
+    },
+    "apply-skill-rollback": {
+      "sourceSummary": "Restore the receipted previous Skill projection after explicit approval while preserving the displaced current version.",
+      "title": "Restore a previous Skill projection",
+      "summary": "After explicit approval, restore the receipted previous version while preserving the version being replaced."
+    },
+    "assistant-display-contract": {
+      "sourceSummary": "Supplies a concise first-response contract by default: at most brief understanding then immediate execution. Explicit prompt-writing requests require a complete copyable prompt; HOOKPROMPT_DISPLAY_MODE=full restores the original three-part display independently of backstage compact context.",
+      "title": "Keep the AI's first reply concise",
+      "summary": "Provide brief understanding followed by execution. Explicit prompt-writing requests still receive a complete copyable prompt."
+    },
+    "backend-data-engineer-deliver": {
+      "sourceSummary": "按明确权限和数据契约实现服务、数据库或同步变更并验证隔离与恢复",
+      "title": "Build backend and data changes",
+      "summary": "Implement services, database changes, or synchronization within agreed permissions and data contracts; verify isolation and recovery."
+    },
+    "brand-visual-designer-deliver": {
+      "sourceSummary": "把品牌定位转成有区别的视觉方向、可复用规则和实际渠道物料。 brand identity visual design typography art direction",
+      "title": "Turn a brand into a visual system",
+      "summary": "Develop distinct visual directions, reusable design rules, and practical materials for the brand's channels."
+    },
+    "bridge-codex-cli": {
+      "sourceSummary": "Expose a bounded MCP stdio tool that invokes the local Codex CLI without a command shell.",
+      "title": "Connect to a local Codex CLI",
+      "summary": "Expose a bounded MCP stdio tool for invoking the local Codex CLI without a command shell."
+    },
+    "bridge-gemini-cli": {
+      "sourceSummary": "Expose a bounded MCP stdio tool that invokes the local Gemini CLI without shell command composition.",
+      "title": "Connect to a local Gemini CLI",
+      "summary": "Expose a bounded MCP stdio tool for invoking the local Gemini CLI without composing shell commands."
+    },
+    "business-finance-analyst-deliver": {
+      "sourceSummary": "经营财务分析（business finance / cash flow / budget variance）：核对期间、收付与利润口径，交现金桥接、预算差异和有条件经营建议。",
+      "title": "Understand business cash and budgets",
+      "summary": "Reconcile periods, receipts, payments, and profit definitions, then explain cash movements and budget variances."
+    },
+    "commerce-operations-designer-deliver": {
+      "sourceSummary": "把下单、支付、履约、退换和订阅续费连接成可追踪的运营状态与异常处理。 commerce ecommerce order fulfillment returns subscription",
+      "title": "Design an order-to-service workflow",
+      "summary": "Connect orders, payment, fulfillment, returns, and subscription renewals with traceable states and exception handling."
+    },
+    "concept-tutor-assist": {
+      "sourceSummary": "概念讲解与答疑：找到学习者卡住的那一步，选择合适的图示、类比或算式解释，再用迁移题检查理解。先理解错误来源，不把答案和公式堆给对方。",
+      "title": "Explain a concept that is not clicking",
+      "summary": "Find the learner's specific difficulty, explain it with suitable visuals or examples, and check understanding with a new question."
+    },
+    "construction-information-review-deliver": {
+      "sourceSummary": "核对建筑模型信息要求、IFC/IDS版本、属性覆盖和交付证据 construction BIM IFC IDS information delivery review",
+      "title": "Review building-model information",
+      "summary": "Check information requirements, IFC and IDS versions, property coverage, and evidence for the model delivery."
+    },
+    "customer-service-writer-assist": {
+      "sourceSummary": "客服与售后话术：把顾客问题、订单事实和商家已批准的处理规则变成可发送的回复草稿。每次先判断能否直接答复、需要补查还是要升级处理，不代替商家承诺退款或发货结果。",
+      "title": "Draft a customer-service reply",
+      "summary": "Turn customer questions, order facts, and approved policies into a reply, identifying missing facts or escalation without making new promises."
+    },
+    "data-pipeline-engineer-deliver": {
+      "sourceSummary": "把多源数据变成可重跑、可回补并能追到异常记录的数据管道。 data pipeline ETL ELT Airflow dbt",
+      "title": "Build a recoverable data pipeline",
+      "summary": "Connect data sources through a pipeline that can be rerun, backfilled, and traced to individual problem records."
+    },
+    "data-quality-analyst-deliver": {
+      "sourceSummary": "数据质量审查（data quality / reconciliation / lineage）：核表结构、业务键、缺失、重复、引用关系和总额对账，交可定位问题及修复方案。",
+      "title": "Find and explain data-quality issues",
+      "summary": "Check schemas, business keys, missing values, duplicates, relationships, and totals, then propose traceable fixes."
+    },
+    "database-migration-deliver": {
+      "sourceSummary": "把数据库结构变更拆成兼容扩展、可重跑回填、切换和清理，保留可恢复路径。 database migration expand contract rollback PostgreSQL",
+      "title": "Plan a safe database migration",
+      "summary": "Separate compatible schema expansion, repeatable backfills, cutover, and cleanup while keeping a recovery path."
+    },
+    "delivery-evidence-verify": {
+      "sourceSummary": "交付证据核验（delivery verification / artifact manifest / SHA256 / acceptance criteria）：核对本次明确授权的交付文件、逐项验收标准与工具回执，区分完整、部分和阻塞，向调用方交接证据、缺项与失败；不负责授权、调度或最终接受。",
+      "title": "Check delivered files against criteria",
+      "summary": "Review authorized files, acceptance criteria, and tool receipts; report complete, partial, or blocked work without claiming final acceptance."
+    },
+    "design-system-designer-deliver": {
+      "sourceSummary": "把分散页面整理成一致的语义token、组件状态和可迁移的设计系统。 design system tokens component library",
+      "title": "Create a consistent design system",
+      "summary": "Turn scattered screens into shared design tokens, component states, and a practical migration plan.",
+      "detail": {
+        "useWhen": [
+          "Bring inconsistent screens into one design system.",
+          "Turn Figma or Penpot specifications into component rules.",
+          "Design dark-mode and multilingual component states."
+        ],
+        "doNotUseWhen": [
+          "Use interaction-designer for a single-page flow.",
+          "Work with frontend-engineer for implementation.",
+          "Use brand-visual-designer for complete brand positioning."
+        ],
+        "humanGate": [
+          "Brand commitments affecting all products and breaking component-interface changes require the responsible owner to choose. Prototypes and pilot migrations may continue within the authorized scope."
+        ],
+        "fields": {
+          "constraints": "Framework, compatibility scope, accessibility goals, and migration pace",
+          "identity": "Brand colors, typography, language, density, and platform",
+          "surfaces": "Existing screens, components, real content, and user tasks",
+          "components": "Component behavior and states",
+          "examples": "Real-page and multilingual examples",
+          "facts": "Materials, versions, units, and assumptions used for this task",
+          "handoff": "Output locations, unfinished items, and next steps",
+          "migration": "Migration and version plan",
+          "tokens": "Semantic design tokens and their references"
+        },
+        "sourceContractSha256": "82dab737ed93d98fd2d526d89242c4b688791f67d29343209a304e4f77458154"
+      }
+    },
+    "energy-project-analyst-deliver": {
+      "sourceSummary": "把发电、用电、时段电价和项目现金流连接起来，比较节能、光伏或储能方案。 energy solar storage project economics tariff",
+      "title": "Compare energy-project options",
+      "summary": "Connect generation, consumption, time-of-use tariffs, and cash flows to compare efficiency, solar, or storage options."
+    },
+    "exercise-designer-assist": {
+      "sourceSummary": "原创练习与答案：按学习目标编原创题目，控制难度与条件，并独立核对每题答案。题目需要测出具体理解，而不是换数字凑数量；不复制题库或用超纲难题冒充提高。",
+      "title": "Create original practice exercises",
+      "summary": "Write exercises for a learning goal, control difficulty and conditions, and independently check each answer."
+    },
+    "experiment-analysis-deliver": {
+      "sourceSummary": "设计和审查随机实验、分流质量、指标与效果解释 experiment analysis A/B testing randomization SRM",
+      "title": "Design and review an experiment",
+      "summary": "Examine randomization, allocation quality, metrics, and interpretation of the measured effect."
+    },
+    "financial-modeler-deliver": {
+      "sourceSummary": "把经营假设连接到利润、现金和估值，交可复算的基准及压力情景。 financial model DCF cash flow forecast valuation",
+      "title": "Build a financial forecast",
+      "summary": "Connect operating assumptions to profit, cash, and valuation, with reproducible base and stress scenarios.",
+      "detail": {
+        "useWhen": [
+          "Build a financial forecast for the next three years.",
+          "Assess a project investment and make the assumptions explicit.",
+          "Explain why profit is growing while cash is declining."
+        ],
+        "doNotUseWhen": [
+          "Use business-finance-analyst for day-to-day cash-flow analysis.",
+          "Use quantitative-researcher for strategy backtesting.",
+          "Personalized securities transactions and statutory audit conclusions are outside this package."
+        ],
+        "humanGate": [
+          "Funding transactions, financing commitments, statutory financial-statement signatures, and personalized investment actions require a decision by an authorized responsible person. Material analysis, modeling, and scenario calculations can continue."
+        ],
+        "fields": {
+          "decision": "The decision question, valuation date, discounting basis, and scenario constraints",
+          "drivers": "Sales, prices, costs, capital expenditure, working capital, and financing assumptions",
+          "historicals": "Original financial statements, periods, currency, accounting policies, and adjustments",
+          "decisionMemo": "Decision explanation",
+          "facts": "Materials, versions, units, and assumptions used for this task",
+          "handoff": "Output locations, unfinished items, and next steps",
+          "model": "Operating-driver and financial-statement model",
+          "scenarios": "Scenarios and sensitivity analysis",
+          "valuation": "Valuation and the bridge to equity value"
+        },
+        "sourceContractSha256": "bf14f1596c5a886f0afb4c2a66bb7c5c9bb9a850533e40921df1778528739333"
+      }
+    },
+    "financial-scenario-modeling-deliver": {
+      "sourceSummary": "把不确定经营条件变成可调整情景，定位现金缺口与改变结论的关键假设。 financial scenarios cash runway sensitivity NPV",
+      "title": "Explore cash and business scenarios",
+      "summary": "Turn uncertain operating conditions into adjustable scenarios and identify cash gaps and assumptions that change the decision."
+    },
+    "frontend-engineer-deliver": {
+      "sourceSummary": "按已确认接口和交互规格实现可测试的前端变更并交付可回滚补丁",
+      "title": "Implement a frontend change",
+      "summary": "Build testable UI changes against agreed interfaces and interaction specifications, with a patch that can be rolled back."
+    },
+    "game-design-playtest-deliver": {
+      "sourceSummary": "将游戏体验目标变成机制、状态、试玩问题与行为证据 game design core loop playtest economy accessibility",
+      "title": "Plan a game and its playtest",
+      "summary": "Translate experience goals into mechanics, states, playtest questions, and evidence from player behavior."
+    },
+    "goalpro-goal-prompt": {
+      "sourceSummary": "Create a bounded Goal Prompt with separated intent, goal/plan/output boundaries, and evidence conditions without executing the target task.",
+      "title": "Write a clear Goal Prompt",
+      "summary": "Define intent, goals, plan, outputs, and evidence conditions in a bounded prompt without executing the target task."
+    },
+    "goalpro-loop-prompt": {
+      "sourceSummary": "Create a Loop Prompt only for an explicit loop request or when post-delivery evidence determines a subsequent action.",
+      "title": "Write a purposeful Loop Prompt",
+      "summary": "Create a loop prompt for an explicit loop request or when evidence after delivery determines a next action."
+    },
+    "headline-cover-optimizer-optimize": {
+      "sourceSummary": "根据已有正文给出5个标题候选、推荐组合与2套封面文字方案，核对字数、承诺和资料依据，不预测点击率。",
+      "title": "Improve headlines and cover copy",
+      "summary": "Create five headlines and two cover-copy options from existing content, checking length, promises, and sources without predicting clicks."
+    },
+    "healthcare-operations-analyst-deliver": {
+      "sourceSummary": "分析就诊服务流程、等待与返工、改进试点及平衡指标 healthcare service operations quality improvement PDSA",
+      "title": "Improve a healthcare service process",
+      "summary": "Analyze service steps, waiting, rework, improvement pilots, and balancing measures."
+    },
+    "hiring-process-designer-deliver": {
+      "sourceSummary": "建立岗位任务、胜任证据、结构化面试与工作样本评分 hiring job analysis structured interview work sample",
+      "title": "Design evidence-based hiring",
+      "summary": "Connect job tasks to competency evidence, structured interviews, and scored work samples."
+    },
+    "install-host-assets": {
+      "sourceSummary": "Plan, apply, and rollback project-scoped Claude command and Skill assets with hash receipts.",
+      "title": "Manage project command and Skill assets",
+      "summary": "Plan, apply, or roll back project-scoped Claude command and Skill assets with hash receipts."
+    },
+    "interaction-designer-deliver": {
+      "sourceSummary": "为具体用户路径制作可实现的状态、视觉和动效规格，并用实际界面证据评审",
+      "title": "Design a usable interaction flow",
+      "summary": "Specify implementable states, visuals, and motion for a user journey, then review actual interface evidence."
+    },
+    "interview-coach-assist": {
+      "sourceSummary": "面试练习：围绕岗位要求模拟面试或修改已有回答。模拟逐轮反馈，改稿直接交付真实材料的重组结果，不自动开始下一轮提问；不编造成功经历。",
+      "title": "Practice or improve an interview answer",
+      "summary": "Rehearse against job requirements or rewrite an answer using real experience, with feedback suited to the requested format."
+    },
+    "investment-research-analyst-deliver": {
+      "sourceSummary": "把公开原始财报和经营资料整理成可追溯的公司研究、风险情景及估值比较。 investment research financial statements fundamentals",
+      "title": "Research a company's fundamentals",
+      "summary": "Organize public original filings and business materials into traceable company research, risk scenarios, and valuation comparisons."
+    },
+    "kim-decision-analysis": {
+      "sourceSummary": "Analyze a product, business, content, pricing, scope, or strategy choice and return an evidence-bounded decision or evidence request.",
+      "title": "Work through a difficult decision",
+      "summary": "Compare product, business, content, pricing, scope, or strategy choices using evidence, and identify what still needs to be known."
+    },
+    "kim-sticker-pack-produce": {
+      "sourceSummary": "Plan a character-sticker workflow with explicit character and sample approvals, then finish supplied transparent motion frames with authored timing and captions.",
+      "title": "Produce an animated sticker pack",
+      "summary": "Plan character and sample approvals, then finish supplied transparent motion frames with authored timing and captions."
+    },
+    "launch-planner-assist": {
+      "sourceSummary": "小项目启动计划：把已选方向变成按依赖排列的一周启动计划。每一步都有具体产物、检查方式和投入上限，先完成最小可交付，再依据反馈决定下一步；不自行替用户开店或收款。",
+      "title": "Plan the first week of a small project",
+      "summary": "Turn a chosen direction into dependency-aware steps, concrete outputs, checks, and spending limits before expanding the work."
+    },
+    "learning-assessment-design-deliver": {
+      "sourceSummary": "把学习目标变成可观察任务、清晰评分标准和下一步反馈。 learning assessment rubric formative feedback education",
+      "title": "Design a useful learning assessment",
+      "summary": "Turn learning goals into observable tasks, clear scoring criteria, and actionable feedback."
+    },
+    "lesson-planner-assist": {
+      "sourceSummary": "备课与课堂设计：围绕一个可观察的学习目标设计课堂。根据学生起点选择讲解、操作和检查方式，让每段活动服务目标；不把一串活动名当教案，也不冒称符合未核实的教材标准。",
+      "title": "Prepare a lesson around a learning goal",
+      "summary": "Use the students' starting point to choose explanations, activities, and checks for an observable learning outcome."
+    },
+    "local-security-scan": {
+      "sourceSummary": "Run the installed local Semgrep CLI on an explicitly authorized local directory with two bundled non-secret rules and a sanitized JSON result; no remote configuration or source changes.",
+      "title": "Run an authorized local security scan",
+      "summary": "Use installed Semgrep on an explicitly authorized directory with two bundled non-secret rules and sanitized JSON output."
+    },
+    "manufacturing-quality-analyst-deliver": {
+      "sourceSummary": "分析测量系统、过程稳定性、质量异常与纠正措施 manufacturing quality statistical process control capability",
+      "title": "Investigate manufacturing quality",
+      "summary": "Analyze measurement systems, process stability, quality deviations, and corrective actions."
+    },
+    "media-production-engineer-deliver": {
+      "sourceSummary": "将授权素材与输出规格转成可复现图像、音视频或数字人制作流程及实测产物",
+      "title": "Build a repeatable media workflow",
+      "summary": "Turn authorized materials and output specifications into reproducible image, audio, video, or digital-presenter production and measured outputs."
+    },
+    "memory-3layer-append": {
+      "sourceSummary": "把用户明确确认的事实写入 Layer 1，并向 Layer 2 追加可追溯的每日记录。",
+      "title": "Save confirmed facts to memory",
+      "summary": "Write facts explicitly confirmed by the user to Layer 1 and append traceable daily records to Layer 2."
+    },
+    "memory-3layer-govern-long-term": {
+      "sourceSummary": "复查冲突与过时条目，并在人工确认后提升 Layer 3 知识或把旧事实标记为 superseded。",
+      "title": "Review long-term memory",
+      "summary": "Review conflicts and outdated records, then promote knowledge or supersede old facts after human confirmation."
+    },
+    "memory-3layer-install-runtime": {
+      "sourceSummary": "把三层记忆核心与受支持宿主的 Hook 配置安全接线，并保持现有配置与无关 Hooks。",
+      "title": "Connect three-layer memory to a host",
+      "summary": "Wire the memory core and supported host Hooks while preserving existing configuration and unrelated Hooks."
+    },
+    "memory-3layer-migrate": {
+      "sourceSummary": "把识别出的旧版 .claude/memory 数据非破坏性复制到 .memory-3layer，并报告冲突与跳过项。",
+      "title": "Migrate older memory records",
+      "summary": "Copy recognized legacy Claude memory into three-layer memory without destructive changes, reporting conflicts and skipped items."
+    },
+    "memory-3layer-read": {
+      "sourceSummary": "只读检查三层记忆状态，并按预算加载可追溯的 active 上下文。",
+      "title": "Read relevant memory context",
+      "summary": "Inspect memory status without writes and load traceable active context within a budget."
+    },
+    "meta-skill-create-refactor": {
+      "sourceSummary": "从真实重复工作流创建或重构可复用 Skill 包，并补齐触发、边界、渐进加载、资产和验证合同。",
+      "title": "Create or improve a reusable Skill",
+      "summary": "Package a real recurring workflow with clear triggers, boundaries, progressive loading, assets, and verification criteria."
+    },
+    "meta-skill-evaluate": {
+      "sourceSummary": "评估 Skill 的触发、结构、基线、闭环和运行证据，输出分层结论与 Promotion 建议而非最终决定。",
+      "title": "Evaluate a Skill and its evidence",
+      "summary": "Assess triggers, structure, baselines, follow-through, and runtime evidence, with a promotion recommendation for the decision owner."
+    },
+    "metric-contract-deliver": {
+      "sourceSummary": "定义指标人群、粒度、分母、事件、时间与数据血缘 metric contract KPI semantic layer data lineage",
+      "title": "Define a metric everyone can use",
+      "summary": "Specify population, granularity, denominator, events, time, and data lineage for a metric."
+    },
+    "mobile-app-engineer-deliver": {
+      "sourceSummary": "把一个移动端用户流程做成可实现的页面、状态与同步方案，重点处理离线、重启和重复提交。 mobile app Flutter offline synchronization",
+      "title": "Build a resilient mobile flow",
+      "summary": "Design implementable screens, states, and synchronization, including offline use, restarts, and duplicate submissions."
+    },
+    "preview-skill-projection-change": {
+      "sourceSummary": "Preview an installation, upgrade, or rollback of the Skill projection at an explicitly selected project or user scope without writing files.",
+      "title": "Preview a Skill installation change",
+      "summary": "Inspect a proposed installation, upgrade, or rollback at an explicit project or user scope without writing files."
+    },
+    "pricing-cost-analyst-assist": {
+      "sourceSummary": "报价与成本测算：把一单收入、现金成本、时间成本和固定支出分开计算，比较报价方案。每个结果都有算式和假设，不把目标销量当预测，也不将现金结余冒充包含全部成本的利润。",
+      "title": "Compare prices and true costs",
+      "summary": "Separate revenue, cash costs, time, and fixed costs; compare quotes using explicit formulas and assumptions."
+    },
+    "product-architect-deliver": {
+      "sourceSummary": "先探索需求和关键取舍，再形成完整产品设计，最后拆可演示的交付切片",
+      "title": "Turn an idea into a buildable product",
+      "summary": "Explore requirements and meaningful choices, create the product design, and divide it into demonstrable deliverables."
+    },
+    "product-listing-writer-assist": {
+      "sourceSummary": "商品页文案：把已核实的商品资料变成顾客看得懂的标题、卖点和详情页。先区分材料事实、使用场景和待证实的效果，再决定哪些内容能写；不把缺点藏进小字。",
+      "title": "Write a useful product listing",
+      "summary": "Turn verified product facts into clear titles, selling points, and detail copy, separating evidence from unproven claims."
+    },
+    "prompt-enhancement": {
+      "sourceSummary": "Transforms an eligible UserPromptSubmit prompt into structured additionalContext for concise understanding followed by immediate execution, preserving established conversation decisions.",
+      "title": "Carry intent into the AI's next step",
+      "summary": "Add structured context to eligible prompts for concise understanding and immediate execution while preserving established decisions."
+    },
+    "provide-multi-cli-host-workflows": {
+      "sourceSummary": "Provide ten upstream-derived Claude commands and a private orchestration Skill for explicit host-side use.",
+      "title": "Use prepared multi-CLI workflows",
+      "summary": "Provide ten upstream-derived Claude commands and a private orchestration Skill for explicit use in the host."
+    },
+    "quantitative-researcher-deliver": {
+      "sourceSummary": "对明确数据和策略假设做可复现研究、成本敏感性与回测风险检查，不执行交易",
+      "title": "Research and test a strategy",
+      "summary": "Use specified data and assumptions for reproducible research, cost sensitivity, and backtest-risk checks without executing trades."
+    },
+    "reliability-engineer-deliver": {
+      "sourceSummary": "围绕用户能否完成任务设计服务目标、监测、金丝雀发布和故障恢复。 SRE reliability canary observability incident",
+      "title": "Design for reliable user journeys",
+      "summary": "Set service objectives, monitoring, canary releases, and incident recovery around whether users can complete their tasks."
+    },
+    "requirements-traceability-deliver": {
+      "sourceSummary": "连接需求、决策、实现、测试与验收证据并处理变更 requirements traceability acceptance evidence change impact",
+      "title": "Trace requirements to delivery evidence",
+      "summary": "Connect requirements, decisions, implementation, tests, and acceptance evidence, including the impact of changes."
+    },
+    "resume-editor-assist": {
+      "sourceSummary": "简历修改：把求职者真实做过的事整理成与目标岗位相关的简历。重点是选事实、说明本人行动与可证实结果；不会为了关键词编岗位、年限、证书或业绩。",
+      "title": "Improve a resume using real experience",
+      "summary": "Select relevant facts, explain the applicant's own actions and supported results, and adapt them to the target role."
+    },
+    "retrieval-evaluation-deliver": {
+      "sourceSummary": "用独立标注和固定语料判断检索是否找到了相关材料，区分召回、排序与答案质量。 retrieval evaluation RAG recall precision MRR",
+      "title": "Check whether retrieval finds the right material",
+      "summary": "Use independent labels and fixed source material to distinguish retrieval coverage, ranking quality, and answer quality."
+    },
+    "sales-operations-analyst-deliver": {
+      "sourceSummary": "销售运营分析（sales operations / pipeline / forecast calibration）：去重商机、核阶段证据与成交时间，交有条件预测、漏斗问题和跟进行动。",
+      "title": "Review a sales pipeline and forecast",
+      "summary": "Deduplicate opportunities, check stage evidence and timing, and produce a conditional forecast with follow-up actions."
+    },
+    "script-writer-write-script": {
+      "sourceSummary": "从已定选题与来源材料，结合具体读者和明确用户立场写成完整口播、分镜或正文；内部大纲服务成品，按渠道调整表达，保留开头、结尾和说法核对，不编造数据或亲历。",
+      "title": "Turn sources into a finished script or article",
+      "summary": "Write a complete spoken script, storyboard, or article for the audience and channel, checking claims without inventing experience."
+    },
+    "side-business-evaluator-assist": {
+      "sourceSummary": "副业方向筛选：结合时间、现有技能和能接触到的顾客，比较几个副业方向并设计低成本验证。先查有没有真实问题与交付能力，再谈扩大投入；不把热度当收入证据。",
+      "title": "Compare realistic side-business ideas",
+      "summary": "Use available time, skills, and customer access to compare options and design low-cost validation before larger commitments."
+    },
+    "skill-install-project": {
+      "sourceSummary": "Install one selected skill into the current project after explicit approval of the exact target.",
+      "title": "Install a Skill in a project",
+      "summary": "Install one selected Skill into the current project after explicit approval of the exact target."
+    },
+    "skill-install-user": {
+      "sourceSummary": "Install one selected skill into user-level agent configuration after explicit approval of the exact target.",
+      "title": "Install a Skill for your user account",
+      "summary": "Install one selected Skill into user-level agent configuration after explicit approval of the exact target."
+    },
+    "skill-search": {
+      "sourceSummary": "Discover installed skills first and optionally search public skill sources with a sanitized query.",
+      "title": "Find an existing Skill",
+      "summary": "Look for installed Skills first, with optional public-source search using a sanitized query."
+    },
+    "sop-runbook-deliver": {
+      "sourceSummary": "把重复任务和故障处理写成有前提、分支、回执、恢复与交接的规程 SOP runbook incident response",
+      "title": "Write an actionable procedure or runbook",
+      "summary": "Document prerequisites, branches, receipts, recovery, and handoff for repeatable work or incident response."
+    },
+    "source-evidence-analyst-deliver": {
+      "sourceSummary": "核实声明、时间与操作证据，组织可复查检索、筛选和研究综合，交可追溯事实包与人工处理材料",
+      "title": "Build a traceable research evidence pack",
+      "summary": "Verify claims, dates, and action evidence, then organize reproducible searches, screening, synthesis, and handoff materials."
+    },
+    "store-performance-analyst-assist": {
+      "sourceSummary": "店铺数据复盘：按SKU/渠道核口径，拆可比期间漏斗与收入变化，区分退款净收入、所列成本贡献和广告归因，交低成本核查及用户约束下的停止条件。",
+      "title": "Review store performance",
+      "summary": "Compare consistent periods and SKU or channel metrics, separate revenue and cost effects, and propose bounded follow-up checks."
+    },
+    "supplier-comparison-analyze": {
+      "sourceSummary": "采购供应商比较（supplier comparison / landed cost / MOQ / delivery / quality evidence）：用户说帮我比较这几家供应商、同规格报价谁的到货成本更低、预算和交期限制下先试哪家时，核对规格数量与同币种报价，比较包数/MOQ、到货成本及费用缺项、交期与质量证据。无权重保留多维取舍，有用户权重与统一质量口径才评分和敏感性，给条件短名单和样品试单验证建议。",
+      "title": "Compare suppliers on the same basis",
+      "summary": "Compare specifications, quantities, currency, landed costs, minimum orders, lead times, and quality evidence to form a conditional shortlist."
+    },
+    "supply-chain-planner-deliver": {
+      "sourceSummary": "分析供需时点、库存缺口、补货参数和供应约束 supply chain inventory replenishment planning",
+      "title": "Plan inventory and replenishment",
+      "summary": "Analyze demand and supply timing, inventory gaps, replenishment parameters, and supplier constraints."
+    },
+    "sustainability-analyst-deliver": {
+      "sourceSummary": "整理组织边界、活动数据、排放因子与可追溯碳盘查 sustainability corporate greenhouse gas inventory",
+      "title": "Prepare a traceable carbon inventory",
+      "summary": "Organize reporting boundaries, activity data, and emission factors for an auditable greenhouse-gas inventory."
+    },
+    "systems-engineering-analyst-deliver": {
+      "sourceSummary": "拆解系统要求、接口责任、验证与确认、变更影响 systems engineering requirements verification validation",
+      "title": "Connect system requirements and interfaces",
+      "summary": "Break down requirements, interface responsibilities, verification, validation, and the impact of changes."
+    },
+    "test-automation-engineer-deliver": {
+      "sourceSummary": "围绕真实用户路径建立有判定力的自动化测试，让失败可复现、可定位。 QA test automation Playwright regression",
+      "title": "Automate tests for real user journeys",
+      "summary": "Create tests with clear pass/fail evidence so failures can be reproduced and located."
+    },
+    "topic-planner-plan-topics": {
+      "sourceSummary": "为自媒体账号产出 5 个带切入角度、目标人群、流量类型、判断标准与排期的选题，并拦下涉及医疗、法律、金融结论的选题。",
+      "title": "Plan five content topics",
+      "summary": "Develop angles, audiences, traffic types, evaluation criteria, and a schedule while excluding medical, legal, or financial conclusions."
+    },
+    "user-researcher-deliver": {
+      "sourceSummary": "用户研究（user research / interview / usability evidence）：从目标人群与实际任务取证，交研究方案、观察记录、分歧与可验证需求。",
+      "title": "Research what users actually need",
+      "summary": "Collect evidence from target users and real tasks, with a research plan, observations, disagreements, and testable needs."
+    },
+    "workplace-writer-assist": {
+      "sourceSummary": "周报与工作沟通：把零散工作事实组织成对方能据此行动的周报、进度说明或邮件草稿。先判断读者需要知道什么、决定什么，再选信息顺序；不把计划写成成果。",
+      "title": "Write a clear work update or message",
+      "summary": "Organize real work facts into an update, progress note, or email draft that helps the recipient act or decide."
+    },
+    "xiaohongshu-create-visual-package": {
+      "sourceSummary": "研究内容机会并制作含标题、正文、封面与 6 至 8 张内页的小红书图文发布包，保留视觉确认与发布边界。",
+      "title": "Create a Xiaohongshu visual post package",
+      "summary": "Research an opportunity and prepare a title, body, cover, and six to eight interior pages with visual approval and publication boundaries."
+    }
+  }
+}

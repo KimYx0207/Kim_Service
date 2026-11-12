@@ -82,6 +82,10 @@ jobs:
         run: python -m playwright install --with-deps chromium-headless-shell
       - name: Exercise tasks, keyboard, drafts, sample edits and downloads
         run: python tests/browser/task_browser.py
+      - name: Check English workflows and sample behavior
+        run: |
+          python tests/browser/task_browser_locales.py
+          python tests/browser/sample_locales.py
       - name: Observe preserved independent task outputs
         run: python tests/browser/outcome_trials.py
       - name: Capture default product screenshots for the README
