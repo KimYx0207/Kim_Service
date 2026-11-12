@@ -6,18 +6,28 @@ Kim Service collection releases use `V<major>.<minor>`. Each component keeps its
 
 ## V1.13 - 2026-11-12
 
-### See the product before setting it up
+### Affected components
+
+The Chinese and English READMEs, task browser, editable booking console, and 12-month operating forecast.
+
+### User-visible changes
 
 - **Pictures appear directly in the README.** The task browser, prepared request, operating forecast and booking console each have a visible screenshot beside the explanation. Workflow and product diagrams show how a goal becomes an editable result.
 - **Follow one complete task.** The Chinese and English introductions walk through choosing financial modeling, adding the goal and materials, handing the request to an AI client, and opening or downloading the result.
 - **Use the browser in Chinese or English.** Switch interface language, search all 86 capabilities by their localized titles and summaries, and keep task drafts when switching. Financial-modeling and design-system task details are fully translated; other packages retain their original detailed specifications.
 - **Try the examples in the same language.** The booking console and 12-month forecast include English controls, sample copy and feedback. Currency, calculations, user inputs, editable design settings and downloads keep their existing meaning.
 
-### Update
+### Breaking changes and migration
 
 Run `git pull --ff-only`, then reopen the [online task browser](https://kimyx0207.github.io/Kim_Service/) or `docs/start.html`. Existing task entry points remain compatible. The release includes the updated source and DSH/ZCode packages; the ZCode collection plugin uses version 1.13.0.
 
-The [screenshot records](docs/images/readme-screenshots.json) identify the actual source and image bytes. The release verification records link the product, browser and package checks to the published revision.
+### Verification
+
+Eight original Chromium screenshots show the catalog, prepared request and two editable examples in Chinese and English. Browser checks cover language switching, retained drafts and edited inputs, calculations, and downloads. The [screenshot records](docs/images/readme-screenshots.json) identify the source and image bytes; release verification and package manifests record the final build.
+
+### Source revisions
+
+The previous collection is [V1.12](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.12). Screenshots were captured from [6a3106e](https://github.com/KimYx0207/Kim_Service/commit/6a3106e356769c78a18cbd86ccbf57f1abefc8d6). ZCode combines this collection with [Meta_Kim v3.10.2](https://github.com/KimYx0207/Meta_Kim/releases/tag/v3.10.2), source [7728524](https://github.com/KimYx0207/Meta_Kim/commit/7728524bb342040d5e884328c7325a236b5b2bc8). The `V1.13` tag, `SOURCE-REVISION.txt`, and package manifests identify the final Service release commit.
 
 ## V1.12 - 2026-11-12
 
