@@ -88,7 +88,7 @@ def prepare_forecast(page):
 
 def capture(browser, base_url, receipt, filename, url_path, viewport, description, prepare, language, element=None):
     # A new context keeps each default page separate from test fixtures and drafts.
-    context = browser.new_context(viewport=viewport)
+    context = browser.new_context(viewport=viewport, locale='en-US' if language == 'en' else 'zh-CN')
     context.set_default_timeout(15_000)
     page = context.new_page()
     errors = []

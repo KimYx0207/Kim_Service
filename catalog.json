@@ -285,7 +285,7 @@
       "snapshot": "committed-component-tree",
       "version": "0.2.1",
       "contractSha256": "82dab737ed93d98fd2d526d89242c4b688791f67d29343209a304e4f77458154",
-      "contentSha256": "5c0a435cb15e201d369cc190a8f15ef72845e278367cd6666a58b217ececf6f8",
+      "contentSha256": "6125077d0adf43451bd281b1a446fb7fe440d9298222c44d724a0cd1748da42f",
       "required": [
         "AGENT.md",
         "capability.json",
