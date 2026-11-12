@@ -4,6 +4,14 @@
 
 Kim Service collection releases use `V<major>.<minor>`. Each component keeps its own version and source history. Detailed past checks are in the [testing record](docs/verification-history.md).
 
+## Unreleased
+
+### Understand the methods and complete the first task
+
+- Explain how specialist Agents, Skills, tools and Hooks contribute to a task, with concrete materials, professional steps, editable outputs and checks.
+- Put the task browser, full examples, client setup, DSH, ZCode and Meta_Kim connection instructions in both language READMEs.
+- Merge four separate user guides and role-directory pages into the READMEs while retaining the visible screenshots and diagrams.
+
 ## V1.13 - 2026-11-12
 
 ### Affected components
@@ -48,11 +56,11 @@ The task browser, editable design-system and financial-modeling examples, shared
 
 ### Breaking changes and migration
 
-Existing component IDs and command entrypoints remain compatible. Update the checkout with `git pull --ff-only`, reopen the task browser, and refresh any packages installed in your client using the [DSH](docs/dsh.md) or [ZCode](docs/zcode-beta.md) guide as appropriate. The Kim ZCode plugin version follows the collection version: V1.12 maps to 1.12.0.
+Existing component IDs and command entrypoints remain compatible. Update the checkout with `git pull --ff-only`, reopen the task browser, and refresh any packages installed in your client using the [DSH](https://github.com/KimYx0207/Kim_Service/blob/V1.12/docs/dsh.md) or [ZCode](https://github.com/KimYx0207/Kim_Service/blob/V1.12/docs/zcode-beta.md) guide as appropriate. The Kim ZCode plugin version follows the collection version: V1.12 maps to 1.12.0.
 
 ### Verification
 
-The checks cover catalog freshness, package contracts, calculation helpers, and actual Chromium interactions with task selection, drafts, keyboard navigation, example editing, and downloads. File-based outcome reviews bind the inputs, grading rules, and artifacts to the reviewed result; changed files require a current review. Implementation details and historical findings remain in the [task browser guide](docs/task-browser.md) and [iteration record](docs/verification/iteration-20261111.md). Final release checks and asset identities are recorded with the GitHub Release.
+The checks cover catalog freshness, package contracts, calculation helpers, and actual Chromium interactions with task selection, drafts, keyboard navigation, example editing, and downloads. File-based outcome reviews bind the inputs, grading rules, and artifacts to the reviewed result; changed files require a current review. Implementation details and historical findings remain in the [task browser guide](https://github.com/KimYx0207/Kim_Service/blob/V1.12/docs/task-browser.md) and [iteration record](docs/verification/iteration-20261111.md). Final release checks and asset identities are recorded with the GitHub Release.
 
 ### Source revisions
 

@@ -24,7 +24,7 @@ Meta_Kim 将选中能力的标准与完整知识真正送到执行上下文，�
 
 ## DSh 的实现与边界
 
-[使用指南](../dsh.md)说明构建、安装、更新、检查与卸载。构建器扫描正式能力目录，51个专业组件转换为原生Skills，保留完整方法、合同、工具、案例及许可。Markdown、JSON和可执行源码等长文本都有无损分段，不让工具结果裁剪丢掉后半部分标准。
+[当时的使用指南](https://github.com/KimYx0207/Kim_Service/blob/V1.12/docs/dsh.md)说明构建、安装、更新、检查与卸载。构建器扫描正式能力目录，51个专业组件转换为原生Skills，保留完整方法、合同、工具、案例及许可。Markdown、JSON和可执行源码等长文本都有无损分段，不让工具结果裁剪丢掉后半部分标准。
 
 真实DSh官方插件加载、读取裁剪、MCP及packed CLI生命周期证据由 [Meta_Kim的独立记录](https://github.com/KimYx0207/Meta_Kim/blob/main/docs/verification/dsh-native-host-20261111.json)承载。DSh适配没有把Skill冒充原生自定义Agent preset，没有声称原生硬Hook或模型业务验收。浏览器/电脑控制仍需宿主真实工具和授权，方法包不授予这些能力。
 

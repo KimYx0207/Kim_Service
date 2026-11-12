@@ -4,6 +4,14 @@
 
 Kim Service 合集使用 `V<主版本>.<次版本>`，每个组件保留自己的版本和来源记录。中文日志从 V1.11 开始；更早的原始记录见[英文历史](CHANGELOG.md#v110---2026-10-23)。
 
+## 未发布
+
+### 看懂专业方法，完整做完第一个任务
+
+- 说明专业 Agent、Skill、工具和 Hook 怎样配合，用具体材料、专业步骤、可编辑成果和检查方法解释能力的价值。
+- 中英文 README 集中说明任务浏览器、完整示例、客户端接入、DSH、ZCode 和 Meta_Kim 配合方式。
+- 四份独立使用说明与角色目录并回 README，保留直接展示的真实截图和流程图。
+
 ## V1.13 - 2026-11-12
 
 ### 更新范围
@@ -48,11 +56,11 @@ Kim Service 合集使用 `V<主版本>.<次版本>`，每个组件保留自己�
 
 ### 怎样更新？
 
-原有组件标识与命令入口保持兼容。运行 `git pull --ff-only` 更新仓库，重新打开任务浏览器；已经安装的客户端能力包，按 [DSH](docs/dsh.md) 或 [ZCode](docs/zcode-beta.md) 等对应指南刷新。Kim 的 ZCode 插件版本随合集版本生成，V1.12 对应 1.12.0。
+原有组件标识与命令入口保持兼容。运行 `git pull --ff-only` 更新仓库，重新打开任务浏览器；已经安装的客户端能力包，按 [DSH](https://github.com/KimYx0207/Kim_Service/blob/V1.12/docs/dsh.md) 或 [ZCode](https://github.com/KimYx0207/Kim_Service/blob/V1.12/docs/zcode-beta.md) 等对应指南刷新。Kim 的 ZCode 插件版本随合集版本生成，V1.12 对应 1.12.0。
 
 ### 怎样检验？
 
-检查覆盖目录一致性、组件约定、计算工具，以及实际 Chromium 中的任务选择、草稿、键盘操作、样例编辑和下载。文件成果评审关联本次输入、评分规则与产物；文件变化后重新检查对应结果。实现细节和历史发现保留在[任务浏览器说明](docs/task-browser.md)及[迭代记录](docs/verification/iteration-20261111.md)，最终发布检查与资产信息随 GitHub Release 记录。
+检查覆盖目录一致性、组件约定、计算工具，以及实际 Chromium 中的任务选择、草稿、键盘操作、样例编辑和下载。文件成果评审关联本次输入、评分规则与产物；文件变化后重新检查对应结果。实现细节和历史发现保留在[任务浏览器说明](https://github.com/KimYx0207/Kim_Service/blob/V1.12/docs/task-browser.md)及[迭代记录](docs/verification/iteration-20261111.md)，最终发布检查与资产信息随 GitHub Release 记录。
 
 ### 来源与历史
 

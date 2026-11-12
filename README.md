@@ -4,123 +4,235 @@
   <a href="README.md">简体中文</a> · <a href="README_EN.md">English</a>
 </p>
 
-**给 AI 一套专业方法，把你的需求做成能打开、修改、继续用的成果。**
+**把专业工作的做法交给 AI，把能打开、修改和检查的成果交给你。**
 
-做一份经营预测、设计一组页面、复盘一家店铺，或把资料写成一篇文章——Kim Service 把这些工作的做法、参考资料和检查方法整理成能力包。选好任务，补上目标与材料，交给你常用的 AI 接着做。
+你知道想做什么，却未必知道一份经营预测要核对哪些数据、一个页面要补齐哪些状态，或一份供应商比较该怎样算成本。Kim Service 把这些工作需要的方法、材料、步骤、例子和验收标准放在一起，让你和 AI 有一套具体的做事依据。
 
-**[打开在线任务浏览器](https://kimyx0207.github.io/Kim_Service/?lang=zh-CN)** · [先看两个可操作的成果](#先看两个可以修改的成果) · [下载仓库](https://github.com/KimYx0207/Kim_Service/archive/refs/heads/main.zip)
+当前 **V1.13** 包含 **48 个专业 Agent、21 个 Skill、1 个 Hook 和 1 个 Tool**，共 71 个组件，提供 **86 项可搜索的任务能力**。你可以只选一个解决眼前的问题，也可以让几种方法围绕同一个项目配合。
+
+**[打开在线任务浏览器](https://kimyx0207.github.io/Kim_Service/?lang=zh-CN)** · **[下载 V1.13 源码与安装包](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.13)**
 
 <p align="center">
   <img src="docs/images/task-browser.png?v=V1.13" alt="Kim Service 中文任务浏览器：搜索想做的事，查看任务卡和可操作的成果示例" width="900">
 </p>
-<p align="center">从“我想做什么”开始，选好方法，再把工作带回自己的 AI 客户端。</p>
 
-## 用一个任务，走完整个过程
+## 它怎样帮助你把事情做扎实
 
-> “我想看看未来 12 个月的利润和现金，提前知道哪几个月可能缺钱。”
+专业工作经常卡在中间：资料口径没统一，结论缺少依据，页面只考虑正常输入，或者交付文件拿回来打不开。Kim Service 把这些容易遗漏的部分写进每个方法包，带着 AI 从材料检查走到交付核验。
 
-先用仓库自带的合成经营数据跑一遍。你会看到需要准备什么，也能打开一个可修改、可下载的经营预测样板。
+例如，财务建模会先核对期间、币种和单位，再把销量、单价、成本、回款连接到利润与现金；设计系统会把颜色和字号整理成可复用的设计变量，同时处理焦点、报错、加载、长文本和主题切换。方法包还说明哪些结果需要重做、用什么证据判断，以及材料不全时哪些工作可以先完成。
 
-<p align="center">
-  <img src="docs/images/intent-to-delivery.zh-CN.svg?v=V1.13" alt="经营预测使用流程：选择财务建模，填写目标和样例材料，复制给 AI，查看模型与月表" width="900">
-</p>
+### 四类组件，分别解决什么问题
 
-### 1. 选一项任务
+- **Agent：把一类专业工作做完整。** 48 个角色各有自己的任务范围、输入输出、专业资料、决策步骤、正反例和质量检查。你交给财务建模的是经营资料，交给设计系统的是页面、品牌与交互要求；两者按各自的方法产出模型或页面规范。
+- **Skill：把某一步做得更稳。** 21 个可复用技能覆盖需求追踪、API 合同、数据迁移、无障碍检查、财务情景、实验分析、检索评估、教学测评，也包含团队协作、记忆、技能发现、小红书与贴纸制作等工作流。同一个项目可以按需组合几项。
+- **Hook：在提出需求时补好工作要求。** HookPrompt 在支持并已配置的客户端中，把实质任务补充成包含目标、范围、输出和检查要求的上下文；保留对话里已经确定的选择，让 AI 更清楚该往哪里做。
+- **Tool：接上实际执行工具。** 多 CLI 工具包可把本机已安装的 Codex、Gemini 接入支持 MCP 的客户端，用于代码工作或复核，并提供项目级工作流入口。实际运行范围和文件操作仍由当前客户端管理。
 
-在任务浏览器搜索“经营预测”，打开[财务建模](https://kimyx0207.github.io/Kim_Service/?lang=zh-CN#capability=financial-modeler-deliver)。先看它要用哪些材料、会交付什么，再选择你正在使用的 AI 客户端。
+它们可以这样配合：专业 Agent 判断任务该怎么做，相关 Skill 提供某一步的做法，Hook 帮助表达需求，工具承担实际操作。你只需要加载与当前任务有关的部分。方法包中的说明、参考资料、案例和检查脚本都随源码保留，成果可以追溯到用了什么材料、做过什么检查。
 
-### 2. 填上你的目标与材料
+<a id="capability-directory"></a>
 
-目标可以直接写：“比较基础、乐观、保守三种情景，解释现金缺口，交付可编辑输入、月表 CSV 和一份说明。”
+## 哪些工作可以从这里开始
 
-第一次体验，把材料指向仓库里的 `agents/financial-modeler/examples/operating-forecast/sample-data.js`。用于自己的业务时，再换成实际的收入、成本、回款与资金安排。
+**做产品、网站或应用时，** 可以从用户研究和最小产品范围开始，再推进交互、品牌与设计系统、前后端、移动端、AI 应用和数据管道。已有产品也能用同一套入口安排自动化测试、安全复核和可靠性改进。交付会落到方案、接口、代码、页面与检查记录，方便下一位接手。
 
-<p align="center">
-  <img src="docs/images/task-request.png?v=V1.13" alt="填写好的财务建模任务：目标、合成样例资料、使用环境，以及可编辑和复制的完整请求" width="900">
-</p>
-<p align="center">页面把入口、材料和交付要求整理好；你还可以在复制前补充自己的要求。</p>
+**经营店铺、销售或创业项目时，** 可以带来 SKU 销售表、客服问题、供应商报价、库存和成本资料。先解释变化、统一可比口径，再做商品文案、客户回复、采购比较、补货计划、销售预测或定价测算。比如比较供应商，会把起订量、运输等到货成本和交期放在一起，说明缺失条件如何影响选择。
 
-### 3. 复制给你常用的 AI
+**看经营财务和投资研究时，** 可以核对账目、解释预算差异、做现金预测、项目估值与压力情景，也能整理投资资料或审查量化回测中的假设。你拿到的是可追到输入的计算、情景比较、关键假设与待核事项，供有权限的负责人做决定。下面的经营预测就是一个完整起点。
 
-[下载仓库](https://github.com/KimYx0207/Kim_Service/archive/refs/heads/main.zip)并在 AI 客户端中打开，点击页面上的“复制请求”，粘贴到当前对话。AI 就能读取选中的方法、资料和计算脚本，处理这次任务。
+**做内容、营销和日常协作时，** 可以从受众与选题走到正文、口播、分镜、标题、封面和媒体制作，也可以把散乱进度整理成邮件、周报或操作流程。求职、招聘和教学同样有对应方法：岗位匹配与面试练习、结构化招聘标准、课程流程、知识讲解、练习与学习评估，都有明确的输入和可用产物。
 
-草稿会按任务分别保存。刷新后可以继续写，也能下载草稿带到另一台设备；重新生成请求后，可以恢复上一版。
+**推进线下运营和工程项目时，** 可以整理制造质量、系统需求与接口、建筑信息、能源项目、碳核算、农田水量以及医疗机构的非临床服务流程。方法会把边界、数据来源、单位、异常和现场待核条件说明白，交付分析、验证安排或试点方案；需要现场资料和专业判断的部分会继续标明。
 
-### 4. 打开成果，亲手改一次
+86 项能力是现有任务入口的覆盖范围。选择时先想清楚“我现在要得到什么”，在浏览器搜索这个结果，再看需要提供哪些材料。你不用先记住角色的英文名字。
 
-在下面的经营预测示例里，试着修改售价或回款假设，观察现金曲线，再下载月表。实际任务完成后，也这样打开、修改、复算交付文件，核对它是否回答了最初的问题。
+<a id="task-browser"></a>
 
-## 先看两个可以修改的成果
+## 从第一次使用，到完成一个任务
 
-这两个示例都使用合成数据，可以直接在线操作，也可以下载源码继续改。
+### 先把仓库和材料交到 AI 手里
 
-### 经营预测：利润增长，现金够用吗？
+在线浏览器可以直接打开，也能切换中文或英文。它负责选任务、填写要求和整理请求；实际处理文件、计算或改代码，发生在你复制请求之后使用的 AI 客户端里。
 
-把销量、价格、成本与回款假设放到同一个模型里，比较三种情景，查看每个月的现金变化。修改一项输入，就能看到结果怎样变化；月表可以下载后在表格软件里继续用。
-
-<p align="center">
-  <img src="docs/images/operating-forecast-example.png?v=V1.13" alt="12 个月经营预测成果：可编辑的经营假设、三种情景和月末现金曲线" width="900">
-</p>
-
-**[打开经营预测](https://kimyx0207.github.io/Kim_Service/agents/financial-modeler/examples/operating-forecast/index.html?lang=zh-CN)** · [查看模型源码](agents/financial-modeler/examples/operating-forecast/)
-
-可以带走：输入与计算结果 JSON、每月明细 CSV，以及可继续修改的模型。
-
-### 预约台：改一次设计，整页保持一致
-
-切换浅深主题、品牌色、字号和信息密度，看表单、按钮与预约列表一起变化。填写一次预约，还能体验输入报错、提交失败后的恢复和新增记录。
-
-<p align="center">
-  <img src="docs/images/design-system-example.png?v=V1.13" alt="可编辑的预约台设计系统：主题与密度控制、预约表单和示例预约列表" width="900">
-</p>
-
-**[打开预约台](https://kimyx0207.github.io/Kim_Service/agents/design-system-designer/examples/service-console/index.html?lang=zh-CN)** · [查看页面源码](agents/design-system-designer/examples/service-console/)
-
-可以带走：当前设计变量的 tokens JSON，以及能接着开发的页面代码。
-
-## 你的任务，也可以这样开始
-
-- **做产品和软件：** 把想法整理成可开发的方案，再做页面、接口和测试。从[产品架构](agents/product-architect/)或[前端实现](agents/frontend-engineer/)开始。
-- **看清经营和财务：** 预测现金、核对账目、分析成本，给下一步决策准备依据。看看[财务建模](agents/financial-modeler/)与[定价成本分析](agents/pricing-cost-analyst/)。
-- **经营店铺和销售：** 找出店铺变化的原因，改商品文案，比较供应商。看看[店铺复盘](agents/store-performance-analyst/)与[商品文案](agents/product-listing-writer/)。
-- **做内容和营销：** 从选题、资料到正文、口播、分镜和封面。看看[脚本与写作](agents/script-writer/)与[标题封面](agents/headline-cover-optimizer/)。
-- **处理工作和教学：** 改简历、练面试、写工作沟通、准备课程。看看[简历修改](agents/resume-editor/)与[课程设计](agents/lesson-planner/)。
-- **推进专业项目：** 整理供应链计划、制造质量或能源项目资料。更多入口在[完整专业角色目录](agents/README.md)。
-
-想找别的任务，直接在[任务浏览器](https://kimyx0207.github.io/Kim_Service/?lang=zh-CN#catalog)搜索。完整的 Agent、Skill、Hook 与工具索引放在文末，按需要查阅。
-
-## 接到你正在使用的 AI
-
-Codex、Claude Code、Cursor、Gemini CLI 等能够读取项目文件的客户端，都可以打开仓库并使用上面的请求。喜欢命令行，也可以这样准备：
+从页首下载入口取得源码并解压，或在电脑上运行：
 
 ```sh
 git clone https://github.com/KimYx0207/Kim_Service.git
 cd Kim_Service
 ```
 
-如果 AI 已经在另一个项目里工作，把 Kim_Service 的实际目录位置告诉它，让它能找到方法包和你的材料。下载后，直接打开 `docs/start.html` 也能离线浏览目录和示例。
+在 Codex、Claude Code、Cursor、Gemini CLI 等能读取项目文件的客户端中打开这个目录；如果工作项目在别处，把 Kim_Service 的完整目录位置告诉 AI，并让它同时能访问本次材料。使用只支持上传文件的聊天界面时，需要附上选中方法的入口、它引用的资料和你的任务文件。
 
-常用包的安装与更新，按包内 README 操作；DSH 用户看 [DSH 指南](docs/dsh.md)，ZCode 用户看 [ZCode 插件指南](docs/zcode-beta.md)。更新源码可用 `git pull --ff-only`。
+下载后，直接用浏览器打开 `docs/start.html`，也能离线选任务。两个互动示例的本地 `index.html` 可以直接打开，不需要先搭服务器。运行包内计算或开发脚本时，再使用相应的 Node.js、Python 和客户端工具。
 
-## 和 Meta_Kim 配合，接着做完整个任务
+### 例一：未来一年，利润增长时现金够用吗？
 
-**Kim Service 提供具体工作的专业方法；[Meta_Kim](https://github.com/KimYx0207/Meta_Kim)把这些方法放进整个任务的推进过程。**
+先拿合成数据练一遍，再替换成自己的业务。这个例子会把选任务、准备材料、实际执行、交付检查和下一轮调整连起来。
+
+<p align="center">
+  <img src="docs/images/intent-to-delivery.zh-CN.svg?v=V1.13" alt="经营预测使用流程：选择财务建模，填写目标和样例材料，复制给 AI，查看模型与月表" width="900">
+</p>
+
+**选任务、写目标。** 在浏览器搜索“经营预测”，打开财务建模，选择你正在使用的 AI 客户端。目标写成：“比较未来 12 个月的基础、乐观、保守情景，找出现金紧张的月份，交付可编辑输入、月表和一份说明。”
+
+**把材料准备到能读取的位置。** 第一次使用仓库中的 `agents/financial-modeler/examples/operating-forecast/sample-data.js`。其中已经声明销量、价格、成本、期初资金、回款比例和设备支出；金额是 CNY，全部为合成示例。做自己的业务时，用实际报表与假设替换，明确期间、币种和缺失项。材料栏用于说明文件在哪里，不会代替把文件交给 AI。
+
+<p align="center">
+  <img src="docs/images/task-request.png?v=V1.13" alt="填写好的财务建模任务：目标、合成样例资料、使用环境，以及可编辑和复制的完整请求" width="900">
+</p>
+
+**复制请求，让 AI 按完整方法执行。** 页面会带入选中的入口和交付要求。你可以再加上下面这段，把执行和结果说清楚：
+
+```text
+请读取 agents/financial-modeler/AGENT.md，以及它引用的 method.json 和本任务所需资料。
+使用 agents/financial-modeler/examples/operating-forecast/sample-data.js 的合成数据，完成未来 12 个月经营预测。
+核对期间、币种和单位，解释利润与现金为什么不同；比较基础、乐观、保守三种情景。
+请实际运行当前环境可用的计算，交付可编辑输入、计算结果 JSON、月度 CSV 和说明。
+逐项列出检查结果、文件打开位置与未完成项；需要补充的数据请单列为假设。
+```
+
+**打开成果，动手验收。** 下面是随仓库提供的可操作样板，用来体验这种交付。在线打开，或在本地打开 `agents/financial-modeler/examples/operating-forecast/index.html`；修改售价、销量或回款比例，查看三种情景与月末现金曲线，下载输入、结果 JSON 和月表 CSV。
+
+<p align="center">
+  <img src="docs/images/operating-forecast-example.png?v=V1.13" alt="12 个月经营预测成果：可编辑的经营假设、三种情景和月末现金曲线" width="900">
+</p>
+
+**[亲手试试经营预测](https://kimyx0207.github.io/Kim_Service/agents/financial-modeler/examples/operating-forecast/index.html?lang=zh-CN)**
+
+实际任务交付后，先核对输入与原始材料，再抽查一个月的“期初现金＋流入－流出＝期末现金”，确认设备支出和回款时间进入模型。检查三种情景究竟改了什么；从交付目录实际打开 JSON、CSV 和说明，确认别人也能使用。这个样板展示经营利润与现金，估值或完整三表需要按任务另外补齐。
+
+**接着迭代。** 可以继续对 AI 说：“保留其他假设，把当月回款从 65% 改成 45%，重新计算三种情景，解释哪些月份受影响，并保留上一版。” 每一轮都围绕相同材料、模型和验收方法继续，变化的原因会更容易看清。
+
+### 例二：把预约页面做成一致、可继续开发的设计
+
+任务可以这样说：“把这一个预约台的按钮、表单和列表统一起来，支持浅深主题和大字号，补齐报错与失败恢复；保留已有字段，先在这一页试用。”
+
+给 AI 当前页面、品牌色、实际文案、使用设备和技术限制；第一次可使用 `agents/design-system-designer/examples/service-console/` 下的样板。请它读取设计系统角色的 `AGENT.md` 和所引用的方法，整理颜色、字号、间距的共同规则，定义组件状态，再在这个页面里实现与检查。
+
+<p align="center">
+  <img src="docs/images/design-system-example.png?v=V1.13" alt="可编辑的预约台设计系统：主题与密度控制、预约表单和示例预约列表" width="900">
+</p>
+
+**[亲手试试预约台](https://kimyx0207.github.io/Kim_Service/agents/design-system-designer/examples/service-console/index.html?lang=zh-CN)**
+
+也可以本地打开 `agents/design-system-designer/examples/service-console/index.html`。切换主题、品牌色、字号和密度，看看整页怎样一起变化；故意漏填或输错，再体验一次模拟提交失败和恢复。示例预约使用合成记录，便于反复试。
+
+这次希望拿到的是：可编辑的页面源码、可导出的设计变量 JSON、组件正常与异常状态说明，以及从旧页面迁移的安排。验收时用键盘走完表单，检查错误是否说得清楚、失败后输入是否保留、长文字和手机宽度是否可用，再检查中英切换与浅深主题。下一轮可以只调整“紧凑布局在手机上太挤”，沿用已定规则继续改。
+
+### 写到一半，怎样继续
+
+每项任务单独保存草稿。刷新后可以继续；换设备前点“下载草稿”，在另一处打开同一项任务后导入。你手动修改过请求时，表单变化会保留手写内容；需要重建时点“按表单重新生成”，还可以“恢复上一版”。浏览器不能保存或空间不足时，先下载草稿，保住当前编辑。
+
+## 单独使用，或让 Meta_Kim 组织整个项目
+
+**一个明确任务，可以直接用 Kim Service。** 比如修改简历、比较报价、完成上面的预测或设计试点：你选择方法、提供材料，当前 AI 客户端执行，再由你检查交付。专业 Agent、需要的 Skill 和实际工具围绕这一项工作配合。
+
+**多个相互衔接的任务，可以配合 Meta_Kim。** 比如把预约台做成一个产品：先确定用户需求和功能范围，再统一设计、实现前后端、测试交付，下一次对话还要接着改。Meta_Kim 负责组织这些步骤、分配能够并行的工作、保留决定与进度、审查交接；Kim Service 提供每一步需要的专业方法和资料，AI 客户端承担实际操作。
 
 <p align="center">
   <img src="docs/images/service-and-meta.zh-CN.svg?v=V1.13" alt="Kim Service 与 Meta_Kim 的关系：用户提出任务，Kim Service 提供专业方法，AI 执行，Meta_Kim 组织任务、检查成果并接续工作" width="900">
 </p>
 
-比如把预约台做成一个产品，需要先明确方案，再设计页面、开发功能、检查交付。Meta_Kim 可以选择和衔接这些工作，把前一步的项目上下文和成果带给下一步。Kim Service 为每一项工作提供相应的方法与资料。
+**先让 Meta_Kim 找到这份 Service。** 如果使用 Meta_Kim 安装器已登记的受管理 Service 源码，可以直接使用该安装来源。自行下载两个仓库时，需要明确绑定；把文件夹放在一起不会自动接入。在你实际工作的项目根目录创建或编辑 `.meta-kim/local.overrides.json`，保留已有字段，加入：
 
-只需要改一份简历、写一篇稿或做一次分析时，也可以直接选用一个能力包。[从 Meta_Kim 开始](https://github.com/KimYx0207/Meta_Kim#readme)。
+```json
+{
+  "dependencyRoots": {
+    "kim-service": "/absolute/path/Kim_Service"
+  }
+}
+```
 
-## 完整入口与扩展使用
+把路径替换成自己的 Kim_Service 完整路径，Windows 可以写成 `C:/work/Kim_Service`。如果文件原来已有 `dependencyRoots`，只补其中的 `kim-service`，不要覆盖其他配置。
 
-- 找能力：[专业角色目录](agents/README.md) · [全部 Agent](agents/) · [Skills](skills/) · [Hooks](hooks/) · [工具](tools/)。
-- 深入使用：[任务浏览器指南](docs/task-browser.md) · [能力包编写指南](docs/expert-package-authoring.md) · [组件约定](docs/agent-pack-contract.md)。
-- 查看依据与维护：[行业任务与来源](docs/research/industry-coverage-2026-11-11.md) · [仓库维护](docs/maintenance.md) · [历史验证记录](docs/verification-history.md) · [更新日志](CHANGELOG.zh-CN.md)。
+也可以在启动 AI 客户端的同一终端设置 `META_KIM_KIM_SERVICE_ROOT`：macOS/Linux 使用 `export META_KIM_KIM_SERVICE_ROOT="/absolute/path/Kim_Service"`，PowerShell 使用 `$env:META_KIM_KIM_SERVICE_ROOT="C:/work/Kim_Service"`。环境变量优先于项目配置；路径失效时先修正该路径，系统不会悄悄换成另一份副本。
 
-每个包保留自己的方法、参考资料、案例和检查脚本。需要了解一份成果怎样做出来，可以沿着包内说明继续读。
+接着，在已接入 Meta_Kim 的项目里打开客户端，在任务浏览器选择 **Meta_Kim**，复制带 `/meta-theory` 的请求，并说明业务材料的位置。让它先确认发现的 Service 路径和本次选中的方法，再开始任务。随后从整体结果检查各项工作是否接上：设计是否符合需求、实现是否遵守设计、测试是否覆盖用户流程。仅安装方法包不会增加客户端原本没有的浏览器、文件或外部系统权限。
+
+需要这个整体工作方式时，可以使用 [Meta_Kim](https://github.com/KimYx0207/Meta_Kim#readme)；继续只做一个任务，也能使用这里完整的方法和示例。
+
+## 按你使用的客户端接入
+
+### 普通项目客户端
+
+Codex、Claude Code、Cursor、Gemini CLI 等客户端，按上面的方式打开仓库或读取指定包即可开始。明确告诉 AI 使用哪个角色、先读取哪些材料、把成果放在哪里，比一次性塞入整个目录更容易核对。常用的 Skill 可以再按客户端支持的技能安装方式启用，并保留它的整个资源目录。
+
+HookPrompt 和多 CLI 工具是按需接入的组件。需要它们时，让 AI 读取 `hooks/hookprompt/README.md` 或 `tools/claudecode-codex-gemini/README.md`，按当前客户端配置并检查实际加载结果；第一个专业任务可以直接使用前面的仓库读取方式。
+
+<a id="dsh"></a>
+
+### DSH（DeepSeek Harness）
+
+DSH 里，专业 Agent 方法和 Skill 会作为原生 Skills 被发现，并保留完整方法、知识、案例、脚本与许可。当前适配依据 DSH **0.2.2-rc.1**，需要 **Node.js 24.9.0+**；先准备好 DSH 自己使用的模型和工具配置。尚未安装该客户端时，可运行：
+
+```sh
+npm install --global @deepseek-ai/dsh@0.2.2-rc.1
+```
+
+**准备 Service 包。** 在页首发布下载中选择 `Kim_Service-DSH-V1.13.zip`，解压并记住包含 `dsh-package.json` 的目录。也可以在 Kim_Service 仓库构建，下面的输出路径要换成自己的完整路径，且目录尚不存在：
+
+```sh
+node scripts/build-dsh-package.mjs --output "/absolute/path/kim-service-dsh"
+node scripts/build-dsh-package.mjs --output "/absolute/path/kim-service-dsh" --check
+```
+
+**安装到 DSH 并核对。** 这条接入由 Meta_Kim 的安装器管理。已有 Meta_Kim 源码的用户直接进入它的目录；没有时先下载，再执行安装。下面选择的是多个项目共用的用户级安装：
+
+```sh
+git clone https://github.com/KimYx0207/Meta_Kim.git
+cd Meta_Kim
+npm install
+node bin/meta-kim.mjs dsh install --service-package "/absolute/path/kim-service-dsh"
+node bin/meta-kim.mjs dsh check
+dsh --profile meta-kim
+```
+
+在 DSH 会话中输入 `/kim-service` 查看实际加载的目录，再选择对应方法，例如 `/kim-financial-modeler`。先确认入口可以读到完整方法，再提交材料。长资料按随包索引分段读取，执行计算时使用完整原脚本。
+
+**只给一个项目使用时，** 准备好 Meta_Kim 源码后，在它的目录执行以下项目级安装和检查：
+
+```sh
+node bin/meta-kim.mjs dsh install --scope project --project-root "/absolute/path/my-project" --service-package "/absolute/path/kim-service-dsh"
+node bin/meta-kim.mjs dsh check --scope project --project-root "/absolute/path/my-project"
+```
+
+项目已有 Git 仓库时使用其根目录；没有 Git 仓库时使用项目目录。然后切换到这个项目目录，执行安装器打印的启动命令。项目模式使用 `dsh --profile web --patch ...`，其中 patch 路径以安装器输出为准。后续检查、更新和卸载带同样的 `--scope project --project-root "/absolute/path/my-project"`。已有自定义 DSH_HOME 时，安装时补 `--dsh-home` 指向同一位置，并继续使用原来的 DSH_HOME。
+
+**更新与停用。** 下载新版包或构建到一个新目录，然后在 Meta_Kim 目录运行 `node bin/meta-kim.mjs dsh update --service-package "/absolute/path/new-package"`，再运行 `node bin/meta-kim.mjs dsh check`。停用时运行 `node bin/meta-kim.mjs dsh uninstall`。更新、卸载遇到用户修改会保留并报告，按结果处理；文件校验和实际宿主加载分别检查。
+
+<a id="zcode"></a>
+
+### ZCode
+
+先在页首发布下载中取得 **`Kim-ZCode-V1.13.zip`**，完整解压到准备长期保留的位置。选择包含 `marketplace.json` 的目录，保留其下全部插件和资料；V1.13 的 Kim 插件版本为 **1.13.0**。
+
+在 ZCode 打开一个项目，再进入**设置 → 插件 → 创建 → 添加市场**，选择刚才的本地目录。在个人来源里安装并启用 `kim-service-local`；想同时使用 Meta_Kim 的任务组织方法，再安装 `meta-kim-local`。安装后，在插件详情核对角色和技能，在子 Agent 列表找到对应角色，例如 `kim-service-local:financial-modeler`，然后带上目标与材料开始任务。
+
+习惯命令行，可以完成同样的添加、安装与列表检查：
+
+```sh
+zcode plugins validate "/absolute/path/kim-zcode"
+zcode plugins marketplace add "/absolute/path/kim-zcode" --scope user
+zcode plugins install kim-service-local@kim-local-reviewed -s user
+zcode plugins list --json
+```
+
+需要 Meta_Kim 插件时再运行 `zcode plugins install meta-kim-local@kim-local-reviewed -s user`。Kim 的完整角色资料与 Skills 随插件保留；这个内容包提供 Agent 和 Skill，HookPrompt、MCP、命令桥接按各自支持的客户端另行接入。
+
+更新时，保留个人修改，再用新发布的整包更新原市场目录；在来源管理里刷新该市场，再到已安装插件中检查更新，核对实际版本。停用或卸载也在插件管理里操作。本地插件的安装位置和实际加载状态可在这些界面直接核对。
+
+## 更新源码，继续自己的工作
+
+Git 下载的仓库，在 Kim_Service 目录运行：
+
+```sh
+git pull --ff-only
+```
+
+重新打开在线入口或本地 `docs/start.html`。用 ZIP 下载的用户，把新版本解压到新目录，再带回自己的材料和修改。已经填好的草稿可以先导出；包版本变化后，核对目标、输入和原完整请求，再决定是否重新生成。
+
+方法包和示例提供的是做事依据。对自己的任务，保留实际产物、计算或操作记录、已通过的检查和剩余事项，下一轮就能从明确的位置接着做。源码里的 `agents/`、`skills/`、`hooks/`、`tools/` 分别保存四类组件；完整任务仍可在页首浏览器搜索，不必逐个翻目录。
 
 ## 联系与支持
 
