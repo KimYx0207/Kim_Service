@@ -52,6 +52,7 @@ def prepare_catalog(page):
     expect(page.locator('#showcase-cards article').first).to_be_visible()
     expect(page.locator('#cards .card').first).to_be_visible()
     expect(page.locator('#search')).to_have_value('')
+    expect(page.locator('#search')).to_be_in_viewport()
 
 
 def prepare_financial_task(page):
@@ -85,7 +86,7 @@ def prepare_forecast(page):
     expect(page.locator('#input-error')).not_to_be_visible()
 
 
-def capture(browser, base_url, receipt, filename, url_path, viewport, description, prepare, language):
+def capture(browser, base_url, receipt, filename, url_path, viewport, description, prepare, language, element=None):
     # A new context keeps each default page separate from test fixtures and drafts.
     context = browser.new_context(viewport=viewport)
     context.set_default_timeout(15_000)
@@ -106,7 +107,10 @@ def capture(browser, base_url, receipt, filename, url_path, viewport, descriptio
         if errors:
             raise RuntimeError('Page errors during screenshot capture: ' + '; '.join(errors[:5]))
         target = ARTIFACTS / filename
-        page.screenshot(path=str(target), full_page=False)
+        if element:
+            page.locator(element).screenshot(path=str(target), animations='disabled')
+        else:
+            page.screenshot(path=str(target), full_page=False)
         if errors:
             raise RuntimeError('Page errors during screenshot capture: ' + '; '.join(errors[:5]))
         current = urlsplit(page.url)
@@ -114,6 +118,7 @@ def capture(browser, base_url, receipt, filename, url_path, viewport, descriptio
             'file': filename,
             'urlPath': current.path + ('?' + current.query if current.query else '') + ('#' + current.fragment if current.fragment else ''),
             'uiLanguage': language,
+            'captureRegion': element or 'viewport',
             'viewport': viewport,
             'description': description,
             'sha256': hashlib.sha256(target.read_bytes()).hexdigest(),
@@ -156,11 +161,11 @@ def main():
                 receipt['browserVersion'] = browser.version
                 for language, suffix in [('zh-CN', ''), ('en', '.en')]:
                     query = '?lang=' + language
-                    capture(browser, base_url, receipt, 'task-browser' + suffix + '.png', '/' + query, DESKTOP,
-                            'Actual task browser with search, capability cards and two editable examples.', prepare_catalog, language)
+                    capture(browser, base_url, receipt, 'task-browser' + suffix + '.png', '/' + query + '#catalog', DESKTOP,
+                            'Actual task browser at the catalog section, with search, filters and capability cards.', prepare_catalog, language)
                     capture(browser, base_url, receipt, 'task-request' + suffix + '.png', '/' + query, DETAIL,
                             'Financial-modeling request prepared with synthetic demo inputs and Meta_Kim selected.',
-                            prepare_financial_task, language)
+                            prepare_financial_task, language, '.request-box')
                     capture(browser, base_url, receipt, 'design-system-example' + suffix + '.png', sample_paths['service-console'] + query, DESKTOP,
                             'Actual booking design-system example with theme controls and synthetic appointments.',
                             prepare_design_system, language)
