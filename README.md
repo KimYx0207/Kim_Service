@@ -4,169 +4,123 @@
   <a href="README.md">简体中文</a> · <a href="README_EN.md">English</a>
 </p>
 
-**给 AI 专业方法，把你的需求做成代码、设计、模型和文稿。**
+**给 AI 一套专业方法，把你的需求做成能打开、修改、继续用的成果。**
 
-Kim Service 是老金（KimYx0207）维护的专业能力库。每个能力包把一类工作的材料要求、操作方法、参考资料和交付标准放在一起。选好任务，把材料交给你常用的 AI，就能按这套方法继续做；也可以交给 [Meta_Kim](https://github.com/KimYx0207/Meta_Kim) 选择能力、组织协作和检查结果。
+做一份经营预测、设计一组页面、复盘一家店铺，或把资料写成一篇文章——Kim Service 把这些工作的做法、参考资料和检查方法整理成能力包。选好任务，补上目标与材料，交给你常用的 AI 接着做。
 
-**[打开任务浏览器](https://kimyx0207.github.io/Kim_Service/)** · [下载最新版本](https://github.com/KimYx0207/Kim_Service/releases/latest) · [专业角色目录](agents/README.md) · [更新日志](CHANGELOG.zh-CN.md)
-
-<p align="center">
-  <img src="docs/images/task-browser.png" alt="Kim Service 任务浏览器实拍：使用流程与两个可编辑示例入口" width="900">
-</p>
-<p align="center">先体验可编辑示例，再搜索任务，查看需要的材料和交付内容。</p>
-
-<details>
-<summary>查看从任务到交付流程</summary>
+**[打开在线任务浏览器](https://kimyx0207.github.io/Kim_Service/?lang=zh-CN)** · [先看两个可操作的成果](#先看两个可以修改的成果) · [下载仓库](https://github.com/KimYx0207/Kim_Service/archive/refs/heads/main.zip)
 
 <p align="center">
-  <img src="docs/images/intent-to-delivery.zh-CN.svg" alt="选任务、补材料、复制请求、查看交付：产品工作流程示意" width="900">
+  <img src="docs/images/task-browser.png" alt="Kim Service 中文任务浏览器：搜索想做的事，查看任务卡和可操作的成果示例" width="900">
 </p>
+<p align="center">从“我想做什么”开始，选好方法，再把工作带回自己的 AI 客户端。</p>
 
-</details>
+## 用一个任务，走完整个过程
 
-## 从你想拿到的结果开始
+> “我想看看未来 12 个月的利润和现金，提前知道哪几个月可能缺钱。”
 
-| 你要完成的事 | 可以要求交付什么 | 从这里开始 |
-| --- | --- | --- |
-| 把产品想法变成可开发的方案 | 系统方案、模块需求、用户流程、接口约定和可演示的交付任务 | [产品架构](agents/product-architect/) · [交互设计](agents/interaction-designer/) · [前端实现](agents/frontend-engineer/) |
-| 让多个页面保持一致 | 设计变量、组件状态、键盘操作规则、示例页面和迁移方案 | [设计系统](agents/design-system-designer/) |
-| 看清未来 12 个月的经营与现金 | 可编辑的假设、利润与现金月表、三种情景及现金缺口说明 | [财务建模](agents/financial-modeler/) |
-| 复盘店铺，决定下一步怎么改 | 同口径指标对照、数据问题、变化假设和小范围改进试验 | [店铺分析](agents/store-performance-analyst/) |
-| 把选题与资料写成能用的内容 | 完整正文、口播或分镜，开头与结尾方案，以及事实核对 | [脚本与写作](agents/script-writer/) · [标题封面](agents/headline-cover-optimizer/) |
-
-先在能力页看清“需要什么材料”和“会交什么”，再选择适合当前工作的包。代码变更、设计文档、分析模型和内容稿件，都有各自的检查方法。
-
-## 按行业和能力选
-
-当前[组件目录](catalog.json)包含 **71 个组件：48 个专业 Agent、21 个 Skill、1 个 Hook、1 个 Tool**，提供 **[86 项能力入口](generated/capabilities.json)**。Agent 提供某类工作的专业方法，Skill 提供可复用的任务流程；在浏览器里按想做的事搜索即可。
-
-| 工作领域 | 常用能力 |
-| --- | --- |
-| 软件与 AI | [前端](agents/frontend-engineer/) · [后端与数据](agents/backend-data-engineer/) · [移动应用](agents/mobile-app-engineer/) · [AI 应用](agents/applied-ai-engineer/) · [测试](agents/test-automation-engineer/) |
-| 产品与设计 | [需求与架构](agents/product-architect/) · [用户研究](agents/user-researcher/) · [交互](agents/interaction-designer/) · [设计系统](agents/design-system-designer/) · [可访问性](skills/accessibility-audit/) |
-| 财务与经营 | [财务建模](agents/financial-modeler/) · [会计对账](agents/accounting-reconciliation-analyst/) · [经营财务](agents/business-finance-analyst/) · [定价成本](agents/pricing-cost-analyst/) |
-| 电商与销售 | [店铺复盘](agents/store-performance-analyst/) · [供应商比较](agents/supplier-comparison-analyst/) · [订单运营](agents/commerce-operations-designer/) · [商品文案](agents/product-listing-writer/) · [销售运营](agents/sales-operations-analyst/) |
-| 内容与营销 | [选题](agents/topic-planner/) · [脚本](agents/script-writer/) · [标题封面](agents/headline-cover-optimizer/) · [媒体制作](agents/media-production-engineer/) · [小红书](skills/xiaohongshu-skill/) |
-| 工作、教育与人才 | [工作沟通](agents/workplace-writer/) · [简历](agents/resume-editor/) · [面试](agents/interview-coach/) · [课程](agents/lesson-planner/) · [学习评价](skills/learning-assessment-design/) |
-| 制造、供应链与能源 | [制造质量](agents/manufacturing-quality-analyst/) · [供应链](agents/supply-chain-planner/) · [系统工程](agents/systems-engineering-analyst/) · [能源项目](agents/energy-project-analyst/) · [碳核算](agents/sustainability-analyst/) |
-| 更多专业场景 | [医疗运营](agents/healthcare-operations-analyst/) · [农业规划](agents/agronomy-planner/) · [建筑信息](skills/construction-information-review/) · [游戏试玩](skills/game-design-playtest/) |
-
-## 先体验两个可以修改、下载的示例
-
-打开[任务浏览器](https://kimyx0207.github.io/Kim_Service/)，从顶部示例卡进入。两例使用合成数据，适合先体验交付形式，再换成自己的材料。
-
-| 示例 | 可以亲手试什么 | 能带走什么 |
-| --- | --- | --- |
-| **预约台设计系统** | 切换浅深主题、品牌色、字号和密度；填写预约表单，体验报错、重试与新增记录 | 当前设计变量的 tokens JSON，以及可继续修改的[页面源码](agents/design-system-designer/examples/service-console/) |
-| **12 个月经营预测** | 修改销量、价格、成本与回款假设；比较基础、乐观、保守情景，查看利润和现金变化 | 输入 JSON、计算结果 JSON、可在表格软件中打开的月表 CSV，以及[模型源码](agents/financial-modeler/examples/operating-forecast/) |
-
-<details>
-<summary>查看预约台设计系统</summary>
+先用仓库自带的合成经营数据跑一遍。你会看到需要准备什么，也能打开一个可修改、可下载的经营预测样板。
 
 <p align="center">
-  <img src="docs/images/design-system-example.png" alt="预约台设计系统实拍：主题与密度控制、预约表单和合成示例记录" width="900">
+  <img src="docs/images/intent-to-delivery.zh-CN.svg" alt="经营预测使用流程：选择财务建模，填写目标和样例材料，复制给 AI，查看模型与月表" width="900">
 </p>
 
-调整主题、品牌色和密度，在同一页面体验表单与列表；图中为默认合成示例数据。
+### 1. 选一项任务
 
-</details>
+在任务浏览器搜索“经营预测”，打开[财务建模](https://kimyx0207.github.io/Kim_Service/?lang=zh-CN#capability=financial-modeler-deliver)。先看它要用哪些材料、会交付什么，再选择你正在使用的 AI 客户端。
 
-<details>
-<summary>查看 12 个月经营预测</summary>
+### 2. 填上你的目标与材料
+
+目标可以直接写：“比较基础、乐观、保守三种情景，解释现金缺口，交付可编辑输入、月表 CSV 和一份说明。”
+
+第一次体验，把材料指向仓库里的 `agents/financial-modeler/examples/operating-forecast/sample-data.js`。用于自己的业务时，再换成实际的收入、成本、回款与资金安排。
 
 <p align="center">
-  <img src="docs/images/operating-forecast-example.png" alt="经营预测实拍：可编辑假设、三情景结果与月末现金曲线" width="900">
+  <img src="docs/images/task-request.png" alt="填写好的财务建模任务：目标、合成样例资料、使用环境，以及可编辑和复制的完整请求" width="900">
+</p>
+<p align="center">页面把入口、材料和交付要求整理好；你还可以在复制前补充自己的要求。</p>
+
+### 3. 复制给你常用的 AI
+
+[下载仓库](https://github.com/KimYx0207/Kim_Service/archive/refs/heads/main.zip)并在 AI 客户端中打开，点击页面上的“复制请求”，粘贴到当前对话。AI 就能读取选中的方法、资料和计算脚本，处理这次任务。
+
+草稿会按任务分别保存。刷新后可以继续写，也能下载草稿带到另一台设备；重新生成请求后，可以恢复上一版。
+
+### 4. 打开成果，亲手改一次
+
+在下面的经营预测示例里，试着修改售价或回款假设，观察现金曲线，再下载月表。实际任务完成后，也这样打开、修改、复算交付文件，核对它是否回答了最初的问题。
+
+## 先看两个可以修改的成果
+
+这两个示例都使用合成数据，可以直接在线操作，也可以下载源码继续改。
+
+### 经营预测：利润增长，现金够用吗？
+
+把销量、价格、成本与回款假设放到同一个模型里，比较三种情景，查看每个月的现金变化。修改一项输入，就能看到结果怎样变化；月表可以下载后在表格软件里继续用。
+
+<p align="center">
+  <img src="docs/images/operating-forecast-example.png" alt="12 个月经营预测成果：可编辑的经营假设、三种情景和月末现金曲线" width="900">
 </p>
 
-用合成经营假设比较三种情景，查看利润与现金变化，再下载输入、结果或月表。
+**[打开经营预测](https://kimyx0207.github.io/Kim_Service/agents/financial-modeler/examples/operating-forecast/index.html?lang=zh-CN)** · [查看模型源码](agents/financial-modeler/examples/operating-forecast/)
 
-</details>
+可以带走：输入与计算结果 JSON、每月明细 CSV，以及可继续修改的模型。
 
-例如，先打开经营预测，修改一项成本假设，观察现金曲线和月表，再下载 CSV。想把它用于自己的业务，就在财务建模能力页填入目标和真实数据，生成下一步请求。
+### 预约台：改一次设计，整页保持一致
 
-下载仓库后，也可以直接在浏览器打开 `docs/start.html`，离线浏览能力和两个示例。
+切换浅深主题、品牌色、字号和信息密度，看表单、按钮与预约列表一起变化。填写一次预约，还能体验输入报错、提交失败后的恢复和新增记录。
 
-## 把选好的任务交给你常用的 AI
+<p align="center">
+  <img src="docs/images/design-system-example.png" alt="可编辑的预约台设计系统：主题与密度控制、预约表单和示例预约列表" width="900">
+</p>
 
-### 1. 准备仓库
+**[打开预约台](https://kimyx0207.github.io/Kim_Service/agents/design-system-designer/examples/service-console/index.html?lang=zh-CN)** · [查看页面源码](agents/design-system-designer/examples/service-console/)
 
-在 GitHub 点击 **Code → Download ZIP** 并解压，或运行：
+可以带走：当前设计变量的 tokens JSON，以及能接着开发的页面代码。
+
+## 你的任务，也可以这样开始
+
+- **做产品和软件：** 把想法整理成可开发的方案，再做页面、接口和测试。从[产品架构](agents/product-architect/)或[前端实现](agents/frontend-engineer/)开始。
+- **看清经营和财务：** 预测现金、核对账目、分析成本，给下一步决策准备依据。看看[财务建模](agents/financial-modeler/)与[定价成本分析](agents/pricing-cost-analyst/)。
+- **经营店铺和销售：** 找出店铺变化的原因，改商品文案，比较供应商。看看[店铺复盘](agents/store-performance-analyst/)与[商品文案](agents/product-listing-writer/)。
+- **做内容和营销：** 从选题、资料到正文、口播、分镜和封面。看看[脚本与写作](agents/script-writer/)与[标题封面](agents/headline-cover-optimizer/)。
+- **处理工作和教学：** 改简历、练面试、写工作沟通、准备课程。看看[简历修改](agents/resume-editor/)与[课程设计](agents/lesson-planner/)。
+- **推进专业项目：** 整理供应链计划、制造质量或能源项目资料。更多入口在[完整专业角色目录](agents/README.md)。
+
+想找别的任务，直接在[任务浏览器](https://kimyx0207.github.io/Kim_Service/?lang=zh-CN#catalog)搜索。完整的 Agent、Skill、Hook 与工具索引放在文末，按需要查阅。
+
+## 接到你正在使用的 AI
+
+Codex、Claude Code、Cursor、Gemini CLI 等能够读取项目文件的客户端，都可以打开仓库并使用上面的请求。喜欢命令行，也可以这样准备：
 
 ```sh
 git clone https://github.com/KimYx0207/Kim_Service.git
 cd Kim_Service
 ```
 
-在 AI 客户端中打开这个目录；如果你正在处理另一个项目，把 Kim_Service 的实际目录位置告诉它，确保它能读取能力包和你的任务材料。
+如果 AI 已经在另一个项目里工作，把 Kim_Service 的实际目录位置告诉它，让它能找到方法包和你的材料。下载后，直接打开 `docs/start.html` 也能离线浏览目录和示例。
 
-### 2. 选择能力，补好目标与材料
+常用包的安装与更新，按包内 README 操作；DSH 用户看 [DSH 指南](docs/dsh.md)，ZCode 用户看 [ZCode 插件指南](docs/zcode-beta.md)。更新源码可用 `git pull --ff-only`。
 
-在任务浏览器搜索“经营预测”“设计系统”“简历”等关键词，打开能力详情，选择正在使用的客户端，填写目标与材料。客户端未单列时，选择“我正在用的 Agent”。页面会把入口路径、所需输入和交付要求整理成一份可编辑请求。
+## 和 Meta_Kim 配合，接着做完整个任务
 
-点击**复制请求**，粘贴到当前 AI 对话中执行。不同能力的请求草稿分开保存；刷新后可接着写，也可以下载、导入草稿。手动补充的要求会保留，重新生成后还能恢复上一版。
-
-<p align="center">
-  <img src="docs/images/browser-walkthrough.zh-CN.svg" alt="查找能力、填写目标和材料、复制请求的操作示意" width="900">
-</p>
-
-<details>
-<summary>查看填写好的任务请求</summary>
+**Kim Service 提供具体工作的专业方法；[Meta_Kim](https://github.com/KimYx0207/Meta_Kim)把这些方法放进整个任务的推进过程。**
 
 <p align="center">
-  <img src="docs/images/task-request.png" alt="财务建模任务请求实拍：填入合成演示目标与材料，并选择 Meta_Kim" width="900">
+  <img src="docs/images/service-and-meta.zh-CN.svg" alt="Kim Service 与 Meta_Kim 的关系：用户提出任务，Kim Service 提供专业方法，AI 执行，Meta_Kim 组织任务、检查成果并接续工作" width="900">
 </p>
 
-这个演示使用仓库自带的合成数据，填写目标与材料后选择 Meta_Kim，即可复制请求继续。
+比如把预约台做成一个产品，需要先明确方案，再设计页面、开发功能、检查交付。Meta_Kim 可以选择和衔接这些工作，把前一步的项目上下文和成果带给下一步。Kim Service 为每一项工作提供相应的方法与资料。
 
-</details>
+只需要改一份简历、写一篇稿或做一次分析时，也可以直接选用一个能力包。[从 Meta_Kim 开始](https://github.com/KimYx0207/Meta_Kim#readme)。
 
-### 3. 先用仓库内示例跑通一次
+## 完整入口与扩展使用
 
-把下面这段发给已打开 Kim_Service 仓库的 AI：
+- 找能力：[专业角色目录](agents/README.md) · [全部 Agent](agents/) · [Skills](skills/) · [Hooks](hooks/) · [工具](tools/)。
+- 深入使用：[任务浏览器指南](docs/task-browser.md) · [能力包编写指南](docs/expert-package-authoring.md) · [组件约定](docs/agent-pack-contract.md)。
+- 查看依据与维护：[行业任务与来源](docs/research/industry-coverage-2026-11-11.md) · [仓库维护](docs/maintenance.md) · [历史验证记录](docs/verification-history.md) · [更新日志](CHANGELOG.zh-CN.md)。
 
-```text
-请读取 agents/financial-modeler/AGENT.md 及其要求的方法资料。
-
-我的目标：做一份未来 12 个月的经营预测示例，理解利润与现金的区别。
-材料：使用 agents/financial-modeler/examples/operating-forecast/
-中的 sample-data.js，沿用样例的币种、期间和合成经营假设。
-
-请复用包内模型，比较基础、乐观、保守三个情景，
-解释主要变化和现金缺口，保留可编辑输入，
-交付结果 JSON、月表 CSV，以及一份能看懂的说明。
-完成后，按包内标准检查公式、期间与导出文件。
-```
-
-换成自己的任务时，替换目标与材料位置，再说明希望得到的文件或结果。拿到交付后，按能力页的标准打开、修改或复算，检查它是否满足你的需求。
-
-## 选择适合你的使用方式
-
-| 使用环境 | 开始方式 |
-| --- | --- |
-| **Codex、Claude Code、Cursor、Gemini CLI 等可读取项目文件的客户端** | 打开仓库，使用上面的复制请求流程；将常用 Skill 安装到客户端时，按对应包内 README 操作。 |
-| **Meta_Kim** | 按 [Meta_Kim 安装说明](https://github.com/KimYx0207/Meta_Kim#readme)接入后，直接描述任务，由它发现和组合需要的专业能力。 |
-| **DSH（DeepSeek Harness）** | 按 [DSH 指南](docs/dsh.md)构建完整 Skills 包，通过 Meta_Kim 安装后使用 `/kim-service` 选择能力。 |
-| **ZCode** | 按 [ZCode 插件指南](docs/zcode-beta.md)安装完整专业包，在客户端中使用对应角色或 Skill。 |
-
-更新源码使用 `git pull --ff-only`；已经安装到客户端的包，再按相应指南更新。方法、参考资料、示例和许可证应随选中的包一起保留。
-
-## 和 Meta_Kim 一起用
-
-**Kim Service 提供“这项工作怎样做好”；Meta_Kim 负责“整个任务怎样推进”。**
-
-比如做一个预约产品：先用产品架构方法明确方案，再用交互和设计系统方法整理页面行为，由前后端能力落实实现，最后检查实际交付。Meta_Kim 将选定的方法、项目上下文和上一步成果交给执行者，并在后续对话中接续工作。
-
-你也可以单独选用一个包：一次文稿修改、简历优化或财务分析，都可以直接在当前客户端完成。
-
-## 深入使用与参与
-
-一个专业包通常包含入口 `AGENT.md` / `SKILL.md`、输入输出约定、方法步骤、参考资料、案例，以及适用的计算或检查脚本。需要了解某个结果为什么这样做，可以继续读包内方法与出处。
-
-- [任务浏览器使用与维护](docs/task-browser.md)：草稿、页面构建、示例配置与发布。
-- [专业能力包作者指南](docs/expert-package-authoring.md)：编写方法、案例和交付检查。
-- [组件约定](docs/agent-pack-contract.md)与[仓库维护指南](docs/maintenance.md)：扩展、生成目录和运行检查。
-- [行业任务与来源](docs/research/industry-coverage-2026-11-11.md)、[迭代记录](docs/verification/iteration-20261111.md)与[历史验证记录](docs/verification-history.md)：查看方法依据、具体检查与历史结果。
-- [Agent](agents/) · [Skill](skills/) · [Hook](hooks/) · [Tool](tools/) · [中文更新日志](CHANGELOG.zh-CN.md)。
+每个包保留自己的方法、参考资料、案例和检查脚本。需要了解一份成果怎样做出来，可以沿着包内说明继续读。
 
 ## 联系与支持
 

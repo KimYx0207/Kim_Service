@@ -1,48 +1,36 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="850" viewBox="0 0 1000 850" lang="en" xml:lang="en" role="img" aria-labelledby="title desc">
-<title id="title">Choose a task. Give your AI a clear method.</title><desc id="desc">Professional roles, reusable skills and editable examples in one catalog.</desc>
-<style>text{font-family:Inter, Arial,sans-serif} path{stroke-linecap:round;stroke-linejoin:round}</style>
-<rect x="0" y="0" width="1000" height="850" rx="26" fill="#f3f6fb" stroke="none"/>
-<text x="42" y="48" font-size="22" font-weight="750" fill="#13775b">KIM SERVICE</text>
-<text x="958" text-anchor="end" y="48" font-size="17" font-weight="500" fill="#5c6980">WORKFLOW ILLUSTRATION</text>
-<text x="42" y="108" font-size="39" font-weight="750" fill="#11243b">Choose a task. Give your AI a clear method.</text>
-<text x="42" y="151" font-size="23" font-weight="400" fill="#435169">Professional roles, reusable skills and editable examples in one catalog.</text>
-<rect x="42" y="194" width="436" height="232" rx="22" fill="#ffffff" stroke="#dce4ef"/>
-<rect x="66" y="218" width="44" height="42" rx="13" fill="#13775b" stroke="none"/>
-<text x="88" text-anchor="middle" y="248" font-size="23" font-weight="750" fill="#fff">01</text>
-<text x="126" y="249" font-size="28" font-weight="700" fill="#11243b">Choose a result</text>
-<text x="66" y="298" font-size="24" font-weight="400" fill="#435169">Find the work you need.</text>
-<text x="66" y="334" font-size="24" font-weight="400" fill="#435169">Compare inputs and outputs.</text>
-<rect x="58" y="357" width="404" height="54" rx="12" fill="#edf3fb" stroke="none"/>
-<text x="72" y="378" font-size="16" font-weight="600" fill="#13775b">EXAMPLES</text>
-<text x="72" y="401" font-size="21" font-weight="650" fill="#223850">Design, writing, finance, code</text>
-<rect x="520" y="194" width="436" height="232" rx="22" fill="#ffffff" stroke="#dce4ef"/>
-<rect x="544" y="218" width="44" height="42" rx="13" fill="#13775b" stroke="none"/>
-<text x="566" text-anchor="middle" y="248" font-size="23" font-weight="750" fill="#fff">02</text>
-<text x="604" y="249" font-size="28" font-weight="700" fill="#11243b">Add your material</text>
-<text x="544" y="298" font-size="24" font-weight="400" fill="#435169">Describe your goal.</text>
-<text x="544" y="334" font-size="24" font-weight="400" fill="#435169">Add sources and constraints.</text>
-<rect x="536" y="357" width="404" height="54" rx="12" fill="#edf3fb" stroke="none"/>
-<text x="550" y="378" font-size="16" font-weight="600" fill="#13775b">YOU PREPARE</text>
-<text x="550" y="401" font-size="21" font-weight="650" fill="#223850">A specific, editable request</text>
-<rect x="42" y="452" width="436" height="232" rx="22" fill="#ffffff" stroke="#dce4ef"/>
-<rect x="66" y="476" width="44" height="42" rx="13" fill="#13775b" stroke="none"/>
-<text x="88" text-anchor="middle" y="506" font-size="23" font-weight="750" fill="#fff">03</text>
-<text x="126" y="507" font-size="28" font-weight="700" fill="#11243b">Use your AI tool</text>
-<text x="66" y="556" font-size="24" font-weight="400" fill="#435169">Copy into your AI tool.</text>
-<text x="66" y="592" font-size="24" font-weight="400" fill="#435169">Follow the linked method.</text>
-<rect x="58" y="615" width="404" height="54" rx="12" fill="#edf3fb" stroke="none"/>
-<text x="72" y="636" font-size="16" font-weight="600" fill="#13775b">YOU USE</text>
-<text x="72" y="659" font-size="21" font-weight="650" fill="#223850">The selected role and skill</text>
-<rect x="520" y="452" width="436" height="232" rx="22" fill="#ffffff" stroke="#dce4ef"/>
-<rect x="544" y="476" width="44" height="42" rx="13" fill="#13775b" stroke="none"/>
-<text x="566" text-anchor="middle" y="506" font-size="23" font-weight="750" fill="#fff">04</text>
-<text x="604" y="507" font-size="28" font-weight="700" fill="#11243b">Review the output</text>
-<text x="544" y="556" font-size="24" font-weight="400" fill="#435169">Open the result and its checks.</text>
-<text x="544" y="592" font-size="24" font-weight="400" fill="#435169">Reuse the method next time.</text>
-<rect x="536" y="615" width="404" height="54" rx="12" fill="#edf3fb" stroke="none"/>
-<text x="550" y="636" font-size="16" font-weight="600" fill="#13775b">YOU RECEIVE</text>
-<text x="550" y="659" font-size="21" font-weight="650" fill="#223850">Files, reasoning and next steps</text>
-<rect x="42" y="732" width="914" height="82" rx="18" fill="#102b43" stroke="none"/>
-<text x="66" y="767" font-size="27" font-weight="650" fill="#f5f9ff">Start with a working example, then bring your own task.</text>
-<text x="66" y="798" font-size="20" font-weight="400" fill="#c0d9ed">Try the design console and 12-month operating forecast in the browser.</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1180" viewBox="0 0 1200 1180" role="img" aria-labelledby="title desc" lang="en" xml:lang="en">
+<title id="title">From a business question to an editable result</title><desc id="desc">Choose a task, add the materials, and let your AI do the work.</desc>
+<style>text{font-family:Inter, Noto Sans, sans-serif}path{stroke-linecap:round;stroke-linejoin:round}</style>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M1 1L8 5L1 9" fill="none" stroke="#23765b" stroke-width="1.5"/></marker></defs>
+<rect width="1200" height="1180" rx="24" fill="#f7f9f5"/>
+<text x="48" y="48" font-size="19" font-weight="750" fill="#23765b" text-anchor="start"><tspan x="48" dy="0">KIM SERVICE / A TASK WALKTHROUGH</tspan></text>
+<text x="48" y="103" font-size="38" font-weight="750" fill="#17372f" text-anchor="start"><tspan x="48" dy="0">From a business question to an editable result</tspan></text>
+<text x="48" y="146" font-size="24" font-weight="450" fill="#52665e" text-anchor="start"><tspan x="48" dy="0">Choose a task, add the materials, and let your AI do the work.</tspan></text>
+<rect x="65" y="185" width="1070" height="80" rx="18" fill="#e7f1e9" stroke="#cedbd1" stroke-width="2"/>
+<text x="600" y="237" font-size="30" font-weight="650" fill="#17372f" text-anchor="middle"><tspan x="600" dy="0">Will the business have enough cash next year?</tspan></text>
+<rect x="65" y="322" width="470" height="210" rx="18" fill="white" stroke="#cedbd1" stroke-width="2"/>
+<text x="92" y="364" font-size="23" font-weight="750" fill="#bb633e" text-anchor="start"><tspan x="92" dy="0">01</tspan></text>
+<text x="92" y="409" font-size="29" font-weight="750" fill="#17372f" text-anchor="start"><tspan x="92" dy="0">Find financial modeling</tspan></text>
+<text x="92" y="455" font-size="24" font-weight="450" fill="#52665e" text-anchor="start"><tspan x="92" dy="0">Search the task browser.</tspan><tspan x="92" dy="34.8">Check the required materials.</tspan></text>
+<rect x="665" y="322" width="470" height="210" rx="18" fill="white" stroke="#cedbd1" stroke-width="2"/>
+<text x="692" y="364" font-size="23" font-weight="750" fill="#bb633e" text-anchor="start"><tspan x="692" dy="0">02</tspan></text>
+<text x="692" y="409" font-size="29" font-weight="750" fill="#17372f" text-anchor="start"><tspan x="692" dy="0">Add the goal and inputs</tspan></text>
+<text x="692" y="455" font-size="24" font-weight="450" fill="#52665e" text-anchor="start"><tspan x="692" dy="0">Choose scenarios to compare.</tspan><tspan x="692" dy="34.8">Add sales, costs and collections.</tspan></text>
+<rect x="665" y="595" width="470" height="210" rx="18" fill="white" stroke="#cedbd1" stroke-width="2"/>
+<text x="692" y="637" font-size="23" font-weight="750" fill="#bb633e" text-anchor="start"><tspan x="692" dy="0">03</tspan></text>
+<text x="692" y="682" font-size="29" font-weight="750" fill="#17372f" text-anchor="start"><tspan x="692" dy="0">Hand the request to your AI</tspan></text>
+<text x="692" y="728" font-size="24" font-weight="450" fill="#52665e" text-anchor="start"><tspan x="692" dy="0">Choose a client. Copy the request.</tspan><tspan x="692" dy="34.8">The AI uses the methods and inputs.</tspan></text>
+<rect x="65" y="595" width="470" height="210" rx="18" fill="white" stroke="#cedbd1" stroke-width="2"/>
+<text x="92" y="637" font-size="23" font-weight="750" fill="#bb633e" text-anchor="start"><tspan x="92" dy="0">04</tspan></text>
+<text x="92" y="682" font-size="29" font-weight="750" fill="#17372f" text-anchor="start"><tspan x="92" dy="0">Open and change the result</tspan></text>
+<text x="92" y="728" font-size="24" font-weight="450" fill="#52665e" text-anchor="start"><tspan x="92" dy="0">Edit an assumption. See the effect.</tspan><tspan x="92" dy="34.8">Download the monthly table.</tspan></text>
+<path d="M540 426H650" fill="none" stroke="#23765b" stroke-width="3" marker-end="url(#arrow)"/>
+<path d="M900 536V580" fill="none" stroke="#23765b" stroke-width="3" marker-end="url(#arrow)"/>
+<path d="M660 700H550" fill="none" stroke="#23765b" stroke-width="3" marker-end="url(#arrow)"/>
+<path d="M300 810V846H600V890" fill="none" stroke="#23765b" stroke-width="3" marker-end="url(#arrow)"/>
+<rect x="155" y="910" width="890" height="145" rx="18" fill="#e7f1e9" stroke="#cedbd1" stroke-width="2"/>
+<path d="M179 936v93" stroke="#23765b" stroke-width="5"/>
+<text x="201" y="961" font-size="29" font-weight="700" fill="#17372f" text-anchor="start"><tspan x="201" dy="0">Files you can take into your own work</tspan></text>
+<text x="201" y="1004" font-size="23" font-weight="450" fill="#52665e" text-anchor="start"><tspan x="201" dy="0">Input and result JSON  ·  Monthly CSV  ·  Notes and source code</tspan></text>
+<text x="600" y="1121" font-size="21" font-weight="450" fill="#52665e" text-anchor="middle"><tspan x="600" dy="0">The README screenshots show interactive examples with synthetic data.</tspan></text>
 </svg>

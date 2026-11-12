@@ -1,62 +1,131 @@
 {
   "schemaVersion": 1,
-  "sourceCommit": "2e56f70a7b3e9c81ff23b41d357720ea7304b23d",
+  "sourceCommit": "6a3106e356769c78a18cbd86ccbf57f1abefc8d6",
   "sourceDirectory": ".site",
   "captureKind": "actual browser screenshot",
   "dataKind": "synthetic demo data",
-  "uiLanguage": "zh-CN",
+  "uiLanguages": [
+    "zh-CN",
+    "en"
+  ],
+  "sourceFileSha256": {
+    "docs/start.html": "8cb608191b117c31c4ae2c7e34a55b29af287d5e219800c735c1e8a17b26d153",
+    "agents/design-system-designer/examples/service-console/index.html": "5627c74ccb6b1b6de3bfaeed994f4ae34e46ba8f24ff81e134f66a8feca9e57c",
+    "agents/design-system-designer/examples/service-console/app.js": "91b522f4155bf4550380cba5529fceb14888684b513e04ac4e4fd466e7dff7b4",
+    "agents/design-system-designer/examples/service-console/locale.js": "e28b4ad4b170ca901dda0a0a56308f173ebbb8bff3743b9a74b6f585494aa369",
+    "agents/design-system-designer/examples/service-console/styles.css": "91273a8db87fb15bcc2414177ad286ce7a8e795eb78542b538dc6160d5291949",
+    "agents/design-system-designer/examples/service-console/tokens.js": "eccd43aaa46d17cfb3cfe4cffd34a9752612d5ea9a0e78b164a4681489a44b4e",
+    "agents/design-system-designer/examples/service-console/config.js": "ded0fa5246d8a97e4162d0d679ffe1bd1922fabf62e0e5db9953866335a84e33",
+    "agents/financial-modeler/examples/operating-forecast/index.html": "6b22cc430be0e71299b337e3ca6ff561c33b5929f52b4d5e98e5410b651de566",
+    "agents/financial-modeler/examples/operating-forecast/app.js": "9ade724acae19b74e20509be2104c797ca088f61b1dbe85728ab762994496ef5",
+    "agents/financial-modeler/examples/operating-forecast/sample-data.js": "d9341091b69d4f90f53688903deb45ab73bccd8cb38e6f20ddca077554a630ea",
+    "agents/financial-modeler/examples/operating-forecast/locale.js": "b8e5b1c4a320df6581a4eb0117ee1874cd1d798cd562c4ae9ca8b54edcdb9092",
+    "agents/financial-modeler/examples/operating-forecast/styles.css": "e20177f11d79e9988163bf2553c0fe674c5c5f445f43edf54179786dc845d5b3"
+  },
   "status": "complete",
   "screenshots": [
     {
       "file": "task-browser.png",
-      "urlPath": "/",
+      "urlPath": "/?lang=zh-CN#catalog",
+      "uiLanguage": "zh-CN",
+      "captureRegion": "viewport",
       "viewport": {
         "width": 1440,
         "height": 1050
       },
-      "description": "Default task browser, including the two editable example cards.",
-      "sha256": "55052dd16871ef3e166216adae889515ec7abcc831e1903f196d92e8f1ec450d",
-      "originalFile": "catalog.png"
+      "description": "Actual task browser at the catalog section, with search, filters and capability cards.",
+      "sha256": "df557e45b07bb0ef0b39a31dd4cf12256e5a97fa2a1d7fadc97a226a3434c4b6"
     },
     {
       "file": "task-request.png",
-      "urlPath": "/#capability=financial-modeler-deliver",
+      "urlPath": "/?lang=zh-CN#capability=financial-modeler-deliver",
+      "uiLanguage": "zh-CN",
+      "captureRegion": ".request-box",
       "viewport": {
         "width": 1280,
         "height": 1000
       },
-      "description": "Financial-modeling request form filled with a synthetic demo brief and Meta_Kim selected; the task is ready to copy.",
-      "sha256": "20b5c9d743765ec17df6188eb7d8c2b4b4b4de10a42fdb8e206fa3a634dbf2ba",
-      "originalFile": "financial-task.png"
+      "description": "Financial-modeling request prepared with synthetic demo inputs and Meta_Kim selected.",
+      "sha256": "3bc9e11fa28907c3c517fadb89c2ad45564e6dd668a6b861d10b5e11dd0526b6"
     },
     {
       "file": "design-system-example.png",
-      "urlPath": "/agents/design-system-designer/examples/service-console/index.html",
+      "urlPath": "/agents/design-system-designer/examples/service-console/index.html?lang=zh-CN",
+      "uiLanguage": "zh-CN",
+      "captureRegion": "viewport",
       "viewport": {
         "width": 1440,
         "height": 1050
       },
-      "description": "Default booking design-system example with its original theme controls and synthetic booking data.",
-      "sha256": "1a0ce712ca61fadaea3df458b9bd7eb544f43ab4a1b19ccc136112b67370c021",
-      "originalFile": "design-system.png"
+      "description": "Actual booking design-system example with theme controls and synthetic appointments.",
+      "sha256": "c0d1979b6dcf578944a31aa531a9add2ff1dbac284923d8cf19bd3d7a365552a"
     },
     {
       "file": "operating-forecast-example.png",
-      "urlPath": "/agents/financial-modeler/examples/operating-forecast/index.html",
+      "urlPath": "/agents/financial-modeler/examples/operating-forecast/index.html?lang=zh-CN",
+      "uiLanguage": "zh-CN",
+      "captureRegion": "viewport",
       "viewport": {
         "width": 1440,
         "height": 1050
       },
-      "description": "Default 12-month operating forecast with the original synthetic assumptions and calculated scenarios.",
-      "sha256": "37a013a5f9ee342c49d9b5d1fad52397258387913ed6a9e8d12022e5a13e93be",
-      "originalFile": "operating-forecast.png"
+      "description": "Actual 12-month operating forecast with editable synthetic inputs and calculated scenarios.",
+      "sha256": "7b8cabf43aed504fcee8cea2427f8cbb2dc82fb65a8dbaf1f09310518f0ff4e4"
+    },
+    {
+      "file": "task-browser.en.png",
+      "urlPath": "/?lang=en#catalog",
+      "uiLanguage": "en",
+      "captureRegion": "viewport",
+      "viewport": {
+        "width": 1440,
+        "height": 1050
+      },
+      "description": "Actual task browser at the catalog section, with search, filters and capability cards.",
+      "sha256": "2d731e6111096eecfb2ae946ccc7770ad037e0275e674b96f2ed4a08f1fe773a"
+    },
+    {
+      "file": "task-request.en.png",
+      "urlPath": "/?lang=en#capability=financial-modeler-deliver",
+      "uiLanguage": "en",
+      "captureRegion": ".request-box",
+      "viewport": {
+        "width": 1280,
+        "height": 1000
+      },
+      "description": "Financial-modeling request prepared with synthetic demo inputs and Meta_Kim selected.",
+      "sha256": "0569a96e318517d5181c22a439b7545a458f5f8cf664b7273ef045a820f39a8e"
+    },
+    {
+      "file": "design-system-example.en.png",
+      "urlPath": "/agents/design-system-designer/examples/service-console/index.html?lang=en",
+      "uiLanguage": "en",
+      "captureRegion": "viewport",
+      "viewport": {
+        "width": 1440,
+        "height": 1050
+      },
+      "description": "Actual booking design-system example with theme controls and synthetic appointments.",
+      "sha256": "503288657c55d5886bacb38961e920a934469c77148342cea41fb052ea20739d"
+    },
+    {
+      "file": "operating-forecast-example.en.png",
+      "urlPath": "/agents/financial-modeler/examples/operating-forecast/index.html?lang=en",
+      "uiLanguage": "en",
+      "captureRegion": "viewport",
+      "viewport": {
+        "width": 1440,
+        "height": 1050
+      },
+      "description": "Actual 12-month operating forecast with editable synthetic inputs and calculated scenarios.",
+      "sha256": "c207e1c8fedda5967ddae029f9a9a3adeeef3a70960c7c2253c2b21bfa0f0351"
     }
   ],
   "browserVersion": "151.0.7922.34",
   "sourceArtifact": {
     "repository": "KimYx0207/Kim_Service",
-    "workflowRunId": 43116420620,
-    "artifactId": 13898552015,
+    "workflowRunId": 43259845319,
+    "artifactId": 13962438613,
     "artifactName": "task-browser-screenshots"
   }
 }

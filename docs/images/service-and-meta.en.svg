@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1050" viewBox="0 0 1200 1050" role="img" aria-labelledby="title desc" lang="en" xml:lang="en">
+<title id="title">How do specialist methods become useful work?</title><desc id="desc">Kim Service supplies the methods. Your AI client carries out the task.</desc>
+<style>text{font-family:Inter, Noto Sans, sans-serif}path{stroke-linecap:round;stroke-linejoin:round}</style>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M1 1L8 5L1 9" fill="none" stroke="#23765b" stroke-width="1.5"/></marker></defs>
+<rect width="1200" height="1050" rx="24" fill="#f7f9f5"/>
+<text x="48" y="48" font-size="19" font-weight="750" fill="#23765b" text-anchor="start"><tspan x="48" dy="0">KIM SERVICE + META_KIM</tspan></text>
+<text x="48" y="103" font-size="38" font-weight="750" fill="#17372f" text-anchor="start"><tspan x="48" dy="0">How do specialist methods become useful work?</tspan></text>
+<text x="48" y="146" font-size="24" font-weight="450" fill="#52665e" text-anchor="start"><tspan x="48" dy="0">Kim Service supplies the methods. Your AI client carries out the task.</tspan></text>
+<rect x="70" y="210" width="500" height="170" rx="18" fill="#e7f1e9" stroke="#cedbd1" stroke-width="2"/>
+<path d="M94 236v118" stroke="#23765b" stroke-width="5"/>
+<text x="116" y="261" font-size="29" font-weight="700" fill="#17372f" text-anchor="start"><tspan x="116" dy="0">Your task and materials</tspan></text>
+<text x="116" y="304" font-size="23" font-weight="450" fill="#52665e" text-anchor="start"><tspan x="116" dy="0">What do you want to achieve?</tspan><tspan x="116" dy="33.35">What files and requirements exist?</tspan></text>
+<rect x="640" y="210" width="500" height="170" rx="18" fill="white" stroke="#cedbd1" stroke-width="2"/>
+<path d="M664 236v118" stroke="#23765b" stroke-width="5"/>
+<text x="686" y="261" font-size="29" font-weight="700" fill="#17372f" text-anchor="start"><tspan x="686" dy="0">Kim Service</tspan></text>
+<text x="686" y="304" font-size="23" font-weight="450" fill="#52665e" text-anchor="start"><tspan x="686" dy="0">Methods, references,</tspan><tspan x="686" dy="33.35">calculation scripts and checks.</tspan></text>
+<path d="M320 385V430H600V470" fill="none" stroke="#23765b" stroke-width="3" marker-end="url(#arrow)"/>
+<path d="M890 385V430H600" fill="none" stroke="#23765b" stroke-width="3"/>
+<text x="890" y="464" font-size="20" font-weight="500" fill="#52665e" text-anchor="middle"><tspan x="890" dy="0">Choose methods for the task</tspan></text>
+<rect x="315" y="490" width="570" height="170" rx="18" fill="#e7f1e9" stroke="#cedbd1" stroke-width="2"/>
+<path d="M339 516v118" stroke="#23765b" stroke-width="5"/>
+<text x="361" y="541" font-size="29" font-weight="700" fill="#17372f" text-anchor="start"><tspan x="361" dy="0">Your AI client</tspan></text>
+<text x="361" y="584" font-size="23" font-weight="450" fill="#52665e" text-anchor="start"><tspan x="361" dy="0">Reads the chosen package.</tspan><tspan x="361" dy="33.35">Works with your goal and inputs.</tspan></text>
+<rect x="65" y="746" width="465" height="180" rx="18" fill="white" stroke="#cedbd1" stroke-width="2"/>
+<path d="M89 772v128" stroke="#23765b" stroke-width="5"/>
+<text x="111" y="797" font-size="29" font-weight="700" fill="#17372f" text-anchor="start"><tspan x="111" dy="0">Meta_Kim · optional</tspan></text>
+<text x="111" y="840" font-size="23" font-weight="450" fill="#52665e" text-anchor="start"><tspan x="111" dy="0">Coordinates larger tasks,</tspan><tspan x="111" dy="33.35">checks and continued work.</tspan></text>
+<rect x="635" y="746" width="500" height="180" rx="18" fill="white" stroke="#cedbd1" stroke-width="2"/>
+<path d="M659 772v128" stroke="#23765b" stroke-width="5"/>
+<text x="681" y="797" font-size="29" font-weight="700" fill="#17372f" text-anchor="start"><tspan x="681" dy="0">Results you can open and edit</tspan></text>
+<text x="681" y="840" font-size="23" font-weight="450" fill="#52665e" text-anchor="start"><tspan x="681" dy="0">Pages, articles, analysis,</tspan><tspan x="681" dy="33.35">models and downloadable files.</tspan></text>
+<path d="M730 666V700H885V732" fill="none" stroke="#23765b" stroke-width="3" marker-end="url(#arrow)"/>
+<path d="M300 742V698H460V667" fill="none" stroke="#23765b" stroke-width="3" marker-end="url(#arrow)" stroke-dasharray="8 8"/>
+<text x="300" y="980" font-size="21" font-weight="500" fill="#52665e" text-anchor="middle"><tspan x="300" dy="0">Coordinates several tasks</tspan></text>
+</svg>

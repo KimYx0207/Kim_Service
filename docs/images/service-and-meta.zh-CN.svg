@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1050" viewBox="0 0 1200 1050" role="img" aria-labelledby="title desc" lang="zh-CN" xml:lang="zh-CN">
+<title id="title">专业方法，怎样变成你的工作成果？</title><desc id="desc">Kim Service 提供做事的方法；AI 在你选择的客户端里执行。</desc>
+<style>text{font-family:Inter, Noto Sans CJK SC, sans-serif}path{stroke-linecap:round;stroke-linejoin:round}</style>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M1 1L8 5L1 9" fill="none" stroke="#23765b" stroke-width="1.5"/></marker></defs>
+<rect width="1200" height="1050" rx="24" fill="#f7f9f5"/>
+<text x="48" y="48" font-size="19" font-weight="750" fill="#23765b" text-anchor="start"><tspan x="48" dy="0">KIM SERVICE + META_KIM</tspan></text>
+<text x="48" y="103" font-size="38" font-weight="750" fill="#17372f" text-anchor="start"><tspan x="48" dy="0">专业方法，怎样变成你的工作成果？</tspan></text>
+<text x="48" y="146" font-size="24" font-weight="450" fill="#52665e" text-anchor="start"><tspan x="48" dy="0">Kim Service 提供做事的方法；AI 在你选择的客户端里执行。</tspan></text>
+<rect x="70" y="210" width="500" height="170" rx="18" fill="#e7f1e9" stroke="#cedbd1" stroke-width="2"/>
+<path d="M94 236v118" stroke="#23765b" stroke-width="5"/>
+<text x="116" y="261" font-size="29" font-weight="700" fill="#17372f" text-anchor="start"><tspan x="116" dy="0">你的任务与材料</tspan></text>
+<text x="116" y="304" font-size="23" font-weight="450" fill="#52665e" text-anchor="start"><tspan x="116" dy="0">想完成什么？</tspan><tspan x="116" dy="33.35">已有文件和要求是什么？</tspan></text>
+<rect x="640" y="210" width="500" height="170" rx="18" fill="white" stroke="#cedbd1" stroke-width="2"/>
+<path d="M664 236v118" stroke="#23765b" stroke-width="5"/>
+<text x="686" y="261" font-size="29" font-weight="700" fill="#17372f" text-anchor="start"><tspan x="686" dy="0">Kim Service</tspan></text>
+<text x="686" y="304" font-size="23" font-weight="450" fill="#52665e" text-anchor="start"><tspan x="686" dy="0">专业方法、参考资料、</tspan><tspan x="686" dy="33.35">计算脚本和检查要点。</tspan></text>
+<path d="M320 385V430H600V470" fill="none" stroke="#23765b" stroke-width="3" marker-end="url(#arrow)"/>
+<path d="M890 385V430H600" fill="none" stroke="#23765b" stroke-width="3"/>
+<text x="890" y="464" font-size="20" font-weight="500" fill="#52665e" text-anchor="middle"><tspan x="890" dy="0">按当前任务选择方法</tspan></text>
+<rect x="315" y="490" width="570" height="170" rx="18" fill="#e7f1e9" stroke="#cedbd1" stroke-width="2"/>
+<path d="M339 516v118" stroke="#23765b" stroke-width="5"/>
+<text x="361" y="541" font-size="29" font-weight="700" fill="#17372f" text-anchor="start"><tspan x="361" dy="0">你的 AI 客户端</tspan></text>
+<text x="361" y="584" font-size="23" font-weight="450" fill="#52665e" text-anchor="start"><tspan x="361" dy="0">读取选好的能力包，</tspan><tspan x="361" dy="33.35">按目标处理材料。</tspan></text>
+<rect x="65" y="746" width="465" height="180" rx="18" fill="white" stroke="#cedbd1" stroke-width="2"/>
+<path d="M89 772v128" stroke="#23765b" stroke-width="5"/>
+<text x="111" y="797" font-size="29" font-weight="700" fill="#17372f" text-anchor="start"><tspan x="111" dy="0">Meta_Kim · 可选</tspan></text>
+<text x="111" y="840" font-size="23" font-weight="450" fill="#52665e" text-anchor="start"><tspan x="111" dy="0">任务较大时，帮助分工、</tspan><tspan x="111" dy="33.35">检查并接着上次继续。</tspan></text>
+<rect x="635" y="746" width="500" height="180" rx="18" fill="white" stroke="#cedbd1" stroke-width="2"/>
+<path d="M659 772v128" stroke="#23765b" stroke-width="5"/>
+<text x="681" y="797" font-size="29" font-weight="700" fill="#17372f" text-anchor="start"><tspan x="681" dy="0">能打开、编辑的成果</tspan></text>
+<text x="681" y="840" font-size="23" font-weight="450" fill="#52665e" text-anchor="start"><tspan x="681" dy="0">页面、文章、分析结果，</tspan><tspan x="681" dy="33.35">或模型与可下载的文件。</tspan></text>
+<path d="M730 666V700H885V732" fill="none" stroke="#23765b" stroke-width="3" marker-end="url(#arrow)"/>
+<path d="M300 742V698H460V667" fill="none" stroke="#23765b" stroke-width="3" marker-end="url(#arrow)" stroke-dasharray="8 8"/>
+<text x="300" y="980" font-size="21" font-weight="500" fill="#52665e" text-anchor="middle"><tspan x="300" dy="0">组织多项工作</tspan></text>
+</svg>

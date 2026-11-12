@@ -4,6 +4,21 @@
 
 Kim Service collection releases use `V<major>.<minor>`. Each component keeps its own version and source history. Detailed past checks are in the [testing record](docs/verification-history.md).
 
+## V1.13 - 2026-11-12
+
+### See the product before setting it up
+
+- **Pictures appear directly in the README.** The task browser, prepared request, operating forecast and booking console each have a visible screenshot beside the explanation. Workflow and product diagrams show how a goal becomes an editable result.
+- **Follow one complete task.** The Chinese and English introductions walk through choosing financial modeling, adding the goal and materials, handing the request to an AI client, and opening or downloading the result.
+- **Use the browser in Chinese or English.** Switch interface language, search all 86 capabilities by their localized titles and summaries, and keep task drafts when switching. Financial-modeling and design-system task details are fully translated; other packages retain their original detailed specifications.
+- **Try the examples in the same language.** The booking console and 12-month forecast include English controls, sample copy and feedback. Currency, calculations, user inputs, editable design settings and downloads keep their existing meaning.
+
+### Update
+
+Run `git pull --ff-only`, then reopen the [online task browser](https://kimyx0207.github.io/Kim_Service/) or `docs/start.html`. Existing task entry points remain compatible. The release includes the updated source and DSH/ZCode packages; the ZCode collection plugin uses version 1.13.0.
+
+The [screenshot records](docs/images/readme-screenshots.json) identify the actual source and image bytes. The release verification records link the product, browser and package checks to the published revision.
+
 ## V1.12 - 2026-11-12
 
 ### Affected components

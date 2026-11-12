@@ -4,171 +4,123 @@
   <a href="README.md">简体中文</a> · <a href="README_EN.md">English</a>
 </p>
 
-**Give your AI specialist methods for building software, designing interfaces, modeling a business, and writing useful content.**
+**Give your AI specialist methods for work you can open, edit, and use.**
 
-Kim Service is a professional capability library maintained by Lao Jin (KimYx0207). Each package brings together the inputs, working method, references, and delivery criteria for a particular job. Pick a task and give your usual AI client the materials to work with. You can also use [Meta_Kim](https://github.com/KimYx0207/Meta_Kim) to select capabilities, coordinate the work, and review the result.
+Build a business forecast, design a set of screens, review a store, or turn source material into an article. Kim Service brings the working methods, references, and checks for these jobs into reusable packages. Choose a task, add your goal and materials, and hand it to the AI you already use.
 
-**[Open the task browser](https://kimyx0207.github.io/Kim_Service/)** · [Download the latest release](https://github.com/KimYx0207/Kim_Service/releases/latest) · [Browse specialist roles](agents/README.md) · [Changelog](CHANGELOG.md)
-
-<p align="center">
-  <img src="docs/images/task-browser.png" alt="Actual Kim Service task browser showing the workflow and two editable example cards" width="900">
-</p>
-<p align="center">The task browser in its current Chinese interface: try an example, then choose a task.</p>
-
-<details>
-<summary>See the workflow</summary>
+**[Open the online task browser](https://kimyx0207.github.io/Kim_Service/?lang=en)** · [Try two editable examples](#try-two-editable-examples) · [Download the repository](https://github.com/KimYx0207/Kim_Service/archive/refs/heads/main.zip)
 
 <p align="center">
-  <img src="docs/images/intent-to-delivery.svg" alt="Choose a task, add material, copy a request and review the result — workflow illustration" width="900">
+  <img src="docs/images/task-browser.en.png" alt="Kim Service task browser in English, with task search, capability cards, and interactive examples" width="900">
 </p>
+<p align="center">Start with the job you need done, choose a method, and take the request to your AI client.</p>
 
-</details>
+## Follow one task from start to finish
 
-## Start with the result you need
+> “I want to understand the next 12 months of profit and cash, and see when cash might run short.”
 
-| Your task | What to ask for | Starting point |
-| --- | --- | --- |
-| Turn a product idea into a buildable plan | System choices, module requirements, user flows, interface contracts, and demonstrable delivery tasks | [Product architecture](agents/product-architect/) · [Interaction design](agents/interaction-designer/) · [Frontend implementation](agents/frontend-engineer/) |
-| Make several screens work as one design system | Design tokens, component states, keyboard behavior, example screens, and a migration plan | [Design systems](agents/design-system-designer/) |
-| Understand the next 12 months of operations and cash | Editable assumptions, monthly profit and cash tables, three scenarios, and cash shortfall analysis | [Financial modeling](agents/financial-modeler/) |
-| Review a store and choose the next improvement | Comparable metrics, data issues, explanations to investigate, and small improvement experiments | [Store performance](agents/store-performance-analyst/) |
-| Turn a topic and source material into finished content | An article, spoken script, or storyboard, with openings, endings, and a claims check | [Scripts and writing](agents/script-writer/) · [Headlines and covers](agents/headline-cover-optimizer/) |
-
-Each capability page explains the materials to supply and the expected output. Code, design documents, analytical models, and written content each have their own checks.
-
-## Choose by field or capability
-
-The current [component catalog](catalog.json) contains **71 components: 48 professional Agents, 21 Skills, one Hook, and one Tool**, exposing **[86 capability entries](generated/capabilities.json)**. Agents package specialist methods; Skills package reusable task workflows. Search by the job you want to do.
-
-| Field | Common capabilities |
-| --- | --- |
-| Software and AI | [Frontend](agents/frontend-engineer/) · [Backend and data](agents/backend-data-engineer/) · [Mobile apps](agents/mobile-app-engineer/) · [Applied AI](agents/applied-ai-engineer/) · [Test automation](agents/test-automation-engineer/) |
-| Product and design | [Requirements and architecture](agents/product-architect/) · [User research](agents/user-researcher/) · [Interaction](agents/interaction-designer/) · [Design systems](agents/design-system-designer/) · [Accessibility](skills/accessibility-audit/) |
-| Finance and business | [Financial modeling](agents/financial-modeler/) · [Accounting reconciliation](agents/accounting-reconciliation-analyst/) · [Business finance](agents/business-finance-analyst/) · [Pricing and costs](agents/pricing-cost-analyst/) |
-| Commerce and sales | [Store analysis](agents/store-performance-analyst/) · [Supplier comparison](agents/supplier-comparison-analyst/) · [Order operations](agents/commerce-operations-designer/) · [Product listings](agents/product-listing-writer/) · [Sales operations](agents/sales-operations-analyst/) |
-| Content and marketing | [Topics](agents/topic-planner/) · [Scripts](agents/script-writer/) · [Headlines and covers](agents/headline-cover-optimizer/) · [Media production](agents/media-production-engineer/) · [Xiaohongshu](skills/xiaohongshu-skill/) |
-| Work, education, and people | [Workplace writing](agents/workplace-writer/) · [Resumes](agents/resume-editor/) · [Interviews](agents/interview-coach/) · [Lessons](agents/lesson-planner/) · [Learning assessment](skills/learning-assessment-design/) |
-| Manufacturing, supply chains, and energy | [Manufacturing quality](agents/manufacturing-quality-analyst/) · [Supply chains](agents/supply-chain-planner/) · [Systems engineering](agents/systems-engineering-analyst/) · [Energy projects](agents/energy-project-analyst/) · [Sustainability](agents/sustainability-analyst/) |
-| More professional settings | [Healthcare operations](agents/healthcare-operations-analyst/) · [Agronomy](agents/agronomy-planner/) · [Construction information](skills/construction-information-review/) · [Game playtests](skills/game-design-playtest/) |
-
-## Try two examples you can edit and download
-
-Open the [task browser](https://kimyx0207.github.io/Kim_Service/) and choose an example card at the top. Both examples use synthetic data, so you can explore the output before bringing your own materials.
-
-| Example | What you can try | What you can take away |
-| --- | --- | --- |
-| **Booking design system** | Change light/dark theme, brand color, type size, and density; submit the booking form and try validation, retry, and new entries | The current design tokens as JSON, plus editable [page source](agents/design-system-designer/examples/service-console/) |
-| **12-month operating forecast** | Change sales, price, cost, and collection assumptions; compare base, upside, and downside scenarios and inspect profit and cash | Input JSON, calculated results as JSON, monthly CSV for a spreadsheet, and the [model source](agents/financial-modeler/examples/operating-forecast/) |
-
-<details>
-<summary>See the booking design system</summary>
+Start with the repository's synthetic business data. You can see what the task needs and explore an operating forecast that you can change and download.
 
 <p align="center">
-  <img src="docs/images/design-system-example.png" alt="Actual booking design-system example with theme and density controls, a booking form, and synthetic records" width="900">
+  <img src="docs/images/intent-to-delivery.svg" alt="Operating forecast workflow: choose financial modeling, add a goal and sample materials, copy to your AI, then review the model and monthly table" width="900">
 </p>
 
-Change theme, brand color, and density while trying the form and list together. This is the default example with synthetic data.
+### 1. Choose a task
 
-</details>
+Search for “financial-modeler” in the task browser and open [financial modeling](https://kimyx0207.github.io/Kim_Service/?lang=en#capability=financial-modeler-deliver). Check the materials it needs and the outputs it offers, then select your AI client.
 
-<details>
-<summary>See the 12-month operating forecast</summary>
+### 2. Add your goal and materials
+
+A useful first goal is: “Compare base, upside, and downside scenarios, explain cash shortfalls, and deliver editable inputs, a monthly CSV, and a readable explanation.”
+
+For the first run, point to `agents/financial-modeler/examples/operating-forecast/sample-data.js` in the repository. For your own business, replace it with actual revenue, costs, collection assumptions, and funding plans.
 
 <p align="center">
-  <img src="docs/images/operating-forecast-example.png" alt="Actual operating forecast showing editable assumptions, three scenarios, and monthly cash balances" width="900">
+  <img src="docs/images/task-request.en.png" alt="Prepared financial-modeling task in English, including the goal, synthetic sample materials, AI client, and editable request" width="900">
+</p>
+<p align="center">The browser assembles the entry point, materials, and deliverables. Add your own requirements before copying.</p>
+
+### 3. Copy the request to your AI
+
+[Download the repository](https://github.com/KimYx0207/Kim_Service/archive/refs/heads/main.zip) and open it in your AI client. Copy the request from the task browser and paste it into your current conversation. Your AI can then read the selected methods, references, and calculation scripts to work on the task.
+
+Drafts are saved separately for each task. Continue after a refresh or download a draft to use on another device. If you regenerate a request, you can restore the previous version.
+
+### 4. Open the result and change one assumption
+
+Try changing a price or collection assumption in the forecast below. Watch the cash chart and download the monthly table. When your own task is complete, open, edit, or recalculate the delivered files in the same way to check that they answer your original question.
+
+## Try two editable examples
+
+Both examples use synthetic data. Open them in a browser, or download their source and keep building.
+
+### Operating forecast: growing profit, enough cash?
+
+Bring sales, prices, costs, and collection assumptions into one model. Compare three scenarios and follow the cash balance month by month. Change an input to see its effect, then download a table you can use in a spreadsheet.
+
+<p align="center">
+  <img src="docs/images/operating-forecast-example.en.png" alt="12-month operating forecast in English, showing editable assumptions, three scenarios, and monthly cash balances" width="900">
 </p>
 
-Compare three scenarios using synthetic operating assumptions, inspect profit and cash, then download the inputs, results, or monthly table.
+**[Open the operating forecast](https://kimyx0207.github.io/Kim_Service/agents/financial-modeler/examples/operating-forecast/index.html?lang=en)** · [Explore the model source](agents/financial-modeler/examples/operating-forecast/)
 
-</details>
+Take away: input and result JSON, a monthly CSV, and the model source to adapt.
 
-For a quick first run, change a cost assumption in the forecast, inspect the cash chart and monthly table, and download the CSV. To adapt it to your business, select financial modeling in the catalog and enter your goal and actual data.
+### Booking console: change the design across the whole page
 
-After downloading the repository, you can also open `docs/start.html` directly in a browser to explore the catalog and both examples offline.
+Switch theme, brand color, type size, and density to see the form, buttons, and booking list change together. Fill in a booking to try validation, recovery after a failed submission, and new records.
 
-## Hand the task to your usual AI client
+<p align="center">
+  <img src="docs/images/design-system-example.en.png" alt="Editable booking design system in English, with theme and density controls, a booking form, and sample records" width="900">
+</p>
 
-### 1. Get the repository
+**[Open the booking console](https://kimyx0207.github.io/Kim_Service/agents/design-system-designer/examples/service-console/index.html?lang=en)** · [Explore the page source](agents/design-system-designer/examples/service-console/)
 
-On GitHub, choose **Code → Download ZIP** and extract it, or run:
+Take away: the current design tokens as JSON and page code you can develop further.
+
+## Start with a task you recognize
+
+- **Build products and software:** turn an idea into a workable plan, then implement screens, APIs, and tests. Start with [product architecture](agents/product-architect/) or [frontend implementation](agents/frontend-engineer/).
+- **Understand business and finance:** forecast cash, reconcile accounts, and analyze costs before making the next decision. Explore [financial modeling](agents/financial-modeler/) and [pricing and cost analysis](agents/pricing-cost-analyst/).
+- **Run a store or sales operation:** investigate performance changes, improve product copy, and compare suppliers. Explore [store analysis](agents/store-performance-analyst/) and [product listings](agents/product-listing-writer/).
+- **Create content and marketing:** turn a topic and sources into articles, spoken scripts, storyboards, and covers. Explore [scripts and writing](agents/script-writer/) and [headlines and covers](agents/headline-cover-optimizer/).
+- **Handle work and teaching:** improve a resume, prepare for an interview, write workplace messages, or plan a course. Explore [resume editing](agents/resume-editor/) and [lesson planning](agents/lesson-planner/).
+- **Move a specialist project forward:** organize supply-chain plans, manufacturing quality work, or energy-project materials. Find more in the [complete role directory](agents/README.md).
+
+For another task, search the [task browser](https://kimyx0207.github.io/Kim_Service/?lang=en#catalog). The full Agent, Skill, Hook, and tool indexes are linked below.
+
+## Connect it to the AI you already use
+
+Codex, Claude Code, Cursor, Gemini CLI, and other clients that can read project files can open the repository and use these requests. If you prefer the command line:
 
 ```sh
 git clone https://github.com/KimYx0207/Kim_Service.git
 cd Kim_Service
 ```
 
-Open that directory in your AI client. If you are working in another project, give the client the actual Kim_Service directory location so it can read the package and your task materials.
+If your AI is already working in another project, give it the actual Kim_Service directory location so it can find the methods and your materials. After downloading, you can also open `docs/start.html` directly to browse the catalog and examples offline.
 
-### 2. Choose a capability and add your materials
+Follow each package's README to install or update packages you use regularly. DSH users can follow the [DSH guide](docs/dsh.md); ZCode users can follow the [ZCode plugin guide](docs/zcode-beta.md). Update the source with `git pull --ff-only`.
 
-Search the task browser for a term such as `financial-modeler`, `design-system-designer`, or `resume`. Open a capability, select your client, and enter your goal and materials. Use the generic current-agent option if your client is not listed. The browser assembles the entry path, required inputs, and expected outputs into an editable request.
+## Combine it with Meta_Kim for a larger task
 
-Copy the request and paste it into your current AI conversation. Drafts are saved separately for each capability, can resume after a refresh, and can be downloaded or imported. Manual additions stay intact, and you can restore the previous request after regeneration.
-
-<p align="center">
-  <img src="docs/images/browser-walkthrough.svg" alt="Illustrated walkthrough of finding a capability and preparing a request" width="900">
-</p>
-
-<details>
-<summary>See a prepared task request</summary>
+**Kim Service supplies specialist methods. [Meta_Kim](https://github.com/KimYx0207/Meta_Kim) coordinates how those methods fit into the overall task.**
 
 <p align="center">
-  <img src="docs/images/task-request.png" alt="Actual financial-modeling request form with a synthetic demo goal and materials, and Meta_Kim selected" width="900">
+  <img src="docs/images/service-and-meta.en.svg" alt="How Kim Service and Meta_Kim work together: the user brings a task, Kim Service supplies methods, the AI executes, and Meta_Kim coordinates, reviews, and continues the work" width="900">
 </p>
 
-This demo uses the repository's synthetic sample data. Enter the goal and materials, choose Meta_Kim, and copy the request to continue.
+Turning the booking console into a product involves agreeing on a plan, designing screens, building features, and checking the result. Meta_Kim can connect those steps and carry the project context and earlier outputs into the next one. Kim Service supplies the methods and references for each job.
 
-</details>
+For a resume edit, an article, or a single analysis, you can also use a package directly. [Get started with Meta_Kim](https://github.com/KimYx0207/Meta_Kim#readme).
 
-### 3. Run a first task with the included example
+## Full directory and further reading
 
-Send this to an AI client that has opened the Kim_Service repository:
+- Find a method: [role directory](agents/README.md) · [all Agents](agents/) · [Skills](skills/) · [Hooks](hooks/) · [tools](tools/).
+- Learn more: [task browser guide](docs/task-browser.md) · [package authoring](docs/expert-package-authoring.md) · [package contracts](docs/agent-pack-contract.md).
+- Explore sources and maintenance: [industry tasks and sources](docs/research/industry-coverage-2026-11-11.md) · [repository maintenance](docs/maintenance.md) · [verification history](docs/verification-history.md) · [changelog](CHANGELOG.md).
 
-```text
-Read agents/financial-modeler/AGENT.md and its required method materials.
-
-Goal: create a 12-month operating forecast example that explains the
-difference between profit and cash.
-Materials: use sample-data.js in
-agents/financial-modeler/examples/operating-forecast/,
-keeping the example's currency, periods, and synthetic assumptions.
-
-Reuse the package's model to compare base, upside, and downside scenarios.
-Explain the main changes and cash shortfalls. Keep the inputs editable
-and deliver result JSON, a monthly CSV, and a readable explanation.
-Check the formulas, periods, and exported files against the package criteria.
-```
-
-For your own task, replace the goal and material locations and specify the files or result you need. Open, edit, or recalculate the output using the capability's criteria to decide whether it meets your needs.
-
-## Choose how to use it
-
-| Your environment | How to start |
-| --- | --- |
-| **Codex, Claude Code, Cursor, Gemini CLI, or another client that can read project files** | Open the repository and use the request workflow above. To install a frequently used Skill, follow that package's README. |
-| **Meta_Kim** | Follow the [Meta_Kim installation guide](https://github.com/KimYx0207/Meta_Kim#readme), describe the task, and let it discover and combine the specialist capabilities. |
-| **DSH — DeepSeek Harness** | Follow the [DSH guide](docs/dsh.md) to build the complete Skills bundle and install it through Meta_Kim, then use `/kim-service` to choose a capability. |
-| **ZCode** | Follow the [ZCode plugin guide](docs/zcode-beta.md) to install the complete professional package and use its roles or Skills in the client. |
-
-Update the source with `git pull --ff-only`, then follow the relevant guide to update packages already installed in a client. Keep the methods, references, examples, and licenses together with the package you select.
-
-## Use it with Meta_Kim
-
-**Kim Service supplies the method for a particular job. Meta_Kim coordinates the overall task.**
-
-For a booking product, that can mean clarifying the system with product architecture, defining screen behavior with interaction and design-system methods, implementing it with frontend and backend capabilities, and reviewing the actual deliverables. Meta_Kim passes the selected methods, project context, and earlier results to the workers and carries the task into later conversations.
-
-You can also use a single package directly in your current client for a writing revision, resume update, or financial analysis.
-
-## Go further and contribute
-
-A professional package typically includes an `AGENT.md` or `SKILL.md` entry, input/output criteria, method steps, references, examples, and applicable calculation or validation scripts. Follow the package's method and source references when you want to understand how a result was produced.
-
-- [Task browser guide](docs/task-browser.md): drafts, page building, example configuration, and publication.
-- [Professional package authoring](docs/expert-package-authoring.md): methods, examples, and output checks.
-- [Package contract](docs/agent-pack-contract.md) and [repository maintenance](docs/maintenance.md): extending packages, generating the catalog, and running checks.
-- [Industry tasks and sources](docs/research/industry-coverage-2026-11-11.md), [iteration record](docs/verification/iteration-20261111.md), and [verification history](docs/verification-history.md): method references, specific checks, and historical results.
-- [Agents](agents/) · [Skills](skills/) · [Hooks](hooks/) · [Tools](tools/) · [Changelog](CHANGELOG.md).
+Each package keeps its methods, references, examples, and checks together. Follow those sources when you want to understand how a result was produced.
 
 ## Contact and support
 
@@ -189,6 +141,6 @@ A professional package typically includes an `AGENT.md` or `SKILL.md` entry, inp
 
 If these open-source projects help you, please consider starring, sharing, or buying Lao Jin a coffee.
 
-## Open-source note
+## Open source
 
 Repository-level content uses the [MIT License](LICENSE). Each package retains its own license and provenance; see its `LICENSE`, `PROVENANCE`, or equivalent source records.

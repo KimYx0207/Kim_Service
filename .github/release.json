@@ -4,12 +4,20 @@
   "releaseTitleEqualsVersion": true,
   "versionFile": "VERSION",
   "tagPrefix": "",
-  "workflows": [".github/workflows/validate.yml"],
-  "metaRelease": "v3.10.1",
-  "previousZcodeRelease": "V1.11",
-  "previousZcodeAsset": "Kim-ZCode-V1.11.zip",
+  "workflows": [
+    ".github/workflows/validate.yml"
+  ],
+  "metaRelease": "v3.10.2",
+  "previousZcodeRelease": "V1.12",
+  "previousZcodeAsset": "Kim-ZCode-V1.12.zip",
   "changelogs": [
-    { "file": "CHANGELOG.md", "language": "English" },
-    { "file": "CHANGELOG.zh-CN.md", "language": "简体中文" }
+    {
+      "file": "CHANGELOG.md",
+      "language": "English"
+    },
+    {
+      "file": "CHANGELOG.zh-CN.md",
+      "language": "简体中文"
+    }
   ]
 }
