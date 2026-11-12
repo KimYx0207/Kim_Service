@@ -10,7 +10,7 @@ test('all PR changes, including SKILL.md, trigger offline repository validation'
   assert.match(workflow, /^on:\n  pull_request:/m);
   assert.doesNotMatch(workflow, /^\s*(paths|paths-ignore|branches-ignore):/m);
   const platforms = workflow.match(/os: \[([^\]]+)\]/)?.[1].split(',').map(value => value.trim());
-  assert.deepEqual(new Set(platforms), new Set(['ubuntu-latest', 'macos-latest', 'windows-latest']),
+  assert.deepEqual(new Set(platforms), new Set(['ubuntu-latest', 'macos-26-intel', 'windows-latest']),
     'all supported desktop platforms retain the same validation gates');
   for (const command of [
     'node scripts/catalog-automation.mjs check',
