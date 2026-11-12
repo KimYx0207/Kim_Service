@@ -12,10 +12,6 @@ You may know what you want without knowing which numbers a forecast must reconci
 
 **[Open the online task browser](https://kimyx0207.github.io/Kim_Service/?lang=en)** · **[Download V1.13 source and packages](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.13)**
 
-<p align="center">
-  <img src="docs/images/task-browser.en.png?v=V1.13" alt="Kim Service task browser in English, with task search, capability cards, and interactive examples" width="900">
-</p>
-
 ## How it helps you do the work thoroughly
 
 Professional work often gets stuck between the request and the result: inconsistent source data, a conclusion without evidence, a form that only handles valid input, or files that someone else cannot open. Kim Service puts these easily missed steps into each method package, taking the work from checking materials to checking the handoff.
@@ -30,6 +26,12 @@ Financial modeling starts with periods, currency, and units, then connects sales
 - **The Tool connects execution capabilities.** The multi-CLI package can expose locally installed Codex and Gemini through MCP to a compatible client for coding or review, with project-level workflow entries. The current client still controls the working directory and permitted file operations.
 
 Together, the specialist Agent supplies the professional method, Skills support particular steps, the Hook helps express the request, and tools perform the operations. Load the parts relevant to the task. Instructions, references, examples, and check scripts stay with the source, so a result can be traced to the materials and checks behind it.
+
+<p align="center">
+  <img src="docs/images/animated-service-capabilities.en.svg" alt="Animated capability map: a cash-forecast goal leads to a financial-modeling Agent, relevant Skills, optional Hook and Tool configuration, and a request containing the goal, materials, method, and checks" width="900">
+</p>
+
+**Start with the deliverable, then choose the combination this task needs.** For one operating forecast, ask the AI to read the financial-modeling method directly. Add the relevant Skill when you need more detailed stress scenarios. The Hook helps with recurring request preparation; the Tool connects available execution tools. Choose what to install and load based on the task and client. You can start with just the method you need.
 
 <a id="capability-directory"></a>
 
@@ -71,18 +73,24 @@ You can open `docs/start.html` directly in a browser to select tasks offline. Bo
 Start with the synthetic data, then replace it with your own business inputs. This example connects task selection, materials, execution, delivery checks, and the next revision.
 
 <p align="center">
-  <img src="docs/images/intent-to-delivery.svg?v=V1.13" alt="Operating forecast workflow: choose financial modeling, add a goal and sample materials, copy to your AI, then review the model and monthly table" width="900">
+  <img src="docs/images/animated-service-delivery.en.svg" alt="Animated forecast workflow: search, inspect materials and examples, choose a method, calculate in the AI client, open and verify files, then keep the result for the next revision; changed collection assumptions return to calculation" width="900">
 </p>
 
-**Choose the task and describe the goal.** Search for “financial-modeler,” open financial modeling, and select your current AI client. Set the goal to: “Compare base, upside, and downside scenarios for the next 12 months, identify cash-pressure months, and deliver editable inputs, a monthly table, and an explanation.”
+**Step 1: turn a question into a task choice.** Start with “Profit appears to be growing next year. Will we have enough cash?” Search the task browser for “financial-modeler” and open financial modeling. The browser searches task descriptions, inputs, outputs, and existing aliases. Compare each card's required inputs and promised outputs to see whether it fits your question.
 
-**Make the materials available.** For the first attempt, use `agents/financial-modeler/examples/operating-forecast/sample-data.js`. It declares sales volume, prices, costs, opening balances, collection assumptions, and equipment spending. Amounts are in CNY, and all data is synthetic. For your business, replace it with actual statements and assumptions, stating the periods, currency, and missing items. The materials field describes where files are; you still need to make those files accessible to the AI.
+<p align="center">
+  <img src="docs/images/task-browser.en.png?v=V1.13" alt="The actual first-step interface: search Kim Service by task, compare capability cards, and open financial-modeling details" width="900">
+</p>
+
+**Step 2: inspect the example and check your materials.** Task details list the required inputs, outputs, method entry point, and examples. For the first attempt, use `agents/financial-modeler/examples/operating-forecast/sample-data.js`. It declares sales volume, prices, costs, opening balances, collection assumptions, and equipment spending. Amounts are in CNY, and all data is synthetic. For your business, replace it with actual statements and assumptions, stating the periods, currency, and missing items. The materials field describes where files are; give the AI actual access to those files too.
+
+**Step 3: choose the method and give the request to your AI.** Select your current AI client. Set the goal to “Compare base, upside, and downside scenarios for the next 12 months, identify cash-pressure months, and deliver editable inputs, a monthly table, and an explanation.” Add the material locations. The page assembles the entry point, inputs, and output requirements into an editable request. Review it, copy it, and paste it into the client where you opened the repository. Direct reading works for a single task. For repeated use, install the entry through DSH, ZCode, or the supported mechanism described below for your client.
 
 <p align="center">
   <img src="docs/images/task-request.en.png?v=V1.13" alt="Prepared financial-modeling task in English, including the goal, synthetic sample materials, AI client, and editable request" width="900">
 </p>
 
-**Copy the request and ask the AI to follow the complete method.** The page includes the selected entry point and delivery requirements. You can add this to make execution and outputs explicit:
+**Step 4: let the AI follow the method and run the calculations.** It now reads the materials, aligns the data, connects income and cash, and compares scenarios. You can append this to the complete request to make execution and outputs explicit:
 
 ```text
 Read agents/financial-modeler/AGENT.md, its referenced method.json, and the materials needed for this task.
@@ -92,7 +100,7 @@ Run the calculations available in this environment. Deliver editable inputs, res
 List the check results, where each file can be opened, and unfinished items. Record missing data as explicit assumptions.
 ```
 
-**Open the result and check it yourself.** The interactive example below is supplied with the repository to demonstrate this kind of deliverable. Open it online, or open `agents/financial-modeler/examples/operating-forecast/index.html` locally. Change a price, sales volume, or collection assumption; inspect the scenarios and monthly cash curve; then download the inputs, result JSON, and monthly CSV.
+**Step 5: open the result and check it yourself.** The interactive example below is supplied with the repository to demonstrate this kind of deliverable. Open it online, or open `agents/financial-modeler/examples/operating-forecast/index.html` locally. Change a price, sales volume, or collection assumption; inspect the scenarios and monthly cash curve; then download the inputs, result JSON, and monthly CSV.
 
 <p align="center">
   <img src="docs/images/operating-forecast-example.en.png?v=V1.13" alt="12-month operating forecast in English, showing editable assumptions, three scenarios, and monthly cash balances" width="900">
@@ -102,7 +110,9 @@ List the check results, where each file can be opened, and unfinished items. Rec
 
 For an actual delivery, first reconcile the inputs with the source materials. Spot-check one month's opening cash plus receipts minus payments against closing cash, including equipment spending and collection timing. Check which assumptions differ across scenarios. Open the JSON, CSV, and notes from the delivery folder so another person can use them. This example covers operating profit and cash; valuation or a complete three-statement model needs additional work for that task.
 
-**Continue the iteration.** Tell the AI: “Keep the other assumptions. Change same-month collection from 65% to 45%, recalculate all three scenarios, explain which months change, and preserve the previous version.” Each revision uses the same materials, model, and checks, making the reason for a change easier to understand.
+When a check fails, identify the affected step. Fix a path or format when a file cannot open; revisit inputs and formulas when cash does not reconcile; list the relevant assumptions when data is missing. Ask the AI to repair the affected result and repeat the same check. Work supported by sufficient evidence can continue.
+
+**Step 6: retain the result and continue the iteration.** Keep inputs, outputs, explanations, and check records in this project's delivery folder. Record agreed assumptions, unresolved items, and the next step. You can then say: “Keep the other assumptions. Change same-month collection from 65% to 45%, recalculate all three scenarios, explain which months change, and preserve the previous version.” The loop in the diagram represents this revision: change an input, return to calculation, and verify the affected results. Later work uses the same method and actual files.
 
 ### Example two: make a booking page consistent and ready for further development
 
@@ -131,8 +141,14 @@ Each task keeps its own draft. Resume after a refresh; before changing devices, 
 **For several connected tasks, combine it with Meta_Kim.** Turning the booking console into a product involves understanding users and scope, agreeing on a design, building frontend and backend behavior, testing the delivery, and continuing in later sessions. Meta_Kim organizes those steps, assigns work that can run in parallel, retains decisions and progress, and reviews handoffs. Kim Service supplies the professional methods and references for each step; the AI client performs the operations.
 
 <p align="center">
-  <img src="docs/images/service-and-meta.en.svg?v=V1.13" alt="How Kim Service and Meta_Kim work together: the user brings a task, Kim Service supplies methods, the AI executes, and Meta_Kim coordinates, reviews, and continues the work" width="900">
+  <img src="docs/images/animated-service-collaboration.en.svg" alt="Animated booking-product coordination: Meta drafts the system and module PRD, details each module, runs independent page and interface work in parallel, pauses only an interface affected by a new field, then joins and verifies the result" width="900">
 </p>
+
+**Follow one booking project through the diagram.** Two design passes develop the same PRD. The first defines modules such as booking, time slots, and records, along with their shared contracts. The second details each module's inputs, page states, interfaces, and acceptance checks. Meta discovers available methods during research and selects the combination during design: design-system and frontend methods for the page, backend and data methods for the interface. Execution then passes the selected methods and concrete work to the current client's execution capabilities.
+
+Set shared dependencies first, then run independent work in parallel. If a new booking field needs clarification during implementation, the affected interface waits while styles and unrelated error messages continue. Once the field is defined, resume from completed work. Join the page and interface, complete an actual booking, inspect failure cases, and save the decisions, outputs, and next step. The diagram shows that split, local wait, and rejoin.
+
+Service supplies readable professional methods, input guidance, and check criteria. Meta manages task order, method selection, and handoffs. The client performs actual tool calls and concurrent work. After a search match, the workflow still checks whether the method fits the scope, the inputs are accessible, and the needed tools are available before starting the relevant operations.
 
 **First, tell Meta_Kim which Service source to use.** If Meta_Kim's installer has registered a managed Service source, it can use that installation. When you download the two repositories yourself, bind them explicitly; placing them beside each other does not connect them automatically. In the root of the project you actually work on, create or edit `.meta-kim/local.overrides.json`, keep existing fields, and add:
 
