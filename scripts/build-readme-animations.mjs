@@ -89,7 +89,7 @@ function phaseBar(y,phaseTexts,steady) {
   return `<rect x="48" y="${y}" width="864" height="69" rx="18" fill="#eaf0fb"/>${text(480,y+44,steady,'note center steady')}${phaseTexts.map((t,i)=>text(480,y+44,t,`note center phase-copy phase p${i}`)).join('')}`;
 }
 function svg(lang,topic,height,title,sub,body,count=5,duration=24) {
-  return `<?xml version="1.0" encoding="UTF-8"?>\n<svg xmlns="http://www.w3.org/2000/svg" width="960" height="${height}" viewBox="0 0 960 ${height}" role="img" aria-labelledby="title desc" lang="${lang}">\n<title id="title">${esc(title)}</title><desc id="desc">${esc(sub)}. ${lang==='en'?'Main steps and connections stay visible. Animation explains order and state changes; reduced motion displays the complete result.':'主要步骤与连接始终显示；动画解释顺序与状态变化，减少动态效果时显示完整结果。'}</desc>\n${styles(count,duration)}\n<rect width="960" height="${height}" rx="28" fill="#f5f8fc"/>${text(48,54,`KIM SERVICE  /  ${topic}`,'tiny')}${text(48,111,title,'title')}${text(48,157,sub,'sub')}\n${body}\n</svg>\n`;
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<svg xmlns="http://www.w3.org/2000/svg" width="960" height="${height}" viewBox="0 0 960 ${height}" role="img" aria-labelledby="title desc" lang="${lang}">\n<title id="title">${esc(title)}</title><desc id="desc">${esc(sub)}. ${lang==='en'?'Main steps and connections stay visible. Animation explains order and state changes; reduced motion displays the complete result.':'主要步骤与连接始终显示；动画解释顺序与状态变化，减少动态效果时显示完整结果。'}</desc>\n${styles(count,duration)}\n<rect width="960" height="${height}" rx="28" fill="#f5f8fc"/>${text(480,54,`KIM SERVICE  /  ${topic}`,'tiny center')}${text(480,111,title,'title center')}${text(480,157,sub,'sub center')}\n${body}\n</svg>\n`;
 }
 function capabilities(lang) {
   const t=copy[lang].cap;
