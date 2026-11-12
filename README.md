@@ -11,7 +11,7 @@
 **[打开在线任务浏览器](https://kimyx0207.github.io/Kim_Service/?lang=zh-CN)** · [先看两个可操作的成果](#先看两个可以修改的成果) · [下载仓库](https://github.com/KimYx0207/Kim_Service/archive/refs/heads/main.zip)
 
 <p align="center">
-  <img src="docs/images/task-browser.png" alt="Kim Service 中文任务浏览器：搜索想做的事，查看任务卡和可操作的成果示例" width="900">
+  <img src="docs/images/task-browser.png?v=V1.13" alt="Kim Service 中文任务浏览器：搜索想做的事，查看任务卡和可操作的成果示例" width="900">
 </p>
 <p align="center">从“我想做什么”开始，选好方法，再把工作带回自己的 AI 客户端。</p>
 
@@ -22,7 +22,7 @@
 先用仓库自带的合成经营数据跑一遍。你会看到需要准备什么，也能打开一个可修改、可下载的经营预测样板。
 
 <p align="center">
-  <img src="docs/images/intent-to-delivery.zh-CN.svg" alt="经营预测使用流程：选择财务建模，填写目标和样例材料，复制给 AI，查看模型与月表" width="900">
+  <img src="docs/images/intent-to-delivery.zh-CN.svg?v=V1.13" alt="经营预测使用流程：选择财务建模，填写目标和样例材料，复制给 AI，查看模型与月表" width="900">
 </p>
 
 ### 1. 选一项任务
@@ -36,7 +36,7 @@
 第一次体验，把材料指向仓库里的 `agents/financial-modeler/examples/operating-forecast/sample-data.js`。用于自己的业务时，再换成实际的收入、成本、回款与资金安排。
 
 <p align="center">
-  <img src="docs/images/task-request.png" alt="填写好的财务建模任务：目标、合成样例资料、使用环境，以及可编辑和复制的完整请求" width="900">
+  <img src="docs/images/task-request.png?v=V1.13" alt="填写好的财务建模任务：目标、合成样例资料、使用环境，以及可编辑和复制的完整请求" width="900">
 </p>
 <p align="center">页面把入口、材料和交付要求整理好；你还可以在复制前补充自己的要求。</p>
 
@@ -59,7 +59,7 @@
 把销量、价格、成本与回款假设放到同一个模型里，比较三种情景，查看每个月的现金变化。修改一项输入，就能看到结果怎样变化；月表可以下载后在表格软件里继续用。
 
 <p align="center">
-  <img src="docs/images/operating-forecast-example.png" alt="12 个月经营预测成果：可编辑的经营假设、三种情景和月末现金曲线" width="900">
+  <img src="docs/images/operating-forecast-example.png?v=V1.13" alt="12 个月经营预测成果：可编辑的经营假设、三种情景和月末现金曲线" width="900">
 </p>
 
 **[打开经营预测](https://kimyx0207.github.io/Kim_Service/agents/financial-modeler/examples/operating-forecast/index.html?lang=zh-CN)** · [查看模型源码](agents/financial-modeler/examples/operating-forecast/)
@@ -71,7 +71,7 @@
 切换浅深主题、品牌色、字号和信息密度，看表单、按钮与预约列表一起变化。填写一次预约，还能体验输入报错、提交失败后的恢复和新增记录。
 
 <p align="center">
-  <img src="docs/images/design-system-example.png" alt="可编辑的预约台设计系统：主题与密度控制、预约表单和示例预约列表" width="900">
+  <img src="docs/images/design-system-example.png?v=V1.13" alt="可编辑的预约台设计系统：主题与密度控制、预约表单和示例预约列表" width="900">
 </p>
 
 **[打开预约台](https://kimyx0207.github.io/Kim_Service/agents/design-system-designer/examples/service-console/index.html?lang=zh-CN)** · [查看页面源码](agents/design-system-designer/examples/service-console/)
@@ -107,7 +107,7 @@ cd Kim_Service
 **Kim Service 提供具体工作的专业方法；[Meta_Kim](https://github.com/KimYx0207/Meta_Kim)把这些方法放进整个任务的推进过程。**
 
 <p align="center">
-  <img src="docs/images/service-and-meta.zh-CN.svg" alt="Kim Service 与 Meta_Kim 的关系：用户提出任务，Kim Service 提供专业方法，AI 执行，Meta_Kim 组织任务、检查成果并接续工作" width="900">
+  <img src="docs/images/service-and-meta.zh-CN.svg?v=V1.13" alt="Kim Service 与 Meta_Kim 的关系：用户提出任务，Kim Service 提供专业方法，AI 执行，Meta_Kim 组织任务、检查成果并接续工作" width="900">
 </p>
 
 比如把预约台做成一个产品，需要先明确方案，再设计页面、开发功能、检查交付。Meta_Kim 可以选择和衔接这些工作，把前一步的项目上下文和成果带给下一步。Kim Service 为每一项工作提供相应的方法与资料。

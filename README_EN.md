@@ -11,7 +11,7 @@ Build a business forecast, design a set of screens, review a store, or turn sour
 **[Open the online task browser](https://kimyx0207.github.io/Kim_Service/?lang=en)** · [Try two editable examples](#try-two-editable-examples) · [Download the repository](https://github.com/KimYx0207/Kim_Service/archive/refs/heads/main.zip)
 
 <p align="center">
-  <img src="docs/images/task-browser.en.png" alt="Kim Service task browser in English, with task search, capability cards, and interactive examples" width="900">
+  <img src="docs/images/task-browser.en.png?v=V1.13" alt="Kim Service task browser in English, with task search, capability cards, and interactive examples" width="900">
 </p>
 <p align="center">Start with the job you need done, choose a method, and take the request to your AI client.</p>
 
@@ -22,7 +22,7 @@ Build a business forecast, design a set of screens, review a store, or turn sour
 Start with the repository's synthetic business data. You can see what the task needs and explore an operating forecast that you can change and download.
 
 <p align="center">
-  <img src="docs/images/intent-to-delivery.svg" alt="Operating forecast workflow: choose financial modeling, add a goal and sample materials, copy to your AI, then review the model and monthly table" width="900">
+  <img src="docs/images/intent-to-delivery.svg?v=V1.13" alt="Operating forecast workflow: choose financial modeling, add a goal and sample materials, copy to your AI, then review the model and monthly table" width="900">
 </p>
 
 ### 1. Choose a task
@@ -36,7 +36,7 @@ A useful first goal is: “Compare base, upside, and downside scenarios, explain
 For the first run, point to `agents/financial-modeler/examples/operating-forecast/sample-data.js` in the repository. For your own business, replace it with actual revenue, costs, collection assumptions, and funding plans.
 
 <p align="center">
-  <img src="docs/images/task-request.en.png" alt="Prepared financial-modeling task in English, including the goal, synthetic sample materials, AI client, and editable request" width="900">
+  <img src="docs/images/task-request.en.png?v=V1.13" alt="Prepared financial-modeling task in English, including the goal, synthetic sample materials, AI client, and editable request" width="900">
 </p>
 <p align="center">The browser assembles the entry point, materials, and deliverables. Add your own requirements before copying.</p>
 
@@ -59,7 +59,7 @@ Both examples use synthetic data. Open them in a browser, or download their sour
 Bring sales, prices, costs, and collection assumptions into one model. Compare three scenarios and follow the cash balance month by month. Change an input to see its effect, then download a table you can use in a spreadsheet.
 
 <p align="center">
-  <img src="docs/images/operating-forecast-example.en.png" alt="12-month operating forecast in English, showing editable assumptions, three scenarios, and monthly cash balances" width="900">
+  <img src="docs/images/operating-forecast-example.en.png?v=V1.13" alt="12-month operating forecast in English, showing editable assumptions, three scenarios, and monthly cash balances" width="900">
 </p>
 
 **[Open the operating forecast](https://kimyx0207.github.io/Kim_Service/agents/financial-modeler/examples/operating-forecast/index.html?lang=en)** · [Explore the model source](agents/financial-modeler/examples/operating-forecast/)
@@ -71,7 +71,7 @@ Take away: input and result JSON, a monthly CSV, and the model source to adapt.
 Switch theme, brand color, type size, and density to see the form, buttons, and booking list change together. Fill in a booking to try validation, recovery after a failed submission, and new records.
 
 <p align="center">
-  <img src="docs/images/design-system-example.en.png" alt="Editable booking design system in English, with theme and density controls, a booking form, and sample records" width="900">
+  <img src="docs/images/design-system-example.en.png?v=V1.13" alt="Editable booking design system in English, with theme and density controls, a booking form, and sample records" width="900">
 </p>
 
 **[Open the booking console](https://kimyx0207.github.io/Kim_Service/agents/design-system-designer/examples/service-console/index.html?lang=en)** · [Explore the page source](agents/design-system-designer/examples/service-console/)
@@ -107,7 +107,7 @@ Follow each package's README to install or update packages you use regularly. DS
 **Kim Service supplies specialist methods. [Meta_Kim](https://github.com/KimYx0207/Meta_Kim) coordinates how those methods fit into the overall task.**
 
 <p align="center">
-  <img src="docs/images/service-and-meta.en.svg" alt="How Kim Service and Meta_Kim work together: the user brings a task, Kim Service supplies methods, the AI executes, and Meta_Kim coordinates, reviews, and continues the work" width="900">
+  <img src="docs/images/service-and-meta.en.svg?v=V1.13" alt="How Kim Service and Meta_Kim work together: the user brings a task, Kim Service supplies methods, the AI executes, and Meta_Kim coordinates, reviews, and continues the work" width="900">
 </p>
 
 Turning the booking console into a product involves agreeing on a plan, designing screens, building features, and checking the result. Meta_Kim can connect those steps and carry the project context and earlier outputs into the next one. Kim Service supplies the methods and references for each job.
