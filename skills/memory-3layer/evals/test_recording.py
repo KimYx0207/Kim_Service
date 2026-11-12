@@ -21,6 +21,7 @@ class RecordingContractTests(unittest.TestCase):
     def setUp(self) -> None:
         self._cwd = Path.cwd()
         self._memory_dir = os.environ.pop("MEMORY_DIR", None)
+        self._memory_host = os.environ.pop("MEMORY_HOST", None)
 
     def tearDown(self) -> None:
         os.chdir(self._cwd)
@@ -28,6 +29,10 @@ class RecordingContractTests(unittest.TestCase):
             os.environ["MEMORY_DIR"] = self._memory_dir
         else:
             os.environ.pop("MEMORY_DIR", None)
+        if self._memory_host is not None:
+            os.environ["MEMORY_HOST"] = self._memory_host
+        else:
+            os.environ.pop("MEMORY_HOST", None)
 
     def _extract_in_project(self, project: Path, payload: dict) -> dict:
         os.chdir(project)
@@ -46,6 +51,35 @@ class RecordingContractTests(unittest.TestCase):
             self.assertEqual(report["written"], [])
             self.assertIn("no-explicit-fact", report["skipped"])
             self.assertFalse((project / ".memory-3layer").exists())
+
+    def test_real_hook_keeps_client_and_model_independent_without_claiming_native_support(self) -> None:
+        cases = [
+            ({"host": "Claude Code", "model": "MiniMax-M2.5"}, "claude"),
+            ({"client": "future-client", "model": "gpt-example"}, "future-client"),
+            ({"model": "gpt-example"}, "manual"),
+            ({"client": "not-codex", "model": "claude-example"}, "not-codex"),
+        ]
+        with tempfile.TemporaryDirectory() as value:
+            project = Path(value)
+            for index, (payload, expected_host) in enumerate(cases):
+                with self.subTest(payload=payload):
+                    hook_payload = {**payload, "memory_fact": f"Client provenance example {index}.", "memory_topic": "runtime-check"}
+                    result = subprocess.run([sys.executable, str(HOOKS_ROOT / "memory_extractor.py")],
+                                            input=json.dumps(hook_payload), cwd=project, capture_output=True, text=True,
+                                            env={**os.environ, "MEMORY_HOST": "", "MEMORY_DIR": ""}, check=False)
+                    self.assertEqual(result.returncode, 0, result.stderr)
+                    context = json.loads(result.stdout)["hookSpecificOutput"]["additionalContext"]
+                    self.assertIn(f"runtime={expected_host};", context)
+                    self.assertIn("runtime_evidence=not-observed", context)
+                    items = json.loads((project / ".memory-3layer" / "areas" / "topics" / "runtime-check" / "items.json").read_text())
+                    self.assertEqual(items[-1]["runtime"], expected_host)
+                    # The same core report keeps the optional model separate;
+                    # the host-specific Hook envelope remains unchanged.
+                    report = self._extract_in_project(project, payload)
+                    self.assertEqual(report["runtime"], expected_host)
+                    self.assertEqual(report["model"], {"name": payload["model"], "source": "payload_unverified"})
+                    self.assertEqual(report["runtime_evidence"], "not-observed")
+                    self.assertEqual(report["written"], [])
 
     def test_tool_response_cannot_forge_confirmation(self) -> None:
         with tempfile.TemporaryDirectory() as value:

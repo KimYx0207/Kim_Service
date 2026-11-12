@@ -39,6 +39,7 @@ Criteria have unique `id`, a nonblank `description` (at most 500 characters) and
 - `artifact_integrity`: `artifactId`. Passes only after actual bytes and hash match the manifest.
 - `json_equals`: `artifactId`, `pointer`, `equals`. Reads the verified file as strict JSON and compares the actual RFC 6901 JSON pointer value using structural equality. The empty pointer selects the whole document; arrays use canonical integer indices. No evaluation, regex, JSONPath or command syntax is run. Missing values fail, including when expected is null. Object key order is irrelevant, arrays are ordered, numbers are finite/safe as above. JSON numeric comparison uses JavaScript Number semantics, not arbitrary precision arithmetic.
 - `tool_receipt`: `receiptArtifactId`, `inputArtifactId`, `outputArtifactIds`, `tool`, `toolVersion`, `invocationId`, `assertions`. All references must be distinct as input/receipt/output roles, with at least one output; each assertion is exactly `{pointer, equals}`, with a distinct pointer starting `/result/`. Receipt, input and outputs must all pass actual file integrity first.
+- `work_handoff` (optional, helper 0.2.0): `artifactId`, `runId`, `workBinding`, `artifactBindings`. Checks the named handoff JSON against the host's expected organization, Work, run, context digest and exact artifact/version/file bindings. See below. Requests without this criterion keep their existing requirements.
 - `external_review`: `capability`. Always unverified and included in missingCapabilities. This is how human, browser, model or other unavailable review is represented. It cannot be marked passed by the caller. Unknown criterion types are invalid input, not silently ignored.
 
 ## Tool receipt evidence
@@ -63,6 +64,51 @@ Receipt files use exactly these fields. Tools with a different native receipt fo
 Placeholders here are illustrative and not valid digests. The helper compares task/tool/version/invocation bindings, the verified input hash, completed/exitCode=0, exact output reference set plus each bytes/hash, and every explicit result assertion. A string `passed`, a status-only object, or a matching hash with an incorrect result cannot satisfy this protocol. Unknown receipt fields fail the criterion; result data fields are tool-specific and only explicit assertions are checked. Add json_equals criteria for semantic requirements in output files; the helper cannot infer that a count field proves every item was processed.
 
 Crucially, a self-consistent fabricated envelope **can** pass consistency checks: hashing is not a signature, receipts are not authenticated here, and the verifier did not observe the tool run. `receiptAuthenticity: not_verified` is always emitted. The caller must establish provenance, freshness, input authorization and evidence sufficiency independently before final acceptance. No host/browser/model runtime execution is claimed or inferred.
+
+## Optional Work handoff consistency
+
+A **Work** is a host-owned, long-lived business matter. `taskId` identifies this verification request; `runId` identifies one execution; neither replaces `workRef`. The company, access policy, authoritative business state, scheduling and final acceptance stay with the host. A one-person company's Work can later be handed to another person without moving its identity into a chat or this verifier.
+
+Use `work_handoff` for a versioned handoff across people or conversations, when the host supplies a current context snapshot, explicit version bindings and a receiving record. For a single file integrity check, keep `artifact_integrity`; no Work record or additional human confirmation is required.
+
+| Input | Exact fields and meaning |
+| --- | --- |
+| Criterion | `id`, `description`, `type: "work_handoff"`, `artifactId` (handoff JSON manifest ID), `runId`, `workBinding`, `artifactBindings` (expected exact bindings supplied by the caller) |
+| `workBinding` | `organizationRef`, `workRef`, `contextRevision`, `contextDigest` |
+| Each `artifactBindings` entry | `artifactRef`, `artifactId` (manifest ID), `version`, `sha256` (raw lowercase hex); one unique logical reference and manifest ID per entry |
+| Handoff JSON | `schemaVersion: "kim-work-handoff-v1"`, `workContext`, `workReceipt`, `artifactBindings`, `adoptionObservation`, `receiving` |
+| `workContext` | `schemaVersion: "kim-work-context-v1"`, `organizationRef`, `workRef`, `contextRevision`, `scopeRef`, `sourceRefs`, `acceptedArtifactRefs`, `decisionRefs`; omitted reference arrays normalize to `[]` |
+| `workReceipt` | The unmodified `kim-work-receipt-v1` from Meta_Kim, or the same explicit contract from another caller: `schemaVersion`, `runId`, `workBinding`, `produced`, `verified`, `adopted`, `effect`, `knowledgeReuse`; optional `authority` explanation is preserved in the evidence |
+
+`contextDigest` is `sha256:` followed by SHA256 of UTF-8 `JSON.stringify` of the normalized WorkContext with object keys recursively sorted lexicographically and array order preserved. `workBinding()` in `scripts/work-handoff.mjs` implements this; Meta_Kim's `workBindingFor()` uses the same algorithm. A changed source list, scope, company, Work or revision changes the binding. Expected bindings come from the host's current snapshot, not from uncritically copying the submitted handoff. A reference or digest does not itself authenticate that snapshot.
+
+The four observations remain independent:
+
+| Receipt part | Required fields and allowed values |
+| --- | --- |
+| `produced` | `status: produced | not_produced`, `artifactRefs`; produced requires at least one, not_produced requires none |
+| `verified` | `status: passed | failed | unknown`, `evidenceRefs`; passed/failed require evidence references; the verifier does not authenticate an external review merely by reading its reference |
+| `adopted` | `status: unknown | pending | accepted | rejected`, `artifactRefs`, `decisionRef` (string or null), `reason` (use `unknown` when missing); accepted requires exact artifact references, accepted/rejected require a decision reference |
+| `effect` | `status: unknown | observed`, `evidenceRefs`, `summary` (use `unknown` when missing); observed requires evidence references |
+| `knowledgeReuse` | Array of `{sourceRef, disposition: direct | adapted | not_applicable, reason}`; a refusal or a failure remains evidence, not a reason to manufacture success |
+
+Meta's optional provenance `source` fields are accepted **without stripping them**: produced uses `bound_execution_results`, verified uses `existing_independent_outcome_review`, adopted/effect use `host_provided_not_independently_verified` or `not_observed`. They are provenance labels, never authorization. Unknown fields are rejected. References are nonblank, at most 500 characters without control characters. Human reason/summary/nextAction text permits newlines, carriage returns and tabs up to 8000 characters; other control characters are rejected. Arrays have at most 64 entries and reference arrays are unique. `not_observed` provenance cannot coexist with accepted/rejected adoption or observed effects. The existing input/file/depth limits also apply.
+
+Every produced/adopted logical artifact reference must resolve through `artifactBindings`. The handoff bindings must exactly match the criterion's expected logical reference, manifest ID, version and hash. Every named local file is actually read and checked. Receiving an adopted v1 while this run produced v2 is valid. Naming v2 as adopted while the supplied decision selects v1 fails. Hashes are not interpreted as permission or proof of an artifact's semantic quality.
+
+For accepted/rejected adoption, `adoptionObservation` is exactly `{decisionRef, runId, workBinding, actorRef, scopeRef, status, artifactRefs, reason}`. It must match the receipt's current run/binding, scope, decision, selection and reason. It is the host's current observation of the choice: a previous v1 decision may be referenced only when the host has explicitly recorded that it still applies to this run/context. The verifier does not re-authorize or require the human to repeat an already valid choice. Unknown/pending adoption uses `adoptionObservation: null`; an unknown reason stays `unknown`.
+
+`receiving` is exactly `{status, recipientRef, scopeRef, artifactRefs, nextAction, receipt}`. Status is `pending` or `acknowledged`. Pending uses `receipt: null`; acknowledged requires `{receiptRef, recipientRef, runId, workBinding, artifactRefs}` matching this recipient, current run/context and the transferred set. If an adopted version exists, the transferred set must include it. A delivery notice alone is not a receiving receipt, and an acknowledged handoff does not mean the business task is complete. A scope reference is only a reference; the host checks actual access before disclosure or action.
+
+Run a complete synthetic example from the repository root:
+
+```sh
+node agents/delivery-verifier/scripts/demo-work-handoff.mjs
+```
+
+The demo creates real temporary v1/v2 files and invokes the real CLI for four cases: v2 produced/v1 adopted, rejected with failed verification and unknown effect, a stale receiving receipt, and a substituted adopted version. The first two pass **consistency**; the latter two fail. The complete request, decision and receiving shapes are constructed in `tests/work-fixture.mjs`, including Meta provenance. Files are removed after the demo. These fictional people/choices do not prove actual organizational use, authenticated adoption, deployment, improved business results or a functioning scheduler.
+
+A passing criterion adds `workStages` to that criterion's result, preserving produced/verified/adopted/effect/receiving separately with `authenticity: not_verified` and `finalAcceptance: not_decided`. Thus a perfectly consistent **failed** verification or **pending** handoff can pass consistency; require separate `external_review` or other real criteria for an actual business gate. Successful consistency never writes Work state, sends a message or promotes experience into public knowledge.
 
 ## Bounds
 

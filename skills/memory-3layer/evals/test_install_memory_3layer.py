@@ -24,6 +24,7 @@ sys.path.insert(0, str(SCRIPTS_ROOT))
 from install_memory_3layer import (  # noqa: E402
     HOOK_FILES,
     LEGACY_OWNED_FILES,
+    LAUNCHER,
     _file_map,
     _is_managed_handler,
     install,
@@ -75,6 +76,20 @@ class InstallerContractTests(unittest.TestCase):
             "codex",
         )
         self.assertEqual(resolve_platform("auto", lambda name: f"/{name}"), "both")
+
+    def test_installed_adapter_binds_client_independently_of_the_model(self) -> None:
+        install(self.project, "claude")
+        config = json.loads((self.project / ".claude" / "settings.json").read_text(encoding="utf-8"))
+        self.assertTrue(all(item["command"].endswith(" claude") for item in managed_handlers(config, "claude")))
+        script = ".claude/hooks/memory-3layer/memory_extractor.py"
+        result = subprocess.run([sys.executable, "-c", LAUNCHER, script, "claude"],
+                                input=json.dumps({"model": "MiniMax-M2.5", "memory_fact": "This project keeps client and model separate."}), cwd=self.project,
+                                capture_output=True, text=True, encoding="utf-8", check=False,
+                                env={**os.environ, "MEMORY_HOST": ""})
+        self.assertEqual(result.returncode, 0, result.stderr)
+        context = json.loads(result.stdout)["hookSpecificOutput"]["additionalContext"]
+        self.assertIn("runtime=claude;", context)
+        self.assertIn("runtime_evidence=not-observed", context)
 
     def test_cli_requires_project_dir_before_any_write(self) -> None:
         installer = SCRIPTS_ROOT / "install_memory_3layer.py"

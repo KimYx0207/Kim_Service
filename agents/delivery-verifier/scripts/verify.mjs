@@ -5,10 +5,11 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { isDeepStrictEqual } from 'node:util';
 import { pathToFileURL } from 'node:url';
+import { WorkHandoffError, validateWorkCriterion, inspectWorkHandoff } from './work-handoff.mjs';
 
 export const LIMITS = Object.freeze({ inputBytes: 262144, fileBytes: 8388608, totalBytes: 33554432,
   jsonBytes: 1048576, artifacts: 64, criteria: 128, assertions: 32, depth: 32, nodes: 50000 });
-const VERSION = '0.1.0';
+const VERSION = '0.2.0';
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 class Rejected extends Error { constructor(code) { super(code); this.code = code; } }
 const reject = code => { throw new Rejected(code); };
@@ -140,6 +141,8 @@ function validate(input) {
         requireThat(assertion.pointer.startsWith('/result/'));
       }
       requireThat(unique(criterion.assertions.map(a => a.pointer)));
+    } else if (criterion.type === 'work_handoff') {
+      validateWorkCriterion(criterion, ids);
     } else if (criterion.type === 'external_review') {
       keys(criterion, [...base, 'capability']); requireThat(id(criterion.capability));
     } else reject('unsupported_criterion');
@@ -211,7 +214,7 @@ function baseResult(taskId = null) {
     receiptAuthenticity: 'not_verified', networkUsed: false, filesModified: false };
 }
 function safeCode(error) {
-  if (error instanceof Rejected) return error.code;
+  if (error instanceof Rejected || error instanceof WorkHandoffError) return error.code;
   if (error?.code === 'ENOENT') return 'artifact_missing';
   if (error?.code === 'EACCES' || error?.code === 'EPERM') return 'artifact_unreadable';
   if (error?.code === 'ELOOP' || error?.code === 'ENOTDIR') return 'unsafe_file';
@@ -279,7 +282,8 @@ export function verify(bytes, artifactRoot) {
       result.missingCapabilities.push({ criterionId: criterion.id, capability: criterion.capability });
     } else {
       row.evidenceArtifactIds = criterion.type === 'tool_receipt'
-        ? [criterion.receiptArtifactId, criterion.inputArtifactId, ...criterion.outputArtifactIds] : [criterion.artifactId];
+        ? [criterion.receiptArtifactId, criterion.inputArtifactId, ...criterion.outputArtifactIds]
+        : criterion.type === 'work_handoff' ? [criterion.artifactId, ...criterion.artifactBindings.map(item => item.artifactId)] : [criterion.artifactId];
       try {
         requireThat(row.evidenceArtifactIds.every(id => good.has(id)), 'artifact_not_verified');
         if (criterion.type === 'json_equals') {
@@ -287,6 +291,8 @@ export function verify(bytes, artifactRoot) {
           requireThat(actual.found && isDeepStrictEqual(actual.value, criterion.equals), 'json_assertion_mismatch');
         } else if (criterion.type === 'tool_receipt') {
           inspectReceipt(parseStrict(evidence.get(criterion.receiptArtifactId), LIMITS.jsonBytes), criterion, input, artifactMap);
+        } else if (criterion.type === 'work_handoff') {
+          row.workStages = inspectWorkHandoff(parseStrict(evidence.get(criterion.artifactId), LIMITS.jsonBytes), criterion, artifactMap);
         }
         row.status = 'passed';
       } catch (error) { row.code = safeCode(error); result.failures.push({ target: criterion.id, code: row.code }); }

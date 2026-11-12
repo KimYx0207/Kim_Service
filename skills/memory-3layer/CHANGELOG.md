@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.0 - 2026-11-12
+
+- Stop inferring clients from model names; bind supported adapters explicitly and report optional model provenance independently. Unknown clients retain manual-core and unverified-runtime boundaries.
+- Extend existing governance proposals with company-owned Work evidence, applicability, expiry and reuse feedback.
+- Keep private organizational candidates internal and require deidentification and validation before public method publication; storage schema and loaders are unchanged.
+
 ## 1.1.0 - 2026-11-11
 
 - 为全部 5 项现有能力补充具体诊断、决策、逐字段验收、所需证据与不可抵消的阻断项。

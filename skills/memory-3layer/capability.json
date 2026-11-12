@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "memory-3layer",
   "componentType": "skill",
-  "componentVersion": "1.1.0",
+  "componentVersion": "1.2.0",
   "entrypoint": "SKILL.md",
   "capabilities": [
     {
@@ -126,7 +126,8 @@
             "type": "string"
           },
           "runtime": {
-            "type": "string"
+            "type": "string",
+            "description": "明确的适配器/宿主声明来源标签；无声明为 manual，不从模型名推导客户端或认证原生运行。"
           },
           "loaded": {
             "type": "object"
@@ -148,6 +149,10 @@
           },
           "error": {
             "type": "string"
+          },
+          "model": {
+            "type": "object",
+            "description": "可选模型来源信息：name 为载荷自报名称或 null，source 为 payload_unverified / not_provided；不用于客户端识别、权限或路由。"
           }
         },
         "required": [

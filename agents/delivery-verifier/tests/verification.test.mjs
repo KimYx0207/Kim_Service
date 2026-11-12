@@ -5,6 +5,7 @@ import test from 'node:test';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { fixture, digest } from './fixture.mjs';
+import { workFixture } from './work-fixture.mjs';
 import { LIMITS, parseStrict, verify } from '../scripts/verify.mjs';
 
 const script = fileURLToPath(new URL('../scripts/verify.mjs', import.meta.url));
@@ -17,7 +18,7 @@ function run(f, input = f.request, args = ['--artifact-root', f.root, '--input-j
   assert.ifError(child.error); assert.equal(child.stderr, '');
   const output = JSON.parse(child.stdout);
   assert.equal(child.status, { completed: 0, partial: 1, blocked: 2 }[output.status]);
-  assert.equal(output.schemaVersion, 1); assert.equal(output.tool, 'delivery-verify'); assert.equal(output.toolVersion, '0.1.0');
+  assert.equal(output.schemaVersion, 1); assert.equal(output.tool, 'delivery-verify'); assert.equal(output.toolVersion, '0.2.0');
   assert.equal(output.verificationScope, 'local_manifest_and_evidence_consistency');
   assert.equal(output.networkUsed, false); assert.equal(output.filesModified, false);
   assert.equal(output.receiptAuthenticity, 'not_verified');
@@ -31,6 +32,83 @@ function run(f, input = f.request, args = ['--artifact-root', f.root, '--input-j
 function using(callback) { const f = fixture(); try { return callback(f); } finally { f.cleanup(); } }
 const receiptWrite = f => f.put('receipt', 'receipt.json', f.receipt);
 const code = (output, expected) => assert.ok(output.failures.some(item => item.code === expected), JSON.stringify(output.failures));
+
+posixTest('full Meta-compatible Work receipt preserves provenance and old-version adoption independently of a new output', () => {
+  const f = workFixture();
+  try {
+    const before = fs.readFileSync(path.join(f.root, 'handoff.json'));
+    const output = run(f);
+    assert.equal(output.status, 'completed');
+    assert.deepEqual(output.criterionResults[0].workStages, { produced: 'produced', verified: 'passed', adopted: 'accepted',
+      effect: 'unknown', receiving: 'acknowledged', authenticity: 'not_verified', finalAcceptance: 'not_decided' });
+    assert.deepEqual(fs.readFileSync(path.join(f.root, 'handoff.json')), before);
+    assert.deepEqual(f.handoff.workReceipt.adopted.artifactRefs, ['artifact:course-v1']);
+    assert.deepEqual(f.handoff.workReceipt.produced.artifactRefs, ['artifact:course-v2']);
+    assert.equal(f.handoff.workReceipt.knowledgeReuse[0].disposition, 'not_applicable');
+    f.handoff.workReceipt.adopted.reason = '先沿用已经采用的旧版。\n新稿需完成本次课程目标核对；无需再次批准旧决定。';
+    f.handoff.adoptionObservation.reason = f.handoff.workReceipt.adopted.reason;
+    f.save(); assert.equal(run(f).status, 'completed', 'multiline human reasons are accepted');
+  } finally { f.cleanup(); }
+});
+
+posixTest('unknown, pending, rejected, failed and absent output are valid observations without implied completion', () => {
+  const f = workFixture();
+  try {
+    for (const status of ['unknown', 'pending', 'rejected']) {
+      f.handoff.workReceipt.adopted.status = status;
+      f.handoff.workReceipt.adopted.reason = 'unknown';
+      f.handoff.workReceipt.adopted.artifactRefs = [];
+      f.handoff.workReceipt.verified.status = 'failed';
+      f.handoff.workReceipt.produced = { status: 'not_produced', artifactRefs: [] };
+      f.handoff.receiving.status = 'pending'; f.handoff.receiving.receipt = null;
+      if (status === 'rejected') {
+        f.handoff.adoptionObservation = { decisionRef: f.handoff.workReceipt.adopted.decisionRef,
+          runId: f.handoff.workReceipt.runId, workBinding: f.handoff.workReceipt.workBinding,
+          actorRef: 'person:owner', scopeRef: f.handoff.workContext.scopeRef, status, artifactRefs: [], reason: 'unknown' };
+      } else f.handoff.adoptionObservation = null;
+      f.save();
+      const output = run(f);
+      assert.equal(output.criterionResults[0].status, 'passed', 'consistency pass is not business success');
+      assert.equal(output.criterionResults[0].workStages.adopted, status);
+      assert.equal(output.criterionResults[0].workStages.receiving, 'pending');
+      assert.equal(output.handoff.finalAcceptance, 'not_decided');
+    }
+  } finally { f.cleanup(); }
+});
+
+posixTest('Work, organization, revision, run, exact artifact version, adoption and receiving mismatches fail', () => {
+  const mutations = [
+    f => { f.handoff.workContext.organizationRef = 'org:another'; },
+    f => { f.handoff.workContext.workRef = 'work:another'; },
+    f => { f.handoff.workContext.sourceRefs.push('source:new'); },
+    f => { f.handoff.workReceipt.runId = 'older-run'; },
+    f => { f.handoff.workReceipt.workBinding = { ...f.handoff.workReceipt.workBinding, contextRevision: 'revision:1' }; },
+    f => { f.handoff.artifactBindings[0].version = '2'; },
+    f => { f.handoff.artifactBindings[0].artifactId = 'course-v2'; },
+    f => { f.handoff.artifactBindings[0].sha256 = f.handoff.artifactBindings[1].sha256; },
+    f => { f.handoff.workReceipt.adopted.artifactRefs = ['artifact:course-v2']; },
+    f => { f.handoff.workReceipt.adopted.artifactRefs = ['artifact:absent']; },
+    f => { f.handoff.adoptionObservation = null; },
+    f => { f.handoff.adoptionObservation.scopeRef = 'scope:another'; },
+    f => { f.handoff.adoptionObservation.runId = 'older-run'; },
+    f => { f.handoff.receiving.receipt = null; },
+    f => { f.handoff.receiving.receipt.workBinding = { ...f.handoff.receiving.receipt.workBinding, contextRevision: 'revision:1' }; },
+    f => { f.handoff.receiving.receipt.recipientRef = 'person:another'; },
+    f => { f.handoff.receiving.receipt.artifactRefs = ['artifact:course-v2']; },
+    f => { f.handoff.receiving.artifactRefs = ['artifact:course-v2']; f.handoff.receiving.receipt.artifactRefs = ['artifact:course-v2']; },
+    f => { f.handoff.receiving.receipt.runId = 'older-run'; },
+    f => { f.handoff.workReceipt.effect.status = 'observed'; },
+    f => { f.handoff.workReceipt.adopted.source = 'not_observed'; },
+    f => { f.handoff.workReceipt.effect.status = 'observed'; f.handoff.workReceipt.effect.evidenceRefs = ['metric:sample']; },
+    f => { f.handoff.approved = true; }
+  ];
+  for (const mutation of mutations) {
+    const f = workFixture();
+    try { mutation(f); f.save(); const output = run(f);
+      assert.equal(output.criterionResults[0].status, 'failed'); assert.equal(output.status, 'partial');
+    } finally { f.cleanup(); }
+  }
+});
 
 posixTest('real files pass bytes/hash, output JSON and individually bound receipt checks without writes', () => using(f => {
   const before = f.request.artifacts.map(item => fs.statSync(path.join(f.root, item.path), { bigint: true }));

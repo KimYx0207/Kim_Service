@@ -63,3 +63,59 @@ next: <one concrete next action>
 ```
 
 写入脚本不能鉴权真实宿主，因此自身始终返回 `runtime_evidence: not-observed`。Claude/Codex 的真实 Hook smoke 必须作为外部独立证据报告；在此之前禁止使用“自动记忆已经生效”之类措辞。
+
+## 公司经验候选：关联事项，按适用条件复用
+
+公司只有一个操作人时，工作产物仍可以是公司资产；将来多人接手时，需要保留同一宿主 Work 和来源范围。组织范围、个人偏好与敏感决策按宿主授权连通，不能因同公司或当前只有一人就全部共享。本包没有身份/权限引擎，scopeRef、目录名或一条 memory_fact 都不授予访问许可。
+
+以下结构写在 `memory-3layer-govern-long-term` 的 proposals 中，或 Layer 2 的经授权审查记录里；reviewScope 沿用文字字段定位审查范围与 WorkContext 的授权材料来源，review 沿用对象字段记录审查结论。**不是向 items.json 新增字段或创建第二份 Work 数据库**。现有 Python loader 仍只按原有状态/日期/预算加载，不会自动理解适用条件、拒用原因或执行夜间蒸馏。实际检索后由调用方按下列字段复查，并回读原始证据。
+
+```json
+{
+  "candidateRef": "candidate:course-channel-check",
+  "workContext": {
+    "schemaVersion": "kim-work-context-v1",
+    "organizationRef": "org:synthetic-company",
+    "workRef": "work:course-launch",
+    "contextRevision": "revision:2",
+    "scopeRef": "scope:internal-course-team",
+    "sourceRefs": ["source:brief-v1"],
+    "acceptedArtifactRefs": ["artifact:course-v1"],
+    "decisionRefs": ["decision:retain-v1"]
+  },
+  "runRef": "synthetic-run-2",
+  "artifactRefs": ["artifact:course-v1", "artifact:course-v2"],
+  "observations": {
+    "produced": "v2",
+    "verified": "技术检查通过；来源 review:synthetic-v2",
+    "adopted": "仍采用 v1；当前宿主观察引用历史 decision:retain-v1",
+    "effect": "unknown"
+  },
+  "reason": "unknown",
+  "claim": "候选：发布前核对素材是否适用于当前渠道。",
+  "applicableWhen": ["同渠道、同类素材、规则仍有效"],
+  "notApplicableWhen": ["渠道不同", "规则已变更"],
+  "reviewAfter": "下一次同类任务复用时",
+  "expiresWhen": ["来源被替代", "新反例推翻条件"],
+  "supersedesRef": null,
+  "visibility": "company_internal",
+  "reuseFeedback": [{
+    "targetWorkRef": "work:second-course",
+    "sourceRef": "candidate:course-channel-check",
+    "disposition": "not_applicable",
+    "reason": "本次渠道不同，未采用这条经验。",
+    "resultEvidenceRefs": [],
+    "effect": "unknown"
+  }]
+}
+```
+
+这是完整合成候选，尚未形成 active 长期事实。`accepted` 的产物可提供正向经验依据，失败/拒用也可支持负向教训；两者都需要真实理由、适用条件和证据才能升为可靠规则。拒用原因未知时保留未知，不能编成成功方法。不要为了“只收采用经验”删掉失败、不适用或过期记录。
+
+每次复用留 direct/adapted/not_applicable、目标事项、当时条件、改动理由和实际结果来源；“检索到”与“用过”不同，“用过”与“有效”不同。过期/反例先形成复查提案；沿用已有具体确认，尚无具体批准才放 pendingConfirmation，不偷偷改 active/superseded。历史记录保留新旧替代链。
+
+公司私有候选先留公司授权范围；向 Kim_Service 等公共仓库准备方法时，先移除客户/个人/商业秘密，抽出可复用条件，保留可公开的独立正反验证，再按已有发布授权处理。只复制一份文件、改成通用标题或脱掉人名不足以证明可公开。此处不自动提交、发布、跨组织共享或设置凌晨任务。
+
+## 模型独立于运行来源
+
+追加回执中的 runtime 是明确声明的客户端来源，model 是独立的可选自报信息，不能相互推导；原生触发仍需外部观察。模型名不进入事实来源判定、权限选择、记忆根目录或适配器路由。公司 Work 与记忆数据继续使用当前宿主的单一来源，切换客户端/模型只调整运行绑定，不复制业务状态。

@@ -11,16 +11,18 @@ Agent 只有 Read 权限；选人、授权、锁、流程与最终接受属于�
 node tests/contract.test.mjs
 node tests/verification.test.mjs
 node scripts/demo.mjs
+node scripts/demo-work-handoff.mjs
 node scripts/verify.mjs --artifact-root /absolute/authorized/artifacts --input-json - < request.json
 ```
 
-前三条可独立运行。demo 只在自己新建的临时目录写入虚构材料，结束自动清理；生产 helper 只读。
+前四条可独立运行。demo 只在自己新建的临时目录写入虚构材料，结束自动清理；生产 helper 只读。
 最后一条是接口示意，目录必须由宿主按本次授权明确绑定，不能直接执行示例占位路径。
 验收输入与回执格式、资源上限、退出码详见 [delivery API](docs/delivery-api.md)。
 
 ## 结果与限制
 
 - 实读 manifest 文件并核对 bytes/SHA256，再逐项检查 JSON 值或绑定工具回执
+- 可选 work_handoff 核 Work/context/run、确切版本、采用观察与接手；新稿、核验、采用、效果分开，旧调用无新要求
 - completed 仅表示列明的本地确定性检查完成；缺人工/浏览器/模型能力保持 partial/blocked
 - 回执字段与实际文件一致不证明工具真的执行；来源真实性和最终接受留给调用方
 - 路径穿越、symlink、硬链接、非普通文件、重复 JSON 键、未知字段和超限输入拒绝

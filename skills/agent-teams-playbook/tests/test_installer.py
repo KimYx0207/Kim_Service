@@ -71,6 +71,35 @@ class InstallerTests(unittest.TestCase):
         self.assert_old()
         self.assert_clean()
 
+    def test_no_target_does_not_assume_claude_and_configured_target_is_explicit(self):
+        result = subprocess.run(["bash", str(self.script)], input="", capture_output=True, text=True,
+                                timeout=30, env={**self.env, "AGENT_TEAMS_INSTALL_TARGET": ""})
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("--target codex", result.stdout)
+        self.assertEqual(list(self.home.iterdir()), [])
+        configured = subprocess.run(["bash", str(self.script)], input="", capture_output=True, text=True,
+                                    timeout=30, env={**self.env, "AGENT_TEAMS_INSTALL_TARGET": "codex"})
+        self.assertEqual(configured.returncode, 0, configured.stdout + configured.stderr)
+        self.assertTrue((self.target / "SKILL.md").is_file())
+        self.assertFalse((self.home / ".claude").exists())
+
+    def test_custom_host_directory_installs_only_portable_method_and_rejects_unbound_path(self):
+        custom_root = self.home / "host chosen skills"
+        for args in ([], ["--skills-dir", "relative/skills"]):
+            result = self.run_install(args, target="custom", env={"CUSTOM_SKILLS_DIR": ""})
+            self.assertNotEqual(result.returncode, 0, result.stdout)
+            self.assertFalse(custom_root.exists())
+            self.assertFalse((self.home / ".claude").exists())
+        result = self.run_install(["--skills-dir", str(custom_root)], target="custom")
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        installed = custom_root / NAME
+        for relative in ("SKILL.md", "capability.json", "method.json", "references/acceptance.md"):
+            self.assertEqual((installed / relative).read_bytes(), (self.package / relative).read_bytes())
+        self.assertFalse((self.home / ".claude").exists())
+        self.assertFalse((self.home / ".codex").exists())
+        self.assertNotIn("context: fork", (installed / "SKILL.md").read_text())
+        self.assertFalse(any(p.name in {"settings.json", "hooks.json"} for p in self.home.rglob("*")))
+
     def test_failed_download_leaves_existing_install_unchanged(self):
         self.existing()
         self.mock("curl", "exit 22")

@@ -26,3 +26,32 @@
 执行本能力时按 SKILL.md 读取本文件及 method.json 中当前 capabilityId 的诊断、决策与 outputChecks。使用已有脚本和引用资料，不另造调度或运行状态。每条 blocking 规则缺证据或失败时保持未验收；其他高分不能抵消。作者自报 pass 最多是待独立复核的线索。
 
 本仓库校验器验证合同、引用和示例格式；professionalEffect=not_evaluated。professional-cases.json 是作者合成的教学正反例，没有真实运行或人审发生性。当前 Meta 的 Skill 发现路径不会像 Agent 方法投影一样自动把 method.json 注入 worker；实际加载依赖入口的明确阅读规则和宿主支持，未观察则如实报告。原生宿主是否触发、业务效果是否改善，都必须另取当前版本的实际任务证据。
+
+## 长期业务事项：跨人、跨会话仍能继续
+
+适用于同一家公司需要多轮产出、多人协作、持续服务或换人接手的事项。公司现在只有一个操作人时也成立；以后增加同事不应更换事项身份。宿主提供可选 `workContext`，本 Skill 在现有 plan/assignments/results 中引用，不创建 Work 数据库、组织权限或第二份运行状态。独立小任务没有 WorkContext 时沿用原流程。
+
+`kim-work-context-v1` 包含 organizationRef、workRef、contextRevision、scopeRef，以及 sourceRefs、acceptedArtifactRefs、decisionRefs 三个可空引用数组。同一 Work 可有多次 run、多段会话；每次执行绑定当前快照。scopeRef 只是权限范围的引用，实际读写/披露许可由宿主判断。公司资产、成员个人偏好和敏感决策可以有不同授权范围，不能按人数或职位推断可见性。
+
+| 当前交付位置 | 必须留下什么 | 不能推导什么 |
+| --- | --- | --- |
+| plan / assignments | 宿主 Work/run/context、输入版本、负责人、资源范围、依赖与接手目标 | 分配角色不证明实际执行或获得权限 |
+| results.produced | 实际形成的版本、文件/返回引用、执行来源 | 新版不自动成为采用版 |
+| results.verified | 本次独立核验的标准、结果、证据，缺失为 unknown | 核验通过不等于用户采用 |
+| results.adopted | accepted/rejected/pending/unknown、确切版本、决定引用、理由或 unknown、决定者与适用范围 | “没说反对”不是采用；拒用不等于技术失败 |
+| results.effect | 业务观察、期间、证据；未观察为 unknown | 采用或收到不证明业务改善 |
+| results.receiving | 接手人、范围、采用版及待选稿、下一步、当前上下文/版本的实际接手回执或 pending | 已发送通知不证明接手；接手不等于办完 |
+
+**完整合成例**：公司课程上线事项 work:course-launch 已采用 v1；新会话 run-2 生成 v2，技术核验通过。宿主本次观察仍引用历史 decision:retain-v1，说明该有效决定继续适用，并保留当时理由；无需请人再批 v1。交给编辑的材料同时列 v1（当前采用）和 v2（新稿）。编辑尚未确认对应版本时 receiving=pending；得到绑定本次 run/context、接手人和材料集合的回执后才记 acknowledged。没有上线反馈，effect=unknown。v2 未被采用的理由仍可进入内部经验候选。
+
+**反例**：以“v2 更新、文件核验通过、群里发出链接”为由替换 v1 并声明整件事完成；或用另一个 Work/旧上下文的接手回执。拒收相应结论，不停止已授权且资料充分的独立任务。
+
+需要机器检查时，调用方可使用同仓库 delivery-verifier 的可选 `work_handoff` 判据：它实读文件并核预期版本、Work/context/run、采用观察和接手一致性。`adoptionObservation` 是当前宿主观察，`decisionRef` 保留历史原决定；不重写原决定、不增设审批。该 Agent 未安装或宿主不能执行时，按本表交人工检查记录并注明未运行 helper，不自动安装或虚报运行。`passed` 只表示一致性，来源与主体真实性仍由宿主核实。
+
+方法只提供可执行工单与交接要求；宿主负责继续运行、接收外部消息、定时整理和最终验收。本例是作者合成，未验证线上业务效果。
+
+## 动态客户端与模型验收
+
+沿用现有 hostCapabilities 作为本轮运行绑定来源，计划、分工和展示只投影同一份来源，不复制另一个品牌路由表。客户端、专业角色、模型配置和权限是不同信息：不得由 GPT 推出 Codex、由 Claude 模型推出 Claude Code，或因用户换模型而重置失败预算。未知字段保持 unknown；默认继承宿主配置，具体模型选择只按已明确的用户/项目/宿主约束与实际 schema。
+
+MiniMax code、ZCode、Gemini CLI 等名称只用于识别当前声明；能读方法文件不等于已有原生 spawn、通信或 Hook 适配。缺能力时保持原有顺序路线和未观察项。独立评审需要证据，不规定某个评审 CLI；方法与运行适配分离后，切换客户端仍使用同一份 Work、能力合同和验收规则。

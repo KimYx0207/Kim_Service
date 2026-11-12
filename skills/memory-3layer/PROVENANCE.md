@@ -11,3 +11,7 @@
 ## 可评审范围
 
 method.json 的 field/criterion/rejectWhen 说明具体判据，verificationMethod/evidenceRequired/blocking 说明怎么核验、需要什么证据与哪些项不能抵消。references/acceptance.md 包含任务推理、完整交付示例与拒收边界。两者服务同一现有 capability，不另造业务状态。作者案例只记录 expectedAssessment，evaluationStatus 始终 not_evaluated。专业前测应在独立执行后保留原始产物与失败，不把本文件中的预期当实际结果。
+
+## 2026-11-12 事项与经验闭环
+
+本次新增内容为本项目根据业务需求编写的方法、字段约束和虚构案例，沿用 existing-package 来源及原有许可。没有复制第三方文章正文、公司内部记录或把文章中的自述成效当作本仓库实测。合成案例验证结构与指定本地行为；真实组织使用、身份来源、业务效果和原生宿主运行保持未验证。

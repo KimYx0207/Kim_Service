@@ -60,3 +60,11 @@ Agent Skills 兼容只保证能读取 `SKILL.md`，不保证兼容 Claude Code �
 - 配置合并前备份目标文件；JSON 无法解析时停止，不重建空文件。
 - 不把本机用户名、绝对路径、环境变量值写入公开包。
 - 任何平台都不得把完整事件负载直接持久化。
+
+## 客户端与模型分别记录
+
+`runtime` 来源标签只使用安装薄适配明确绑定的 MEMORY_HOST，或载荷明确的 runtime/host/client 声明；没有声明时为 manual。安装器为已有 Claude/Codex 适配传入明确的客户端标签。原有未带标签的命令仍可运行，只保留未知/手动来源，不从 model 名称猜客户端。
+
+同一 Claude Code 客户端使用 MiniMax 模型时仍标客户端 claude；未知客户端自报 GPT 模型不会因此变成 Codex。可选 model 对象独立保留 name 和 payload_unverified/not_provided，既不改变输出协议、权限和存储格式，也不认证实际模型调用。runtime_evidence 仍为 not-observed，外部声明不是原生实测。
+
+MiniMax code、ZCode、Gemini CLI 等未提供真实 Hook 适配证据的宿主继续使用 manual 核心；宿主可按现有合同声明来源并手动调用，不能复制 Claude/Codex 配置冒称原生支持。数据始终在同一 .memory-3layer 项目目录，安装目录只是薄适配，展示读取实际报告。

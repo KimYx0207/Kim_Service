@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.0 - 2026-11-12
+
+- Add optional work_handoff criterion in helper 0.2.0: verify actual artifact bytes, host Work/context/run bindings, adopted versions and receiving consistency.
+- Accept unmodified Meta Work receipts including provenance; separate consistency from authenticated adoption or business effects.
+- Add runnable synthetic positive and negative cases; legacy criteria remain unchanged.
+
 ## 0.3.1 - 2026-11-11
 
 - Use task-specific handling for material unknowns and existing authorization.

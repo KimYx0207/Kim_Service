@@ -31,6 +31,8 @@ description: 把重复任务和故障处理写成有前提、分支、回执、�
 - `limitations`：未执行、未观察、方法假设和外推边界。
 - `handoff`：当前产物、规则结果、证据定位与待解决事项交调用方。
 
+有可选 `workContext` 时，按 [交付模板的事项交接例](references/delivery-template.md) 将身份、采用版本、实际接手回执和经验候选放进 facts / validationRecord / maintenance / handoff。没有事项上下文时不增加登记或确认；scopeRef 不授予权限。
+
 ## 关键验收条件
 
 - `procedure`：每步有前提、角色、输入、动作、可观察预期、失败分支和记录位置。 拒收：只写检查/处理/完成等动作名，或依赖未写出的专家常识。

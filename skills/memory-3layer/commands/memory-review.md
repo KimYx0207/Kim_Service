@@ -18,3 +18,5 @@ exists, the legacy `<repo>/.claude/memory/` only when `MEMORY_LEGACY_READ=1` was
 Permanent repository rules may belong in `AGENTS.md`, `CLAUDE.md`, or another
 runtime-native instruction file. Do not assume Claude Code is the only host.
 Never promote model inference, secrets, raw transcripts, or full tool output.
+
+For company Work, use the candidate template in `references/operating-contract.md` through the existing governance proposals. Preserve exact adopted versions and original decision references, including failed/rejected/not-applicable evidence, expiry triggers and actual reuse feedback. Keep company-private candidates internal; deidentify, generalize and validate before proposing a public method. Existing specific authorization is reusable; unknown reasons stay unknown. This command neither schedules nightly processing nor grants access or silently changes the storage schema.

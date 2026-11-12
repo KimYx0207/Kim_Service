@@ -3,6 +3,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { layerCopy } from './readme-layer-copy.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const check = process.argv.includes('--check');
@@ -150,9 +151,79 @@ function collaboration(lang) {
   return svg(lang,'03',1543,t.title,t.sub,out,6,30);
 }
 
+const workContextCopy = {
+  'zh-CN': {
+    title:'让交接留下可继续使用的经验', sub:'事项上下文 → 专业方法 → 结果回执 → 条件化复用',
+    host:['业务系统提供事项上下文',['公司、事项、上下文版本和来源引用','权限与主状态由原业务系统维护']],
+    methods:[['团队交接',['确定负责人和下一步','写清依赖与接手条件','使用团队协作方法']],['SOP 执行',['明确步骤与完成标准','遇到异常留下恢复点','使用现有操作规程']]],
+    receipt:['核对真实产物与事项回执',['产出 · 核验 · 采用 · 效果，分别说明','对齐事项、上下文和具体成果版本']],
+    branches:[['已采用',['保留采用版本','决定人、理由与证据']],['未采用',['保留未采用原因','失败也能留下经验']]],
+    unknown:'没有业务系统的采用记录，就保持未知',
+    candidate:['整理内部经验候选',['保留来源、适用条件、失败原因与反例','核对实际效果，评估是否值得再次使用']],
+    reuse:['下一次工作，按条件选择',['直接复用 · 调整后复用 · 不适用并说明原因']],
+    phases:['先关联同一事项及其上下文版本','按任务选择团队交接和 SOP 方法','核对实际成果与四类结果记录','记录真实采用情况；缺失保持未知','内部经验先作为有来源的候选','下次任务核对条件，再决定怎样复用'],
+    steady:'同一事项 · 明确交接 · 保留原因 · 按条件复用',
+    foot:['内部材料留在原边界内；公共方法吸收经过提炼、验证的通用经验。'],
+  },
+  en: {
+    title:'Turn handoffs into reusable experience',sub:'Work context → methods → receipts → reuse with conditions',
+    host:['The business system supplies work context',['Company, work, context revision and source references','Permissions and main status stay with that system']],
+    methods:[['Team handoff',['Name the next owner','Keep dependencies','Set handoff conditions']],['SOP execution',['Define steps and checks','Keep recovery points','Use existing runbooks']]],
+    receipt:['Check real artifacts and work receipts',['Produced · Verified · Adopted · Effect, kept separate','Match work, context and the exact artifact version']],
+    branches:[['Adopted',['Keep the chosen version','Decision, reason, proof']],['Not adopted',['Keep why it was rejected','Learn from failure too']]],
+    unknown:'No adoption record from the host → unknown',
+    candidate:['Keep an internal candidate lesson',['Sources, conditions, failures and counterexamples','Review observed results before using a lesson again']],
+    reuse:['Select for the next work item',['Reuse directly · adapt · mark unsuitable with a reason']],
+    phases:['Bind the work item and its context revision','Choose handoff and SOP methods for the task','Check artifacts and four separate outcome records','Record adoption from the host; unknown if absent','Preserve an internal lesson with traceable sources','Check conditions before choosing how to reuse'],
+    steady:'One work item · clear handoff · reasons · conditional reuse',
+    foot:['Keep internal materials in their original scope.', 'Public methods receive generalized, validated lessons.'],
+  },
+};
+function workContext(lang) {
+  const t=workContextCopy[lang];
+  const card=(x,y,w,h,title,body,color,phase,center=false,fill='#fff')=>{
+    const tx=center?x+w/2:x+24,align=center?' center':'';
+    return `<g class="node" data-label="${esc(title)}">`+panel(x,y,w,h,color,phase,fill)+text(tx,y+51,title,'label'+align)+lines(tx,y+100,body,'body'+align,42)+'</g>';
+  };
+  let out=card(64,205,832,166,t.host[0],t.host[1],C.blue,0,true,'#edf3ff');
+  out+=route('M480 371 V410 H262 V443',1)+route('M480 371 V410 H698 V443',1,C.teal)+arrow(262,449)+arrow(698,449,C.teal);
+  t.methods.forEach((m,i)=>{out+=card(i?500:64,455,396,218,m[0],m[1],i?C.teal:C.blue,1);});
+  out+=route('M262 673 V712 H480 V747',2)+route('M698 673 V712 H480',2,C.teal)+arrow(480,753,C.purple);
+  out+=card(64,759,832,166,t.receipt[0],t.receipt[1],C.purple,2,true);
+  out+=route('M480 925 V964 H262 V997',3,C.purple)+route('M480 925 V964 H698 V997',3,C.orange)+arrow(262,1003,C.purple)+arrow(698,1003,C.orange);
+  t.branches.forEach((b,i)=>{out+=card(i?500:64,1009,396,174,b[0],b[1],i?C.orange:C.purple,3);});
+  out+=route('M262 1183 V1272 H480 V1301',4,C.purple)+route('M698 1183 V1272 H480',4,C.orange)+arrow(480,1307,C.purple);
+  out+=`<rect x="100" y="1206" width="760" height="51" rx="12" fill="#f5f8fc"/>`+text(480,1238,t.unknown,'note center');
+  out+=card(64,1313,832,166,t.candidate[0],t.candidate[1],C.purple,4,true,'#f4f0fb');
+  out+=route('M480 1479 V1521',5,C.teal)+arrow(480,1527,C.teal);
+  out+=card(64,1533,832,134,t.reuse[0],t.reuse[1],C.teal,5,true,'#edf8f6');
+  out+=phaseBar(1707,t.phases,t.steady)+lines(480,1821,t.foot,'note center',39);
+  return svg(lang,'04',lang==='en'?1900:1864,t.title,t.sub,out,6,32);
+}
+
+function layers(lang) {
+  const t=layerCopy[lang];
+  const card=(x,y,w,h,row,color,phase,center=false,fill='#fff')=>{
+    const tx=center?x+w/2:x+24,align=center?' center':'';
+    return `<g class="node" data-label="${esc(row[0])}">`+panel(x,y,w,h,color,phase,fill)+text(tx,y+51,row[0],'label'+align)+lines(tx,y+102,row[1],'body'+align,42)+'</g>';
+  };
+  let out=card(64,205,832,176,t.source,C.blue,0,true,'#edf3ff');
+  out+=route('M480 381 V420 H262 V463',0)+arrow(262,469);
+  out+=route('M480 381 V420 H698 V463',0,C.purple)+arrow(698,469,C.purple);
+  out+=route('M460 584 H500',1,C.teal);
+  out+='<path d="M486 577L495 584L486 591" fill="none" stroke="'+C.teal+'" stroke-width="3"/>';
+  out+=card(64,475,396,232,t.data,C.teal,1)+card(500,475,396,232,t.application,C.purple,1);
+  out+=route('M698 707 V748 H480 V783',2,C.purple)+arrow(480,789,C.purple);
+  out+=card(64,795,832,176,t.presentation,C.blue,2,true);
+  out+=route('M480 971 V1047',3,C.orange)+arrow(480,1053,C.orange);
+  out+=card(64,1065,832,176,t.host,C.orange,3,true,'#fff6e9');
+  out+=phaseBar(1281,t.phases,t.steady)+lines(480,1398,t.foot,'note center',42);
+  return svg(lang,'05',1485,t.title,t.sub,out,4,24);
+}
+
 const generated=[];
 for (const lang of Object.keys(copy)) {
-  for (const [name,build] of Object.entries({ capabilities, delivery, collaboration })) {
+  for (const [name,build] of Object.entries({ capabilities, delivery, collaboration, 'work-context': workContext, layers })) {
     const relative=`docs/images/animated-service-${name}.${lang}.svg`;
     const content=build(lang), target=path.join(root,relative);
     if(check) {

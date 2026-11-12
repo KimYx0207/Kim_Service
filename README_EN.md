@@ -168,7 +168,46 @@ Then open the client in the project already configured for Meta_Kim, select **Me
 
 Use [Meta_Kim](https://github.com/KimYx0207/Meta_Kim#readme) when you need that overall workflow. The complete methods and examples here also support a single independent task.
 
+## Keep company work continuous across conversations and people
+
+A company with one operator still needs a working record that a future colleague can continue. The host attaches the goal, sources, adopted version and decisions to one **Work**, a long-lived business matter. Many conversations and runs can refer to it; Service supplies the professional methods. The host's existing permissions determine access to company assets, personal preferences and sensitive decisions.
+
+<p align="center">
+  <img src="docs/images/animated-service-work-context.en.svg" alt="Animated company Work, delivery receipt, adoption and experience flow" width="900">
+</p>
+
+| Existing method | Concrete addition |
+| --- | --- |
+| [agent-teams-playbook](skills/agent-teams-playbook/) | Optional WorkContext connects assignments, sources and versions; handoffs include scope, adopted output, next action and receiving receipt |
+| [sop-runbook](skills/sop-runbook/) | Separate production, verification, adoption and effect in existing runbook outputs; human choices name exact versions and reasons or unknown |
+| [memory-3layer](skills/memory-3layer/) | Retain success, failure, rejection, applicability, expiry and actual reuse feedback as company-internal candidates for review |
+| [delivery-verifier](agents/delivery-verifier/) | Optional work_handoff reads actual files and checks versions/hashes, Work/context/run, adoption observations and receiving consistency |
+
+For example, this run creates course draft v2 and its technical checks pass, while the owner continues using the previously adopted v1. Both versions remain distinct in the handoff. The original valid decision remains referenced without asking the human to approve it again. A sent notice is not a receiving receipt; receiving is not business completion. Without effect evidence, keep unknown. Reasons for rejecting the new draft can also become experience candidates.
+
+Run the complete synthetic local example from the repository root:
+
+```sh
+node agents/delivery-verifier/scripts/demo-work-handoff.mjs
+```
+
+It includes that valid case, failed/rejected/unknown observations, a stale-context receipt and substituted adoption version. It creates real temporary files and invokes the read-only verifier, demonstrating only the stated local consistency behavior. Real identities, adoption provenance, production hosts and business effects remain unverified. See the [delivery API](agents/delivery-verifier/docs/delivery-api.md) for the complete fields and boundaries.
+
+Standalone tasks without WorkContext retain their existing entry points. Service adds no business database, scheduler, organizational permissions or approval system. Private company experience stays internal; public methods need deidentification, generalization and focused validation under existing publication authority. Automatic applicability retrieval, scheduled curation and outbound messaging depend on the host's actual capabilities.
+
 ## Connect the methods to your client
+
+**Professional methods do not require one model vendor.** The task and host configuration determine the client, model and available tools separately. Claude Code, Codex, Gemini CLI, ZCode, MiniMax Code and other clients that can read the resources can use the same methods within their actual capabilities. The task browser reads its client list from `config/task-browser.json`; choose the existing-Agent option to keep your current environment.
+
+| Item | Configuration and behavior |
+| --- | --- |
+| Task-browser client options | Generate request text; selecting a name does not launch a client, connect an account or switch a real model |
+| Specialist execution and independent review | Use host tools and model settings; responsibilities are not fixed to a branded CLI, and retries depend on progress, evidence and the task budget |
+| Team-method installation | Explicit `--target`, then `AGENT_TEAMS_INSTALL_TARGET`; with neither, show usage without writing a default Claude directory |
+| Another client’s Skills directory | `--target custom --skills-dir /absolute/host/skills` installs a portable method package only; the host supplies the path and native loading needs verification in that client |
+| Memory host and model provenance | `MEMORY_HOST` or payload `runtime / host / client` identifies the host; model is separate, and no host declaration remains `manual` |
+
+For example, a Claude Code host with a MiniMax model label keeps both fields separately. A model name alone never determines the client. Self-reported model values remain unverified and do not prove a real model call. The host supplies account connections, model access and tool schemas. Optional multi-CLI tools pass parameters only through implemented adapters; omitting a model retains that CLI’s configuration.
 
 ### Project-based AI clients
 
@@ -237,6 +276,25 @@ zcode plugins list --json
 To add Meta_Kim, run `zcode plugins install meta-kim-local@kim-local-reviewed -s user`. Kim's complete role resources and Skills stay with the plugin. This content package supplies Agents and Skills; HookPrompt, MCP, and command bridges use their separately supported client integrations.
 
 For an update, preserve personal changes and replace the original marketplace directory with the new published package. Refresh the source, check for updates among installed plugins, and verify the resulting versions. Disable or remove plugins from the same management interface, where you can inspect their location and loaded state.
+
+## Application, data and presentation boundaries
+
+<p align="center">
+  <img src="docs/images/animated-service-layers.en.svg" alt="Component sources feed catalog data, application requests and the presentation layer before the chosen client executes" width="900">
+</p>
+
+**Component definitions are the method source; the page presents those facts.** Edit professional content, request behavior or client options at its responsible source, then rebuild the catalog and page.
+
+| Layer and responsibility | Existing location | Purpose |
+| --- | --- | --- |
+| Method sources | Each component’s `capability.json`, `method.json`, references and `evals/` | Scope, inputs, outputs, procedures, examples and acceptance checks |
+| Data | `src/data/capability-catalog.mjs`, `src/data/task-browser.mjs` | Read and validate catalog and task configuration |
+| Application | `src/application/task-browser/model.mjs` | Search, filter and combine capabilities; build complete requests to copy |
+| Presentation | `src/presentation/task-browser/` | Chinese and English UI, status feedback, request editing and copy interaction |
+| Display and host options | `config/task-browser.json` | Own host labels, request prefixes, field names, search terms and page settings |
+| Generated outputs | `catalog.json`, `generated/capabilities.json`, `docs/start.html` | Rebuild from sources instead of maintaining another list |
+
+A new displayed client needs a configuration entry; a new native tool call needs an implemented and verified adapter. Method packages, optional local helpers and host permissions retain separate responsibilities. The business host owns Work master records, external messages and scheduled knowledge processing. `scripts/build-readme-animations.mjs` and localized copy generate the diagrams; `--check` verifies consistency, and reduced motion keeps complete steps and explanations readable.
 
 ## Update the source and continue your work
 

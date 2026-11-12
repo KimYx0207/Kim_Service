@@ -5,6 +5,7 @@
   "runtimeStatus": "needs_probe",
   "automaticInvocation": false,
   "steps": [
+    "存在宿主 WorkContext 时先绑定 organizationRef/workRef/contextRevision/scopeRef 与来源；无上下文沿用本能力原有入口，不创建业务主状态或重复确认已授权事项。",
     "确认项目根、需要的记忆范围和当前实际宿主，不从持久文件存在推断已进入上下文。",
     "读取三层文件与有效状态，报告解析错误、预算与截断；默认只读。",
     "用户确认事实才交受管记录器；完全重复可确定跳过，语义冲突只提出复查。",
@@ -105,6 +106,15 @@
           "宿主事件/信任状态观察"
         ],
         "whenMissing": "分别标未观察；不要把安装当自动运行。"
+      },
+      {
+        "id": "work-continuity",
+        "question": "仅已提供 WorkContext 或显式请求业务事项交接核验时：这次产出属于哪家公司、哪件长期事项、哪个上下文与确切版本？采用、效果和接手是否各有来源？",
+        "evidenceRequired": [
+          "宿主 WorkContext 和实际 run 引用",
+          "版本/采用决定/接手回执及其来源"
+        ],
+        "whenMissing": "未使用事项上下文的普通任务，本诊断不适用，不新增登记或确认。适用时，保留未知，继续与缺口无关的工作；没有来源不宣布采用、接手或效果。"
       }
     ],
     "decisionRules": [
@@ -125,6 +135,12 @@
         "when": "只完成配置或手动脚本",
         "action": "报告已证范围和not-observed原生状态",
         "avoid": "从宿主名字或文件存在推断原生Hook可用。"
+      },
+      {
+        "id": "separate-work-evidence",
+        "when": "跨人、跨会话交付或复用组织经验",
+        "action": "分别记录 produced、verified、adopted、effect，绑定宿主 Work 与确切版本；接受历史有效决定的当前观察，保留失败/拒用/不适用和未知。",
+        "avoid": "把新版、核验通过、已发送、已收到或公司所有等同采用、完成、所有成员有权读取或可公开发布。"
       }
     ],
     "contractGuidance": [
@@ -266,11 +282,12 @@
           {
             "id": "runtime-acceptance",
             "field": "runtime",
-            "criterion": "报告实际模式，manual 不冒充宿主原生 Hook。",
-            "rejectWhen": "按宿主名字猜真实触发模式。",
+            "criterion": "runtime 仅表示明确适配器/宿主声明的来源标签，未提供则 manual；不从 model 反推客户端。无论标签是什么，原生 Hook 是否实际触发仍需独立证据。",
+            "rejectWhen": "把 GPT/Claude/MiniMax 等模型名当客户端，或将自报客户端标签当已支持/已触发的原生适配。",
             "verificationMethod": "artifact_inspection",
             "evidenceRequired": [
-              "调用入口"
+              "MEMORY_HOST 适配器绑定或 runtime/host/client 明确声明",
+              "runtime_evidence 与实际观察分开"
             ],
             "blocking": true
           },
@@ -354,6 +371,17 @@
               "是否存在写入差异"
             ],
             "blocking": true
+          },
+          {
+            "id": "model-provenance-acceptance",
+            "field": "model",
+            "criterion": "model 若存在，仅保留 name 与 payload_unverified/not_provided 来源；与 runtime 独立，不保存为长期事实或证明实际模型调用。",
+            "rejectWhen": "用自报模型推宿主、改权限、冒认已执行模型，或缺少模型时虚构名称。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "存在该字段时，对照本次原始 model 标签和来源标记"
+            ],
+            "blocking": true
           }
         ]
       },
@@ -397,12 +425,14 @@
           {
             "id": "proposals-acceptance",
             "field": "proposals",
-            "criterion": "每条含目标ID、建议动作、理由和受影响知识，长期提升需跨情境证据。",
-            "rejectWhen": "凭一次成功把局部经验提升普遍规则。",
+            "criterion": "每条含目标ID、建议动作、理由和受影响知识，长期提升需跨情境证据。 事项延续附加条件：仅 reviewScope 已明确关联 WorkContext 来源或明确请求组织事项经验治理时适用；普通记忆任务不适用，不新增 Work 登记或确认。组织经验候选保留 Work/版本/采用决定及理由未知、成功失败拒用证据、适用与不适用条件、有效期/失效触发、来源范围和实际复用反馈；候选不自动变 active 或公共方法。",
+            "rejectWhen": "凭一次成功把局部经验提升普遍规则。 仅上述事项延续条件适用时，另拒收：只留成功例、把采用当效果、把不适用删掉、跨组织读取，或公司私有记录未经脱敏验证就公开。",
             "verificationMethod": "artifact_inspection",
             "evidenceRequired": [
               "建议差异",
-              "适用范围与证据"
+              "适用范围与证据",
+              "仅上述事项延续条件适用时：同一宿主事项/上下文及确切产物版本",
+              "仅上述事项延续条件适用时：各阶段原始来源、采用观察和接手/复用回执或明确未知"
             ],
             "blocking": true
           },

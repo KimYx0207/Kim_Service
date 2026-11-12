@@ -7,7 +7,7 @@
 [![GitHub stars](https://img.shields.io/github/stars/KimYx0207/Kim_Service?style=social)](https://github.com/KimYx0207/Kim_Service)
 [![GitHub forks](https://img.shields.io/github/forks/KimYx0207/Kim_Service?style=social)](https://github.com/KimYx0207/Kim_Service)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/KimYx0207/Kim_Service)
-[![Version](https://img.shields.io/badge/version-4.8.0-green.svg)](https://github.com/KimYx0207/Kim_Service)
+[![Version](https://img.shields.io/badge/version-4.10.0-green.svg)](https://github.com/KimYx0207/Kim_Service)
 [![Runtime](https://img.shields.io/badge/runtimes-Claude%20Code%20%7C%20Codex%20%7C%20OpenClaw%20%7C%20Cursor-blue.svg)](https://github.com/KimYx0207/Kim_Service)
 
 **A cross-runtime Skill for executable multi-agent orchestration for Claude Code, Codex, OpenClaw, and Cursor**
@@ -45,12 +45,14 @@ The core philosophy is "adaptive decision-making" rather than "hardcoded configu
 git clone https://github.com/KimYx0207/Kim_Service.git
 cd Kim_Service/skills/agent-teams-playbook
 chmod +x scripts/install.sh
-./scripts/install.sh
+./scripts/install.sh --target codex
+# Or use a Skills directory explicitly supplied by your host:
+./scripts/install.sh --target custom --skills-dir /absolute/host/skills
 ```
 
 ### Safe installation and recovery
 
-Use `--target claude|codex|openclaw|cursor|all`; add `--from-github` to download from GitHub main. The Bash installer runs on Linux/macOS; Windows requires Git Bash/WSL with POSIX absolute paths, not native PowerShell. Override only the selected root with `CLAUDE_SKILLS_DIR`, `CODEX_SKILLS_DIR`, `OPENCLAW_SKILLS_DIR`, or `CURSOR_SKILLS_DIR`. Relative paths, `..`, and symlink destinations are rejected.
+Use `--target claude|codex|openclaw|cursor|custom|all`; no client is selected implicitly. An optional `AGENT_TEAMS_INSTALL_TARGET` supplies a configured default, with `--target` taking precedence. `custom` requires `--skills-dir` or `CUSTOM_SKILLS_DIR`; it copies portable method files without installing unknown-client Hooks or claiming native support. `all` covers only the four existing directory adapters; add `--from-github` to download from GitHub main. The Bash installer runs on Linux/macOS; Windows requires Git Bash/WSL with POSIX absolute paths, not native PowerShell. Override only the selected root with `CLAUDE_SKILLS_DIR`, `CODEX_SKILLS_DIR`, `OPENCLAW_SKILLS_DIR`, or `CURSOR_SKILLS_DIR`. Relative paths, `..`, and symlink destinations are rejected.
 
 All files are prepared and verified in a same-filesystem staging directory before replacement. Enter `y` and press Enter to replace an existing install; default/EOF leaves it intact. A successful replacement retains the entire old directory, including user changes/additions, at the printed `.agent-teams-playbook.backup.*/previous` path. User edits/additions remain only in the backup, not the new active install; backups are not deleted automatically. Failed downloads, missing files, failed promotion, and failed final verification automatically restore the old install. Claude fork configuration also happens in staging.
 
@@ -79,6 +81,10 @@ Help me build an Agent team to complete this task...
 `capability.json` is the source of truth for package version and validation entrypoints; `SKILL.md` uses `metadata.version`. The current host schema wins: codex-v1 uses `multi_agent_v1.spawn_agent` / `fork_context`, codex-v2 uses `spawn_agent` / `fork_turns`, and feature flags may hide optional fields. Without available agent capabilities, execute sequentially in the main thread and disclose it. See [SKILL.md](SKILL.md) for profiles and static examples.
 
 This package advises task division and checks; Meta_Kim retains its Router, cross-component state machine, and final acceptance. `tests/runtime-contracts.test.mjs` checks static contracts; `tests/test_installer.py` exercises offline installation in isolated directories. Neither is live-model or live-host multi-agent behavior evidence.
+
+## Company Work and receiving
+
+Optional WorkContext connects existing assignments to the host's long-lived business matter, including a one-person company that later grows. The [acceptance method](references/acceptance.md) separates produced, verified, adopted, effect and receiving. Reuse valid historical decisions without repeat approval and preserve unknown reasons. Tasks without Work context need no new registration or confirmation; company permissions, business state and scheduling remain host-owned.
 
 ## Core Design Principles
 
@@ -168,4 +174,4 @@ This Skill will NOT:
 
 ---
 
-**Version**: V4.8.0 | **Last Updated**: 2026-07-10 | **Maintainer**: KimYx0207
+**Version**: V4.10.0 | **Last Updated**: 2026-11-12 | **Maintainer**: KimYx0207

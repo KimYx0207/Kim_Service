@@ -168,7 +168,46 @@ Service 为这条链提供可读取的专业方法、材料说明和检查标准
 
 需要这个整体工作方式时，可以使用 [Meta_Kim](https://github.com/KimYx0207/Meta_Kim#readme)；继续只做一个任务，也能使用这里完整的方法和示例。
 
+## 一件公司的事，跨会话、跨成员继续
+
+公司现在只有一个人，也需要保留下一位同事能接住的工作现场。宿主把目标、来源、当前采用版和决定挂在同一个 **Work（业务事项）** 上；会话和执行可以有很多次，Service 沿用这个引用提供专业方法。公司资产、个人偏好和敏感决策的可见范围由宿主已有授权决定。
+
+<p align="center">
+  <img src="docs/images/animated-service-work-context.zh-CN.svg" alt="公司事项、交付回执、采用与经验的动态说明" width="900">
+</p>
+
+| 已有方法 | 本次补齐的具体工作 |
+| --- | --- |
+| [agent-teams-playbook](skills/agent-teams-playbook/) | 用可选 WorkContext 关联同一事项的分工、来源和版本，交接含范围、采用稿、下一步与接手回执 |
+| [sop-runbook](skills/sop-runbook/) | 把产出、核验、采用、效果分别写进现有规程与交付；人工选择有确切版本、理由或 unknown |
+| [memory-3layer](skills/memory-3layer/) | 保留成功、失败、拒用、适用/不适用、过期条件及实际复用反馈；先作为公司内部候选复查 |
+| [delivery-verifier](agents/delivery-verifier/) | 可选 work_handoff 实读文件、核版本/hash、事项/context/run、采用观察与接手一致性 |
+
+例如，课程资料本次生成了 v2，技术检查通过，但负责人仍沿用以前已采用的 v1。交接时两版分别标清；原有效决定继续引用，不请人再批一遍。收到通知不等于接手，接手不等于办完；没有业务效果证据就保留 unknown。拒用新稿的原因也可成为经验候选。
+
+从仓库根目录运行完整本地合成演示：
+
+```sh
+node agents/delivery-verifier/scripts/demo-work-handoff.mjs
+```
+
+演示包含上述正例、失败/拒用/未知例、旧上下文回执和采用版本偷换两个反例。它实际创建临时文件并调用只读核验器，证明列明的本地一致性行为；真实人员、采用来源、线上宿主和业务效果仍未验证。完整字段与边界见 [delivery API](agents/delivery-verifier/docs/delivery-api.md)。
+
+已有独立任务没有 WorkContext 时继续原有用法。Service 不新增业务数据库、调度、组织权限或审批；公司私有经验先留内部，通用方法经过脱敏、泛化与针对性验证后再按已有授权准备公共版本。自动检索适用条件、定时整理及对外消息都由宿主已有能力执行。
+
 ## 按你使用的客户端接入
+
+**专业方法不指定你必须使用哪家模型。** 客户端、模型、可用工具分别由当前任务和宿主配置决定。Claude Code、Codex、Gemini CLI、ZCode、MiniMax Code 或其他能读取方法资料的客户端，可以按自身能力使用同一份方法。任务浏览器的客户端列表统一来自 `config/task-browser.json`；选择“我正在用的 Agent”可直接沿用现有环境。
+
+| 项目 | 配置与行为 |
+| --- | --- |
+| 任务浏览器客户端选项 | 根据配置生成请求文本；选择名称不会启动客户端、连接账户或切换真实模型 |
+| 专业执行与独立评审 | 沿用宿主工具和模型配置；角色职责不固定绑定某一品牌 CLI，重试依据进展、证据与任务预算 |
+| 团队方法安装 | 显式 `--target` 优先，其次 `AGENT_TEAMS_INSTALL_TARGET`；均未提供时显示用法，不默认写入 Claude 目录 |
+| 其他客户端的 Skills 目录 | `--target custom --skills-dir /absolute/host/skills` 只安装通用方法包；目录由宿主提供，原生加载需在该客户端核实 |
+| Memory 的客户端与模型来源 | `MEMORY_HOST` 或载荷中的 `runtime / host / client` 标识宿主；模型单独记录，缺少宿主声明时保留 `manual` |
+
+例如，客户端声明为 Claude Code、模型标签为 MiniMax 时，会分别保留两者；只有一个模型名时不会反推客户端。载荷自报模型仍标为未验证，不作为真实模型调用证据。账户连接、模型权限和工具 schema 由宿主提供；可选多 CLI 工具只通过已实现的适配器传参，未填写模型时沿用对应 CLI 配置。
 
 ### 普通项目客户端
 
@@ -237,6 +276,25 @@ zcode plugins list --json
 需要 Meta_Kim 插件时再运行 `zcode plugins install meta-kim-local@kim-local-reviewed -s user`。Kim 的完整角色资料与 Skills 随插件保留；这个内容包提供 Agent 和 Skill，HookPrompt、MCP、命令桥接按各自支持的客户端另行接入。
 
 更新时，保留个人修改，再用新发布的整包更新原市场目录；在来源管理里刷新该市场，再到已安装插件中检查更新，核对实际版本。停用或卸载也在插件管理里操作。本地插件的安装位置和实际加载状态可在这些界面直接核对。
+
+## 应用、数据与展示的边界
+
+<p align="center">
+  <img src="docs/images/animated-service-layers.zh-CN.svg" alt="从组件正本到数据目录、应用请求、展示页面，再交给所选客户端执行" width="900">
+</p>
+
+**组件定义是方法的正本，页面是这些事实的展示。** 修改专业内容、任务交互或客户端选项时，各自进入对应位置，再生成目录和页面。
+
+| 层与职责 | 现有位置 | 负责什么 |
+| --- | --- | --- |
+| 方法来源 | 各组件 `capability.json`、`method.json`、专业资料与 `evals/` | 任务边界、输入输出、执行步骤、案例和检查标准 |
+| 数据层 | `src/data/capability-catalog.mjs`、`src/data/task-browser.mjs` | 读取与校验能力目录和任务配置 |
+| 应用层 | `src/application/task-browser/model.mjs` | 搜索、筛选、组合能力，构建可复制的完整请求 |
+| 展示层 | `src/presentation/task-browser/` | 中英文界面、状态反馈、请求编辑和复制交互 |
+| 展示与宿主选项配置 | `config/task-browser.json` | 统一管理宿主标签、请求前缀、字段名、搜索词和其他页面配置 |
+| 生成结果 | `catalog.json`、`generated/capabilities.json`、`docs/start.html` | 由构建脚本生成；修改正本后重建，避免另维护一套清单 |
+
+新增客户端显示选项只改现有配置；新增原生工具调用需要在实际适配器层实现并验证。方法包、可选本地 helper 和宿主权限各守自己的边界，业务 Work 主记录、外部消息和定时整理继续由业务宿主负责。图表同样由 `scripts/build-readme-animations.mjs` 与本地化文案生成，可用 `--check` 检查一致性；减少动态效果时，完整步骤和说明仍然可读。
 
 ## 更新源码，继续自己的工作
 

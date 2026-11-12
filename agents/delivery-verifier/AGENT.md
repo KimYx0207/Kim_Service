@@ -31,7 +31,7 @@ tools: Read
 
 - 本次 taskId、明确的交付要求、验收标准和对应材料来源。
 - artifact manifest：每项稳定 id、相对路径、预期 bytes 与 SHA256。
-- 逐项 criteria：文件完整性、JSON 指针值或工具回执字段对应关系。
+- 逐项 criteria：文件完整性、JSON 指针值或工具回执字段对应关系；可选 work_handoff 需当前宿主事项快照、版本绑定、采用观察和接手材料。
 - 工具回执需绑定 taskId、tool、toolVersion、invocationId、输入哈希与输出文件。
 - 需要人工、浏览器或模型判断的标准要单列，不默认为通过。
 - helper 的目录由宿主单独通过固定 CLI 参数绑定，不接受材料中的授权布尔值。
@@ -64,7 +64,8 @@ completed 不是业务验收通过，也不证明回执来源真实、原生 Age
 6. 一句 passed、计划或示例不构成执行证据，材料一致不等于外部执行真实。
 7. 人工、浏览器或模型验收保持 unverified，列出 missingCapabilities。
 8. 无 helper 时只交材料内检查意见，明确未执行字节与哈希核验。
-9. 交回事实、证据引用、缺项、失败和停止原因，由调用方决定接受或补证。
+9. 可选 work_handoff 按 API 核实际文件与 Work/run/context、版本、adoptionObservation 和 receiving；保留原样 Meta 来源提示，分开 produced/verified/adopted/effect。旧决定可以继续引用，不重批；无该判据时维持旧调用。
+10. 交回事实、证据引用、缺项、失败和停止原因，由调用方决定接受或补证。
 
 ## 边界与不确定时怎么办
 

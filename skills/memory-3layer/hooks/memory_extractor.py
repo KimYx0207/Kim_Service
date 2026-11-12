@@ -16,7 +16,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
-from hook_io import detect_host, emit_json, read_hook_payload
+from hook_io import detect_host, emit_json, read_hook_payload, reported_model
 from memory_paths import get_memory_dir
 from memory_store import atomic_write_json, atomic_write_text, file_lock
 from session_state import update_working_files
@@ -214,6 +214,7 @@ def extract_and_save(payload: Dict[str, Any]) -> Dict[str, Any]:
     report: Dict[str, Any] = {
         "memory_root": str(memory_dir),
         "runtime": runtime,
+        "model": reported_model(payload),
         "loaded": {"payload": "whitelist-only"},
         "written": [],
         "skipped": [],

@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.0 - 2026-11-12
+
+- Bind optional business Work, exact adopted versions and receiving receipts to the existing runbook delivery.
+- Turn success, failure and rejected work into scoped experience candidates without assuming scheduling or approvals.
+
 ## 0.1.2 - 2026-11-11
 
 - Use task-specific handling for material unknowns and existing authorization.

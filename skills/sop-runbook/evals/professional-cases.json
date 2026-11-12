@@ -92,6 +92,154 @@
       "decisionRuleRefs": [
         "observable-step"
       ]
+    },
+    {
+      "id": "work-handoff-current-observation",
+      "capabilityId": "sop-runbook-deliver",
+      "category": "worked_example",
+      "scenario": "公司同一事项由另一位同事继续，原有效决定仍选 v1。",
+      "input": {
+        "task": "交接课程发布前检查",
+        "currentProcedure": "已有 v1 采用记录及 v2 新稿",
+        "operatingConstraints": "内部可读，尚未授权外部发布",
+        "workContext": {
+          "schemaVersion": "kim-work-context-v1",
+          "organizationRef": "org:synthetic-company",
+          "workRef": "work:course-launch",
+          "contextRevision": "revision:2",
+          "scopeRef": "scope:internal-course-team",
+          "sourceRefs": [
+            "source:brief-v1"
+          ],
+          "acceptedArtifactRefs": [
+            "artifact:course-v1"
+          ],
+          "decisionRefs": [
+            "decision:retain-v1"
+          ]
+        }
+      },
+      "candidateOutputExcerpt": {
+        "procedure": [
+          {
+            "step": "读宿主当前快照",
+            "input": "artifact:course-v1",
+            "expected": "来源、版本和范围一致",
+            "failure": "保留差异，继续独立的只读核对"
+          }
+        ],
+        "recovery": "收到超时先查原回执；不重复发送或替换采用稿。",
+        "validationRecord": "作者合成案例，未执行线上发布/演练。",
+        "maintenance": {
+          "candidate": "新稿未被采用的理由可进入内部候选；理由缺失保留 unknown",
+          "applicableWhen": "相同课程目标与内部编辑范围",
+          "invalidWhen": "目标改变或原决定被明确替代"
+        },
+        "facts": {
+          "workContext": {
+            "schemaVersion": "kim-work-context-v1",
+            "organizationRef": "org:synthetic-company",
+            "workRef": "work:course-launch",
+            "contextRevision": "revision:2",
+            "scopeRef": "scope:internal-course-team",
+            "sourceRefs": [
+              "source:brief-v1"
+            ],
+            "acceptedArtifactRefs": [
+              "artifact:course-v1"
+            ],
+            "decisionRefs": [
+              "decision:retain-v1"
+            ]
+          },
+          "observations": {
+            "produced": {
+              "status": "produced",
+              "artifactRefs": [
+                "artifact:course-v2"
+              ]
+            },
+            "verified": {
+              "status": "passed",
+              "evidenceRefs": [
+                "review:synthetic-v2"
+              ]
+            },
+            "adopted": {
+              "status": "accepted",
+              "artifactRefs": [
+                "artifact:course-v1"
+              ],
+              "decisionRef": "decision:retain-v1",
+              "reason": "沿用已采用的 v1；新稿未替换既有决定。"
+            },
+            "effect": {
+              "status": "unknown",
+              "evidenceRefs": [],
+              "summary": "尚未观察业务效果"
+            }
+          }
+        },
+        "limitations": [
+          "无接手真实性或业务成效实测"
+        ],
+        "handoff": {
+          "recipientRef": "person:editor",
+          "scopeRef": "scope:internal-course-team",
+          "adoptedArtifactRefs": [
+            "artifact:course-v1"
+          ],
+          "decisionRef": "decision:retain-v1",
+          "receiving": "pending",
+          "nextAction": "接手后沿当前采用版继续，不重批旧决定"
+        }
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "使用现有输出字段保留可继续工作的现场；待接手不影响文档准备。",
+      "diagnosticRefs": [
+        "work-continuity"
+      ],
+      "decisionRuleRefs": [
+        "separate-work-evidence"
+      ]
+    },
+    {
+      "id": "work-false-handoff",
+      "capabilityId": "sop-runbook-deliver",
+      "category": "failure_boundary",
+      "scenario": "接手人只收到消息，未确认当前采用稿。",
+      "input": {
+        "task": "交接课程",
+        "currentProcedure": "发送 v2 链接",
+        "operatingConstraints": "采用 v1；无新采用决定",
+        "workContext": {
+          "schemaVersion": "kim-work-context-v1",
+          "organizationRef": "org:synthetic-company",
+          "workRef": "work:course-launch",
+          "contextRevision": "revision:2",
+          "scopeRef": "scope:internal-course-team",
+          "sourceRefs": [
+            "source:brief-v1"
+          ],
+          "acceptedArtifactRefs": [
+            "artifact:course-v1"
+          ],
+          "decisionRefs": [
+            "decision:retain-v1"
+          ]
+        }
+      },
+      "candidateOutputExcerpt": {
+        "handoff": "已发送 v2，视为接手完成并覆盖 v1。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "发送回执不同于接手回执，新稿不自动覆盖采用版。",
+      "diagnosticRefs": [
+        "work-continuity"
+      ],
+      "decisionRuleRefs": [
+        "separate-work-evidence"
+      ]
     }
   ]
 }

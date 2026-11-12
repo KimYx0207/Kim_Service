@@ -140,3 +140,5 @@ MIT，详见 [LICENSE](LICENSE) 与 [NOTICE](NOTICE)。
     <td align="center"><img src="docs/images/alipay.jpg" width="260" alt="支付宝收款码"></td>
   </tr>
 </table>
+
+公司事项经验：按 [operating-contract](references/operating-contract.md) 的候选模板在现有治理输出中保留版本、采用理由、失败/拒用、适用/过期及实际复用反馈。公司私有经验先留内部，公共方法需脱敏和验证。存储、加载器与调度能力保持原实现。

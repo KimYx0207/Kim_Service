@@ -13,3 +13,7 @@ Living pages have no immutable upstream revision; the inspection date is recorde
 | goalpro | [Kim Service goalpro](https://github.com/KimYx0207/Kim_Service/blob/7e0cc4b10c855a24960aac0ea3bd62c4e4bf7e57/skills/goalpro/SKILL.md); 7e0cc4b10c855a24960aac0ea3bd62c4e4bf7e57 | 区分明示意图、推断、代理证据和真实目标 | 不把Goal/Loop提示词工作流迁移成角色状态机 | Existing MIT or MIT OR Apache-2.0 LICENSE/NOTICE retained; method principles only |
 
 The local knowledge asset is tied to the complete component content hash in the catalog. Its bytes and method metadata are rechecked by a consuming host; content integrity is distinct from professional accuracy. `evals/professional-cases.json` contains authored examples, not execution receipts or an expert certification.
+
+## 2026-11-12 事项与经验闭环
+
+本次新增内容为本项目根据业务需求编写的方法、字段约束和虚构案例，沿用 existing-package 来源及原有许可。没有复制第三方文章正文、公司内部记录或把文章中的自述成效当作本仓库实测。合成案例验证结构与指定本地行为；真实组织使用、身份来源、业务效果和原生宿主运行保持未验证。

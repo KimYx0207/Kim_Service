@@ -48,7 +48,8 @@ LEGACY_OWNED_FILES = {
     ".claude/commands/memory-status.md": "28b8f29e093f99f8453a0f3616d2aac7c61ccee7df4f4c6431752b53058312d2",
 }
 LAUNCHER = (
-    "import pathlib,runpy,subprocess,sys;"
+    "import os,pathlib,runpy,subprocess,sys;"
+    "os.environ['MEMORY_HOST']=sys.argv[2] if len(sys.argv)>2 else os.environ.get('MEMORY_HOST','manual');"
     "c=pathlib.Path.cwd();"
     "g=subprocess.run(['git','rev-parse','--show-toplevel'],capture_output=True,text=True,"
     "encoding='utf-8',errors='replace');"
@@ -312,7 +313,7 @@ def _python_command(windows: bool) -> str:
 
 def _hook_command(platform: str, script: str, *, windows: bool) -> str:
     relative = f".{platform}/hooks/memory-3layer/{script}"
-    return f'{_python_command(windows)} -c "{LAUNCHER}" {relative}'
+    return f'{_python_command(windows)} -c "{LAUNCHER}" {relative} {platform}'
 
 
 def _is_managed_handler(handler: object, platform: str) -> bool:

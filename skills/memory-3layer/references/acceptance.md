@@ -29,3 +29,11 @@ source 表明事实来自哪里；status 表明是否仍生效；加载回执表
 执行本能力时按 SKILL.md 读取本文件及 method.json 中当前 capabilityId 的诊断、决策与 outputChecks。使用已有脚本和引用资料，不另造调度或运行状态。每条 blocking 规则缺证据或失败时保持未验收；其他高分不能抵消。作者自报 pass 最多是待独立复核的线索。
 
 本仓库校验器验证合同、引用和示例格式；professionalEffect=not_evaluated。professional-cases.json 是作者合成的教学正反例，没有真实运行或人审发生性。当前 Meta 的 Skill 发现路径不会像 Agent 方法投影一样自动把 method.json 注入 worker；实际加载依赖入口的明确阅读规则和宿主支持，未观察则如实报告。原生宿主是否触发、业务效果是否改善，都必须另取当前版本的实际任务证据。
+
+## 组织经验验收
+
+长期治理时，先按 operating-contract 的候选模板关联宿主 Work，再对 produced/verified/adopted/effect 分开判断。产物 adopted 可以引用历史有效决定；当前观察绑定当前事项/上下文，不重写原决定或重复要求批准。换人需要 current Work、来源范围、采用版和接手回执，记忆文件存在本身不证明接手。
+
+合格候选保留成功、失败、拒用、不适用和过期条件，写明实际复用 direct/adapted/not_applicable 及结果未知。company_internal 是处理边界说明，不是新权限机制；宿主仍检查访问。只有真正脱敏、泛化并完成针对性验证的通用方法才可准备公共版本。未经确认的候选不写 active，未观察的业务效果不写有效经验。
+
+反例：从一次“已生成”自动总结成功规则；把拒用理由 unknown 编成确定因果；删除不适用记录；因为公司当前一人而把内部资料写进公共库；安装 loader 就宣称自动检索适用条件或凌晨学习已运行。拒收这些结论。Python 存储格式、既有去重/生命周期和权限边界保持原实现。

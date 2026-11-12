@@ -17,6 +17,7 @@
     "读取本包 references/worked-delivery.md 的完整产物与专业反例；按当前输入迁移，不把合成答案当本次事实或验收记录"
   ],
   "steps": [
+    "存在宿主 WorkContext 时先绑定 organizationRef/workRef/contextRevision/scopeRef 与来源；无上下文沿用本能力原有入口，不创建业务主状态或重复确认已授权事项。",
     "先读取包内专业方法与现有 AGENT.md，绑定当前输入、目标和材料范围；来源引用不等于当前任务联网。",
     "核查的是否是当前任务的实际产物？ 缺身份或文件不能给完成结论，交缺失清单。",
     "标准可机械验证还是依赖专业/用户判断？ 把未执行标准列 missingCapabilities/未验证，不替换成字段存在。",
@@ -105,6 +106,15 @@
           "任务、工具与输入输出绑定"
         ],
         "whenMissing": "只核已提供字段一致性；不宣称回执真实性。"
+      },
+      {
+        "id": "work-continuity",
+        "question": "仅已提供 WorkContext 或显式请求业务事项交接核验时：这次产出属于哪家公司、哪件长期事项、哪个上下文与确切版本？采用、效果和接手是否各有来源？",
+        "evidenceRequired": [
+          "宿主 WorkContext 和实际 run 引用",
+          "版本/采用决定/接手回执及其来源"
+        ],
+        "whenMissing": "未使用事项上下文的普通任务，本诊断不适用，不新增登记或确认。适用时，保留未知，继续与缺口无关的工作；没有来源不宣布采用、接手或效果。"
       }
     ],
     "decisionRules": [
@@ -125,6 +135,12 @@
         "when": "回执指向另一任务或旧产物摘要",
         "action": "拒绝用它证明本次标准；保留已核其他项",
         "avoid": "只看回执写着 success 就忽略对象绑定。"
+      },
+      {
+        "id": "separate-work-evidence",
+        "when": "跨人、跨会话交付或复用组织经验",
+        "action": "分别记录 produced、verified、adopted、effect，绑定宿主 Work 与确切版本；接受历史有效决定的当前观察，保留失败/拒用/不适用和未知。",
+        "avoid": "把新版、核验通过、已发送、已收到或公司所有等同采用、完成、所有成员有权读取或可公开发布。"
       }
     ],
     "contractGuidance": [
@@ -174,14 +190,16 @@
           },
           {
             "field": "criterionResults",
-            "criterion": "逐项绑定当前任务/标准版本、实际产物和独立观察；缺证据与历史/作者自报分开，硬失败不能被其他通过项抵消。",
-            "rejectWhen": "引用文件存在或作者自报即pass，旧版本结果审批新要求。",
+            "criterion": "逐项绑定当前任务/标准版本、实际产物和独立观察；缺证据与历史/作者自报分开，硬失败不能被其他通过项抵消。 事项延续附加条件：仅显式使用可选 work_handoff 判据时适用；未使用时不适用且不要求 Work 字段。使用可选 work_handoff 时按真实 CLI 结果核宿主预期 Work/run/context、产物版本/hash、采用观察与接手；原样保留 Meta 来源说明，四层结果独立。",
+            "rejectWhen": "引用文件存在或作者自报即pass，旧版本结果审批新要求。 仅上述事项延续条件适用时，另拒收：把本地一致性 passed 当真实人审、权限、业务成效或接手事实，或丢弃 not_observed 来源的矛盾。",
             "id": "delivery-verifier-criterion-results",
             "verificationMethod": "source_check",
             "evidenceRequired": [
               "当前标准与源版本",
               "实际产物内容/哈希",
-              "独立观察与未测项"
+              "独立观察与未测项",
+              "仅上述事项延续条件适用时：同一宿主事项/上下文及确切产物版本",
+              "仅上述事项延续条件适用时：各阶段原始来源、采用观察和接手/复用回执或明确未知"
             ],
             "blocking": true
           },

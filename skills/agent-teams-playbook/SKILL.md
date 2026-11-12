@@ -1,12 +1,15 @@
 ---
 name: agent-teams-playbook
 metadata:
-  version: "4.9.1"
+  version: "4.10.0"
 description: |
-  Cross-runtime playbook for multi-agent collaboration, agent teams, swarm orchestration, parallel task distribution, capability discovery, and quality gates on Claude Code, Codex, OpenClaw, and Cursor. Use for 多agent、agent协作、agent编排、并行agent、分工协作、拉团队、多代理协作 or complex work needing independent roles and review. Map the six-stage workflow to the active host's actual capabilities; report sequential degradation when parallel agents are unavailable.
+  Cross-runtime playbook for multi-agent collaboration, agent teams, swarm orchestration, parallel task distribution, capability discovery, and quality gates on hosts discovered from their current capabilities; client and model selection remain separate. Use for 多agent、agent协作、agent编排、并行agent、分工协作、拉团队、多代理协作 or complex work needing independent roles and review. Map the six-stage workflow to the active host's actual capabilities; report sequential degradation when parallel agents are unavailable.
 ---
 
 # Agent Teams 编排手册
+
+
+可选公司事项协作：收到 `workContext` 时读取 [acceptance 的长期事项合同](references/acceptance.md)，将当前 run 关联宿主 Work，分开产出、核验、采用、效果与接手。无 WorkContext 时继续既有入口；宿主拥有业务状态、权限和调度，旧有效决定无需重批。
 
 ## 本能力的验收方法
 
@@ -21,9 +24,9 @@ description: |
 
 ## 跨平台兼容层（新增，不替代原流程）
 
-本 Skill 的完整 6 阶段工作流、按需能力解析、Agent → Skill 委派模式、质量把关和故障处理规则仍然保留。四个平台的差异只影响"用什么工具执行"，不影响"是否执行这些阶段"。
+本 Skill 的完整 6 阶段工作流、按需能力解析、Agent → Skill 委派模式、质量把关和故障处理规则仍然保留。不同宿主的差异只影响"用什么工具执行"，不影响"是否执行这些阶段"。下表是已有协议映射示例，不是允许使用的客户端名单。
 
-先识别当前平台，再把下列抽象动作映射到平台原生能力。不要在非 Claude Code 平台原样承诺 `Task`、`TeamCreate`、`SendMessage` 或 `Skill(...)` 一定存在；也不要因为平台工具名不同而跳过阶段0-5。
+先读取当前宿主提供的能力与配置，再把下列抽象动作映射到实际可用工具。客户端和模型分别记录：Claude Code 可以通过用户配置使用其他模型，模型名不证明当前客户端。MiniMax code、ZCode、Gemini CLI 等客户端也按现场 schema 与工具返回判断，不因名字已列出就宣称原生支持。不要在非 Claude Code 平台原样承诺 `Task`、`TeamCreate`、`SendMessage` 或 `Skill(...)` 一定存在；也不要因为平台工具名不同而跳过阶段0-5。
 
 | 抽象动作 | Claude Code | Codex | OpenClaw | Cursor |
 |------|------|------|------|------|
@@ -39,6 +42,17 @@ description: |
 3. Codex 以当前宿主实际暴露的工具 schema 和权限为准，再选择匹配的 profile；不能只凭产品名或版本猜参数。只有工具调用成功且有返回的 Agent 标识，才报告已启动。
 4. OpenClaw/Cursor 的 team 能力可能来自项目插件、workspace 或 IDE 能力；先探测，再承诺。
 5. 若平台不支持真正并行或团队通信，明确降级为"主线程分阶段执行"，但仍执行阶段0-5的治理流程。
+
+## 数据、方法、运行与展示的单一来源
+
+| 层 | 使用的现有来源 | 变化时怎样继续 |
+| --- | --- | --- |
+| 业务事实 | 宿主 WorkContext、原始产物/决定/接手回执 | 新上下文绑定新执行；不在界面或 Skill 另存业务主状态 |
+| 专业方法 | capability.json 的输入输出与 method.json 的验收规则 | 按能力引用加载，版本与来源保留，不复制另一份方法合同 |
+| 运行绑定 | 本次 hostCapabilities、工具 schema、权限和宿主配置 | 换客户端时重新核可用工具；继承模型配置，只有明确选择且 schema 支持才覆盖 |
+| 用户展示 | 上述事实与结果的可读投影 | 选择需要展示的模块；unknown/缺能力如实显示，界面不反向发明采用或执行状态 |
+
+新客户端接入只需宿主提供真实能力与目录绑定，不增加 Service 路由、权限或模型网关。评审是需要独立证据的职责，不绑定某个评审 CLI；按宿主已有能力安排，缺少独立证据时保持未核验。重试沿用阶段4同一预算和进展记录，客户端或模型变化不清零预算。
 
 ## Codex 宿主 profiles（薄适配）
 
@@ -109,7 +123,7 @@ description: |
 | 1 | 提示增强 | 简单任务，1-2步 | 优化单agent提示词，不拆分不组队 |
 | 2 | Provider直接复用 | 任务可由单个现有 Agent / Skill / Tool 完全解决 | 直接绑定已发现 provider，无需外部搜索或组建Agent Teams |
 | 3 | 计划+评审 | 中等/复杂任务（**默认**） | 出计划 → 沿用授权执行 → Review验收；新增关键决定才询问 |
-| 4 | Lead-Member | 需要明确团队分工 | Leader协调分配，Member并行执行，通过TaskList协同 |
+| 4 | Lead-Member | 需要明确团队分工 | Leader协调分配，Member并行执行，通过宿主当前任务记录协同 |
 | 5 | 复合编排 | 复杂任务，无固定模式 | 动态组合上述场景，按阶段切换策略 |
 
 
@@ -154,7 +168,7 @@ description: |
 | 预期结果 | [具体交付物] |
 | 验收标准 | [可量化的通过条件] |
 | 范围界定 | [must-have vs add-later] |
-| 当前平台 | [Claude Code / Codex / OpenClaw / Cursor / Unknown] |
+| 当前平台 | [宿主声明的客户端标识；未披露则 unknown] |
 | 预计Agent数 | [按任务 DAG、冲突边界与宿主并发能力确定，不写死数量] |
 | 选定场景 | [场景编号+名称] |
 | 协作模式 | [Subagent/Agent Team/Degraded] |

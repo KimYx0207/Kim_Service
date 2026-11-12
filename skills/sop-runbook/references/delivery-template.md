@@ -27,3 +27,26 @@ S2若付款成功但订单未标记，提出对账/修复方案，由授权方�
 | 从method.json选择 | 文件/表/行或页码 | 实际执行的方法 | 输入与输出版本 | 通过/失败/未观察/不适用 | 影响与下一步 |
 
 空白不是通过；阻断条件未满足时不得由其他高分抵消。不适用需说明与任务范围的关系。规则结果交调用方审阅，不自动批准最终交付。
+
+## 同一事项交接模板与合成正反例
+
+以下字段放入本能力已有输出，宿主继续拥有业务状态与权限。它们不是新增业务数据库。
+
+| 输出字段 | 有 WorkContext 时的最小记录 |
+| --- | --- |
+| facts | workContext、runRef、原始来源；缺口与假设分开 |
+| procedure | 步骤、输入版本、负责角色、授权范围引用、可观察预期、异常去向 |
+| validationRecord | produced / verified / adopted / effect 四份观察与各自证据，不用单一 done 覆盖 |
+| maintenance | 候选经验、成功/失败/拒用依据、适用/不适用条件、复查/过期触发、替代关系及复用反馈 |
+| handoff | recipientRef、scopeRef、采用版本、待选版本、decisionRef、理由或 unknown、nextAction、receiving 回执或 pending |
+| limitations | 未执行/未认证/未观察的具体范围；候选尚未成为长期规则或公共方法 |
+
+**合成任务**：课程上线检查从公司负责人交给编辑，work:course-launch 不变；本次只能内部核对，无外部发布授权。
+
+1. 读取宿主当前 revision:2，核 source:brief-v1 和原 decision:retain-v1；仍采用 artifact:course-v1。宿主可沿用有效旧决定，无需重新请人批准。新生成 artifact:course-v2 单列为 produced。
+2. 核对两版文件和各自标准。验证记录仅对实际检查填 passed/failed，未测写 unknown；v2 检查通过也不替换采用版。
+3. 把 v1、v2、来源、未完成事项和范围交到接手材料中。尚无接手回执写 pending；外部消息只由当前任务授权的宿主发送。本 Skill 写好交接材料不声称发送。
+4. 若收到同一 run/context、接手人、版本集合的回执，记录 acknowledged；随后继续内部核对。没有业务反馈，effect=unknown，不能写“上线效果提升”。
+5. 维护候选：v2 拒用理由未知则写 unknown；旧渠道经验在新渠道不适用，保留 not_applicable 及理由。复查条件是课程目标/渠道规则改变；由宿主既有流程安排整理，不把某个凌晨时点写成已存在调度。
+
+**反例**：只给 v2 链接就宣布“接手且采用”，或把旧 run 的完整采用观察搬到新 run。拒收此结论并补正确版本/当前观察；保留旧原始 decisionRef，不改写审批历史。完整可运行本地一致性例见 delivery-verifier 的 scripts/demo-work-handoff.mjs；该可选检查不证明真实人员、业务采用或线上效果。

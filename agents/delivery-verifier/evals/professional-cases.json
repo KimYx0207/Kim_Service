@@ -97,6 +97,168 @@
         "partial-result",
         "stale-receipt"
       ]
+    },
+    {
+      "id": "work-handoff-old-version",
+      "capabilityId": "delivery-evidence-verify",
+      "category": "worked_example",
+      "scenario": "完整可执行合成 fixture：生成 v2、采用旧 v1、效果未知。",
+      "input": {
+        "taskId": "synthetic-course-work",
+        "artifacts": [
+          {
+            "id": "course-v1",
+            "path": "course-v1.txt",
+            "bytes": 44,
+            "sha256": "47817cd05d3e531fd3aa8624ed590f04224b2aea18f455691eadcba714d2f26f"
+          },
+          {
+            "id": "course-v2",
+            "path": "course-v2.txt",
+            "bytes": 53,
+            "sha256": "e476fe4c628edde34c9060282c8b0351f3d956f19c0fdb7128910fb82e4e74ba"
+          },
+          {
+            "id": "handoff",
+            "path": "handoff.json",
+            "bytes": 2962,
+            "sha256": "bb9b4863dd761be465b7adfd7f944a7f0e6ddbb673a1631fa7c88ddea9168e64"
+          }
+        ],
+        "criteria": [
+          {
+            "id": "work-handoff",
+            "description": "Current Work, exact versions and receiving consistency",
+            "type": "work_handoff",
+            "artifactId": "handoff",
+            "artifactBindings": [
+              {
+                "artifactRef": "artifact:course-v1",
+                "artifactId": "course-v1",
+                "version": "1",
+                "sha256": "47817cd05d3e531fd3aa8624ed590f04224b2aea18f455691eadcba714d2f26f"
+              },
+              {
+                "artifactRef": "artifact:course-v2",
+                "artifactId": "course-v2",
+                "version": "2",
+                "sha256": "e476fe4c628edde34c9060282c8b0351f3d956f19c0fdb7128910fb82e4e74ba"
+              }
+            ],
+            "runId": "synthetic-run-2",
+            "workBinding": {
+              "organizationRef": "org:synthetic-company",
+              "workRef": "work:course-launch",
+              "contextRevision": "revision:2",
+              "contextDigest": "sha256:cdb1daf1f767791039bec67a79ad266a864bf91f19afba71cbbf71a0e56cdb29"
+            }
+          }
+        ]
+      },
+      "candidateOutputExcerpt": {
+        "status": "completed",
+        "criterionResults": [
+          {
+            "id": "work-handoff",
+            "status": "passed",
+            "scope": "local consistency only",
+            "workStages": {
+              "produced": "produced",
+              "verified": "passed",
+              "adopted": "accepted",
+              "effect": "unknown",
+              "receiving": "acknowledged",
+              "authenticity": "not_verified",
+              "finalAcceptance": "not_decided"
+            }
+          }
+        ],
+        "handoff": {
+          "finalAcceptance": "not_decided"
+        }
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "产物身份、采用观察与接手的字段可一致；真实主体与业务效果仍未认证。",
+      "diagnosticRefs": [
+        "work-continuity"
+      ],
+      "decisionRuleRefs": [
+        "separate-work-evidence"
+      ]
+    },
+    {
+      "id": "work-handoff-inflated-verdict",
+      "capabilityId": "delivery-evidence-verify",
+      "category": "failure_boundary",
+      "scenario": "同一个本地一致性结果被说成整件事已经真实完成。",
+      "input": {
+        "taskId": "synthetic-course-work",
+        "artifacts": [
+          {
+            "id": "course-v1",
+            "path": "course-v1.txt",
+            "bytes": 44,
+            "sha256": "47817cd05d3e531fd3aa8624ed590f04224b2aea18f455691eadcba714d2f26f"
+          },
+          {
+            "id": "course-v2",
+            "path": "course-v2.txt",
+            "bytes": 53,
+            "sha256": "e476fe4c628edde34c9060282c8b0351f3d956f19c0fdb7128910fb82e4e74ba"
+          },
+          {
+            "id": "handoff",
+            "path": "handoff.json",
+            "bytes": 2962,
+            "sha256": "bb9b4863dd761be465b7adfd7f944a7f0e6ddbb673a1631fa7c88ddea9168e64"
+          }
+        ],
+        "criteria": [
+          {
+            "id": "work-handoff",
+            "description": "Current Work, exact versions and receiving consistency",
+            "type": "work_handoff",
+            "artifactId": "handoff",
+            "artifactBindings": [
+              {
+                "artifactRef": "artifact:course-v1",
+                "artifactId": "course-v1",
+                "version": "1",
+                "sha256": "47817cd05d3e531fd3aa8624ed590f04224b2aea18f455691eadcba714d2f26f"
+              },
+              {
+                "artifactRef": "artifact:course-v2",
+                "artifactId": "course-v2",
+                "version": "2",
+                "sha256": "e476fe4c628edde34c9060282c8b0351f3d956f19c0fdb7128910fb82e4e74ba"
+              }
+            ],
+            "runId": "synthetic-run-2",
+            "workBinding": {
+              "organizationRef": "org:synthetic-company",
+              "workRef": "work:course-launch",
+              "contextRevision": "revision:2",
+              "contextDigest": "sha256:cdb1daf1f767791039bec67a79ad266a864bf91f19afba71cbbf71a0e56cdb29"
+            }
+          }
+        ]
+      },
+      "candidateOutputExcerpt": {
+        "status": "completed",
+        "handoff": {
+          "finalAcceptance": "approved",
+          "businessEffect": "proven",
+          "permissions": "granted-from-scopeRef"
+        }
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "本地通过不认证采用、接手、权限或效果。",
+      "diagnosticRefs": [
+        "work-continuity"
+      ],
+      "decisionRuleRefs": [
+        "separate-work-evidence"
+      ]
     }
   ]
 }

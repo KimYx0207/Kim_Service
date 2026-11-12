@@ -368,6 +368,129 @@
         "preserve-history",
         "honest-runtime"
       ]
+    },
+    {
+      "id": "company-work-negative-learning",
+      "capabilityId": "memory-3layer-govern-long-term",
+      "category": "worked_example",
+      "scenario": "新稿被拒用；某旧经验因渠道不同而不适用，留在公司内部复查。",
+      "input": {
+        "projectDir": "/example/company-project",
+        "reviewScope": "复查公司课程事项 work:course-launch 的可复用经验；公司 org:synthetic-company、上下文 revision:2；WorkContext 来源见授权材料 source:brief-v1。",
+        "evidenceRefs": [
+          "decision:reject-v2",
+          "review:synthetic-v2",
+          "source:old-channel",
+          "source:brief-v1"
+        ]
+      },
+      "candidateOutputExcerpt": {
+        "review": {
+          "summary": "核验与采用不同；失败、拒用和不适用均保留来源，业务效果 unknown。",
+          "workContext": {
+            "schemaVersion": "kim-work-context-v1",
+            "organizationRef": "org:synthetic-company",
+            "workRef": "work:course-launch",
+            "contextRevision": "revision:2",
+            "scopeRef": "scope:internal-course-team",
+            "sourceRefs": [
+              "source:brief-v1"
+            ],
+            "acceptedArtifactRefs": [
+              "artifact:course-v1"
+            ],
+            "decisionRefs": [
+              "decision:retain-v1"
+            ]
+          }
+        },
+        "proposals": [
+          {
+            "candidateRef": "candidate:channel-check",
+            "workContext": {
+              "schemaVersion": "kim-work-context-v1",
+              "organizationRef": "org:synthetic-company",
+              "workRef": "work:course-launch",
+              "contextRevision": "revision:2",
+              "scopeRef": "scope:internal-course-team",
+              "sourceRefs": [
+                "source:brief-v1"
+              ],
+              "acceptedArtifactRefs": [
+                "artifact:course-v1"
+              ],
+              "decisionRefs": [
+                "decision:retain-v1"
+              ]
+            },
+            "artifactRefs": [
+              "artifact:course-v2"
+            ],
+            "decisionRef": "decision:reject-v2",
+            "reason": "unknown",
+            "learning": "发布前先核目标渠道适用条件；此条仍为待证假设。",
+            "applicableWhen": [
+              "同渠道、同类素材且规则仍有效"
+            ],
+            "notApplicableWhen": [
+              "目标渠道不同"
+            ],
+            "expiresWhen": [
+              "渠道规则变化或反例推翻"
+            ],
+            "visibility": "company_internal",
+            "reuseFeedback": [
+              {
+                "sourceRef": "source:old-channel",
+                "disposition": "not_applicable",
+                "reason": "本次渠道不同",
+                "effect": "unknown"
+              }
+            ]
+          }
+        ],
+        "appliedChanges": [],
+        "pendingConfirmation": [
+          "尚无长期知识提升的具体确认；继续保留内部候选，不写公共仓库。"
+        ]
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "负面经验也可成为候选；无事实、采用或长期变更依据时不自动升级。",
+      "diagnosticRefs": [
+        "work-continuity"
+      ],
+      "decisionRuleRefs": [
+        "separate-work-evidence"
+      ]
+    },
+    {
+      "id": "company-private-is-not-public",
+      "capabilityId": "memory-3layer-govern-long-term",
+      "category": "failure_boundary",
+      "scenario": "公司目前只有一人，Agent 从一次成功产出直接生成公共 Skill。",
+      "input": {
+        "projectDir": "/example/company-project",
+        "reviewScope": "复查课程经验",
+        "evidenceRefs": [
+          "artifact:course-v2"
+        ]
+      },
+      "candidateOutputExcerpt": {
+        "proposals": [
+          "把客户原始资料和单次结果写到公共方法"
+        ],
+        "appliedChanges": [
+          "自动提升 active 并公开，理由：公司只有一人且文件核验通过。"
+        ]
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "公司所有不等于可公开；一次产出不证明经验有效，来源范围/脱敏/泛化验证与已有授权不能跳过。",
+      "diagnosticRefs": [
+        "work-continuity"
+      ],
+      "decisionRuleRefs": [
+        "separate-work-evidence"
+      ]
     }
   ]
 }

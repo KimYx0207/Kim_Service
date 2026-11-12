@@ -5,6 +5,7 @@
   "runtimeStatus": "needs_probe",
   "automaticInvocation": false,
   "steps": [
+    "存在宿主 WorkContext 时先绑定 organizationRef/workRef/contextRevision/scopeRef 与来源；无上下文沿用本能力原有入口，不创建业务主状态或重复确认已授权事项。",
     "从用户目标拆出可观察的交付条件，读取当前宿主可见工具和已有专业能力，不用团队人数代表任务复杂度。",
     "将任务写为带依赖原因、输入版本、产物、负责人与验收者的工单；写同一文件、独占浏览器或数据库迁移时声明冲突。",
     "只分发前置产物和权限已就绪的任务；某节点等待人工只暂停它及依赖者，独立任务继续。",
@@ -68,6 +69,15 @@
           "接口/UX/数据一致性检查记录"
         ],
         "whenMissing": "完成子任务不等于合并通过；缺少任一必需产物就保留交付缺口。"
+      },
+      {
+        "id": "work-continuity",
+        "question": "仅已提供 WorkContext 或显式请求业务事项交接核验时：这次产出属于哪家公司、哪件长期事项、哪个上下文与确切版本？采用、效果和接手是否各有来源？",
+        "evidenceRequired": [
+          "宿主 WorkContext 和实际 run 引用",
+          "版本/采用决定/接手回执及其来源"
+        ],
+        "whenMissing": "未使用事项上下文的普通任务，本诊断不适用，不新增登记或确认。适用时，保留未知，继续与缺口无关的工作；没有来源不宣布采用、接手或效果。"
       }
     ],
     "decisionRules": [
@@ -88,6 +98,12 @@
         "when": "任务失败且准备重试",
         "action": "先记录失败类、已完成副作用、改变的输入和重试预算",
         "avoid": "原样无限重试、重放付款/发布，或跳过必需验收。"
+      },
+      {
+        "id": "separate-work-evidence",
+        "when": "跨人、跨会话交付或复用组织经验",
+        "action": "分别记录 produced、verified、adopted、effect，绑定宿主 Work 与确切版本；接受历史有效决定的当前观察，保留失败/拒用/不适用和未知。",
+        "avoid": "把新版、核验通过、已发送、已收到或公司所有等同采用、完成、所有成员有权读取或可公开发布。"
       }
     ],
     "contractGuidance": [
@@ -111,8 +127,13 @@
           },
           {
             "field": "hostCapabilities",
-            "interpretation": "本轮实际工具 schema、并发容量及通信能力。",
-            "onMissing": "先发现，缺少则明示顺序降级。"
+            "interpretation": "本轮宿主能力快照是运行绑定的唯一输入：客户端标识、实际工具 schema、权限、容量、模型配置来源和已有任务预算分开；未知平台名称不证明原生支持。",
+            "onMissing": "读取当前宿主声明与实际工具；缺能力则明确顺序/人工材料路线，不默认切到 Claude 或任何评审 CLI。"
+          },
+          {
+            "field": "workContext",
+            "interpretation": "可选 kim-work-context-v1：公司、长期业务事项、上下文版本、授权范围引用及来源/采用版本/决定引用；宿主提供并负责权限。",
+            "onMissing": "保持原有独立任务用法，不要求额外登记、确认或创建 Work。"
           }
         ],
         "outputChecks": [
@@ -124,7 +145,8 @@
             "verificationMethod": "source_check",
             "evidenceRequired": [
               "本轮工具 schema",
-              "实际调用回执或不可用记录"
+              "实际调用回执或不可用记录",
+              "当前宿主能力/配置来源；缺失明确记录，不另造第二套配置"
             ],
             "blocking": true
           },
@@ -143,8 +165,8 @@
           {
             "id": "assignments-acceptance",
             "field": "assignments",
-            "criterion": "每项工作绑定真实专业能力、文件/资源范围和交接产物，验收者与产物作者可区分。",
-            "rejectWhen": "只给角色名而无专业材料，或多名写者同时覆盖同一资源。",
+            "criterion": "每项工作绑定真实专业能力、文件/资源范围和交接产物，验收者与产物作者可区分。 运行绑定引用当前 hostCapabilities，客户端、专业角色和模型选择分开；默认继承配置，未知模型标未披露，独立评审不绑定某品牌 CLI。",
+            "rejectWhen": "只给角色名而无专业材料，或多名写者同时覆盖同一资源。 由模型名反推客户端、硬编码评审 CLI 或绕过宿主配置选择模型。",
             "verificationMethod": "artifact_inspection",
             "evidenceRequired": [
               "能力来源与边界",
@@ -155,12 +177,14 @@
           {
             "id": "results-acceptance",
             "field": "results",
-            "criterion": "产物逐项绑定实际工单、版本和工具返回；保留失败、等待及未运行状态。",
-            "rejectWhen": "把计划、提示词、旧运行结果或口头完成当作本轮已交付。",
+            "criterion": "产物逐项绑定实际工单、版本和工具返回；保留失败、等待及未运行状态。 事项延续附加条件：仅提供 WorkContext 或明确请求业务事项交接时适用；普通任务不适用，不新增 Work 登记或确认。组织交付逐项绑定宿主 Work/run/context 和实际版本，分开 produced/verified/adopted/effect；跨人接手有 recipient、scope、当前采用版、下一步和实际接手回执或 pending。",
+            "rejectWhen": "把计划、提示词、旧运行结果或口头完成当作本轮已交付。 仅上述事项延续条件适用时，另拒收：新稿覆盖已采用旧版、跨 Work/旧上下文回执串用，或只凭消息已发送宣称接手。",
             "verificationMethod": "source_check",
             "evidenceRequired": [
               "当前调用回执",
-              "对应文件、返回文本或哈希"
+              "对应文件、返回文本或哈希",
+              "仅上述事项延续条件适用时：同一宿主事项/上下文及确切产物版本",
+              "仅上述事项延续条件适用时：各阶段原始来源、采用观察和接手/复用回执或明确未知"
             ],
             "blocking": true
           },

@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import sys
 from typing import Any, Dict
 
@@ -44,19 +45,31 @@ def context_output(event_name: str, context: str) -> Dict[str, Any]:
 
 
 def detect_host(payload: Dict[str, Any]) -> str:
-    """Best-effort provenance label; never changes the output schema."""
-    explicit = os.environ.get("MEMORY_HOST", "").strip().lower()
-    if explicit in {"claude", "codex", "manual"}:
+    """Declared provenance only; model names never identify the client or adapter."""
+    aliases = {"claude-code": "claude", "codex-cli": "codex"}
+
+    def label(value: Any) -> str:
+        if not isinstance(value, str):
+            return ""
+        value = value.strip().lower()
+        if not re.fullmatch(r"[a-z][a-z0-9._ -]{0,79}", value):
+            return ""
+        value = re.sub(r" +", "-", value)
+        return aliases.get(value, value)
+
+    explicit = label(os.environ.get("MEMORY_HOST"))
+    if explicit:
         return explicit
     for key in ("runtime", "host", "client"):
-        value = str(payload.get(key, "")).lower()
-        if "codex" in value:
-            return "codex"
-        if "claude" in value:
-            return "claude"
-    model = str(payload.get("model", "")).lower()
-    if model.startswith(("gpt-", "o1", "o3", "o4", "codex")):
-        return "codex"
-    if "claude" in model:
-        return "claude"
+        value = label(payload.get(key))
+        if value:
+            return value
     return "manual"
+
+
+def reported_model(payload: Dict[str, Any]) -> Dict[str, Any]:
+    """Keep an optional model label separate from host provenance and authority."""
+    value = payload.get("model")
+    if isinstance(value, str) and 0 < len(value.strip()) <= 200 and not re.search(r"[\x00-\x1f\x7f]", value):
+        return {"name": value.strip(), "source": "payload_unverified"}
+    return {"name": None, "source": "not_provided"}

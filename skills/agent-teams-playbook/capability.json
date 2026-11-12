@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "agent-teams-playbook",
   "componentType": "skill",
-  "componentVersion": "4.9.1",
+  "componentVersion": "4.10.0",
   "entrypoint": "SKILL.md",
   "capabilities": [
     {
@@ -37,7 +37,76 @@
             }
           },
           "hostCapabilities": {
-            "type": "object"
+            "type": "object",
+            "description": "本次宿主提供的客户端标识、真实工具 schema/权限/容量、模型配置来源和任务预算；客户端与模型分开，未知如实保留，不是固定品牌名单。"
+          },
+          "workContext": {
+            "type": "object",
+            "description": "可选的宿主业务事项快照；引用不授予权限，不建立第二份业务状态。",
+            "additionalProperties": false,
+            "required": [
+              "schemaVersion",
+              "organizationRef",
+              "workRef",
+              "contextRevision",
+              "scopeRef"
+            ],
+            "properties": {
+              "schemaVersion": {
+                "type": "string",
+                "const": "kim-work-context-v1"
+              },
+              "organizationRef": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 500
+              },
+              "workRef": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 500
+              },
+              "contextRevision": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 500
+              },
+              "scopeRef": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 500
+              },
+              "sourceRefs": {
+                "type": "array",
+                "maxItems": 64,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 500
+                }
+              },
+              "acceptedArtifactRefs": {
+                "type": "array",
+                "maxItems": 64,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 500
+                }
+              },
+              "decisionRefs": {
+                "type": "array",
+                "maxItems": 64,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 500
+                }
+              }
+            }
           }
         },
         "required": [

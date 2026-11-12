@@ -7,7 +7,7 @@
 [![GitHub stars](https://img.shields.io/github/stars/KimYx0207/Kim_Service?style=social)](https://github.com/KimYx0207/Kim_Service)
 [![GitHub forks](https://img.shields.io/github/forks/KimYx0207/Kim_Service?style=social)](https://github.com/KimYx0207/Kim_Service)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/KimYx0207/Kim_Service)
-[![Version](https://img.shields.io/badge/version-4.8.0-green.svg)](https://github.com/KimYx0207/Kim_Service)
+[![Version](https://img.shields.io/badge/version-4.10.0-green.svg)](https://github.com/KimYx0207/Kim_Service)
 [![Runtime](https://img.shields.io/badge/runtimes-Claude%20Code%20%7C%20Codex%20%7C%20OpenClaw%20%7C%20Cursor-blue.svg)](https://github.com/KimYx0207/Kim_Service)
 
 </div>
@@ -81,15 +81,21 @@ git clone https://github.com/KimYx0207/Kim_Service.git
 cd Kim_Service/skills/agent-teams-playbook
 chmod +x scripts/install.sh
 
-# 安装到 Claude Code（默认）
-./scripts/install.sh
+# 显式选择当前客户端的目录适配（这里以 Claude Code 为例）
+./scripts/install.sh --target claude
 
 # 安装到指定平台
 ./scripts/install.sh --target codex
 ./scripts/install.sh --target openclaw
 ./scripts/install.sh --target cursor
 
-# 一次安装到四个平台
+# 未列名客户端：使用你或宿主已确认的 Skills 目录，只安装通用方法包
+./scripts/install.sh --target custom --skills-dir /absolute/host/skills
+
+# 可选配置默认目标；命令行 --target 优先
+AGENT_TEAMS_INSTALL_TARGET=codex ./scripts/install.sh
+
+# 一次安装到四个已有目录适配
 ./scripts/install.sh --target all
 
 # 从 GitHub main 下载安装，而不是复制当前本地 checkout
@@ -98,7 +104,7 @@ chmod +x scripts/install.sh
 
 ### 安装安全与恢复
 
-Bash 安装器在 Linux/macOS 运行；Windows 使用 Git Bash/WSL 的 POSIX 绝对路径，不声称原生 PowerShell 安装。环境变量只决定明确选择的目标根目录；相对路径、`..` 和符号链接目标会被拒绝。
+Bash 安装器在 Linux/macOS 运行；Windows 使用 Git Bash/WSL 的 POSIX 绝对路径，不声称原生 PowerShell 安装。未提供 --target 或 AGENT_TEAMS_INSTALL_TARGET 时只给用法，不创建 Claude 目录。custom 不猜 MiniMax code、ZCode、Gemini CLI 的目录，也不写它们的 Hook；接入是否可用仍需宿主实际加载。环境变量只决定明确选择的目标根目录；相对路径、`..` 和符号链接目标会被拒绝。
 
 安装先在目标同盘的隐藏 staging 目录准备并校验 `SKILL.md` 与 `README.md`，再询问是否覆盖。回答 `y` 后按 Enter；默认或 EOF 都保留原安装。成功覆盖会把整个旧目录（包括用户修改和额外文件）保留在输出的 `.agent-teams-playbook.backup.*/previous`，用户修改和额外文件只保存在备份中，不会自动合并到新启用目录，也不会自动删除备份。失败下载、缺文件、替换或最终校验失败会自动恢复旧目录。Claude fork 选项也在 staging 内修改。
 
@@ -158,6 +164,10 @@ cp README.md ~/.cursor/skills/agent-teams-playbook/
 `capability.json` 是包版本和验证入口的事实源，`SKILL.md` 使用 `metadata.version`。以当前宿主 schema 为准：codex-v1 使用 `multi_agent_v1.spawn_agent` / `fork_context`，codex-v2 使用 `spawn_agent` / `fork_turns`；可选字段受 feature flags 控制，无可用能力时主线程分阶段执行。具体 profiles 与静态样例见 [SKILL.md](SKILL.md)。
 
 本包提供分工与检查建议，不接管 Meta_Kim 的 Router、跨组件状态机或最终验收。`tests/runtime-contracts.test.mjs` 是静态合同检查，`tests/test_installer.py` 是隔离目录内的离线安装行为测试；都不等于真实模型或宿主多 Agent 行为实测。
+
+## 公司事项与接手
+
+可选 WorkContext 把现有分工关联到宿主长期事项，适用于当前一人、以后多人协作的公司。按 [验收方法](references/acceptance.md) 分开产出、核验、采用、效果和接手；有效历史决定可继续引用，未知理由保留 unknown。没有事项上下文时不增加登记或确认；不接管公司权限、业务状态或定时调度。
 
 ## 核心设计原则
 
@@ -288,7 +298,7 @@ Claude Code 默认**不设置** `context: fork`，6阶段工作流在主会话�
 ```yaml
 ---
 name: agent-teams-playbook
-version: "4.8.0"
+version: "4.10.0"
 context: fork    # 添加这行启用隔离模式
 ---
 ```
@@ -317,6 +327,6 @@ context: fork    # 添加这行启用隔离模式
 
 ---
 
-**版本**：V4.8.0
+**版本**：V4.10.0
 **最后更新**：2026-07-10
 **维护者**：老金

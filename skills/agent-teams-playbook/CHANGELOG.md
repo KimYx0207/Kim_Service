@@ -1,9 +1,17 @@
+# Changelog
+
+## 4.10.0 - 2026-11-12
+
+- Require an explicit/configured install target; add a host-supplied custom Skills directory without guessing client protocols. Keep client, model, method and display bindings separate.
+- Add optional host WorkContext continuity and version-bound produced/verified/adopted/effect handoffs across people and conversations.
+- Preserve existing authorization and host scheduling; receiving receipts do not imply business completion.
+
 ## 4.9.1 — 2026-11-11
 
 - 统一重试与恢复预算；Meta沿用宿主planning-continuity；独立任务保留等价记录；默认继承模型。
 - 合成样板与结构/工具验证不改变 professionalEffect: not_evaluated。
 
-# Changelog
+
 
 ## 4.9.0 - 2026-11-11
 

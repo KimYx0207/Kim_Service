@@ -54,10 +54,10 @@ test('Node descriptor requires explicit host binding and never extends current P
   assert.equal(cap.deliveryContract, 'delivery-tool.json');
   const descriptor = JSON.parse(read(cap.deliveryContract));
   assert.equal(descriptor.protocol, 'artifact-verification-v1');
-  assert.equal(descriptor.toolVersion, '0.1.0');
+  assert.equal(descriptor.toolVersion, '0.2.0');
   assert.deepEqual(descriptor.invocation, { type: 'local_cli', runtime: 'node', entrypoint: 'scripts/verify.mjs',
     argv: ['--artifact-root', '<host-authorized-root>', '--input-json', '-'], inputTransport: 'stdin_json', outputTransport: 'stdout_json', shell: false });
-  assert.deepEqual(descriptor.files, ['scripts/verify.mjs']);
+  assert.deepEqual(descriptor.files, ['scripts/verify.mjs', 'scripts/work-handoff.mjs']);
   assert.deepEqual(descriptor.sideEffects, []);
   assert.equal(descriptor.networkUsed, false);
   assert.equal(descriptor.filesModified, false);

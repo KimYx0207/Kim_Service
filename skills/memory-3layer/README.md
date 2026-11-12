@@ -140,3 +140,5 @@ MIT. See [LICENSE](LICENSE) and [NOTICE](NOTICE).
     <td align="center"><img src="docs/images/alipay.jpg" width="260" alt="Alipay payment QR code"></td>
   </tr>
 </table>
+
+Company Work: the [operating contract](references/operating-contract.md) extends existing governance proposals with exact versions, adoption reasons, negative evidence, applicability/expiry and actual reuse feedback. Company-private candidates remain internal; public methods require deidentification and validation. Storage, loaders and scheduling are unchanged.

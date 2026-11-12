@@ -266,12 +266,12 @@
       ]
     },
     {
-      "componentContentSha256": "6fc6d495839fb8d338764836ab9fd0f3a037a75f7291502797bd103ed9611fad",
+      "componentContentSha256": "531c61dc18224ea97575a8c871cbd329be8e6bcff4e7663dcfc2cb9b82b69a13",
       "componentId": "agent-teams-playbook",
       "componentPath": "skills/agent-teams-playbook",
       "componentType": "skill",
-      "componentVersion": "4.9.1",
-      "contractSha256": "42c408e8650d04f451a968df8a96a9b7b0f86e402d360eaa11e0e43a4ef5fbc0",
+      "componentVersion": "4.10.0",
+      "contractSha256": "2220cacdb80ae3908b3b2bab81946dca59609555c34fce581b1630faee05e321",
       "doNotUseWhen": [
         "单 Agent 可以直接完成的一次性问答或单文件小改动",
         "宿主没有真实的子 Agent 能力且任务也不值得采用分阶段降级流程",
@@ -296,6 +296,7 @@
             "type": "array"
           },
           "hostCapabilities": {
+            "description": "本次宿主提供的客户端标识、真实工具 schema/权限/容量、模型配置来源和任务预算；客户端与模型分开，未知如实保留，不是固定品牌名单。",
             "type": "object"
           },
           "successCriteria": {
@@ -306,6 +307,74 @@
           },
           "task": {
             "type": "string"
+          },
+          "workContext": {
+            "additionalProperties": false,
+            "description": "可选的宿主业务事项快照；引用不授予权限，不建立第二份业务状态。",
+            "properties": {
+              "acceptedArtifactRefs": {
+                "items": {
+                  "maxLength": 500,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "maxItems": 64,
+                "type": "array",
+                "uniqueItems": true
+              },
+              "contextRevision": {
+                "maxLength": 500,
+                "minLength": 1,
+                "type": "string"
+              },
+              "decisionRefs": {
+                "items": {
+                  "maxLength": 500,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "maxItems": 64,
+                "type": "array",
+                "uniqueItems": true
+              },
+              "organizationRef": {
+                "maxLength": 500,
+                "minLength": 1,
+                "type": "string"
+              },
+              "schemaVersion": {
+                "const": "kim-work-context-v1",
+                "type": "string"
+              },
+              "scopeRef": {
+                "maxLength": 500,
+                "minLength": 1,
+                "type": "string"
+              },
+              "sourceRefs": {
+                "items": {
+                  "maxLength": 500,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "maxItems": 64,
+                "type": "array",
+                "uniqueItems": true
+              },
+              "workRef": {
+                "maxLength": 500,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "schemaVersion",
+              "organizationRef",
+              "workRef",
+              "contextRevision",
+              "scopeRef"
+            ],
+            "type": "object"
           }
         },
         "required": [
@@ -2945,12 +3014,12 @@
       ]
     },
     {
-      "componentContentSha256": "fcc3b215e79fc364a76c1f0e50f288e01b86bad77d75425f92283c661374ac78",
+      "componentContentSha256": "f14fae7983eb3c22ea69fc2aaf8420b420862abb81b1660ac6f24bba2ecf5295",
       "componentId": "delivery-verifier",
       "componentPath": "agents/delivery-verifier",
       "componentType": "agent",
-      "componentVersion": "0.3.1",
-      "contractSha256": "91b9991f3734cd24231571b64064aed83db195032a04a5df53b702f45fa1ee64",
+      "componentVersion": "0.4.0",
+      "contractSha256": "f6b607238096d49b5fdf2de4071289b3d2d4b0600b2d7e620d2680fd0d05daeb",
       "deliveryContract": "delivery-tool.json",
       "doNotUseWhen": [
         "需要调度、权限、锁或最终裁决时交回调用方或 Meta。",
@@ -7789,12 +7858,12 @@
       ]
     },
     {
-      "componentContentSha256": "135c96a8a07345f459de34b6f6fb1fdbc00bded414ec2fc4b9a8ba6deadbae03",
+      "componentContentSha256": "ae647ba692881c06da9f8e448adca39b498e39cf8203dad1998abb186a24b07d",
       "componentId": "memory-3layer",
       "componentPath": "skills/memory-3layer",
       "componentType": "skill",
-      "componentVersion": "1.1.0",
-      "contractSha256": "e901a72392311679ebd717d56a67ba74ea7f90c3f03020fa966d8032baf3f6e5",
+      "componentVersion": "1.2.0",
+      "contractSha256": "42da3f04fea7ce8ded30293245c8b9fa35eee871169250500c2ce3172699d034",
       "doNotUseWhen": [
         "内容含秘密、私钥、Cookie、支付凭证、个人隐私或机器私有路径",
         "内容只是模型推测、普通工具输出、完整聊天记录或无法追溯来源的断言",
@@ -7875,10 +7944,15 @@
           "memory_root": {
             "type": "string"
           },
+          "model": {
+            "description": "可选模型来源信息：name 为载荷自报名称或 null，source 为 payload_unverified / not_provided；不用于客户端识别、权限或路由。",
+            "type": "object"
+          },
           "next": {
             "type": "string"
           },
           "runtime": {
+            "description": "明确的适配器/宿主声明来源标签；无声明为 manual，不从模型名推导客户端或认证原生运行。",
             "type": "string"
           },
           "runtime_evidence": {
@@ -7920,12 +7994,12 @@
       ]
     },
     {
-      "componentContentSha256": "135c96a8a07345f459de34b6f6fb1fdbc00bded414ec2fc4b9a8ba6deadbae03",
+      "componentContentSha256": "ae647ba692881c06da9f8e448adca39b498e39cf8203dad1998abb186a24b07d",
       "componentId": "memory-3layer",
       "componentPath": "skills/memory-3layer",
       "componentType": "skill",
-      "componentVersion": "1.1.0",
-      "contractSha256": "e901a72392311679ebd717d56a67ba74ea7f90c3f03020fa966d8032baf3f6e5",
+      "componentVersion": "1.2.0",
+      "contractSha256": "42da3f04fea7ce8ded30293245c8b9fa35eee871169250500c2ce3172699d034",
       "doNotUseWhen": [
         "没有可追溯证据或结论仍是模型推测",
         "目标是自动覆盖冲突事实或物理删除历史条目",
@@ -8009,12 +8083,12 @@
       ]
     },
     {
-      "componentContentSha256": "135c96a8a07345f459de34b6f6fb1fdbc00bded414ec2fc4b9a8ba6deadbae03",
+      "componentContentSha256": "ae647ba692881c06da9f8e448adca39b498e39cf8203dad1998abb186a24b07d",
       "componentId": "memory-3layer",
       "componentPath": "skills/memory-3layer",
       "componentType": "skill",
-      "componentVersion": "1.1.0",
-      "contractSha256": "e901a72392311679ebd717d56a67ba74ea7f90c3f03020fa966d8032baf3f6e5",
+      "componentVersion": "1.2.0",
+      "contractSha256": "42da3f04fea7ce8ded30293245c8b9fa35eee871169250500c2ce3172699d034",
       "doNotUseWhen": [
         "用户只要求读取或记录记忆而不需要安装运行时接线",
         "项目根目录不明确、现有配置无法安全合并或目标宿主不受支持",
@@ -8142,12 +8216,12 @@
       ]
     },
     {
-      "componentContentSha256": "135c96a8a07345f459de34b6f6fb1fdbc00bded414ec2fc4b9a8ba6deadbae03",
+      "componentContentSha256": "ae647ba692881c06da9f8e448adca39b498e39cf8203dad1998abb186a24b07d",
       "componentId": "memory-3layer",
       "componentPath": "skills/memory-3layer",
       "componentType": "skill",
-      "componentVersion": "1.1.0",
-      "contractSha256": "e901a72392311679ebd717d56a67ba74ea7f90c3f03020fa966d8032baf3f6e5",
+      "componentVersion": "1.2.0",
+      "contractSha256": "42da3f04fea7ce8ded30293245c8b9fa35eee871169250500c2ce3172699d034",
       "doNotUseWhen": [
         "用户没有明确要求迁移",
         "目标目录含冲突、非法状态、秘密、私有机器路径或不安全链接",
@@ -8227,12 +8301,12 @@
       ]
     },
     {
-      "componentContentSha256": "135c96a8a07345f459de34b6f6fb1fdbc00bded414ec2fc4b9a8ba6deadbae03",
+      "componentContentSha256": "ae647ba692881c06da9f8e448adca39b498e39cf8203dad1998abb186a24b07d",
       "componentId": "memory-3layer",
       "componentPath": "skills/memory-3layer",
       "componentType": "skill",
-      "componentVersion": "1.1.0",
-      "contractSha256": "e901a72392311679ebd717d56a67ba74ea7f90c3f03020fa966d8032baf3f6e5",
+      "componentVersion": "1.2.0",
+      "contractSha256": "42da3f04fea7ce8ded30293245c8b9fa35eee871169250500c2ce3172699d034",
       "doNotUseWhen": [
         "任务与长期项目上下文无关",
         "目标是读取秘密、完整聊天转储或未经授权的项目外数据",
@@ -11740,12 +11814,12 @@
       ]
     },
     {
-      "componentContentSha256": "33749e147947b56190fc551e0f05a839ca89df0ebc7972325397bef7f917ef91",
+      "componentContentSha256": "142d013ab10592ff0abcea11fe2c9066967ea30a41289b083c2cde8deb180b6e",
       "componentId": "sop-runbook",
       "componentPath": "skills/sop-runbook",
       "componentType": "skill",
-      "componentVersion": "0.1.2",
-      "contractSha256": "42b689d6ff5575af40619017d58592e5c8b280cb0f2d4cf03f97d042f5a07bba",
+      "componentVersion": "0.2.0",
+      "contractSha256": "75771e7393152f7b1fac0563afc4c92841f81b707d924370dbaaac1f1d96b725",
       "doNotUseWhen": [
         "编写规程不授予生产、付款、发送消息或危险操作权限；演练记录不能冒充真实恢复。",
         "要求自动发布、付款、修改生产系统或联系第三方时交调用方授权处理。",
@@ -11785,6 +11859,74 @@
               "object",
               "array"
             ]
+          },
+          "workContext": {
+            "additionalProperties": false,
+            "description": "可选的宿主业务事项快照；引用不授予权限，不建立第二份业务状态。",
+            "properties": {
+              "acceptedArtifactRefs": {
+                "items": {
+                  "maxLength": 500,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "maxItems": 64,
+                "type": "array",
+                "uniqueItems": true
+              },
+              "contextRevision": {
+                "maxLength": 500,
+                "minLength": 1,
+                "type": "string"
+              },
+              "decisionRefs": {
+                "items": {
+                  "maxLength": 500,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "maxItems": 64,
+                "type": "array",
+                "uniqueItems": true
+              },
+              "organizationRef": {
+                "maxLength": 500,
+                "minLength": 1,
+                "type": "string"
+              },
+              "schemaVersion": {
+                "const": "kim-work-context-v1",
+                "type": "string"
+              },
+              "scopeRef": {
+                "maxLength": 500,
+                "minLength": 1,
+                "type": "string"
+              },
+              "sourceRefs": {
+                "items": {
+                  "maxLength": 500,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "maxItems": 64,
+                "type": "array",
+                "uniqueItems": true
+              },
+              "workRef": {
+                "maxLength": 500,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "schemaVersion",
+              "organizationRef",
+              "workRef",
+              "contextRevision",
+              "scopeRef"
+            ],
+            "type": "object"
           }
         },
         "required": [
@@ -13812,9 +13954,9 @@
         "delivery-evidence-verify"
       ],
       "componentType": "agent",
-      "componentVersion": "0.3.1",
-      "contentSha256": "fcc3b215e79fc364a76c1f0e50f288e01b86bad77d75425f92283c661374ac78",
-      "contractSha256": "91b9991f3734cd24231571b64064aed83db195032a04a5df53b702f45fa1ee64",
+      "componentVersion": "0.4.0",
+      "contentSha256": "f14fae7983eb3c22ea69fc2aaf8420b420862abb81b1660ac6f24bba2ecf5295",
+      "contractSha256": "f6b607238096d49b5fdf2de4071289b3d2d4b0600b2d7e620d2680fd0d05daeb",
       "entrypoint": "AGENT.md",
       "id": "delivery-verifier",
       "path": "agents/delivery-verifier",
@@ -14393,9 +14535,9 @@
         "agent-teams-orchestrate"
       ],
       "componentType": "skill",
-      "componentVersion": "4.9.1",
-      "contentSha256": "6fc6d495839fb8d338764836ab9fd0f3a037a75f7291502797bd103ed9611fad",
-      "contractSha256": "42c408e8650d04f451a968df8a96a9b7b0f86e402d360eaa11e0e43a4ef5fbc0",
+      "componentVersion": "4.10.0",
+      "contentSha256": "531c61dc18224ea97575a8c871cbd329be8e6bcff4e7663dcfc2cb9b82b69a13",
+      "contractSha256": "2220cacdb80ae3908b3b2bab81946dca59609555c34fce581b1630faee05e321",
       "entrypoint": "SKILL.md",
       "id": "agent-teams-playbook",
       "path": "skills/agent-teams-playbook",
@@ -14586,9 +14728,9 @@
         "memory-3layer-read"
       ],
       "componentType": "skill",
-      "componentVersion": "1.1.0",
-      "contentSha256": "135c96a8a07345f459de34b6f6fb1fdbc00bded414ec2fc4b9a8ba6deadbae03",
-      "contractSha256": "e901a72392311679ebd717d56a67ba74ea7f90c3f03020fa966d8032baf3f6e5",
+      "componentVersion": "1.2.0",
+      "contentSha256": "ae647ba692881c06da9f8e448adca39b498e39cf8203dad1998abb186a24b07d",
+      "contractSha256": "42da3f04fea7ce8ded30293245c8b9fa35eee871169250500c2ce3172699d034",
       "entrypoint": "SKILL.md",
       "id": "memory-3layer",
       "path": "skills/memory-3layer",
@@ -14688,9 +14830,9 @@
         "sop-runbook-deliver"
       ],
       "componentType": "skill",
-      "componentVersion": "0.1.2",
-      "contentSha256": "33749e147947b56190fc551e0f05a839ca89df0ebc7972325397bef7f917ef91",
-      "contractSha256": "42b689d6ff5575af40619017d58592e5c8b280cb0f2d4cf03f97d042f5a07bba",
+      "componentVersion": "0.2.0",
+      "contentSha256": "142d013ab10592ff0abcea11fe2c9066967ea30a41289b083c2cde8deb180b6e",
+      "contractSha256": "75771e7393152f7b1fac0563afc4c92841f81b707d924370dbaaac1f1d96b725",
       "entrypoint": "SKILL.md",
       "id": "sop-runbook",
       "path": "skills/sop-runbook",

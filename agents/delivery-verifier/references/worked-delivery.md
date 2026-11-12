@@ -32,3 +32,16 @@
 ## 使用与来源边界
 
 方法依据沿用本包 PROVENANCE.md 的已登记专业资料。上面的数字、场景和交付表是原创合成示例；来源列表不证明当前任务已联网取证。先读取 professional-method.md 确认适用范围，再将本例迁移到当前事实；无法验证的结论交明确缺口，不填写成功回执。
+
+## 完整事项交接案例
+
+在仓库根目录运行 `node agents/delivery-verifier/scripts/demo-work-handoff.mjs`。它临时创建真实文件并调用现有只读 CLI，构造完整 manifest、kim-work-context-v1、未剥离 provenance 的 kim-work-receipt-v1、adoptionObservation 和接手回执；完整构造在 tests/work-fixture.mjs。
+
+| 合成输入 | 预期局部检查 | 业务解释 |
+| --- | --- | --- |
+| 本次 v2 produced/verified；仍沿历史 decision:retain-v1 采用 v1；当前接手回执含两版 | 一致性 passed | 新版不覆盖采用版，effect 仍 unknown |
+| verified failed、adopted rejected、理由 unknown、receiving pending | 一致性 passed | 如实记录负面和未知，不声称业务成功 |
+| 接手回执来自 revision:1，当前为 revision:2 | failed | 回到宿主取得当前接手记录；不冒用旧回执 |
+| 采用观察选 v1，receipt 偷换成 v2 | failed | 保留已采用版本，修正错配，不重批旧决定 |
+
+还需在交付中报告：这是本地合成文件检查；人员、原审批、真实接手、业务效果和线上宿主都未认证。公司内部经验应先留内部，失败/拒用原因进入候选并带适用与失效条件，不能从这个 demo 产出公共“实测有效”结论。

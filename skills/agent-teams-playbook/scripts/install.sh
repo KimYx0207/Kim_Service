@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 # agent-teams-playbook Installation Script
-# Version: V4.9.0
-# Description: Installs the agent-teams-playbook Skill for Claude Code, Codex, OpenClaw, or Cursor
+# Version: V4.10.0
+# Description: Installs a portable method package into an explicitly selected host directory
 # Note: "swarm/蜂群" is generic; Claude Code's official concept is "Agent Teams"
 
 set -e
@@ -17,7 +17,7 @@ TX_OLD_MOVED=0
 TX_PROMOTED=0
 TX_COMMITTED=0
 
-VERSION="V4.9.1"
+VERSION="V4.10.0"
 SKILL_NAME="agent-teams-playbook"
 INSTALL_FILES=(
     "SKILL.md" "README.md" "README_EN.md" "capability.json" "method.json"
@@ -28,8 +28,10 @@ INSTALL_FILES=(
 GITHUB_REPO="KimYx0207/Kim_Service"
 GITHUB_BRANCH="main"
 GITHUB_COMPONENT_PATH="skills/agent-teams-playbook"
-INSTALL_TARGET="claude"
+INSTALL_TARGET="${AGENT_TEAMS_INSTALL_TARGET:-}"
 INSTALL_SOURCE="local"
+CUSTOM_SKILLS_DIR="${CUSTOM_SKILLS_DIR:-}"
+CUSTOM_DIR_ARGUMENT=0
 
 CLAUDE_SKILLS_DIR="${CLAUDE_SKILLS_DIR:-${HOME}/.claude/skills}"
 CODEX_SKILLS_DIR="${CODEX_SKILLS_DIR:-${HOME}/.codex/skills}"
@@ -76,7 +78,9 @@ USAGE:
 OPTIONS:
     -h, --help              Show this help message
     -v, --version           Show version information
-    -t, --target TARGET     Install target: claude, codex, openclaw, cursor, all
+    -t, --target TARGET     Install target: claude, codex, openclaw, cursor, custom, all
+                            No implicit client. AGENT_TEAMS_INSTALL_TARGET is an optional configured default.
+    --skills-dir PATH      Host/user supplied Skills root; requires --target custom.
     --from-github           Download the target runtime skill package from GitHub main.
                             Default: copy from the local checkout.
 
@@ -92,12 +96,14 @@ DESCRIPTION:
        Each --target all destination is an independent transaction.
 
 EXAMPLES:
-    ./install.sh                         # Install for Claude Code
+    ./install.sh --target claude         # Install for Claude Code
     ./install.sh --target codex          # Install for Codex
     ./install.sh --target openclaw       # Install for OpenClaw
     ./install.sh --target cursor         # Install for Cursor
     ./install.sh --target all            # Install for all supported targets
     ./install.sh --target all --from-github
+    ./install.sh --target custom --skills-dir /absolute/host/skills
+    AGENT_TEAMS_INSTALL_TARGET=codex ./install.sh
     CODEX_SKILLS_DIR=/path/to/skills ./install.sh --target codex
 
 EOF
@@ -132,6 +138,19 @@ while [[ $# -gt 0 ]]; do
         --from-github)
             INSTALL_SOURCE="github"
             ;;
+        --skills-dir)
+            if [[ -z "${2:-}" ]]; then
+                print_error "--skills-dir requires an absolute Skills root"
+                exit 1
+            fi
+            CUSTOM_SKILLS_DIR="$2"
+            CUSTOM_DIR_ARGUMENT=1
+            shift
+            ;;
+        --skills-dir=*)
+            CUSTOM_SKILLS_DIR="${1#*=}"
+            CUSTOM_DIR_ARGUMENT=1
+            ;;
         *)
             print_error "Unknown option: $1"
             echo "Use --help for usage information"
@@ -141,15 +160,34 @@ while [[ $# -gt 0 ]]; do
     shift
 done
 
+if [ -z "$INSTALL_TARGET" ]; then
+    print_error "Choose the current host explicitly; no files were installed."
+    print_info "Example: ./scripts/install.sh --target codex"
+    print_info "Other hosts: ./scripts/install.sh --target custom --skills-dir /absolute/host/skills"
+    print_info "Or configure AGENT_TEAMS_INSTALL_TARGET; see --help for supported directory adapters."
+    exit 1
+fi
+if [ "$CUSTOM_DIR_ARGUMENT" = 1 ] && [ "$INSTALL_TARGET" != "custom" ]; then
+    print_error "--skills-dir only applies to --target custom; no files were installed."
+    exit 1
+fi
+
 target_dir() {
     case "$1" in
         claude) echo "${CLAUDE_SKILLS_DIR%/}/${SKILL_NAME}" ;;
         codex) echo "${CODEX_SKILLS_DIR%/}/${SKILL_NAME}" ;;
         openclaw) echo "${OPENCLAW_SKILLS_DIR%/}/${SKILL_NAME}" ;;
         cursor) echo "${CURSOR_SKILLS_DIR%/}/${SKILL_NAME}" ;;
+        custom)
+            if [ -z "$CUSTOM_SKILLS_DIR" ]; then
+                print_error "Custom installation requires --skills-dir /absolute/host/skills or CUSTOM_SKILLS_DIR." >&2
+                return 1
+            fi
+            echo "${CUSTOM_SKILLS_DIR%/}/${SKILL_NAME}"
+            ;;
         *)
             print_error "Unsupported target: $1" >&2
-            print_error "Supported targets: claude, codex, openclaw, cursor, all" >&2
+            print_error "Supported targets: claude, codex, openclaw, cursor, custom, all" >&2
             return 1
             ;;
     esac
@@ -510,12 +548,12 @@ main() {
         all)
             targets=("claude" "codex" "openclaw" "cursor")
             ;;
-        claude|codex|openclaw|cursor)
+        claude|codex|openclaw|cursor|custom)
             targets=("${INSTALL_TARGET}")
             ;;
         *)
             print_error "Unsupported target: ${INSTALL_TARGET}"
-            print_error "Supported targets: claude, codex, openclaw, cursor, all"
+            print_error "Supported targets: claude, codex, openclaw, cursor, custom, all"
             exit 1
             ;;
     esac

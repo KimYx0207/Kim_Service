@@ -68,3 +68,15 @@
 
 来源版本、采用与未采用内容见 [PROVENANCE.md](../PROVENANCE.md)。更换事实、平台规则或资料时重新核来源与案例；不要静默覆盖历史检查结果。
 完整合成输入及评审片段见 [professional-cases.json](../evals/professional-cases.json)。
+
+## 可选业务事项交接
+
+当调用方明确提供 WorkContext 与本次交接材料，使用 delivery-api.md 的 `work_handoff` 判据核 host 预期的 Work/run/context、确切产物版本/hash、adoptionObservation 与 receiving。没有该判据时，旧入口不要求 Work 字段或新增确认。方法入口必须读实际 API；不能用文档中写过的 passed 代替运行。
+
+produced、verified、adopted、effect 分开；新稿与采用旧稿并存有效，失败/拒用/不适用可保留。采用观察绑定当前 run/context，decisionRef 可引用旧原始决定；不重批、不改写历史。接手必须包含采用版并核当前材料与接手者，只有发送回执时保持 pending。scopeRef 不是权限。
+
+核验通过仅表示本地一致性：主体、权限、采用真实性和效果都未认证。若业务要求真正确认这些，保留 external_review 或宿主既有证据链；不把一致性通过升级为最终验收，不自动写经验库或公开公司材料。
+
+## 模型与核验职责分开
+
+本地 helper 是固定、只读的 Node 能力，不调用或指定模型；当前宿主有明确目录绑定及所需运行条件时才运行。外部评审按当前可用能力与既有授权组织，不要求某品牌评审 CLI。客户端、模型配置、业务 Work 与核验结果各保留来源；展示只读取现有结果，不能把模型或客户端名称改写成 passed。缺能力继续报告 external_review/unverified，不安装未知客户端或绕过拒绝。

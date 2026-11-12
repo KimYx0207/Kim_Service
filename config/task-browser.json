@@ -281,6 +281,16 @@
       "prefix": ""
     },
     {
+      "id": "gemini",
+      "label": "Gemini CLI",
+      "prefix": ""
+    },
+    {
+      "id": "minimax-code",
+      "label": "MiniMax Code",
+      "prefix": ""
+    },
+    {
       "id": "zcode",
       "label": "ZCode",
       "prefix": ""

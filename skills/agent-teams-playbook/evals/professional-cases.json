@@ -119,6 +119,165 @@
         "single-writer",
         "retry-evidence"
       ]
+    },
+    {
+      "id": "work-version-handoff",
+      "capabilityId": "agent-teams-orchestrate",
+      "category": "worked_example",
+      "scenario": "跨会话继续公司课程事项：当前生成 v2，但宿主沿用历史采用的 v1。",
+      "input": {
+        "task": "继续课程上线资料，交给第二位编辑",
+        "workContext": {
+          "schemaVersion": "kim-work-context-v1",
+          "organizationRef": "org:synthetic-company",
+          "workRef": "work:course-launch",
+          "contextRevision": "revision:2",
+          "scopeRef": "scope:internal-course-team",
+          "sourceRefs": [
+            "source:brief-v1"
+          ],
+          "acceptedArtifactRefs": [
+            "artifact:course-v1"
+          ],
+          "decisionRefs": [
+            "decision:retain-v1"
+          ]
+        },
+        "successCriteria": [
+          "采用版本可定位",
+          "新稿独立保留",
+          "接手有回执"
+        ]
+      },
+      "candidateOutputExcerpt": {
+        "mode": "sequential",
+        "plan": [
+          {
+            "task": "编辑交接",
+            "workRef": "work:course-launch",
+            "scopeRef": "scope:internal-course-team",
+            "inputVersion": "artifact:course-v1",
+            "nextAction": "在已采用 v1 上继续"
+          }
+        ],
+        "assignments": [
+          {
+            "task": "编辑交接",
+            "recipientRef": "person:editor",
+            "scopeRef": "scope:internal-course-team"
+          }
+        ],
+        "results": [
+          {
+            "workContext": {
+              "schemaVersion": "kim-work-context-v1",
+              "organizationRef": "org:synthetic-company",
+              "workRef": "work:course-launch",
+              "contextRevision": "revision:2",
+              "scopeRef": "scope:internal-course-team",
+              "sourceRefs": [
+                "source:brief-v1"
+              ],
+              "acceptedArtifactRefs": [
+                "artifact:course-v1"
+              ],
+              "decisionRefs": [
+                "decision:retain-v1"
+              ]
+            },
+            "runRef": "synthetic-run-2",
+            "produced": {
+              "status": "produced",
+              "artifactRefs": [
+                "artifact:course-v2"
+              ]
+            },
+            "verified": {
+              "status": "passed",
+              "evidenceRefs": [
+                "review:synthetic-v2"
+              ]
+            },
+            "adopted": {
+              "status": "accepted",
+              "artifactRefs": [
+                "artifact:course-v1"
+              ],
+              "decisionRef": "decision:retain-v1",
+              "reason": "沿用已采用的 v1；新稿未替换既有决定。"
+            },
+            "effect": {
+              "status": "unknown",
+              "evidenceRefs": [],
+              "summary": "尚未观察业务效果"
+            },
+            "receiving": {
+              "status": "pending",
+              "recipientRef": "person:editor",
+              "artifactRefs": [
+                "artifact:course-v1",
+                "artifact:course-v2"
+              ],
+              "receipt": null
+            }
+          }
+        ],
+        "verification": [
+          "示例采用观察引用旧决定，未声称有真实接手或业务效果"
+        ],
+        "degradations": [
+          "合成案例；未验证原生并行/线上运行"
+        ]
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "历史决定不因新会话失效；接手 pending 和业务效果未知可如实交付。",
+      "diagnosticRefs": [
+        "work-continuity"
+      ],
+      "decisionRuleRefs": [
+        "separate-work-evidence"
+      ]
+    },
+    {
+      "id": "work-newest-is-not-adopted",
+      "capabilityId": "agent-teams-orchestrate",
+      "category": "failure_boundary",
+      "scenario": "新稿有文件且静态检查通过，采用记录仍为旧稿。",
+      "input": {
+        "task": "交接课程",
+        "workContext": {
+          "schemaVersion": "kim-work-context-v1",
+          "organizationRef": "org:synthetic-company",
+          "workRef": "work:course-launch",
+          "contextRevision": "revision:2",
+          "scopeRef": "scope:internal-course-team",
+          "sourceRefs": [
+            "source:brief-v1"
+          ],
+          "acceptedArtifactRefs": [
+            "artifact:course-v1"
+          ],
+          "decisionRefs": [
+            "decision:retain-v1"
+          ]
+        }
+      },
+      "candidateOutputExcerpt": {
+        "results": [
+          {
+            "adopted": "自动采用最新 v2",
+            "receiving": "已向编辑发消息，所以已接手"
+          }
+        ]
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "新版/核验/已发送均不能推导采用或实际接手。",
+      "diagnosticRefs": [
+        "work-continuity"
+      ],
+      "decisionRuleRefs": [
+        "separate-work-evidence"
+      ]
     }
   ]
 }
