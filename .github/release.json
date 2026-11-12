@@ -7,9 +7,9 @@
   "workflows": [
     ".github/workflows/validate.yml"
   ],
-  "metaRelease": "v3.10.2",
-  "previousZcodeRelease": "V1.12",
-  "previousZcodeAsset": "Kim-ZCode-V1.12.zip",
+  "metaRelease": "v3.11.0",
+  "previousZcodeRelease": "V1.13",
+  "previousZcodeAsset": "Kim-ZCode-V1.13.zip",
   "changelogs": [
     {
       "file": "CHANGELOG.md",

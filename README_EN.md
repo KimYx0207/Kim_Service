@@ -8,9 +8,9 @@
 
 You may know what you want without knowing which numbers a forecast must reconcile, which states a page needs, or how to compare the full cost of supplier quotes. Kim Service brings the methods, materials, steps, examples, and acceptance criteria together, giving you and your AI a concrete basis for the work.
 
-**V1.13** includes **48 specialist Agents, 21 Skills, 1 Hook, and 1 Tool**: 71 components with **86 searchable task capabilities**. Choose one for the job in front of you, or combine several methods within a project.
+**V1.14** includes **48 specialist Agents, 21 Skills, 1 Hook, and 1 Tool**: 71 components with **86 searchable task capabilities**. Choose one for the job in front of you, or combine several methods within a project.
 
-**[Open the online task browser](https://kimyx0207.github.io/Kim_Service/?lang=en)** · **[Download V1.13 source and packages](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.13)**
+**[Open the online task browser](https://kimyx0207.github.io/Kim_Service/?lang=en)** · **[Download V1.14 source and packages](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.14)**
 
 ## How it helps you do the work thoroughly
 
@@ -225,7 +225,7 @@ In DSH, specialist Agent methods and Skills are discovered as native Skills, ret
 npm install --global @deepseek-ai/dsh@0.2.2-rc.1
 ```
 
-**Prepare the Service package.** Download `Kim_Service-DSH-V1.13.zip` from the release linked above, extract it, and identify the directory containing `dsh-package.json`. Alternatively, build it from the Kim_Service repository. Replace the output below with your own full path; the directory must not exist yet:
+**Prepare the Service package.** Download `Kim_Service-DSH-V1.14.zip` from the release linked above, extract it, and identify the directory containing `dsh-package.json`. Alternatively, build it from the Kim_Service repository. Replace the output below with your own full path; the directory must not exist yet:
 
 ```sh
 node scripts/build-dsh-package.mjs --output "/absolute/path/kim-service-dsh"
@@ -260,7 +260,7 @@ Use the Git root if the project has a repository, or the project directory if it
 
 ### ZCode
 
-Download **`Kim-ZCode-V1.13.zip`** from the release linked above and extract the whole package into a permanent location. Select the directory containing `marketplace.json` and keep all its plugin and resource folders. The V1.13 Kim plugin version is **1.13.0**.
+Download **`Kim-ZCode-V1.14.zip`** from the release linked above and extract the whole package into a permanent location. Select the directory containing `marketplace.json` and keep all its plugin and resource folders. The V1.14 Kim plugin version is **1.14.0**.
 
 Open a project in ZCode, then go to **Settings → Plugins → Create → Add marketplace** and choose that local directory. Install and enable `kim-service-local` from the personal source; add `meta-kim-local` if you also want Meta_Kim's task coordination. Inspect the installed roles and Skills in the plugin details, find a role such as `kim-service-local:financial-modeler` in the subagent list, and start with your goal and materials.
 

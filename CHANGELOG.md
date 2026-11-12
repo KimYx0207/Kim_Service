@@ -4,13 +4,36 @@
 
 Kim Service collection releases use `V<major>.<minor>`. Each component keeps its own version and source history. Detailed past checks are in the [testing record](docs/verification-history.md).
 
-## Unreleased
+## V1.14 - 2026-11-13
 
-### Understand the methods and complete the first task
+### Affected components
 
-- Explain how specialist Agents, Skills, tools and Hooks contribute to a task, with concrete materials, professional steps, editable outputs and checks.
-- Put the task browser, full examples, client setup, DSH, ZCode and Meta_Kim connection instructions in both language READMEs.
-- Merge four separate user guides and role-directory pages into the READMEs while retaining the visible screenshots and diagrams.
+Agent Teams Playbook 4.10.0, SOP Runbook 0.2.0, Memory 3-Layer 1.2.0, Delivery Verifier 0.4.0, the task-browser client configuration, and the Chinese and English READMEs. The collection still contains 71 components and 86 searchable task capabilities.
+
+### User-visible changes
+
+- **Keep the context with the work.** The team playbook and runbook can carry the company's Work identity, current context, accepted version, decision references and receiving receipt across people and conversations. A company can start with one member and keep the same handoff method as the team grows.
+- **Check what was delivered and what was adopted.** Delivery Verifier's optional Work handoff check reads the actual artifact bytes, binds their hashes to the Work and run, and checks the adopted version and matching receiving receipt. Produced, verified, adopted and effective remain distinct outcomes.
+- **Turn completed work into reusable experience.** Existing memory and runbook methods retain adoption reasons, failure cases, applicability, expiry and reuse feedback as candidates for organizational knowledge. The host keeps responsibility for authorizing adoption and scheduling any later review.
+- **Choose the client explicitly.** The team installer uses an explicit or configured destination, including a supplied Skills directory. Memory records the actual host separately from the model. The task browser also offers Gemini CLI and MiniMax Code when preparing a request; a display choice does not claim that a native adapter or model connection has been installed.
+- **Understand the whole flow in the README.** Five animated diagram topics in both languages explain the capability map, collaboration, Work continuity, layers and delivery. Their titles and ending notes are centered, and reduced-motion views stay readable. The complete first-task walkthrough, editable examples, client setup, DSH, ZCode and Meta_Kim instructions now live together in each README.
+- **Follow one source for each responsibility.** The README maps application orchestration, data contracts/configuration and presentation to their existing directories, and explains which source owns each fact. Business parameters and client choices come from configuration; generated catalogs and pages follow their existing source files.
+
+### Breaking changes and migration
+
+Update the checkout with `git pull --ff-only`, then reopen the [task browser](https://kimyx0207.github.io/Kim_Service/) or `docs/start.html`. If using the team installer, provide the intended client target or a configured Skills directory; an omitted target no longer selects Claude implicitly. Existing tasks without Work context continue to use their original path.
+
+Refresh installed capability packages using the [DSH instructions](README_EN.md#dsh) or [ZCode instructions](README_EN.md#zcode). The downloadable packages are `Kim_Service-DSH-V1.14.zip` and `Kim-ZCode-V1.14.zip`; the Kim ZCode plugin version is generated from `VERSION` as 1.14.0. The combined ZCode package uses the declared Meta_Kim v3.11.0 release.
+
+### Verification
+
+Focused tests exercise real file hashes, Work/context/run mismatches, adopted-versus-produced versions, receiving receipts, explicit installation destinations and separate host/model provenance. Meta_Kim receipt output was checked through the actual Service verifier. Synthetic cases and package/loading checks retain their measured scope; they do not authenticate a caller's business decisions or establish unperformed native model execution.
+
+The final source commit must pass the normal main-branch repository and browser checks. The release workflow then builds source, DSH and ZCode packages from their declared source revisions, checks the candidate against the previous public ZCode bundle, and verifies uploaded asset sizes and SHA-256 digests. Its final run links and manifests accompany the GitHub Release.
+
+### Source revisions
+
+The previous public collection is [V1.13](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.13). This release includes the Work, runtime-selection and README implementation published in [a12723c0](https://github.com/KimYx0207/Kim_Service/commit/a12723c028aa83bd274e6be2144b7f4c86ad49e3). The `V1.14` tag, `SOURCE-REVISION.txt` and package manifests identify the final Service release commit; the combined ZCode package separately records the exact [Meta_Kim v3.11.0](https://github.com/KimYx0207/Meta_Kim/releases/tag/v3.11.0) source. Component versions, licenses and provenance remain with their individual methods.
 
 ## V1.13 - 2026-11-12
 
