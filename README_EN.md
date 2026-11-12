@@ -12,6 +12,12 @@ You may know what you want without knowing which numbers a forecast must reconci
 
 **[Open the online task browser](https://kimyx0207.github.io/Kim_Service/?lang=en)** · **[Download V1.14 source and packages](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.14)**
 
+<p align="center">
+  <img src="docs/images/service-overview.webp" alt="Conceptual Kim Service workbench: task materials on the left, reusable method cards in the center, and reports, spreadsheets, page layouts, and a checked folder on the right" width="900">
+</p>
+
+*Conceptual illustration: bring the task materials on the left, select the professional methods in the center, and produce reports, spreadsheets, pages, and other results you can open, change, and check.*
+
 ## How it helps you do the work thoroughly
 
 Professional work often gets stuck between the request and the result: inconsistent source data, a conclusion without evidence, a form that only handles valid input, or files that someone else cannot open. Kim Service puts these easily missed steps into each method package, taking the work from checking materials to checking the handoff.
@@ -170,6 +176,12 @@ Use [Meta_Kim](https://github.com/KimYx0207/Meta_Kim#readme) when you need that 
 
 ## Keep company work continuous across conversations and people
 
+<p align="center">
+  <img src="docs/images/service-shared-work.webp" alt="Conceptual shared workbench: a central binder retains materials, the adopted document, and a decision note while collaborators continue the same work" width="900">
+</p>
+
+*Conceptual illustration: keep the goal, materials, adopted version, decision reasons, and next action attached to the same work so the next collaborator can build on existing results.*
+
 A company with one operator still needs a working record that a future colleague can continue. The host attaches the goal, sources, adopted version and decisions to one **Work**, a long-lived business matter. Many conversations and runs can refer to it; Service supplies the professional methods. The host's existing permissions determine access to company assets, personal preferences and sensitive decisions.
 
 <p align="center">
@@ -294,7 +306,7 @@ For an update, preserve personal changes and replace the original marketplace di
 | Display and host options | `config/task-browser.json` | Own host labels, request prefixes, field names, search terms and page settings |
 | Generated outputs | `catalog.json`, `generated/capabilities.json`, `docs/start.html` | Rebuild from sources instead of maintaining another list |
 
-A new displayed client needs a configuration entry; a new native tool call needs an implemented and verified adapter. Method packages, optional local helpers and host permissions retain separate responsibilities. The business host owns Work master records, external messages and scheduled knowledge processing. `scripts/build-readme-animations.mjs` and localized copy generate the diagrams; `--check` verifies consistency, and reduced motion keeps complete steps and explanations readable.
+A new displayed client needs a configuration entry; a new native tool call needs an implemented and verified adapter. Method packages, optional local helpers and host permissions retain separate responsibilities. The business host owns Work master records, external messages and scheduled knowledge processing. `scripts/build-readme-animations.mjs` and localized copy generate the animated SVGs above; `--check` verifies consistency, and reduced motion keeps complete steps and explanations readable.
 
 ## Update the source and continue your work
 
