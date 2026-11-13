@@ -1,0 +1,143 @@
+{
+  "schemaVersion": 1,
+  "id": "credit-risk-analyst",
+  "componentType": "agent",
+  "componentVersion": "0.1.0",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "credit-risk-analyst-deliver",
+      "summary": "把企业偿债来源、债务到期、逾期事实和损失情景连接起来，交付有证据的授信分析草案。 corporate credit risk debt service delinquency exposure",
+      "useWhen": [
+        "授信前需要核对企业能否以经营现金偿债。",
+        "已有贷款需要区分逾期、流动性缺口和实际信用损失。",
+        "需要比较担保、期限与额度方案的风险条件。"
+      ],
+      "doNotUseWhen": [
+        "授信批准、拒贷、催收、评级签署和真实账户变更沿用机构既有权限；本包完成企业材料分析，不对个人作自动信用决定。",
+        "只要相邻领域通用建议、与本角色的具体工作对象无关时，交适合的现有角色。",
+        "本任务要求直接变更账户、业务系统或发送材料时，由当前宿主按既有授权单独处理。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "borrower": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "企业主体、合并范围、报表与现金来源"
+          },
+          "facilities": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "逐笔本金、还本付息日、币种、抵质押与交叉违约条款"
+          },
+          "policy": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "机构口径、情景假设、观察日和决策范围"
+          }
+        },
+        "required": [
+          "borrower",
+          "facilities",
+          "policy"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "exposureMap": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "债项与到期分布"
+          },
+          "repaymentAnalysis": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "偿债来源与压力情景"
+          },
+          "riskFindings": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "信用风险判断及反证"
+          },
+          "monitoringPlan": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "监测与条件建议"
+          },
+          "facts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "输入口径与证据"
+          },
+          "limitations": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "未核范围与适用边界"
+          },
+          "handoff": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "交付与下一步"
+          }
+        },
+        "required": [
+          "exposureMap",
+          "repaymentAnalysis",
+          "riskFindings",
+          "monitoringPlan",
+          "facts",
+          "limitations",
+          "handoff"
+        ],
+        "deliveryFormat": "conceptual-human-delivery"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "授信批准、拒贷、催收、评级签署和真实账户变更沿用机构既有权限；本包完成企业材料分析，不对个人作自动信用决定。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

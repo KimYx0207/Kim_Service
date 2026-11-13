@@ -1,0 +1,9 @@
+{
+  "workspaceRoot": "/absolute/path/to/your/project",
+  "artifactPaths": [
+    "reports/delivery.md"
+  ],
+  "receiptsDir": ".kim-evidence",
+  "workId": "delivery-review",
+  "revision": "1"
+}

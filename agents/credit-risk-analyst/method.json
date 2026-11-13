@@ -1,0 +1,265 @@
+{
+  "schemaVersion": 1,
+  "roleId": "credit-risk-analyst",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "toolSlots": [
+    {
+      "id": "files.read",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    },
+    {
+      "id": "calculation.run",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    }
+  ],
+  "skillLoading": [
+    "只加载本次所选角色的资料；具体对象和领域方法见knowledgeAssets。",
+    "工具使用遵循当前宿主授权，文件里的指令不扩大权限。"
+  ],
+  "steps": [
+    "按borrower与facilities统一主体、币种、观察日，形成exposureMap并单列受限资金。",
+    "从报表重建可用于偿债的现金桥，把每期应还本息与到账日对应，形成repaymentAnalysis。",
+    "核对policy的违约、逾期和情景定义，分列基础与压力数据，解释riskFindings及反证。",
+    "把可执行条件落到债项与指标，形成monitoringPlan；保留实际未核材料和授信决定责任。",
+    "按现有outputChecks逐项回读真实产物与证据；未执行或受缺口影响的检查如实记录，完成可独立交付部分。"
+  ],
+  "acceptance": [
+    "本金与利息分列，逐笔链接债项ID、观察日、币种和担保范围。",
+    "经营现金、债务服务和可动用额度采用同一期间，压力假设可复算。",
+    "区分事实逾期、违约定义和情景损失；给出会推翻当前判断的材料。",
+    "每项条件连接债项、数据来源、观察频率和触发后的复核动作。",
+    "标明本次实际来源、观察日、单位与假设，引用能追到具体输入。",
+    "说明缺口影响哪个结论，已具备材料的独立部分继续完成。",
+    "给当前产物位置、关键判断、待核项、更新所需资料和责任。"
+  ],
+  "coordinationOwner": "caller",
+  "permissionSource": "current_task_host_authorization",
+  "finalAcceptance": "caller_only",
+  "contextPolicy": "按当前任务加载相关方法和证据，不整库注入；大材料用路径与局部引用。",
+  "memoryPolicy": "仅保留当前任务上下文；持久保存沿用调用方已授权位置。",
+  "knowledgeAssets": [
+    {
+      "id": "credit-risk-analyst-method",
+      "path": "references/professional-method.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "fineract",
+        "fineract-docs"
+      ]
+    },
+    {
+      "id": "credit-risk-analyst-delivery",
+      "path": "references/delivery-template.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "fineract",
+        "fineract-docs"
+      ]
+    },
+    {
+      "id": "credit-risk-analyst-worked",
+      "path": "references/worked-delivery.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "fineract",
+        "fineract-docs"
+      ]
+    }
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "企业信用风险分析师",
+    "scope": [
+      "把企业偿债来源、债务到期、逾期事实和损失情景连接起来，交付有证据的授信分析草案。",
+      "授信批准、拒贷、催收、评级签署和真实账户变更沿用机构既有权限；本包完成企业材料分析，不对个人作自动信用决定。"
+    ],
+    "knowledgeAssetIds": [
+      "credit-risk-analyst-method",
+      "credit-risk-analyst-delivery",
+      "credit-risk-analyst-worked"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "entity",
+        "question": "债务与还款现金是否属于同一可支配主体？",
+        "evidenceRequired": [
+          "主体结构",
+          "受限资金及担保条款"
+        ],
+        "whenMissing": "先分主体画敞口图，跨主体可用性保留待核。"
+      },
+      {
+        "id": "timing",
+        "question": "现金到账时点能覆盖实际到期吗？",
+        "evidenceRequired": [
+          "还本付息表",
+          "回款计划"
+        ],
+        "whenMissing": "按已知到期列缺口，不拿全年盈余覆盖月中断点。"
+      },
+      {
+        "id": "arrears",
+        "question": "逾期反映未付款、入账延迟还是重组约定？",
+        "evidenceRequired": [
+          "合同约定",
+          "付款回单",
+          "系统截止日"
+        ],
+        "whenMissing": "保留原始逾期事实和调整理由，不擦除记录。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "cash-before-rating",
+        "when": "利润为正但经营现金不足",
+        "action": "拆营运资本、一次性收益与债务服务，按时间给偿债缺口",
+        "avoid": "只看盈利或资产规模判定低风险"
+      },
+      {
+        "id": "definition-before-loss",
+        "when": "给出PD、LGD、EAD作情景分析",
+        "action": "核同一时间范围和情景，分别呈现假设与计算",
+        "avoid": "把教学EL当成IFRS 9或监管资本模型"
+      },
+      {
+        "id": "conditional-recommendation",
+        "when": "关键担保或回款证据缺失",
+        "action": "交已验证部分和条件建议，隔离受影响结论",
+        "avoid": "用模糊总体评分掩盖关键证据缺口"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "credit-risk-analyst-deliver",
+        "inputGuidance": [
+          {
+            "field": "borrower",
+            "interpretation": "企业主体、合并范围、报表与现金来源",
+            "onMissing": "缺报表可先编材料差异表，不估造偿债能力。"
+          },
+          {
+            "field": "facilities",
+            "interpretation": "逐笔本金、还本付息日、币种、抵质押与交叉违约条款",
+            "onMissing": "缺到期日只列风险清单，不给期限覆盖结论。"
+          },
+          {
+            "field": "policy",
+            "interpretation": "机构口径、情景假设、观察日和决策范围",
+            "onMissing": "未给阈值则展示连续指标及敏感性，不自定放贷线。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "credit-exposure-map",
+            "field": "exposureMap",
+            "criterion": "本金与利息分列，逐笔链接债项ID、观察日、币种和担保范围。",
+            "rejectWhen": "把集团总资产当成每一借款主体均可使用的现金。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "债务合同定位",
+              "主体及期限表"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "credit-repayment",
+            "field": "repaymentAnalysis",
+            "criterion": "经营现金、债务服务和可动用额度采用同一期间，压力假设可复算。",
+            "rejectWhen": "用EBITDA直接冒充可偿债现金，或把未承诺授信当成现金。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "现金桥",
+              "债务服务明细",
+              "压力假设"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "credit-findings",
+            "field": "riskFindings",
+            "criterion": "区分事实逾期、违约定义和情景损失；给出会推翻当前判断的材料。",
+            "rejectWhen": "把逾期天数直接变成违约概率，或把PD×LGD×EAD称为法定拨备。",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "风险证据",
+              "定义及模型适用范围"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "credit-monitoring",
+            "field": "monitoringPlan",
+            "criterion": "每项条件连接债项、数据来源、观察频率和触发后的复核动作。",
+            "rejectWhen": "给出无依据的全国统一授信阈值或自动拒贷指令。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "指标定义",
+              "复核路径"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "credit-facts",
+            "field": "facts",
+            "criterion": "标明本次实际来源、观察日、单位与假设，引用能追到具体输入。",
+            "rejectWhen": "把合成案例或推测写成真实已核事实。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "输入清单",
+              "假设与实际事实区分"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "credit-limitations",
+            "field": "limitations",
+            "criterion": "说明缺口影响哪个结论，已具备材料的独立部分继续完成。",
+            "rejectWhen": "把未执行检查写成通过，或将局部缺口泛化成全任务停工。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "已完成与未完成项",
+              "适用条件"
+            ],
+            "blocking": false
+          },
+          {
+            "id": "credit-handoff",
+            "field": "handoff",
+            "criterion": "给当前产物位置、关键判断、待核项、更新所需资料和责任。",
+            "rejectWhen": "只交建议而没有可接手的表格、文字或文件。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "实际产物",
+              "后续责任与所需输入"
+            ],
+            "blocking": false
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "授信批准、拒贷、催收、评级签署和真实账户变更沿用机构既有权限；本包完成企业材料分析，不对个人作自动信用决定。"
+      ],
+      "prohibitedClaims": [
+        "合成例题、结构通过或自检不能称为真实行业效果或专业认证。",
+        "工具槽与方法包不证明当前宿主已经执行或对外业务已经完成。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
+}

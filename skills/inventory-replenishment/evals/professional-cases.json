@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "roleId": "inventory-replenishment",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "capacity-gap",
+      "capabilityId": "inventory-replenishment-deliver",
+      "category": "worked_example",
+      "scenario": "订单上限36，小于补足目标需48",
+      "input": {
+        "context": {
+          "organizationId": "synthetic-demo",
+          "workId": "professional-method-demo",
+          "revision": "1"
+        },
+        "sku": "synthetic-A",
+        "unit": "piece",
+        "demandPerDay": 10,
+        "dailyStdDev": 3,
+        "leadDays": 4,
+        "reviewDays": 3,
+        "zScore": 1.645,
+        "usableOnHand": 40,
+        "confirmedOnOrder": 10,
+        "backorders": 5,
+        "packSize": 12,
+        "minOrder": 24,
+        "maxOrder": 36,
+        "assumptions": {
+          "independentDailyDemand": true,
+          "stableDemand": true,
+          "fixedLeadTime": true,
+          "confirmedOrdersArriveWithinProtectionPeriod": true
+        }
+      },
+      "candidateOutputExcerpt": {
+        "status": "needs_review",
+        "result": {
+          "sku": "synthetic-A",
+          "unit": "piece",
+          "protectionDays": 7,
+          "inventoryPosition": 45,
+          "safetyStock": 13.056782720103756,
+          "orderUpTo": 83.05678272010375,
+          "unconstrainedOrder": 38.056782720103755,
+          "orderQuantity": 36,
+          "unmetQuantity": 2.0567827201037545,
+          "constraints": [
+            "max_order_limits_target"
+          ],
+          "serviceClaim": "conditional_cycle_service_approximation_not_fill_rate"
+        }
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "容量截断仍保留未满足量，交责任人取舍。",
+      "diagnosticRefs": [
+        "feasibility"
+      ],
+      "decisionRuleRefs": [
+        "keep-shortfall"
+      ]
+    },
+    {
+      "id": "fill-rate-claim",
+      "capabilityId": "inventory-replenishment-deliver",
+      "category": "failure_boundary",
+      "scenario": "容量36件时截断订单但把剩余缺口写成0",
+      "input": {
+        "context": {
+          "organizationId": "synthetic-demo",
+          "workId": "professional-method-demo",
+          "revision": "1"
+        },
+        "sku": "synthetic-A",
+        "unit": "piece",
+        "demandPerDay": 10,
+        "dailyStdDev": 3,
+        "leadDays": 4,
+        "reviewDays": 3,
+        "zScore": 1.645,
+        "usableOnHand": 40,
+        "confirmedOnOrder": 10,
+        "backorders": 5,
+        "packSize": 12,
+        "minOrder": 24,
+        "maxOrder": 36,
+        "assumptions": {
+          "independentDailyDemand": true,
+          "stableDemand": true,
+          "fixedLeadTime": true,
+          "confirmedOrdersArriveWithinProtectionPeriod": true
+        }
+      },
+      "candidateOutputExcerpt": {
+        "status": "completed",
+        "result": {
+          "sku": "synthetic-A",
+          "unit": "piece",
+          "protectionDays": 7,
+          "inventoryPosition": 45,
+          "safetyStock": 13.056782720103756,
+          "orderUpTo": 83.05678272010375,
+          "unconstrainedOrder": 38.056782720103755,
+          "orderQuantity": 36,
+          "unmetQuantity": 0,
+          "constraints": [],
+          "serviceClaim": "conditional_cycle_service_approximation_not_fill_rate"
+        }
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "目标差额约38.06件，36件不能补足；忽略约2.06件缺口会误导采购。",
+      "diagnosticRefs": [
+        "feasibility"
+      ],
+      "decisionRuleRefs": [
+        "keep-shortfall"
+      ]
+    }
+  ]
+}

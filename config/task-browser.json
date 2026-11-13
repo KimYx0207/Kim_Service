@@ -147,6 +147,73 @@
     [
       "设计系统",
       "design-system-designer"
+    ],
+    [
+      "信用风险",
+      "credit risk",
+      "credit-risk-analyst"
+    ],
+    [
+      "流动性",
+      "资金缺口",
+      "treasury"
+    ],
+    [
+      "理赔",
+      "claims",
+      "insurance"
+    ],
+    [
+      "合同审查",
+      "contract review"
+    ],
+    [
+      "设备维护",
+      "maintenance"
+    ],
+    [
+      "仓储",
+      "warehouse"
+    ],
+    [
+      "工程进度",
+      "construction"
+    ],
+    [
+      "酒店",
+      "hospitality"
+    ],
+    [
+      "游戏经济",
+      "game economy"
+    ],
+    [
+      "安全事件",
+      "incident response"
+    ],
+    [
+      "血缘",
+      "lineage"
+    ],
+    [
+      "补货",
+      "replenishment"
+    ],
+    [
+      "复盘",
+      "postmortem"
+    ],
+    [
+      "招投标",
+      "tender"
+    ],
+    [
+      "MCP审计",
+      "MCP audit"
+    ],
+    [
+      "交付回执",
+      "evidence receipt"
     ]
   ],
   "fieldNames": {
@@ -218,7 +285,107 @@
     "constraints": "限制条件",
     "currentSystem": "当前情况",
     "journey": "用户路径",
-    "reference": "参考资料"
+    "reference": "参考资料",
+    "borrower": "借款主体与报表",
+    "facilities": "债项与还款安排",
+    "policy": "适用口径与规则",
+    "exposureMap": "债务敞口分布",
+    "repaymentAnalysis": "偿债分析",
+    "riskFindings": "风险与反证",
+    "monitoringPlan": "监测计划",
+    "facts": "事实与来源",
+    "balances": "期初资金与限制",
+    "cashFlows": "收付款时间表",
+    "scenarios": "情景与最低现金",
+    "cashLadder": "分期现金表",
+    "gapAnalysis": "资金缺口分析",
+    "fundingOptions": "融资与调度候选",
+    "claim": "事故与理赔明细",
+    "coverageMap": "保单责任与证据",
+    "amountReview": "赔款复算",
+    "evidenceGaps": "缺失与争议材料",
+    "reviewPacket": "复核材料包",
+    "contract": "合同正文与附件",
+    "context": "本次任务背景",
+    "playbook": "谈判底线与关注项",
+    "clauseMatrix": "条款对照表",
+    "riskAnalysis": "风险分析",
+    "negotiationOptions": "谈判与修改方案",
+    "obligationCalendar": "履约时间表",
+    "events": "事件与维修记录",
+    "failureMap": "故障模式与依据",
+    "reliabilityMetrics": "可靠性指标",
+    "maintenancePlan": "维护计划",
+    "returnToService": "恢复运行检查",
+    "inventory": "库存与批次",
+    "orders": "订单与承诺",
+    "availability": "可用库存与短缺",
+    "allocationPlan": "批次分配候选",
+    "processImprovements": "作业改善方案",
+    "controlMetrics": "履约与盘点指标",
+    "baseline": "批准基线",
+    "actuals": "实际进度与成本",
+    "changes": "变更与约束",
+    "scheduleReview": "工期与依赖分析",
+    "costPerformance": "进度成本表现",
+    "changeRegister": "变更登记",
+    "recoveryOptions": "纠偏与恢复方案",
+    "nodes": "数据对象",
+    "edges": "上下游依赖",
+    "changed": "变更对象",
+    "sku": "商品或物料编号",
+    "unit": "数量单位",
+    "demandPerDay": "日均需求",
+    "dailyStdDev": "日需求标准差",
+    "leadDays": "到货提前期",
+    "reviewDays": "补货复核周期",
+    "zScore": "服务目标参数",
+    "usableOnHand": "可用现货",
+    "confirmedOnOrder": "确认在途数量",
+    "backorders": "未重复扣减的欠单",
+    "packSize": "整箱数量",
+    "minOrder": "最小订货量",
+    "maxOrder": "本次订单上限",
+    "assumptions": "计算前提",
+    "incident": "事件与影响",
+    "actions": "后续行动",
+    "asOf": "观察时间",
+    "tenderId": "招标编号",
+    "deadline": "截止时间",
+    "clauses": "要求与条款",
+    "responses": "逐项响应",
+    "schemaVersion": "回执格式版本",
+    "protocol": "接口协议",
+    "capabilityId": "任务能力编号",
+    "inputSha256": "输入校验值",
+    "policySha256": "规则校验值",
+    "claims": "结果适用范围",
+    "roomInventory": "房量与房型",
+    "reservations": "预订与取消",
+    "pricingPolicy": "定价与渠道规则",
+    "revenueBaseline": "营收基线",
+    "demandSignals": "需求信号",
+    "channelContribution": "渠道净贡献",
+    "pricingOptions": "价格与库存方案",
+    "economy": "货币与资源体系",
+    "cohorts": "玩家分层",
+    "economyMap": "产消与成长关系",
+    "balanceSimulation": "数值平衡演算",
+    "transactionControls": "交易与防重控制",
+    "tuningPlan": "数值调整计划",
+    "responseContext": "处置范围与授权",
+    "incidentTimeline": "事件证据时间线",
+    "scopeAssessment": "影响范围判断",
+    "containmentPlan": "遏制处置方案",
+    "recoveryReview": "恢复与观察",
+    "previous": "上次工具清单",
+    "current": "当前工具清单",
+    "approvedToolNames": "当前允许的工具名",
+    "event": "宿主工具事件",
+    "trustedConfig": "明确授权的本地配置",
+    "hookSpecificOutput": "Hook 上下文输出",
+    "hookEventName": "Hook 事件名称",
+    "additionalContext": "回执上下文"
   },
   "commonFields": [
     "status",

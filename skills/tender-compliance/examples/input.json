@@ -1,0 +1,60 @@
+{
+  "context": {
+    "organizationId": "synthetic-demo",
+    "workId": "professional-method-demo",
+    "revision": "1"
+  },
+  "tenderId": "synthetic-tender-01",
+  "asOf": "2026-11-13T10:00:00+08:00",
+  "deadline": "2026-11-20T17:00:00+08:00",
+  "clauses": [
+    {
+      "id": "qualification",
+      "version": "addendum-2",
+      "sourceRef": "synthetic-tender.pdf:p12",
+      "mandatory": true,
+      "requirement": "在提交时提供有效资格材料。"
+    },
+    {
+      "id": "service-hours",
+      "version": "original",
+      "sourceRef": "synthetic-tender.pdf:p30",
+      "mandatory": false,
+      "requirement": "说明服务响应时间。"
+    }
+  ],
+  "responses": [
+    {
+      "clauseId": "qualification",
+      "clauseVersion": "original",
+      "assessment": "claimed_compliant",
+      "responseRef": "synthetic-bid.pdf:p4",
+      "evidenceIds": [
+        "cert-1"
+      ]
+    },
+    {
+      "clauseId": "service-hours",
+      "clauseVersion": "original",
+      "assessment": "claimed_compliant",
+      "responseRef": "synthetic-bid.pdf:p9",
+      "evidenceIds": [
+        "sla-1"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "cert-1",
+      "sourceRef": "synthetic-certificate.pdf",
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "validUntil": "2026-11-10T00:00:00+08:00"
+    },
+    {
+      "id": "sla-1",
+      "sourceRef": "synthetic-sla.pdf",
+      "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "validUntil": null
+    }
+  ]
+}

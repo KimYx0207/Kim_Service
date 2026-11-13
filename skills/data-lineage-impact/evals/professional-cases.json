@@ -1,0 +1,173 @@
+{
+  "schemaVersion": 1,
+  "roleId": "data-lineage-impact",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "possible-downstream",
+      "capabilityId": "data-lineage-impact-deliver",
+      "category": "worked_example",
+      "scenario": "看板依赖仅有作者声明",
+      "input": {
+        "context": {
+          "organizationId": "synthetic-demo",
+          "workId": "professional-method-demo",
+          "revision": "1"
+        },
+        "nodes": [
+          {
+            "id": "prod/erp/orders#net",
+            "owner": "订单数据组"
+          },
+          {
+            "id": "prod/mart/revenue#net",
+            "owner": "财务数据组"
+          },
+          {
+            "id": "prod/dashboard/revenue#value",
+            "owner": "经营分析组"
+          }
+        ],
+        "edges": [
+          {
+            "from": "prod/erp/orders#net",
+            "to": "prod/mart/revenue#net",
+            "confidence": "observed",
+            "evidenceRef": "synthetic-job-17.sql:12"
+          },
+          {
+            "from": "prod/mart/revenue#net",
+            "to": "prod/dashboard/revenue#value",
+            "confidence": "declared",
+            "evidenceRef": "synthetic-dashboard-owner-note"
+          }
+        ],
+        "changed": [
+          "prod/erp/orders#net"
+        ]
+      },
+      "candidateOutputExcerpt": {
+        "status": "needs_review",
+        "result": {
+          "affected": [
+            {
+              "id": "prod/dashboard/revenue#value",
+              "owner": "经营分析组",
+              "certainty": "possible_path",
+              "path": [
+                "prod/erp/orders#net",
+                "prod/mart/revenue#net",
+                "prod/dashboard/revenue#value"
+              ]
+            },
+            {
+              "id": "prod/mart/revenue#net",
+              "owner": "财务数据组",
+              "certainty": "observed_path",
+              "path": [
+                "prod/erp/orders#net",
+                "prod/mart/revenue#net"
+              ]
+            }
+          ],
+          "unmatchedSeeds": [],
+          "cycleDetected": false,
+          "evidenceMissing": [],
+          "coverage": "supplied_edges_only"
+        }
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "需要核看板实际查询，不能将声明升级为实测。",
+      "diagnosticRefs": [
+        "edge-evidence"
+      ],
+      "decisionRuleRefs": [
+        "propagate-uncertainty"
+      ]
+    },
+    {
+      "id": "false-completeness",
+      "capabilityId": "data-lineage-impact-deliver",
+      "category": "failure_boundary",
+      "scenario": "看板依赖只有声明，却把整条路径标成已观察",
+      "input": {
+        "context": {
+          "organizationId": "synthetic-demo",
+          "workId": "professional-method-demo",
+          "revision": "1"
+        },
+        "nodes": [
+          {
+            "id": "prod/erp/orders#net",
+            "owner": "订单数据组"
+          },
+          {
+            "id": "prod/mart/revenue#net",
+            "owner": "财务数据组"
+          },
+          {
+            "id": "prod/dashboard/revenue#value",
+            "owner": "经营分析组"
+          }
+        ],
+        "edges": [
+          {
+            "from": "prod/erp/orders#net",
+            "to": "prod/mart/revenue#net",
+            "confidence": "observed",
+            "evidenceRef": "synthetic-job-17.sql:12"
+          },
+          {
+            "from": "prod/mart/revenue#net",
+            "to": "prod/dashboard/revenue#value",
+            "confidence": "declared",
+            "evidenceRef": "synthetic-dashboard-owner-note"
+          }
+        ],
+        "changed": [
+          "prod/erp/orders#net"
+        ]
+      },
+      "candidateOutputExcerpt": {
+        "status": "completed",
+        "result": {
+          "affected": [
+            {
+              "id": "prod/dashboard/revenue#value",
+              "owner": "经营分析组",
+              "certainty": "observed_path",
+              "path": [
+                "prod/erp/orders#net",
+                "prod/mart/revenue#net",
+                "prod/dashboard/revenue#value"
+              ]
+            },
+            {
+              "id": "prod/mart/revenue#net",
+              "owner": "财务数据组",
+              "certainty": "observed_path",
+              "path": [
+                "prod/erp/orders#net",
+                "prod/mart/revenue#net"
+              ]
+            }
+          ],
+          "unmatchedSeeds": [],
+          "cycleDetected": false,
+          "evidenceMissing": [],
+          "coverage": "supplied_edges_only"
+        }
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "路径中的声明边不能由工具输出升级为已观察；此候选形式合法但专业判断应拒收。",
+      "diagnosticRefs": [
+        "edge-evidence"
+      ],
+      "decisionRuleRefs": [
+        "propagate-uncertainty"
+      ]
+    }
+  ]
+}

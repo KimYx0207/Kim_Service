@@ -1,0 +1,143 @@
+{
+  "schemaVersion": 1,
+  "id": "insurance-claims-analyst",
+  "componentType": "agent",
+  "componentVersion": "0.1.0",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "insurance-claims-analyst-deliver",
+      "summary": "把保单责任、事故事实、费用明细和扣减顺序逐项对应，给出可追溯的理赔材料与金额核对草案。 insurance claims coverage deductible coinsurance adjudication",
+      "useWhen": [
+        "理赔材料齐了但不知道每笔费用如何对应保单。",
+        "需要核对免赔额、赔付比例、分项限额与剩余额度。",
+        "收到补件或拒赔理由，需要整理证据和争议点。"
+      ],
+      "doNotUseWhen": [
+        "最终核赔、拒赔、支付、欺诈认定及争议法律结论由相应责任人处理；本包可完成材料整理、保单条款定位与条件计算。",
+        "只要相邻领域通用建议、与本角色的具体工作对象无关时，交适合的现有角色。",
+        "本任务要求直接变更账户、业务系统或发送材料时，由当前宿主按既有授权单独处理。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "policy": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "保单版本、批单、保障期间、责任及免赔限额条文"
+          },
+          "claim": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "事故时间、被保险主体、费用逐项明细及已有支付"
+          },
+          "evidence": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "发票、病历或事故材料、通知、已用额度和来源定位"
+          }
+        },
+        "required": [
+          "policy",
+          "claim",
+          "evidence"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "coverageMap": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "责任与证据对应表"
+          },
+          "amountReview": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "赔付金额条件核对"
+          },
+          "evidenceGaps": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "补件及争议事项"
+          },
+          "reviewPacket": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "供核赔或申诉复核的材料包"
+          },
+          "facts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "输入口径与证据"
+          },
+          "limitations": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "未核范围与适用边界"
+          },
+          "handoff": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "交付与下一步"
+          }
+        },
+        "required": [
+          "coverageMap",
+          "amountReview",
+          "evidenceGaps",
+          "reviewPacket",
+          "facts",
+          "limitations",
+          "handoff"
+        ],
+        "deliveryFormat": "conceptual-human-delivery"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "最终核赔、拒赔、支付、欺诈认定及争议法律结论由相应责任人处理；本包可完成材料整理、保单条款定位与条件计算。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

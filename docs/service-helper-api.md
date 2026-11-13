@@ -2,11 +2,11 @@
 
 ## Responsibility
 
-Meta Live or the current host owns company identity, Work state, execution permissions, model/client selection, external actions and acceptance. Kim Service supplies methods and deterministic local processing. The standalone browser prepares requests. None of the five helpers runs a model, contacts a service, sends a notification, or claims 24-hour execution.
+Meta Live or the current host owns company identity, Work state, execution permissions, model/client selection, external actions and acceptance. Kim Service supplies methods and deterministic local processing. The standalone browser prepares requests. None of the local helpers runs a model, contacts a service, sends a notification, or claims 24-hour execution.
 
 ## Discover from one source
 
-Run `node scripts/service-capabilities.mjs export` from the repository. The returned `kim-service-capabilities-v1` document is derived from canonical component contracts. It includes all capability IDs; five entries additionally have `helper.protocol: kim-service-helper-v1`.
+Run `node scripts/service-capabilities.mjs export` from the repository. The returned `kim-service-capabilities-v1` document is derived from canonical component contracts. It includes all capability IDs; executable entries additionally have `helper.protocol: kim-service-helper-v1`. Discovery follows the canonical catalog across component types, including the MCP audit Tool; callers must select by the returned protocol and contract rather than a hardcoded list of five names.
 
 Each helper specifies a fixed Node entrypoint and `['--input-json', '-']`, JSON stdin/stdout, no shell, the component content hash, and file/hash references for input schema, output schema and policy. Resolve those paths within a trusted checkout, check the component/version binding, and invoke the selected registered entrypoint using an argument array. User materials are data, not entrypoints or commands. No provider name or model price is embedded in this protocol.
 
@@ -89,6 +89,18 @@ The result includes actual `diagram.svg`, `storyboard.html` and `alternative.txt
 
 ## Single-source build and verification
 
+The additional industry helpers use this same transport and receipt:
+
+| Package | Deterministic work | Interpretation limit |
+| --- | --- | --- |
+| `skills/data-lineage-impact` | Bounded dependency traversal, affected objects, evidence paths, ownership gaps and cycles | Coverage is limited to the supplied graph; references are not authenticated |
+| `skills/inventory-replenishment` | Periodic-review stock target, pack/MOQ rounding and capacity shortfall | Requires declared demand and lead-time assumptions; no guaranteed fill rate or purchase order |
+| `skills/incident-postmortem` | Zoned timestamps, interval calculations and action/evidence completeness | A single incident does not establish mean recovery time or prove a root cause |
+| `skills/tender-compliance` | Clause-version matching, evidence validity and missing mandatory responses | Complete references still need content review and do not establish legal compliance |
+| `tools/mcp-contract-auditor` | Tool-list and schema differences, supplied approval-name gaps and annotation hints | No live connection, full JSON Schema validation or permission grant |
+
+Each has a complete synthetic `examples/input.json` and a `scripts/run.mjs --input-json -` entry. The separate `hooks/evidence-receipt` package implements an opt-in Claude Code `PostToolUse` adapter, not this helper protocol; its local snapshot records file bytes and does not attest their quality or adoption.
+
 The component `capability.json` is the source of the public input/output schemas. Package `policy.json` is the capacity/rhythm source. `src/application/service-helpers/runtime.mjs` is the source of common JSON validation, canonical hashing and CLI boundaries. `node scripts/build-service-helpers.mjs build` projects runtime and schemas into each standalone package; `check` rejects drift. Component algorithms stay within their own `scripts/` files and copied packages remain executable outside the repository.
 
 After editing canonical files:
@@ -97,7 +109,8 @@ After editing canonical files:
 node scripts/build-service-helpers.mjs build
 node scripts/catalog-automation.mjs build
 node scripts/start-page.mjs build
-node --test scripts/service-capabilities.test.mjs skills/evidence-pack/tests/helper.test.mjs skills/agent-evaluation/tests/helper.test.mjs skills/feedback-to-requirements/tests/helper.test.mjs skills/customer-case-operations/tests/helper.test.mjs skills/visual-explainer/tests/helper.test.mjs
+node --test scripts/service-capabilities.test.mjs
+node scripts/check-components.mjs
 ```
 
 These are local structural and behavioral checks using synthetic examples. They do not demonstrate live model performance, customer outcomes, or persistent execution across two products.

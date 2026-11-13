@@ -1,0 +1,38 @@
+{
+  "context": {
+    "organizationId": "synthetic-demo",
+    "workId": "professional-method-demo",
+    "revision": "1"
+  },
+  "nodes": [
+    {
+      "id": "prod/erp/orders#net",
+      "owner": "订单数据组"
+    },
+    {
+      "id": "prod/mart/revenue#net",
+      "owner": "财务数据组"
+    },
+    {
+      "id": "prod/dashboard/revenue#value",
+      "owner": "经营分析组"
+    }
+  ],
+  "edges": [
+    {
+      "from": "prod/erp/orders#net",
+      "to": "prod/mart/revenue#net",
+      "confidence": "observed",
+      "evidenceRef": "synthetic-job-17.sql:12"
+    },
+    {
+      "from": "prod/mart/revenue#net",
+      "to": "prod/dashboard/revenue#value",
+      "confidence": "declared",
+      "evidenceRef": "synthetic-dashboard-owner-note"
+    }
+  ],
+  "changed": [
+    "prod/erp/orders#net"
+  ]
+}

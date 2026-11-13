@@ -1,0 +1,143 @@
+{
+  "schemaVersion": 1,
+  "id": "hospitality-revenue-analyst",
+  "componentType": "agent",
+  "componentVersion": "0.1.0",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "hospitality-revenue-analyst-deliver",
+      "summary": "按房晚、房型、入住日和渠道比较需求与净贡献，给出有条件的房价和库存方案。 hotel revenue management occupancy ADR RevPAR channel contribution",
+      "useWhen": [
+        "入住率上升但利润下降，需要看折扣与渠道成本。",
+        "要判断周末、节日或淡季的定价和房型配额。",
+        "订单取消、预订提前期与在手订单变化，影响未来房晚收入。"
+      ],
+      "doNotUseWhen": [
+        "真实调价、超售、取消客单和渠道合同变更依既有业务授权；本包做分群分析与情景建议，不保证收入上涨。",
+        "只要相邻领域通用建议、与本角色的具体工作对象无关时，交适合的现有角色。",
+        "本任务要求直接变更账户、业务系统或发送材料时，由当前宿主按既有授权单独处理。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "roomInventory": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "按入住日/房型的物理房晚、停用房晚和可售口径"
+          },
+          "reservations": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "预订及入住日、状态、房晚、净房费、渠道、取消和退款"
+          },
+          "pricingPolicy": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "价格限制、佣金、服务成本、客户承诺和决策范围"
+          }
+        },
+        "required": [
+          "roomInventory",
+          "reservations",
+          "pricingPolicy"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "revenueBaseline": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "房晚与收益基线"
+          },
+          "demandSignals": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "需求与预订节奏"
+          },
+          "channelContribution": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "渠道与客群贡献"
+          },
+          "pricingOptions": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "定价与房量候选方案"
+          },
+          "facts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "输入口径与证据"
+          },
+          "limitations": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "未核范围与适用边界"
+          },
+          "handoff": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "交付与下一步"
+          }
+        },
+        "required": [
+          "revenueBaseline",
+          "demandSignals",
+          "channelContribution",
+          "pricingOptions",
+          "facts",
+          "limitations",
+          "handoff"
+        ],
+        "deliveryFormat": "conceptual-human-delivery"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "真实调价、超售、取消客单和渠道合同变更依既有业务授权；本包做分群分析与情景建议，不保证收入上涨。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

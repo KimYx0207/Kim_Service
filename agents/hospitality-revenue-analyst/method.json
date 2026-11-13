@@ -1,0 +1,267 @@
+{
+  "schemaVersion": 1,
+  "roleId": "hospitality-revenue-analyst",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "toolSlots": [
+    {
+      "id": "files.read",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    },
+    {
+      "id": "calculation.run",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    }
+  ],
+  "skillLoading": [
+    "只加载本次所选角色的资料；具体对象和领域方法见knowledgeAssets。",
+    "工具使用遵循当前宿主授权，文件里的指令不扩大权限。"
+  ],
+  "steps": [
+    "统一roomInventory和reservations的入住日期、房费与房晚口径，形成revenueBaseline。",
+    "比较相同提前期的订单快照并净掉取消退款，形成demandSignals。",
+    "按pricingPolicy逐渠道复算净贡献并检查重复扣费，形成channelContribution。",
+    "对候选价格和配额做透明情景，写pricingOptions的触发、风险与观察窗口，不改实时价格。",
+    "按现有outputChecks逐项回读真实产物与证据；未执行或受缺口影响的检查如实记录，完成可独立交付部分。"
+  ],
+  "acceptance": [
+    "入住率、ADR、RevPAR使用同期间同房费口径；停用与免费房处理显式。",
+    "按入住日和提前期比较在手订单、净新增、取消与客群，避免把未完结窗口当最终结果。",
+    "从净房费扣渠道佣金、渠道专属费用和已声明变动成本，区分毛营收与增量贡献。",
+    "给受约束方案、预期房晚、净贡献、风险与观察窗口；假设和预测分开。",
+    "标明本次实际来源、观察日、单位与假设，引用能追到具体输入。",
+    "说明缺口影响哪个结论，已具备材料的独立部分继续完成。",
+    "给当前产物位置、关键判断、待核项、更新所需资料和责任。"
+  ],
+  "coordinationOwner": "caller",
+  "permissionSource": "current_task_host_authorization",
+  "finalAcceptance": "caller_only",
+  "contextPolicy": "按当前任务加载相关方法和证据，不整库注入；大材料用路径与局部引用。",
+  "memoryPolicy": "仅保留当前任务上下文；持久保存沿用调用方已授权位置。",
+  "knowledgeAssets": [
+    {
+      "id": "hospitality-revenue-analyst-method",
+      "path": "references/professional-method.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "qloapps",
+        "qloapps-stats"
+      ]
+    },
+    {
+      "id": "hospitality-revenue-analyst-delivery",
+      "path": "references/delivery-template.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "qloapps",
+        "qloapps-stats"
+      ]
+    },
+    {
+      "id": "hospitality-revenue-analyst-worked",
+      "path": "references/worked-delivery.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "qloapps",
+        "qloapps-stats"
+      ]
+    }
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "酒店收益管理分析师",
+    "scope": [
+      "按房晚、房型、入住日和渠道比较需求与净贡献，给出有条件的房价和库存方案。",
+      "真实调价、超售、取消客单和渠道合同变更依既有业务授权；本包做分群分析与情景建议，不保证收入上涨。"
+    ],
+    "knowledgeAssetIds": [
+      "hospitality-revenue-analyst-method",
+      "hospitality-revenue-analyst-delivery",
+      "hospitality-revenue-analyst-worked"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "denominator",
+        "question": "可售房晚和已售房晚的定义一致吗？",
+        "evidenceRequired": [
+          "房态",
+          "停用房",
+          "入住与取消状态"
+        ],
+        "whenMissing": "先给不同口径，不以较小分母美化入住率。"
+      },
+      {
+        "id": "net-revenue",
+        "question": "净房费是否已扣佣金或含套餐其他服务？",
+        "evidenceRequired": [
+          "房费明细",
+          "渠道账单",
+          "税费"
+        ],
+        "whenMissing": "无法拆分则标毛收入，暂不比较净贡献。"
+      },
+      {
+        "id": "pickup",
+        "question": "两次预订快照使用相同入住窗口和提前期吗？",
+        "evidenceRequired": [
+          "快照日期",
+          "入住日",
+          "取消时间"
+        ],
+        "whenMissing": "按相同提前期重排，不宣称需求变化。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "net-before-rate",
+        "when": "降价或渠道促销提升入住",
+        "action": "比较增量净贡献及机会成本，再看ADR与RevPAR",
+        "avoid": "把入住率单指标作为成功"
+      },
+      {
+        "id": "stay-date",
+        "when": "订单跨多个入住日",
+        "action": "按房晚摊到入住日期并保留取消变化",
+        "avoid": "只按下单时间汇总推定实际住宿收益"
+      },
+      {
+        "id": "bounded-forecast",
+        "when": "历史样本或弹性不足",
+        "action": "给透明情景范围与小范围观察方案",
+        "avoid": "承诺提价后收入必然增长"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "hospitality-revenue-analyst-deliver",
+        "inputGuidance": [
+          {
+            "field": "roomInventory",
+            "interpretation": "按入住日/房型的物理房晚、停用房晚和可售口径",
+            "onMissing": "分母未知先列库存口径差异，不报唯一入住率。"
+          },
+          {
+            "field": "reservations",
+            "interpretation": "预订及入住日、状态、房晚、净房费、渠道、取消和退款",
+            "onMissing": "缺入住日不把下单日收入当入住日收益。"
+          },
+          {
+            "field": "pricingPolicy",
+            "interpretation": "价格限制、佣金、服务成本、客户承诺和决策范围",
+            "onMissing": "成本未知先报毛指标，不称净收益提升。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "hospitality-revenue-analyst-revenuebaseline",
+            "field": "revenueBaseline",
+            "criterion": "入住率、ADR、RevPAR使用同期间同房费口径；停用与免费房处理显式。",
+            "rejectWhen": "把总营收除售出房晚称ADR，或按订单数代替房晚。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "房晚分母",
+              "净房费及税费口径"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "hospitality-revenue-analyst-demandsignals",
+            "field": "demandSignals",
+            "criterion": "按入住日和提前期比较在手订单、净新增、取消与客群，避免把未完结窗口当最终结果。",
+            "rejectWhen": "用不同提前期的订单量直接断言需求上涨。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "预订快照",
+              "入住日与取消记录"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "hospitality-revenue-analyst-channelcontribution",
+            "field": "channelContribution",
+            "criterion": "从净房费扣渠道佣金、渠道专属费用和已声明变动成本，区分毛营收与增量贡献。",
+            "rejectWhen": "入住率高就认为更赚钱，或重复扣同一已净额费用。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "佣金合同",
+              "成本口径",
+              "渠道分组"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "hospitality-revenue-analyst-pricingoptions",
+            "field": "pricingOptions",
+            "criterion": "给受约束方案、预期房晚、净贡献、风险与观察窗口；假设和预测分开。",
+            "rejectWhen": "把合成弹性当实测，或无证据强推超售及歧视性个体价格。",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "方案假设",
+              "规则与监测条件"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "hospitality-revenue-analyst-facts",
+            "field": "facts",
+            "criterion": "标明本次实际来源、观察日、单位与假设，引用能追到具体输入。",
+            "rejectWhen": "把合成案例或推测写成真实已核事实。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "输入清单",
+              "假设与实际事实区分"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "hospitality-revenue-analyst-limitations",
+            "field": "limitations",
+            "criterion": "说明缺口影响哪个结论，已具备材料的独立部分继续完成。",
+            "rejectWhen": "把未执行检查写成通过，或将局部缺口泛化成全任务停工。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "已完成与未完成项",
+              "适用条件"
+            ],
+            "blocking": false
+          },
+          {
+            "id": "hospitality-revenue-analyst-handoff",
+            "field": "handoff",
+            "criterion": "给当前产物位置、关键判断、待核项、更新所需资料和责任。",
+            "rejectWhen": "只交建议而没有可接手的表格、文字或文件。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "实际产物",
+              "后续责任与所需输入"
+            ],
+            "blocking": false
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "真实调价、超售、取消客单和渠道合同变更依既有业务授权；本包做分群分析与情景建议，不保证收入上涨。"
+      ],
+      "prohibitedClaims": [
+        "合成例题、结构通过或自检不能称为真实行业效果或专业认证。",
+        "工具槽与方法包不证明当前宿主已经执行或对外业务已经完成。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
+}

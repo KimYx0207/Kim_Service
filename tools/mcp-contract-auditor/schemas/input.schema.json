@@ -1,0 +1,186 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$comment": "Generated from capability.json input; edit the contract and rebuild.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "organizationId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "workId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "revision": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        }
+      },
+      "required": [
+        "organizationId",
+        "workId",
+        "revision"
+      ],
+      "description": "本次组织、事项和输入版本；只是绑定身份，不保存画像。"
+    },
+    "previous": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "serverId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "protocolVersion": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "complete": {
+          "type": "boolean"
+        },
+        "tools": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "description": {
+                "type": "string",
+                "minLength": 0,
+                "maxLength": 16000
+              },
+              "inputSchema": {
+                "type": [
+                  "object",
+                  "boolean"
+                ]
+              },
+              "outputSchema": {
+                "type": [
+                  "object",
+                  "boolean"
+                ]
+              },
+              "annotations": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            },
+            "required": [
+              "name",
+              "inputSchema"
+            ]
+          },
+          "minItems": 0,
+          "maxItems": 1000
+        }
+      },
+      "required": [
+        "serverId",
+        "protocolVersion",
+        "complete",
+        "tools"
+      ],
+      "description": "旧服务身份、协议版本、完整分页标记和tools清单。仅包含工具契约，禁止放凭证。"
+    },
+    "current": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "serverId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "protocolVersion": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "complete": {
+          "type": "boolean"
+        },
+        "tools": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "description": {
+                "type": "string",
+                "minLength": 0,
+                "maxLength": 16000
+              },
+              "inputSchema": {
+                "type": [
+                  "object",
+                  "boolean"
+                ]
+              },
+              "outputSchema": {
+                "type": [
+                  "object",
+                  "boolean"
+                ]
+              },
+              "annotations": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            },
+            "required": [
+              "name",
+              "inputSchema"
+            ]
+          },
+          "minItems": 0,
+          "maxItems": 1000
+        }
+      },
+      "required": [
+        "serverId",
+        "protocolVersion",
+        "complete",
+        "tools"
+      ],
+      "description": "新服务身份和本次工具清单；complete=false表示未收齐分页，不可判定完整新增/删除。"
+    },
+    "approvedToolNames": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 128
+      },
+      "minItems": 0,
+      "maxItems": 1000,
+      "description": "当前任务或宿主已经授权的工具名清单；仅核对范围，不从annotations反推授权。"
+    }
+  },
+  "required": [
+    "context",
+    "previous",
+    "current",
+    "approvedToolNames"
+  ]
+}

@@ -1,0 +1,282 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$comment": "Generated from capability.json output; edit the contract and rebuild.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": 1,
+      "description": "使用当前机器回执版本1，不接受不同语义的包。"
+    },
+    "protocol": {
+      "const": "kim-service-helper-v1",
+      "description": "协议为kim-service-helper-v1，输出为一条完整JSON回执。"
+    },
+    "capabilityId": {
+      "const": "mcp-contract-auditor-deliver",
+      "description": "必须对应本次选定能力mcp-contract-auditor-deliver。"
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "organizationId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "workId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "revision": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        }
+      },
+      "required": [
+        "organizationId",
+        "workId",
+        "revision"
+      ],
+      "description": "原样保留本次organizationId、workId和revision。"
+    },
+    "inputSha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "用runtime canonical函数对实际完整输入重算SHA256。"
+    },
+    "policySha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "用同一规则对本次policy.json重算SHA256。"
+    },
+    "status": {
+      "enum": [
+        "completed",
+        "needs_review"
+      ],
+      "description": "身份/协议变化、增删/差异、未批准工具、部分分页或需进一步检查的schema/注解都会返回needs_review；completed仅表示当前比较没有这些变化，不是已连接或已授权。"
+    },
+    "result": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "serverIdentityChanged": {
+          "type": "boolean"
+        },
+        "protocolVersionChanged": {
+          "type": "boolean"
+        },
+        "comparisonComplete": {
+          "type": "boolean"
+        },
+        "added": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "minItems": 0,
+          "maxItems": 1000
+        },
+        "removed": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "minItems": 0,
+          "maxItems": 1000
+        },
+        "possibleAdded": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "minItems": 0,
+          "maxItems": 1000
+        },
+        "possibleRemoved": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "minItems": 0,
+          "maxItems": 1000
+        },
+        "changed": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "fields": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "minItems": 1,
+                "maxItems": 50
+              },
+              "previousHash": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "currentHash": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "required": [
+              "name",
+              "fields",
+              "previousHash",
+              "currentHash"
+            ]
+          },
+          "minItems": 0,
+          "maxItems": 1000
+        },
+        "unapproved": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "minItems": 0,
+          "maxItems": 1000
+        },
+        "schemaReviews": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "inputAssessment": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 512
+              },
+              "outputAssessment": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 512
+              },
+              "referenceCount": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 100000
+              },
+              "annotationHints": {
+                "type": "object"
+              },
+              "reviewReasons": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 512
+                },
+                "minItems": 0,
+                "maxItems": 20
+              }
+            },
+            "required": [
+              "name",
+              "inputAssessment",
+              "outputAssessment",
+              "referenceCount",
+              "annotationHints",
+              "reviewReasons"
+            ]
+          },
+          "minItems": 0,
+          "maxItems": 1000
+        },
+        "trust": {
+          "const": "not_established_by_annotations"
+        },
+        "schemaValidation": {
+          "const": "structural_inventory_only_not_full_json_schema_validation"
+        },
+        "liveConnectionObserved": {
+          "const": false
+        }
+      },
+      "required": [
+        "serverIdentityChanged",
+        "protocolVersionChanged",
+        "comparisonComplete",
+        "added",
+        "removed",
+        "possibleAdded",
+        "possibleRemoved",
+        "changed",
+        "unapproved",
+        "schemaReviews",
+        "trust",
+        "schemaValidation",
+        "liveConnectionObserved"
+      ],
+      "description": "按区分大小写的工具名比较所有声明字段及canonical哈希；完整性不足时只给possibleAdded/possibleRemoved。schema组合/$ref不能被误判为协议违规，行为注解不能成为授权来源。"
+    },
+    "claims": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "modelCalled": {
+          "const": false
+        },
+        "networkAccessed": {
+          "const": false
+        },
+        "businessStatePersisted": {
+          "const": false
+        },
+        "finalAcceptance": {
+          "const": "not_decided"
+        }
+      },
+      "required": [
+        "modelCalled",
+        "networkAccessed",
+        "businessStatePersisted",
+        "finalAcceptance"
+      ],
+      "description": "只声明本次离线运算，模型、网络、业务持久化均false，最终接受not_decided。"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "protocol",
+    "capabilityId",
+    "context",
+    "inputSha256",
+    "policySha256",
+    "status",
+    "result",
+    "claims"
+  ]
+}

@@ -1,0 +1,134 @@
+{
+  "schemaVersion": 1,
+  "roleId": "warehouse-operations-analyst",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "worked-delivery",
+      "capabilityId": "warehouse-operations-analyst-deliver",
+      "category": "worked_example",
+      "scenario": "同包完整合成示例，判断必须保持输入口径与业务边界。",
+      "input": {
+        "inventory": {
+          "sku": "A",
+          "unit": "件",
+          "onHand": 100,
+          "reserved": 30,
+          "blocked": 10,
+          "statesDisjoint": true,
+          "batches": [
+            {
+              "id": "B1",
+              "available": 40,
+              "remainingDays": 2
+            },
+            {
+              "id": "B2",
+              "available": 20,
+              "remainingDays": 30
+            }
+          ]
+        },
+        "orders": {
+          "quantity": 70,
+          "minimumRemainingDaysAtDelivery": 7,
+          "delivery": "当日"
+        },
+        "operations": "状态与单位已核，未执行出库"
+      },
+      "candidateOutputExcerpt": {
+        "availability": "一般可配60件；满足本客户保质期的只有20件。",
+        "allocationPlan": "B2候选分配20，缺50；B1不得仅因先到期而发出。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "输出从给定事实得到，解释关键计算或证据，并保留未验证范围。",
+      "diagnosticRefs": [
+        "available-stock",
+        "batch-fit",
+        "root-difference"
+      ],
+      "decisionRuleRefs": [
+        "allocation-ledger",
+        "fefo-with-constraints",
+        "count-before-adjust"
+      ]
+    },
+    {
+      "id": "material-failure",
+      "capabilityId": "warehouse-operations-analyst-deliver",
+      "category": "failure_boundary",
+      "scenario": "表面给出完整结论，但违反本角色关键专业规则。",
+      "input": {
+        "inventory": {
+          "sku": "A",
+          "unit": "件",
+          "onHand": 100,
+          "reserved": 30,
+          "blocked": 10,
+          "statesDisjoint": true,
+          "batches": [
+            {
+              "id": "B1",
+              "available": 40,
+              "remainingDays": 2
+            },
+            {
+              "id": "B2",
+              "available": 20,
+              "remainingDays": 30
+            }
+          ]
+        },
+        "orders": {
+          "quantity": 70,
+          "minimumRemainingDaysAtDelivery": 7,
+          "delivery": "当日"
+        },
+        "operations": "状态与单位已核，未执行出库"
+      },
+      "candidateOutputExcerpt": {
+        "allocationPlan": "库存100大于70，直接全部承诺；优先发出快过期B1。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "忽略预留、冻结及客户保质期约束。",
+      "diagnosticRefs": [
+        "available-stock",
+        "batch-fit",
+        "root-difference"
+      ],
+      "decisionRuleRefs": [
+        "allocation-ledger",
+        "fefo-with-constraints",
+        "count-before-adjust"
+      ]
+    },
+    {
+      "id": "bounded-progress",
+      "capabilityId": "warehouse-operations-analyst-deliver",
+      "category": "worked_example",
+      "scenario": "关键材料局部缺失，仍完成可独立交付部分。",
+      "input": {
+        "inventory": "在库80箱，预留记录20件，箱件换算未给",
+        "orders": "新订单30件",
+        "operations": "先整理可知信息"
+      },
+      "candidateOutputExcerpt": {
+        "availability": "库存单位与需求单位不可直接相减；先核SKU包装换算，其他同单位SKU可继续分配。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "缺口仅限制受影响判断，保留有依据的工作，不填造事实。",
+      "diagnosticRefs": [
+        "available-stock",
+        "batch-fit",
+        "root-difference"
+      ],
+      "decisionRuleRefs": [
+        "allocation-ledger",
+        "fefo-with-constraints",
+        "count-before-adjust"
+      ]
+    }
+  ]
+}

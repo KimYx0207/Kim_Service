@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "roleId": "contract-review-analyst",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "worked-delivery",
+      "capabilityId": "contract-review-analyst-deliver",
+      "category": "worked_example",
+      "scenario": "同包完整合成示例，判断必须保持输入口径与业务边界。",
+      "input": {
+        "contract": {
+          "version": "合成v1",
+          "clause8": "一般责任上限=过去12个月已付费用",
+          "clause8_3": "保密与知识产权赔偿不受8条上限约束",
+          "clause12": "每年自动续约，期满前30自然日按约定邮箱送达通知"
+        },
+        "context": {
+          "role": "服务采购方",
+          "jurisdiction": "未提供"
+        },
+        "playbook": "需要明确最大责任与退出窗口"
+      },
+      "candidateOutputExcerpt": {
+        "riskAnalysis": "上限存在两类例外，不能称全部责任封顶；法律效力待法域与律师审核。",
+        "obligationCalendar": "以本合同期满日倒推30自然日，须核当前期间和约定送达地址。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "输出从给定事实得到，解释关键计算或证据，并保留未验证范围。",
+      "diagnosticRefs": [
+        "version",
+        "exception",
+        "trigger"
+      ],
+      "decisionRuleRefs": [
+        "span-before-claim",
+        "commercial-not-legal",
+        "options-not-deletion"
+      ]
+    },
+    {
+      "id": "material-failure",
+      "capabilityId": "contract-review-analyst-deliver",
+      "category": "failure_boundary",
+      "scenario": "表面给出完整结论，但违反本角色关键专业规则。",
+      "input": {
+        "contract": {
+          "version": "合成v1",
+          "clause8": "一般责任上限=过去12个月已付费用",
+          "clause8_3": "保密与知识产权赔偿不受8条上限约束",
+          "clause12": "每年自动续约，期满前30自然日按约定邮箱送达通知"
+        },
+        "context": {
+          "role": "服务采购方",
+          "jurisdiction": "未提供"
+        },
+        "playbook": "需要明确最大责任与退出窗口"
+      },
+      "candidateOutputExcerpt": {
+        "riskAnalysis": "全部责任都不超过12个月费用；自动续约条款必然无效。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "遗漏明示例外并无来源作法律效力结论。",
+      "diagnosticRefs": [
+        "version",
+        "exception",
+        "trigger"
+      ],
+      "decisionRuleRefs": [
+        "span-before-claim",
+        "commercial-not-legal",
+        "options-not-deletion"
+      ]
+    },
+    {
+      "id": "bounded-progress",
+      "capabilityId": "contract-review-analyst-deliver",
+      "category": "worked_example",
+      "scenario": "关键材料局部缺失，仍完成可独立交付部分。",
+      "input": {
+        "contract": "正文引用附件A验收标准，但附件未提供",
+        "context": "采购方审核付款与验收",
+        "playbook": "先审正文"
+      },
+      "candidateOutputExcerpt": {
+        "clauseMatrix": "正文付款时间可提取；验收标准和默示验收后果因附件A缺失待核，其余条款分析继续。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "缺口仅限制受影响判断，保留有依据的工作，不填造事实。",
+      "diagnosticRefs": [
+        "version",
+        "exception",
+        "trigger"
+      ],
+      "decisionRuleRefs": [
+        "span-before-claim",
+        "commercial-not-legal",
+        "options-not-deletion"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,366 @@
+{
+  "schemaVersion": 1,
+  "id": "inventory-replenishment",
+  "componentType": "skill",
+  "componentVersion": "0.1.0",
+  "entrypoint": "SKILL.md",
+  "capabilities": [
+    {
+      "id": "inventory-replenishment-deliver",
+      "summary": "核对库存位置、保护期、安全库存、包装MOQ和容量约束 inventory replenishment periodic review safety stock",
+      "useWhen": [
+        "需要按复核周期、提前期和需求波动计算补货候选。",
+        "MOQ、整箱数或订单容量导致理论数量不可执行。",
+        "仓库“有库存”但已分配、在途或欠单口径不同。"
+      ],
+      "doNotUseWhen": [
+        "不适用于未经处理的间歇需求、促销突变、相关需求或随机提前期。",
+        "不替代多级库存优化、保质期批次优化或产能排程。",
+        "不自动下采购单，不保证指定服务水平必然达成。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "context": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "organizationId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "workId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "revision": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              }
+            },
+            "required": [
+              "organizationId",
+              "workId",
+              "revision"
+            ],
+            "description": "本次组织、事项和输入版本；只是绑定身份，不保存画像。"
+          },
+          "sku": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "description": "可唯一识别的SKU，本次单SKU计算。"
+          },
+          "unit": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 32,
+            "description": "所有数量共同单位。"
+          },
+          "demandPerDay": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100000000.0,
+            "description": "同口径日均需求，不包含单位不一致的汇总。"
+          },
+          "dailyStdDev": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100000000.0,
+            "description": "独立日需求标准差，不是方差。"
+          },
+          "leadDays": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 3650,
+            "description": "固定到货提前期，日历与需求一致。"
+          },
+          "reviewDays": {
+            "type": "number",
+            "minimum": 0.001,
+            "maximum": 3650,
+            "description": "周期复核间隔，大于0。"
+          },
+          "zScore": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 5,
+            "description": "调用方选择的正态分位参数，不是fill rate。"
+          },
+          "usableOnHand": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1000000000000.0,
+            "description": "扣除冻结/已分配后的可用现货。"
+          },
+          "confirmedOnOrder": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1000000000000.0,
+            "description": "确认将在保护期内到货且未另行占用的在途。"
+          },
+          "backorders": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1000000000000.0,
+            "description": "尚未从可用现货扣减的欠单；按订单和预留记录去重，不重复扣已分配需求。"
+          },
+          "packSize": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 1000000,
+            "description": "整数包装倍数。"
+          },
+          "minOrder": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 1000000000,
+            "description": "供应商最小订单量；无需要时不触发。"
+          },
+          "maxOrder": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 1000000000,
+            "description": "本次订单数量上限，0表示不能下单。"
+          },
+          "assumptions": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "independentDailyDemand": {
+                "const": true
+              },
+              "stableDemand": {
+                "const": true
+              },
+              "fixedLeadTime": {
+                "const": true
+              },
+              "confirmedOrdersArriveWithinProtectionPeriod": {
+                "const": true
+              }
+            },
+            "required": [
+              "independentDailyDemand",
+              "stableDemand",
+              "fixedLeadTime",
+              "confirmedOrdersArriveWithinProtectionPeriod"
+            ],
+            "description": "四项明确前提；不满足时选择其他模型，不伪填true。"
+          }
+        },
+        "required": [
+          "context",
+          "sku",
+          "unit",
+          "demandPerDay",
+          "dailyStdDev",
+          "leadDays",
+          "reviewDays",
+          "zScore",
+          "usableOnHand",
+          "confirmedOnOrder",
+          "backorders",
+          "packSize",
+          "minOrder",
+          "maxOrder",
+          "assumptions"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "schemaVersion": {
+            "const": 1,
+            "description": "使用当前机器回执版本1，不接受不同语义的包。"
+          },
+          "protocol": {
+            "const": "kim-service-helper-v1",
+            "description": "协议为kim-service-helper-v1，输出为一条完整JSON回执。"
+          },
+          "capabilityId": {
+            "const": "inventory-replenishment-deliver",
+            "description": "必须对应本次选定能力inventory-replenishment-deliver。"
+          },
+          "context": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "organizationId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "workId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "revision": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              }
+            },
+            "required": [
+              "organizationId",
+              "workId",
+              "revision"
+            ],
+            "description": "原样保留本次organizationId、workId和revision。"
+          },
+          "inputSha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "description": "用runtime canonical函数对实际完整输入重算SHA256。"
+          },
+          "policySha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "description": "用同一规则对本次policy.json重算SHA256。"
+          },
+          "status": {
+            "enum": [
+              "completed",
+              "needs_review"
+            ],
+            "description": "maxOrder或MOQ使候选不能补足目标时返回needs_review并保留unmetQuantity；所有候选仍只在明确假设下成立。"
+          },
+          "result": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "sku": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "unit": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 32
+              },
+              "protectionDays": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1000000000000.0
+              },
+              "inventoryPosition": {
+                "type": "number",
+                "minimum": -1000000000000.0,
+                "maximum": 2000000000000.0
+              },
+              "safetyStock": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1000000000000.0
+              },
+              "orderUpTo": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1000000000000.0
+              },
+              "unconstrainedOrder": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 3000000000000.0
+              },
+              "orderQuantity": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1000000000000.0
+              },
+              "unmetQuantity": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 3000000000000.0
+              },
+              "constraints": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 512
+                },
+                "minItems": 0,
+                "maxItems": 10
+              },
+              "serviceClaim": {
+                "const": "conditional_cycle_service_approximation_not_fill_rate"
+              }
+            },
+            "required": [
+              "sku",
+              "unit",
+              "protectionDays",
+              "inventoryPosition",
+              "safetyStock",
+              "orderUpTo",
+              "unconstrainedOrder",
+              "orderQuantity",
+              "unmetQuantity",
+              "constraints",
+              "serviceClaim"
+            ],
+            "description": "保护期=L+R，安全库存=z×日标准差×sqrt(L+R)，目标=日均需求×保护期+安全库存；库存位置=可用现货+合格在途−欠单；先补足差额，再按MOQ和整箱向上取整，容量冲突必须保留未满足数量。"
+          },
+          "claims": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "modelCalled": {
+                "const": false
+              },
+              "networkAccessed": {
+                "const": false
+              },
+              "businessStatePersisted": {
+                "const": false
+              },
+              "finalAcceptance": {
+                "const": "not_decided"
+              }
+            },
+            "required": [
+              "modelCalled",
+              "networkAccessed",
+              "businessStatePersisted",
+              "finalAcceptance"
+            ],
+            "description": "只声明本次离线运算，模型、网络、业务持久化均false，最终接受not_decided。"
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "protocol",
+          "capabilityId",
+          "context",
+          "inputSha256",
+          "policySha256",
+          "status",
+          "result",
+          "claims"
+        ]
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "实际采购承诺、超预算或服务目标变更交现有库存/采购责任人决定；情景复算不新增批准。"
+        ]
+      },
+      "validation": [
+        "tests/helper.test.mjs"
+      ],
+      "helperContract": "helper-contract.json"
+    }
+  ]
+}

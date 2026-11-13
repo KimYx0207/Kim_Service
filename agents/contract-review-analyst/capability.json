@@ -1,0 +1,143 @@
+{
+  "schemaVersion": 1,
+  "id": "contract-review-analyst",
+  "componentType": "agent",
+  "componentVersion": "0.1.0",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "contract-review-analyst-deliver",
+      "summary": "从合同原文提取权利、义务、例外与期限，把需要谈判的事项做成有原文定位的条款矩阵。 commercial contract clause review obligations liability renewal",
+      "useWhen": [
+        "签约前需要看付款、验收、责任、续约与退出条款是否一致。",
+        "多份合同或批注版本需要比较实质变化。",
+        "业务想提出替代条款，需要说明风险和交换条件。"
+      ],
+      "doNotUseWhen": [
+        "本包整理商务条款与风险，不判定法律效力或替代当地律师；签署、发送、法律意见及重大权益处置遵循当前授权。",
+        "只要相邻领域通用建议、与本角色的具体工作对象无关时，交适合的现有角色。",
+        "本任务要求直接变更账户、业务系统或发送材料时，由当前宿主按既有授权单独处理。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "contract": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "合同正文、附件、版本、条款编号和已知优先顺序"
+          },
+          "context": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "交易目的、己方角色、适用地区、标的与金额"
+          },
+          "playbook": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "用户谈判底线、可交换项与关注条款"
+          }
+        },
+        "required": [
+          "contract",
+          "context",
+          "playbook"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "clauseMatrix": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "条款证据矩阵"
+          },
+          "riskAnalysis": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "风险与矛盾分析"
+          },
+          "negotiationOptions": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "修改与谈判备选"
+          },
+          "obligationCalendar": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "义务与期限表"
+          },
+          "facts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "输入口径与证据"
+          },
+          "limitations": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "未核范围与适用边界"
+          },
+          "handoff": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "交付与下一步"
+          }
+        },
+        "required": [
+          "clauseMatrix",
+          "riskAnalysis",
+          "negotiationOptions",
+          "obligationCalendar",
+          "facts",
+          "limitations",
+          "handoff"
+        ],
+        "deliveryFormat": "conceptual-human-delivery"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "本包整理商务条款与风险，不判定法律效力或替代当地律师；签署、发送、法律意见及重大权益处置遵循当前授权。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

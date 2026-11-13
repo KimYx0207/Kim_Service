@@ -1,0 +1,187 @@
+{
+  "schemaVersion": 1,
+  "roleId": "incident-postmortem",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "unclosed-action",
+      "capabilityId": "incident-postmortem-deliver",
+      "category": "worked_example",
+      "scenario": "监控改进没有负责人及验证条件",
+      "input": {
+        "context": {
+          "organizationId": "synthetic-demo",
+          "workId": "professional-method-demo",
+          "revision": "1"
+        },
+        "incident": {
+          "id": "synthetic-checkout-01",
+          "startedAt": "2026-11-01T10:00:00+08:00",
+          "detectedAt": "2026-11-01T10:05:00+08:00",
+          "mitigatedAt": "2026-11-01T10:20:00+08:00",
+          "recoveredAt": "2026-11-01T10:30:00+08:00",
+          "impactSummary": "合成示例：部分结账请求失败，精确比例待日志重算。",
+          "evidenceRefs": [
+            "synthetic-event-log:100-160"
+          ]
+        },
+        "actions": [
+          {
+            "id": "limit-rollout",
+            "type": "prevent",
+            "owner": "发布负责人",
+            "dueAt": "2026-11-03T18:00:00+08:00",
+            "verification": "演练中批量发布超过10%时被限制，保留执行日志。",
+            "status": "in_progress",
+            "completionEvidence": []
+          },
+          {
+            "id": "probe-checkout",
+            "type": "detect",
+            "owner": "",
+            "dueAt": null,
+            "verification": "",
+            "status": "proposed",
+            "completionEvidence": []
+          }
+        ],
+        "asOf": "2026-11-04T12:00:00+08:00"
+      },
+      "candidateOutputExcerpt": {
+        "status": "needs_review",
+        "result": {
+          "incidentId": "synthetic-checkout-01",
+          "durationsMinutes": {
+            "detection": 5,
+            "detectionToMitigation": 15,
+            "mitigationToRecovery": 10,
+            "customerImpact": 30
+          },
+          "actions": [
+            {
+              "id": "limit-rollout",
+              "issues": [
+                "overdue"
+              ],
+              "overdue": true,
+              "evidenceSupportedCompletion": false
+            },
+            {
+              "id": "probe-checkout",
+              "issues": [
+                "missing_owner",
+                "missing_verification",
+                "missing_due_date"
+              ],
+              "overdue": false,
+              "evidenceSupportedCompletion": false
+            }
+          ],
+          "missingActionTypes": [
+            "mitigate"
+          ],
+          "metricScope": "single_incident_not_mean_mttr",
+          "causeAssessment": "requires_source_based_review"
+        }
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "具体缺口影响后续行动闭环。",
+      "diagnosticRefs": [
+        "action-closure"
+      ],
+      "decisionRuleRefs": [
+        "completion-evidence"
+      ]
+    },
+    {
+      "id": "single-mttr",
+      "capabilityId": "incident-postmortem-deliver",
+      "category": "failure_boundary",
+      "scenario": "行动没有完成证据却写evidenceSupportedCompletion=true",
+      "input": {
+        "context": {
+          "organizationId": "synthetic-demo",
+          "workId": "professional-method-demo",
+          "revision": "1"
+        },
+        "incident": {
+          "id": "synthetic-checkout-01",
+          "startedAt": "2026-11-01T10:00:00+08:00",
+          "detectedAt": "2026-11-01T10:05:00+08:00",
+          "mitigatedAt": "2026-11-01T10:20:00+08:00",
+          "recoveredAt": "2026-11-01T10:30:00+08:00",
+          "impactSummary": "合成示例：部分结账请求失败，精确比例待日志重算。",
+          "evidenceRefs": [
+            "synthetic-event-log:100-160"
+          ]
+        },
+        "actions": [
+          {
+            "id": "limit-rollout",
+            "type": "prevent",
+            "owner": "发布负责人",
+            "dueAt": "2026-11-03T18:00:00+08:00",
+            "verification": "演练中批量发布超过10%时被限制，保留执行日志。",
+            "status": "completed",
+            "completionEvidence": []
+          },
+          {
+            "id": "probe-checkout",
+            "type": "detect",
+            "owner": "",
+            "dueAt": null,
+            "verification": "",
+            "status": "proposed",
+            "completionEvidence": []
+          }
+        ],
+        "asOf": "2026-11-04T12:00:00+08:00"
+      },
+      "candidateOutputExcerpt": {
+        "status": "completed",
+        "result": {
+          "incidentId": "synthetic-checkout-01",
+          "durationsMinutes": {
+            "detection": 5,
+            "detectionToMitigation": 15,
+            "mitigationToRecovery": 10,
+            "customerImpact": 30
+          },
+          "actions": [
+            {
+              "id": "limit-rollout",
+              "issues": [],
+              "overdue": false,
+              "evidenceSupportedCompletion": true
+            },
+            {
+              "id": "probe-checkout",
+              "issues": [
+                "missing_owner",
+                "missing_verification",
+                "missing_due_date"
+              ],
+              "overdue": false,
+              "evidenceSupportedCompletion": false
+            }
+          ],
+          "missingActionTypes": [
+            "mitigate"
+          ],
+          "metricScope": "single_incident_not_mean_mttr",
+          "causeAssessment": "requires_source_based_review"
+        }
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "原输入没有完成证据，候选不能声称已有证据支持关单。",
+      "diagnosticRefs": [
+        "action-closure"
+      ],
+      "decisionRuleRefs": [
+        "completion-evidence"
+      ]
+    }
+  ]
+}

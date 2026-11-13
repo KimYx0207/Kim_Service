@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "roleId": "hospitality-revenue-analyst",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "worked-delivery",
+      "capabilityId": "hospitality-revenue-analyst-deliver",
+      "category": "worked_example",
+      "scenario": "同包完整合成示例，判断必须保持输入口径与业务边界。",
+      "input": {
+        "roomInventory": {
+          "availableRoomNights": 100,
+          "outOfOrderTreatment": "已在可售量剔除"
+        },
+        "reservations": {
+          "soldRoomNights": 80,
+          "roomRevenue": 40000,
+          "channelA": {
+            "nights": 40,
+            "roomRate": 500,
+            "commission": 0.15
+          },
+          "direct": {
+            "nights": 40,
+            "roomRate": 500
+          },
+          "occupiedRoomNights": 80,
+          "roomRevenueBasis": "已扣税费退款及非房费服务，未扣渠道佣金；80房晚均实际入住"
+        },
+        "pricingPolicy": {
+          "currency": "CNY",
+          "variableCostPerOccupiedNight": 100,
+          "fixedCosts": "未提供"
+        }
+      },
+      "candidateOutputExcerpt": {
+        "revenueBaseline": "入住率80%，ADR=500元，RevPAR=400元。",
+        "channelContribution": "A=13000，直销=16000，总贡献29000元，未扣固定成本。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "输出从给定事实得到，解释关键计算或证据，并保留未验证范围。",
+      "diagnosticRefs": [
+        "denominator",
+        "net-revenue",
+        "pickup"
+      ],
+      "decisionRuleRefs": [
+        "net-before-rate",
+        "stay-date",
+        "bounded-forecast"
+      ]
+    },
+    {
+      "id": "material-failure",
+      "capabilityId": "hospitality-revenue-analyst-deliver",
+      "category": "failure_boundary",
+      "scenario": "表面给出完整结论，但违反本角色关键专业规则。",
+      "input": {
+        "roomInventory": {
+          "availableRoomNights": 100,
+          "outOfOrderTreatment": "已在可售量剔除"
+        },
+        "reservations": {
+          "soldRoomNights": 80,
+          "roomRevenue": 40000,
+          "channelA": {
+            "nights": 40,
+            "roomRate": 500,
+            "commission": 0.15
+          },
+          "direct": {
+            "nights": 40,
+            "roomRate": 500
+          },
+          "occupiedRoomNights": 80,
+          "roomRevenueBasis": "已扣税费退款及非房费服务，未扣渠道佣金；80房晚均实际入住"
+        },
+        "pricingPolicy": {
+          "currency": "CNY",
+          "variableCostPerOccupiedNight": 100,
+          "fixedCosts": "未提供"
+        }
+      },
+      "candidateOutputExcerpt": {
+        "revenueBaseline": "80笔订单就等于80房晚，餐饮也算ADR。",
+        "channelContribution": "渠道A入住率高，所以一定比直销利润好。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "混淆订单与房晚、总营收与房费，并忽略佣金及成本。",
+      "diagnosticRefs": [
+        "denominator",
+        "net-revenue",
+        "pickup"
+      ],
+      "decisionRuleRefs": [
+        "net-before-rate",
+        "stay-date",
+        "bounded-forecast"
+      ]
+    },
+    {
+      "id": "bounded-progress",
+      "capabilityId": "hospitality-revenue-analyst-deliver",
+      "category": "worked_example",
+      "scenario": "关键材料局部缺失，仍完成可独立交付部分。",
+      "input": {
+        "roomInventory": "100间房，观察期天数和停用房未给",
+        "reservations": "有已确认订单房费",
+        "pricingPolicy": "先审指标口径"
+      },
+      "candidateOutputExcerpt": {
+        "revenueBaseline": "先列订单、房晚及房费可用字段；可售房晚分母未确定，暂不报入住率或RevPAR。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "缺口仅限制受影响判断，保留有依据的工作，不填造事实。",
+      "diagnosticRefs": [
+        "denominator",
+        "net-revenue",
+        "pickup"
+      ],
+      "decisionRuleRefs": [
+        "net-before-rate",
+        "stay-date",
+        "bounded-forecast"
+      ]
+    }
+  ]
+}

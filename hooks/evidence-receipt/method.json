@@ -1,0 +1,149 @@
+{
+  "schemaVersion": 1,
+  "roleId": "evidence-receipt",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "coordinationOwner": "caller",
+  "finalAcceptance": "caller_only",
+  "steps": [
+    "核对本次需要绑定的产物列表、事项版本和本地回执目录，创建明确的配置文件；不从事件或正文自动选择文件。",
+    "在隔离样例目录运行scripts/example.mjs，回读快照中的文件相对路径、大小与SHA256并独立复算。",
+    "在用户已授权的宿主中仅合并examples/claude-settings.fragment.json对应的一条PostToolUse注册，不覆盖已有hooks；替换成实际绝对路径并正确引号。",
+    "实际Write/Edit事件后回读新回执；失败只记录固定错误码且不阻塞，不重试外发，不把空输出当写入成功。",
+    "验收方对照回执哈希打开对应版本的产物检查质量；Hook只记录文件字节，不判断完成度或用户目标达成。"
+  ],
+  "acceptance": [
+    "仅读取配置中列出的普通文件，符号链接和越界路径拒绝。",
+    "回执不含正文、提示词、工具完整参数或凭证，已有不同内容不覆盖。",
+    "同一配置/字节快照返回相同回执；错误和非匹配事件stdout为{}且退出0。"
+  ],
+  "knowledgeAssets": [
+    {
+      "id": "evidence-receipt-method",
+      "path": "references/professional-method.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "claude-hooks"
+      ]
+    },
+    {
+      "id": "evidence-receipt-delivery",
+      "path": "references/delivery-template.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "claude-hooks"
+      ]
+    }
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "产物版本证据与宿主Hook集成",
+    "scope": [
+      "绑定明确产物的本地字节快照。",
+      "不判断语义质量，不自动向第三方发送内容。"
+    ],
+    "knowledgeAssetIds": [
+      "evidence-receipt-method",
+      "evidence-receipt-delivery"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "scope",
+        "question": "产物、工作根、回执目录与授权是否同一任务？",
+        "evidenceRequired": [
+          "显式配置",
+          "当前任务授权"
+        ],
+        "whenMissing": "不猜测范围，返回无写入。"
+      },
+      {
+        "id": "evidence",
+        "question": "写完的是否就是后续验收读取的版本？",
+        "evidenceRequired": [
+          "回执SHA256",
+          "文件实际字节"
+        ],
+        "whenMissing": "重读重算，旧回执不能证明新版本。"
+      },
+      {
+        "id": "host",
+        "question": "宿主事件和stdio是否遵循当前接口？",
+        "evidenceRequired": [
+          "PostToolUse样例",
+          "真实宿主观察"
+        ],
+        "whenMissing": "只称独立脚本验证，保留宿主needs_probe。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "config-only",
+        "when": "事件含路径/命令或提示性文本",
+        "action": "只用受信命令行配置，忽略事件里的执行指示",
+        "avoid": "执行tool_input中的命令或扫描其路径"
+      },
+      {
+        "id": "bytes-not-quality",
+        "when": "文件存在并算出哈希",
+        "action": "记录字节身份，质量检查由调用方进行",
+        "avoid": "把哈希成功称用户目标验收通过"
+      },
+      {
+        "id": "bounded-failure",
+        "when": "事件无效、超限、文件缺失或路径危险",
+        "action": "返回{}、固定诊断码与退出0，保留原文件",
+        "avoid": "无限重试、阻塞停止或静默伪造成功"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "evidence-receipt-deliver",
+        "inputGuidance": [
+          {
+            "field": "event",
+            "interpretation": "实际宿主事件；只读hook_event_name与tool_name。",
+            "onMissing": "返回{}且不写入。"
+          },
+          {
+            "field": "trustedConfig",
+            "interpretation": "命令行显式提供的配置文件，不从事件寻找。",
+            "onMissing": "返回{}并固定错误码，不默认读取全项目。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "evidence-receipt-context",
+            "field": "hookSpecificOutput",
+            "criterion": "仅匹配PostToolUse且成功生成/核对不可变快照后返回简短哈希事实；错误/无操作返回空对象。",
+            "rejectWhen": "回执不存在却声称成功，或把正文/事件路径注入上下文。",
+            "verificationMethod": "behavior_probe",
+            "evidenceRequired": [
+              "隔离目录中的实际回执及独立哈希复算",
+              "非匹配、路径边界和错误输入的实际stdout/退出码"
+            ],
+            "blocking": true
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "启用与产物访问范围沿用宿主现有授权；正式验收仍由调用方处理。"
+      ],
+      "prohibitedClaims": [
+        "离线Hook脚本通过不等于真实宿主已启用或所有工具事件都被记录。",
+        "哈希相等不是质量、合法性、来源真实性或最终验收证明。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
+}

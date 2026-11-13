@@ -1,0 +1,178 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$comment": "Generated from capability.json output; edit the contract and rebuild.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": 1,
+      "description": "使用当前机器回执版本1，不接受不同语义的包。"
+    },
+    "protocol": {
+      "const": "kim-service-helper-v1",
+      "description": "协议为kim-service-helper-v1，输出为一条完整JSON回执。"
+    },
+    "capabilityId": {
+      "const": "inventory-replenishment-deliver",
+      "description": "必须对应本次选定能力inventory-replenishment-deliver。"
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "organizationId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "workId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "revision": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        }
+      },
+      "required": [
+        "organizationId",
+        "workId",
+        "revision"
+      ],
+      "description": "原样保留本次organizationId、workId和revision。"
+    },
+    "inputSha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "用runtime canonical函数对实际完整输入重算SHA256。"
+    },
+    "policySha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "用同一规则对本次policy.json重算SHA256。"
+    },
+    "status": {
+      "enum": [
+        "completed",
+        "needs_review"
+      ],
+      "description": "maxOrder或MOQ使候选不能补足目标时返回needs_review并保留unmetQuantity；所有候选仍只在明确假设下成立。"
+    },
+    "result": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sku": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "unit": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 32
+        },
+        "protectionDays": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1000000000000
+        },
+        "inventoryPosition": {
+          "type": "number",
+          "minimum": -1000000000000,
+          "maximum": 2000000000000
+        },
+        "safetyStock": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1000000000000
+        },
+        "orderUpTo": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1000000000000
+        },
+        "unconstrainedOrder": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 3000000000000
+        },
+        "orderQuantity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1000000000000
+        },
+        "unmetQuantity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 3000000000000
+        },
+        "constraints": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512
+          },
+          "minItems": 0,
+          "maxItems": 10
+        },
+        "serviceClaim": {
+          "const": "conditional_cycle_service_approximation_not_fill_rate"
+        }
+      },
+      "required": [
+        "sku",
+        "unit",
+        "protectionDays",
+        "inventoryPosition",
+        "safetyStock",
+        "orderUpTo",
+        "unconstrainedOrder",
+        "orderQuantity",
+        "unmetQuantity",
+        "constraints",
+        "serviceClaim"
+      ],
+      "description": "保护期=L+R，安全库存=z×日标准差×sqrt(L+R)，目标=日均需求×保护期+安全库存；库存位置=可用现货+合格在途−欠单；先补足差额，再按MOQ和整箱向上取整，容量冲突必须保留未满足数量。"
+    },
+    "claims": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "modelCalled": {
+          "const": false
+        },
+        "networkAccessed": {
+          "const": false
+        },
+        "businessStatePersisted": {
+          "const": false
+        },
+        "finalAcceptance": {
+          "const": "not_decided"
+        }
+      },
+      "required": [
+        "modelCalled",
+        "networkAccessed",
+        "businessStatePersisted",
+        "finalAcceptance"
+      ],
+      "description": "只声明本次离线运算，模型、网络、业务持久化均false，最终接受not_decided。"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "protocol",
+    "capabilityId",
+    "context",
+    "inputSha256",
+    "policySha256",
+    "status",
+    "result",
+    "claims"
+  ]
+}

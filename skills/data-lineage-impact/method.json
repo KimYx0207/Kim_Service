@@ -1,0 +1,253 @@
+{
+  "schemaVersion": 1,
+  "roleId": "data-lineage-impact",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "coordinationOwner": "caller",
+  "finalAcceptance": "caller_only",
+  "permissionSource": "current_task_host_authorization",
+  "steps": [
+    "对照变更单和数据目录确认全限定ID、版本、字段类型及口径，保留未匹配对象。",
+    "把SQL、运行日志和人工声明整理成edges；OpenLineage事件先按专业方法处理facet优先级再转换，保留证据位置与采集日期，未观察依赖标declared/unknown。",
+    "运行包内helper，复核两条代表路径和所有unmatchedSeeds，检查循环与责任人缺失。",
+    "按高影响报表、指标、接口和调度任务分配回归责任，把图外系统作为明确缺口。",
+    "交付影响清单、回归样例及回滚触发条件；实际迁移与最终采用仍由调用方执行。"
+  ],
+  "acceptance": [
+    "影响对象不含重复，路径从变更对象开始且每条边存在；只有整条路径均有已观察证据时标observed_path。未知对象、证据空白、循环和责任人缺口不能丢失。",
+    "未知变更对象、相关无证据边、可能路径、未知责任人或循环使status为needs_review；completed只表示所给图已完成遍历，coverage始终为supplied_edges_only。",
+    "回执输入与规则哈希可复算；领域交付带事实、假设、缺口与证据定位。"
+  ],
+  "knowledgeAssets": [
+    {
+      "id": "data-lineage-impact-method",
+      "path": "references/professional-method.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "openlineage"
+      ]
+    },
+    {
+      "id": "data-lineage-impact-delivery",
+      "path": "references/delivery-template.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "openlineage"
+      ]
+    }
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "数据血缘与变更影响",
+    "scope": [
+      "把“改这个字段会影响谁”变成带路径、来源、责任人和缺口的影响清单，先区分确认依赖与可能依赖，再安排有范围的回归。",
+      "不自动解析全部SQL或发现生产全量血缘；只分析本次提供的图。"
+    ],
+    "knowledgeAssetIds": [
+      "data-lineage-impact-method",
+      "data-lineage-impact-delivery"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "identity",
+        "question": "相同字段名是否来自不同环境/命名空间？",
+        "evidenceRequired": [
+          "数据目录对象ID",
+          "变更对象与版本"
+        ],
+        "whenMissing": "先建立身份映射，不按裸表名合并。"
+      },
+      {
+        "id": "edge-evidence",
+        "question": "依赖来自真实运行、静态声明还是猜测？",
+        "evidenceRequired": [
+          "SQL/运行日志位置",
+          "采集时间及覆盖范围"
+        ],
+        "whenMissing": "将路径降为possible_path并列缺口。"
+      },
+      {
+        "id": "coverage",
+        "question": "哪些系统、动态SQL或人工表格没有被纳入？",
+        "evidenceRequired": [
+          "数据源清单",
+          "未采集系统和对象责任人"
+        ],
+        "whenMissing": "报告图外盲区，不能宣布完整覆盖。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "propagate-uncertainty",
+        "when": "路径含声明/未知边或证据缺失",
+        "action": "影响保留但标可能，安排定向核验",
+        "avoid": "按路径末端单一证据提升整条路径可信度"
+      },
+      {
+        "id": "openlineage-facet-precedence",
+        "when": "将OpenLineage原始事件整理为本包nodes/edges且同数据集同时存在lineage与columnLineage",
+        "action": "采用lineage所描述的关系并保留来源位置；分别映射数据集与字段身份后提交通用图",
+        "avoid": "合并新旧facet重复或矛盾的边，或声称helper自动解析官方事件"
+      },
+      {
+        "id": "identity-before-traverse",
+        "when": "同名对象或变更ID不在图中",
+        "action": "固定全限定ID并报告未匹配对象",
+        "avoid": "默默忽略未匹配变更"
+      },
+      {
+        "id": "bounded-cycle",
+        "when": "血缘有循环或回写",
+        "action": "去重遍历并提示循环，按实际批次/运行版本分解",
+        "avoid": "无限递归或把循环节点漏掉"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "data-lineage-impact-deliver",
+        "inputGuidance": [
+          {
+            "field": "context",
+            "interpretation": "本次组织、事项和输入版本；只是绑定身份，不保存画像。",
+            "onMissing": "补本次调用标识，不借用别的任务身份。"
+          },
+          {
+            "field": "nodes",
+            "interpretation": "唯一全限定对象ID与责任人；ID应包含环境/命名空间、数据集与字段，不合并同名异源对象。",
+            "onMissing": "缺身份不能追踪，缺责任人保留待分配。"
+          },
+          {
+            "field": "edges",
+            "interpretation": "输入到输出的有向边，标记已观察/声明/未知与实际证据引用。",
+            "onMissing": "没有边只说明资料没有覆盖，不能得出无下游结论。"
+          },
+          {
+            "field": "changed",
+            "interpretation": "本次实际改变的对象ID列表，需与nodes一致。",
+            "onMissing": "列清变更对象；未知对象返回unmatchedSeeds。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "data-lineage-impact-schemaversion",
+            "field": "schemaVersion",
+            "criterion": "使用当前机器回执版本1，不接受不同语义的包。",
+            "rejectWhen": "版本不匹配却继续解析。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "回执schema版本与schemas/output.schema.json"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "data-lineage-impact-protocol",
+            "field": "protocol",
+            "criterion": "协议为kim-service-helper-v1，输出为一条完整JSON回执。",
+            "rejectWhen": "把文字建议或非本协议结果当机器回执。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "当前完整stdout与output schema"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "data-lineage-impact-capabilityid",
+            "field": "capabilityId",
+            "criterion": "必须对应本次选定能力data-lineage-impact-deliver。",
+            "rejectWhen": "混用其他能力输出。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "所选capability与回执能力ID"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "data-lineage-impact-context",
+            "field": "context",
+            "criterion": "原样保留本次organizationId、workId和revision。",
+            "rejectWhen": "跨事项或旧版本结果冒充本次成果。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "输入和回执的context逐字段比较"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "data-lineage-impact-inputsha256",
+            "field": "inputSha256",
+            "criterion": "用runtime canonical函数对实际完整输入重算SHA256。",
+            "rejectWhen": "改过输入仍引用旧哈希，或只哈希部分输入。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "实际输入字节解析值与独立哈希复算"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "data-lineage-impact-policysha256",
+            "field": "policySha256",
+            "criterion": "用同一规则对本次policy.json重算SHA256。",
+            "rejectWhen": "规则已改而沿用旧结果。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "当前policy.json与哈希复算"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "data-lineage-impact-status",
+            "field": "status",
+            "criterion": "未知变更对象、相关无证据边、可能路径、未知责任人或循环使status为needs_review；completed只表示所给图已完成遍历，coverage始终为supplied_edges_only。",
+            "rejectWhen": "completed被误写成行业结果或生产执行已经验收。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "实际脚本status与result中缺口/例外逐项对应"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "data-lineage-impact-result",
+            "field": "result",
+            "criterion": "影响对象不含重复，路径从变更对象开始且每条边存在；只有整条路径均有已观察证据时标observed_path。未知对象、证据空白、循环和责任人缺口不能丢失。",
+            "rejectWhen": "把声明或缺失证据路径标成已观察，漏掉间接下游，或把给定图的遍历称全系统影响证明。 输入来自OpenLineage时，将新旧facet叠加为重复证据，或声称本通用图helper已解析官方事件。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "本次输入、公式/映射、脚本结果和下方领域交付记录"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "data-lineage-impact-claims",
+            "field": "claims",
+            "criterion": "只声明本次离线运算，模型、网络、业务持久化均false，最终接受not_decided。",
+            "rejectWhen": "把离线检查写成连接成功、真实业务验证或独立批准。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "脚本执行轨迹和真实外部动作范围"
+            ],
+            "blocking": true
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "生产字段删除、数据权限变更或迁移执行由现有变更责任人确认；影响分析与草稿不新增审批。"
+      ],
+      "prohibitedClaims": [
+        "方法与合成例不是实测专业效果；普通离线分析按现有授权执行。",
+        "不因声明工具或回执而获得业务系统写入、发送消息或最终批准权限。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
+}

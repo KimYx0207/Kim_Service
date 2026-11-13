@@ -8,9 +8,9 @@
 
 You may know what you want without knowing which numbers a forecast must reconcile, which states a page needs, or how to compare the full cost of supplier quotes. Kim Service brings the methods, materials, steps, examples, and acceptance criteria together, giving you and your AI a concrete basis for the work.
 
-The current main branch includes **48 specialist Agents, 26 Skills, 1 Hook, and 1 Tool**: 76 components with **91 searchable task capabilities**. Choose one for the job in front of you, or combine several methods within a project.
+The current main branch includes **58 specialist Agents, 30 Skills, 2 Hooks, and 2 Tools**: 92 components with **107 searchable task capabilities**. Choose one for the job in front of you, or combine several methods within a project.
 
-**[Browse capabilities and prepare a request](https://kimyx0207.github.io/Kim_Service/?lang=en)** · **[Download V1.14 source and packages](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.14)**
+**[Browse capabilities and prepare a request](https://kimyx0207.github.io/Kim_Service/?lang=en)** · **[Download V1.15 source and packages](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.15)**
 
 <p align="center">
   <img src="docs/images/service-system-panorama.en.svg" alt="Kim Service task panorama: goals and materials enter the task browser; optional Meta_Kim orchestration combines Agent, Skill, Hook and Tool methods into a request; the current AI client produces real artifacts and verifies the handoff, with repair paths, necessary human choices and host-owned Work records" width="1200">
@@ -26,10 +26,10 @@ Financial modeling starts with periods, currency, and units, then connects sales
 
 ### What the four kinds of component do
 
-- **Agents handle a complete professional task.** Each of the 48 roles has a defined scope, inputs and outputs, reference material, decision steps, positive and negative examples, and quality checks. Financial modeling receives business data; design-system work receives screens, brand choices, and interaction requirements. Their methods lead to different, concrete deliverables.
-- **Skills support a particular step.** The 26 reusable skills cover requirements tracing, API contracts, database migration, accessibility, financial scenarios, experiments, retrieval evaluation, and learning assessment. They also include workflows for teamwork, memory, skill discovery, Xiaohongshu, and sticker production. Select the ones the current job needs.
-- **The Hook helps clarify the request.** In a supported, configured client, HookPrompt adds context about the goal, scope, output, and checks to substantive task prompts. It preserves decisions already made in the conversation so the AI can continue in the intended direction.
-- **The Tool connects execution capabilities.** The multi-CLI package can expose locally installed Codex and Gemini through MCP to a compatible client for coding or review, with project-level workflow entries. The current client still controls the working directory and permitted file operations.
+- **Agents handle a complete professional task.** Each of the 58 roles has a defined scope, inputs and outputs, reference material, decision steps, positive and negative examples, and quality checks. Financial modeling receives business data; design-system work receives screens, brand choices, and interaction requirements. Their methods lead to different, concrete deliverables.
+- **Skills support a particular step.** The 30 reusable skills cover requirements tracing, API contracts, database migration, accessibility, financial scenarios, experiments, retrieval evaluation, and learning assessment. They also include workflows for teamwork, memory, skill discovery, Xiaohongshu, and sticker production. Select the ones the current job needs.
+- **Hooks clarify requests and record delivered versions.** In a supported, configured client, HookPrompt adds context about the goal, scope, output, and checks to substantive task prompts. It preserves decisions already made in the conversation. The new opt-in evidence Hook records hashes of explicitly selected local artifacts.
+- **Tools connect and inspect execution capabilities.** The multi-CLI package can expose locally installed Codex and Gemini through MCP to a compatible client for coding or review, with project-level workflow entries. The new offline MCP auditor examines tool-definition changes. The current client still controls the working directory and permitted file operations.
 
 Together, the specialist Agent supplies the professional method, Skills support particular steps, the Hook helps express the request, and tools perform the operations. Load the parts relevant to the task. Instructions, references, examples, and check scripts stay with the source, so a result can be traced to the materials and checks behind it.
 
@@ -53,11 +53,45 @@ Together, the specialist Agent supplies the professional method, Skills support 
 
 **For physical operations and engineering projects,** work through manufacturing quality, system requirements and interfaces, construction information, energy projects, emissions accounting, field-water planning, or nonclinical healthcare service processes. The methods make scope, sources, units, exceptions, and on-site checks explicit, producing analysis, verification plans, or pilot proposals while retaining the items that need local evidence and professional judgment.
 
-The 91 capabilities describe the available task entries. Start with the result you need, search for it in the browser, and check the required materials. You do not need to memorize role names.
+The 107 capabilities describe the available task entries. Start with the result you need, search for it in the browser, and check the required materials. You do not need to memorize role names.
 
 <a id="task-browser"></a>
 
-## One driving interface, five executable additions
+## Professional industry methods added in V1.15
+
+The additions address specific business decisions. Each Agent includes material requirements, diagnostic branches, a complete delivery template, acceptable and rejected examples, and evidence-based output checks. Entrypoints stay compact; detailed references are loaded when needed.
+
+| Search the catalog for | Bring | Expected deliverable |
+| --- | --- | --- |
+| Credit risk | Loan exposure, repayment and arrears records, sourced assumptions | Risk breakdown, expected-loss scenarios and evidence gaps |
+| Treasury liquidity | Available cash, payment timing and financing constraints | Maturity-bucket cash gaps, stress scenarios and funding options |
+| Insurance claims | Policy version, loss evidence, deductibles and limits | Evidence mapping, conditional payout calculations and disputed items |
+| Contract review | Complete clauses, attachments, transaction goals and scope | Obligations, evidence-backed risks and proposed amendments |
+| Maintenance reliability | Asset registers, failures, downtime and repair records | Reliability measures, fault diagnosis and maintenance options |
+| Warehouse operations | Inventory, reservations, movements, locations and constraints | Available-to-promise reconciliation, bottlenecks and improvements |
+| Construction project control | Work breakdown, baseline, progress, costs and changes | Schedule/cost variance, change impact and recovery options |
+| Hospitality revenue | Room capacity, rates, cancellations, channel fees and demand | Net revenue comparisons, inventory/rate options and sensitivities |
+| Game economy | Currency sources and sinks, rewards, items and player segments | Currency balance, inflation risks and testable economy changes |
+| Security incidents | Authorized alerts, logs, timelines and affected assets | Evidence timeline, incident scope, response and recovery options |
+
+Search for the business task, review its inputs and deliverables, then copy the request into a client that can read the repository and your materials. Complete supported parts first when evidence is missing. Business owners retain responsibility for legal, credit, claims and production decisions; examples are not actual business findings.
+
+### New Skills, MCP tooling and a Hook
+
+| Capability | Practical use |
+| --- | --- |
+| Data lineage and change impact | Trace affected tables, fields and jobs through supplied dependencies, retaining impact paths |
+| Inventory replenishment | Recompute replenishment options from demand, lead times, service targets and pack constraints |
+| Incident postmortem | Check event timing, impact and follow-up actions, including owners and verification methods |
+| Tender compliance | Map requirements to responses, evidence and gaps, distinguishing mandatory conditions |
+| MCP contract audit | Compare tool lists, input/output definitions and risk hints in an offline report |
+| Local evidence receipt Hook | Hash explicitly selected files so handoffs can identify the delivered version |
+
+The four Skills and MCP auditor include executable synthetic examples and local scripts, using the same machine interface described below. The MCP auditor does not connect to a remote server or enforce permissions. The Hook must be configured in a compatible client; it records selected local files without automatic external transmission or replacement of host settings.
+
+References include Apache Fineract, Open Source Risk Engine, openIMIS, CUAD, ERPNext, OpenProject, QloApps, Nakama, DFIR-IRIS, OpenLineage, Google SRE, OCDS and official MCP materials. Each new package's `PROVENANCE.md` records what was adopted, what was excluded, source versions and licensing. The [industry-method record](docs/research/industry-agents-2026-11-13.md) and [Skills/integration record](docs/research/skills-integrations-2026-11-13.md) summarize the work. Original methods and authored examples check the workflow; real professional outcomes require actual task artifacts and review.
+
+## One driving interface and project collaboration helpers
 
 **Start continuing project work in Meta Live; Kim Service supplies the capabilities.** Meta Live owns Work records and continuation. The current host invokes methods or locally bound helpers. Service's standalone online/offline browser is a catalog and request preparation tool. It does not start a separate scheduler. The helpers can also be used directly.
 
@@ -101,7 +135,7 @@ For real evidence, give `scripts/files.mjs --input-json -` an explicit workspace
 node scripts/service-capabilities.mjs export
 ```
 
-`kim-service-capabilities-v1` is derived directly from canonical `capability.json` files. Existing capabilities remain available. The five locally invocable helpers advertise `kim-service-helper-v1`, fixed argument arrays, schema/policy paths and hashes. Hosts bind a registered local entrypoint; they do not execute commands supplied inside materials. Client/model selection stays with task configuration. Every request binds `organizationId / workId / revision`, and results retain input and policy hashes. Acceptance stays with the host. See [the helper API](docs/service-helper-api.md).
+`kim-service-capabilities-v1` is derived directly from canonical `capability.json` files. Existing capabilities remain available. The ten locally invocable helpers advertise `kim-service-helper-v1`, fixed argument arrays, schema/policy paths and hashes. Hosts bind a registered local entrypoint; they do not execute commands supplied inside materials. Client/model selection stays with task configuration. Every request binds `organizationId / workId / revision`, and results retain input and policy hashes. Acceptance stays with the host. See [the helper API](docs/service-helper-api.md).
 
 ## From your first visit to a completed task
 
@@ -285,7 +319,7 @@ In DSH, specialist Agent methods and Skills are discovered as native Skills, ret
 npm install --global @deepseek-ai/dsh@0.2.2-rc.1
 ```
 
-**Prepare the Service package.** Download `Kim_Service-DSH-V1.14.zip` from the release linked above, extract it, and identify the directory containing `dsh-package.json`. Alternatively, build it from the Kim_Service repository. Replace the output below with your own full path; the directory must not exist yet:
+**Prepare the Service package.** Download `Kim_Service-DSH-V1.15.zip` from the release linked above, extract it, and identify the directory containing `dsh-package.json`. Alternatively, build it from the Kim_Service repository. Replace the output below with your own full path; the directory must not exist yet:
 
 ```sh
 node scripts/build-dsh-package.mjs --output "/absolute/path/kim-service-dsh"
@@ -320,7 +354,7 @@ Use the Git root if the project has a repository, or the project directory if it
 
 ### ZCode
 
-Download **`Kim-ZCode-V1.14.zip`** from the release linked above and extract the whole package into a permanent location. Select the directory containing `marketplace.json` and keep all its plugin and resource folders. The V1.14 Kim plugin version is **1.14.0**.
+Download **`Kim-ZCode-V1.15.zip`** from the release linked above and extract the whole package into a permanent location. Select the directory containing `marketplace.json` and keep all its plugin and resource folders. The V1.15 Kim plugin version is **1.15.0**.
 
 Open a project in ZCode, then go to **Settings → Plugins → Create → Add marketplace** and choose that local directory. Install and enable `kim-service-local` from the personal source; add `meta-kim-local` if you also want Meta_Kim's task coordination. Inspect the installed roles and Skills in the plugin details, find a role such as `kim-service-local:financial-modeler` in the subagent list, and start with your goal and materials.
 

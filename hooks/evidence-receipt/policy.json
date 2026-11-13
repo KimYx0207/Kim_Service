@@ -1,0 +1,13 @@
+{
+  "maxEventBytes": 65536,
+  "maxConfigBytes": 65536,
+  "maxArtifacts": 32,
+  "maxArtifactBytes": 8388608,
+  "maxTotalArtifactBytes": 33554432,
+  "maxPathChars": 240,
+  "readTimeoutMs": 1500,
+  "supportedTools": [
+    "Write",
+    "Edit"
+  ]
+}

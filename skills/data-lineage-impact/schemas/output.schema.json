@@ -1,0 +1,183 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$comment": "Generated from capability.json output; edit the contract and rebuild.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": 1,
+      "description": "使用当前机器回执版本1，不接受不同语义的包。"
+    },
+    "protocol": {
+      "const": "kim-service-helper-v1",
+      "description": "协议为kim-service-helper-v1，输出为一条完整JSON回执。"
+    },
+    "capabilityId": {
+      "const": "data-lineage-impact-deliver",
+      "description": "必须对应本次选定能力data-lineage-impact-deliver。"
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "organizationId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "workId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "revision": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        }
+      },
+      "required": [
+        "organizationId",
+        "workId",
+        "revision"
+      ],
+      "description": "原样保留本次organizationId、workId和revision。"
+    },
+    "inputSha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "用runtime canonical函数对实际完整输入重算SHA256。"
+    },
+    "policySha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "用同一规则对本次policy.json重算SHA256。"
+    },
+    "status": {
+      "enum": [
+        "completed",
+        "needs_review"
+      ],
+      "description": "未知变更对象、相关无证据边、可能路径、未知责任人或循环使status为needs_review；completed只表示所给图已完成遍历，coverage始终为supplied_edges_only。"
+    },
+    "result": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "affected": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 240
+              },
+              "owner": {
+                "type": "string",
+                "minLength": 0,
+                "maxLength": 128
+              },
+              "certainty": {
+                "enum": [
+                  "observed_path",
+                  "possible_path"
+                ]
+              },
+              "path": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 240
+                },
+                "minItems": 1,
+                "maxItems": 2000
+              }
+            },
+            "required": [
+              "id",
+              "owner",
+              "certainty",
+              "path"
+            ]
+          },
+          "minItems": 0,
+          "maxItems": 2000
+        },
+        "unmatchedSeeds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240
+          },
+          "minItems": 0,
+          "maxItems": 500
+        },
+        "cycleDetected": {
+          "type": "boolean"
+        },
+        "evidenceMissing": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512
+          },
+          "minItems": 0,
+          "maxItems": 5000
+        },
+        "coverage": {
+          "const": "supplied_edges_only"
+        }
+      },
+      "required": [
+        "affected",
+        "unmatchedSeeds",
+        "cycleDetected",
+        "evidenceMissing",
+        "coverage"
+      ],
+      "description": "影响对象不含重复，路径从变更对象开始且每条边存在；只有整条路径均有已观察证据时标observed_path。未知对象、证据空白、循环和责任人缺口不能丢失。"
+    },
+    "claims": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "modelCalled": {
+          "const": false
+        },
+        "networkAccessed": {
+          "const": false
+        },
+        "businessStatePersisted": {
+          "const": false
+        },
+        "finalAcceptance": {
+          "const": "not_decided"
+        }
+      },
+      "required": [
+        "modelCalled",
+        "networkAccessed",
+        "businessStatePersisted",
+        "finalAcceptance"
+      ],
+      "description": "只声明本次离线运算，模型、网络、业务持久化均false，最终接受not_decided。"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "protocol",
+    "capabilityId",
+    "context",
+    "inputSha256",
+    "policySha256",
+    "status",
+    "result",
+    "claims"
+  ]
+}

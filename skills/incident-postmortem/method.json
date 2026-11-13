@@ -1,0 +1,247 @@
+{
+  "schemaVersion": 1,
+  "roleId": "incident-postmortem",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "coordinationOwner": "caller",
+  "finalAcceptance": "caller_only",
+  "permissionSource": "current_task_host_authorization",
+  "steps": [
+    "从监控、请求日志、变更单和应急记录建立统一时区时间线；区分用户影响、检测、缓解和真正恢复。",
+    "运行helper重算四段时长，人工核对日志定位与客户影响分母；时序矛盾先回源修正。",
+    "按触发因素、系统促因、检测缺口、恢复障碍写因果假设，给支持及反证，不按事件相邻直接定因。",
+    "将行动分为prevent/detect/mitigate，写负责人、期限和可观察完成条件，再检查逾期和虚假关闭。",
+    "交复盘正文、行动验证表及未核结论；实际通知、生产变更与关单交调用方。"
+  ],
+  "acceptance": [
+    "时间按显式时区比较且开始≤发现≤缓解≤恢复≤观察时点；客户影响时长与分段相加一致。每项完成状态需要证据引用，缺失类型与逾期不能被平均分抵消。",
+    "缺行动类型、负责人/期限/验证条件、逾期未完成或声称完成却无证据时needs_review；completed只表示给定记录检查完成且没有这些缺口。",
+    "回执输入与规则哈希可复算；领域交付带事实、假设、缺口与证据定位。"
+  ],
+  "knowledgeAssets": [
+    {
+      "id": "incident-postmortem-method",
+      "path": "references/professional-method.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "google-sre"
+      ]
+    },
+    {
+      "id": "incident-postmortem-delivery",
+      "path": "references/delivery-template.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "google-sre"
+      ]
+    }
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "故障复盘与行动验证",
+    "scope": [
+      "把事故记录变成能复核的影响与恢复时间线，并让每一项改进都有负责人、期限和完成证据，减少“加强意识”式空泛结论。",
+      "本包不替代正在发生的应急指挥，不自动隔离或重启生产系统。"
+    ],
+    "knowledgeAssetIds": [
+      "incident-postmortem-method",
+      "incident-postmortem-delivery"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "impact-window",
+        "question": "用户受损窗口与告警/记录时间是否一致？",
+        "evidenceRequired": [
+          "客户请求指标",
+          "监测事件与时间区"
+        ],
+        "whenMissing": "保留时间未知，禁止使用方便的告警窗口冒充影响窗口。"
+      },
+      {
+        "id": "causal-evidence",
+        "question": "哪些是触发、促因、检测延误和恢复障碍？",
+        "evidenceRequired": [
+          "变更记录",
+          "重放或对照证据"
+        ],
+        "whenMissing": "把原因写成待验证假设。"
+      },
+      {
+        "id": "action-closure",
+        "question": "行动能阻止复发还是只增加口头要求？",
+        "evidenceRequired": [
+          "负责人/期限",
+          "可执行验证和完成证据"
+        ],
+        "whenMissing": "给出具体行动候选与待验收状态，不伪关单。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "evidence-not-blame",
+        "when": "结论把事故归为某人粗心",
+        "action": "追问当时可见信息、护栏、工具和恢复路径，定位可改变条件",
+        "avoid": "人身归责代替系统可改进项"
+      },
+      {
+        "id": "completion-evidence",
+        "when": "行动标completed但没有验证证据",
+        "action": "报告完成声明未得到支持，保留负责人与核验任务",
+        "avoid": "将issue关闭状态当行动有效性证明"
+      },
+      {
+        "id": "single-incident",
+        "when": "只有一次故障的数据",
+        "action": "只报这次分段时长和影响，不生成平均MTTR",
+        "avoid": "一个恢复时间冒充团队长期指标"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "incident-postmortem-deliver",
+        "inputGuidance": [
+          {
+            "field": "context",
+            "interpretation": "本次组织、事项和输入版本；只是绑定身份，不保存画像。",
+            "onMissing": "补本次调用标识，不借用别的任务身份。"
+          },
+          {
+            "field": "incident",
+            "interpretation": "同一事故的开始、发现、缓解、恢复时间，含时区、客户影响和证据引用。",
+            "onMissing": "缺实际时间先标未知，不把记录时间或告警恢复时间替换用户恢复。"
+          },
+          {
+            "field": "actions",
+            "interpretation": "每个预防、检测或缓解措施的负责人、期限、验证条件、状态和完成证据。",
+            "onMissing": "没有行动保留缺口；未完成不自动写completed。"
+          },
+          {
+            "field": "asOf",
+            "interpretation": "本次复盘观察时点，必须带明确时区。",
+            "onMissing": "固定观察时点以保持结果可复算。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "incident-postmortem-schemaversion",
+            "field": "schemaVersion",
+            "criterion": "使用当前机器回执版本1，不接受不同语义的包。",
+            "rejectWhen": "版本不匹配却继续解析。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "回执schema版本与schemas/output.schema.json"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "incident-postmortem-protocol",
+            "field": "protocol",
+            "criterion": "协议为kim-service-helper-v1，输出为一条完整JSON回执。",
+            "rejectWhen": "把文字建议或非本协议结果当机器回执。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "当前完整stdout与output schema"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "incident-postmortem-capabilityid",
+            "field": "capabilityId",
+            "criterion": "必须对应本次选定能力incident-postmortem-deliver。",
+            "rejectWhen": "混用其他能力输出。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "所选capability与回执能力ID"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "incident-postmortem-context",
+            "field": "context",
+            "criterion": "原样保留本次organizationId、workId和revision。",
+            "rejectWhen": "跨事项或旧版本结果冒充本次成果。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "输入和回执的context逐字段比较"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "incident-postmortem-inputsha256",
+            "field": "inputSha256",
+            "criterion": "用runtime canonical函数对实际完整输入重算SHA256。",
+            "rejectWhen": "改过输入仍引用旧哈希，或只哈希部分输入。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "实际输入字节解析值与独立哈希复算"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "incident-postmortem-policysha256",
+            "field": "policySha256",
+            "criterion": "用同一规则对本次policy.json重算SHA256。",
+            "rejectWhen": "规则已改而沿用旧结果。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "当前policy.json与哈希复算"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "incident-postmortem-status",
+            "field": "status",
+            "criterion": "缺行动类型、负责人/期限/验证条件、逾期未完成或声称完成却无证据时needs_review；completed只表示给定记录检查完成且没有这些缺口。",
+            "rejectWhen": "completed被误写成行业结果或生产执行已经验收。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "实际脚本status与result中缺口/例外逐项对应"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "incident-postmortem-result",
+            "field": "result",
+            "criterion": "时间按显式时区比较且开始≤发现≤缓解≤恢复≤观察时点；客户影响时长与分段相加一致。每项完成状态需要证据引用，缺失类型与逾期不能被平均分抵消。",
+            "rejectWhen": "把一个事故恢复时长称MTTR、从时间相邻推出根因、或没有完成证据却宣称行动关闭。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "本次输入、公式/映射、脚本结果和下方领域交付记录"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "incident-postmortem-claims",
+            "field": "claims",
+            "criterion": "只声明本次离线运算，模型、网络、业务持久化均false，最终接受not_decided。",
+            "rejectWhen": "把离线检查写成连接成功、真实业务验证或独立批准。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "脚本执行轨迹和真实外部动作范围"
+            ],
+            "blocking": true
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "公开事故通报、生产变更或责任处置沿用现有事故负责人授权；复盘编写和时间复算直接推进。"
+      ],
+      "prohibitedClaims": [
+        "方法与合成例不是实测专业效果；普通离线分析按现有授权执行。",
+        "不因声明工具或回执而获得业务系统写入、发送消息或最终批准权限。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
+}

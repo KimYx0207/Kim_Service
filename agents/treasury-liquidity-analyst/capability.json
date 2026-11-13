@@ -1,0 +1,143 @@
+{
+  "schemaVersion": 1,
+  "id": "treasury-liquidity-analyst",
+  "componentType": "agent",
+  "componentVersion": "0.1.0",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "treasury-liquidity-analyst-deliver",
+      "summary": "把现金、收付款、融资到期与受限资金放入同一时间梯度，找出缺口出现在哪一天及可用缓解方案。 treasury liquidity cash ladder maturity stress testing",
+      "useWhen": [
+        "需要做13周滚动资金预测并解释缺口。",
+        "账上有钱却可能付不出到期款，需要查受限资金与时点。",
+        "比较收款延迟、融资续作失败或汇率变化下的现金余量。"
+      ],
+      "doNotUseWhen": [
+        "真实调拨、授信提款、外汇及衍生品交易依资金授权；本包交预测与方案，不代替交易或监管流动性申报。",
+        "只要相邻领域通用建议、与本角色的具体工作对象无关时，交适合的现有角色。",
+        "本任务要求直接变更账户、业务系统或发送材料时，由当前宿主按既有授权单独处理。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "balances": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "按主体、币种列期初账面现金、受限现金和账户日"
+          },
+          "cashFlows": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "含结算日、币种、金额、可信度和来源ID的收支及债务到期"
+          },
+          "scenarios": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "预测粒度、最低现金、回款延迟和融资可用条件"
+          }
+        },
+        "required": [
+          "balances",
+          "cashFlows",
+          "scenarios"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "cashLadder": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "分期现金滚动表"
+          },
+          "gapAnalysis": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "期限与币种缺口"
+          },
+          "fundingOptions": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "补缺口的候选办法"
+          },
+          "monitoringPlan": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "更新节奏和偏差说明"
+          },
+          "facts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "输入口径与证据"
+          },
+          "limitations": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "未核范围与适用边界"
+          },
+          "handoff": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "交付与下一步"
+          }
+        },
+        "required": [
+          "cashLadder",
+          "gapAnalysis",
+          "fundingOptions",
+          "monitoringPlan",
+          "facts",
+          "limitations",
+          "handoff"
+        ],
+        "deliveryFormat": "conceptual-human-delivery"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "真实调拨、授信提款、外汇及衍生品交易依资金授权；本包交预测与方案，不代替交易或监管流动性申报。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "roleId": "game-economy-designer",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "worked-delivery",
+      "capabilityId": "game-economy-designer-deliver",
+      "category": "worked_example",
+      "scenario": "同包完整合成示例，判断必须保持输入口径与业务边界。",
+      "input": {
+        "economy": {
+          "currency": "金币",
+          "opening": 10000,
+          "minted": 3000,
+          "burned": 2500,
+          "playerTransfers": 1200,
+          "duplicateRewardEvent": {
+            "id": "E1",
+            "amount": 200
+          }
+        },
+        "cohorts": {
+          "new": {
+            "dailyEarn": 100,
+            "requiredSpend": 120
+          },
+          "mature": {
+            "dailyEarn": 500,
+            "requiredSpend": 200
+          }
+        },
+        "constraints": "检查守恒与成长公平；未连接生产钱包"
+      },
+      "candidateOutputExcerpt": {
+        "balanceSimulation": "系统期末10500金币；玩家间转账1200不改总存量，新手每日缺20而成熟群体盈余300。",
+        "transactionControls": "E1重试不得再次发200；实际服务端重试测试未执行。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "输出从给定事实得到，解释关键计算或证据，并保留未验证范围。",
+      "diagnosticRefs": [
+        "source-sink",
+        "cohort",
+        "authority"
+      ],
+      "decisionRuleRefs": [
+        "conservation",
+        "idempotent-reward",
+        "cohort-before-tuning"
+      ]
+    },
+    {
+      "id": "material-failure",
+      "capabilityId": "game-economy-designer-deliver",
+      "category": "failure_boundary",
+      "scenario": "表面给出完整结论，但违反本角色关键专业规则。",
+      "input": {
+        "economy": {
+          "currency": "金币",
+          "opening": 10000,
+          "minted": 3000,
+          "burned": 2500,
+          "playerTransfers": 1200,
+          "duplicateRewardEvent": {
+            "id": "E1",
+            "amount": 200
+          }
+        },
+        "cohorts": {
+          "new": {
+            "dailyEarn": 100,
+            "requiredSpend": 120
+          },
+          "mature": {
+            "dailyEarn": 500,
+            "requiredSpend": 200
+          }
+        },
+        "constraints": "检查守恒与成长公平；未连接生产钱包"
+      },
+      "candidateOutputExcerpt": {
+        "balanceSimulation": "总量=10000+3000-2500-1200=9300；所有玩家都很富，统一涨价。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "把系统内转账算销毁，且用总体存量掩盖新手资源缺口。",
+      "diagnosticRefs": [
+        "source-sink",
+        "cohort",
+        "authority"
+      ],
+      "decisionRuleRefs": [
+        "conservation",
+        "idempotent-reward",
+        "cohort-before-tuning"
+      ]
+    },
+    {
+      "id": "bounded-progress",
+      "capabilityId": "game-economy-designer-deliver",
+      "category": "worked_example",
+      "scenario": "关键材料局部缺失，仍完成可独立交付部分。",
+      "input": {
+        "economy": "只有价格表，没有产出和库存流水",
+        "cohorts": "玩家投诉升级太慢",
+        "constraints": "先诊断缺口"
+      },
+      "candidateOutputExcerpt": {
+        "economyMap": "先列必要资源、获取路径和升级门槛；缺产出及参与时长时只给时间成本采样方案，不断言应降价多少。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "缺口仅限制受影响判断，保留有依据的工作，不填造事实。",
+      "diagnosticRefs": [
+        "source-sink",
+        "cohort",
+        "authority"
+      ],
+      "decisionRuleRefs": [
+        "conservation",
+        "idempotent-reward",
+        "cohort-before-tuning"
+      ]
+    }
+  ]
+}

@@ -4,12 +4,32 @@ import os from 'node:os';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import test from 'node:test';
-import { publishReleaseAssets, releaseDocumentLinks, releaseSection, resolveReleaseTitle, selectPassedRuns, verifyPublished } from '../.github/scripts/publish-release.mjs';
+import { assertPublicationSource, publishReleaseAssets, releaseDocumentLinks, releaseSection, resolveReleaseTitle, selectPassedRuns, verifyPublished } from '../.github/scripts/publish-release.mjs';
 
 const sha = 'a'.repeat(40);
 const workflow = '.github/workflows/ci.yml';
 const passed = { id: 1, head_sha: sha, head_branch: 'main', event: 'push',
   path: workflow, status: 'completed', conclusion: 'success', html_url: 'https://github.com/example/run/1' };
+
+test('manual publication uses main without creating a release branch and binds the exact source', () => {
+  const source = { refName: 'main', eventName: 'workflow_dispatch', tag: 'V1.15',
+    sha, eventSha: sha, mainSha: sha, remoteMainSha: sha };
+  assert.doesNotThrow(() => assertPublicationSource(source));
+  for (const difference of [{ eventName: 'push' }, { eventName: 'pull_request' },
+    { refName: 'feature/work' }, { refName: 'release/V1.14' },
+    { eventSha: 'b'.repeat(40) }, { mainSha: 'b'.repeat(40) },
+    { remoteMainSha: 'b'.repeat(40) }, { remoteMainSha: undefined }, { sha: 'short' }]) {
+    assert.throws(() => assertPublicationSource({ ...source, ...difference }));
+  }
+  assert.doesNotThrow(() => assertPublicationSource({ ...source,
+    refName: 'release/V1.15', eventName: 'create' }));
+});
+
+test('a stale dispatched commit is rejected even when checkout pins origin/main to the event SHA', () => {
+  assert.throws(() => assertPublicationSource({ refName: 'main', eventName: 'workflow_dispatch',
+    tag: 'V1.15', sha, eventSha: sha, mainSha: sha, remoteMainSha: 'b'.repeat(40) }),
+  /current remote main commit/);
+});
 
 test('release titles follow the repository rule without changing the default format', () => {
   assert.equal(resolveReleaseTitle({ title: 'Kim_Service', version: 'V1.11', releaseTitleEqualsVersion: true }), 'V1.11');

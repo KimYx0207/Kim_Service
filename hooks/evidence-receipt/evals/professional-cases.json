@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "roleId": "evidence-receipt",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "bytes-only",
+      "capabilityId": "evidence-receipt-deliver",
+      "category": "worked_example",
+      "scenario": "报告写入后只声明已记录字节快照",
+      "input": {
+        "event": {
+          "hook_event_name": "PostToolUse",
+          "tool_name": "Write"
+        },
+        "trustedConfig": {
+          "workspaceRoot": "/synthetic/project",
+          "artifactPaths": [
+            "report.md"
+          ],
+          "receiptsDir": ".kim-evidence",
+          "workId": "synthetic",
+          "revision": "1"
+        }
+      },
+      "candidateOutputExcerpt": {
+        "hookSpecificOutput": {
+          "hookEventName": "PostToolUse",
+          "additionalContext": "Local artifact byte snapshot recorded; content quality and acceptance are not decided."
+        }
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "记录范围明确，不越权验收。",
+      "diagnosticRefs": [
+        "evidence"
+      ],
+      "decisionRuleRefs": [
+        "bytes-not-quality"
+      ]
+    },
+    {
+      "id": "false-acceptance",
+      "capabilityId": "evidence-receipt-deliver",
+      "category": "failure_boundary",
+      "scenario": "哈希生成后宣称所有业务目标已验收",
+      "input": {
+        "event": {
+          "hook_event_name": "PostToolUse",
+          "tool_name": "Write"
+        },
+        "trustedConfig": {
+          "workspaceRoot": "/synthetic/project",
+          "artifactPaths": [
+            "report.md"
+          ],
+          "receiptsDir": ".kim-evidence",
+          "workId": "synthetic",
+          "revision": "1"
+        }
+      },
+      "candidateOutputExcerpt": {
+        "hookSpecificOutput": {
+          "hookEventName": "PostToolUse",
+          "additionalContext": "All business goals have been accepted."
+        }
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "字节证据不能替代质量与用户验收。",
+      "diagnosticRefs": [
+        "evidence"
+      ],
+      "decisionRuleRefs": [
+        "bytes-not-quality"
+      ]
+    }
+  ]
+}

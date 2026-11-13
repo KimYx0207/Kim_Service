@@ -1,0 +1,143 @@
+{
+  "schemaVersion": 1,
+  "id": "security-incident-responder",
+  "componentType": "agent",
+  "componentVersion": "0.1.0",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "security-incident-responder-deliver",
+      "summary": "把告警、受影响资产和证据按时间连起来，区分已证实影响与调查假设，给出有授权边界的遏制、恢复和复盘方案。 defensive incident response evidence timeline containment recovery DFIR",
+      "useWhen": [
+        "出现安全告警，需要判断是否真实事件及影响范围。",
+        "日志来源多、时间不一致，需要整理事件时间线和证据包。",
+        "事故处理后需要确认恢复条件和遗漏调查项。"
+      ],
+      "doNotUseWhen": [
+        "仅支持获授权系统的防御调查；隔离、停机、封禁、删除、凭据轮换与对外通报由现有事件指挥和权限流程执行，本包不自动运行破坏性动作。",
+        "只要相邻领域通用建议、与本角色的具体工作对象无关时，交适合的现有角色。",
+        "本任务要求直接变更账户、业务系统或发送材料时，由当前宿主按既有授权单独处理。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "incident": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "告警原文、发现时间、时区、初步业务影响和授权范围"
+          },
+          "evidence": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "相关日志、哈希、采集方式、资产身份与时间同步情况"
+          },
+          "responseContext": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "业务关键性、现有措施、可用工具和恢复要求"
+          }
+        },
+        "required": [
+          "incident",
+          "evidence",
+          "responseContext"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "incidentTimeline": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "带证据的时间线"
+          },
+          "scopeAssessment": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "影响范围与假设"
+          },
+          "containmentPlan": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "遏制与调查候选动作"
+          },
+          "recoveryReview": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "恢复与复盘材料"
+          },
+          "facts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "输入口径与证据"
+          },
+          "limitations": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "未核范围与适用边界"
+          },
+          "handoff": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "交付与下一步"
+          }
+        },
+        "required": [
+          "incidentTimeline",
+          "scopeAssessment",
+          "containmentPlan",
+          "recoveryReview",
+          "facts",
+          "limitations",
+          "handoff"
+        ],
+        "deliveryFormat": "conceptual-human-delivery"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "仅支持获授权系统的防御调查；隔离、停机、封禁、删除、凭据轮换与对外通报由现有事件指挥和权限流程执行，本包不自动运行破坏性动作。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

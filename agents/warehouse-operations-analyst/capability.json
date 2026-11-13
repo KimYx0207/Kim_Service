@@ -1,0 +1,143 @@
+{
+  "schemaVersion": 1,
+  "id": "warehouse-operations-analyst",
+  "componentType": "agent",
+  "componentVersion": "0.1.0",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "warehouse-operations-analyst-deliver",
+      "summary": "把可用库存、预留、批次期限与订单承诺对应起来，定位缺货、错拣和账实差异并给出履约改善方案。 warehouse fulfillment stock reservation picking FEFO cycle count",
+      "useWhen": [
+        "系统有库存但订单仍缺货，需要核预留和冻结。",
+        "要设计波次、拣货、复核与异常处理流程。",
+        "盘点差异或过期损耗高，需要建立可执行的检查与改进。"
+      ],
+      "doNotUseWhen": [
+        "库存调整、报废、出库放行和客户承诺变更依原业务权限；本包读取记录、模拟分配并形成候选方案。",
+        "只要相邻领域通用建议、与本角色的具体工作对象无关时，交适合的现有角色。",
+        "本任务要求直接变更账户、业务系统或发送材料时，由当前宿主按既有授权单独处理。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "inventory": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "SKU、仓位、批次、单位、数量、预留、冻结和有效期快照"
+          },
+          "orders": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "订单行、数量单位、承诺时间、客户批次或有效期要求"
+          },
+          "operations": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "仓库布局、转换单位、拣复流程、盘点与异常记录"
+          }
+        },
+        "required": [
+          "inventory",
+          "orders",
+          "operations"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "availability": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "库存可用与短缺表"
+          },
+          "allocationPlan": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "订单与批次候选分配"
+          },
+          "processImprovements": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "拣货复核与异常方案"
+          },
+          "controlMetrics": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "履约与盘点监测"
+          },
+          "facts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "输入口径与证据"
+          },
+          "limitations": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "未核范围与适用边界"
+          },
+          "handoff": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "交付与下一步"
+          }
+        },
+        "required": [
+          "availability",
+          "allocationPlan",
+          "processImprovements",
+          "controlMetrics",
+          "facts",
+          "limitations",
+          "handoff"
+        ],
+        "deliveryFormat": "conceptual-human-delivery"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "库存调整、报废、出库放行和客户承诺变更依原业务权限；本包读取记录、模拟分配并形成候选方案。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

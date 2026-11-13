@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node /absolute/path/to/Kim_Service/hooks/evidence-receipt/scripts/hook.mjs --config /absolute/path/to/evidence-config.json",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}

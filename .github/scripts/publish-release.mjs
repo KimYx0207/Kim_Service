@@ -78,6 +78,18 @@ export function resolveReleaseTitle(config) {
     ? config.version : `${config.title} ${config.version}`;
 }
 
+export function assertPublicationSource({ refName, eventName, tag, sha, eventSha, mainSha, remoteMainSha }) {
+  assert(/^[a-f0-9]{40}$/u.test(sha), 'Expected an exact publication commit');
+  assert.equal(sha, eventSha, 'Checked-out source differs from the requested release');
+  const mainDispatch = refName === 'main' && eventName === 'workflow_dispatch';
+  assert(mainDispatch || refName === `release/${tag}`,
+    'Dispatch publication on main or use the exact release/<version> branch');
+  if (mainDispatch) {
+    assert.equal(sha, mainSha, 'Manual main publication must use the checked-out main commit');
+    assert.equal(sha, remoteMainSha, 'Manual main publication must use the current remote main commit');
+  }
+}
+
 function configuration() {
   const config = JSON.parse(fs.readFileSync(path.join(root, '.github/release.json'), 'utf8'));
   const version = config.versionFile.endsWith('.json')
@@ -86,9 +98,12 @@ function configuration() {
   assert(config.repository === process.env.GITHUB_REPOSITORY, 'Publication repository mismatch');
   assert(/^(?:\d+\.\d+\.\d+|V\d+\.\d+)$/u.test(version), 'Invalid release version');
   const tag = config.tagPrefix + version;
-  assert(process.env.GITHUB_REF_NAME === `release/${tag}`, 'Use the exact release/<version> branch');
   const sha = command('git', ['rev-parse', 'HEAD']);
-  assert.equal(sha, process.env.GITHUB_SHA, 'Checked-out source differs from the requested release');
+  assertPublicationSource({ refName: process.env.GITHUB_REF_NAME,
+    eventName: process.env.GITHUB_EVENT_NAME, tag, sha, eventSha: process.env.GITHUB_SHA,
+    mainSha: command('git', ['rev-parse', 'origin/main']),
+    remoteMainSha: process.env.GITHUB_REF_NAME === 'main'
+      ? api(`repos/${config.repository}/git/ref/heads/main`).object.sha : undefined });
   command('git', ['merge-base', '--is-ancestor', sha, 'origin/main']);
   assert.equal(command('git', ['status', '--porcelain=v1', '--untracked-files=all']), '', 'Release source must be clean');
   return { ...config, version, tag, sha, releaseTitle: resolveReleaseTitle({ ...config, version }),

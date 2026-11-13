@@ -12,6 +12,11 @@
       "title": "Reconcile accounts and payments",
       "summary": "Match bank, payment, and ledger records and trace differences to amounts, dates, fees, or missing entries."
     },
+    "agent-evaluation-deliver": {
+      "sourceSummary": "用相同数据集比较不同模型客户端的已有输出，保留缺失项、关键断言、分层回归和成本延迟预算。 agent evaluation offline regression budget",
+      "title": "Compare existing agent outputs",
+      "summary": "Compare supplied outputs across clients using frozen cases, critical checks, missing results, and budgets."
+    },
     "agent-teams-orchestrate": {
       "sourceSummary": "为复杂任务设计并执行跨宿主的多 Agent 分工、并行协作、结果汇总与质量闸门。",
       "title": "Coordinate a team of AI agents",
@@ -92,10 +97,35 @@
       "title": "Review building-model information",
       "summary": "Check information requirements, IFC and IDS versions, property coverage, and evidence for the model delivery."
     },
+    "construction-project-controller-deliver": {
+      "sourceSummary": "把工程工作包、先后关系、完成量与成本连到同一基线，定位工期与预算偏差并形成可比较的纠偏方案。 construction project controls WBS critical path earned value change control",
+      "title": "Review construction schedule and costs",
+      "summary": "Connect work packages, dependencies, accepted progress, costs and changes to the approved project baseline."
+    },
+    "contract-review-analyst-deliver": {
+      "sourceSummary": "从合同原文提取权利、义务、例外与期限，把需要谈判的事项做成有原文定位的条款矩阵。 commercial contract clause review obligations liability renewal",
+      "title": "Review contract obligations and risks",
+      "summary": "Trace rights, obligations, exceptions and deadlines to contract clauses and prepare negotiation options."
+    },
+    "credit-risk-analyst-deliver": {
+      "sourceSummary": "把企业偿债来源、债务到期、逾期事实和损失情景连接起来，交付有证据的授信分析草案。 corporate credit risk debt service delinquency exposure",
+      "title": "Analyze corporate credit risk",
+      "summary": "Connect repayment sources, maturities, arrears and loss scenarios to a traceable credit-analysis draft."
+    },
+    "customer-case-operations-deliver": {
+      "sourceSummary": "按可配置阶段、角色、材料和事件重放客户事项，输出下一步与缺项，独立保留验证、回执与采纳。 customer case operations workflow receipt",
+      "title": "Validate customer case progression",
+      "summary": "Replay configured case events, validate materials and roles, and separate progress, receipts, and adoption."
+    },
     "customer-service-writer-assist": {
       "sourceSummary": "客服与售后话术：把顾客问题、订单事实和商家已批准的处理规则变成可发送的回复草稿。每次先判断能否直接答复、需要补查还是要升级处理，不代替商家承诺退款或发货结果。",
       "title": "Draft a customer-service reply",
       "summary": "Turn customer questions, order facts, and approved policies into a reply, identifying missing facts or escalation without making new promises."
+    },
+    "data-lineage-impact-deliver": {
+      "sourceSummary": "核对字段血缘、变更影响范围、证据完整性与回归责任 data lineage impact analysis column change",
+      "title": "Trace data change impact",
+      "summary": "Follow supplied data dependencies to affected fields, datasets and jobs, retaining evidence and ownership gaps."
     },
     "data-pipeline-engineer-deliver": {
       "sourceSummary": "把多源数据变成可重跑、可回补并能追到异常记录的数据管道。 data pipeline ETL ELT Airflow dbt",
@@ -154,6 +184,16 @@
       "title": "Compare energy-project options",
       "summary": "Connect generation, consumption, time-of-use tariffs, and cash flows to compare efficiency, solar, or storage options."
     },
+    "evidence-pack-deliver": {
+      "sourceSummary": "把长文原文保留成带来源哈希的分页分块索引，按字节预算取回当前模块所需材料。 evidence source chunk context budget",
+      "title": "Build a bounded evidence pack",
+      "summary": "Preserve source text with hashes, paginated chunks, and a deterministic context budget."
+    },
+    "evidence-receipt-deliver": {
+      "sourceSummary": "在配置允许的产物写入后记录本地哈希回执，不包含正文和凭证 artifact evidence receipt PostToolUse hook",
+      "title": "Record local artifact evidence",
+      "summary": "Record hashes for explicitly selected local files so a handoff can identify the delivered artifact version."
+    },
     "exercise-designer-assist": {
       "sourceSummary": "原创练习与答案：按学习目标编原创题目，控制难度与条件，并独立核对每题答案。题目需要测出具体理解，而不是换数字凑数量；不复制题库或用超纲难题冒充提高。",
       "title": "Create original practice exercises",
@@ -163,6 +203,11 @@
       "sourceSummary": "设计和审查随机实验、分流质量、指标与效果解释 experiment analysis A/B testing randomization SRM",
       "title": "Design and review an experiment",
       "summary": "Examine randomization, allocation quality, metrics, and interpretation of the measured effect."
+    },
+    "feedback-to-requirements-deliver": {
+      "sourceSummary": "将客户反馈、明确重复关系与分组转成需求候选，计算独立客户数，保留矛盾证据和版本绑定采纳记录。 feedback requirements evidence ledger",
+      "title": "Turn feedback into traceable requirements",
+      "summary": "Build requirement candidates from feedback, preserve disagreements, and bind adoption to evidence versions."
     },
     "financial-modeler-deliver": {
       "sourceSummary": "把经营假设连接到利润、现金和估值，交可复算的基准及压力情景。 financial model DCF cash flow forecast valuation",
@@ -211,6 +256,11 @@
       "title": "Plan a game and its playtest",
       "summary": "Translate experience goals into mechanics, states, playtest questions, and evidence from player behavior."
     },
+    "game-economy-designer-deliver": {
+      "sourceSummary": "把游戏货币产消、玩家成长与交易回执连起来，设计可演算、可监测、可回退的数值方案。 game economy currency sources sinks progression wallet ledger balancing",
+      "title": "Design and check a game economy",
+      "summary": "Reconcile currency sources and sinks, player segments and rewards; propose testable changes with abuse and inflation checks."
+    },
     "goalpro-goal-prompt": {
       "sourceSummary": "Create a bounded Goal Prompt with separated intent, goal/plan/output boundaries, and evidence conditions without executing the target task.",
       "title": "Write a clear Goal Prompt",
@@ -236,10 +286,25 @@
       "title": "Design evidence-based hiring",
       "summary": "Connect job tasks to competency evidence, structured interviews, and scored work samples."
     },
+    "hospitality-revenue-analyst-deliver": {
+      "sourceSummary": "按房晚、房型、入住日和渠道比较需求与净贡献，给出有条件的房价和库存方案。 hotel revenue management occupancy ADR RevPAR channel contribution",
+      "title": "Compare hotel revenue options",
+      "summary": "Compare room availability, demand, rates, cancellations and channel fees using consistent net revenue measures."
+    },
+    "incident-postmortem-deliver": {
+      "sourceSummary": "整理客户影响、故障时间线、系统促因和可验证改进行动 incident postmortem action validation reliability",
+      "title": "Review an incident postmortem",
+      "summary": "Check event timing, impact and follow-up actions for owners, deadlines, verification methods and completion evidence."
+    },
     "install-host-assets": {
       "sourceSummary": "Plan, apply, and rollback project-scoped Claude command and Skill assets with hash receipts.",
       "title": "Manage project command and Skill assets",
       "summary": "Plan, apply, or roll back project-scoped Claude command and Skill assets with hash receipts."
+    },
+    "insurance-claims-analyst-deliver": {
+      "sourceSummary": "把保单责任、事故事实、费用明细和扣减顺序逐项对应，给出可追溯的理赔材料与金额核对草案。 insurance claims coverage deductible coinsurance adjudication",
+      "title": "Review insurance claim evidence",
+      "summary": "Map policy clauses to loss evidence and recompute conditional payouts in the stated deductible and limit order."
     },
     "interaction-designer-deliver": {
       "sourceSummary": "为具体用户路径制作可实现的状态、视觉和动效规格，并用实际界面证据评审",
@@ -250,6 +315,11 @@
       "sourceSummary": "面试练习：围绕岗位要求模拟面试或修改已有回答。模拟逐轮反馈，改稿直接交付真实材料的重组结果，不自动开始下一轮提问；不编造成功经历。",
       "title": "Practice or improve an interview answer",
       "summary": "Rehearse against job requirements or rewrite an answer using real experience, with feedback suited to the requested format."
+    },
+    "inventory-replenishment-deliver": {
+      "sourceSummary": "核对库存位置、保护期、安全库存、包装MOQ和容量约束 inventory replenishment periodic review safety stock",
+      "title": "Calculate inventory replenishment",
+      "summary": "Recompute periodic-review stock targets, pack quantities, minimum orders and capacity shortfalls under explicit demand assumptions."
     },
     "investment-research-analyst-deliver": {
       "sourceSummary": "把公开原始财报和经营资料整理成可追溯的公司研究、风险情景及估值比较。 investment research financial statements fundamentals",
@@ -286,10 +356,20 @@
       "title": "Run an authorized local security scan",
       "summary": "Use installed Semgrep on an explicitly authorized directory with two bundled non-secret rules and sanitized JSON output."
     },
+    "maintenance-reliability-engineer-deliver": {
+      "sourceSummary": "按设备功能、故障模式和维修记录寻找停机原因，形成可追踪的维护任务与恢复验证方案。 asset maintenance reliability MTBF MTTR failure criticality",
+      "title": "Plan equipment maintenance",
+      "summary": "Separate failure modes, repair time and downtime, then propose maintenance and return-to-service checks."
+    },
     "manufacturing-quality-analyst-deliver": {
       "sourceSummary": "分析测量系统、过程稳定性、质量异常与纠正措施 manufacturing quality statistical process control capability",
       "title": "Investigate manufacturing quality",
       "summary": "Analyze measurement systems, process stability, quality deviations, and corrective actions."
+    },
+    "mcp-contract-auditor-deliver": {
+      "sourceSummary": "离线比较MCP工具清单、schema、行为注解和已允许工具范围 MCP contract drift permission audit",
+      "title": "Audit MCP tool contract changes",
+      "summary": "Compare supplied MCP tool definitions, schemas and untrusted risk hints offline without connecting or invoking tools."
     },
     "media-production-engineer-deliver": {
       "sourceSummary": "将授权素材与输出规格转成可复现图像、音视频或数字人制作流程及实测产物",
@@ -406,6 +486,11 @@
       "title": "Turn sources into a finished script or article",
       "summary": "Write a complete spoken script, storyboard, or article for the audience and channel, checking claims without inventing experience."
     },
+    "security-incident-responder-deliver": {
+      "sourceSummary": "把告警、受影响资产和证据按时间连起来，区分已证实影响与调查假设，给出有授权边界的遏制、恢复和复盘方案。 defensive incident response evidence timeline containment recovery DFIR",
+      "title": "Analyze a security incident",
+      "summary": "Build an evidence timeline and bounded response, containment and recovery options from authorized incident materials."
+    },
     "side-business-evaluator-assist": {
       "sourceSummary": "副业方向筛选：结合时间、现有技能和能接触到的顾客，比较几个副业方向并设计低成本验证。先查有没有真实问题与交付能力，再谈扩大投入；不把热度当收入证据。",
       "title": "Compare realistic side-business ideas",
@@ -461,6 +546,11 @@
       "title": "Connect system requirements and interfaces",
       "summary": "Break down requirements, interface responsibilities, verification, validation, and the impact of changes."
     },
+    "tender-compliance-deliver": {
+      "sourceSummary": "把招标条款、补遗版本和响应证据逐项绑定 tender bid compliance response evidence matrix",
+      "title": "Check tender response evidence",
+      "summary": "Match versioned tender requirements to responses, evidence validity and unresolved mandatory conditions."
+    },
     "test-automation-engineer-deliver": {
       "sourceSummary": "围绕真实用户路径建立有判定力的自动化测试，让失败可复现、可定位。 QA test automation Playwright regression",
       "title": "Automate tests for real user journeys",
@@ -471,10 +561,25 @@
       "title": "Plan five content topics",
       "summary": "Develop angles, audiences, traffic types, evaluation criteria, and a schedule while excluding medical, legal, or financial conclusions."
     },
+    "treasury-liquidity-analyst-deliver": {
+      "sourceSummary": "把现金、收付款、融资到期与受限资金放入同一时间梯度，找出缺口出现在哪一天及可用缓解方案。 treasury liquidity cash ladder maturity stress testing",
+      "title": "Identify treasury cash shortfalls",
+      "summary": "Build a dated cash ladder by entity and currency, preserving restricted cash, settlement timing and funding constraints."
+    },
     "user-researcher-deliver": {
       "sourceSummary": "用户研究（user research / interview / usability evidence）：从目标人群与实际任务取证，交研究方案、观察记录、分歧与可验证需求。",
       "title": "Research what users actually need",
       "summary": "Collect evidence from target users and real tasks, with a research plan, observations, disagreements, and testable needs."
+    },
+    "visual-explainer-deliver": {
+      "sourceSummary": "用单一图数据生成居中分层 SVG、可逐步播放的 HTML 与文字说明，核查边、阶段及退回路径。 visual explainer storyboard SVG diagram",
+      "title": "Generate a staged diagram explanation",
+      "summary": "Create a deterministic SVG and step-controlled HTML from one diagram specification, with a text alternative."
+    },
+    "warehouse-operations-analyst-deliver": {
+      "sourceSummary": "把可用库存、预留、批次期限与订单承诺对应起来，定位缺货、错拣和账实差异并给出履约改善方案。 warehouse fulfillment stock reservation picking FEFO cycle count",
+      "title": "Improve warehouse fulfillment",
+      "summary": "Reconcile available stock, reservations, lots and order commitments; identify picking, expiry and inventory risks."
     },
     "workplace-writer-assist": {
       "sourceSummary": "周报与工作沟通：把零散工作事实组织成对方能据此行动的周报、进度说明或邮件草稿。先判断读者需要知道什么、决定什么，再选信息顺序；不把计划写成成果。",
@@ -485,31 +590,6 @@
       "sourceSummary": "研究内容机会并制作含标题、正文、封面与 6 至 8 张内页的小红书图文发布包，保留视觉确认与发布边界。",
       "title": "Create a Xiaohongshu visual post package",
       "summary": "Research an opportunity and prepare a title, body, cover, and six to eight interior pages with visual approval and publication boundaries."
-    },
-    "evidence-pack-deliver": {
-      "sourceSummary": "把长文原文保留成带来源哈希的分页分块索引，按字节预算取回当前模块所需材料。 evidence source chunk context budget",
-      "title": "Build a bounded evidence pack",
-      "summary": "Preserve source text with hashes, paginated chunks, and a deterministic context budget."
-    },
-    "agent-evaluation-deliver": {
-      "sourceSummary": "用相同数据集比较不同模型客户端的已有输出，保留缺失项、关键断言、分层回归和成本延迟预算。 agent evaluation offline regression budget",
-      "title": "Compare existing agent outputs",
-      "summary": "Compare supplied outputs across clients using frozen cases, critical checks, missing results, and budgets."
-    },
-    "feedback-to-requirements-deliver": {
-      "sourceSummary": "将客户反馈、明确重复关系与分组转成需求候选，计算独立客户数，保留矛盾证据和版本绑定采纳记录。 feedback requirements evidence ledger",
-      "title": "Turn feedback into traceable requirements",
-      "summary": "Build requirement candidates from feedback, preserve disagreements, and bind adoption to evidence versions."
-    },
-    "customer-case-operations-deliver": {
-      "sourceSummary": "按可配置阶段、角色、材料和事件重放客户事项，输出下一步与缺项，独立保留验证、回执与采纳。 customer case operations workflow receipt",
-      "title": "Validate customer case progression",
-      "summary": "Replay configured case events, validate materials and roles, and separate progress, receipts, and adoption."
-    },
-    "visual-explainer-deliver": {
-      "sourceSummary": "用单一图数据生成居中分层 SVG、可逐步播放的 HTML 与文字说明，核查边、阶段及退回路径。 visual explainer storyboard SVG diagram",
-      "title": "Generate a staged diagram explanation",
-      "summary": "Create a deterministic SVG and step-controlled HTML from one diagram specification, with a text alternative."
     }
   }
 }

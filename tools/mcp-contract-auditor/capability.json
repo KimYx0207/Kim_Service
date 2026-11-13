@@ -1,0 +1,501 @@
+{
+  "schemaVersion": 1,
+  "id": "mcp-contract-auditor",
+  "componentType": "tool",
+  "componentVersion": "0.1.0",
+  "entrypoint": "README.md",
+  "capabilities": [
+    {
+      "id": "mcp-contract-auditor-deliver",
+      "summary": "离线比较MCP工具清单、schema、行为注解和已允许工具范围 MCP contract drift permission audit",
+      "useWhen": [
+        "MCP服务更新后需要知道工具、输入输出或行为声明变了什么。",
+        "准备启用工具，需要将发现清单与当前允许范围核对。",
+        "工具清单分页或schema复杂，不能把部分信息当完整兼容性结论。"
+      ],
+      "doNotUseWhen": [
+        "不主动连接MCP、读取凭证、调用tools/call或修改宿主设置。",
+        "不提供完整JSON Schema有效性/语义兼容认证；组合和引用保留为需检查。",
+        "工具annotations仅为声明，不授权操作或证明服务器可信。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "context": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "organizationId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "workId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "revision": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              }
+            },
+            "required": [
+              "organizationId",
+              "workId",
+              "revision"
+            ],
+            "description": "本次组织、事项和输入版本；只是绑定身份，不保存画像。"
+          },
+          "previous": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "serverId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 512
+              },
+              "protocolVersion": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 64
+              },
+              "complete": {
+                "type": "boolean"
+              },
+              "tools": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "description": {
+                      "type": "string",
+                      "minLength": 0,
+                      "maxLength": 16000
+                    },
+                    "inputSchema": {
+                      "type": [
+                        "object",
+                        "boolean"
+                      ]
+                    },
+                    "outputSchema": {
+                      "type": [
+                        "object",
+                        "boolean"
+                      ]
+                    },
+                    "annotations": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "inputSchema"
+                  ]
+                },
+                "minItems": 0,
+                "maxItems": 1000
+              }
+            },
+            "required": [
+              "serverId",
+              "protocolVersion",
+              "complete",
+              "tools"
+            ],
+            "description": "旧服务身份、协议版本、完整分页标记和tools清单。仅包含工具契约，禁止放凭证。"
+          },
+          "current": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "serverId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 512
+              },
+              "protocolVersion": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 64
+              },
+              "complete": {
+                "type": "boolean"
+              },
+              "tools": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "description": {
+                      "type": "string",
+                      "minLength": 0,
+                      "maxLength": 16000
+                    },
+                    "inputSchema": {
+                      "type": [
+                        "object",
+                        "boolean"
+                      ]
+                    },
+                    "outputSchema": {
+                      "type": [
+                        "object",
+                        "boolean"
+                      ]
+                    },
+                    "annotations": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "inputSchema"
+                  ]
+                },
+                "minItems": 0,
+                "maxItems": 1000
+              }
+            },
+            "required": [
+              "serverId",
+              "protocolVersion",
+              "complete",
+              "tools"
+            ],
+            "description": "新服务身份和本次工具清单；complete=false表示未收齐分页，不可判定完整新增/删除。"
+          },
+          "approvedToolNames": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            },
+            "minItems": 0,
+            "maxItems": 1000,
+            "description": "当前任务或宿主已经授权的工具名清单；仅核对范围，不从annotations反推授权。"
+          }
+        },
+        "required": [
+          "context",
+          "previous",
+          "current",
+          "approvedToolNames"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "schemaVersion": {
+            "const": 1,
+            "description": "使用当前机器回执版本1，不接受不同语义的包。"
+          },
+          "protocol": {
+            "const": "kim-service-helper-v1",
+            "description": "协议为kim-service-helper-v1，输出为一条完整JSON回执。"
+          },
+          "capabilityId": {
+            "const": "mcp-contract-auditor-deliver",
+            "description": "必须对应本次选定能力mcp-contract-auditor-deliver。"
+          },
+          "context": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "organizationId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "workId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "revision": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              }
+            },
+            "required": [
+              "organizationId",
+              "workId",
+              "revision"
+            ],
+            "description": "原样保留本次organizationId、workId和revision。"
+          },
+          "inputSha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "description": "用runtime canonical函数对实际完整输入重算SHA256。"
+          },
+          "policySha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "description": "用同一规则对本次policy.json重算SHA256。"
+          },
+          "status": {
+            "enum": [
+              "completed",
+              "needs_review"
+            ],
+            "description": "身份/协议变化、增删/差异、未批准工具、部分分页或需进一步检查的schema/注解都会返回needs_review；completed仅表示当前比较没有这些变化，不是已连接或已授权。"
+          },
+          "result": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "serverIdentityChanged": {
+                "type": "boolean"
+              },
+              "protocolVersionChanged": {
+                "type": "boolean"
+              },
+              "comparisonComplete": {
+                "type": "boolean"
+              },
+              "added": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "minItems": 0,
+                "maxItems": 1000
+              },
+              "removed": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "minItems": 0,
+                "maxItems": 1000
+              },
+              "possibleAdded": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "minItems": 0,
+                "maxItems": 1000
+              },
+              "possibleRemoved": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "minItems": 0,
+                "maxItems": 1000
+              },
+              "changed": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "fields": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 128
+                      },
+                      "minItems": 1,
+                      "maxItems": 50
+                    },
+                    "previousHash": {
+                      "type": "string",
+                      "pattern": "^[a-f0-9]{64}$"
+                    },
+                    "currentHash": {
+                      "type": "string",
+                      "pattern": "^[a-f0-9]{64}$"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "fields",
+                    "previousHash",
+                    "currentHash"
+                  ]
+                },
+                "minItems": 0,
+                "maxItems": 1000
+              },
+              "unapproved": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "minItems": 0,
+                "maxItems": 1000
+              },
+              "schemaReviews": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "inputAssessment": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 512
+                    },
+                    "outputAssessment": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 512
+                    },
+                    "referenceCount": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 100000
+                    },
+                    "annotationHints": {
+                      "type": "object"
+                    },
+                    "reviewReasons": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 512
+                      },
+                      "minItems": 0,
+                      "maxItems": 20
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "inputAssessment",
+                    "outputAssessment",
+                    "referenceCount",
+                    "annotationHints",
+                    "reviewReasons"
+                  ]
+                },
+                "minItems": 0,
+                "maxItems": 1000
+              },
+              "trust": {
+                "const": "not_established_by_annotations"
+              },
+              "schemaValidation": {
+                "const": "structural_inventory_only_not_full_json_schema_validation"
+              },
+              "liveConnectionObserved": {
+                "const": false
+              }
+            },
+            "required": [
+              "serverIdentityChanged",
+              "protocolVersionChanged",
+              "comparisonComplete",
+              "added",
+              "removed",
+              "possibleAdded",
+              "possibleRemoved",
+              "changed",
+              "unapproved",
+              "schemaReviews",
+              "trust",
+              "schemaValidation",
+              "liveConnectionObserved"
+            ],
+            "description": "按区分大小写的工具名比较所有声明字段及canonical哈希；完整性不足时只给possibleAdded/possibleRemoved。schema组合/$ref不能被误判为协议违规，行为注解不能成为授权来源。"
+          },
+          "claims": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "modelCalled": {
+                "const": false
+              },
+              "networkAccessed": {
+                "const": false
+              },
+              "businessStatePersisted": {
+                "const": false
+              },
+              "finalAcceptance": {
+                "const": "not_decided"
+              }
+            },
+            "required": [
+              "modelCalled",
+              "networkAccessed",
+              "businessStatePersisted",
+              "finalAcceptance"
+            ],
+            "description": "只声明本次离线运算，模型、网络、业务持久化均false，最终接受not_decided。"
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "protocol",
+          "capabilityId",
+          "context",
+          "inputSha256",
+          "policySha256",
+          "status",
+          "result",
+          "claims"
+        ]
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "新增工具执行权限、外部写入及凭证范围变更沿用宿主现有授权；离线比较可直接进行。"
+        ]
+      },
+      "validation": [
+        "tests/helper.test.mjs"
+      ],
+      "helperContract": "helper-contract.json"
+    }
+  ]
+}

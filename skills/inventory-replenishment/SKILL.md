@@ -1,0 +1,44 @@
+---
+name: inventory-replenishment
+description: 核对库存位置、保护期、安全库存、包装MOQ和容量约束 inventory replenishment periodic review safety stock
+---
+
+# 库存补货与服务水平
+
+给单SKU周期复核补货提供可复算候选，清楚说明服务水平假设、缺货风险和约束导致的未满足数量。
+
+## 使用
+
+读取[专业方法](references/professional-method.md)与[交付模板](references/delivery-template.md)，按 `method.json` 顺序处理实际材料。
+
+```sh
+node skills/inventory-replenishment/scripts/run.mjs --input-json - < skills/inventory-replenishment/examples/input.json
+```
+
+该示例是合成数据。替换输入时保持单位、身份和版本一致。脚本从 stdin 读取 JSON，stdout 返回一个带输入/规则哈希的回执；没有网络、付费模型调用或业务写入。脚本输出需配合领域说明，不能当成全部专业判断。完整机器结构见 `capability.json`，示例期望和反例见[案例](evals/professional-cases.json)。
+
+## 工作顺序
+
+1. 从同一时点库存表拆可用现货、冻结/已分配、确认在途和欠单；逐单核在途是否在保护期内到货。
+2. 检查稳定需求、日独立性与固定提前期假设；不满足时交适用模型分析，不强行给本公式结果。
+3. 固定L、R、z、包装、MOQ和上限，运行helper并独立复算保护期与目标。
+4. 核候选整箱和MOQ可执行性，列容量不足、期限与缺货风险，对高低需求/提前期做条件情景。
+5. 交补货建议、口径与待决例外；实际采购、预算与执行状态由宿主记录。
+
+## 交付与判断
+
+保护期=L+R，安全库存=z×日标准差×sqrt(L+R)，目标=日均需求×保护期+安全库存；库存位置=可用现货+合格在途−欠单；先补足差额，再按MOQ和整箱向上取整，容量冲突必须保留未满足数量。
+
+maxOrder或MOQ使候选不能补足目标时返回needs_review并保留unmetQuantity；所有候选仍只在明确假设下成立。
+
+## 范围
+
+- 不适用于未经处理的间歇需求、促销突变、相关需求或随机提前期。
+- 不替代多级库存优化、保质期批次优化或产能排程。
+- 不自动下采购单，不保证指定服务水平必然达成。
+
+实际采购承诺、超预算或服务目标变更交现有库存/采购责任人决定；情景复算不新增批准。 普通可逆的读取、复算与草稿编制直接按当前任务授权推进。`needs_probe` 表示宿主未认证，不意味着本地脚本不可运行。包保留完整目录即可独立运行；复制入口一份不会携带资料。
+
+## 来源
+
+[PROVENANCE.md](PROVENANCE.md)记录本次实际读取的原项目、固定版本、采用范围与未采用范围。原创工作流、脚本和合成例按MIT许可发布。

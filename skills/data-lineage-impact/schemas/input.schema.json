@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$comment": "Generated from capability.json input; edit the contract and rebuild.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "organizationId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "workId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "revision": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        }
+      },
+      "required": [
+        "organizationId",
+        "workId",
+        "revision"
+      ],
+      "description": "本次组织、事项和输入版本；只是绑定身份，不保存画像。"
+    },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240
+          },
+          "owner": {
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 128
+          }
+        },
+        "required": [
+          "id",
+          "owner"
+        ]
+      },
+      "minItems": 1,
+      "maxItems": 2000,
+      "description": "唯一全限定对象ID与责任人；ID应包含环境/命名空间、数据集与字段，不合并同名异源对象。"
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "from": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240
+          },
+          "to": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240
+          },
+          "evidenceRef": {
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 512
+          },
+          "confidence": {
+            "enum": [
+              "observed",
+              "declared",
+              "unknown"
+            ]
+          }
+        },
+        "required": [
+          "from",
+          "to",
+          "evidenceRef",
+          "confidence"
+        ]
+      },
+      "minItems": 0,
+      "maxItems": 5000,
+      "description": "输入到输出的有向边，标记已观察/声明/未知与实际证据引用。"
+    },
+    "changed": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 240
+      },
+      "minItems": 1,
+      "maxItems": 500,
+      "description": "本次实际改变的对象ID列表，需与nodes一致。"
+    }
+  },
+  "required": [
+    "context",
+    "nodes",
+    "edges",
+    "changed"
+  ]
+}

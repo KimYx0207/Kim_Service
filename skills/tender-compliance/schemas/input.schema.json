@@ -1,0 +1,199 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$comment": "Generated from capability.json input; edit the contract and rebuild.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "organizationId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "workId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "revision": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        }
+      },
+      "required": [
+        "organizationId",
+        "workId",
+        "revision"
+      ],
+      "description": "本次组织、事项和输入版本；只是绑定身份，不保存画像。"
+    },
+    "tenderId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "description": "本次招标唯一ID，不能把其他项目的资格结果直接移用。"
+    },
+    "asOf": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,3})?(?:Z|[+-]\\d{2}:\\d{2})$",
+      "maxLength": 35,
+      "description": "核对证据有效性的观察时间，带时区。"
+    },
+    "deadline": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,3})?(?:Z|[+-]\\d{2}:\\d{2})$",
+      "maxLength": 35,
+      "description": "本轮正式截止时间及所在时区，含已确认补遗。"
+    },
+    "clauses": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "version": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "sourceRef": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512
+          },
+          "mandatory": {
+            "type": "boolean"
+          },
+          "requirement": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1200
+          }
+        },
+        "required": [
+          "id",
+          "version",
+          "sourceRef",
+          "mandatory",
+          "requirement"
+        ]
+      },
+      "minItems": 1,
+      "maxItems": 500,
+      "description": "逐条真实条款、版本、页/段定位及强制性。"
+    },
+    "responses": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "clauseId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "clauseVersion": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "assessment": {
+            "enum": [
+              "claimed_compliant",
+              "noncompliant",
+              "needs_review"
+            ]
+          },
+          "responseRef": {
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 512
+          },
+          "evidenceIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            },
+            "minItems": 0,
+            "maxItems": 30
+          }
+        },
+        "required": [
+          "clauseId",
+          "clauseVersion",
+          "assessment",
+          "responseRef",
+          "evidenceIds"
+        ]
+      },
+      "minItems": 0,
+      "maxItems": 500,
+      "description": "每条响应对应条款版本、内容位置、主张和证据ID。"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "sourceRef": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "validUntil": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,3})?(?:Z|[+-]\\d{2}:\\d{2})$",
+                "maxLength": 35
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "sourceRef",
+          "sha256",
+          "validUntil"
+        ]
+      },
+      "minItems": 0,
+      "maxItems": 2000,
+      "description": "材料定位、版本哈希和适用有效期；sha256是调用方提供值，本脚本不读取源文件核验。"
+    }
+  },
+  "required": [
+    "context",
+    "tenderId",
+    "asOf",
+    "deadline",
+    "clauses",
+    "responses",
+    "evidence"
+  ]
+}

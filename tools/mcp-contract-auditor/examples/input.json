@@ -1,0 +1,78 @@
+{
+  "context": {
+    "organizationId": "synthetic-demo",
+    "workId": "professional-method-demo",
+    "revision": "1"
+  },
+  "previous": {
+    "serverId": "synthetic:crm-readonly",
+    "protocolVersion": "2026-07-28",
+    "complete": true,
+    "tools": [
+      {
+        "name": "lookup_customer",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "openWorldHint": false
+        }
+      }
+    ]
+  },
+  "current": {
+    "serverId": "synthetic:crm-readonly",
+    "protocolVersion": "2026-07-28",
+    "complete": true,
+    "tools": [
+      {
+        "name": "lookup_customer",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "customerId": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "customerId"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "delete_customer",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": true
+        }
+      }
+    ]
+  },
+  "approvedToolNames": [
+    "lookup_customer"
+  ]
+}

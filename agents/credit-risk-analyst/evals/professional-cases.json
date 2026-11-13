@@ -1,0 +1,177 @@
+{
+  "schemaVersion": 1,
+  "roleId": "credit-risk-analyst",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "worked-delivery",
+      "capabilityId": "credit-risk-analyst-deliver",
+      "category": "worked_example",
+      "scenario": "同包完整合成示例，判断必须保持输入口径与业务边界。",
+      "input": {
+        "borrower": {
+          "entity": "合成企业甲",
+          "cashAvailableForDebtService": 120,
+          "currency": "CNY",
+          "unit": "万元",
+          "cashHorizon": "未来12个月"
+        },
+        "facilities": {
+          "principalDue": 80,
+          "interestDue": 20,
+          "horizon": "12个月"
+        },
+        "policy": {
+          "stressCashReduction": 20,
+          "approvalThreshold": "未提供",
+          "pd": 0.02,
+          "lgd": 0.4,
+          "ead": 1000,
+          "pdHorizon": "未来12个月",
+          "eadCurrency": "CNY",
+          "eadUnit": "万元",
+          "stressDefinition": "该12个月可供偿债现金减少20万元；未指定原因",
+          "maturitySchedule": "未提供逐期到期计划"
+        }
+      },
+      "candidateOutputExcerpt": {
+        "repaymentAnalysis": "基础DSCR=1.20，压力DSCR=1.00；同期间、同币种；到期日分布尚待核。",
+        "riskFindings": "简单EL情景为8万元，不称监管拨备或自动授信结论。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "输出从给定事实得到，解释关键计算或证据，并保留未验证范围。",
+      "diagnosticRefs": [
+        "entity",
+        "timing",
+        "arrears"
+      ],
+      "decisionRuleRefs": [
+        "cash-before-rating",
+        "definition-before-loss",
+        "conditional-recommendation"
+      ]
+    },
+    {
+      "id": "material-failure",
+      "capabilityId": "credit-risk-analyst-deliver",
+      "category": "failure_boundary",
+      "scenario": "表面给出完整结论，但违反本角色关键专业规则。",
+      "input": {
+        "borrower": {
+          "entity": "合成企业甲",
+          "cashAvailableForDebtService": 120,
+          "currency": "CNY",
+          "unit": "万元",
+          "cashHorizon": "未来12个月"
+        },
+        "facilities": {
+          "principalDue": 80,
+          "interestDue": 20,
+          "horizon": "12个月"
+        },
+        "policy": {
+          "stressCashReduction": 20,
+          "approvalThreshold": "未提供",
+          "pd": 0.02,
+          "lgd": 0.4,
+          "ead": 1000,
+          "pdHorizon": "未来12个月",
+          "eadCurrency": "CNY",
+          "eadUnit": "万元",
+          "stressDefinition": "该12个月可供偿债现金减少20万元；未指定原因",
+          "maturitySchedule": "未提供逐期到期计划"
+        }
+      },
+      "candidateOutputExcerpt": {
+        "riskFindings": "DSCR大于1，因此自动批准；有担保所以信用损失为0。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "忽略到期日、机构阈值、担保可执行性和损失模型前提。",
+      "diagnosticRefs": [
+        "entity",
+        "timing",
+        "arrears"
+      ],
+      "decisionRuleRefs": [
+        "cash-before-rating",
+        "definition-before-loss",
+        "conditional-recommendation"
+      ]
+    },
+    {
+      "id": "bounded-progress",
+      "capabilityId": "credit-risk-analyst-deliver",
+      "category": "worked_example",
+      "scenario": "关键材料局部缺失，仍完成可独立交付部分。",
+      "input": {
+        "borrower": "仅有利润表，没有现金流与受限资金明细",
+        "facilities": "到期债务清单已提供",
+        "policy": "要求先整理可知风险"
+      },
+      "candidateOutputExcerpt": {
+        "repaymentAnalysis": "先交到期表与应还本息；现金覆盖暂不判断，列出税费、资本开支和回款需要补的字段。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "缺口仅限制受影响判断，保留有依据的工作，不填造事实。",
+      "diagnosticRefs": [
+        "entity",
+        "timing",
+        "arrears"
+      ],
+      "decisionRuleRefs": [
+        "cash-before-rating",
+        "definition-before-loss",
+        "conditional-recommendation"
+      ]
+    },
+    {
+      "id": "mismatched-horizons",
+      "capabilityId": "credit-risk-analyst-deliver",
+      "category": "worked_example",
+      "scenario": "PD一年、EAD为不同币种时不能直接给本币损失。",
+      "input": {
+        "borrower": {
+          "entity": "合成企业甲",
+          "cashAvailableForDebtService": 120,
+          "currency": "CNY",
+          "unit": "万元",
+          "cashHorizon": "未来12个月"
+        },
+        "facilities": {
+          "principalDue": 80,
+          "interestDue": 20,
+          "horizon": "12个月"
+        },
+        "policy": {
+          "stressCashReduction": 20,
+          "approvalThreshold": "未提供",
+          "pd": 0.02,
+          "lgd": 0.4,
+          "ead": 1000,
+          "pdHorizon": "未来12个月",
+          "eadCurrency": "USD",
+          "eadUnit": "千元",
+          "stressDefinition": "该12个月可供偿债现金减少20万元；未指定原因",
+          "maturitySchedule": "未提供逐期到期计划"
+        }
+      },
+      "candidateOutputExcerpt": {
+        "riskFindings": "若LGD与PD适用于同一USD敞口，可得USD8千元的简单情景EL；没有汇率和估值日期，不能写CNY8万元。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "币种单位随EAD传递，转换必须显式给汇率日期，期限口径不能混淆。",
+      "diagnosticRefs": [
+        "entity",
+        "timing",
+        "arrears"
+      ],
+      "decisionRuleRefs": [
+        "cash-before-rating",
+        "definition-before-loss",
+        "conditional-recommendation"
+      ]
+    }
+  ]
+}

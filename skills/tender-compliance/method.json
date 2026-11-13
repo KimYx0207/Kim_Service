@@ -1,0 +1,262 @@
+{
+  "schemaVersion": 1,
+  "roleId": "tender-compliance",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "coordinationOwner": "caller",
+  "finalAcceptance": "caller_only",
+  "permissionSource": "current_task_host_authorization",
+  "steps": [
+    "按招标ID/标包整理正式文件与补遗，建立条款ID、当前版本和页段定位，拆强制与评分条件。",
+    "逐条绑定响应章节与证据ID；对证照核主体、范围、有效日期和必要签章，不从其他项目借用结论。",
+    "运行helper检查遗漏、版本漂移、过期、截止和未知条款；人工打开文件验证内容与给定哈希。",
+    "把强制缺口和一般待补项分开，明确材料负责人及在截止前可完成的动作，不擅自提交澄清。",
+    "交可编辑响应矩阵、证据索引、已知不符合与待审核事项；正式签署/提交仍由现有负责人处理。"
+  ],
+  "acceptance": [
+    "每个条款保留原文定位与当前版本，响应逐一对应；版本落后、缺响应、缺引用、过期证据和明确不符合必须分开报告；强制项不能被其他得分抵消。",
+    "强制条款有缺口、截止已到、未知响应条款或任一响应未完成时needs_review；即使completed，readiness也只到ready_for_content_review，legalCompliance仍为not_determined。",
+    "回执输入与规则哈希可复算；领域交付带事实、假设、缺口与证据定位。"
+  ],
+  "knowledgeAssets": [
+    {
+      "id": "tender-compliance-method",
+      "path": "references/professional-method.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "ocds"
+      ]
+    },
+    {
+      "id": "tender-compliance-delivery",
+      "path": "references/delivery-template.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "ocds"
+      ]
+    }
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "招投标证据与响应矩阵",
+    "scope": [
+      "把一叠招标文件变成带出处的响应矩阵，先找资格、硬性条款和失效证据，再整理可以完成的投标草稿。",
+      "不判断特定辖区法律效力或保证投标合规/中标；以实际招标文件与当前规则为准。"
+    ],
+    "knowledgeAssetIds": [
+      "tender-compliance-method",
+      "tender-compliance-delivery"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "baseline",
+        "question": "当前有效招标文件与补遗是哪一版？",
+        "evidenceRequired": [
+          "正式文件/补遗",
+          "条款页码及版本"
+        ],
+        "whenMissing": "先建立基线，冲突条款标待澄清。"
+      },
+      {
+        "id": "evidence-fit",
+        "question": "证据是否属于本投标主体且覆盖条款和时间范围？",
+        "evidenceRequired": [
+          "主体/资质范围",
+          "有效期和原文件哈希"
+        ],
+        "whenMissing": "保留待内容审查，不凭附件数量判满足。"
+      },
+      {
+        "id": "knockout",
+        "question": "哪些是强制资格/实质性要求，哪些只是评分？",
+        "evidenceRequired": [
+          "否决条件原文",
+          "评分规则及截止时间"
+        ],
+        "whenMissing": "不自行将评分项升级或降级为否决条件。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "mandatory-not-average",
+        "when": "强制条款缺证据或明确不满足",
+        "action": "列入blockingClauseIds并继续整理其他完备部分",
+        "avoid": "用总分或优点抵消硬缺口"
+      },
+      {
+        "id": "version-binding",
+        "when": "补遗版本与响应版本不一致",
+        "action": "标stale_clause_version并回到原条款核影响",
+        "avoid": "默默沿用旧响应"
+      },
+      {
+        "id": "reference-not-authentication",
+        "when": "材料引用和哈希都齐全",
+        "action": "只称待内容审查，核主体、范围、签章、有效期",
+        "avoid": "把引用存在当真实性或法律认证"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "tender-compliance-deliver",
+        "inputGuidance": [
+          {
+            "field": "context",
+            "interpretation": "本次组织、事项和输入版本；只是绑定身份，不保存画像。",
+            "onMissing": "补本次调用标识，不借用别的任务身份。"
+          },
+          {
+            "field": "tenderId",
+            "interpretation": "本次招标唯一ID，不能把其他项目的资格结果直接移用。",
+            "onMissing": "先固定项目与标包。"
+          },
+          {
+            "field": "asOf",
+            "interpretation": "核对证据有效性的观察时间，带时区。",
+            "onMissing": "补明确观察时间，不用机器隐式当前时刻。"
+          },
+          {
+            "field": "deadline",
+            "interpretation": "本轮正式截止时间及所在时区，含已确认补遗。",
+            "onMissing": "截止未确认时不称可提交。"
+          },
+          {
+            "field": "clauses",
+            "interpretation": "逐条真实条款、版本、页/段定位及强制性。",
+            "onMissing": "先提取原文和版本，不凭经验补造条款。"
+          },
+          {
+            "field": "responses",
+            "interpretation": "每条响应对应条款版本、内容位置、主张和证据ID。",
+            "onMissing": "未响应保留missing，已响应未知保持needs_review。"
+          },
+          {
+            "field": "evidence",
+            "interpretation": "材料定位、版本哈希和适用有效期；sha256是调用方提供值，本脚本不读取源文件核验。",
+            "onMissing": "缺来源或有效期信息按具体条款继续核，不伪造资质。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "tender-compliance-schemaversion",
+            "field": "schemaVersion",
+            "criterion": "使用当前机器回执版本1，不接受不同语义的包。",
+            "rejectWhen": "版本不匹配却继续解析。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "回执schema版本与schemas/output.schema.json"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "tender-compliance-protocol",
+            "field": "protocol",
+            "criterion": "协议为kim-service-helper-v1，输出为一条完整JSON回执。",
+            "rejectWhen": "把文字建议或非本协议结果当机器回执。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "当前完整stdout与output schema"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "tender-compliance-capabilityid",
+            "field": "capabilityId",
+            "criterion": "必须对应本次选定能力tender-compliance-deliver。",
+            "rejectWhen": "混用其他能力输出。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "所选capability与回执能力ID"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "tender-compliance-context",
+            "field": "context",
+            "criterion": "原样保留本次organizationId、workId和revision。",
+            "rejectWhen": "跨事项或旧版本结果冒充本次成果。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "输入和回执的context逐字段比较"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "tender-compliance-inputsha256",
+            "field": "inputSha256",
+            "criterion": "用runtime canonical函数对实际完整输入重算SHA256。",
+            "rejectWhen": "改过输入仍引用旧哈希，或只哈希部分输入。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "实际输入字节解析值与独立哈希复算"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "tender-compliance-policysha256",
+            "field": "policySha256",
+            "criterion": "用同一规则对本次policy.json重算SHA256。",
+            "rejectWhen": "规则已改而沿用旧结果。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "当前policy.json与哈希复算"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "tender-compliance-status",
+            "field": "status",
+            "criterion": "强制条款有缺口、截止已到、未知响应条款或任一响应未完成时needs_review；即使completed，readiness也只到ready_for_content_review，legalCompliance仍为not_determined。",
+            "rejectWhen": "completed被误写成行业结果或生产执行已经验收。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "实际脚本status与result中缺口/例外逐项对应"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "tender-compliance-result",
+            "field": "result",
+            "criterion": "每个条款保留原文定位与当前版本，响应逐一对应；版本落后、缺响应、缺引用、过期证据和明确不符合必须分开报告；强制项不能被其他得分抵消。",
+            "rejectWhen": "把旧版响应用于补遗新条款，将过期证照或只有文件名的证据当有效，或把引用齐备称法律合规/已提交。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "本次输入、公式/映射、脚本结果和下方领域交付记录"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "tender-compliance-claims",
+            "field": "claims",
+            "criterion": "只声明本次离线运算，模型、网络、业务持久化均false，最终接受not_decided。",
+            "rejectWhen": "把离线检查写成连接成功、真实业务验证或独立批准。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "脚本执行轨迹和真实外部动作范围"
+            ],
+            "blocking": true
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "正式提交、签署承诺、价格决定和法律争议交现有投标负责人或相应专业人员审核；资料整理不新增审批。"
+      ],
+      "prohibitedClaims": [
+        "方法与合成例不是实测专业效果；普通离线分析按现有授权执行。",
+        "不因声明工具或回执而获得业务系统写入、发送消息或最终批准权限。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
+}

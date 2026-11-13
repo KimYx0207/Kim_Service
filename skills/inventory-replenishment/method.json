@@ -1,0 +1,302 @@
+{
+  "schemaVersion": 1,
+  "roleId": "inventory-replenishment",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "coordinationOwner": "caller",
+  "finalAcceptance": "caller_only",
+  "permissionSource": "current_task_host_authorization",
+  "steps": [
+    "从同一时点库存表拆可用现货、冻结/已分配、确认在途和欠单；逐单核在途是否在保护期内到货。",
+    "检查稳定需求、日独立性与固定提前期假设；不满足时交适用模型分析，不强行给本公式结果。",
+    "固定L、R、z、包装、MOQ和上限，运行helper并独立复算保护期与目标。",
+    "核候选整箱和MOQ可执行性，列容量不足、期限与缺货风险，对高低需求/提前期做条件情景。",
+    "交补货建议、口径与待决例外；实际采购、预算与执行状态由宿主记录。"
+  ],
+  "acceptance": [
+    "保护期=L+R，安全库存=z×日标准差×sqrt(L+R)，目标=日均需求×保护期+安全库存；库存位置=可用现货+合格在途−欠单；先补足差额，再按MOQ和整箱向上取整，容量冲突必须保留未满足数量。",
+    "maxOrder或MOQ使候选不能补足目标时返回needs_review并保留unmetQuantity；所有候选仍只在明确假设下成立。",
+    "回执输入与规则哈希可复算；领域交付带事实、假设、缺口与证据定位。"
+  ],
+  "knowledgeAssets": [
+    {
+      "id": "inventory-replenishment-method",
+      "path": "references/professional-method.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "frepple"
+      ]
+    },
+    {
+      "id": "inventory-replenishment-delivery",
+      "path": "references/delivery-template.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "frepple"
+      ]
+    }
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "库存补货与服务水平",
+    "scope": [
+      "给单SKU周期复核补货提供可复算候选，清楚说明服务水平假设、缺货风险和约束导致的未满足数量。",
+      "不适用于未经处理的间歇需求、促销突变、相关需求或随机提前期。"
+    ],
+    "knowledgeAssetIds": [
+      "inventory-replenishment-method",
+      "inventory-replenishment-delivery"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "demand-regime",
+        "question": "历史需求适合独立稳定日需求近似吗？",
+        "evidenceRequired": [
+          "按日需求与促销标记",
+          "零需求比例及相关性"
+        ],
+        "whenMissing": "不套正态安全库存，先给分布/经验分位数方案。"
+      },
+      {
+        "id": "inventory-position",
+        "question": "现货、已分配、在途到货和欠单是否同一时点？",
+        "evidenceRequired": [
+          "库存状态",
+          "在途确认与预计到货"
+        ],
+        "whenMissing": "只计算已明确部分，不能把不确定供给当可用。"
+      },
+      {
+        "id": "feasibility",
+        "question": "包装、MOQ、订单上限和实际保质期是否兼容？",
+        "evidenceRequired": [
+          "供应商包装/起订规则",
+          "容量和有效期"
+        ],
+        "whenMissing": "输出约束缺口与备选，不自动更改采购。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "assumptions-first",
+        "when": "需求或提前期前提不成立",
+        "action": "改用适用的需求/提前期分布建模，暂不使用本helper",
+        "avoid": "用增大z掩盖结构错误"
+      },
+      {
+        "id": "keep-shortfall",
+        "when": "容量低于目标或MOQ",
+        "action": "输出可下单整箱数量及未满足数量，交责任人取舍",
+        "avoid": "截断后仍声称达成服务目标"
+      },
+      {
+        "id": "service-definition",
+        "when": "使用zScore解释服务水平",
+        "action": "标条件周期服务近似，不称订单满足率/填充率",
+        "avoid": "把单次不缺货概率等同需求数量满足比例"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "inventory-replenishment-deliver",
+        "inputGuidance": [
+          {
+            "field": "context",
+            "interpretation": "本次组织、事项和输入版本；只是绑定身份，不保存画像。",
+            "onMissing": "补本次调用标识，不借用别的任务身份。"
+          },
+          {
+            "field": "sku",
+            "interpretation": "可唯一识别的SKU，本次单SKU计算。",
+            "onMissing": "缺失该字段先补口径，不以零代替未知。"
+          },
+          {
+            "field": "unit",
+            "interpretation": "所有数量共同单位。",
+            "onMissing": "缺失该字段先补口径，不以零代替未知。"
+          },
+          {
+            "field": "demandPerDay",
+            "interpretation": "同口径日均需求，不包含单位不一致的汇总。",
+            "onMissing": "缺失该字段先补口径，不以零代替未知。"
+          },
+          {
+            "field": "dailyStdDev",
+            "interpretation": "独立日需求标准差，不是方差。",
+            "onMissing": "缺失该字段先补口径，不以零代替未知。"
+          },
+          {
+            "field": "leadDays",
+            "interpretation": "固定到货提前期，日历与需求一致。",
+            "onMissing": "缺失该字段先补口径，不以零代替未知。"
+          },
+          {
+            "field": "reviewDays",
+            "interpretation": "周期复核间隔，大于0。",
+            "onMissing": "缺失该字段先补口径，不以零代替未知。"
+          },
+          {
+            "field": "zScore",
+            "interpretation": "调用方选择的正态分位参数，不是fill rate。",
+            "onMissing": "缺失该字段先补口径，不以零代替未知。"
+          },
+          {
+            "field": "usableOnHand",
+            "interpretation": "扣除冻结/已分配后的可用现货。",
+            "onMissing": "缺失该字段先补口径，不以零代替未知。"
+          },
+          {
+            "field": "confirmedOnOrder",
+            "interpretation": "确认将在保护期内到货且未另行占用的在途。",
+            "onMissing": "缺失该字段先补口径，不以零代替未知。"
+          },
+          {
+            "field": "backorders",
+            "interpretation": "尚未从可用现货扣减的欠单；按订单和预留记录去重，不重复扣已分配需求。",
+            "onMissing": "缺失该字段先补口径，不以零代替未知。"
+          },
+          {
+            "field": "packSize",
+            "interpretation": "整数包装倍数。",
+            "onMissing": "缺失该字段先补口径，不以零代替未知。"
+          },
+          {
+            "field": "minOrder",
+            "interpretation": "供应商最小订单量；无需要时不触发。",
+            "onMissing": "缺失该字段先补口径，不以零代替未知。"
+          },
+          {
+            "field": "maxOrder",
+            "interpretation": "本次订单数量上限，0表示不能下单。",
+            "onMissing": "缺失该字段先补口径，不以零代替未知。"
+          },
+          {
+            "field": "assumptions",
+            "interpretation": "四项明确前提；不满足时选择其他模型，不伪填true。",
+            "onMissing": "缺失该字段先补口径，不以零代替未知。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "inventory-replenishment-schemaversion",
+            "field": "schemaVersion",
+            "criterion": "使用当前机器回执版本1，不接受不同语义的包。",
+            "rejectWhen": "版本不匹配却继续解析。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "回执schema版本与schemas/output.schema.json"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "inventory-replenishment-protocol",
+            "field": "protocol",
+            "criterion": "协议为kim-service-helper-v1，输出为一条完整JSON回执。",
+            "rejectWhen": "把文字建议或非本协议结果当机器回执。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "当前完整stdout与output schema"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "inventory-replenishment-capabilityid",
+            "field": "capabilityId",
+            "criterion": "必须对应本次选定能力inventory-replenishment-deliver。",
+            "rejectWhen": "混用其他能力输出。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "所选capability与回执能力ID"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "inventory-replenishment-context",
+            "field": "context",
+            "criterion": "原样保留本次organizationId、workId和revision。",
+            "rejectWhen": "跨事项或旧版本结果冒充本次成果。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "输入和回执的context逐字段比较"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "inventory-replenishment-inputsha256",
+            "field": "inputSha256",
+            "criterion": "用runtime canonical函数对实际完整输入重算SHA256。",
+            "rejectWhen": "改过输入仍引用旧哈希，或只哈希部分输入。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "实际输入字节解析值与独立哈希复算"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "inventory-replenishment-policysha256",
+            "field": "policySha256",
+            "criterion": "用同一规则对本次policy.json重算SHA256。",
+            "rejectWhen": "规则已改而沿用旧结果。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "当前policy.json与哈希复算"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "inventory-replenishment-status",
+            "field": "status",
+            "criterion": "maxOrder或MOQ使候选不能补足目标时返回needs_review并保留unmetQuantity；所有候选仍只在明确假设下成立。",
+            "rejectWhen": "completed被误写成行业结果或生产执行已经验收。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "实际脚本status与result中缺口/例外逐项对应"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "inventory-replenishment-result",
+            "field": "result",
+            "criterion": "保护期=L+R，安全库存=z×日标准差×sqrt(L+R)，目标=日均需求×保护期+安全库存；库存位置=可用现货+合格在途−欠单；先补足差额，再按MOQ和整箱向上取整，容量冲突必须保留未满足数量。",
+            "rejectWhen": "把填充率等同周期服务水平、把冻结库存算可用、忽略欠单/在途时序、把容量截断后的不足数量写成已满足目标。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "本次输入、公式/映射、脚本结果和下方领域交付记录"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "inventory-replenishment-claims",
+            "field": "claims",
+            "criterion": "只声明本次离线运算，模型、网络、业务持久化均false，最终接受not_decided。",
+            "rejectWhen": "把离线检查写成连接成功、真实业务验证或独立批准。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "脚本执行轨迹和真实外部动作范围"
+            ],
+            "blocking": true
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "实际采购承诺、超预算或服务目标变更交现有库存/采购责任人决定；情景复算不新增批准。"
+      ],
+      "prohibitedClaims": [
+        "方法与合成例不是实测专业效果；普通离线分析按现有授权执行。",
+        "不因声明工具或回执而获得业务系统写入、发送消息或最终批准权限。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
+}

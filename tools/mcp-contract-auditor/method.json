@@ -1,0 +1,255 @@
+{
+  "schemaVersion": 1,
+  "roleId": "mcp-contract-auditor",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "coordinationOwner": "caller",
+  "finalAcceptance": "caller_only",
+  "permissionSource": "current_task_host_authorization",
+  "steps": [
+    "从当前宿主提供的工具清单导出前后快照；在采集记录中核对服务身份、账号/租户、授权范围和协议版本，分别保留分页完成标记，不保存凭证。",
+    "运行离线helper，按工具名核新增/删除、描述、inputSchema、outputSchema、annotations和扩展字段变化。",
+    "打开变更条目的原schema，对引用/组合和实际调用兼容性做专门检查；未执行探测就保留未观察。",
+    "逐项核approvedToolNames与业务副作用，工具自报只读不替代授权或服务信任审查。",
+    "交差异回执、需复核项与适用范围；连接、安装、凭证及真实调用仍由宿主执行。"
+  ],
+  "acceptance": [
+    "按区分大小写的工具名比较所有声明字段及canonical哈希；完整性不足时只给possibleAdded/possibleRemoved。schema组合/$ref不能被误判为协议违规，行为注解不能成为授权来源。",
+    "身份/协议变化、增删/差异、未批准工具、部分分页或需进一步检查的schema/注解都会返回needs_review；completed仅表示当前比较没有这些变化，不是已连接或已授权。",
+    "回执输入与规则哈希可复算；领域交付带事实、假设、缺口与证据定位。"
+  ],
+  "knowledgeAssets": [
+    {
+      "id": "mcp-contract-auditor-method",
+      "path": "references/professional-method.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "mcp-tools"
+      ]
+    },
+    {
+      "id": "mcp-contract-auditor-delivery",
+      "path": "references/delivery-template.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "mcp-tools"
+      ]
+    }
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "MCP连接契约审计",
+    "scope": [
+      "在替换或更新MCP服务前，对两份工具清单做有范围的差异审计，提醒新增能力、接口漂移和行为注解变化；不连接真实服务。",
+      "不主动连接MCP、读取凭证、调用tools/call或修改宿主设置。"
+    ],
+    "knowledgeAssetIds": [
+      "mcp-contract-auditor-method",
+      "mcp-contract-auditor-delivery"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "snapshot-scope",
+        "question": "两个快照是否同一服务身份和同一授权视角，且收齐所有页？",
+        "evidenceRequired": [
+          "serverId/协议版本",
+          "账号/租户与授权范围的非秘密采集引用",
+          "tools/list分页完成记录"
+        ],
+        "whenMissing": "保留分页标记原义；采集身份或授权未知时，只描述所给快照差异，不推导服务版本变化，不改写机器回执。"
+      },
+      {
+        "id": "contract-drift",
+        "question": "工具参数、输出、描述、注解和扩展字段有变化吗？",
+        "evidenceRequired": [
+          "完整工具契约",
+          "前后canonical哈希"
+        ],
+        "whenMissing": "保留字段差异，不臆造兼容性。"
+      },
+      {
+        "id": "authority",
+        "question": "工具名在当前已批准范围内吗，行为声明有独立信任依据吗？",
+        "evidenceRequired": [
+          "宿主授权范围",
+          "服务身份/部署审查"
+        ],
+        "whenMissing": "只报告需核，不读写凭证或扩大权限。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "annotations-not-authority",
+        "when": "工具自称只读/幂等/非破坏",
+        "action": "作为提示记录，仍核服务和现有授权",
+        "avoid": "用注解自动放行或声称安全"
+      },
+      {
+        "id": "same-discovery-view",
+        "when": "服务、账号/租户或授权范围不同或未知",
+        "action": "列明发现视角差异；added/removed仅解释为快照可见集差异，继续核共同工具字段；取得同视角采集后再判断变化原因",
+        "avoid": "把完整分页等同相同授权，或将不同账号看到的工具差异归因为版本升级、服务能力删除或破坏性变更"
+      },
+      {
+        "id": "partial-inventory",
+        "when": "任一快照complete=false",
+        "action": "将新增/删除降为possible，保留已共同观察的字段diff",
+        "avoid": "把缺页工具当已删除"
+      },
+      {
+        "id": "schema-unknown",
+        "when": "schema含组合、引用或本审计不能判断的根类型",
+        "action": "返回需检查，保留原契约哈希，由专用validator或探测判断",
+        "avoid": "把有限检查器不支持等同官方协议违规"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "mcp-contract-auditor-deliver",
+        "inputGuidance": [
+          {
+            "field": "context",
+            "interpretation": "本次组织、事项和输入版本；只是绑定身份，不保存画像。",
+            "onMissing": "补本次调用标识，不借用别的任务身份。"
+          },
+          {
+            "field": "previous",
+            "interpretation": "旧服务身份、协议版本、完整分页标记和tools清单。仅包含工具契约，禁止放凭证。",
+            "onMissing": "缺旧快照时不能证明没有变化。"
+          },
+          {
+            "field": "current",
+            "interpretation": "新服务身份和本次工具清单；complete=false表示未收齐分页，不可判定完整新增/删除。",
+            "onMissing": "补工具清单；材料不足明确partial。"
+          },
+          {
+            "field": "approvedToolNames",
+            "interpretation": "当前任务或宿主已经授权的工具名清单；仅核对范围，不从annotations反推授权。",
+            "onMissing": "以明确允许范围核对，不能把所有工具默认已批准。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "mcp-contract-auditor-schemaversion",
+            "field": "schemaVersion",
+            "criterion": "使用当前机器回执版本1，不接受不同语义的包。",
+            "rejectWhen": "版本不匹配却继续解析。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "回执schema版本与schemas/output.schema.json"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "mcp-contract-auditor-protocol",
+            "field": "protocol",
+            "criterion": "协议为kim-service-helper-v1，输出为一条完整JSON回执。",
+            "rejectWhen": "把文字建议或非本协议结果当机器回执。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "当前完整stdout与output schema"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "mcp-contract-auditor-capabilityid",
+            "field": "capabilityId",
+            "criterion": "必须对应本次选定能力mcp-contract-auditor-deliver。",
+            "rejectWhen": "混用其他能力输出。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "所选capability与回执能力ID"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "mcp-contract-auditor-context",
+            "field": "context",
+            "criterion": "原样保留本次organizationId、workId和revision。",
+            "rejectWhen": "跨事项或旧版本结果冒充本次成果。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "输入和回执的context逐字段比较"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "mcp-contract-auditor-inputsha256",
+            "field": "inputSha256",
+            "criterion": "用runtime canonical函数对实际完整输入重算SHA256。",
+            "rejectWhen": "改过输入仍引用旧哈希，或只哈希部分输入。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "实际输入字节解析值与独立哈希复算"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "mcp-contract-auditor-policysha256",
+            "field": "policySha256",
+            "criterion": "用同一规则对本次policy.json重算SHA256。",
+            "rejectWhen": "规则已改而沿用旧结果。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "当前policy.json与哈希复算"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "mcp-contract-auditor-status",
+            "field": "status",
+            "criterion": "身份/协议变化、增删/差异、未批准工具、部分分页或需进一步检查的schema/注解都会返回needs_review；completed仅表示当前比较没有这些变化，不是已连接或已授权。",
+            "rejectWhen": "completed被误写成行业结果或生产执行已经验收。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "实际脚本status与result中缺口/例外逐项对应"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "mcp-contract-auditor-result",
+            "field": "result",
+            "criterion": "按区分大小写的工具名比较所有声明字段及canonical哈希；完整性不足时只给possibleAdded/possibleRemoved。schema组合/$ref不能被误判为协议违规，行为注解不能成为授权来源。 added/removed只陈述所给快照可见集差异；解释同视角变化需核同服务、账号/租户和授权范围，版本原因另查发布证据。",
+            "rejectWhen": "只比较工具名而漏schema或描述漂移、把分页不全判断为工具删除、或因readOnlyHint=true自动授权。 不同或未知授权视角的可见集差异被归因为服务版本升级/能力删除。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "本次输入、公式/映射、脚本结果和下方领域交付记录",
+              "非秘密的同服务、账号/租户与授权范围采集引用，或明确范围不一致/未知"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "mcp-contract-auditor-claims",
+            "field": "claims",
+            "criterion": "只声明本次离线运算，模型、网络、业务持久化均false，最终接受not_decided。",
+            "rejectWhen": "把离线检查写成连接成功、真实业务验证或独立批准。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "脚本执行轨迹和真实外部动作范围"
+            ],
+            "blocking": true
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "新增工具执行权限、外部写入及凭证范围变更沿用宿主现有授权；离线比较可直接进行。"
+      ],
+      "prohibitedClaims": [
+        "方法与合成例不是实测专业效果；普通离线分析按现有授权执行。",
+        "不因声明工具或回执而获得业务系统写入、发送消息或最终批准权限。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
+}

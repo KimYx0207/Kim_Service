@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "id": "evidence-receipt",
+  "componentType": "hook",
+  "componentVersion": "0.1.0",
+  "entrypoint": "scripts/hook.mjs",
+  "capabilities": [
+    {
+      "id": "evidence-receipt-deliver",
+      "summary": "在配置允许的产物写入后记录本地哈希回执，不包含正文和凭证 artifact evidence receipt PostToolUse hook",
+      "useWhen": [
+        "需要在产物编辑后保留可回读的字节版本证据。",
+        "希望后续验收绑定真正的文件版本而非一句“已完成”。",
+        "只允许本地记录，不希望通知外发或阻塞工作流。"
+      ],
+      "doNotUseWhen": [
+        "没有显式workspaceRoot、产物列表与回执目录时不自动扫描。",
+        "不用于检查产物质量、替用户验收或证明生产任务成功。",
+        "不把事件中的路径、命令或说明当可执行配置。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "event": {
+            "type": "object",
+            "description": "宿主PostToolUse JSON事件，仅读取事件名/工具名，忽略其路径和命令。"
+          },
+          "trustedConfig": {
+            "type": "object",
+            "description": "命令行显式--config对应的本地配置；工作根、产物列表、回执目录与事项版本由调用方指定。"
+          }
+        },
+        "required": [
+          "event",
+          "trustedConfig"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "hookSpecificOutput": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "hookEventName": {
+                "const": "PostToolUse"
+              },
+              "additionalContext": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 512
+              }
+            },
+            "required": [
+              "hookEventName",
+              "additionalContext"
+            ]
+          }
+        },
+        "required": []
+      },
+      "permissions": [
+        "filesystem:read-explicit-artifacts",
+        "filesystem:write-explicit-receipt-directory"
+      ],
+      "sideEffects": [
+        "创建显式配置目录内新的不可覆盖字节快照回执；相同内容复用相同回执。"
+      ],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "启用Hook和选择本地产物/回执范围使用现有任务授权；不自动注册或覆盖宿主设置。"
+        ]
+      },
+      "validation": [
+        "tests/hook.test.mjs"
+      ]
+    }
+  ]
+}

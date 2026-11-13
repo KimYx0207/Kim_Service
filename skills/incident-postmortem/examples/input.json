@@ -1,0 +1,39 @@
+{
+  "context": {
+    "organizationId": "synthetic-demo",
+    "workId": "professional-method-demo",
+    "revision": "1"
+  },
+  "incident": {
+    "id": "synthetic-checkout-01",
+    "startedAt": "2026-11-01T10:00:00+08:00",
+    "detectedAt": "2026-11-01T10:05:00+08:00",
+    "mitigatedAt": "2026-11-01T10:20:00+08:00",
+    "recoveredAt": "2026-11-01T10:30:00+08:00",
+    "impactSummary": "合成示例：部分结账请求失败，精确比例待日志重算。",
+    "evidenceRefs": [
+      "synthetic-event-log:100-160"
+    ]
+  },
+  "actions": [
+    {
+      "id": "limit-rollout",
+      "type": "prevent",
+      "owner": "发布负责人",
+      "dueAt": "2026-11-03T18:00:00+08:00",
+      "verification": "演练中批量发布超过10%时被限制，保留执行日志。",
+      "status": "in_progress",
+      "completionEvidence": []
+    },
+    {
+      "id": "probe-checkout",
+      "type": "detect",
+      "owner": "",
+      "dueAt": null,
+      "verification": "",
+      "status": "proposed",
+      "completionEvidence": []
+    }
+  ],
+  "asOf": "2026-11-04T12:00:00+08:00"
+}

@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "roleId": "construction-project-controller",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "worked-delivery",
+      "capabilityId": "construction-project-controller-deliver",
+      "category": "worked_example",
+      "scenario": "同包完整合成示例，判断必须保持输入口径与业务边界。",
+      "input": {
+        "baseline": {
+          "PV": 100,
+          "unit": "万元",
+          "asOf": "合成第6周",
+          "version": "approved-v1"
+        },
+        "actuals": {
+          "EV": 80,
+          "AC": 90,
+          "earnedBasis": "已验收工程量"
+        },
+        "changes": {
+          "pendingAddedScopeBudget": 30
+        }
+      },
+      "candidateOutputExcerpt": {
+        "costPerformance": "CV=-10，SV=-20，CPI≈0.889，SPI=0.80；SPI不直接等于日历延期率。",
+        "changeRegister": "未批追加30万元单列，原基线不变。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "输出从给定事实得到，解释关键计算或证据，并保留未验证范围。",
+      "diagnosticRefs": [
+        "baseline-version",
+        "physical-progress",
+        "critical-chain"
+      ],
+      "decisionRuleRefs": [
+        "earned-not-spent",
+        "baseline-preserved",
+        "recovery-constrained"
+      ]
+    },
+    {
+      "id": "material-failure",
+      "capabilityId": "construction-project-controller-deliver",
+      "category": "failure_boundary",
+      "scenario": "表面给出完整结论，但违反本角色关键专业规则。",
+      "input": {
+        "baseline": {
+          "PV": 100,
+          "unit": "万元",
+          "asOf": "合成第6周",
+          "version": "approved-v1"
+        },
+        "actuals": {
+          "EV": 80,
+          "AC": 90,
+          "earnedBasis": "已验收工程量"
+        },
+        "changes": {
+          "pendingAddedScopeBudget": 30
+        }
+      },
+      "candidateOutputExcerpt": {
+        "costPerformance": "已经花90，所以EV=90；SPI=0.8说明一定延期20%。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "把实际成本当完成价值，并把价值进度比错当工期比例。",
+      "diagnosticRefs": [
+        "baseline-version",
+        "physical-progress",
+        "critical-chain"
+      ],
+      "decisionRuleRefs": [
+        "earned-not-spent",
+        "baseline-preserved",
+        "recovery-constrained"
+      ]
+    },
+    {
+      "id": "bounded-progress",
+      "capabilityId": "construction-project-controller-deliver",
+      "category": "worked_example",
+      "scenario": "关键材料局部缺失，仍完成可独立交付部分。",
+      "input": {
+        "baseline": "有工作包预算但没有依赖网络",
+        "actuals": "各包已验收完成量和成本可读",
+        "changes": "希望先知道成本问题"
+      },
+      "candidateOutputExcerpt": {
+        "costPerformance": "先计算同口径成本绩效；精确关键路径与竣工日期因逻辑依赖缺失暂不判断。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "缺口仅限制受影响判断，保留有依据的工作，不填造事实。",
+      "diagnosticRefs": [
+        "baseline-version",
+        "physical-progress",
+        "critical-chain"
+      ],
+      "decisionRuleRefs": [
+        "earned-not-spent",
+        "baseline-preserved",
+        "recovery-constrained"
+      ]
+    }
+  ]
+}

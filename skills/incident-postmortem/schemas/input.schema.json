@@ -1,0 +1,177 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$comment": "Generated from capability.json input; edit the contract and rebuild.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "organizationId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "workId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "revision": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        }
+      },
+      "required": [
+        "organizationId",
+        "workId",
+        "revision"
+      ],
+      "description": "本次组织、事项和输入版本；只是绑定身份，不保存画像。"
+    },
+    "incident": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "startedAt": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,3})?(?:Z|[+-]\\d{2}:\\d{2})$",
+          "maxLength": 35,
+          "description": "实际客户影响开始时间，非单纯技术异常开始；带时区。"
+        },
+        "detectedAt": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,3})?(?:Z|[+-]\\d{2}:\\d{2})$",
+          "maxLength": 35
+        },
+        "mitigatedAt": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,3})?(?:Z|[+-]\\d{2}:\\d{2})$",
+          "maxLength": 35
+        },
+        "recoveredAt": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,3})?(?:Z|[+-]\\d{2}:\\d{2})$",
+          "maxLength": 35,
+          "description": "实际客户影响结束/客户功能恢复时间，非仅告警变绿；带时区。"
+        },
+        "impactSummary": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1200
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512
+          },
+          "minItems": 1,
+          "maxItems": 100
+        }
+      },
+      "required": [
+        "id",
+        "startedAt",
+        "detectedAt",
+        "mitigatedAt",
+        "recoveredAt",
+        "impactSummary",
+        "evidenceRefs"
+      ],
+      "description": "同一事故的开始、发现、缓解、恢复时间，含时区、客户影响和证据引用。"
+    },
+    "actions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "type": {
+            "enum": [
+              "prevent",
+              "detect",
+              "mitigate"
+            ]
+          },
+          "owner": {
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 128
+          },
+          "dueAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,3})?(?:Z|[+-]\\d{2}:\\d{2})$",
+                "maxLength": 35
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "verification": {
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 1200
+          },
+          "status": {
+            "enum": [
+              "proposed",
+              "in_progress",
+              "completed"
+            ]
+          },
+          "completionEvidence": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            },
+            "minItems": 0,
+            "maxItems": 30
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "owner",
+          "dueAt",
+          "verification",
+          "status",
+          "completionEvidence"
+        ]
+      },
+      "minItems": 0,
+      "maxItems": 100,
+      "description": "每个预防、检测或缓解措施的负责人、期限、验证条件、状态和完成证据。"
+    },
+    "asOf": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,3})?(?:Z|[+-]\\d{2}:\\d{2})$",
+      "maxLength": 35,
+      "description": "本次复盘观察时点，必须带明确时区。"
+    }
+  },
+  "required": [
+    "context",
+    "incident",
+    "actions",
+    "asOf"
+  ]
+}

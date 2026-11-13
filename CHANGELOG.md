@@ -4,6 +4,35 @@
 
 Kim Service collection releases use `V<major>.<minor>`. Each component keeps its own version and source history. Detailed past checks are in the [testing record](docs/verification-history.md).
 
+## V1.15 - 2026-11-13
+
+### Affected components
+
+Ten new professional Agents, four executable Skills, the MCP Contract Auditor Tool, the Evidence Receipt Hook, helper discovery, bilingual task browsing, README examples and main-branch release publication. The existing evidence, evaluation, feedback, customer-case and visual helpers are included in this first public collection release containing them.
+
+### User-visible changes
+
+- **Specialize the industry work.** Credit risk, treasury liquidity, insurance claims, contract review, maintenance reliability, warehouse operations, construction control, hospitality revenue, game economy and security incident response now have separate methods. Every new Agent includes domain knowledge, required materials, decision branches, a worked delivery, authored acceptance/rejection cases and evidence-based output checks.
+- **Compute useful intermediate results.** Four new Skills trace data-lineage impact, calculate replenishment options, examine incident timelines/actions and map tender responses to evidence. Each provides synthetic input and a standalone local executable entry.
+- **Inspect tool changes and identify delivered files.** The MCP auditor compares supplied tool definitions offline, treating annotations as untrusted hints. The opt-in evidence Hook hashes explicitly selected local files without sending their contents or replacing host settings.
+- **Keep discovery and transport coherent.** Canonical capability contracts drive the catalog, Chinese/English task views and helper exports. The generator now discovers executable Tool packages as well as Skills. All discovered helpers are tested after copying their complete package outside the repository.
+- **Preserve large materials and explain the work.** Existing helper additions package full source materials with bounded context, compare recorded agent outputs, turn feedback into evidence-linked proposals, manage customer-case evidence and create staged SVG/HTML explanations. The reviewed bilingual README and diagrams from commit 174d1ed are part of this release.
+- **Publish directly from main.** A manual main workflow dispatch retains exact-commit successful CI, source cleanliness and uploaded-asset digest checks. An ordinary push does not publish a release.
+
+### Breaking changes and migration
+
+No existing capability is removed. Update the main checkout with `git pull --ff-only`, or download the complete V1.15 source, DSH or ZCode package. The combined ZCode distribution uses the declared Meta_Kim v3.12.0 release and Kim collection plugin 1.15.0. Previously configured clients keep their ownership and permissions; new Hook registration is explicit. MCP contract auditing is an offline tool and does not install or connect an MCP server.
+
+### Verification
+
+Repository checks cover canonical discovery, professional method contracts, bilingual task mapping, executable helper examples, independently copied packages, source provenance and release source/asset binding. The release workflow requires the final exact main commit to pass the cross-platform contracts/regressions and browser job, then builds and checks source, DSH and ZCode packages against the previous public ZCode distribution. Actual run links, component manifests and SHA-256 checksums accompany the Release.
+
+Authored professional examples remain synthetic and `not_evaluated`; structural checks and deterministic recomputation do not claim production model or professional-outcome certification. Host credentials, actual customer decisions and unexecuted model/tool calls are not inferred from a package being available.
+
+### Source revisions
+
+Previous collection: [V1.14](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.14). Reviewed README/diagram source: [174d1ed](https://github.com/KimYx0207/Kim_Service/commit/174d1ed113fa389aaa96b3f244fb948a58e23c3d). The V1.15 tag, `SOURCE-REVISION.txt` and package manifests identify the exact final source; `catalog.json` binds each canonical component to committed bytes. New packages retain their own `PROVENANCE.md`, versions and licensing. Research records describe the actual adoption and exclusions from official open-source projects, without bundling incompatible third-party code.
+
 ## V1.14 - 2026-11-13
 
 ### Affected components

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "repository": "KimYx0207/Kim_Service",
-  "componentCount": 76,
+  "componentCount": 92,
   "release": {
     "repository": "KimYx0207/Kim_Service",
     "remoteName": "origin",
@@ -197,6 +197,63 @@
       ]
     },
     {
+      "id": "construction-project-controller",
+      "kind": "agent",
+      "path": "agents/construction-project-controller",
+      "source": "canonical:agents/construction-project-controller",
+      "revision": "pending-local:27d8d1456b493559b24787d34c0420ccaa604e605e6a07130e42bdefb6ab4818",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.0",
+      "contractSha256": "27d8d1456b493559b24787d34c0420ccaa604e605e6a07130e42bdefb6ab4818",
+      "contentSha256": "20309469504206d6f28fbfa51d03ff1ab84740e859d13d99c440abe4ac2153d7",
+      "required": [
+        "AGENT.md",
+        "capability.json",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
+      "id": "contract-review-analyst",
+      "kind": "agent",
+      "path": "agents/contract-review-analyst",
+      "source": "canonical:agents/contract-review-analyst",
+      "revision": "pending-local:6a173be5ccc9e9cce3f663aa9665a87d9b41949d914af9c744f2d5fc639e5d4f",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.0",
+      "contractSha256": "6a173be5ccc9e9cce3f663aa9665a87d9b41949d914af9c744f2d5fc639e5d4f",
+      "contentSha256": "1a51e1e61b91af9c6890b203e5551327f611b1a17401235c92a1a65ded9e1482",
+      "required": [
+        "AGENT.md",
+        "capability.json",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
+      "id": "credit-risk-analyst",
+      "kind": "agent",
+      "path": "agents/credit-risk-analyst",
+      "source": "canonical:agents/credit-risk-analyst",
+      "revision": "pending-local:8bb876903218878b417f9c2fd9ddc544b79ebff8b4aa9cf71090906e069d1372",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.0",
+      "contractSha256": "8bb876903218878b417f9c2fd9ddc544b79ebff8b4aa9cf71090906e069d1372",
+      "contentSha256": "d56ca010b8e206d066b4aa15e28b9a96bec2fb8609b56c25dea95c4304b5c2be",
+      "required": [
+        "AGENT.md",
+        "capability.json",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
       "id": "customer-service-writer",
       "kind": "agent",
       "path": "agents/customer-service-writer",
@@ -380,6 +437,25 @@
       ]
     },
     {
+      "id": "game-economy-designer",
+      "kind": "agent",
+      "path": "agents/game-economy-designer",
+      "source": "canonical:agents/game-economy-designer",
+      "revision": "pending-local:dc5398f7c3f55b60e57e730d61f51bead5768d5cccf2ae3115a6065529fcc53d",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.0",
+      "contractSha256": "dc5398f7c3f55b60e57e730d61f51bead5768d5cccf2ae3115a6065529fcc53d",
+      "contentSha256": "97fd1007f1079ac2a4ee51f8ca0f77274fb837ef6e1c639da787b5c8c19972eb",
+      "required": [
+        "AGENT.md",
+        "capability.json",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
       "id": "headline-cover-optimizer",
       "kind": "agent",
       "path": "agents/headline-cover-optimizer",
@@ -427,6 +503,44 @@
       "version": "0.1.2",
       "contractSha256": "f3917539f28c5f29e1cb17f65509b08246463d3dd8faff9e16ffe3c8e5d1d8a0",
       "contentSha256": "f6e60f4e6a20e0b3a1f411240e2873e9067b44cac617507b2da15505f4b843d7",
+      "required": [
+        "AGENT.md",
+        "capability.json",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
+      "id": "hospitality-revenue-analyst",
+      "kind": "agent",
+      "path": "agents/hospitality-revenue-analyst",
+      "source": "canonical:agents/hospitality-revenue-analyst",
+      "revision": "pending-local:8240e75eceb8ca8ce3032795185c59a34453ffa8ca6a850b700fa071d072ca93",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.0",
+      "contractSha256": "8240e75eceb8ca8ce3032795185c59a34453ffa8ca6a850b700fa071d072ca93",
+      "contentSha256": "276a89192a4ef51da1c5ad48a7d887339ccafcf0dccf5a150e561ec394b29554",
+      "required": [
+        "AGENT.md",
+        "capability.json",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
+      "id": "insurance-claims-analyst",
+      "kind": "agent",
+      "path": "agents/insurance-claims-analyst",
+      "source": "canonical:agents/insurance-claims-analyst",
+      "revision": "pending-local:a4555ea20d10d5a3e876bcd4a77693ed06ea1290a3c5f84061cdab03605ff7df",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.0",
+      "contractSha256": "a4555ea20d10d5a3e876bcd4a77693ed06ea1290a3c5f84061cdab03605ff7df",
+      "contentSha256": "1c96f7676dea8764b5f5ee01398fab799c04959d7c1c835b01b2ae1f9236b3e5",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -522,6 +636,25 @@
       "version": "0.3.1",
       "contractSha256": "6365e390ca12d7436a1f1e1c0600c186a3901bacfb557d8933a8960515d70094",
       "contentSha256": "26bb657abc76a405edad33c98e2bd56309e70fb82add5248391cf8fcc4a2aa8f",
+      "required": [
+        "AGENT.md",
+        "capability.json",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
+      "id": "maintenance-reliability-engineer",
+      "kind": "agent",
+      "path": "agents/maintenance-reliability-engineer",
+      "source": "canonical:agents/maintenance-reliability-engineer",
+      "revision": "pending-local:45dde3060d7db2dee30491f006a6a819cf081195e8a6b7a24f0328726f8e6977",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.0",
+      "contractSha256": "45dde3060d7db2dee30491f006a6a819cf081195e8a6b7a24f0328726f8e6977",
+      "contentSha256": "af59df20a6f03d4f925abe1757ae4aa2c63dc79f6db8009cc8217af2f9d126a8",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -747,6 +880,25 @@
       ]
     },
     {
+      "id": "security-incident-responder",
+      "kind": "agent",
+      "path": "agents/security-incident-responder",
+      "source": "canonical:agents/security-incident-responder",
+      "revision": "pending-local:a2cecb16f11023ea2d630908807aca86a24cb90913c9f3829f3d82c3382e884d",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.0",
+      "contractSha256": "a2cecb16f11023ea2d630908807aca86a24cb90913c9f3829f3d82c3382e884d",
+      "contentSha256": "21223a4d74552bebe6ad71ba672627f6143c945324be2fae42c421add2379bee",
+      "required": [
+        "AGENT.md",
+        "capability.json",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
       "id": "side-business-evaluator",
       "kind": "agent",
       "path": "agents/side-business-evaluator",
@@ -922,6 +1074,25 @@
       ]
     },
     {
+      "id": "treasury-liquidity-analyst",
+      "kind": "agent",
+      "path": "agents/treasury-liquidity-analyst",
+      "source": "canonical:agents/treasury-liquidity-analyst",
+      "revision": "pending-local:83988f4565a3b43d290805711b39f949b0b6e2f8800aaed9b698d62dc353bf43",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.0",
+      "contractSha256": "83988f4565a3b43d290805711b39f949b0b6e2f8800aaed9b698d62dc353bf43",
+      "contentSha256": "6fc41e9467e11cf9aef51ef846e51d408b1a16d5922d723de3b609b465e1f9c1",
+      "required": [
+        "AGENT.md",
+        "capability.json",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
       "id": "user-researcher",
       "kind": "agent",
       "path": "agents/user-researcher",
@@ -931,6 +1102,25 @@
       "version": "0.1.2",
       "contractSha256": "631459fcc86a20ebd33d5bc6127be65cad5a5fb0e44cae8d79eb4e151859640b",
       "contentSha256": "8cd3bed9226f19f3c8dd78be7e29aa36953b21f502f1bbebc2303525db894720",
+      "required": [
+        "AGENT.md",
+        "capability.json",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
+      "id": "warehouse-operations-analyst",
+      "kind": "agent",
+      "path": "agents/warehouse-operations-analyst",
+      "source": "canonical:agents/warehouse-operations-analyst",
+      "revision": "pending-local:92fad45cfcf28f8b8334c8d91b5931e91659d45440485e1ae18ebe6938b07cba",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.0",
+      "contractSha256": "92fad45cfcf28f8b8334c8d91b5931e91659d45440485e1ae18ebe6938b07cba",
+      "contentSha256": "6830524265dd4506beed1afdb5c95be26573f2668f940bc30a85ca1120e7a68d",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -957,6 +1147,29 @@
       ],
       "validation": [
         "node tests/contract.test.mjs"
+      ]
+    },
+    {
+      "id": "evidence-receipt",
+      "kind": "hook",
+      "path": "hooks/evidence-receipt",
+      "source": "canonical:hooks/evidence-receipt",
+      "revision": "pending-local:9d8de5ef7eb02220907467560e28f1db09318cccb4f7feb9c86dc3f951373d1e",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.0",
+      "contractSha256": "9d8de5ef7eb02220907467560e28f1db09318cccb4f7feb9c86dc3f951373d1e",
+      "contentSha256": "4f1f10f6579587ce78114c9e2542c45f772887de52530a8ae85bc6494745d800",
+      "required": [
+        "capability.json",
+        "CHANGELOG.md",
+        "LICENSE",
+        "NOTICE",
+        "README.md",
+        "scripts/hook.mjs",
+        "tests/hook.test.mjs"
+      ],
+      "validation": [
+        "node tests/hook.test.mjs"
       ]
     },
     {
@@ -1119,6 +1332,29 @@
       "version": "0.1.0",
       "contractSha256": "db2d5cb8163d0c1a2e4efc2cdefd71f22497c17fc13703e8efd30b5c901f1919",
       "contentSha256": "395c5ce126689f436244f1c6e9a404943d27979257982dd2ad5af9c4d2302f01",
+      "required": [
+        "capability.json",
+        "CHANGELOG.md",
+        "LICENSE",
+        "NOTICE",
+        "README.md",
+        "SKILL.md",
+        "tests/helper.test.mjs"
+      ],
+      "validation": [
+        "node tests/helper.test.mjs"
+      ]
+    },
+    {
+      "id": "data-lineage-impact",
+      "kind": "skill",
+      "path": "skills/data-lineage-impact",
+      "source": "canonical:skills/data-lineage-impact",
+      "revision": "pending-local:b0fe7f5b33746641a57f21483cef21b06cc62731f0bef473c0bb968518a478d7",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.0",
+      "contractSha256": "b0fe7f5b33746641a57f21483cef21b06cc62731f0bef473c0bb968518a478d7",
+      "contentSha256": "79f396bf9c7ec1a59668c613f1b332fd83a7f6405d8d8cbcf8742f4b1f1d3c8a",
       "required": [
         "capability.json",
         "CHANGELOG.md",
@@ -1323,6 +1559,52 @@
         "node tests/behavior.test.mjs",
         "node tests/boundary.test.mjs",
         "node tests/governance.test.mjs"
+      ]
+    },
+    {
+      "id": "incident-postmortem",
+      "kind": "skill",
+      "path": "skills/incident-postmortem",
+      "source": "canonical:skills/incident-postmortem",
+      "revision": "pending-local:2de87a5745baea1753478d5989ac76440a2028439d2c18f2af2ecc8fcbe7bbd2",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.0",
+      "contractSha256": "2de87a5745baea1753478d5989ac76440a2028439d2c18f2af2ecc8fcbe7bbd2",
+      "contentSha256": "90e37593f98009317e19fc5d99b7933f4ef4d7c633c7b6d299e640ecb1abdc5d",
+      "required": [
+        "capability.json",
+        "CHANGELOG.md",
+        "LICENSE",
+        "NOTICE",
+        "README.md",
+        "SKILL.md",
+        "tests/helper.test.mjs"
+      ],
+      "validation": [
+        "node tests/helper.test.mjs"
+      ]
+    },
+    {
+      "id": "inventory-replenishment",
+      "kind": "skill",
+      "path": "skills/inventory-replenishment",
+      "source": "canonical:skills/inventory-replenishment",
+      "revision": "pending-local:9f0acfe94e0a3c542f19e0b37904664fb7b5ea76e77b48f40b9dd9acf7a58076",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.0",
+      "contractSha256": "9f0acfe94e0a3c542f19e0b37904664fb7b5ea76e77b48f40b9dd9acf7a58076",
+      "contentSha256": "e3d1e665c3ac7cc8e3bf79ec16a3e333e995c32fee76a1e0d61e37bdee02db67",
+      "required": [
+        "capability.json",
+        "CHANGELOG.md",
+        "LICENSE",
+        "NOTICE",
+        "README.md",
+        "SKILL.md",
+        "tests/helper.test.mjs"
+      ],
+      "validation": [
+        "node tests/helper.test.mjs"
       ]
     },
     {
@@ -1593,6 +1875,29 @@
       ]
     },
     {
+      "id": "tender-compliance",
+      "kind": "skill",
+      "path": "skills/tender-compliance",
+      "source": "canonical:skills/tender-compliance",
+      "revision": "pending-local:17e81025d88f374f6c9f2ce7a52f7c2d8db7a18a8f6773162627b0e732f6af4a",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.0",
+      "contractSha256": "17e81025d88f374f6c9f2ce7a52f7c2d8db7a18a8f6773162627b0e732f6af4a",
+      "contentSha256": "9e1f9122c1f1691a8e4c36725eccaf9b990bad043bc6d0817fc945cbe74b0933",
+      "required": [
+        "capability.json",
+        "CHANGELOG.md",
+        "LICENSE",
+        "NOTICE",
+        "README.md",
+        "SKILL.md",
+        "tests/helper.test.mjs"
+      ],
+      "validation": [
+        "node tests/helper.test.mjs"
+      ]
+    },
+    {
       "id": "visual-explainer",
       "kind": "skill",
       "path": "skills/visual-explainer",
@@ -1668,6 +1973,25 @@
         "node tests/host-assets.test.mjs",
         "node tests/installer.test.mjs",
         "node tests/mcp-server.test.mjs"
+      ]
+    },
+    {
+      "id": "mcp-contract-auditor",
+      "kind": "tool",
+      "path": "tools/mcp-contract-auditor",
+      "source": "canonical:tools/mcp-contract-auditor",
+      "revision": "pending-local:d238c20f56bdcc9041fc9dcaf4cf267ae7c745a35a57fd41c4d6a073c5d2684e",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.0",
+      "contractSha256": "d238c20f56bdcc9041fc9dcaf4cf267ae7c745a35a57fd41c4d6a073c5d2684e",
+      "contentSha256": "1a0f6e670ce29d47b50229fcfc4b94303c30063c6dc22c4b2e2dca30272c275c",
+      "required": [
+        "capability.json",
+        "README.md",
+        "tests/helper.test.mjs"
+      ],
+      "validation": [
+        "node tests/helper.test.mjs"
       ]
     }
   ],

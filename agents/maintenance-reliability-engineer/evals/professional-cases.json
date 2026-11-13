@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 1,
+  "roleId": "maintenance-reliability-engineer",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "worked-delivery",
+      "capabilityId": "maintenance-reliability-engineer-deliver",
+      "category": "worked_example",
+      "scenario": "同包完整合成示例，判断必须保持输入口径与业务边界。",
+      "input": {
+        "assets": {
+          "assetId": "A",
+          "function": "合成输送设备",
+          "requiredServiceHours": 504
+        },
+        "events": {
+          "operatingHours": 480,
+          "failures": 4,
+          "activeRepairHours": 8,
+          "waitingPartsHours": 12,
+          "verificationHours": 4
+        },
+        "policy": "MTTR使用主动维修；可用率使用整个服务窗口"
+      },
+      "candidateOutputExcerpt": {
+        "reliabilityMetrics": "MTBF=120运行小时，主动维修MTTR=2小时，全恢复平均6小时，窗口可用率约95.24%。",
+        "failureMap": "停机原因需按事件追证，轴承症状不自动等于已确认根因。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "输出从给定事实得到，解释关键计算或证据，并保留未验证范围。",
+      "diagnosticRefs": [
+        "failure-mode",
+        "downtime",
+        "task-fit"
+      ],
+      "decisionRuleRefs": [
+        "time-basis",
+        "criticality-first",
+        "verify-recovery"
+      ]
+    },
+    {
+      "id": "material-failure",
+      "capabilityId": "maintenance-reliability-engineer-deliver",
+      "category": "failure_boundary",
+      "scenario": "表面给出完整结论，但违反本角色关键专业规则。",
+      "input": {
+        "assets": {
+          "assetId": "A",
+          "function": "合成输送设备",
+          "requiredServiceHours": 504
+        },
+        "events": {
+          "operatingHours": 480,
+          "failures": 4,
+          "activeRepairHours": 8,
+          "waitingPartsHours": 12,
+          "verificationHours": 4
+        },
+        "policy": "MTTR使用主动维修；可用率使用整个服务窗口"
+      },
+      "candidateOutputExcerpt": {
+        "reliabilityMetrics": "MTTR只有2小时，因此4次总停机8小时，设备可用率98.36%。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "遗漏待料与恢复验证，把主动维修指标错当总不可用时间。",
+      "diagnosticRefs": [
+        "failure-mode",
+        "downtime",
+        "task-fit"
+      ],
+      "decisionRuleRefs": [
+        "time-basis",
+        "criticality-first",
+        "verify-recovery"
+      ]
+    },
+    {
+      "id": "bounded-progress",
+      "capabilityId": "maintenance-reliability-engineer-deliver",
+      "category": "worked_example",
+      "scenario": "关键材料局部缺失，仍完成可独立交付部分。",
+      "input": {
+        "assets": "新设备B",
+        "events": {
+          "operatingHours": 200,
+          "failures": 0
+        },
+        "policy": "评估是否无需维护"
+      },
+      "candidateOutputExcerpt": {
+        "reliabilityMetrics": "200运行小时未观察到故障；不能估算有限样本MTBF，也不能据此取消维护。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "缺口仅限制受影响判断，保留有依据的工作，不填造事实。",
+      "diagnosticRefs": [
+        "failure-mode",
+        "downtime",
+        "task-fit"
+      ],
+      "decisionRuleRefs": [
+        "time-basis",
+        "criticality-first",
+        "verify-recovery"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,139 @@
+{
+  "schemaVersion": 1,
+  "roleId": "security-incident-responder",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "worked-delivery",
+      "capabilityId": "security-incident-responder-deliver",
+      "category": "worked_example",
+      "scenario": "同包完整合成示例，判断必须保持输入口径与业务边界。",
+      "input": {
+        "incident": {
+          "id": "SYN-1",
+          "authorizedAssets": [
+            "A",
+            "B"
+          ],
+          "timezone": "UTC",
+          "businessImpact": "待核"
+        },
+        "evidence": [
+          {
+            "id": "E1",
+            "asset": "A",
+            "eventTime": "09:00Z",
+            "collectedTime": "09:10Z",
+            "fact": "未知程序执行",
+            "clock": "已核同步"
+          },
+          {
+            "id": "E2",
+            "asset": "B",
+            "eventTime": "09:02Z",
+            "collectedTime": "09:05Z",
+            "fact": "同账号成功登录",
+            "clock": "已核同步"
+          }
+        ],
+        "responseContext": "仅只读分析，尚未执行隔离或会话撤销"
+      },
+      "candidateOutputExcerpt": {
+        "incidentTimeline": "09:00Z A执行，09:02Z B登录；采集时间单列。",
+        "scopeAssessment": "A有执行证据，B登录已观察；B恶意执行、横向移动因果及业务影响未确认。",
+        "containmentPlan": "给按权限保全与核查方案，现场处置未执行。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "输出从给定事实得到，解释关键计算或证据，并保留未验证范围。",
+      "diagnosticRefs": [
+        "time-trust",
+        "impact",
+        "containment-cost"
+      ],
+      "decisionRuleRefs": [
+        "preserve-before-change",
+        "scope-by-evidence",
+        "recover-with-observation"
+      ]
+    },
+    {
+      "id": "material-failure",
+      "capabilityId": "security-incident-responder-deliver",
+      "category": "failure_boundary",
+      "scenario": "表面给出完整结论，但违反本角色关键专业规则。",
+      "input": {
+        "incident": {
+          "id": "SYN-1",
+          "authorizedAssets": [
+            "A",
+            "B"
+          ],
+          "timezone": "UTC",
+          "businessImpact": "待核"
+        },
+        "evidence": [
+          {
+            "id": "E1",
+            "asset": "A",
+            "eventTime": "09:00Z",
+            "collectedTime": "09:10Z",
+            "fact": "未知程序执行",
+            "clock": "已核同步"
+          },
+          {
+            "id": "E2",
+            "asset": "B",
+            "eventTime": "09:02Z",
+            "collectedTime": "09:05Z",
+            "fact": "同账号成功登录",
+            "clock": "已核同步"
+          }
+        ],
+        "responseContext": "仅只读分析，尚未执行隔离或会话撤销"
+      },
+      "candidateOutputExcerpt": {
+        "scopeAssessment": "采集09:05早于09:10，证明B先攻陷A；两台均已清除威胁。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "混用采集与发生时间，编造因果、影响范围与恢复完成状态。",
+      "diagnosticRefs": [
+        "time-trust",
+        "impact",
+        "containment-cost"
+      ],
+      "decisionRuleRefs": [
+        "preserve-before-change",
+        "scope-by-evidence",
+        "recover-with-observation"
+      ]
+    },
+    {
+      "id": "bounded-progress",
+      "capabilityId": "security-incident-responder-deliver",
+      "category": "worked_example",
+      "scenario": "关键材料局部缺失，仍完成可独立交付部分。",
+      "input": {
+        "incident": "单条IP情报命中，资产范围明确",
+        "evidence": "未提供端点或网络访问记录",
+        "responseContext": "继续只读调查"
+      },
+      "candidateOutputExcerpt": {
+        "scopeAssessment": "情报命中仅作线索；列需核的连接、进程和身份日志，不能认定入侵或归因攻击者。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "缺口仅限制受影响判断，保留有依据的工作，不填造事实。",
+      "diagnosticRefs": [
+        "time-trust",
+        "impact",
+        "containment-cost"
+      ],
+      "decisionRuleRefs": [
+        "preserve-before-change",
+        "scope-by-evidence",
+        "recover-with-observation"
+      ]
+    }
+  ]
+}

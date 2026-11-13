@@ -1,0 +1,442 @@
+{
+  "schemaVersion": 1,
+  "id": "tender-compliance",
+  "componentType": "skill",
+  "componentVersion": "0.1.0",
+  "entrypoint": "SKILL.md",
+  "capabilities": [
+    {
+      "id": "tender-compliance-deliver",
+      "summary": "把招标条款、补遗版本和响应证据逐项绑定 tender bid compliance response evidence matrix",
+      "useWhen": [
+        "投标材料很多，需要确认每条资格/技术/商务要求是否有响应依据。",
+        "收到澄清或补遗，需要定位旧响应和证据是否过期。",
+        "报价与技术方案齐了，但不知道哪些条款可能直接否决。"
+      ],
+      "doNotUseWhen": [
+        "不判断特定辖区法律效力或保证投标合规/中标；以实际招标文件与当前规则为准。",
+        "不把有附件当成内容满足，脚本不读取或认证附件真实性。",
+        "不自动提交投标、联系评委、伪造资质或修改签章。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "context": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "organizationId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "workId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "revision": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              }
+            },
+            "required": [
+              "organizationId",
+              "workId",
+              "revision"
+            ],
+            "description": "本次组织、事项和输入版本；只是绑定身份，不保存画像。"
+          },
+          "tenderId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "description": "本次招标唯一ID，不能把其他项目的资格结果直接移用。"
+          },
+          "asOf": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,3})?(?:Z|[+-]\\d{2}:\\d{2})$",
+            "maxLength": 35,
+            "description": "核对证据有效性的观察时间，带时区。"
+          },
+          "deadline": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,3})?(?:Z|[+-]\\d{2}:\\d{2})$",
+            "maxLength": 35,
+            "description": "本轮正式截止时间及所在时区，含已确认补遗。"
+          },
+          "clauses": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "version": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "sourceRef": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 512
+                },
+                "mandatory": {
+                  "type": "boolean"
+                },
+                "requirement": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1200
+                }
+              },
+              "required": [
+                "id",
+                "version",
+                "sourceRef",
+                "mandatory",
+                "requirement"
+              ]
+            },
+            "minItems": 1,
+            "maxItems": 500,
+            "description": "逐条真实条款、版本、页/段定位及强制性。"
+          },
+          "responses": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "clauseId": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "clauseVersion": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "assessment": {
+                  "enum": [
+                    "claimed_compliant",
+                    "noncompliant",
+                    "needs_review"
+                  ]
+                },
+                "responseRef": {
+                  "type": "string",
+                  "minLength": 0,
+                  "maxLength": 512
+                },
+                "evidenceIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  },
+                  "minItems": 0,
+                  "maxItems": 30
+                }
+              },
+              "required": [
+                "clauseId",
+                "clauseVersion",
+                "assessment",
+                "responseRef",
+                "evidenceIds"
+              ]
+            },
+            "minItems": 0,
+            "maxItems": 500,
+            "description": "每条响应对应条款版本、内容位置、主张和证据ID。"
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "sourceRef": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 512
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                },
+                "validUntil": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,3})?(?:Z|[+-]\\d{2}:\\d{2})$",
+                      "maxLength": 35
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "sourceRef",
+                "sha256",
+                "validUntil"
+              ]
+            },
+            "minItems": 0,
+            "maxItems": 2000,
+            "description": "材料定位、版本哈希和适用有效期；sha256是调用方提供值，本脚本不读取源文件核验。"
+          }
+        },
+        "required": [
+          "context",
+          "tenderId",
+          "asOf",
+          "deadline",
+          "clauses",
+          "responses",
+          "evidence"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "schemaVersion": {
+            "const": 1,
+            "description": "使用当前机器回执版本1，不接受不同语义的包。"
+          },
+          "protocol": {
+            "const": "kim-service-helper-v1",
+            "description": "协议为kim-service-helper-v1，输出为一条完整JSON回执。"
+          },
+          "capabilityId": {
+            "const": "tender-compliance-deliver",
+            "description": "必须对应本次选定能力tender-compliance-deliver。"
+          },
+          "context": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "organizationId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "workId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "revision": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              }
+            },
+            "required": [
+              "organizationId",
+              "workId",
+              "revision"
+            ],
+            "description": "原样保留本次organizationId、workId和revision。"
+          },
+          "inputSha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "description": "用runtime canonical函数对实际完整输入重算SHA256。"
+          },
+          "policySha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "description": "用同一规则对本次policy.json重算SHA256。"
+          },
+          "status": {
+            "enum": [
+              "completed",
+              "needs_review"
+            ],
+            "description": "强制条款有缺口、截止已到、未知响应条款或任一响应未完成时needs_review；即使completed，readiness也只到ready_for_content_review，legalCompliance仍为not_determined。"
+          },
+          "result": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "tenderId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "deadlinePassed": {
+                "type": "boolean"
+              },
+              "rows": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "mandatory": {
+                      "type": "boolean"
+                    },
+                    "status": {
+                      "enum": [
+                        "documented_pending_content_review",
+                        "needs_review",
+                        "noncompliant"
+                      ]
+                    },
+                    "issues": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 512
+                      },
+                      "minItems": 0,
+                      "maxItems": 50
+                    },
+                    "evidenceIds": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 128
+                      },
+                      "minItems": 0,
+                      "maxItems": 30
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "mandatory",
+                    "status",
+                    "issues",
+                    "evidenceIds"
+                  ]
+                },
+                "minItems": 1,
+                "maxItems": 500
+              },
+              "blockingClauseIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "minItems": 0,
+                "maxItems": 500
+              },
+              "unknownResponseClauses": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "minItems": 0,
+                "maxItems": 500
+              },
+              "readiness": {
+                "enum": [
+                  "evidence_gaps",
+                  "ready_for_content_review"
+                ]
+              },
+              "legalCompliance": {
+                "const": "not_determined"
+              },
+              "evidenceAuthentication": {
+                "const": "supplied_references_not_verified"
+              }
+            },
+            "required": [
+              "tenderId",
+              "deadlinePassed",
+              "rows",
+              "blockingClauseIds",
+              "unknownResponseClauses",
+              "readiness",
+              "legalCompliance",
+              "evidenceAuthentication"
+            ],
+            "description": "每个条款保留原文定位与当前版本，响应逐一对应；版本落后、缺响应、缺引用、过期证据和明确不符合必须分开报告；强制项不能被其他得分抵消。"
+          },
+          "claims": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "modelCalled": {
+                "const": false
+              },
+              "networkAccessed": {
+                "const": false
+              },
+              "businessStatePersisted": {
+                "const": false
+              },
+              "finalAcceptance": {
+                "const": "not_decided"
+              }
+            },
+            "required": [
+              "modelCalled",
+              "networkAccessed",
+              "businessStatePersisted",
+              "finalAcceptance"
+            ],
+            "description": "只声明本次离线运算，模型、网络、业务持久化均false，最终接受not_decided。"
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "protocol",
+          "capabilityId",
+          "context",
+          "inputSha256",
+          "policySha256",
+          "status",
+          "result",
+          "claims"
+        ]
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "正式提交、签署承诺、价格决定和法律争议交现有投标负责人或相应专业人员审核；资料整理不新增审批。"
+        ]
+      },
+      "validation": [
+        "tests/helper.test.mjs"
+      ],
+      "helperContract": "helper-contract.json"
+    }
+  ]
+}

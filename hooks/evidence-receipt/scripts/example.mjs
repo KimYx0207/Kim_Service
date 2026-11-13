@@ -1,0 +1,12 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import { capture } from './hook.mjs';
+const target=process.argv[2];
+if (process.argv.length!==3 || !target || !path.isAbsolute(target)) throw new Error('Usage: node scripts/example.mjs /absolute/path/to/new-demo-workspace');
+if(fs.existsSync(target))throw new Error('Example workspace must not exist');
+fs.mkdirSync(target,{recursive:true});
+fs.writeFileSync(path.join(target,'report.md'),'# Synthetic delivery\n\nThis file demonstrates byte identity, not production acceptance.\n');
+const config=path.join(target,'evidence-config.json');
+fs.writeFileSync(config,JSON.stringify({workspaceRoot:target,artifactPaths:['report.md'],receiptsDir:'receipts',workId:'synthetic-delivery',revision:'1'},null,2)+'\n');
+const result=capture({hook_event_name:'PostToolUse',tool_name:'Write'},config);
+process.stdout.write(JSON.stringify({workspace:target,receipts:fs.readdirSync(path.join(target,'receipts')).map(name=>path.join(target,'receipts',name)),hookOutput:result})+'\n');

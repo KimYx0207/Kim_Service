@@ -1,0 +1,143 @@
+{
+  "schemaVersion": 1,
+  "id": "game-economy-designer",
+  "componentType": "agent",
+  "componentVersion": "0.1.0",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "game-economy-designer-deliver",
+      "summary": "把游戏货币产消、玩家成长与交易回执连起来，设计可演算、可监测、可回退的数值方案。 game economy currency sources sinks progression wallet ledger balancing",
+      "useWhen": [
+        "游戏货币越来越多，想查产出、回收和通胀来源。",
+        "需要设计装备成长、价格梯度或活动奖励，并验证玩家进度。",
+        "重复发奖或付费回调重试导致经济异常，需要核交易身份和回滚。"
+      ],
+      "doNotUseWhen": [
+        "本包设计规则、模拟经济和审核记录；真实发奖、扣款、支付退款、封禁或上线数值沿用发布权限，不制作诱导未成年人或利用成瘾的机制。",
+        "只要相邻领域通用建议、与本角色的具体工作对象无关时，交适合的现有角色。",
+        "本任务要求直接变更账户、业务系统或发送材料时，由当前宿主按既有授权单独处理。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "economy": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "货币/物品单位、产出、消耗、交易规则与版本"
+          },
+          "cohorts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "匿名聚合玩家分层、活跃、阶段、库存与行为样本"
+          },
+          "constraints": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "目标体验、付费边界、活动期限、技术约束及数据口径"
+          }
+        },
+        "required": [
+          "economy",
+          "cohorts",
+          "constraints"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "economyMap": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "货币与物品流向"
+          },
+          "balanceSimulation": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "分层成长与余额模拟"
+          },
+          "transactionControls": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "奖励与消费一致性"
+          },
+          "tuningPlan": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "调参与观察方案"
+          },
+          "facts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "输入口径与证据"
+          },
+          "limitations": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "未核范围与适用边界"
+          },
+          "handoff": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "交付与下一步"
+          }
+        },
+        "required": [
+          "economyMap",
+          "balanceSimulation",
+          "transactionControls",
+          "tuningPlan",
+          "facts",
+          "limitations",
+          "handoff"
+        ],
+        "deliveryFormat": "conceptual-human-delivery"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "本包设计规则、模拟经济和审核记录；真实发奖、扣款、支付退款、封禁或上线数值沿用发布权限，不制作诱导未成年人或利用成瘾的机制。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

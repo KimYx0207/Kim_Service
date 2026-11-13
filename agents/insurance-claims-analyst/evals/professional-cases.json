@@ -1,0 +1,180 @@
+{
+  "schemaVersion": 1,
+  "roleId": "insurance-claims-analyst",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "worked-delivery",
+      "capabilityId": "insurance-claims-analyst-deliver",
+      "category": "worked_example",
+      "scenario": "同包完整合成示例，判断必须保持输入口径与业务边界。",
+      "input": {
+        "policy": {
+          "order": "先免赔，再80%赔付，再剩余限额",
+          "deductible": 100,
+          "insurerShare": 0.8,
+          "remainingLimit": 650,
+          "currency": "CNY",
+          "deductibleRemaining": 100
+        },
+        "claim": {
+          "eligibleExpense": 1000,
+          "unverifiedExpense": 200
+        },
+        "evidence": "合成发票明细与条款已定位，未提供核赔或支付回单"
+      },
+      "candidateOutputExcerpt": {
+        "amountReview": "max(1000−100,0)×0.8=720，再受限额650约束为650；未核200单列，责任适用仍待原文确认。",
+        "reviewPacket": "金额草案，尚无核赔决定和付款证据。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "输出从给定事实得到，解释关键计算或证据，并保留未验证范围。",
+      "diagnosticRefs": [
+        "coverage-date",
+        "line-item",
+        "order"
+      ],
+      "decisionRuleRefs": [
+        "policy-first",
+        "claim-not-payment",
+        "anomaly-not-fraud"
+      ]
+    },
+    {
+      "id": "material-failure",
+      "capabilityId": "insurance-claims-analyst-deliver",
+      "category": "failure_boundary",
+      "scenario": "表面给出完整结论，但违反本角色关键专业规则。",
+      "input": {
+        "policy": {
+          "order": "先免赔，再80%赔付，再剩余限额",
+          "deductible": 100,
+          "insurerShare": 0.8,
+          "remainingLimit": 650,
+          "currency": "CNY",
+          "deductibleRemaining": 100
+        },
+        "claim": {
+          "eligibleExpense": 1000,
+          "unverifiedExpense": 200
+        },
+        "evidence": "合成发票明细与条款已定位，未提供核赔或支付回单"
+      },
+      "candidateOutputExcerpt": {
+        "amountReview": "全部1200先乘80%并重复扣两次100；已赔付760。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "把未核费用并入、违反明确扣减顺序且无回单宣称支付。",
+      "diagnosticRefs": [
+        "coverage-date",
+        "line-item",
+        "order"
+      ],
+      "decisionRuleRefs": [
+        "policy-first",
+        "claim-not-payment",
+        "anomaly-not-fraud"
+      ]
+    },
+    {
+      "id": "bounded-progress",
+      "capabilityId": "insurance-claims-analyst-deliver",
+      "category": "worked_example",
+      "scenario": "关键材料局部缺失，仍完成可独立交付部分。",
+      "input": {
+        "policy": "两份批单的生效顺序不明",
+        "claim": "事故日期和费用完整",
+        "evidence": "原条款附件可读"
+      },
+      "candidateOutputExcerpt": {
+        "coverageMap": "先提取各版本责任和生效日期冲突，费用与证据核对继续；受批单歧义影响的覆盖判断保留条件。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "缺口仅限制受影响判断，保留有依据的工作，不填造事实。",
+      "diagnosticRefs": [
+        "coverage-date",
+        "line-item",
+        "order"
+      ],
+      "decisionRuleRefs": [
+        "policy-first",
+        "claim-not-payment",
+        "anomaly-not-fraud"
+      ]
+    },
+    {
+      "id": "order-unmasked",
+      "capabilityId": "insurance-claims-analyst-deliver",
+      "category": "worked_example",
+      "scenario": "剩余限额提高后可以看到扣减顺序差异。",
+      "input": {
+        "policy": {
+          "order": "先免赔，再80%赔付，再剩余限额",
+          "deductible": 100,
+          "insurerShare": 0.8,
+          "remainingLimit": 1000,
+          "currency": "CNY",
+          "deductibleRemaining": 100
+        },
+        "claim": {
+          "eligibleExpense": 1000,
+          "unverifiedExpense": 200
+        },
+        "evidence": "合成发票明细与条款已定位，未提供核赔或支付回单"
+      },
+      "candidateOutputExcerpt": {
+        "amountReview": "本保单题设先免赔后比例，(1000-100)×0.8=720，未触及1000限额；先比例后免赔的700违反本条款。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "保留实际条款顺序，避免截顶掩盖过程错误。",
+      "diagnosticRefs": [
+        "coverage-date",
+        "line-item",
+        "order"
+      ],
+      "decisionRuleRefs": [
+        "policy-first",
+        "claim-not-payment",
+        "anomaly-not-fraud"
+      ]
+    },
+    {
+      "id": "below-deductible",
+      "capabilityId": "insurance-claims-analyst-deliver",
+      "category": "worked_example",
+      "scenario": "合格费用低于剩余免赔。",
+      "input": {
+        "policy": {
+          "order": "先免赔，再80%赔付，再剩余限额",
+          "deductible": 100,
+          "insurerShare": 0.8,
+          "remainingLimit": 650,
+          "currency": "CNY",
+          "deductibleRemaining": 100
+        },
+        "claim": {
+          "eligibleExpense": 50,
+          "unverifiedExpense": 0
+        },
+        "evidence": "合成发票明细与条款已定位，未提供核赔或支付回单"
+      },
+      "candidateOutputExcerpt": {
+        "amountReview": "max(50-100,0)×0.8=0，可赔草案0；不能得-40，也不能据此宣称责任已核定。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "免赔扣减不能产生负赔款，剩余免赔与责任仍分别核对。",
+      "diagnosticRefs": [
+        "coverage-date",
+        "line-item",
+        "order"
+      ],
+      "decisionRuleRefs": [
+        "policy-first",
+        "claim-not-payment",
+        "anomaly-not-fraud"
+      ]
+    }
+  ]
+}

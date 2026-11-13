@@ -1,0 +1,196 @@
+{
+  "schemaVersion": 1,
+  "roleId": "treasury-liquidity-analyst",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "worked-delivery",
+      "capabilityId": "treasury-liquidity-analyst-deliver",
+      "category": "worked_example",
+      "scenario": "同包完整合成示例，判断必须保持输入口径与业务边界。",
+      "input": {
+        "balances": {
+          "bookCash": 120,
+          "restrictedCash": 20,
+          "currency": "CNY",
+          "unit": "万元"
+        },
+        "cashFlows": [
+          {
+            "period": "第1周",
+            "inflow": 30,
+            "outflow": 60
+          },
+          {
+            "period": "第2周",
+            "inflow": 20,
+            "outflow": 100
+          },
+          {
+            "period": "第3周",
+            "inflow": 80,
+            "outflow": 20
+          }
+        ],
+        "scenarios": {
+          "minimumCash": 10,
+          "uncommittedFacility": 50,
+          "withinWeekSettlementOrder": "未给"
+        }
+      },
+      "candidateOutputExcerpt": {
+        "cashLadder": [
+          70,
+          -10,
+          50
+        ],
+        "gapAnalysis": "第2周周末相对最低现金10不足20；周内结算顺序未知，题设两笔流量的峰值需求可能20至40，须细化结算日。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "输出从给定事实得到，解释关键计算或证据，并保留未验证范围。",
+      "diagnosticRefs": [
+        "available",
+        "ladder",
+        "stress"
+      ],
+      "decisionRuleRefs": [
+        "no-profit-substitution",
+        "uncommitted-separate",
+        "first-gap"
+      ]
+    },
+    {
+      "id": "material-failure",
+      "capabilityId": "treasury-liquidity-analyst-deliver",
+      "category": "failure_boundary",
+      "scenario": "表面给出完整结论，但违反本角色关键专业规则。",
+      "input": {
+        "balances": {
+          "bookCash": 120,
+          "restrictedCash": 20,
+          "currency": "CNY",
+          "unit": "万元"
+        },
+        "cashFlows": [
+          {
+            "period": "第1周",
+            "inflow": 30,
+            "outflow": 60
+          },
+          {
+            "period": "第2周",
+            "inflow": 20,
+            "outflow": 100
+          },
+          {
+            "period": "第3周",
+            "inflow": 80,
+            "outflow": 20
+          }
+        ],
+        "scenarios": {
+          "minimumCash": 10,
+          "uncommittedFacility": 50,
+          "withinWeekSettlementOrder": "未给"
+        }
+      },
+      "candidateOutputExcerpt": {
+        "gapAnalysis": "第3周期末还有50，所以无需行动；账面120全部可用。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "忽略20受限资金与第2周付款时点，末期盈余不能回填更早缺口。",
+      "diagnosticRefs": [
+        "available",
+        "ladder",
+        "stress"
+      ],
+      "decisionRuleRefs": [
+        "no-profit-substitution",
+        "uncommitted-separate",
+        "first-gap"
+      ]
+    },
+    {
+      "id": "bounded-progress",
+      "capabilityId": "treasury-liquidity-analyst-deliver",
+      "category": "worked_example",
+      "scenario": "关键材料局部缺失，仍完成可独立交付部分。",
+      "input": {
+        "balances": {
+          "bookCash": 40,
+          "restrictedCash": "待核"
+        },
+        "cashFlows": "已知本周付款30，未来回款日未知",
+        "scenarios": "先列日期风险"
+      },
+      "candidateOutputExcerpt": {
+        "cashLadder": "先按已核账户和已知付款列明细；受限金额与未定回款另列，不能给已无缺口结论。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "缺口仅限制受影响判断，保留有依据的工作，不填造事实。",
+      "diagnosticRefs": [
+        "available",
+        "ladder",
+        "stress"
+      ],
+      "decisionRuleRefs": [
+        "no-profit-substitution",
+        "uncommitted-separate",
+        "first-gap"
+      ]
+    },
+    {
+      "id": "intraperiod-gap",
+      "capabilityId": "treasury-liquidity-analyst-deliver",
+      "category": "worked_example",
+      "scenario": "周末净缺口小于先付款再收款产生的周内最大需求。",
+      "input": {
+        "balances": {
+          "bookCash": 120,
+          "restrictedCash": 20,
+          "currency": "CNY",
+          "unit": "万元"
+        },
+        "cashFlows": [
+          {
+            "period": "第1周",
+            "inflow": 30,
+            "outflow": 60
+          },
+          {
+            "period": "第2周",
+            "inflow": 20,
+            "outflow": 100
+          },
+          {
+            "period": "第3周",
+            "inflow": 80,
+            "outflow": 20
+          }
+        ],
+        "scenarios": {
+          "minimumCash": 10,
+          "uncommittedFacility": 50,
+          "withinWeekSettlementOrder": "第2周100支出先结算，之后20流入"
+        }
+      },
+      "candidateOutputExcerpt": {
+        "gapAnalysis": "第2周期初70，先付100到-30，再收20到-10；为保持最低现金10，需要峰值40，不是周末净不足20。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "结算先后改变最低点，即使周末净额相同也不能认为需求相同。",
+      "diagnosticRefs": [
+        "available",
+        "ladder",
+        "stress"
+      ],
+      "decisionRuleRefs": [
+        "no-profit-substitution",
+        "uncommitted-separate",
+        "first-gap"
+      ]
+    }
+  ]
+}

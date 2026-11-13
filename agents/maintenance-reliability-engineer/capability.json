@@ -1,0 +1,143 @@
+{
+  "schemaVersion": 1,
+  "id": "maintenance-reliability-engineer",
+  "componentType": "agent",
+  "componentVersion": "0.1.0",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "maintenance-reliability-engineer-deliver",
+      "summary": "按设备功能、故障模式和维修记录寻找停机原因，形成可追踪的维护任务与恢复验证方案。 asset maintenance reliability MTBF MTTR failure criticality",
+      "useWhen": [
+        "设备反复停机，需要分清故障、待料与维修等待。",
+        "想用维修记录调整预防维护计划，而不是只增加保养频次。",
+        "需要比较维修、备件和更新方案对生产可用性的影响。"
+      ],
+      "doNotUseWhen": [
+        "上锁挂牌、带电作业、保护联锁变更和设备复产需现场获资质责任人处理；本包不远程控制设备，完成记录分析与维护方案。",
+        "只要相邻领域通用建议、与本角色的具体工作对象无关时，交适合的现有角色。",
+        "本任务要求直接变更账户、业务系统或发送材料时，由当前宿主按既有授权单独处理。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "assets": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "设备ID、功能、工况、关键程度与安全约束"
+          },
+          "events": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "故障开始、停机、维修、待料、恢复和验证记录"
+          },
+          "policy": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "运行时间口径、维护策略、备件和恢复验收要求"
+          }
+        },
+        "required": [
+          "assets",
+          "events",
+          "policy"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "failureMap": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "故障模式与证据图"
+          },
+          "reliabilityMetrics": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "可靠性和维修指标"
+          },
+          "maintenancePlan": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "维护与备件计划"
+          },
+          "returnToService": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "恢复验证与观察计划"
+          },
+          "facts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "输入口径与证据"
+          },
+          "limitations": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "未核范围与适用边界"
+          },
+          "handoff": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "交付与下一步"
+          }
+        },
+        "required": [
+          "failureMap",
+          "reliabilityMetrics",
+          "maintenancePlan",
+          "returnToService",
+          "facts",
+          "limitations",
+          "handoff"
+        ],
+        "deliveryFormat": "conceptual-human-delivery"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "上锁挂牌、带电作业、保护联锁变更和设备复产需现场获资质责任人处理；本包不远程控制设备，完成记录分析与维护方案。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

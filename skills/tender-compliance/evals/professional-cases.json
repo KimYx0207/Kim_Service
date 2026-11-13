@@ -1,0 +1,226 @@
+{
+  "schemaVersion": 1,
+  "roleId": "tender-compliance",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "expired-qualification",
+      "capabilityId": "tender-compliance-deliver",
+      "category": "worked_example",
+      "scenario": "补遗更新资格条款但旧响应引用过期证书",
+      "input": {
+        "context": {
+          "organizationId": "synthetic-demo",
+          "workId": "professional-method-demo",
+          "revision": "1"
+        },
+        "tenderId": "synthetic-tender-01",
+        "asOf": "2026-11-13T10:00:00+08:00",
+        "deadline": "2026-11-20T17:00:00+08:00",
+        "clauses": [
+          {
+            "id": "qualification",
+            "version": "addendum-2",
+            "sourceRef": "synthetic-tender.pdf:p12",
+            "mandatory": true,
+            "requirement": "在提交时提供有效资格材料。"
+          },
+          {
+            "id": "service-hours",
+            "version": "original",
+            "sourceRef": "synthetic-tender.pdf:p30",
+            "mandatory": false,
+            "requirement": "说明服务响应时间。"
+          }
+        ],
+        "responses": [
+          {
+            "clauseId": "qualification",
+            "clauseVersion": "original",
+            "assessment": "claimed_compliant",
+            "responseRef": "synthetic-bid.pdf:p4",
+            "evidenceIds": [
+              "cert-1"
+            ]
+          },
+          {
+            "clauseId": "service-hours",
+            "clauseVersion": "original",
+            "assessment": "claimed_compliant",
+            "responseRef": "synthetic-bid.pdf:p9",
+            "evidenceIds": [
+              "sla-1"
+            ]
+          }
+        ],
+        "evidence": [
+          {
+            "id": "cert-1",
+            "sourceRef": "synthetic-certificate.pdf",
+            "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "validUntil": "2026-11-10T00:00:00+08:00"
+          },
+          {
+            "id": "sla-1",
+            "sourceRef": "synthetic-sla.pdf",
+            "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "validUntil": null
+          }
+        ]
+      },
+      "candidateOutputExcerpt": {
+        "status": "needs_review",
+        "result": {
+          "tenderId": "synthetic-tender-01",
+          "deadlinePassed": false,
+          "rows": [
+            {
+              "id": "qualification",
+              "mandatory": true,
+              "status": "needs_review",
+              "issues": [
+                "stale_clause_version",
+                "expired_evidence:cert-1"
+              ],
+              "evidenceIds": [
+                "cert-1"
+              ]
+            },
+            {
+              "id": "service-hours",
+              "mandatory": false,
+              "status": "documented_pending_content_review",
+              "issues": [],
+              "evidenceIds": [
+                "sla-1"
+              ]
+            }
+          ],
+          "blockingClauseIds": [
+            "qualification"
+          ],
+          "unknownResponseClauses": [],
+          "readiness": "evidence_gaps",
+          "legalCompliance": "not_determined",
+          "evidenceAuthentication": "supplied_references_not_verified"
+        }
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "强制条款需要新响应与有效证据，不能被服务项齐备抵消。",
+      "diagnosticRefs": [
+        "evidence-fit"
+      ],
+      "decisionRuleRefs": [
+        "mandatory-not-average"
+      ]
+    },
+    {
+      "id": "links-as-compliance",
+      "capabilityId": "tender-compliance-deliver",
+      "category": "failure_boundary",
+      "scenario": "过期证书及旧版响应被写成资料完备",
+      "input": {
+        "context": {
+          "organizationId": "synthetic-demo",
+          "workId": "professional-method-demo",
+          "revision": "1"
+        },
+        "tenderId": "synthetic-tender-01",
+        "asOf": "2026-11-13T10:00:00+08:00",
+        "deadline": "2026-11-20T17:00:00+08:00",
+        "clauses": [
+          {
+            "id": "qualification",
+            "version": "addendum-2",
+            "sourceRef": "synthetic-tender.pdf:p12",
+            "mandatory": true,
+            "requirement": "在提交时提供有效资格材料。"
+          },
+          {
+            "id": "service-hours",
+            "version": "original",
+            "sourceRef": "synthetic-tender.pdf:p30",
+            "mandatory": false,
+            "requirement": "说明服务响应时间。"
+          }
+        ],
+        "responses": [
+          {
+            "clauseId": "qualification",
+            "clauseVersion": "original",
+            "assessment": "claimed_compliant",
+            "responseRef": "synthetic-bid.pdf:p4",
+            "evidenceIds": [
+              "cert-1"
+            ]
+          },
+          {
+            "clauseId": "service-hours",
+            "clauseVersion": "original",
+            "assessment": "claimed_compliant",
+            "responseRef": "synthetic-bid.pdf:p9",
+            "evidenceIds": [
+              "sla-1"
+            ]
+          }
+        ],
+        "evidence": [
+          {
+            "id": "cert-1",
+            "sourceRef": "synthetic-certificate.pdf",
+            "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "validUntil": "2026-11-10T00:00:00+08:00"
+          },
+          {
+            "id": "sla-1",
+            "sourceRef": "synthetic-sla.pdf",
+            "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "validUntil": null
+          }
+        ]
+      },
+      "candidateOutputExcerpt": {
+        "status": "completed",
+        "result": {
+          "tenderId": "synthetic-tender-01",
+          "deadlinePassed": false,
+          "rows": [
+            {
+              "id": "qualification",
+              "mandatory": true,
+              "status": "documented_pending_content_review",
+              "issues": [],
+              "evidenceIds": [
+                "cert-1"
+              ]
+            },
+            {
+              "id": "service-hours",
+              "mandatory": false,
+              "status": "documented_pending_content_review",
+              "issues": [],
+              "evidenceIds": [
+                "sla-1"
+              ]
+            }
+          ],
+          "blockingClauseIds": [],
+          "unknownResponseClauses": [],
+          "readiness": "ready_for_content_review",
+          "legalCompliance": "not_determined",
+          "evidenceAuthentication": "supplied_references_not_verified"
+        }
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "资格条款版本不符且证据过期，强制缺口不能被服务时效资料抵消。",
+      "diagnosticRefs": [
+        "evidence-fit"
+      ],
+      "decisionRuleRefs": [
+        "mandatory-not-average"
+      ]
+    }
+  ]
+}

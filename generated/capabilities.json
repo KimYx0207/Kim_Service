@@ -2971,6 +2971,429 @@
       ]
     },
     {
+      "componentContentSha256": "20309469504206d6f28fbfa51d03ff1ab84740e859d13d99c440abe4ac2153d7",
+      "componentId": "construction-project-controller",
+      "componentPath": "agents/construction-project-controller",
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contractSha256": "27d8d1456b493559b24787d34c0420ccaa604e605e6a07130e42bdefb6ab4818",
+      "doNotUseWhen": [
+        "施工安全方案、结构设计、签证支付、合同索赔和正式基线变更由有权限的工程责任人确认；本包交证据与候选分析。",
+        "只要相邻领域通用建议、与本角色的具体工作对象无关时，交适合的现有角色。",
+        "本任务要求直接变更账户、业务系统或发送材料时，由当前宿主按既有授权单独处理。"
+      ],
+      "entrypoint": "AGENT.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "施工安全方案、结构设计、签证支付、合同索赔和正式基线变更由有权限的工程责任人确认；本包交证据与候选分析。"
+        ]
+      },
+      "id": "construction-project-controller-deliver",
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "actuals": {
+            "description": "截至观察日实际完成量、验收、成本、承诺成本和现场记录",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "baseline": {
+            "description": "WBS、逻辑依赖、日历、里程碑、预算和批准版本",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "changes": {
+            "description": "变更请求、约束、资源与待决事项",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "baseline",
+          "actuals",
+          "changes"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "changeRegister": {
+            "description": "变更与基线差异表",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "costPerformance": {
+            "description": "完成量与成本偏差",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "facts": {
+            "description": "输入口径与证据",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "handoff": {
+            "description": "交付与下一步",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "limitations": {
+            "description": "未核范围与适用边界",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "recoveryOptions": {
+            "description": "纠偏备选与检查计划",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "scheduleReview": {
+            "description": "依赖与工期分析",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "scheduleReview",
+          "costPerformance",
+          "changeRegister",
+          "recoveryOptions",
+          "facts",
+          "limitations",
+          "handoff"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "把工程工作包、先后关系、完成量与成本连到同一基线，定位工期与预算偏差并形成可比较的纠偏方案。 construction project controls WBS critical path earned value change control",
+      "useWhen": [
+        "工程看着很忙但里程碑延期，需要核关键路径和实际完成量。",
+        "支出超预算，需要分清进度提前、成本超支和范围变更。",
+        "多个承包或设备交付相互依赖，需要比较赶工与重排方案。"
+      ],
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "1a51e1e61b91af9c6890b203e5551327f611b1a17401235c92a1a65ded9e1482",
+      "componentId": "contract-review-analyst",
+      "componentPath": "agents/contract-review-analyst",
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contractSha256": "6a173be5ccc9e9cce3f663aa9665a87d9b41949d914af9c744f2d5fc639e5d4f",
+      "doNotUseWhen": [
+        "本包整理商务条款与风险，不判定法律效力或替代当地律师；签署、发送、法律意见及重大权益处置遵循当前授权。",
+        "只要相邻领域通用建议、与本角色的具体工作对象无关时，交适合的现有角色。",
+        "本任务要求直接变更账户、业务系统或发送材料时，由当前宿主按既有授权单独处理。"
+      ],
+      "entrypoint": "AGENT.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "本包整理商务条款与风险，不判定法律效力或替代当地律师；签署、发送、法律意见及重大权益处置遵循当前授权。"
+        ]
+      },
+      "id": "contract-review-analyst-deliver",
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "context": {
+            "description": "交易目的、己方角色、适用地区、标的与金额",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "contract": {
+            "description": "合同正文、附件、版本、条款编号和已知优先顺序",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "playbook": {
+            "description": "用户谈判底线、可交换项与关注条款",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "contract",
+          "context",
+          "playbook"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "clauseMatrix": {
+            "description": "条款证据矩阵",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "facts": {
+            "description": "输入口径与证据",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "handoff": {
+            "description": "交付与下一步",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "limitations": {
+            "description": "未核范围与适用边界",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "negotiationOptions": {
+            "description": "修改与谈判备选",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "obligationCalendar": {
+            "description": "义务与期限表",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "riskAnalysis": {
+            "description": "风险与矛盾分析",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "clauseMatrix",
+          "riskAnalysis",
+          "negotiationOptions",
+          "obligationCalendar",
+          "facts",
+          "limitations",
+          "handoff"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "从合同原文提取权利、义务、例外与期限，把需要谈判的事项做成有原文定位的条款矩阵。 commercial contract clause review obligations liability renewal",
+      "useWhen": [
+        "签约前需要看付款、验收、责任、续约与退出条款是否一致。",
+        "多份合同或批注版本需要比较实质变化。",
+        "业务想提出替代条款，需要说明风险和交换条件。"
+      ],
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "d56ca010b8e206d066b4aa15e28b9a96bec2fb8609b56c25dea95c4304b5c2be",
+      "componentId": "credit-risk-analyst",
+      "componentPath": "agents/credit-risk-analyst",
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contractSha256": "8bb876903218878b417f9c2fd9ddc544b79ebff8b4aa9cf71090906e069d1372",
+      "doNotUseWhen": [
+        "授信批准、拒贷、催收、评级签署和真实账户变更沿用机构既有权限；本包完成企业材料分析，不对个人作自动信用决定。",
+        "只要相邻领域通用建议、与本角色的具体工作对象无关时，交适合的现有角色。",
+        "本任务要求直接变更账户、业务系统或发送材料时，由当前宿主按既有授权单独处理。"
+      ],
+      "entrypoint": "AGENT.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "授信批准、拒贷、催收、评级签署和真实账户变更沿用机构既有权限；本包完成企业材料分析，不对个人作自动信用决定。"
+        ]
+      },
+      "id": "credit-risk-analyst-deliver",
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "borrower": {
+            "description": "企业主体、合并范围、报表与现金来源",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "facilities": {
+            "description": "逐笔本金、还本付息日、币种、抵质押与交叉违约条款",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "policy": {
+            "description": "机构口径、情景假设、观察日和决策范围",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "borrower",
+          "facilities",
+          "policy"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "exposureMap": {
+            "description": "债项与到期分布",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "facts": {
+            "description": "输入口径与证据",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "handoff": {
+            "description": "交付与下一步",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "limitations": {
+            "description": "未核范围与适用边界",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "monitoringPlan": {
+            "description": "监测与条件建议",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "repaymentAnalysis": {
+            "description": "偿债来源与压力情景",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "riskFindings": {
+            "description": "信用风险判断及反证",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "exposureMap",
+          "repaymentAnalysis",
+          "riskFindings",
+          "monitoringPlan",
+          "facts",
+          "limitations",
+          "handoff"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "把企业偿债来源、债务到期、逾期事实和损失情景连接起来，交付有证据的授信分析草案。 corporate credit risk debt service delinquency exposure",
+      "useWhen": [
+        "授信前需要核对企业能否以经营现金偿债。",
+        "已有贷款需要区分逾期、流动性缺口和实际信用损失。",
+        "需要比较担保、期限与额度方案的风险条件。"
+      ],
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
       "componentContentSha256": "395c5ce126689f436244f1c6e9a404943d27979257982dd2ad5af9c4d2302f01",
       "componentId": "customer-case-operations",
       "componentPath": "skills/customer-case-operations",
@@ -3776,6 +4199,338 @@
       ],
       "validation": [
         "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "79f396bf9c7ec1a59668c613f1b332fd83a7f6405d8d8cbcf8742f4b1f1d3c8a",
+      "componentId": "data-lineage-impact",
+      "componentPath": "skills/data-lineage-impact",
+      "componentType": "skill",
+      "componentVersion": "0.1.0",
+      "contractSha256": "b0fe7f5b33746641a57f21483cef21b06cc62731f0bef473c0bb968518a478d7",
+      "doNotUseWhen": [
+        "不自动解析全部SQL或发现生产全量血缘；只分析本次提供的图。",
+        "不将名称相似视为同一字段，不因图中没连线宣布没有影响。",
+        "不自动修改数据库、调度任务或发布迁移。"
+      ],
+      "entrypoint": "SKILL.md",
+      "helperContract": "helper-contract.json",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "生产字段删除、数据权限变更或迁移执行由现有变更责任人确认；影响分析与草稿不新增审批。"
+        ]
+      },
+      "id": "data-lineage-impact-deliver",
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "changed": {
+            "description": "本次实际改变的对象ID列表，需与nodes一致。",
+            "items": {
+              "maxLength": 240,
+              "minLength": 1,
+              "type": "string"
+            },
+            "maxItems": 500,
+            "minItems": 1,
+            "type": "array"
+          },
+          "context": {
+            "additionalProperties": false,
+            "description": "本次组织、事项和输入版本；只是绑定身份，不保存画像。",
+            "properties": {
+              "organizationId": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "revision": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "workId": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "organizationId",
+              "workId",
+              "revision"
+            ],
+            "type": "object"
+          },
+          "edges": {
+            "description": "输入到输出的有向边，标记已观察/声明/未知与实际证据引用。",
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "confidence": {
+                  "enum": [
+                    "observed",
+                    "declared",
+                    "unknown"
+                  ]
+                },
+                "evidenceRef": {
+                  "maxLength": 512,
+                  "minLength": 0,
+                  "type": "string"
+                },
+                "from": {
+                  "maxLength": 240,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "to": {
+                  "maxLength": 240,
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "from",
+                "to",
+                "evidenceRef",
+                "confidence"
+              ],
+              "type": "object"
+            },
+            "maxItems": 5000,
+            "minItems": 0,
+            "type": "array"
+          },
+          "nodes": {
+            "description": "唯一全限定对象ID与责任人；ID应包含环境/命名空间、数据集与字段，不合并同名异源对象。",
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "maxLength": 240,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "owner": {
+                  "maxLength": 128,
+                  "minLength": 0,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "owner"
+              ],
+              "type": "object"
+            },
+            "maxItems": 2000,
+            "minItems": 1,
+            "type": "array"
+          }
+        },
+        "required": [
+          "context",
+          "nodes",
+          "edges",
+          "changed"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "additionalProperties": false,
+        "properties": {
+          "capabilityId": {
+            "const": "data-lineage-impact-deliver",
+            "description": "必须对应本次选定能力data-lineage-impact-deliver。"
+          },
+          "claims": {
+            "additionalProperties": false,
+            "description": "只声明本次离线运算，模型、网络、业务持久化均false，最终接受not_decided。",
+            "properties": {
+              "businessStatePersisted": {
+                "const": false
+              },
+              "finalAcceptance": {
+                "const": "not_decided"
+              },
+              "modelCalled": {
+                "const": false
+              },
+              "networkAccessed": {
+                "const": false
+              }
+            },
+            "required": [
+              "modelCalled",
+              "networkAccessed",
+              "businessStatePersisted",
+              "finalAcceptance"
+            ],
+            "type": "object"
+          },
+          "context": {
+            "additionalProperties": false,
+            "description": "原样保留本次organizationId、workId和revision。",
+            "properties": {
+              "organizationId": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "revision": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "workId": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "organizationId",
+              "workId",
+              "revision"
+            ],
+            "type": "object"
+          },
+          "inputSha256": {
+            "description": "用runtime canonical函数对实际完整输入重算SHA256。",
+            "pattern": "^[a-f0-9]{64}$",
+            "type": "string"
+          },
+          "policySha256": {
+            "description": "用同一规则对本次policy.json重算SHA256。",
+            "pattern": "^[a-f0-9]{64}$",
+            "type": "string"
+          },
+          "protocol": {
+            "const": "kim-service-helper-v1",
+            "description": "协议为kim-service-helper-v1，输出为一条完整JSON回执。"
+          },
+          "result": {
+            "additionalProperties": false,
+            "description": "影响对象不含重复，路径从变更对象开始且每条边存在；只有整条路径均有已观察证据时标observed_path。未知对象、证据空白、循环和责任人缺口不能丢失。",
+            "properties": {
+              "affected": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "certainty": {
+                      "enum": [
+                        "observed_path",
+                        "possible_path"
+                      ]
+                    },
+                    "id": {
+                      "maxLength": 240,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "owner": {
+                      "maxLength": 128,
+                      "minLength": 0,
+                      "type": "string"
+                    },
+                    "path": {
+                      "items": {
+                        "maxLength": 240,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "maxItems": 2000,
+                      "minItems": 1,
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "owner",
+                    "certainty",
+                    "path"
+                  ],
+                  "type": "object"
+                },
+                "maxItems": 2000,
+                "minItems": 0,
+                "type": "array"
+              },
+              "coverage": {
+                "const": "supplied_edges_only"
+              },
+              "cycleDetected": {
+                "type": "boolean"
+              },
+              "evidenceMissing": {
+                "items": {
+                  "maxLength": 512,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "maxItems": 5000,
+                "minItems": 0,
+                "type": "array"
+              },
+              "unmatchedSeeds": {
+                "items": {
+                  "maxLength": 240,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "maxItems": 500,
+                "minItems": 0,
+                "type": "array"
+              }
+            },
+            "required": [
+              "affected",
+              "unmatchedSeeds",
+              "cycleDetected",
+              "evidenceMissing",
+              "coverage"
+            ],
+            "type": "object"
+          },
+          "schemaVersion": {
+            "const": 1,
+            "description": "使用当前机器回执版本1，不接受不同语义的包。"
+          },
+          "status": {
+            "description": "未知变更对象、相关无证据边、可能路径、未知责任人或循环使status为needs_review；completed只表示所给图已完成遍历，coverage始终为supplied_edges_only。",
+            "enum": [
+              "completed",
+              "needs_review"
+            ]
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "protocol",
+          "capabilityId",
+          "context",
+          "inputSha256",
+          "policySha256",
+          "status",
+          "result",
+          "claims"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "核对字段血缘、变更影响范围、证据完整性与回归责任 data lineage impact analysis column change",
+      "useWhen": [
+        "表或字段改名、删除、脱敏、类型或业务口径变动，需要定位下游。",
+        "一份报表数字变化，需要追溯数据来源和转换链。",
+        "上线前需要证明影响覆盖范围及尚未接入的系统。"
+      ],
+      "validation": [
+        "tests/helper.test.mjs"
       ]
     },
     {
@@ -4927,6 +5682,86 @@
       ],
       "validation": [
         "tests/helper.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "4f1f10f6579587ce78114c9e2542c45f772887de52530a8ae85bc6494745d800",
+      "componentId": "evidence-receipt",
+      "componentPath": "hooks/evidence-receipt",
+      "componentType": "hook",
+      "componentVersion": "0.1.0",
+      "contractSha256": "9d8de5ef7eb02220907467560e28f1db09318cccb4f7feb9c86dc3f951373d1e",
+      "doNotUseWhen": [
+        "没有显式workspaceRoot、产物列表与回执目录时不自动扫描。",
+        "不用于检查产物质量、替用户验收或证明生产任务成功。",
+        "不把事件中的路径、命令或说明当可执行配置。"
+      ],
+      "entrypoint": "scripts/hook.mjs",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "启用Hook和选择本地产物/回执范围使用现有任务授权；不自动注册或覆盖宿主设置。"
+        ]
+      },
+      "id": "evidence-receipt-deliver",
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "event": {
+            "description": "宿主PostToolUse JSON事件，仅读取事件名/工具名，忽略其路径和命令。",
+            "type": "object"
+          },
+          "trustedConfig": {
+            "description": "命令行显式--config对应的本地配置；工作根、产物列表、回执目录与事项版本由调用方指定。",
+            "type": "object"
+          }
+        },
+        "required": [
+          "event",
+          "trustedConfig"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "additionalProperties": false,
+        "properties": {
+          "hookSpecificOutput": {
+            "additionalProperties": false,
+            "properties": {
+              "additionalContext": {
+                "maxLength": 512,
+                "minLength": 1,
+                "type": "string"
+              },
+              "hookEventName": {
+                "const": "PostToolUse"
+              }
+            },
+            "required": [
+              "hookEventName",
+              "additionalContext"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-explicit-artifacts",
+        "filesystem:write-explicit-receipt-directory"
+      ],
+      "sideEffects": [
+        "创建显式配置目录内新的不可覆盖字节快照回执；相同内容复用相同回执。"
+      ],
+      "summary": "在配置允许的产物写入后记录本地哈希回执，不包含正文和凭证 artifact evidence receipt PostToolUse hook",
+      "useWhen": [
+        "需要在产物编辑后保留可回读的字节版本证据。",
+        "希望后续验收绑定真正的文件版本而非一句“已完成”。",
+        "只允许本地记录，不希望通知外发或阻塞工作流。"
+      ],
+      "validation": [
+        "tests/hook.test.mjs"
       ]
     },
     {
@@ -6569,6 +7404,147 @@
       ]
     },
     {
+      "componentContentSha256": "97fd1007f1079ac2a4ee51f8ca0f77274fb837ef6e1c639da787b5c8c19972eb",
+      "componentId": "game-economy-designer",
+      "componentPath": "agents/game-economy-designer",
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contractSha256": "dc5398f7c3f55b60e57e730d61f51bead5768d5cccf2ae3115a6065529fcc53d",
+      "doNotUseWhen": [
+        "本包设计规则、模拟经济和审核记录；真实发奖、扣款、支付退款、封禁或上线数值沿用发布权限，不制作诱导未成年人或利用成瘾的机制。",
+        "只要相邻领域通用建议、与本角色的具体工作对象无关时，交适合的现有角色。",
+        "本任务要求直接变更账户、业务系统或发送材料时，由当前宿主按既有授权单独处理。"
+      ],
+      "entrypoint": "AGENT.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "本包设计规则、模拟经济和审核记录；真实发奖、扣款、支付退款、封禁或上线数值沿用发布权限，不制作诱导未成年人或利用成瘾的机制。"
+        ]
+      },
+      "id": "game-economy-designer-deliver",
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "cohorts": {
+            "description": "匿名聚合玩家分层、活跃、阶段、库存与行为样本",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "constraints": {
+            "description": "目标体验、付费边界、活动期限、技术约束及数据口径",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "economy": {
+            "description": "货币/物品单位、产出、消耗、交易规则与版本",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "economy",
+          "cohorts",
+          "constraints"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "balanceSimulation": {
+            "description": "分层成长与余额模拟",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "economyMap": {
+            "description": "货币与物品流向",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "facts": {
+            "description": "输入口径与证据",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "handoff": {
+            "description": "交付与下一步",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "limitations": {
+            "description": "未核范围与适用边界",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "transactionControls": {
+            "description": "奖励与消费一致性",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "tuningPlan": {
+            "description": "调参与观察方案",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "economyMap",
+          "balanceSimulation",
+          "transactionControls",
+          "tuningPlan",
+          "facts",
+          "limitations",
+          "handoff"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "把游戏货币产消、玩家成长与交易回执连起来，设计可演算、可监测、可回退的数值方案。 game economy currency sources sinks progression wallet ledger balancing",
+      "useWhen": [
+        "游戏货币越来越多，想查产出、回收和通胀来源。",
+        "需要设计装备成长、价格梯度或活动奖励，并验证玩家进度。",
+        "重复发奖或付费回调重试导致经济异常，需要核交易身份和回滚。"
+      ],
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
       "componentContentSha256": "72d14b74d89f9cef5848b12121fd9f435b7b943f394e6b6b954a83012a9db605",
       "componentId": "goalpro",
       "componentPath": "skills/goalpro",
@@ -7226,6 +8202,562 @@
       ]
     },
     {
+      "componentContentSha256": "276a89192a4ef51da1c5ad48a7d887339ccafcf0dccf5a150e561ec394b29554",
+      "componentId": "hospitality-revenue-analyst",
+      "componentPath": "agents/hospitality-revenue-analyst",
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contractSha256": "8240e75eceb8ca8ce3032795185c59a34453ffa8ca6a850b700fa071d072ca93",
+      "doNotUseWhen": [
+        "真实调价、超售、取消客单和渠道合同变更依既有业务授权；本包做分群分析与情景建议，不保证收入上涨。",
+        "只要相邻领域通用建议、与本角色的具体工作对象无关时，交适合的现有角色。",
+        "本任务要求直接变更账户、业务系统或发送材料时，由当前宿主按既有授权单独处理。"
+      ],
+      "entrypoint": "AGENT.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "真实调价、超售、取消客单和渠道合同变更依既有业务授权；本包做分群分析与情景建议，不保证收入上涨。"
+        ]
+      },
+      "id": "hospitality-revenue-analyst-deliver",
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "pricingPolicy": {
+            "description": "价格限制、佣金、服务成本、客户承诺和决策范围",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "reservations": {
+            "description": "预订及入住日、状态、房晚、净房费、渠道、取消和退款",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "roomInventory": {
+            "description": "按入住日/房型的物理房晚、停用房晚和可售口径",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "roomInventory",
+          "reservations",
+          "pricingPolicy"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "channelContribution": {
+            "description": "渠道与客群贡献",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "demandSignals": {
+            "description": "需求与预订节奏",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "facts": {
+            "description": "输入口径与证据",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "handoff": {
+            "description": "交付与下一步",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "limitations": {
+            "description": "未核范围与适用边界",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "pricingOptions": {
+            "description": "定价与房量候选方案",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "revenueBaseline": {
+            "description": "房晚与收益基线",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "revenueBaseline",
+          "demandSignals",
+          "channelContribution",
+          "pricingOptions",
+          "facts",
+          "limitations",
+          "handoff"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "按房晚、房型、入住日和渠道比较需求与净贡献，给出有条件的房价和库存方案。 hotel revenue management occupancy ADR RevPAR channel contribution",
+      "useWhen": [
+        "入住率上升但利润下降，需要看折扣与渠道成本。",
+        "要判断周末、节日或淡季的定价和房型配额。",
+        "订单取消、预订提前期与在手订单变化，影响未来房晚收入。"
+      ],
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "90e37593f98009317e19fc5d99b7933f4ef4d7c633c7b6d299e640ecb1abdc5d",
+      "componentId": "incident-postmortem",
+      "componentPath": "skills/incident-postmortem",
+      "componentType": "skill",
+      "componentVersion": "0.1.0",
+      "contractSha256": "2de87a5745baea1753478d5989ac76440a2028439d2c18f2af2ecc8fcbe7bbd2",
+      "doNotUseWhen": [
+        "本包不替代正在发生的应急指挥，不自动隔离或重启生产系统。",
+        "单次事件时间不能当成平均MTTR，不按人员责备代替系统分析。",
+        "不把填完行动表等同完成改进，不自动发送事故通报。"
+      ],
+      "entrypoint": "SKILL.md",
+      "helperContract": "helper-contract.json",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "公开事故通报、生产变更或责任处置沿用现有事故负责人授权；复盘编写和时间复算直接推进。"
+        ]
+      },
+      "id": "incident-postmortem-deliver",
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "actions": {
+            "description": "每个预防、检测或缓解措施的负责人、期限、验证条件、状态和完成证据。",
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "completionEvidence": {
+                  "items": {
+                    "maxLength": 512,
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "maxItems": 30,
+                  "minItems": 0,
+                  "type": "array"
+                },
+                "dueAt": {
+                  "anyOf": [
+                    {
+                      "maxLength": 35,
+                      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,3})?(?:Z|[+-]\\d{2}:\\d{2})$",
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "id": {
+                  "maxLength": 128,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "owner": {
+                  "maxLength": 128,
+                  "minLength": 0,
+                  "type": "string"
+                },
+                "status": {
+                  "enum": [
+                    "proposed",
+                    "in_progress",
+                    "completed"
+                  ]
+                },
+                "type": {
+                  "enum": [
+                    "prevent",
+                    "detect",
+                    "mitigate"
+                  ]
+                },
+                "verification": {
+                  "maxLength": 1200,
+                  "minLength": 0,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "type",
+                "owner",
+                "dueAt",
+                "verification",
+                "status",
+                "completionEvidence"
+              ],
+              "type": "object"
+            },
+            "maxItems": 100,
+            "minItems": 0,
+            "type": "array"
+          },
+          "asOf": {
+            "description": "本次复盘观察时点，必须带明确时区。",
+            "maxLength": 35,
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,3})?(?:Z|[+-]\\d{2}:\\d{2})$",
+            "type": "string"
+          },
+          "context": {
+            "additionalProperties": false,
+            "description": "本次组织、事项和输入版本；只是绑定身份，不保存画像。",
+            "properties": {
+              "organizationId": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "revision": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "workId": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "organizationId",
+              "workId",
+              "revision"
+            ],
+            "type": "object"
+          },
+          "incident": {
+            "additionalProperties": false,
+            "description": "同一事故的开始、发现、缓解、恢复时间，含时区、客户影响和证据引用。",
+            "properties": {
+              "detectedAt": {
+                "maxLength": 35,
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,3})?(?:Z|[+-]\\d{2}:\\d{2})$",
+                "type": "string"
+              },
+              "evidenceRefs": {
+                "items": {
+                  "maxLength": 512,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "maxItems": 100,
+                "minItems": 1,
+                "type": "array"
+              },
+              "id": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "impactSummary": {
+                "maxLength": 1200,
+                "minLength": 1,
+                "type": "string"
+              },
+              "mitigatedAt": {
+                "maxLength": 35,
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,3})?(?:Z|[+-]\\d{2}:\\d{2})$",
+                "type": "string"
+              },
+              "recoveredAt": {
+                "description": "实际客户影响结束/客户功能恢复时间，非仅告警变绿；带时区。",
+                "maxLength": 35,
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,3})?(?:Z|[+-]\\d{2}:\\d{2})$",
+                "type": "string"
+              },
+              "startedAt": {
+                "description": "实际客户影响开始时间，非单纯技术异常开始；带时区。",
+                "maxLength": 35,
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,3})?(?:Z|[+-]\\d{2}:\\d{2})$",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "startedAt",
+              "detectedAt",
+              "mitigatedAt",
+              "recoveredAt",
+              "impactSummary",
+              "evidenceRefs"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "context",
+          "incident",
+          "actions",
+          "asOf"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "additionalProperties": false,
+        "properties": {
+          "capabilityId": {
+            "const": "incident-postmortem-deliver",
+            "description": "必须对应本次选定能力incident-postmortem-deliver。"
+          },
+          "claims": {
+            "additionalProperties": false,
+            "description": "只声明本次离线运算，模型、网络、业务持久化均false，最终接受not_decided。",
+            "properties": {
+              "businessStatePersisted": {
+                "const": false
+              },
+              "finalAcceptance": {
+                "const": "not_decided"
+              },
+              "modelCalled": {
+                "const": false
+              },
+              "networkAccessed": {
+                "const": false
+              }
+            },
+            "required": [
+              "modelCalled",
+              "networkAccessed",
+              "businessStatePersisted",
+              "finalAcceptance"
+            ],
+            "type": "object"
+          },
+          "context": {
+            "additionalProperties": false,
+            "description": "原样保留本次organizationId、workId和revision。",
+            "properties": {
+              "organizationId": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "revision": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "workId": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "organizationId",
+              "workId",
+              "revision"
+            ],
+            "type": "object"
+          },
+          "inputSha256": {
+            "description": "用runtime canonical函数对实际完整输入重算SHA256。",
+            "pattern": "^[a-f0-9]{64}$",
+            "type": "string"
+          },
+          "policySha256": {
+            "description": "用同一规则对本次policy.json重算SHA256。",
+            "pattern": "^[a-f0-9]{64}$",
+            "type": "string"
+          },
+          "protocol": {
+            "const": "kim-service-helper-v1",
+            "description": "协议为kim-service-helper-v1，输出为一条完整JSON回执。"
+          },
+          "result": {
+            "additionalProperties": false,
+            "description": "时间按显式时区比较且开始≤发现≤缓解≤恢复≤观察时点；客户影响时长与分段相加一致。每项完成状态需要证据引用，缺失类型与逾期不能被平均分抵消。",
+            "properties": {
+              "actions": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "evidenceSupportedCompletion": {
+                      "type": "boolean"
+                    },
+                    "id": {
+                      "maxLength": 128,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "issues": {
+                      "items": {
+                        "maxLength": 512,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "maxItems": 8,
+                      "minItems": 0,
+                      "type": "array"
+                    },
+                    "overdue": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "issues",
+                    "overdue",
+                    "evidenceSupportedCompletion"
+                  ],
+                  "type": "object"
+                },
+                "maxItems": 100,
+                "minItems": 0,
+                "type": "array"
+              },
+              "causeAssessment": {
+                "const": "requires_source_based_review"
+              },
+              "durationsMinutes": {
+                "additionalProperties": false,
+                "properties": {
+                  "customerImpact": {
+                    "description": "仅当startedAt/recoveredAt分别为实际客户影响起止时成立；单事故时长，不是平均MTTR。",
+                    "maximum": 1000000000000,
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "detection": {
+                    "maximum": 1000000000000,
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "detectionToMitigation": {
+                    "maximum": 1000000000000,
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "mitigationToRecovery": {
+                    "maximum": 1000000000000,
+                    "minimum": 0,
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "detection",
+                  "detectionToMitigation",
+                  "mitigationToRecovery",
+                  "customerImpact"
+                ],
+                "type": "object"
+              },
+              "incidentId": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "metricScope": {
+                "const": "single_incident_not_mean_mttr"
+              },
+              "missingActionTypes": {
+                "items": {
+                  "maxLength": 512,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "maxItems": 3,
+                "minItems": 0,
+                "type": "array"
+              }
+            },
+            "required": [
+              "incidentId",
+              "durationsMinutes",
+              "actions",
+              "missingActionTypes",
+              "metricScope",
+              "causeAssessment"
+            ],
+            "type": "object"
+          },
+          "schemaVersion": {
+            "const": 1,
+            "description": "使用当前机器回执版本1，不接受不同语义的包。"
+          },
+          "status": {
+            "description": "缺行动类型、负责人/期限/验证条件、逾期未完成或声称完成却无证据时needs_review；completed只表示给定记录检查完成且没有这些缺口。",
+            "enum": [
+              "completed",
+              "needs_review"
+            ]
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "protocol",
+          "capabilityId",
+          "context",
+          "inputSha256",
+          "policySha256",
+          "status",
+          "result",
+          "claims"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "整理客户影响、故障时间线、系统促因和可验证改进行动 incident postmortem action validation reliability",
+      "useWhen": [
+        "服务恢复后需要复盘影响、发现/缓解/恢复间隔。",
+        "事故反复出现，原来的行动只有“加强监控”而没有验收。",
+        "需要比较故障响应过程，区分实际观察与事后推测。"
+      ],
+      "validation": [
+        "tests/helper.test.mjs"
+      ]
+    },
+    {
       "componentContentSha256": "88e1211b094ed701da53b32daf0f11a582ee1cf031761a3d94a5f88b92c4799a",
       "componentId": "claudecode-codex-gemini",
       "componentPath": "tools/claudecode-codex-gemini",
@@ -7273,6 +8805,147 @@
       ],
       "validation": [
         "tests/installer.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "1c96f7676dea8764b5f5ee01398fab799c04959d7c1c835b01b2ae1f9236b3e5",
+      "componentId": "insurance-claims-analyst",
+      "componentPath": "agents/insurance-claims-analyst",
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contractSha256": "a4555ea20d10d5a3e876bcd4a77693ed06ea1290a3c5f84061cdab03605ff7df",
+      "doNotUseWhen": [
+        "最终核赔、拒赔、支付、欺诈认定及争议法律结论由相应责任人处理；本包可完成材料整理、保单条款定位与条件计算。",
+        "只要相邻领域通用建议、与本角色的具体工作对象无关时，交适合的现有角色。",
+        "本任务要求直接变更账户、业务系统或发送材料时，由当前宿主按既有授权单独处理。"
+      ],
+      "entrypoint": "AGENT.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "最终核赔、拒赔、支付、欺诈认定及争议法律结论由相应责任人处理；本包可完成材料整理、保单条款定位与条件计算。"
+        ]
+      },
+      "id": "insurance-claims-analyst-deliver",
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "claim": {
+            "description": "事故时间、被保险主体、费用逐项明细及已有支付",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "evidence": {
+            "description": "发票、病历或事故材料、通知、已用额度和来源定位",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "policy": {
+            "description": "保单版本、批单、保障期间、责任及免赔限额条文",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "policy",
+          "claim",
+          "evidence"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "amountReview": {
+            "description": "赔付金额条件核对",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "coverageMap": {
+            "description": "责任与证据对应表",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "evidenceGaps": {
+            "description": "补件及争议事项",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "facts": {
+            "description": "输入口径与证据",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "handoff": {
+            "description": "交付与下一步",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "limitations": {
+            "description": "未核范围与适用边界",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "reviewPacket": {
+            "description": "供核赔或申诉复核的材料包",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "coverageMap",
+          "amountReview",
+          "evidenceGaps",
+          "reviewPacket",
+          "facts",
+          "limitations",
+          "handoff"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "把保单责任、事故事实、费用明细和扣减顺序逐项对应，给出可追溯的理赔材料与金额核对草案。 insurance claims coverage deductible coinsurance adjudication",
+      "useWhen": [
+        "理赔材料齐了但不知道每笔费用如何对应保单。",
+        "需要核对免赔额、赔付比例、分项限额与剩余额度。",
+        "收到补件或拒赔理由，需要整理证据和争议点。"
+      ],
+      "validation": [
+        "tests/contract.test.mjs"
       ]
     },
     {
@@ -8302,6 +9975,370 @@
       ]
     },
     {
+      "componentContentSha256": "e3d1e665c3ac7cc8e3bf79ec16a3e333e995c32fee76a1e0d61e37bdee02db67",
+      "componentId": "inventory-replenishment",
+      "componentPath": "skills/inventory-replenishment",
+      "componentType": "skill",
+      "componentVersion": "0.1.0",
+      "contractSha256": "9f0acfe94e0a3c542f19e0b37904664fb7b5ea76e77b48f40b9dd9acf7a58076",
+      "doNotUseWhen": [
+        "不适用于未经处理的间歇需求、促销突变、相关需求或随机提前期。",
+        "不替代多级库存优化、保质期批次优化或产能排程。",
+        "不自动下采购单，不保证指定服务水平必然达成。"
+      ],
+      "entrypoint": "SKILL.md",
+      "helperContract": "helper-contract.json",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "实际采购承诺、超预算或服务目标变更交现有库存/采购责任人决定；情景复算不新增批准。"
+        ]
+      },
+      "id": "inventory-replenishment-deliver",
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "assumptions": {
+            "additionalProperties": false,
+            "description": "四项明确前提；不满足时选择其他模型，不伪填true。",
+            "properties": {
+              "confirmedOrdersArriveWithinProtectionPeriod": {
+                "const": true
+              },
+              "fixedLeadTime": {
+                "const": true
+              },
+              "independentDailyDemand": {
+                "const": true
+              },
+              "stableDemand": {
+                "const": true
+              }
+            },
+            "required": [
+              "independentDailyDemand",
+              "stableDemand",
+              "fixedLeadTime",
+              "confirmedOrdersArriveWithinProtectionPeriod"
+            ],
+            "type": "object"
+          },
+          "backorders": {
+            "description": "尚未从可用现货扣减的欠单；按订单和预留记录去重，不重复扣已分配需求。",
+            "maximum": 1000000000000,
+            "minimum": 0,
+            "type": "number"
+          },
+          "confirmedOnOrder": {
+            "description": "确认将在保护期内到货且未另行占用的在途。",
+            "maximum": 1000000000000,
+            "minimum": 0,
+            "type": "number"
+          },
+          "context": {
+            "additionalProperties": false,
+            "description": "本次组织、事项和输入版本；只是绑定身份，不保存画像。",
+            "properties": {
+              "organizationId": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "revision": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "workId": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "organizationId",
+              "workId",
+              "revision"
+            ],
+            "type": "object"
+          },
+          "dailyStdDev": {
+            "description": "独立日需求标准差，不是方差。",
+            "maximum": 100000000,
+            "minimum": 0,
+            "type": "number"
+          },
+          "demandPerDay": {
+            "description": "同口径日均需求，不包含单位不一致的汇总。",
+            "maximum": 100000000,
+            "minimum": 0,
+            "type": "number"
+          },
+          "leadDays": {
+            "description": "固定到货提前期，日历与需求一致。",
+            "maximum": 3650,
+            "minimum": 0,
+            "type": "number"
+          },
+          "maxOrder": {
+            "description": "本次订单数量上限，0表示不能下单。",
+            "maximum": 1000000000,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "minOrder": {
+            "description": "供应商最小订单量；无需要时不触发。",
+            "maximum": 1000000000,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "packSize": {
+            "description": "整数包装倍数。",
+            "maximum": 1000000,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "reviewDays": {
+            "description": "周期复核间隔，大于0。",
+            "maximum": 3650,
+            "minimum": 0.001,
+            "type": "number"
+          },
+          "sku": {
+            "description": "可唯一识别的SKU，本次单SKU计算。",
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          },
+          "unit": {
+            "description": "所有数量共同单位。",
+            "maxLength": 32,
+            "minLength": 1,
+            "type": "string"
+          },
+          "usableOnHand": {
+            "description": "扣除冻结/已分配后的可用现货。",
+            "maximum": 1000000000000,
+            "minimum": 0,
+            "type": "number"
+          },
+          "zScore": {
+            "description": "调用方选择的正态分位参数，不是fill rate。",
+            "maximum": 5,
+            "minimum": 0,
+            "type": "number"
+          }
+        },
+        "required": [
+          "context",
+          "sku",
+          "unit",
+          "demandPerDay",
+          "dailyStdDev",
+          "leadDays",
+          "reviewDays",
+          "zScore",
+          "usableOnHand",
+          "confirmedOnOrder",
+          "backorders",
+          "packSize",
+          "minOrder",
+          "maxOrder",
+          "assumptions"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "additionalProperties": false,
+        "properties": {
+          "capabilityId": {
+            "const": "inventory-replenishment-deliver",
+            "description": "必须对应本次选定能力inventory-replenishment-deliver。"
+          },
+          "claims": {
+            "additionalProperties": false,
+            "description": "只声明本次离线运算，模型、网络、业务持久化均false，最终接受not_decided。",
+            "properties": {
+              "businessStatePersisted": {
+                "const": false
+              },
+              "finalAcceptance": {
+                "const": "not_decided"
+              },
+              "modelCalled": {
+                "const": false
+              },
+              "networkAccessed": {
+                "const": false
+              }
+            },
+            "required": [
+              "modelCalled",
+              "networkAccessed",
+              "businessStatePersisted",
+              "finalAcceptance"
+            ],
+            "type": "object"
+          },
+          "context": {
+            "additionalProperties": false,
+            "description": "原样保留本次organizationId、workId和revision。",
+            "properties": {
+              "organizationId": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "revision": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "workId": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "organizationId",
+              "workId",
+              "revision"
+            ],
+            "type": "object"
+          },
+          "inputSha256": {
+            "description": "用runtime canonical函数对实际完整输入重算SHA256。",
+            "pattern": "^[a-f0-9]{64}$",
+            "type": "string"
+          },
+          "policySha256": {
+            "description": "用同一规则对本次policy.json重算SHA256。",
+            "pattern": "^[a-f0-9]{64}$",
+            "type": "string"
+          },
+          "protocol": {
+            "const": "kim-service-helper-v1",
+            "description": "协议为kim-service-helper-v1，输出为一条完整JSON回执。"
+          },
+          "result": {
+            "additionalProperties": false,
+            "description": "保护期=L+R，安全库存=z×日标准差×sqrt(L+R)，目标=日均需求×保护期+安全库存；库存位置=可用现货+合格在途−欠单；先补足差额，再按MOQ和整箱向上取整，容量冲突必须保留未满足数量。",
+            "properties": {
+              "constraints": {
+                "items": {
+                  "maxLength": 512,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "maxItems": 10,
+                "minItems": 0,
+                "type": "array"
+              },
+              "inventoryPosition": {
+                "maximum": 2000000000000,
+                "minimum": -1000000000000,
+                "type": "number"
+              },
+              "orderQuantity": {
+                "maximum": 1000000000000,
+                "minimum": 0,
+                "type": "number"
+              },
+              "orderUpTo": {
+                "maximum": 1000000000000,
+                "minimum": 0,
+                "type": "number"
+              },
+              "protectionDays": {
+                "maximum": 1000000000000,
+                "minimum": 0,
+                "type": "number"
+              },
+              "safetyStock": {
+                "maximum": 1000000000000,
+                "minimum": 0,
+                "type": "number"
+              },
+              "serviceClaim": {
+                "const": "conditional_cycle_service_approximation_not_fill_rate"
+              },
+              "sku": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "unconstrainedOrder": {
+                "maximum": 3000000000000,
+                "minimum": 0,
+                "type": "number"
+              },
+              "unit": {
+                "maxLength": 32,
+                "minLength": 1,
+                "type": "string"
+              },
+              "unmetQuantity": {
+                "maximum": 3000000000000,
+                "minimum": 0,
+                "type": "number"
+              }
+            },
+            "required": [
+              "sku",
+              "unit",
+              "protectionDays",
+              "inventoryPosition",
+              "safetyStock",
+              "orderUpTo",
+              "unconstrainedOrder",
+              "orderQuantity",
+              "unmetQuantity",
+              "constraints",
+              "serviceClaim"
+            ],
+            "type": "object"
+          },
+          "schemaVersion": {
+            "const": 1,
+            "description": "使用当前机器回执版本1，不接受不同语义的包。"
+          },
+          "status": {
+            "description": "maxOrder或MOQ使候选不能补足目标时返回needs_review并保留unmetQuantity；所有候选仍只在明确假设下成立。",
+            "enum": [
+              "completed",
+              "needs_review"
+            ]
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "protocol",
+          "capabilityId",
+          "context",
+          "inputSha256",
+          "policySha256",
+          "status",
+          "result",
+          "claims"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "核对库存位置、保护期、安全库存、包装MOQ和容量约束 inventory replenishment periodic review safety stock",
+      "useWhen": [
+        "需要按复核周期、提前期和需求波动计算补货候选。",
+        "MOQ、整箱数或订单容量导致理论数量不可执行。",
+        "仓库“有库存”但已分配、在途或欠单口径不同。"
+      ],
+      "validation": [
+        "tests/helper.test.mjs"
+      ]
+    },
+    {
       "componentContentSha256": "65bf99c92ec3f11e39fabb8f8d5835c9320de59839aa94420158e493cb6b1a86",
       "componentId": "investment-research-analyst",
       "componentPath": "agents/investment-research-analyst",
@@ -9269,6 +11306,147 @@
       ]
     },
     {
+      "componentContentSha256": "af59df20a6f03d4f925abe1757ae4aa2c63dc79f6db8009cc8217af2f9d126a8",
+      "componentId": "maintenance-reliability-engineer",
+      "componentPath": "agents/maintenance-reliability-engineer",
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contractSha256": "45dde3060d7db2dee30491f006a6a819cf081195e8a6b7a24f0328726f8e6977",
+      "doNotUseWhen": [
+        "上锁挂牌、带电作业、保护联锁变更和设备复产需现场获资质责任人处理；本包不远程控制设备，完成记录分析与维护方案。",
+        "只要相邻领域通用建议、与本角色的具体工作对象无关时，交适合的现有角色。",
+        "本任务要求直接变更账户、业务系统或发送材料时，由当前宿主按既有授权单独处理。"
+      ],
+      "entrypoint": "AGENT.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "上锁挂牌、带电作业、保护联锁变更和设备复产需现场获资质责任人处理；本包不远程控制设备，完成记录分析与维护方案。"
+        ]
+      },
+      "id": "maintenance-reliability-engineer-deliver",
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "assets": {
+            "description": "设备ID、功能、工况、关键程度与安全约束",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "events": {
+            "description": "故障开始、停机、维修、待料、恢复和验证记录",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "policy": {
+            "description": "运行时间口径、维护策略、备件和恢复验收要求",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "assets",
+          "events",
+          "policy"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "facts": {
+            "description": "输入口径与证据",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "failureMap": {
+            "description": "故障模式与证据图",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "handoff": {
+            "description": "交付与下一步",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "limitations": {
+            "description": "未核范围与适用边界",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "maintenancePlan": {
+            "description": "维护与备件计划",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "reliabilityMetrics": {
+            "description": "可靠性和维修指标",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "returnToService": {
+            "description": "恢复验证与观察计划",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "failureMap",
+          "reliabilityMetrics",
+          "maintenancePlan",
+          "returnToService",
+          "facts",
+          "limitations",
+          "handoff"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "按设备功能、故障模式和维修记录寻找停机原因，形成可追踪的维护任务与恢复验证方案。 asset maintenance reliability MTBF MTTR failure criticality",
+      "useWhen": [
+        "设备反复停机，需要分清故障、待料与维修等待。",
+        "想用维修记录调整预防维护计划，而不是只增加保养频次。",
+        "需要比较维修、备件和更新方案对生产可用性的影响。"
+      ],
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
       "componentContentSha256": "ce9c8b515ce477f2ce046c4ed71ef4382854fa7a617daf07425d41cf1575978c",
       "componentId": "manufacturing-quality-analyst",
       "componentPath": "agents/manufacturing-quality-analyst",
@@ -9407,6 +11585,505 @@
       ],
       "validation": [
         "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "1a0f6e670ce29d47b50229fcfc4b94303c30063c6dc22c4b2e2dca30272c275c",
+      "componentId": "mcp-contract-auditor",
+      "componentPath": "tools/mcp-contract-auditor",
+      "componentType": "tool",
+      "componentVersion": "0.1.0",
+      "contractSha256": "d238c20f56bdcc9041fc9dcaf4cf267ae7c745a35a57fd41c4d6a073c5d2684e",
+      "doNotUseWhen": [
+        "不主动连接MCP、读取凭证、调用tools/call或修改宿主设置。",
+        "不提供完整JSON Schema有效性/语义兼容认证；组合和引用保留为需检查。",
+        "工具annotations仅为声明，不授权操作或证明服务器可信。"
+      ],
+      "entrypoint": "README.md",
+      "helperContract": "helper-contract.json",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "新增工具执行权限、外部写入及凭证范围变更沿用宿主现有授权；离线比较可直接进行。"
+        ]
+      },
+      "id": "mcp-contract-auditor-deliver",
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "approvedToolNames": {
+            "description": "当前任务或宿主已经授权的工具名清单；仅核对范围，不从annotations反推授权。",
+            "items": {
+              "maxLength": 128,
+              "minLength": 1,
+              "type": "string"
+            },
+            "maxItems": 1000,
+            "minItems": 0,
+            "type": "array"
+          },
+          "context": {
+            "additionalProperties": false,
+            "description": "本次组织、事项和输入版本；只是绑定身份，不保存画像。",
+            "properties": {
+              "organizationId": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "revision": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "workId": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "organizationId",
+              "workId",
+              "revision"
+            ],
+            "type": "object"
+          },
+          "current": {
+            "additionalProperties": false,
+            "description": "新服务身份和本次工具清单；complete=false表示未收齐分页，不可判定完整新增/删除。",
+            "properties": {
+              "complete": {
+                "type": "boolean"
+              },
+              "protocolVersion": {
+                "maxLength": 64,
+                "minLength": 1,
+                "type": "string"
+              },
+              "serverId": {
+                "maxLength": 512,
+                "minLength": 1,
+                "type": "string"
+              },
+              "tools": {
+                "items": {
+                  "additionalProperties": true,
+                  "properties": {
+                    "annotations": {
+                      "additionalProperties": true,
+                      "type": "object"
+                    },
+                    "description": {
+                      "maxLength": 16000,
+                      "minLength": 0,
+                      "type": "string"
+                    },
+                    "inputSchema": {
+                      "type": [
+                        "object",
+                        "boolean"
+                      ]
+                    },
+                    "name": {
+                      "maxLength": 128,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "outputSchema": {
+                      "type": [
+                        "object",
+                        "boolean"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "inputSchema"
+                  ],
+                  "type": "object"
+                },
+                "maxItems": 1000,
+                "minItems": 0,
+                "type": "array"
+              }
+            },
+            "required": [
+              "serverId",
+              "protocolVersion",
+              "complete",
+              "tools"
+            ],
+            "type": "object"
+          },
+          "previous": {
+            "additionalProperties": false,
+            "description": "旧服务身份、协议版本、完整分页标记和tools清单。仅包含工具契约，禁止放凭证。",
+            "properties": {
+              "complete": {
+                "type": "boolean"
+              },
+              "protocolVersion": {
+                "maxLength": 64,
+                "minLength": 1,
+                "type": "string"
+              },
+              "serverId": {
+                "maxLength": 512,
+                "minLength": 1,
+                "type": "string"
+              },
+              "tools": {
+                "items": {
+                  "additionalProperties": true,
+                  "properties": {
+                    "annotations": {
+                      "additionalProperties": true,
+                      "type": "object"
+                    },
+                    "description": {
+                      "maxLength": 16000,
+                      "minLength": 0,
+                      "type": "string"
+                    },
+                    "inputSchema": {
+                      "type": [
+                        "object",
+                        "boolean"
+                      ]
+                    },
+                    "name": {
+                      "maxLength": 128,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "outputSchema": {
+                      "type": [
+                        "object",
+                        "boolean"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "inputSchema"
+                  ],
+                  "type": "object"
+                },
+                "maxItems": 1000,
+                "minItems": 0,
+                "type": "array"
+              }
+            },
+            "required": [
+              "serverId",
+              "protocolVersion",
+              "complete",
+              "tools"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "context",
+          "previous",
+          "current",
+          "approvedToolNames"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "additionalProperties": false,
+        "properties": {
+          "capabilityId": {
+            "const": "mcp-contract-auditor-deliver",
+            "description": "必须对应本次选定能力mcp-contract-auditor-deliver。"
+          },
+          "claims": {
+            "additionalProperties": false,
+            "description": "只声明本次离线运算，模型、网络、业务持久化均false，最终接受not_decided。",
+            "properties": {
+              "businessStatePersisted": {
+                "const": false
+              },
+              "finalAcceptance": {
+                "const": "not_decided"
+              },
+              "modelCalled": {
+                "const": false
+              },
+              "networkAccessed": {
+                "const": false
+              }
+            },
+            "required": [
+              "modelCalled",
+              "networkAccessed",
+              "businessStatePersisted",
+              "finalAcceptance"
+            ],
+            "type": "object"
+          },
+          "context": {
+            "additionalProperties": false,
+            "description": "原样保留本次organizationId、workId和revision。",
+            "properties": {
+              "organizationId": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "revision": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "workId": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "organizationId",
+              "workId",
+              "revision"
+            ],
+            "type": "object"
+          },
+          "inputSha256": {
+            "description": "用runtime canonical函数对实际完整输入重算SHA256。",
+            "pattern": "^[a-f0-9]{64}$",
+            "type": "string"
+          },
+          "policySha256": {
+            "description": "用同一规则对本次policy.json重算SHA256。",
+            "pattern": "^[a-f0-9]{64}$",
+            "type": "string"
+          },
+          "protocol": {
+            "const": "kim-service-helper-v1",
+            "description": "协议为kim-service-helper-v1，输出为一条完整JSON回执。"
+          },
+          "result": {
+            "additionalProperties": false,
+            "description": "按区分大小写的工具名比较所有声明字段及canonical哈希；完整性不足时只给possibleAdded/possibleRemoved。schema组合/$ref不能被误判为协议违规，行为注解不能成为授权来源。",
+            "properties": {
+              "added": {
+                "items": {
+                  "maxLength": 128,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "maxItems": 1000,
+                "minItems": 0,
+                "type": "array"
+              },
+              "changed": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "currentHash": {
+                      "pattern": "^[a-f0-9]{64}$",
+                      "type": "string"
+                    },
+                    "fields": {
+                      "items": {
+                        "maxLength": 128,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "maxItems": 50,
+                      "minItems": 1,
+                      "type": "array"
+                    },
+                    "name": {
+                      "maxLength": 128,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "previousHash": {
+                      "pattern": "^[a-f0-9]{64}$",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "fields",
+                    "previousHash",
+                    "currentHash"
+                  ],
+                  "type": "object"
+                },
+                "maxItems": 1000,
+                "minItems": 0,
+                "type": "array"
+              },
+              "comparisonComplete": {
+                "type": "boolean"
+              },
+              "liveConnectionObserved": {
+                "const": false
+              },
+              "possibleAdded": {
+                "items": {
+                  "maxLength": 128,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "maxItems": 1000,
+                "minItems": 0,
+                "type": "array"
+              },
+              "possibleRemoved": {
+                "items": {
+                  "maxLength": 128,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "maxItems": 1000,
+                "minItems": 0,
+                "type": "array"
+              },
+              "protocolVersionChanged": {
+                "type": "boolean"
+              },
+              "removed": {
+                "items": {
+                  "maxLength": 128,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "maxItems": 1000,
+                "minItems": 0,
+                "type": "array"
+              },
+              "schemaReviews": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "annotationHints": {
+                      "type": "object"
+                    },
+                    "inputAssessment": {
+                      "maxLength": 512,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "name": {
+                      "maxLength": 128,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "outputAssessment": {
+                      "maxLength": 512,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "referenceCount": {
+                      "maximum": 100000,
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "reviewReasons": {
+                      "items": {
+                        "maxLength": 512,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "maxItems": 20,
+                      "minItems": 0,
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "inputAssessment",
+                    "outputAssessment",
+                    "referenceCount",
+                    "annotationHints",
+                    "reviewReasons"
+                  ],
+                  "type": "object"
+                },
+                "maxItems": 1000,
+                "minItems": 0,
+                "type": "array"
+              },
+              "schemaValidation": {
+                "const": "structural_inventory_only_not_full_json_schema_validation"
+              },
+              "serverIdentityChanged": {
+                "type": "boolean"
+              },
+              "trust": {
+                "const": "not_established_by_annotations"
+              },
+              "unapproved": {
+                "items": {
+                  "maxLength": 128,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "maxItems": 1000,
+                "minItems": 0,
+                "type": "array"
+              }
+            },
+            "required": [
+              "serverIdentityChanged",
+              "protocolVersionChanged",
+              "comparisonComplete",
+              "added",
+              "removed",
+              "possibleAdded",
+              "possibleRemoved",
+              "changed",
+              "unapproved",
+              "schemaReviews",
+              "trust",
+              "schemaValidation",
+              "liveConnectionObserved"
+            ],
+            "type": "object"
+          },
+          "schemaVersion": {
+            "const": 1,
+            "description": "使用当前机器回执版本1，不接受不同语义的包。"
+          },
+          "status": {
+            "description": "身份/协议变化、增删/差异、未批准工具、部分分页或需进一步检查的schema/注解都会返回needs_review；completed仅表示当前比较没有这些变化，不是已连接或已授权。",
+            "enum": [
+              "completed",
+              "needs_review"
+            ]
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "protocol",
+          "capabilityId",
+          "context",
+          "inputSha256",
+          "policySha256",
+          "status",
+          "result",
+          "claims"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "离线比较MCP工具清单、schema、行为注解和已允许工具范围 MCP contract drift permission audit",
+      "useWhen": [
+        "MCP服务更新后需要知道工具、输入输出或行为声明变了什么。",
+        "准备启用工具，需要将发现清单与当前允许范围核对。",
+        "工具清单分页或schema复杂，不能把部分信息当完整兼容性结论。"
+      ],
+      "validation": [
+        "tests/helper.test.mjs"
       ]
     },
     {
@@ -13422,6 +16099,147 @@
       ]
     },
     {
+      "componentContentSha256": "21223a4d74552bebe6ad71ba672627f6143c945324be2fae42c421add2379bee",
+      "componentId": "security-incident-responder",
+      "componentPath": "agents/security-incident-responder",
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contractSha256": "a2cecb16f11023ea2d630908807aca86a24cb90913c9f3829f3d82c3382e884d",
+      "doNotUseWhen": [
+        "仅支持获授权系统的防御调查；隔离、停机、封禁、删除、凭据轮换与对外通报由现有事件指挥和权限流程执行，本包不自动运行破坏性动作。",
+        "只要相邻领域通用建议、与本角色的具体工作对象无关时，交适合的现有角色。",
+        "本任务要求直接变更账户、业务系统或发送材料时，由当前宿主按既有授权单独处理。"
+      ],
+      "entrypoint": "AGENT.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "仅支持获授权系统的防御调查；隔离、停机、封禁、删除、凭据轮换与对外通报由现有事件指挥和权限流程执行，本包不自动运行破坏性动作。"
+        ]
+      },
+      "id": "security-incident-responder-deliver",
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "evidence": {
+            "description": "相关日志、哈希、采集方式、资产身份与时间同步情况",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "incident": {
+            "description": "告警原文、发现时间、时区、初步业务影响和授权范围",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "responseContext": {
+            "description": "业务关键性、现有措施、可用工具和恢复要求",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "incident",
+          "evidence",
+          "responseContext"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "containmentPlan": {
+            "description": "遏制与调查候选动作",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "facts": {
+            "description": "输入口径与证据",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "handoff": {
+            "description": "交付与下一步",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "incidentTimeline": {
+            "description": "带证据的时间线",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "limitations": {
+            "description": "未核范围与适用边界",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "recoveryReview": {
+            "description": "恢复与复盘材料",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "scopeAssessment": {
+            "description": "影响范围与假设",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "incidentTimeline",
+          "scopeAssessment",
+          "containmentPlan",
+          "recoveryReview",
+          "facts",
+          "limitations",
+          "handoff"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "把告警、受影响资产和证据按时间连起来，区分已证实影响与调查假设，给出有授权边界的遏制、恢复和复盘方案。 defensive incident response evidence timeline containment recovery DFIR",
+      "useWhen": [
+        "出现安全告警，需要判断是否真实事件及影响范围。",
+        "日志来源多、时间不一致，需要整理事件时间线和证据包。",
+        "事故处理后需要确认恢复条件和遗漏调查项。"
+      ],
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
       "componentContentSha256": "6a9b6d3b3d080bd1c8a9f61f84e959868e607339fca2432af371dccc1beb4776",
       "componentId": "side-business-evaluator",
       "componentPath": "agents/side-business-evaluator",
@@ -15040,6 +17858,446 @@
       ]
     },
     {
+      "componentContentSha256": "9e1f9122c1f1691a8e4c36725eccaf9b990bad043bc6d0817fc945cbe74b0933",
+      "componentId": "tender-compliance",
+      "componentPath": "skills/tender-compliance",
+      "componentType": "skill",
+      "componentVersion": "0.1.0",
+      "contractSha256": "17e81025d88f374f6c9f2ce7a52f7c2d8db7a18a8f6773162627b0e732f6af4a",
+      "doNotUseWhen": [
+        "不判断特定辖区法律效力或保证投标合规/中标；以实际招标文件与当前规则为准。",
+        "不把有附件当成内容满足，脚本不读取或认证附件真实性。",
+        "不自动提交投标、联系评委、伪造资质或修改签章。"
+      ],
+      "entrypoint": "SKILL.md",
+      "helperContract": "helper-contract.json",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "正式提交、签署承诺、价格决定和法律争议交现有投标负责人或相应专业人员审核；资料整理不新增审批。"
+        ]
+      },
+      "id": "tender-compliance-deliver",
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "asOf": {
+            "description": "核对证据有效性的观察时间，带时区。",
+            "maxLength": 35,
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,3})?(?:Z|[+-]\\d{2}:\\d{2})$",
+            "type": "string"
+          },
+          "clauses": {
+            "description": "逐条真实条款、版本、页/段定位及强制性。",
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "maxLength": 128,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "mandatory": {
+                  "type": "boolean"
+                },
+                "requirement": {
+                  "maxLength": 1200,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "sourceRef": {
+                  "maxLength": 512,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "version": {
+                  "maxLength": 128,
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "version",
+                "sourceRef",
+                "mandatory",
+                "requirement"
+              ],
+              "type": "object"
+            },
+            "maxItems": 500,
+            "minItems": 1,
+            "type": "array"
+          },
+          "context": {
+            "additionalProperties": false,
+            "description": "本次组织、事项和输入版本；只是绑定身份，不保存画像。",
+            "properties": {
+              "organizationId": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "revision": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "workId": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "organizationId",
+              "workId",
+              "revision"
+            ],
+            "type": "object"
+          },
+          "deadline": {
+            "description": "本轮正式截止时间及所在时区，含已确认补遗。",
+            "maxLength": 35,
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,3})?(?:Z|[+-]\\d{2}:\\d{2})$",
+            "type": "string"
+          },
+          "evidence": {
+            "description": "材料定位、版本哈希和适用有效期；sha256是调用方提供值，本脚本不读取源文件核验。",
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "maxLength": 128,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "sha256": {
+                  "pattern": "^[a-f0-9]{64}$",
+                  "type": "string"
+                },
+                "sourceRef": {
+                  "maxLength": 512,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "validUntil": {
+                  "anyOf": [
+                    {
+                      "maxLength": 35,
+                      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,3})?(?:Z|[+-]\\d{2}:\\d{2})$",
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "sourceRef",
+                "sha256",
+                "validUntil"
+              ],
+              "type": "object"
+            },
+            "maxItems": 2000,
+            "minItems": 0,
+            "type": "array"
+          },
+          "responses": {
+            "description": "每条响应对应条款版本、内容位置、主张和证据ID。",
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "assessment": {
+                  "enum": [
+                    "claimed_compliant",
+                    "noncompliant",
+                    "needs_review"
+                  ]
+                },
+                "clauseId": {
+                  "maxLength": 128,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "clauseVersion": {
+                  "maxLength": 128,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "evidenceIds": {
+                  "items": {
+                    "maxLength": 128,
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "maxItems": 30,
+                  "minItems": 0,
+                  "type": "array"
+                },
+                "responseRef": {
+                  "maxLength": 512,
+                  "minLength": 0,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "clauseId",
+                "clauseVersion",
+                "assessment",
+                "responseRef",
+                "evidenceIds"
+              ],
+              "type": "object"
+            },
+            "maxItems": 500,
+            "minItems": 0,
+            "type": "array"
+          },
+          "tenderId": {
+            "description": "本次招标唯一ID，不能把其他项目的资格结果直接移用。",
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "context",
+          "tenderId",
+          "asOf",
+          "deadline",
+          "clauses",
+          "responses",
+          "evidence"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "additionalProperties": false,
+        "properties": {
+          "capabilityId": {
+            "const": "tender-compliance-deliver",
+            "description": "必须对应本次选定能力tender-compliance-deliver。"
+          },
+          "claims": {
+            "additionalProperties": false,
+            "description": "只声明本次离线运算，模型、网络、业务持久化均false，最终接受not_decided。",
+            "properties": {
+              "businessStatePersisted": {
+                "const": false
+              },
+              "finalAcceptance": {
+                "const": "not_decided"
+              },
+              "modelCalled": {
+                "const": false
+              },
+              "networkAccessed": {
+                "const": false
+              }
+            },
+            "required": [
+              "modelCalled",
+              "networkAccessed",
+              "businessStatePersisted",
+              "finalAcceptance"
+            ],
+            "type": "object"
+          },
+          "context": {
+            "additionalProperties": false,
+            "description": "原样保留本次organizationId、workId和revision。",
+            "properties": {
+              "organizationId": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "revision": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "workId": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "organizationId",
+              "workId",
+              "revision"
+            ],
+            "type": "object"
+          },
+          "inputSha256": {
+            "description": "用runtime canonical函数对实际完整输入重算SHA256。",
+            "pattern": "^[a-f0-9]{64}$",
+            "type": "string"
+          },
+          "policySha256": {
+            "description": "用同一规则对本次policy.json重算SHA256。",
+            "pattern": "^[a-f0-9]{64}$",
+            "type": "string"
+          },
+          "protocol": {
+            "const": "kim-service-helper-v1",
+            "description": "协议为kim-service-helper-v1，输出为一条完整JSON回执。"
+          },
+          "result": {
+            "additionalProperties": false,
+            "description": "每个条款保留原文定位与当前版本，响应逐一对应；版本落后、缺响应、缺引用、过期证据和明确不符合必须分开报告；强制项不能被其他得分抵消。",
+            "properties": {
+              "blockingClauseIds": {
+                "items": {
+                  "maxLength": 128,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "maxItems": 500,
+                "minItems": 0,
+                "type": "array"
+              },
+              "deadlinePassed": {
+                "type": "boolean"
+              },
+              "evidenceAuthentication": {
+                "const": "supplied_references_not_verified"
+              },
+              "legalCompliance": {
+                "const": "not_determined"
+              },
+              "readiness": {
+                "enum": [
+                  "evidence_gaps",
+                  "ready_for_content_review"
+                ]
+              },
+              "rows": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "evidenceIds": {
+                      "items": {
+                        "maxLength": 128,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "maxItems": 30,
+                      "minItems": 0,
+                      "type": "array"
+                    },
+                    "id": {
+                      "maxLength": 128,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "issues": {
+                      "items": {
+                        "maxLength": 512,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "maxItems": 50,
+                      "minItems": 0,
+                      "type": "array"
+                    },
+                    "mandatory": {
+                      "type": "boolean"
+                    },
+                    "status": {
+                      "enum": [
+                        "documented_pending_content_review",
+                        "needs_review",
+                        "noncompliant"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "mandatory",
+                    "status",
+                    "issues",
+                    "evidenceIds"
+                  ],
+                  "type": "object"
+                },
+                "maxItems": 500,
+                "minItems": 1,
+                "type": "array"
+              },
+              "tenderId": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "unknownResponseClauses": {
+                "items": {
+                  "maxLength": 128,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "maxItems": 500,
+                "minItems": 0,
+                "type": "array"
+              }
+            },
+            "required": [
+              "tenderId",
+              "deadlinePassed",
+              "rows",
+              "blockingClauseIds",
+              "unknownResponseClauses",
+              "readiness",
+              "legalCompliance",
+              "evidenceAuthentication"
+            ],
+            "type": "object"
+          },
+          "schemaVersion": {
+            "const": 1,
+            "description": "使用当前机器回执版本1，不接受不同语义的包。"
+          },
+          "status": {
+            "description": "强制条款有缺口、截止已到、未知响应条款或任一响应未完成时needs_review；即使completed，readiness也只到ready_for_content_review，legalCompliance仍为not_determined。",
+            "enum": [
+              "completed",
+              "needs_review"
+            ]
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "protocol",
+          "capabilityId",
+          "context",
+          "inputSha256",
+          "policySha256",
+          "status",
+          "result",
+          "claims"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "把招标条款、补遗版本和响应证据逐项绑定 tender bid compliance response evidence matrix",
+      "useWhen": [
+        "投标材料很多，需要确认每条资格/技术/商务要求是否有响应依据。",
+        "收到澄清或补遗，需要定位旧响应和证据是否过期。",
+        "报价与技术方案齐了，但不知道哪些条款可能直接否决。"
+      ],
+      "validation": [
+        "tests/helper.test.mjs"
+      ]
+    },
+    {
       "componentContentSha256": "c589219ec2b614caaa04ff473c033b64d9b31a1175fb211ca674af0936f8e02e",
       "componentId": "test-automation-engineer",
       "componentPath": "agents/test-automation-engineer",
@@ -15346,6 +18604,147 @@
         "用户说「帮我做内容排期」「选题日历」「这批选题哪个先发」",
         "用户给了账号领域和粉丝情况，要一批能直接开拍开写的选题",
         "用户拿着一个大方向（如「母婴」「上班族做饭」「减脂」）问怎么切入"
+      ],
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "6fc41e9467e11cf9aef51ef846e51d408b1a16d5922d723de3b609b465e1f9c1",
+      "componentId": "treasury-liquidity-analyst",
+      "componentPath": "agents/treasury-liquidity-analyst",
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contractSha256": "83988f4565a3b43d290805711b39f949b0b6e2f8800aaed9b698d62dc353bf43",
+      "doNotUseWhen": [
+        "真实调拨、授信提款、外汇及衍生品交易依资金授权；本包交预测与方案，不代替交易或监管流动性申报。",
+        "只要相邻领域通用建议、与本角色的具体工作对象无关时，交适合的现有角色。",
+        "本任务要求直接变更账户、业务系统或发送材料时，由当前宿主按既有授权单独处理。"
+      ],
+      "entrypoint": "AGENT.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "真实调拨、授信提款、外汇及衍生品交易依资金授权；本包交预测与方案，不代替交易或监管流动性申报。"
+        ]
+      },
+      "id": "treasury-liquidity-analyst-deliver",
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "balances": {
+            "description": "按主体、币种列期初账面现金、受限现金和账户日",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "cashFlows": {
+            "description": "含结算日、币种、金额、可信度和来源ID的收支及债务到期",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "scenarios": {
+            "description": "预测粒度、最低现金、回款延迟和融资可用条件",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "balances",
+          "cashFlows",
+          "scenarios"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "cashLadder": {
+            "description": "分期现金滚动表",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "facts": {
+            "description": "输入口径与证据",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "fundingOptions": {
+            "description": "补缺口的候选办法",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "gapAnalysis": {
+            "description": "期限与币种缺口",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "handoff": {
+            "description": "交付与下一步",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "limitations": {
+            "description": "未核范围与适用边界",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "monitoringPlan": {
+            "description": "更新节奏和偏差说明",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "cashLadder",
+          "gapAnalysis",
+          "fundingOptions",
+          "monitoringPlan",
+          "facts",
+          "limitations",
+          "handoff"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "把现金、收付款、融资到期与受限资金放入同一时间梯度，找出缺口出现在哪一天及可用缓解方案。 treasury liquidity cash ladder maturity stress testing",
+      "useWhen": [
+        "需要做13周滚动资金预测并解释缺口。",
+        "账上有钱却可能付不出到期款，需要查受限资金与时点。",
+        "比较收款延迟、融资续作失败或汇率变化下的现金余量。"
       ],
       "validation": [
         "tests/contract.test.mjs"
@@ -15900,6 +19299,147 @@
       ]
     },
     {
+      "componentContentSha256": "6830524265dd4506beed1afdb5c95be26573f2668f940bc30a85ca1120e7a68d",
+      "componentId": "warehouse-operations-analyst",
+      "componentPath": "agents/warehouse-operations-analyst",
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contractSha256": "92fad45cfcf28f8b8334c8d91b5931e91659d45440485e1ae18ebe6938b07cba",
+      "doNotUseWhen": [
+        "库存调整、报废、出库放行和客户承诺变更依原业务权限；本包读取记录、模拟分配并形成候选方案。",
+        "只要相邻领域通用建议、与本角色的具体工作对象无关时，交适合的现有角色。",
+        "本任务要求直接变更账户、业务系统或发送材料时，由当前宿主按既有授权单独处理。"
+      ],
+      "entrypoint": "AGENT.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "库存调整、报废、出库放行和客户承诺变更依原业务权限；本包读取记录、模拟分配并形成候选方案。"
+        ]
+      },
+      "id": "warehouse-operations-analyst-deliver",
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "inventory": {
+            "description": "SKU、仓位、批次、单位、数量、预留、冻结和有效期快照",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "operations": {
+            "description": "仓库布局、转换单位、拣复流程、盘点与异常记录",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "orders": {
+            "description": "订单行、数量单位、承诺时间、客户批次或有效期要求",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "inventory",
+          "orders",
+          "operations"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "allocationPlan": {
+            "description": "订单与批次候选分配",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "availability": {
+            "description": "库存可用与短缺表",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "controlMetrics": {
+            "description": "履约与盘点监测",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "facts": {
+            "description": "输入口径与证据",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "handoff": {
+            "description": "交付与下一步",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "limitations": {
+            "description": "未核范围与适用边界",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "processImprovements": {
+            "description": "拣货复核与异常方案",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "availability",
+          "allocationPlan",
+          "processImprovements",
+          "controlMetrics",
+          "facts",
+          "limitations",
+          "handoff"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "把可用库存、预留、批次期限与订单承诺对应起来，定位缺货、错拣和账实差异并给出履约改善方案。 warehouse fulfillment stock reservation picking FEFO cycle count",
+      "useWhen": [
+        "系统有库存但订单仍缺货，需要核预留和冻结。",
+        "要设计波次、拣货、复核与异常处理流程。",
+        "盘点差异或过期损耗高，需要建立可执行的检查与改进。"
+      ],
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
       "componentContentSha256": "31579c26c8afa9edbca4208a2a38b87fdaae9bb4a23490ed1dc98013dd229513",
       "componentId": "workplace-writer",
       "componentPath": "agents/workplace-writer",
@@ -16116,8 +19656,8 @@
       ]
     }
   ],
-  "capabilityCount": 91,
-  "componentCount": 76,
+  "capabilityCount": 107,
+  "componentCount": 92,
   "components": [
     {
       "capabilityIds": [
@@ -16252,6 +19792,51 @@
       "entrypoint": "AGENT.md",
       "id": "concept-tutor",
       "path": "agents/concept-tutor",
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "construction-project-controller-deliver"
+      ],
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contentSha256": "20309469504206d6f28fbfa51d03ff1ab84740e859d13d99c440abe4ac2153d7",
+      "contractSha256": "27d8d1456b493559b24787d34c0420ccaa604e605e6a07130e42bdefb6ab4818",
+      "entrypoint": "AGENT.md",
+      "id": "construction-project-controller",
+      "path": "agents/construction-project-controller",
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "contract-review-analyst-deliver"
+      ],
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contentSha256": "1a51e1e61b91af9c6890b203e5551327f611b1a17401235c92a1a65ded9e1482",
+      "contractSha256": "6a173be5ccc9e9cce3f663aa9665a87d9b41949d914af9c744f2d5fc639e5d4f",
+      "entrypoint": "AGENT.md",
+      "id": "contract-review-analyst",
+      "path": "agents/contract-review-analyst",
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "credit-risk-analyst-deliver"
+      ],
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contentSha256": "d56ca010b8e206d066b4aa15e28b9a96bec2fb8609b56c25dea95c4304b5c2be",
+      "contractSha256": "8bb876903218878b417f9c2fd9ddc544b79ebff8b4aa9cf71090906e069d1372",
+      "entrypoint": "AGENT.md",
+      "id": "credit-risk-analyst",
+      "path": "agents/credit-risk-analyst",
       "validation": [
         "tests/contract.test.mjs"
       ]
@@ -16399,6 +19984,21 @@
     },
     {
       "capabilityIds": [
+        "game-economy-designer-deliver"
+      ],
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contentSha256": "97fd1007f1079ac2a4ee51f8ca0f77274fb837ef6e1c639da787b5c8c19972eb",
+      "contractSha256": "dc5398f7c3f55b60e57e730d61f51bead5768d5cccf2ae3115a6065529fcc53d",
+      "entrypoint": "AGENT.md",
+      "id": "game-economy-designer",
+      "path": "agents/game-economy-designer",
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
         "headline-cover-optimizer-optimize"
       ],
       "componentType": "agent",
@@ -16438,6 +20038,36 @@
       "entrypoint": "AGENT.md",
       "id": "hiring-process-designer",
       "path": "agents/hiring-process-designer",
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "hospitality-revenue-analyst-deliver"
+      ],
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contentSha256": "276a89192a4ef51da1c5ad48a7d887339ccafcf0dccf5a150e561ec394b29554",
+      "contractSha256": "8240e75eceb8ca8ce3032795185c59a34453ffa8ca6a850b700fa071d072ca93",
+      "entrypoint": "AGENT.md",
+      "id": "hospitality-revenue-analyst",
+      "path": "agents/hospitality-revenue-analyst",
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "insurance-claims-analyst-deliver"
+      ],
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contentSha256": "1c96f7676dea8764b5f5ee01398fab799c04959d7c1c835b01b2ae1f9236b3e5",
+      "contractSha256": "a4555ea20d10d5a3e876bcd4a77693ed06ea1290a3c5f84061cdab03605ff7df",
+      "entrypoint": "AGENT.md",
+      "id": "insurance-claims-analyst",
+      "path": "agents/insurance-claims-analyst",
       "validation": [
         "tests/contract.test.mjs"
       ]
@@ -16513,6 +20143,21 @@
       "entrypoint": "AGENT.md",
       "id": "lesson-planner",
       "path": "agents/lesson-planner",
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "maintenance-reliability-engineer-deliver"
+      ],
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contentSha256": "af59df20a6f03d4f925abe1757ae4aa2c63dc79f6db8009cc8217af2f9d126a8",
+      "contractSha256": "45dde3060d7db2dee30491f006a6a819cf081195e8a6b7a24f0328726f8e6977",
+      "entrypoint": "AGENT.md",
+      "id": "maintenance-reliability-engineer",
+      "path": "agents/maintenance-reliability-engineer",
       "validation": [
         "tests/contract.test.mjs"
       ]
@@ -16687,6 +20332,21 @@
     },
     {
       "capabilityIds": [
+        "security-incident-responder-deliver"
+      ],
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contentSha256": "21223a4d74552bebe6ad71ba672627f6143c945324be2fae42c421add2379bee",
+      "contractSha256": "a2cecb16f11023ea2d630908807aca86a24cb90913c9f3829f3d82c3382e884d",
+      "entrypoint": "AGENT.md",
+      "id": "security-incident-responder",
+      "path": "agents/security-incident-responder",
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
         "side-business-evaluator-assist"
       ],
       "componentType": "agent",
@@ -16824,6 +20484,21 @@
     },
     {
       "capabilityIds": [
+        "treasury-liquidity-analyst-deliver"
+      ],
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contentSha256": "6fc41e9467e11cf9aef51ef846e51d408b1a16d5922d723de3b609b465e1f9c1",
+      "contractSha256": "83988f4565a3b43d290805711b39f949b0b6e2f8800aaed9b698d62dc353bf43",
+      "entrypoint": "AGENT.md",
+      "id": "treasury-liquidity-analyst",
+      "path": "agents/treasury-liquidity-analyst",
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
         "user-researcher-deliver"
       ],
       "componentType": "agent",
@@ -16833,6 +20508,21 @@
       "entrypoint": "AGENT.md",
       "id": "user-researcher",
       "path": "agents/user-researcher",
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "warehouse-operations-analyst-deliver"
+      ],
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contentSha256": "6830524265dd4506beed1afdb5c95be26573f2668f940bc30a85ca1120e7a68d",
+      "contractSha256": "92fad45cfcf28f8b8334c8d91b5931e91659d45440485e1ae18ebe6938b07cba",
+      "entrypoint": "AGENT.md",
+      "id": "warehouse-operations-analyst",
+      "path": "agents/warehouse-operations-analyst",
       "validation": [
         "tests/contract.test.mjs"
       ]
@@ -16850,6 +20540,21 @@
       "path": "agents/workplace-writer",
       "validation": [
         "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "evidence-receipt-deliver"
+      ],
+      "componentType": "hook",
+      "componentVersion": "0.1.0",
+      "contentSha256": "4f1f10f6579587ce78114c9e2542c45f772887de52530a8ae85bc6494745d800",
+      "contractSha256": "9d8de5ef7eb02220907467560e28f1db09318cccb4f7feb9c86dc3f951373d1e",
+      "entrypoint": "scripts/hook.mjs",
+      "id": "evidence-receipt",
+      "path": "hooks/evidence-receipt",
+      "validation": [
+        "tests/hook.test.mjs"
       ]
     },
     {
@@ -16955,6 +20660,21 @@
       "entrypoint": "SKILL.md",
       "id": "customer-case-operations",
       "path": "skills/customer-case-operations",
+      "validation": [
+        "tests/helper.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "data-lineage-impact-deliver"
+      ],
+      "componentType": "skill",
+      "componentVersion": "0.1.0",
+      "contentSha256": "79f396bf9c7ec1a59668c613f1b332fd83a7f6405d8d8cbcf8742f4b1f1d3c8a",
+      "contractSha256": "b0fe7f5b33746641a57f21483cef21b06cc62731f0bef473c0bb968518a478d7",
+      "entrypoint": "SKILL.md",
+      "id": "data-lineage-impact",
+      "path": "skills/data-lineage-impact",
       "validation": [
         "tests/helper.test.mjs"
       ]
@@ -17083,6 +20803,36 @@
         "tests/behavior.test.mjs",
         "tests/boundary.test.mjs",
         "tests/governance.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "incident-postmortem-deliver"
+      ],
+      "componentType": "skill",
+      "componentVersion": "0.1.0",
+      "contentSha256": "90e37593f98009317e19fc5d99b7933f4ef4d7c633c7b6d299e640ecb1abdc5d",
+      "contractSha256": "2de87a5745baea1753478d5989ac76440a2028439d2c18f2af2ecc8fcbe7bbd2",
+      "entrypoint": "SKILL.md",
+      "id": "incident-postmortem",
+      "path": "skills/incident-postmortem",
+      "validation": [
+        "tests/helper.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "inventory-replenishment-deliver"
+      ],
+      "componentType": "skill",
+      "componentVersion": "0.1.0",
+      "contentSha256": "e3d1e665c3ac7cc8e3bf79ec16a3e333e995c32fee76a1e0d61e37bdee02db67",
+      "contractSha256": "9f0acfe94e0a3c542f19e0b37904664fb7b5ea76e77b48f40b9dd9acf7a58076",
+      "entrypoint": "SKILL.md",
+      "id": "inventory-replenishment",
+      "path": "skills/inventory-replenishment",
+      "validation": [
+        "tests/helper.test.mjs"
       ]
     },
     {
@@ -17255,6 +21005,21 @@
     },
     {
       "capabilityIds": [
+        "tender-compliance-deliver"
+      ],
+      "componentType": "skill",
+      "componentVersion": "0.1.0",
+      "contentSha256": "9e1f9122c1f1691a8e4c36725eccaf9b990bad043bc6d0817fc945cbe74b0933",
+      "contractSha256": "17e81025d88f374f6c9f2ce7a52f7c2d8db7a18a8f6773162627b0e732f6af4a",
+      "entrypoint": "SKILL.md",
+      "id": "tender-compliance",
+      "path": "skills/tender-compliance",
+      "validation": [
+        "tests/helper.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
         "visual-explainer-deliver"
       ],
       "componentType": "skill",
@@ -17305,6 +21070,21 @@
         "tests/host-assets.test.mjs",
         "tests/installer.test.mjs",
         "tests/mcp-server.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "mcp-contract-auditor-deliver"
+      ],
+      "componentType": "tool",
+      "componentVersion": "0.1.0",
+      "contentSha256": "1a0f6e670ce29d47b50229fcfc4b94303c30063c6dc22c4b2e2dca30272c275c",
+      "contractSha256": "d238c20f56bdcc9041fc9dcaf4cf267ae7c745a35a57fd41c4d6a073c5d2684e",
+      "entrypoint": "README.md",
+      "id": "mcp-contract-auditor",
+      "path": "tools/mcp-contract-auditor",
+      "validation": [
+        "tests/helper.test.mjs"
       ]
     }
   ],

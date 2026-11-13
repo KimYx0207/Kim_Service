@@ -1,0 +1,334 @@
+{
+  "schemaVersion": 1,
+  "id": "data-lineage-impact",
+  "componentType": "skill",
+  "componentVersion": "0.1.0",
+  "entrypoint": "SKILL.md",
+  "capabilities": [
+    {
+      "id": "data-lineage-impact-deliver",
+      "summary": "核对字段血缘、变更影响范围、证据完整性与回归责任 data lineage impact analysis column change",
+      "useWhen": [
+        "表或字段改名、删除、脱敏、类型或业务口径变动，需要定位下游。",
+        "一份报表数字变化，需要追溯数据来源和转换链。",
+        "上线前需要证明影响覆盖范围及尚未接入的系统。"
+      ],
+      "doNotUseWhen": [
+        "不自动解析全部SQL或发现生产全量血缘；只分析本次提供的图。",
+        "不将名称相似视为同一字段，不因图中没连线宣布没有影响。",
+        "不自动修改数据库、调度任务或发布迁移。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "context": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "organizationId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "workId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "revision": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              }
+            },
+            "required": [
+              "organizationId",
+              "workId",
+              "revision"
+            ],
+            "description": "本次组织、事项和输入版本；只是绑定身份，不保存画像。"
+          },
+          "nodes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 240
+                },
+                "owner": {
+                  "type": "string",
+                  "minLength": 0,
+                  "maxLength": 128
+                }
+              },
+              "required": [
+                "id",
+                "owner"
+              ]
+            },
+            "minItems": 1,
+            "maxItems": 2000,
+            "description": "唯一全限定对象ID与责任人；ID应包含环境/命名空间、数据集与字段，不合并同名异源对象。"
+          },
+          "edges": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "from": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 240
+                },
+                "to": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 240
+                },
+                "evidenceRef": {
+                  "type": "string",
+                  "minLength": 0,
+                  "maxLength": 512
+                },
+                "confidence": {
+                  "enum": [
+                    "observed",
+                    "declared",
+                    "unknown"
+                  ]
+                }
+              },
+              "required": [
+                "from",
+                "to",
+                "evidenceRef",
+                "confidence"
+              ]
+            },
+            "minItems": 0,
+            "maxItems": 5000,
+            "description": "输入到输出的有向边，标记已观察/声明/未知与实际证据引用。"
+          },
+          "changed": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240
+            },
+            "minItems": 1,
+            "maxItems": 500,
+            "description": "本次实际改变的对象ID列表，需与nodes一致。"
+          }
+        },
+        "required": [
+          "context",
+          "nodes",
+          "edges",
+          "changed"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "schemaVersion": {
+            "const": 1,
+            "description": "使用当前机器回执版本1，不接受不同语义的包。"
+          },
+          "protocol": {
+            "const": "kim-service-helper-v1",
+            "description": "协议为kim-service-helper-v1，输出为一条完整JSON回执。"
+          },
+          "capabilityId": {
+            "const": "data-lineage-impact-deliver",
+            "description": "必须对应本次选定能力data-lineage-impact-deliver。"
+          },
+          "context": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "organizationId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "workId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "revision": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              }
+            },
+            "required": [
+              "organizationId",
+              "workId",
+              "revision"
+            ],
+            "description": "原样保留本次organizationId、workId和revision。"
+          },
+          "inputSha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "description": "用runtime canonical函数对实际完整输入重算SHA256。"
+          },
+          "policySha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "description": "用同一规则对本次policy.json重算SHA256。"
+          },
+          "status": {
+            "enum": [
+              "completed",
+              "needs_review"
+            ],
+            "description": "未知变更对象、相关无证据边、可能路径、未知责任人或循环使status为needs_review；completed只表示所给图已完成遍历，coverage始终为supplied_edges_only。"
+          },
+          "result": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "affected": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 240
+                    },
+                    "owner": {
+                      "type": "string",
+                      "minLength": 0,
+                      "maxLength": 128
+                    },
+                    "certainty": {
+                      "enum": [
+                        "observed_path",
+                        "possible_path"
+                      ]
+                    },
+                    "path": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 240
+                      },
+                      "minItems": 1,
+                      "maxItems": 2000
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "owner",
+                    "certainty",
+                    "path"
+                  ]
+                },
+                "minItems": 0,
+                "maxItems": 2000
+              },
+              "unmatchedSeeds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 240
+                },
+                "minItems": 0,
+                "maxItems": 500
+              },
+              "cycleDetected": {
+                "type": "boolean"
+              },
+              "evidenceMissing": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 512
+                },
+                "minItems": 0,
+                "maxItems": 5000
+              },
+              "coverage": {
+                "const": "supplied_edges_only"
+              }
+            },
+            "required": [
+              "affected",
+              "unmatchedSeeds",
+              "cycleDetected",
+              "evidenceMissing",
+              "coverage"
+            ],
+            "description": "影响对象不含重复，路径从变更对象开始且每条边存在；只有整条路径均有已观察证据时标observed_path。未知对象、证据空白、循环和责任人缺口不能丢失。"
+          },
+          "claims": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "modelCalled": {
+                "const": false
+              },
+              "networkAccessed": {
+                "const": false
+              },
+              "businessStatePersisted": {
+                "const": false
+              },
+              "finalAcceptance": {
+                "const": "not_decided"
+              }
+            },
+            "required": [
+              "modelCalled",
+              "networkAccessed",
+              "businessStatePersisted",
+              "finalAcceptance"
+            ],
+            "description": "只声明本次离线运算，模型、网络、业务持久化均false，最终接受not_decided。"
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "protocol",
+          "capabilityId",
+          "context",
+          "inputSha256",
+          "policySha256",
+          "status",
+          "result",
+          "claims"
+        ]
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "生产字段删除、数据权限变更或迁移执行由现有变更责任人确认；影响分析与草稿不新增审批。"
+        ]
+      },
+      "validation": [
+        "tests/helper.test.mjs"
+      ],
+      "helperContract": "helper-contract.json"
+    }
+  ]
+}

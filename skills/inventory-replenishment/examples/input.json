@@ -1,0 +1,26 @@
+{
+  "context": {
+    "organizationId": "synthetic-demo",
+    "workId": "professional-method-demo",
+    "revision": "1"
+  },
+  "sku": "synthetic-A",
+  "unit": "piece",
+  "demandPerDay": 10,
+  "dailyStdDev": 3,
+  "leadDays": 4,
+  "reviewDays": 3,
+  "zScore": 1.645,
+  "usableOnHand": 40,
+  "confirmedOnOrder": 10,
+  "backorders": 5,
+  "packSize": 12,
+  "minOrder": 24,
+  "maxOrder": 120,
+  "assumptions": {
+    "independentDailyDemand": true,
+    "stableDemand": true,
+    "fixedLeadTime": true,
+    "confirmedOrdersArriveWithinProtectionPeriod": true
+  }
+}

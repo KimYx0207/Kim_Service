@@ -1,0 +1,155 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$comment": "Generated from capability.json input; edit the contract and rebuild.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "organizationId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "workId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "revision": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        }
+      },
+      "required": [
+        "organizationId",
+        "workId",
+        "revision"
+      ],
+      "description": "本次组织、事项和输入版本；只是绑定身份，不保存画像。"
+    },
+    "sku": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "description": "可唯一识别的SKU，本次单SKU计算。"
+    },
+    "unit": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 32,
+      "description": "所有数量共同单位。"
+    },
+    "demandPerDay": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100000000,
+      "description": "同口径日均需求，不包含单位不一致的汇总。"
+    },
+    "dailyStdDev": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100000000,
+      "description": "独立日需求标准差，不是方差。"
+    },
+    "leadDays": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 3650,
+      "description": "固定到货提前期，日历与需求一致。"
+    },
+    "reviewDays": {
+      "type": "number",
+      "minimum": 0.001,
+      "maximum": 3650,
+      "description": "周期复核间隔，大于0。"
+    },
+    "zScore": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 5,
+      "description": "调用方选择的正态分位参数，不是fill rate。"
+    },
+    "usableOnHand": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1000000000000,
+      "description": "扣除冻结/已分配后的可用现货。"
+    },
+    "confirmedOnOrder": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1000000000000,
+      "description": "确认将在保护期内到货且未另行占用的在途。"
+    },
+    "backorders": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1000000000000,
+      "description": "尚未从可用现货扣减的欠单；按订单和预留记录去重，不重复扣已分配需求。"
+    },
+    "packSize": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 1000000,
+      "description": "整数包装倍数。"
+    },
+    "minOrder": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 1000000000,
+      "description": "供应商最小订单量；无需要时不触发。"
+    },
+    "maxOrder": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 1000000000,
+      "description": "本次订单数量上限，0表示不能下单。"
+    },
+    "assumptions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "independentDailyDemand": {
+          "const": true
+        },
+        "stableDemand": {
+          "const": true
+        },
+        "fixedLeadTime": {
+          "const": true
+        },
+        "confirmedOrdersArriveWithinProtectionPeriod": {
+          "const": true
+        }
+      },
+      "required": [
+        "independentDailyDemand",
+        "stableDemand",
+        "fixedLeadTime",
+        "confirmedOrdersArriveWithinProtectionPeriod"
+      ],
+      "description": "四项明确前提；不满足时选择其他模型，不伪填true。"
+    }
+  },
+  "required": [
+    "context",
+    "sku",
+    "unit",
+    "demandPerDay",
+    "dailyStdDev",
+    "leadDays",
+    "reviewDays",
+    "zScore",
+    "usableOnHand",
+    "confirmedOnOrder",
+    "backorders",
+    "packSize",
+    "minOrder",
+    "maxOrder",
+    "assumptions"
+  ]
+}

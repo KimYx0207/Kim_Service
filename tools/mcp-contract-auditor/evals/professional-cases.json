@@ -1,0 +1,238 @@
+{
+  "schemaVersion": 1,
+  "roleId": "mcp-contract-auditor",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "new-destructive-tool",
+      "capabilityId": "mcp-contract-auditor-deliver",
+      "category": "worked_example",
+      "scenario": "旧查询服务多出删除工具且输入字段改名",
+      "input": {
+        "context": {
+          "organizationId": "synthetic-demo",
+          "workId": "professional-method-demo",
+          "revision": "1"
+        },
+        "previous": {
+          "serverId": "synthetic:crm-readonly",
+          "protocolVersion": "2026-07-28",
+          "complete": true,
+          "tools": [
+            {
+              "name": "lookup_customer",
+              "inputSchema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id"
+                ]
+              },
+              "annotations": {
+                "readOnlyHint": true,
+                "openWorldHint": false
+              }
+            }
+          ]
+        },
+        "current": {
+          "serverId": "synthetic:crm-readonly",
+          "protocolVersion": "2026-07-28",
+          "complete": true,
+          "tools": [
+            {
+              "name": "lookup_customer",
+              "inputSchema": {
+                "type": "object",
+                "properties": {
+                  "customerId": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "customerId"
+                ]
+              },
+              "annotations": {
+                "readOnlyHint": true,
+                "openWorldHint": false
+              }
+            },
+            {
+              "name": "delete_customer",
+              "inputSchema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id"
+                ]
+              },
+              "annotations": {
+                "readOnlyHint": false,
+                "destructiveHint": true
+              }
+            }
+          ]
+        },
+        "approvedToolNames": [
+          "lookup_customer"
+        ]
+      },
+      "candidateOutputExcerpt": {
+        "status": "needs_review",
+        "result": {
+          "serverIdentityChanged": false,
+          "protocolVersionChanged": false,
+          "comparisonComplete": true,
+          "added": [
+            "delete_customer"
+          ],
+          "removed": [],
+          "possibleAdded": [],
+          "possibleRemoved": [],
+          "changed": [
+            {
+              "name": "lookup_customer",
+              "fields": [
+                "inputSchema"
+              ],
+              "previousHash": "e10963ced4265ca7f7ed9e30202d2abd99323bb1edf9cc3890358524aac7332a",
+              "currentHash": "97f94705f8000bf47e2db62de1e03eceebc6ac6a029e78f02998de3c8c977535"
+            }
+          ],
+          "unapproved": [
+            "delete_customer"
+          ],
+          "schemaReviews": [
+            {
+              "name": "delete_customer",
+              "inputAssessment": "object_root_declared_not_validated",
+              "outputAssessment": "not_declared",
+              "referenceCount": 0,
+              "annotationHints": {
+                "readOnlyHint": false,
+                "destructiveHint": true,
+                "idempotentHint": "unknown",
+                "openWorldHint": "unknown"
+              },
+              "reviewReasons": [
+                "annotation_hints_incomplete_or_nonboolean"
+              ]
+            },
+            {
+              "name": "lookup_customer",
+              "inputAssessment": "object_root_declared_not_validated",
+              "outputAssessment": "not_declared",
+              "referenceCount": 0,
+              "annotationHints": {
+                "readOnlyHint": true,
+                "destructiveHint": "unknown",
+                "idempotentHint": "unknown",
+                "openWorldHint": false
+              },
+              "reviewReasons": [
+                "annotation_hints_incomplete_or_nonboolean"
+              ]
+            }
+          ],
+          "trust": "not_established_by_annotations",
+          "schemaValidation": "structural_inventory_only_not_full_json_schema_validation",
+          "liveConnectionObserved": false
+        }
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "两类变化独立报告，服务名称不能代替工具权限。",
+      "diagnosticRefs": [
+        "authority"
+      ],
+      "decisionRuleRefs": [
+        "annotations-not-authority"
+      ]
+    },
+    {
+      "id": "partial-deletion",
+      "capabilityId": "mcp-contract-auditor-deliver",
+      "category": "failure_boundary",
+      "scenario": "新快照只抓一页便把未出现的工具报告为确定删除",
+      "input": {
+        "context": {
+          "organizationId": "synthetic-demo",
+          "workId": "professional-method-demo",
+          "revision": "1"
+        },
+        "previous": {
+          "serverId": "synthetic:crm-readonly",
+          "protocolVersion": "2026-07-28",
+          "complete": true,
+          "tools": [
+            {
+              "name": "lookup_customer",
+              "inputSchema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id"
+                ]
+              },
+              "annotations": {
+                "readOnlyHint": true,
+                "openWorldHint": false
+              }
+            }
+          ]
+        },
+        "current": {
+          "serverId": "synthetic:crm-readonly",
+          "protocolVersion": "2026-07-28",
+          "complete": false,
+          "tools": []
+        },
+        "approvedToolNames": [
+          "lookup_customer"
+        ]
+      },
+      "candidateOutputExcerpt": {
+        "status": "completed",
+        "result": {
+          "serverIdentityChanged": false,
+          "protocolVersionChanged": false,
+          "comparisonComplete": true,
+          "added": [],
+          "removed": [
+            "lookup_customer"
+          ],
+          "possibleAdded": [],
+          "possibleRemoved": [],
+          "changed": [],
+          "unapproved": [],
+          "schemaReviews": [],
+          "trust": "not_established_by_annotations",
+          "schemaValidation": "structural_inventory_only_not_full_json_schema_validation",
+          "liveConnectionObserved": false
+        }
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "缺页只支持可能消失，不能得出完整清单差异。",
+      "diagnosticRefs": [
+        "snapshot-scope"
+      ],
+      "decisionRuleRefs": [
+        "partial-inventory"
+      ]
+    }
+  ]
+}
