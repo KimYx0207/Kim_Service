@@ -25,7 +25,7 @@ test('public CLI emits one complete machine catalog and rejects unexpected argum
  const bad=spawnSync(process.execPath,['scripts/service-capabilities.mjs','export','--run-shell'],{cwd:root,encoding:'utf8'});assert.notEqual(bad.status,0);
 });
 test('each package CLI works after an independent copy outside the repository',()=>{
- const temp=fs.mkdtempSync(path.join(os.tmpdir(),'kim-service-helpers-'));try{
+ const temp=fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(),'kim-service-helpers 中文 ')));try{
   for(const id of added){
    const directory=path.join(temp,id);fs.cpSync(path.join(root,'skills',id),directory,{recursive:true});
    if(id==='evidence-pack'){

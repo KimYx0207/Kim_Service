@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import {fileURLToPath} from 'node:url';
 import {spawnSync} from 'node:child_process';
 import {run} from '../scripts/run.mjs';
 const example=()=>JSON.parse(fs.readFileSync(new URL('../examples/input.json',import.meta.url),'utf8'));
@@ -41,5 +42,5 @@ test('adoption includes directly related contradictions and their external sourc
  input.records[3].text+=' changed';assert.throws(()=>run(input),/stale/);
 });
 test('offline CLI produces traceable candidates without business writes',()=>{
- const child=spawnSync(process.execPath,[new URL('../scripts/run.mjs',import.meta.url).pathname,'--input-json','-'],{input:JSON.stringify(example()),encoding:'utf8'});assert.equal(child.status,0,child.stderr);assert.equal(JSON.parse(child.stdout).claims.businessStatePersisted,false);
+ const child=spawnSync(process.execPath,[fileURLToPath(new URL('../scripts/run.mjs',import.meta.url)),'--input-json','-'],{input:JSON.stringify(example()),encoding:'utf8'});assert.equal(child.status,0,child.stderr);assert.equal(JSON.parse(child.stdout).claims.businessStatePersisted,false);
 });

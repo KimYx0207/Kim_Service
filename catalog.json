@@ -1023,7 +1023,7 @@
       "snapshot": "capability-contract-pending-release",
       "version": "0.1.0",
       "contractSha256": "80d4be3ffb907dd06db482b5e9af24098473038e0e1659f78428ffb65c6a135e",
-      "contentSha256": "73d1aeea9f33359c4660bee768f70c66a09c6409e8793ecc4ee8bc2b4df15ee7",
+      "contentSha256": "2768ed6c924f511c211e71861dd1a8562002b0c6e08d5db1791bfa4cf715ebe5",
       "required": [
         "capability.json",
         "CHANGELOG.md",
@@ -1118,7 +1118,7 @@
       "snapshot": "capability-contract-pending-release",
       "version": "0.1.0",
       "contractSha256": "db2d5cb8163d0c1a2e4efc2cdefd71f22497c17fc13703e8efd30b5c901f1919",
-      "contentSha256": "fd0ccd225c99cb3ce95248f2123f8d752f698e5ba9767e38ce11db4b16711fc7",
+      "contentSha256": "395c5ce126689f436244f1c6e9a404943d27979257982dd2ad5af9c4d2302f01",
       "required": [
         "capability.json",
         "CHANGELOG.md",
@@ -1164,7 +1164,7 @@
       "snapshot": "capability-contract-pending-release",
       "version": "0.1.0",
       "contractSha256": "2fb9e3eb9e64469a51eaece8cf8d8c9bad0e74b2400093491874c8ed0dc77a35",
-      "contentSha256": "3f4a8d6ba3446a9a38b106a20baf0a1eb3bb0629012619fcc267c0302006c32a",
+      "contentSha256": "7dd447ffefa7d8ac3321f41fd45420fe5b0dcc038fb9083422e9dff3158d3db8",
       "required": [
         "capability.json",
         "CHANGELOG.md",
@@ -1210,7 +1210,7 @@
       "snapshot": "capability-contract-pending-release",
       "version": "0.1.0",
       "contractSha256": "62da1f35071fd93855309789ca7c2776162ee6d9f46b6416929a4ddf443de346",
-      "contentSha256": "fd1f46bb6dc6f3c6f8c9c4aa5b4b53a3951b49264f1bb4f04da910e40083854f",
+      "contentSha256": "aa9a40b0967fc87434ae41d6df47a7a751ad9ff85efcb70a8ad01b5459d5dfa2",
       "required": [
         "capability.json",
         "CHANGELOG.md",
@@ -1601,7 +1601,7 @@
       "snapshot": "capability-contract-pending-release",
       "version": "0.1.0",
       "contractSha256": "279f3007508fd0532ae9d7ac70731a77135ac00c3a50a7e2987b56c037841339",
-      "contentSha256": "057bf47bddee9ae3252e37a2997979655a2adeb0c78f0bb5bd3dae8fa9ee2a30",
+      "contentSha256": "b33f1504a87a582d4bac51ec4b042f1149f6cf8de33bd632cc8208213db1a8ba",
       "required": [
         "capability.json",
         "CHANGELOG.md",

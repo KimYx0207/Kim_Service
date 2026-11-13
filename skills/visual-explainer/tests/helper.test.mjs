@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import {fileURLToPath} from 'node:url';
 import {spawnSync} from 'node:child_process';
 import vm from 'node:vm';
 import {run} from '../scripts/run.mjs';
@@ -31,7 +32,7 @@ test('material strings are escaped in SVG and HTML instead of becoming active ma
  const result=run(input).result;const svg=result.files[0].content;const html=result.files[1].content;assert.equal(svg.includes('<script>'),false);assert.equal(html.includes('<img src=x'),false);assert.match(html,/\\u003c\/script>/);
 });
 test('CLI emits real artifact content with bounded JSON and honest rendering status',()=>{
- const child=spawnSync(process.execPath,[new URL('../scripts/run.mjs',import.meta.url).pathname,'--input-json','-'],{input:JSON.stringify(example()),encoding:'utf8'});assert.equal(child.status,0,child.stderr);assert.ok(JSON.parse(child.stdout).result.files[0].content.startsWith('<svg'));
+ const child=spawnSync(process.execPath,[fileURLToPath(new URL('../scripts/run.mjs',import.meta.url)),'--input-json','-'],{input:JSON.stringify(example()),encoding:'utf8'});assert.equal(child.status,0,child.stderr);assert.ok(JSON.parse(child.stdout).result.files[0].content.startsWith('<svg'));
 });
 test('actual generated controls advance, go back, show all and respect reduced motion',()=>{
  const html=run(example()).result.files.find(file=>file.name==='storyboard.html').content;

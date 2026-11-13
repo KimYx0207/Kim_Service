@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import {fileURLToPath} from 'node:url';
 import {spawnSync} from 'node:child_process';
 import {run} from '../scripts/run.mjs';
 import {run as files} from '../scripts/files.mjs';
@@ -40,17 +41,17 @@ test('selection is a monotonic prefix even when a later small chunk would fit',(
  const ids=[pack.chunks[2].id,pack.chunks[0].id];const first=run({context,operation:'read',pack,chunkIds:ids,contextBudgetBytes:1200}).result.context;assert.equal(first.nextSelectionOffset,1);const next=run({context,operation:'read',pack,chunkIds:ids,selectionOffset:1,contextBudgetBytes:4500}).result.context;assert.deepEqual(next.citations.map(c=>c.id),[ids[1]]);
 });
 test('high JSON escaping cannot create a pack larger than this interface can re-read',()=>{
- const dir=fs.mkdtempSync(path.join(os.tmpdir(),'kim-evidence-escaping-'));try{
+ const dir=fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(),'kim-evidence-escaping-')));try{
   const text='\0'.repeat(4*1024*1024-5000);fs.writeFileSync(path.join(dir,'brief.md'),text);
   const request={context,operation:'build',workspaceRoot:dir,packPath:'pack.json',sourceFiles:[{id:'brief',title:'资料',revision:'v1',path:'brief.md'}]};
   assert.throws(()=>files(request),/cannot be re-read/);assert.equal(fs.existsSync(path.join(dir,'pack.json')),false);assert.deepEqual(fs.readdirSync(dir),['brief.md']);
  }finally{fs.rmSync(dir,{recursive:true,force:true});}
 });
 test('file CLI keeps 6 MiB Unicode on disk and returns bounded output; source and pack drift fail',()=>{
- const dir=fs.mkdtempSync(path.join(os.tmpdir(),'kim-evidence-'));try{
+ const dir=fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(),'kim-evidence-')));try{
   const unit='中😀\r\n';const text=unit.repeat(Math.ceil(6*1024*1024/bytes(unit)));fs.writeFileSync(path.join(dir,'brief.md'),text);
   const request={context,operation:'build',workspaceRoot:dir,packPath:'pack.json',sourceFiles:[{id:'brief',title:'资料',revision:'v1',path:'brief.md'}]};
-  const cli=spawnSync(process.execPath,[new URL('../scripts/files.mjs',import.meta.url).pathname,'--input-json','-'],{input:JSON.stringify(request),encoding:'utf8',maxBuffer:1024*1024});
+  const cli=spawnSync(process.execPath,[fileURLToPath(new URL('../scripts/files.mjs',import.meta.url)),'--input-json','-'],{input:JSON.stringify(request),encoding:'utf8',maxBuffer:1024*1024});
   assert.equal(cli.status,0,cli.stderr);assert.ok(bytes(cli.stdout)<131072);const result=JSON.parse(cli.stdout).result;assert.equal(Object.hasOwn(result,'pack'),false);
   const pack=JSON.parse(fs.readFileSync(path.join(dir,'pack.json'),'utf8'));assert.equal(pack.chunks.map(c=>c.text).join(''),text);assert.equal(pack.sources[0].sha256,hash(text));
   const read={context,operation:'read',workspaceRoot:dir,packPath:'pack.json',expectedPackSha256:result.packRef.sha256,selectionOffset:result.context.nextSelectionOffset};
@@ -59,7 +60,7 @@ test('file CLI keeps 6 MiB Unicode on disk and returns bounded output; source an
  }finally{fs.rmSync(dir,{recursive:true,force:true});}
 });
 test('file boundaries reject traversal, symlinks, invalid UTF-8 and overwriting existing evidence',()=>{
- const dir=fs.mkdtempSync(path.join(os.tmpdir(),'kim-evidence-paths-'));try{
+ const dir=fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(),'kim-evidence-paths-')));try{
   fs.writeFileSync(path.join(dir,'brief.md'),'abc');const request={context,operation:'build',workspaceRoot:dir,packPath:'pack.json',sourceFiles:[{id:'brief',title:'资料',revision:'v1',path:'brief.md'}]};files(request);
   assert.throws(()=>files(request),/already exists/);assert.throws(()=>files({...request,packPath:'../escape'}),/inside/);
   fs.symlinkSync(path.join(dir,'brief.md'),path.join(dir,'link.md'));assert.throws(()=>files({...request,packPath:'new.json',sourceFiles:[{...request.sourceFiles[0],path:'link.md'}]}),/symlink/);
@@ -67,10 +68,20 @@ test('file boundaries reject traversal, symlinks, invalid UTF-8 and overwriting 
  }finally{fs.rmSync(dir,{recursive:true,force:true});}
 });
 test('UTF-8 BOM bytes survive file input and chunk boundaries; excessive heading metadata is bounded',()=>{
- const dir=fs.mkdtempSync(path.join(os.tmpdir(),'kim-evidence-bom-'));try{
+ const dir=fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(),'kim-evidence-bom-')));try{
   const text='\ufeff'+'x'.repeat(4093)+'\ufeff尾部';fs.writeFileSync(path.join(dir,'brief.md'),text);
   const result=files({context,operation:'build',workspaceRoot:dir,packPath:'pack.json',sourceFiles:[{id:'brief',title:'BOM',revision:'v1',path:'brief.md'}]}).result;
   const pack=JSON.parse(fs.readFileSync(path.join(dir,result.packRef.path),'utf8'));assert.equal(pack.chunks.map(c=>c.text).join(''),text);assert.equal(pack.sources[0].sha256,hash(fs.readFileSync(path.join(dir,'brief.md'))));
   assert.throws(()=>run(build('# heading\n'.repeat(10001))),/Too many source sections/);
+ }finally{fs.rmSync(dir,{recursive:true,force:true});}
+});
+test('example resolves its new workspace under a temporary-directory alias without relaxing file boundaries',()=>{
+ const dir=fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(),'kim-evidence-temp-alias-')));try{
+  const physical=path.join(dir,'physical');const alias=path.join(dir,'alias');fs.mkdirSync(physical);fs.symlinkSync(physical,alias,'junction');
+  const aliasWorkspace=path.join(alias,'example work');
+  const child=spawnSync(process.execPath,[fileURLToPath(new URL('../scripts/example.mjs',import.meta.url)),aliasWorkspace],{encoding:'utf8',maxBuffer:1024*1024});
+  assert.equal(child.status,0,child.stderr);const request=JSON.parse(fs.readFileSync(path.join(aliasWorkspace,'request.json'),'utf8'));
+  assert.equal(request.workspaceRoot,fs.realpathSync(aliasWorkspace));assert.ok(JSON.parse(child.stdout).result.packRef.sha256);
+  assert.throws(()=>files({...request,workspaceRoot:aliasWorkspace,packPath:'blocked.json'}),/symlink/);
  }finally{fs.rmSync(dir,{recursive:true,force:true});}
 });

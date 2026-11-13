@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import {fileURLToPath} from 'node:url';
 import {spawnSync} from 'node:child_process';
 import {run} from '../scripts/run.mjs';
 const example=()=>JSON.parse(fs.readFileSync(new URL('../examples/input.json',import.meta.url),'utf8'));
@@ -33,5 +34,5 @@ test('new material revisions make old adoption inactive while retaining its evid
  const result=run(input).result.cases[0];assert.equal(result.adoption.status,'not_decided');assert.equal(result.adoption.previous.status,'adopted');assert.equal(result.receipts[0].caseVersion,2);
 });
 test('offline CLI has no model invocation, real notification or scheduler claim',()=>{
- const child=spawnSync(process.execPath,[new URL('../scripts/run.mjs',import.meta.url).pathname,'--input-json','-'],{input:JSON.stringify(example()),encoding:'utf8'});assert.equal(child.status,0,child.stderr);assert.equal(JSON.parse(child.stdout).claims.modelCalled,false);
+ const child=spawnSync(process.execPath,[fileURLToPath(new URL('../scripts/run.mjs',import.meta.url)),'--input-json','-'],{input:JSON.stringify(example()),encoding:'utf8'});assert.equal(child.status,0,child.stderr);assert.equal(JSON.parse(child.stdout).claims.modelCalled,false);
 });

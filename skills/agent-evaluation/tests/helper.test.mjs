@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import {fileURLToPath} from 'node:url';
 import {spawnSync} from 'node:child_process';
 import {run} from '../scripts/run.mjs';
 import {hash} from '../scripts/runtime.mjs';
@@ -28,6 +29,6 @@ test('JSON pointer treats escaped slash keys correctly and budgets can fail a pa
  const input=example();input.dataset.cases=[{id:'pointer',input:{},tags:[],assertions:[{id:'slash',type:'json_pointer_equals',path:'/a~1b/~0key',value:2,critical:true}]}];input.runs=[{...input.runs[0],datasetSha256:hash(input.dataset),outputs:[{caseId:'pointer',caseInputSha256:hash({}),value:{'a/b':{'~key':2}},measurement:{cost:2,currency:'CNY',latencyMs:20}}]}];const result=run(input).result;assert.equal(result.summaries[0].passed,1);assert.equal(result.summaries[0].budget.cost,'fail');assert.equal(result.summaries[0].gate,'blocked');
 });
 test('documented CLI runs offline and emits one JSON receipt',()=>{
- const child=spawnSync(process.execPath,[new URL('../scripts/run.mjs',import.meta.url).pathname,'--input-json','-'],{input:JSON.stringify(example()),encoding:'utf8'});
+ const child=spawnSync(process.execPath,[fileURLToPath(new URL('../scripts/run.mjs',import.meta.url)),'--input-json','-'],{input:JSON.stringify(example()),encoding:'utf8'});
  assert.equal(child.status,0,child.stderr);const result=JSON.parse(child.stdout);assert.equal(result.claims.modelCalled,false);assert.equal(result.context.workId,'work-onboarding');
 });
