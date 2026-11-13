@@ -3,3 +3,4 @@
 ## 0.1.0
 
 - Add bounded local JSON helper, schemas, examples and failure tests.
+- Canonical source: `skills/evidence-pack`; release provenance is bound to the committed component tree.

@@ -719,7 +719,7 @@ function validateReadmeLayoutMetadata(catalog) {
   return { layout, groups };
 }
 
-function validateReadmeLayoutText(rawReadme, assets, groups, label, report = fail) {
+function validateReadmeLayoutText(rawReadme, assets, groups, label, report = fail, { requireAllAssets = true } = {}) {
   const readme = stripFencedCodeBlocks(rawReadme);
   const images = htmlImages(readme);
   const assetImages = new Map();
@@ -752,6 +752,13 @@ function validateReadmeLayoutText(rawReadme, assets, groups, label, report = fai
   for (const asset of assets) {
     const acceptedPaths = asset.readmePaths ?? [asset.path];
     const matches = images.filter((image) => acceptedPaths.includes(image.src));
+    const assetFilename = path.posix.basename(asset.path);
+    for (const image of images) {
+      if (image.src && !acceptedPaths.includes(image.src) && path.posix.basename(image.src.split(/[?#]/)[0]) === assetFilename) {
+        reject(label + ' public asset reference must use its catalog path: ' + image.src);
+      }
+    }
+    if (matches.length === 0 && !requireAllAssets) continue;
     if (matches.length !== 1) {
       reject(label + ' must contain exactly one rendered image for ' + asset.path + '; found ' + matches.length);
       continue;
@@ -839,6 +846,30 @@ function checkReadmeLayoutRegressions(assets, groups) {
   validateReadmeLayoutText(good, assets, groups, 'README layout positive fixture', (message) => goodErrors.push(message));
   if (goodErrors.length) fail('README layout scanner rejected its positive fixture: ' + goodErrors.join('; '));
 
+  // Support assets may be absent or selected individually. Rendering one
+  // still retains its original path, width, centering and duplicate checks.
+  const optionalPolicy = { requireAllAssets: false };
+  const singleAsset = '<p align="center"><img src="' + contact.path + '" alt="Existing asset" width="' + contact.readme.width + '"></p>';
+  for (const fixture of ['# Project\n\n[Issues](https://github.com/example/project/issues)\n', singleAsset, good]) {
+    const fixtureErrors = [];
+    validateReadmeLayoutText(fixture, assets, groups, 'README optional asset positive fixture', message => fixtureErrors.push(message), optionalPolicy);
+    if (fixtureErrors.length) fail('README optional asset scanner rejected its positive fixture: ' + fixtureErrors.join('; '));
+  }
+  const optionalBad = [
+    singleAsset.replace('src="' + contact.path + '"', 'src="missing/' + contact.path + '"'),
+    singleAsset.replace('width="' + contact.readme.width + '"', 'width="1"'),
+    singleAsset.replace('align="center"', 'align="right"'),
+    singleAsset + '\n' + singleAsset
+  ];
+  for (const [index, fixture] of optionalBad.entries()) {
+    const fixtureErrors = [];
+    validateReadmeLayoutText(fixture, assets, groups, 'README optional asset negative fixture', message => fixtureErrors.push(message), optionalPolicy);
+    if (!fixtureErrors.length) fail('README optional asset scanner missed negative fixture ' + String(index + 1));
+  }
+  const missingRequired = [];
+  validateReadmeLayoutText(singleAsset, assets, groups, 'Explicit required asset policy fixture', message => missingRequired.push(message));
+  if (!missingRequired.length) fail('README scanner ignored its explicit required asset policy');
+
   // Both a shared root asset and an existing identical package copy can render
   // the same protected asset, but displaying both is still a duplicate.
   const projectedAssets = assets.map(asset => ({ ...asset, readmePaths: ['../../' + asset.path, asset.path] }));
@@ -905,7 +936,9 @@ function checkReadmeLayouts(catalog) {
       fs.readFileSync(path.join(ROOT, filename), 'utf8'),
       catalog.assets,
       groups,
-      'Repository root ' + filename
+      'Repository root ' + filename,
+      fail,
+      { requireAllAssets: false }
     );
   }
 
@@ -921,7 +954,9 @@ function checkReadmeLayouts(catalog) {
         fs.readFileSync(path.join(componentRoot, filename), 'utf8'),
         componentAssets,
         groups,
-        component.id + ' ' + filename
+        component.id + ' ' + filename,
+        fail,
+        { requireAllAssets: false }
       );
     }
   }
@@ -978,7 +1013,7 @@ console.log(
   'Kim_Service repository check passed: ' +
   String(catalog.components.length) + ' components, ' +
   String(files.length) + ' files, ' +
-  String(catalog.assets.length) + ' protected QR assets.'
+  String(catalog.assets.length) + ' integrity-checked assets.'
 );
 
 if (RELEASE_MODE) {

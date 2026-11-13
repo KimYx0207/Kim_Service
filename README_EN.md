@@ -360,7 +360,7 @@ Methods and examples provide a working basis. For your own task, retain the actu
 
 ## Support the project
 
-If these open-source projects help you, please consider starring and sharing them.
+Report a problem or suggest an improvement through the project's [Issues](https://github.com/KimYx0207/Kim_Service/issues). If the project helps you, please consider [starring and sharing it](https://github.com/KimYx0207/Kim_Service).
 
 ## Open source
 

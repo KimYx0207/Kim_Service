@@ -365,7 +365,7 @@ git pull --ff-only
 
 ## 支持项目
 
-如果这些开源项目帮到了你，欢迎 Star 和分享。
+发现问题或有改进建议，请通过项目的 [Issues](https://github.com/KimYx0207/Kim_Service/issues) 提交。若项目帮到了你，欢迎 [Star 和分享](https://github.com/KimYx0207/Kim_Service)。
 
 ## 开源说明
 
