@@ -140,6 +140,8 @@ The expected delivery is editable page source, exportable design values in JSON,
 
 Each task keeps its own draft. Resume after a refresh; before changing devices, download the draft and import it into the same task elsewhere. Form changes preserve a manually edited request. Choose “Regenerate from the form” when you want to rebuild it, with “Restore previous version” available afterward. If browser storage is unavailable or full, download the draft to preserve the current edit.
 
+When large materials exceed the inline budget, the request uses file references and the page offers downloads of the complete source. Attach those files to your AI conversation or place them in a workspace the Agent can read, then have it retrieve the sections needed for the current module. The page does not upload files. Drafts store materials once and rebuild automatic requests on restore; authored requests and undo versions are preserved. `contentPolicy` in `config/task-browser.json` owns the inline budgets and the shared draft export/import limit: currently 4 KiB for goals, 16 KiB for materials, and 16 MiB for drafts. Above the draft limit, the page keeps current edits and tells you to download the complete materials, save authored request text, and use file references before exporting. It does not produce an export that the same configuration cannot import.
+
 ## Use it directly, or let Meta_Kim organize the project
 
 **For one clear task, use Kim Service directly.** Edit a resume, compare quotes, or complete the forecast or design pilot above: choose a method, provide materials, let the current AI client work, and inspect the delivery. The specialist Agent, relevant Skills, and available tools support that task.

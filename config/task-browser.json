@@ -235,8 +235,12 @@
   ],
   "schemaVersion": 1,
   "drafts": {
-    "storageKeyPrefix": "kim-service.task-draft",
-    "maxImportBytes": 1048576
+    "storageKeyPrefix": "kim-service.task-draft"
+  },
+  "contentPolicy": {
+    "inlineGoalBytes": 4096,
+    "inlineMaterialBytes": 16384,
+    "maxDraftBytes": 16777216
   },
   "repository": {
     "url": "https://github.com/KimYx0207/Kim_Service",

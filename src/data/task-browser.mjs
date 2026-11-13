@@ -33,7 +33,10 @@ export function readBrowserConfig(root = ROOT) {
       !Array.isArray(ui.commonFields) || !Array.isArray(ui.suggestions) ||
       !ui.typeNames || !ui.fieldNames || !ui.repository?.ref ||
       typeof ui.drafts?.storageKeyPrefix !== 'string' || !ui.drafts.storageKeyPrefix ||
-      !Number.isSafeInteger(ui.drafts.maxImportBytes) || ui.drafts.maxImportBytes < 1) throw new Error('Invalid task-browser configuration');
+      ['inlineGoalBytes','inlineMaterialBytes','maxDraftBytes'].some(key =>
+        !Number.isSafeInteger(ui.contentPolicy?.[key]) || ui.contentPolicy[key] < 1) ||
+      ui.contentPolicy.inlineGoalBytes > ui.contentPolicy.maxDraftBytes ||
+      ui.contentPolicy.inlineMaterialBytes > ui.contentPolicy.maxDraftBytes) throw new Error('Invalid task-browser configuration');
   for (const value of [ui.repository.url, ui.repository.publishedUrl]) {
     const url = new URL(value);
     if (url.protocol !== 'https:' || url.username || url.password || url.search || url.hash) {

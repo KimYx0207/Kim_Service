@@ -4,7 +4,7 @@
   const data = JSON.parse(document.getElementById('capability-data').textContent);
   const pageUrl = new URL(location.href);
   let app = createTaskBrowser(data.ui, { locale: pageUrl.searchParams.get('lang') });
-  let {filterCapabilities,buildRequest,requestForDraft,fields,titleOf,briefLabel,sourceUrl,sampleUrl,
+  let {filterCapabilities,buildRequest,requestAttachments,requestForDraft,fields,titleOf,briefLabel,sourceUrl,sampleUrl,
     commonFields:COMMON_FIELDS,typeNames:TYPE_NAMES,locale,text:t,hosts,suggestions,
     detailOf,summaryOf,showcaseOf}=app;
   function applyStaticLanguage() {
@@ -20,7 +20,8 @@
     document.getElementById('inventory').textContent = t('ui.inventory',{components:data.componentCount,capabilities:data.capabilityCount});
   }
   for (const picker of document.querySelectorAll('.language-select')) picker.addEventListener('change',()=>switchLanguage(picker.value));
-  const drafts=createTaskDraftStore({getStorage:()=>window.localStorage,keyPrefix:data.ui.drafts.storageKeyPrefix});
+  const draftOptions={maxBytes:data.ui.contentPolicy.maxDraftBytes};
+  const drafts=createTaskDraftStore({getStorage:()=>window.localStorage,keyPrefix:data.ui.drafts.storageKeyPrefix,...draftOptions});
   const search = document.getElementById('search');
   search.value = pageUrl.searchParams.get('q') || '';
   const cards = document.getElementById('cards');
@@ -36,7 +37,7 @@
 
   function switchLanguage(value) {
     app = createTaskBrowser(data.ui,{locale:value});
-    ({filterCapabilities,buildRequest,requestForDraft,fields,titleOf,briefLabel,sourceUrl,sampleUrl,
+    ({filterCapabilities,buildRequest,requestAttachments,requestForDraft,fields,titleOf,briefLabel,sourceUrl,sampleUrl,
       commonFields:COMMON_FIELDS,typeNames:TYPE_NAMES,locale,text:t,hosts,suggestions,
       detailOf,summaryOf,showcaseOf}=app);
     applyStaticLanguage();
@@ -59,6 +60,12 @@
     if (className) node.className = className;
     if (text !== undefined) node.textContent = text;
     return node;
+  }
+
+  function downloadText(filename, content, type) {
+    const url=URL.createObjectURL(new Blob([content],{type}));
+    const link=element('a');link.href=url;link.download=filename;link.click();
+    setTimeout(()=>URL.revokeObjectURL(url),1000);
   }
 
   function fileLink(relative, text, className) {
@@ -144,11 +151,13 @@
     const draft = drafts.get(capability.id) || {goal:'',materials:'',host:hosts[0].id,request:'',manual:false,componentVersion:capability.componentVersion};
     const notices=[];
     if(draft.componentVersion!==capability.componentVersion){
-      draft.manual=true;
-      notices.push(t('ui.versionChanged',{from:draft.componentVersion,to:capability.componentVersion}));
+      const generated=draft.requestMode==='generated' && !draft.manual;
+      notices.push(t(generated?'ui.generatedVersionChanged':'ui.versionChanged',{from:draft.componentVersion,to:capability.componentVersion}));
+      if(generated)draft.componentVersion=capability.componentVersion;else draft.manual=true;
     }
     if(!hosts.some(item=>item.id===draft.host)){
-      draft.host=hosts[0].id;draft.manual=true;
+      draft.host=hosts[0].id;
+      if(draft.requestMode!=='generated')draft.manual=true;
       notices.push(t('ui.hostRemoved'));
     }
     if (trigger) lastTrigger = trigger;
@@ -211,6 +220,7 @@
     const preparedRequest = requestForDraft(capability,draft);
     request.value = preparedRequest.request;
     draft.manual = preparedRequest.manual;
+    delete draft.requestMode;
     const hostLabel=element('label','request-field',t('ui.requestHost'));
     const host=element('select'); host.id='request-host'; hostLabel.htmlFor=host.id;
     hosts.forEach(item=>{const option=element('option','',item.label);option.value=item.id;host.append(option);});
@@ -221,24 +231,43 @@
     const materialLabel=element('label','request-field',t('ui.requestMaterials'));
     const materials=element('textarea');materials.id='request-materials';materialLabel.htmlFor=materials.id;
     materials.className='materials-input';materials.placeholder=t('ui.materialsPlaceholder');materials.value=draft.materials;
+    const attachments=element('div','material-attachments');
+    function renderAttachments(){
+      const files=requestAttachments(capability,{goal:goal.value,materials:materials.value});
+      attachments.replaceChildren();attachments.hidden=!files.length;
+      if(!files.length)return;
+      attachments.append(element('p','detail-summary',t(draft.manual?'ui.manualAttachmentNote':'ui.attachmentNote')));
+      const actions=element('div','draft-actions');
+      for(const file of files){
+        const button=element('button','secondary',t('ui.downloadAttachment',{filename:file.filename,bytes:file.bytes}));
+        button.type='button';
+        button.addEventListener('click',()=>downloadText(file.filename,file.content,'text/plain;charset=utf-8'));
+        actions.append(button);
+      }
+      attachments.append(actions);
+    }
     const update=element('button','secondary',t('ui.regenerate')); update.type='button';
     const undo=element('button','secondary',t('ui.undo'));undo.type='button';undo.disabled=typeof draft.previousRequest!=='string';
     const editor=element('details','request-editor');editor.append(element('summary','',t('ui.editorSummary')),request,update,undo);
     const draftStatus=element('p','draft-status');draftStatus.setAttribute('role','status');
+    const downloadRequest=element('button','secondary',t('ui.downloadRequest'));downloadRequest.type='button';
+    downloadRequest.addEventListener('click',()=>downloadText(capability.id+'-request.txt',request.value,'text/plain;charset=utf-8'));
     function renderDraftStatus(){
       const state=drafts.status(capability.id);
       const text=state==='unavailable'?t('ui.draftUnavailable'):
         state==='unreadable'?t('ui.draftUnreadable'):
+        state==='too_large'?t('ui.draftTooLarge',{bytes:draftOptions.maxBytes}):
         state==='delete_failed'?t('ui.draftDeleteFailed'):
         state==='saved'||state==='restored'?t('ui.draftSaved'):
         t('ui.draftEmpty');
       draftStatus.textContent=[text,...notices].join(' ');
+      downloadRequest.hidden=!draft.manual;
     }
-    function saveDraft(){draft.goal=goal.value;draft.materials=materials.value;draft.host=host.value;draft.request=request.value;drafts.set(capability.id,{...draft});renderDraftStatus();}
+    function saveDraft(){draft.goal=goal.value;draft.materials=materials.value;draft.host=host.value;draft.request=request.value;drafts.set(capability.id,{...draft},{generatedRequest:buildRequest(capability,draft)});renderDraftStatus();renderAttachments();}
     function refreshRequest(){draft.goal=goal.value;draft.materials=materials.value;draft.host=host.value;if(!draft.manual){request.value=buildRequest(capability,draft);}else{copyStatus.textContent=t('ui.manualPreserved');}saveDraft();}
     goal.addEventListener('input',refreshRequest);materials.addEventListener('input',refreshRequest);host.addEventListener('change',refreshRequest);
     request.addEventListener('input',()=>{draft.manual=true;saveDraft();});
-    update.addEventListener('click',()=>{draft.previousRequest=request.value;request.value=buildRequest(capability,draft);draft.manual=false;draft.componentVersion=capability.componentVersion;notices.length=0;undo.disabled=false;saveDraft();copyStatus.textContent=t('ui.regenerated');});
+    update.addEventListener('click',()=>{const generated=buildRequest(capability,draft);if(draft.manual||request.value!==generated){draft.previousRequest=request.value;undo.disabled=false;}request.value=generated;draft.manual=false;draft.componentVersion=capability.componentVersion;notices.length=0;saveDraft();copyStatus.textContent=t('ui.regenerated');});
     undo.addEventListener('click',()=>{if(typeof draft.previousRequest!=='string')return;const current=request.value;request.value=draft.previousRequest;draft.previousRequest=current;draft.manual=true;saveDraft();copyStatus.textContent=t('ui.undone');});
     const draftActions=element('div','draft-actions');
     const download=element('button','secondary',t('ui.downloadDraft'));download.type='button';
@@ -247,28 +276,32 @@
     const file=element('input');file.type='file';file.accept='.json,application/json';file.hidden=true;file.id='import-draft';
     download.addEventListener('click',()=>{
       saveDraft();
-      const url=URL.createObjectURL(new Blob([serializeTaskDraft(capability.id,draft)],{type:'application/json'}));
-      const link=element('a');link.href=url;link.download=capability.id+'-draft.json';link.click();
-      setTimeout(()=>URL.revokeObjectURL(url),1000);
+      try{
+        const content=serializeTaskDraft(capability.id,draft,{...draftOptions,generatedRequest:buildRequest(capability,draft)});
+        downloadText(capability.id+'-draft.json',content,'application/json');
+      }catch(error){
+        copyStatus.textContent=t(error.code==='DRAFT_TOO_LARGE'?'ui.draftTooLarge':'ui.exportFailed',{bytes:draftOptions.maxBytes});
+      }
     });
     restore.addEventListener('click',()=>file.click());
     file.addEventListener('change',async()=>{
       const selected=file.files[0];if(!selected)return;
       try{
-        if(selected.size>data.ui.drafts.maxImportBytes)throw Object.assign(new Error('Draft too large'),{code:'DRAFT_TOO_LARGE'});
-        const restored=parseTaskDraft(await selected.text(),capability.id);
+        if(selected.size>draftOptions.maxBytes)throw Object.assign(new Error('Draft too large'),{code:'DRAFT_TOO_LARGE'});
+        const restored=parseTaskDraft(await selected.text(),capability.id,draftOptions);
         drafts.set(capability.id,restored);
         if(activeId===capability.id)openDetail(capability,null,false);
       }catch(error){
         const key=error instanceof SyntaxError?'ui.importSyntax':
           {DRAFT_FORMAT:'ui.importFormat',DRAFT_FIELDS:'ui.importMissing',DRAFT_HISTORY:'ui.importHistory',DRAFT_TOO_LARGE:'ui.draftTooLarge'}[error.code]||'ui.importUnknown';
-        copyStatus.textContent=t('ui.importFailed',{reason:t(key)});
+        copyStatus.textContent=t('ui.importFailed',{reason:t(key,{bytes:draftOptions.maxBytes})});
       }
       finally{file.value='';}
     });
     clear.addEventListener('click',()=>{if(drafts.remove(capability.id))openDetail(capability,null,false);else renderDraftStatus();});
-    draftActions.append(download,restore,clear,file);
+    draftActions.append(download,downloadRequest,restore,clear,file);
     renderDraftStatus();
+    renderAttachments();
     const copyActions = element('div','copy-actions');
     const copy = element('button','primary',t('ui.copy'));
     copy.type = 'button';
@@ -282,11 +315,12 @@
       copy.disabled = true;copy.textContent=t('ui.copying');
       const success = await copyRequest(request,navigator.clipboard);
       copy.disabled = false;copy.textContent=t('ui.copy');
-      copyStatus.textContent = success ? t('ui.copySuccess',{host:hosts.find(item=>item.id===host.value).label}) : t('ui.copyFailure');
+      copyStatus.textContent = (success ? t('ui.copySuccess',{host:hosts.find(item=>item.id===host.value).label}) : t('ui.copyFailure'))+
+        (requestAttachments(capability,draft).length?' '+t('ui.attachBeforeSend'):'');
     });
     select.addEventListener('click',()=>{editor.open=true;request.focus();request.select();copyStatus.textContent=t('ui.selected');});
     copyActions.append(copy,select,copyStatus);
-    requestBox.append(requestHeading,element('p','',t('ui.requestIntro')),hostLabel,host,goalLabel,goal,materialLabel,materials,editor,copyActions,draftActions,draftStatus);
+    requestBox.append(requestHeading,element('p','',t('ui.requestIntro')),hostLabel,host,goalLabel,goal,materialLabel,materials,attachments,editor,copyActions,draftActions,draftStatus);
     const note = element('p','source-note',t('ui.sourcePrefix'));
     note.append(fileLink(`${capability.componentPath}/capability.json`,`${capability.componentPath}/capability.json`));
     note.append(document.createTextNode(t('ui.sourceSuffix')));

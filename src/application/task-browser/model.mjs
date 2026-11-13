@@ -94,18 +94,32 @@ export function createTaskBrowser(config, { locale: requestedLocale = config.def
     });
   }
 
+  function requestAttachments(capability, { goal = '', materials = '' } = {}) {
+    return [['goal', goal, config.contentPolicy.inlineGoalBytes],
+      ['materials', materials, config.contentPolicy.inlineMaterialBytes]].flatMap(([kind, content, budget]) => {
+      const bytes = new TextEncoder().encode(content).byteLength;
+      // Preserve the exact source in a downloadable file; never silently truncate it.
+      return bytes > budget ? [{ kind, filename: `${capability.id}-${kind}.txt`, content, bytes }] : [];
+    });
+  }
+
   function buildRequest(capability, { goal = '', materials = '', host = 'existing' } = {}) {
     const entry = `${capability.componentPath}/${capability.entrypoint}`;
     const inputs = fields(capability.input, { capability }).filter(field => field.required);
     const outputs = fields(capability.output, { capability });
+    const attachments = requestAttachments(capability, { goal, materials });
+    const goalFile = attachments.find(file => file.kind === 'goal');
+    const materialsFile = attachments.find(file => file.kind === 'materials');
+    const fileReference = file => text('request.fileReference', { filename: file.filename, bytes: file.bytes });
     const fieldName = field => `${field.description || field.label}${english ? ' (' : '（'}${field.key}${english ? ')' : '）'}`;
     const lines = [
       text('request.repositoryIntro'), '', text('request.readFirst', { entry }),
       ...(capability.readme && capability.readme !== entry ? [text('request.readme', { readme: capability.readme })] : []),
       text('request.capability', { id: capability.id }), text('request.version', { version: capability.componentVersion }), '',
       text('request.declaration', { summary: summaryOf(capability) }), '',
-      text('request.goal', { goal: goal.trim() || text('request.goalPlaceholder') }), '',
-      text('request.materials'), ...(materials.trim() ? [materials.trim(), ''] : []),
+      text('request.goal', { goal: goalFile ? fileReference(goalFile) : goal.trim() || text('request.goalPlaceholder') }), '',
+      text('request.materials'), ...(materialsFile ? [fileReference(materialsFile), ''] : materials.trim() ? [materials.trim(), ''] : []),
+      ...(attachments.length ? [text('request.readAttachments'), ''] : []),
       ...inputs.map(field => `- ${fieldName(field)}${english ? ': ' : '：'}${text('request.requiredUnknown')}`),
       ...(inputs.length ? [] : [text('request.emptyMaterials')]), '',
       text('request.deliver'),
@@ -119,6 +133,7 @@ export function createTaskBrowser(config, { locale: requestedLocale = config.def
   function requestForDraft(capability, draft) {
     if (draft.manual) return { request: draft.request, manual: true };
     const request = buildRequest(capability, draft);
+    if (draft.requestMode === 'generated') return { request, manual: false };
     if (!draft.request || draft.request === request) return { request, manual: false };
     const otherLanguage = createTaskBrowser(config, { locale: english ? 'zh-CN' : 'en' });
     if (draft.request === otherLanguage.buildRequest(capability, draft)) return { request, manual: false };
@@ -141,6 +156,6 @@ export function createTaskBrowser(config, { locale: requestedLocale = config.def
       inputs: translated.inputs, outputs: translated.outputs } : sample;
   }
   return Object.freeze({ locale, text, hosts, suggestions, detailOf, summaryOf, showcaseOf,
-    filterCapabilities, buildRequest, requestForDraft, fields, titleOf, briefLabel, sourceUrl, sampleUrl,
+    filterCapabilities, buildRequest, requestAttachments, requestForDraft, fields, titleOf, briefLabel, sourceUrl, sampleUrl,
     commonFields: COMMON_FIELDS, typeNames: TYPE_NAMES });
 }

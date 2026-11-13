@@ -2,6 +2,8 @@
 
 核查日期：2026-10-05。范围：Meta_Kim 9f4e07d9 与 Kim Service V1.7 的公开源码声明及一手上游。
 
+> 2026-11-13 补充核对：下列清单保留 2026-10-05 的历史快照。Meta_Kim 当前 [codex-capability-recovery.mjs](https://github.com/KimYx0207/Meta_Kim/blob/57ad5563834f04f894255d8c7867d041f1878ea1/scripts/codex-capability-recovery.mjs) 已明确引用 GBrain operator 方法，用于先核对原运行与副作用回执再诊断重试。因此 GBrain 的当前状态应读作“有限诊断方法吸收，未接入 GBrain 运行依赖”，不能继续只按下文的历史来源过滤记录理解，也不能据此宣称已吸收其完整检索、知识图谱或记忆能力。
+
 ## 一句话结论
 
 本轮盘点得到 **55 个外部、历史、方法或候选项目身份**，另有 Meta_Kim 自身；专业 Agent 应按任务吸收方法、明确交接与验收，保留宿主工具和授权边界。
