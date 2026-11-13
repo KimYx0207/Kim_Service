@@ -98,7 +98,11 @@ class TaskBrowserLocaleAcceptance(unittest.TestCase):
                          'The original specialist terms remain available without being rewritten')
         self.page.keyboard.press('Escape')
         self.page.set_viewport_size({'width': 375, 'height': 812})
-        self.assertTrue(self.page.evaluate('document.documentElement.scrollWidth <= innerWidth + 1'))
+        overflow = self.page.evaluate('''() => [...document.querySelectorAll('body *')]
+            .filter(el => { const r = el.getBoundingClientRect(); return r.width && (r.right > innerWidth + 1 || r.left < -1); })
+            .map(el => ({tag: el.tagName, id: el.id, className: el.className,
+                width: el.getBoundingClientRect().width, right: el.getBoundingClientRect().right}))''')
+        self.assertTrue(self.page.evaluate('document.documentElement.scrollWidth <= innerWidth + 1'), overflow)
 
     def test_english_copy_and_manual_draft_survive_reload_and_language_switch(self):
         # A local clipboard fixture exercises the UI callback without changing a desktop clipboard.
@@ -174,7 +178,11 @@ class TaskBrowserLocaleAcceptance(unittest.TestCase):
         expect(self.page.locator('.copy-status')).to_contain_text('format or task does not match')
         expect(editor).to_have_value('Keep this draft while a bad import is rejected.')
         self.page.set_viewport_size({'width': 375, 'height': 812})
-        self.assertTrue(self.page.evaluate('document.documentElement.scrollWidth <= innerWidth + 1'))
+        overflow = self.page.evaluate('''() => [...document.querySelectorAll('body *')]
+            .filter(el => { const r = el.getBoundingClientRect(); return r.width && (r.right > innerWidth + 1 || r.left < -1); })
+            .map(el => ({tag: el.tagName, id: el.id, className: el.className,
+                width: el.getBoundingClientRect().width, right: el.getBoundingClientRect().right}))''')
+        self.assertTrue(self.page.evaluate('document.documentElement.scrollWidth <= innerWidth + 1'), overflow)
 
 
 if __name__ == '__main__':

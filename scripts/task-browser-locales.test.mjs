@@ -121,3 +121,9 @@ test('UI messages, templates and sample links use explicit supported locales', (
   const html = renderStartPage(root);
   assert.doesNotMatch(html, /<script[^>]+src=|<link[^>]+(?:stylesheet|preload)|@import|\bfetch\s*\(/iu);
 });
+
+test('host labels follow the selected language without leaking Chinese into English controls', () => {
+  for (const host of en.hosts) assert.doesNotMatch(host.label, chinese, host.id);
+  assert.equal(en.hosts.find(host => host.id === 'doubao').label, 'Doubao Work');
+  assert.match(zh.hosts.find(host => host.id === 'doubao').label, /豆包工作/u);
+});

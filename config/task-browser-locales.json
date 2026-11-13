@@ -344,7 +344,8 @@
         "app": "App"
       },
       "hostLabels": {
-        "existing": "My current AI client"
+        "existing": "My current AI client",
+        "doubao": "Doubao Work"
       },
       "fieldNames": {
         "task": "Task",
