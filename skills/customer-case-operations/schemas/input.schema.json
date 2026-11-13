@@ -1,0 +1,556 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$comment": "Generated from capability.json input; edit the contract and rebuild.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "organizationId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "workId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "revision": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        }
+      },
+      "required": [
+        "organizationId",
+        "workId",
+        "revision"
+      ]
+    },
+    "workflow": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "revision": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "initialState": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "managerRole": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "adoptionRole": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "states": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "label": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200
+              },
+              "requiredMaterials": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "minItems": 0
+              },
+              "terminal": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "id",
+              "label",
+              "requiredMaterials",
+              "terminal"
+            ]
+          },
+          "minItems": 1
+        },
+        "transitions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "from": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "to": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "roles": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "minItems": 1
+              },
+              "requiredMaterials": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "minItems": 0
+              },
+              "requiresDecision": {
+                "type": "boolean"
+              },
+              "decisionRoles": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "minItems": 0
+              }
+            },
+            "required": [
+              "id",
+              "from",
+              "to",
+              "roles",
+              "requiredMaterials",
+              "requiresDecision",
+              "decisionRoles"
+            ]
+          },
+          "minItems": 0
+        },
+        "verificationRole": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        }
+      },
+      "required": [
+        "id",
+        "revision",
+        "initialState",
+        "managerRole",
+        "adoptionRole",
+        "states",
+        "transitions",
+        "verificationRole"
+      ]
+    },
+    "members": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            },
+            "minItems": 1
+          }
+        },
+        "required": [
+          "id",
+          "roles"
+        ]
+      },
+      "minItems": 1
+    },
+    "cases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "customerId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "state": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "ownerId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "version": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "artifactVersion": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "materials": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                },
+                "sourceRef": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2048
+                }
+              },
+              "required": [
+                "id",
+                "sha256",
+                "sourceRef"
+              ]
+            },
+            "minItems": 0
+          }
+        },
+        "required": [
+          "id",
+          "customerId",
+          "state",
+          "ownerId",
+          "version",
+          "artifactVersion",
+          "materials"
+        ]
+      },
+      "minItems": 1
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "caseId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "actorId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "expectedVersion": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "kind": {
+                "const": "transition"
+              },
+              "transitionId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "decision": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "actorId": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  },
+                  "caseSnapshotSha256": {
+                    "type": "string",
+                    "pattern": "^[a-f0-9]{64}$"
+                  },
+                  "transitionId": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  },
+                  "reason": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 2000
+                  },
+                  "evidenceRef": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 2048
+                  }
+                },
+                "required": [
+                  "actorId",
+                  "caseSnapshotSha256",
+                  "transitionId",
+                  "reason",
+                  "evidenceRef"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "caseId",
+              "actorId",
+              "expectedVersion",
+              "kind",
+              "transitionId"
+            ]
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "caseId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "actorId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "expectedVersion": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "kind": {
+                "const": "material"
+              },
+              "material": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  },
+                  "sha256": {
+                    "type": "string",
+                    "pattern": "^[a-f0-9]{64}$"
+                  },
+                  "sourceRef": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 2048
+                  }
+                },
+                "required": [
+                  "id",
+                  "sha256",
+                  "sourceRef"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "caseId",
+              "actorId",
+              "expectedVersion",
+              "kind",
+              "material"
+            ]
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "caseId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "actorId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "expectedVersion": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "kind": {
+                "const": "receipt"
+              },
+              "receiptKind": {
+                "enum": [
+                  "produced",
+                  "verified",
+                  "received"
+                ]
+              },
+              "artifactVersion": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "evidenceRef": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              }
+            },
+            "required": [
+              "id",
+              "caseId",
+              "actorId",
+              "expectedVersion",
+              "kind",
+              "receiptKind",
+              "artifactVersion",
+              "evidenceRef"
+            ]
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "caseId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "actorId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "expectedVersion": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "kind": {
+                "const": "adoption"
+              },
+              "artifactVersion": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "status": {
+                "enum": [
+                  "adopted",
+                  "rejected"
+                ]
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2000
+              },
+              "evidenceRef": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              }
+            },
+            "required": [
+              "id",
+              "caseId",
+              "actorId",
+              "expectedVersion",
+              "kind",
+              "artifactVersion",
+              "status",
+              "reason",
+              "evidenceRef"
+            ]
+          }
+        ]
+      },
+      "minItems": 0
+    }
+  },
+  "required": [
+    "context",
+    "workflow",
+    "members",
+    "cases",
+    "events"
+  ]
+}

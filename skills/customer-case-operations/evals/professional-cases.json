@@ -1,0 +1,281 @@
+{
+  "schemaVersion": 1,
+  "roleId": "customer-case-operations",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "worked-case",
+      "capabilityId": "customer-case-operations-deliver",
+      "category": "worked_example",
+      "scenario": "对示例材料运行实际本地 helper，核对输入版本、输出哈希与未完成边界。",
+      "input": {
+        "context": {
+          "organizationId": "example-company",
+          "workId": "work-onboarding",
+          "revision": "r1"
+        },
+        "workflow": {
+          "id": "onboarding",
+          "revision": "r1",
+          "initialState": "received",
+          "managerRole": "ops-manager",
+          "adoptionRole": "ops-manager",
+          "verificationRole": "reviewer",
+          "states": [
+            {
+              "id": "received",
+              "label": "已收到申请",
+              "requiredMaterials": [],
+              "terminal": false
+            },
+            {
+              "id": "review",
+              "label": "复核材料",
+              "requiredMaterials": [
+                "brief"
+              ],
+              "terminal": false
+            },
+            {
+              "id": "ready",
+              "label": "已形成结论",
+              "requiredMaterials": [
+                "brief"
+              ],
+              "terminal": true
+            }
+          ],
+          "transitions": [
+            {
+              "id": "start-review",
+              "from": "received",
+              "to": "review",
+              "roles": [
+                "operator"
+              ],
+              "requiredMaterials": [
+                "brief"
+              ],
+              "requiresDecision": false,
+              "decisionRoles": []
+            },
+            {
+              "id": "accept",
+              "from": "review",
+              "to": "ready",
+              "roles": [
+                "operator"
+              ],
+              "requiredMaterials": [],
+              "requiresDecision": true,
+              "decisionRoles": [
+                "ops-manager"
+              ]
+            }
+          ]
+        },
+        "members": [
+          {
+            "id": "ops",
+            "roles": [
+              "operator"
+            ]
+          },
+          {
+            "id": "manager",
+            "roles": [
+              "ops-manager"
+            ]
+          },
+          {
+            "id": "reviewer",
+            "roles": [
+              "reviewer"
+            ]
+          }
+        ],
+        "cases": [
+          {
+            "id": "case-1",
+            "customerId": "customer-1",
+            "state": "received",
+            "ownerId": "ops",
+            "version": 1,
+            "artifactVersion": "v1",
+            "materials": [
+              {
+                "id": "brief",
+                "sha256": "4f5d83948c65e9a386ee896eac0b2b3cc2d91da1f429c08523da4d2ae3ab4060",
+                "sourceRef": "brief.md"
+              }
+            ]
+          }
+        ],
+        "events": [
+          {
+            "id": "e1",
+            "kind": "transition",
+            "caseId": "case-1",
+            "actorId": "ops",
+            "expectedVersion": 1,
+            "transitionId": "start-review"
+          }
+        ]
+      },
+      "candidateOutputExcerpt": {
+        "context": {
+          "organizationId": "example-company",
+          "workId": "work-onboarding",
+          "revision": "r1"
+        }
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "示例只能用于演示结构；实际结果通过本地测试复算，真实业务效果另核。",
+      "diagnosticRefs": [
+        "scope",
+        "evidence"
+      ],
+      "decisionRuleRefs": [
+        "event-dedup",
+        "version-binding"
+      ]
+    },
+    {
+      "id": "failure-case",
+      "capabilityId": "customer-case-operations-deliver",
+      "category": "failure_boundary",
+      "scenario": "把另一版本事项的结果用于当前输入，尽管外观完整仍应拒绝。",
+      "input": {
+        "context": {
+          "organizationId": "example-company",
+          "workId": "work-onboarding",
+          "revision": "r1"
+        },
+        "workflow": {
+          "id": "onboarding",
+          "revision": "r1",
+          "initialState": "received",
+          "managerRole": "ops-manager",
+          "adoptionRole": "ops-manager",
+          "verificationRole": "reviewer",
+          "states": [
+            {
+              "id": "received",
+              "label": "已收到申请",
+              "requiredMaterials": [],
+              "terminal": false
+            },
+            {
+              "id": "review",
+              "label": "复核材料",
+              "requiredMaterials": [
+                "brief"
+              ],
+              "terminal": false
+            },
+            {
+              "id": "ready",
+              "label": "已形成结论",
+              "requiredMaterials": [
+                "brief"
+              ],
+              "terminal": true
+            }
+          ],
+          "transitions": [
+            {
+              "id": "start-review",
+              "from": "received",
+              "to": "review",
+              "roles": [
+                "operator"
+              ],
+              "requiredMaterials": [
+                "brief"
+              ],
+              "requiresDecision": false,
+              "decisionRoles": []
+            },
+            {
+              "id": "accept",
+              "from": "review",
+              "to": "ready",
+              "roles": [
+                "operator"
+              ],
+              "requiredMaterials": [],
+              "requiresDecision": true,
+              "decisionRoles": [
+                "ops-manager"
+              ]
+            }
+          ]
+        },
+        "members": [
+          {
+            "id": "ops",
+            "roles": [
+              "operator"
+            ]
+          },
+          {
+            "id": "manager",
+            "roles": [
+              "ops-manager"
+            ]
+          },
+          {
+            "id": "reviewer",
+            "roles": [
+              "reviewer"
+            ]
+          }
+        ],
+        "cases": [
+          {
+            "id": "case-1",
+            "customerId": "customer-1",
+            "state": "received",
+            "ownerId": "ops",
+            "version": 1,
+            "artifactVersion": "v1",
+            "materials": [
+              {
+                "id": "brief",
+                "sha256": "4f5d83948c65e9a386ee896eac0b2b3cc2d91da1f429c08523da4d2ae3ab4060",
+                "sourceRef": "brief.md"
+              }
+            ]
+          }
+        ],
+        "events": [
+          {
+            "id": "e1",
+            "kind": "transition",
+            "caseId": "case-1",
+            "actorId": "ops",
+            "expectedVersion": 1,
+            "transitionId": "start-review"
+          }
+        ]
+      },
+      "candidateOutputExcerpt": {
+        "context": {
+          "organizationId": "example-company",
+          "workId": "work-onboarding",
+          "revision": "stale"
+        }
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "上下文和证据版本不匹配不能成为当前任务的验收依据。",
+      "diagnosticRefs": [
+        "scope"
+      ],
+      "decisionRuleRefs": [
+        "event-dedup"
+      ]
+    }
+  ]
+}

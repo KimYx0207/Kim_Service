@@ -79,7 +79,11 @@ jobs:
       - name: Install pinned browser test runtime
         run: python -m pip install -r tests/browser/requirements.txt
       - name: Install test browser
-        run: python -m playwright install --with-deps chromium-headless-shell
+        run: |
+          python -m playwright install --with-deps chromium-headless-shell
+          sudo apt-get install -y fonts-noto-cjk
+      - name: Verify generated diagrams and staged explanations in the browser
+        run: python tests/browser/service_helper_visuals.py
       - name: Exercise tasks, keyboard, drafts, sample edits and downloads
         run: python tests/browser/task_browser.py
       - name: Check English workflows and sample behavior

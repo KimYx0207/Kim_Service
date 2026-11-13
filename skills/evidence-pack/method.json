@@ -1,0 +1,227 @@
+{
+  "schemaVersion": 1,
+  "roleId": "evidence-pack",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "coordinationOwner": "caller",
+  "finalAcceptance": "caller_only",
+  "permissionSource": "current_task_host_authorization",
+  "steps": [
+    "先固定公司、Work、材料版本和授权范围，读取 UTF-8 原文或已有提取结果。",
+    "执行 build；保留完整 evidence-pack.json，原文仅分块保存一次，不静默截断。",
+    "用 read 和分页游标取索引，再明确选择 chunkIds，在字节预算内装配上下文。",
+    "将引用和剩余块交给当前模块；材料变化重新构建并核对哈希。"
+  ],
+  "acceptance": [
+    "来源、标题、页码和分块正文分开；保留追溯信息，再按需构建上下文。",
+    "核对本次输出哈希、未完成项及宿主采纳边界。"
+  ],
+  "knowledgeAssets": [
+    {
+      "id": "evidence-pack-method",
+      "path": "references/method.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "docling"
+      ]
+    }
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "大材料证据包",
+    "scope": [
+      "来源、标题、页码和分块正文分开；保留追溯信息，再按需构建上下文。",
+      "不复制上游代码，不安装 OCR 或模型，不声明已提取 PDF 页面。"
+    ],
+    "knowledgeAssetIds": [
+      "evidence-pack-method"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "scope",
+        "question": "当前材料属于哪个组织、事项和版本？",
+        "evidenceRequired": [
+          "context",
+          "输入材料"
+        ],
+        "whenMissing": "补齐身份范围后进行关联计算，其他独立解释可继续。"
+      },
+      {
+        "id": "evidence",
+        "question": "当前结果是否有原始材料和可复算依据？",
+        "evidenceRequired": [
+          "运行 JSON",
+          "输出哈希"
+        ],
+        "whenMissing": "保留未知和未完成项，不生成完成记录。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "source-changed",
+        "when": "来源版本或哈希变化",
+        "action": "重新构建索引",
+        "avoid": "沿用旧块结论"
+      },
+      {
+        "id": "bounded-read",
+        "when": "预算放不下整个块",
+        "action": "返回未读块清单并继续分页读取",
+        "avoid": "静默裁掉原文"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "evidence-pack-deliver",
+        "inputGuidance": [
+          {
+            "field": "context",
+            "interpretation": "context 详见 schemas/input.schema.json。",
+            "onMissing": "缺失必填结构时修正输入，不猜造真实数据。"
+          },
+          {
+            "field": "operation",
+            "interpretation": "operation 详见 schemas/input.schema.json。",
+            "onMissing": "缺失必填结构时修正输入，不猜造真实数据。"
+          },
+          {
+            "field": "workspaceRoot",
+            "interpretation": "workspaceRoot 详见 schemas/input.schema.json。",
+            "onMissing": "缺失必填结构时修正输入，不猜造真实数据。"
+          },
+          {
+            "field": "packPath",
+            "interpretation": "packPath 详见 schemas/input.schema.json。",
+            "onMissing": "缺失必填结构时修正输入，不猜造真实数据。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "evidence-pack-schemaversion",
+            "field": "schemaVersion",
+            "criterion": "结果必须满足包内可执行 schema、输入哈希及当前公司事项版本。",
+            "rejectWhen": "该字段缺失、伪造或不匹配当前运行。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "examples/input.json",
+              "schemas/output.schema.json"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "evidence-pack-protocol",
+            "field": "protocol",
+            "criterion": "结果必须满足包内可执行 schema、输入哈希及当前公司事项版本。",
+            "rejectWhen": "该字段缺失、伪造或不匹配当前运行。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "examples/input.json",
+              "schemas/output.schema.json"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "evidence-pack-capabilityid",
+            "field": "capabilityId",
+            "criterion": "结果必须满足包内可执行 schema、输入哈希及当前公司事项版本。",
+            "rejectWhen": "该字段缺失、伪造或不匹配当前运行。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "examples/input.json",
+              "schemas/output.schema.json"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "evidence-pack-context",
+            "field": "context",
+            "criterion": "结果必须满足包内可执行 schema、输入哈希及当前公司事项版本。",
+            "rejectWhen": "该字段缺失、伪造或不匹配当前运行。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "examples/input.json",
+              "schemas/output.schema.json"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "evidence-pack-inputsha256",
+            "field": "inputSha256",
+            "criterion": "结果必须满足包内可执行 schema、输入哈希及当前公司事项版本。",
+            "rejectWhen": "该字段缺失、伪造或不匹配当前运行。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "examples/input.json",
+              "schemas/output.schema.json"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "evidence-pack-policysha256",
+            "field": "policySha256",
+            "criterion": "结果必须满足包内可执行 schema、输入哈希及当前公司事项版本。",
+            "rejectWhen": "该字段缺失、伪造或不匹配当前运行。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "examples/input.json",
+              "schemas/output.schema.json"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "evidence-pack-status",
+            "field": "status",
+            "criterion": "结果必须满足包内可执行 schema、输入哈希及当前公司事项版本。",
+            "rejectWhen": "该字段缺失、伪造或不匹配当前运行。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "examples/input.json",
+              "schemas/output.schema.json"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "evidence-pack-result",
+            "field": "result",
+            "criterion": "结果必须满足包内可执行 schema、输入哈希及当前公司事项版本。",
+            "rejectWhen": "来源字节变化后仍声称旧哈希有效，或将未读的块写成已读。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "examples/input.json",
+              "schemas/output.schema.json"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "evidence-pack-claims",
+            "field": "claims",
+            "criterion": "仅声明本次实际离线运算，不扩成模型调用、真实写入或最终采纳。",
+            "rejectWhen": "该字段缺失、伪造或不匹配当前运行。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "examples/input.json",
+              "schemas/output.schema.json"
+            ],
+            "blocking": true
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "沿用既有授权，只有尚未决定的实质业务取舍交由宿主处理。"
+      ],
+      "prohibitedClaims": [
+        "不复制上游代码，不安装 OCR 或模型，不声明已提取 PDF 页面。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
+}

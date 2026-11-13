@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "roleId": "evidence-pack",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "worked-case",
+      "capabilityId": "evidence-pack-deliver",
+      "category": "worked_example",
+      "scenario": "对示例材料运行实际本地 helper，核对输入版本、输出哈希与未完成边界。",
+      "input": {
+        "context": {
+          "organizationId": "example-company",
+          "workId": "work-onboarding",
+          "revision": "r1"
+        },
+        "operation": "build",
+        "workspaceRoot": "/absolute/path/to/authorized-workspace",
+        "packPath": "evidence-v1.json",
+        "sourceFiles": [
+          {
+            "id": "brief",
+            "title": "客户入驻资料",
+            "revision": "v1",
+            "path": "brief.md"
+          }
+        ]
+      },
+      "candidateOutputExcerpt": {
+        "context": {
+          "organizationId": "example-company",
+          "workId": "work-onboarding",
+          "revision": "r1"
+        }
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "示例只能用于演示结构；实际结果通过本地测试复算，真实业务效果另核。",
+      "diagnosticRefs": [
+        "scope",
+        "evidence"
+      ],
+      "decisionRuleRefs": [
+        "source-changed",
+        "bounded-read"
+      ]
+    },
+    {
+      "id": "failure-case",
+      "capabilityId": "evidence-pack-deliver",
+      "category": "failure_boundary",
+      "scenario": "把另一版本事项的结果用于当前输入，尽管外观完整仍应拒绝。",
+      "input": {
+        "context": {
+          "organizationId": "example-company",
+          "workId": "work-onboarding",
+          "revision": "r1"
+        },
+        "operation": "build",
+        "workspaceRoot": "/absolute/path/to/authorized-workspace",
+        "packPath": "evidence-v1.json",
+        "sourceFiles": [
+          {
+            "id": "brief",
+            "title": "客户入驻资料",
+            "revision": "v1",
+            "path": "brief.md"
+          }
+        ]
+      },
+      "candidateOutputExcerpt": {
+        "context": {
+          "organizationId": "example-company",
+          "workId": "work-onboarding",
+          "revision": "stale"
+        }
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "上下文和证据版本不匹配不能成为当前任务的验收依据。",
+      "diagnosticRefs": [
+        "scope"
+      ],
+      "decisionRuleRefs": [
+        "source-changed"
+      ]
+    }
+  ]
+}

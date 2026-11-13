@@ -1,0 +1,20 @@
+{
+  "maxInputBytes": 25165824,
+  "maxOutputBytes": 33554432,
+  "maxJsonNodes": 200000,
+  "maxJsonDepth": 32,
+  "maxSourceBytes": 16777216,
+  "maxChunks": 18000,
+  "chunkBytes": 4096,
+  "minChunkBytes": 1024,
+  "maxChunkBytes": 32768,
+  "indexPageSize": 24,
+  "maxIndexPageSize": 100,
+  "contextBudgetBytes": 12288,
+  "minContextBudgetBytes": 256,
+  "maxContextBudgetBytes": 131072,
+  "maxFileRequestBytes": 65536,
+  "maxFileResponseBytes": 131072,
+  "maxSources": 128,
+  "maxSectionsPerSource": 10000
+}

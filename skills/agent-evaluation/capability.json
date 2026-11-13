@@ -1,0 +1,458 @@
+{
+  "schemaVersion": 1,
+  "id": "agent-evaluation",
+  "componentType": "skill",
+  "componentVersion": "0.1.0",
+  "entrypoint": "SKILL.md",
+  "capabilities": [
+    {
+      "id": "agent-evaluation-deliver",
+      "summary": "用相同数据集比较不同模型客户端的已有输出，保留缺失项、关键断言、分层回归和成本延迟预算。 agent evaluation offline regression budget",
+      "useWhen": [
+        "跨客户端离线评测",
+        "冻结案例、输入、关键断言和标签；为同题各运行绑定 datasetSha256 与 caseInputSha256。",
+        "运行离线比较，检查完整分母、关键失败、群体切片和基线回归。"
+      ],
+      "doNotUseWhen": [
+        "不复制实现，不调用模型，不执行用户提供的 JavaScript 或 Python 断言，不硬编码模型价格。",
+        "需要新增账号权限或未经授权的外部数据读取。",
+        "需要把离线投影当作业务系统真实写入或最终验收。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "context": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "organizationId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "workId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "revision": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              }
+            },
+            "required": [
+              "organizationId",
+              "workId",
+              "revision"
+            ]
+          },
+          "dataset": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "revision": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "context": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "organizationId": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  },
+                  "workId": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  },
+                  "revision": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  }
+                },
+                "required": [
+                  "organizationId",
+                  "workId",
+                  "revision"
+                ]
+              },
+              "cases": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "input": {},
+                    "tags": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 128
+                      },
+                      "minItems": 0
+                    },
+                    "assertions": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 128
+                          },
+                          "type": {
+                            "enum": [
+                              "equals",
+                              "contains",
+                              "json_pointer_equals"
+                            ]
+                          },
+                          "value": {},
+                          "path": {
+                            "type": "string",
+                            "minLength": 0,
+                            "maxLength": 2000
+                          },
+                          "critical": {
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "type",
+                          "value",
+                          "critical"
+                        ]
+                      },
+                      "minItems": 1
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "input",
+                    "tags",
+                    "assertions"
+                  ]
+                },
+                "minItems": 1
+              }
+            },
+            "required": [
+              "id",
+              "revision",
+              "context",
+              "cases"
+            ]
+          },
+          "runs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "context": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "organizationId": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "workId": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "revision": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    }
+                  },
+                  "required": [
+                    "organizationId",
+                    "workId",
+                    "revision"
+                  ]
+                },
+                "datasetSha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                },
+                "client": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200
+                },
+                "provider": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200
+                },
+                "model": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200
+                },
+                "outputs": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "caseId": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 128
+                      },
+                      "caseInputSha256": {
+                        "type": "string",
+                        "pattern": "^[a-f0-9]{64}$"
+                      },
+                      "value": {},
+                      "outputSha256": {
+                        "type": "string",
+                        "pattern": "^[a-f0-9]{64}$"
+                      },
+                      "measurement": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                          "cost": {
+                            "type": "number",
+                            "minimum": 0
+                          },
+                          "currency": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 12
+                          },
+                          "latencyMs": {
+                            "type": "number",
+                            "minimum": 0
+                          }
+                        },
+                        "required": []
+                      }
+                    },
+                    "required": [
+                      "caseId",
+                      "caseInputSha256",
+                      "value"
+                    ]
+                  },
+                  "minItems": 0
+                }
+              },
+              "required": [
+                "id",
+                "context",
+                "datasetSha256",
+                "client",
+                "provider",
+                "model",
+                "outputs"
+              ]
+            },
+            "minItems": 1
+          },
+          "baselineRunId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "budget": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "currency": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 12
+              },
+              "maxTotalCost": {
+                "type": "number",
+                "minimum": 0
+              },
+              "maxCaseLatencyMs": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "required": []
+          }
+        },
+        "required": [
+          "context",
+          "dataset",
+          "runs"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "schemaVersion": {
+            "const": 1
+          },
+          "protocol": {
+            "const": "kim-service-helper-v1"
+          },
+          "capabilityId": {
+            "const": "agent-evaluation-deliver"
+          },
+          "context": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "organizationId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "workId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "revision": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              }
+            },
+            "required": [
+              "organizationId",
+              "workId",
+              "revision"
+            ]
+          },
+          "inputSha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "policySha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "status": {
+            "enum": [
+              "completed",
+              "needs_review"
+            ]
+          },
+          "result": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "datasetSha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "rows": {
+                "type": "array"
+              },
+              "summaries": {
+                "type": "array"
+              },
+              "comparisons": {
+                "type": "array"
+              },
+              "semanticQuality": {
+                "type": "string"
+              },
+              "generalization": {
+                "type": "string"
+              },
+              "providerExecutionObserved": {
+                "const": false
+              }
+            },
+            "required": [
+              "datasetSha256",
+              "rows",
+              "summaries",
+              "comparisons",
+              "semanticQuality",
+              "generalization",
+              "providerExecutionObserved"
+            ]
+          },
+          "claims": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "modelCalled": {
+                "const": false
+              },
+              "networkAccessed": {
+                "const": false
+              },
+              "businessStatePersisted": {
+                "const": false
+              },
+              "finalAcceptance": {
+                "const": "not_decided"
+              }
+            },
+            "required": [
+              "modelCalled",
+              "networkAccessed",
+              "businessStatePersisted",
+              "finalAcceptance"
+            ]
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "protocol",
+          "capabilityId",
+          "context",
+          "inputSha256",
+          "policySha256",
+          "status",
+          "result",
+          "claims"
+        ]
+      },
+      "permissions": [],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "业务取舍、采纳及新增外部动作沿用当前宿主授权；已有决定不重复询问，纯本地核验可继续。"
+        ]
+      },
+      "helperContract": "helper-contract.json",
+      "validation": [
+        "tests/helper.test.mjs"
+      ]
+    }
+  ]
+}

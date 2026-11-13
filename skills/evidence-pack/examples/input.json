@@ -1,0 +1,18 @@
+{
+  "context": {
+    "organizationId": "example-company",
+    "workId": "work-onboarding",
+    "revision": "r1"
+  },
+  "operation": "build",
+  "workspaceRoot": "/absolute/path/to/authorized-workspace",
+  "packPath": "evidence-v1.json",
+  "sourceFiles": [
+    {
+      "id": "brief",
+      "title": "客户入驻资料",
+      "revision": "v1",
+      "path": "brief.md"
+    }
+  ]
+}

@@ -485,6 +485,31 @@
       "sourceSummary": "研究内容机会并制作含标题、正文、封面与 6 至 8 张内页的小红书图文发布包，保留视觉确认与发布边界。",
       "title": "Create a Xiaohongshu visual post package",
       "summary": "Research an opportunity and prepare a title, body, cover, and six to eight interior pages with visual approval and publication boundaries."
+    },
+    "evidence-pack-deliver": {
+      "sourceSummary": "把长文原文保留成带来源哈希的分页分块索引，按字节预算取回当前模块所需材料。 evidence source chunk context budget",
+      "title": "Build a bounded evidence pack",
+      "summary": "Preserve source text with hashes, paginated chunks, and a deterministic context budget."
+    },
+    "agent-evaluation-deliver": {
+      "sourceSummary": "用相同数据集比较不同模型客户端的已有输出，保留缺失项、关键断言、分层回归和成本延迟预算。 agent evaluation offline regression budget",
+      "title": "Compare existing agent outputs",
+      "summary": "Compare supplied outputs across clients using frozen cases, critical checks, missing results, and budgets."
+    },
+    "feedback-to-requirements-deliver": {
+      "sourceSummary": "将客户反馈、明确重复关系与分组转成需求候选，计算独立客户数，保留矛盾证据和版本绑定采纳记录。 feedback requirements evidence ledger",
+      "title": "Turn feedback into traceable requirements",
+      "summary": "Build requirement candidates from feedback, preserve disagreements, and bind adoption to evidence versions."
+    },
+    "customer-case-operations-deliver": {
+      "sourceSummary": "按可配置阶段、角色、材料和事件重放客户事项，输出下一步与缺项，独立保留验证、回执与采纳。 customer case operations workflow receipt",
+      "title": "Validate customer case progression",
+      "summary": "Replay configured case events, validate materials and roles, and separate progress, receipts, and adoption."
+    },
+    "visual-explainer-deliver": {
+      "sourceSummary": "用单一图数据生成居中分层 SVG、可逐步播放的 HTML 与文字说明，核查边、阶段及退回路径。 visual explainer storyboard SVG diagram",
+      "title": "Generate a staged diagram explanation",
+      "summary": "Create a deterministic SVG and step-controlled HTML from one diagram specification, with a text alternative."
     }
   }
 }

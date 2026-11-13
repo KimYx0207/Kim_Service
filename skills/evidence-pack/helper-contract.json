@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "protocol": "kim-service-helper-v1",
+  "capabilityId": "evidence-pack-deliver",
+  "inputSchema": "schemas/input.schema.json",
+  "outputSchema": "schemas/output.schema.json",
+  "policy": "policy.json",
+  "invocation": {
+    "runtime": "node",
+    "entrypoint": "scripts/files.mjs",
+    "argv": [
+      "--input-json",
+      "-"
+    ],
+    "inputTransport": "stdin_json",
+    "outputTransport": "stdout_json",
+    "shell": false
+  },
+  "authority": {
+    "modelCalls": false,
+    "networkAccess": false,
+    "businessWrites": false,
+    "finalAcceptance": "caller_only",
+    "localArtifactWrites": true
+  },
+  "pureCore": {
+    "entrypoint": "scripts/run.mjs",
+    "inputSchema": "schemas/core-input.schema.json",
+    "outputSchema": "schemas/core-output.schema.json",
+    "purpose": "bounded in-process/offline use; build returns the full pack"
+  }
+}

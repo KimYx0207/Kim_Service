@@ -1,0 +1,14 @@
+{
+  "maxInputBytes": 8388608,
+  "maxOutputBytes": 12582912,
+  "maxJsonNodes": 200000,
+  "maxJsonDepth": 32,
+  "maxCases": 500,
+  "maxRuns": 12,
+  "maxAssertionsPerCase": 24,
+  "assertionTypes": [
+    "equals",
+    "contains",
+    "json_pointer_equals"
+  ]
+}

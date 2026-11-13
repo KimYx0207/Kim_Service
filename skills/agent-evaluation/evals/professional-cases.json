@@ -1,0 +1,319 @@
+{
+  "schemaVersion": 1,
+  "roleId": "agent-evaluation",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "worked-case",
+      "capabilityId": "agent-evaluation-deliver",
+      "category": "worked_example",
+      "scenario": "对示例材料运行实际本地 helper，核对输入版本、输出哈希与未完成边界。",
+      "input": {
+        "context": {
+          "organizationId": "example-company",
+          "workId": "work-onboarding",
+          "revision": "r1"
+        },
+        "dataset": {
+          "id": "onboarding-checks",
+          "revision": "r1",
+          "context": {
+            "organizationId": "example-company",
+            "workId": "work-onboarding",
+            "revision": "r1"
+          },
+          "cases": [
+            {
+              "id": "amount",
+              "input": {
+                "amount": 1200,
+                "currency": "CNY"
+              },
+              "tags": [
+                "critical",
+                "finance"
+              ],
+              "assertions": [
+                {
+                  "id": "amount",
+                  "type": "json_pointer_equals",
+                  "path": "/amount",
+                  "value": 1200,
+                  "critical": true
+                }
+              ]
+            },
+            {
+              "id": "status",
+              "input": "还没有收到正式验收回执",
+              "tags": [
+                "receipt"
+              ],
+              "assertions": [
+                {
+                  "id": "claim",
+                  "type": "contains",
+                  "value": "待验收",
+                  "critical": true
+                }
+              ]
+            },
+            {
+              "id": "owner",
+              "input": "把工作交给当前负责人",
+              "tags": [
+                "handoff"
+              ],
+              "assertions": [
+                {
+                  "id": "owner",
+                  "type": "equals",
+                  "value": "operator",
+                  "critical": false
+                }
+              ]
+            }
+          ]
+        },
+        "baselineRunId": "baseline",
+        "runs": [
+          {
+            "id": "baseline",
+            "context": {
+              "organizationId": "example-company",
+              "workId": "work-onboarding",
+              "revision": "r1"
+            },
+            "datasetSha256": "68316d9e04a5065bce0165500182d3171c7849b4045e3c8dd16aec6d799d4a08",
+            "client": "host-client-a",
+            "provider": "configured-provider-a",
+            "model": "configured-model-a",
+            "outputs": [
+              {
+                "caseId": "amount",
+                "caseInputSha256": "84cf96b5a30e2f881857fb26ba0b2394a456cf3d4df3d4614dcdefcf146b60c9",
+                "value": {
+                  "amount": 1200
+                }
+              },
+              {
+                "caseId": "status",
+                "caseInputSha256": "f0798f475f35a1e18d9515c6b4b6f939231d67c0584e003981ea2b11eb13e426",
+                "value": "已完成"
+              }
+            ]
+          },
+          {
+            "id": "candidate",
+            "context": {
+              "organizationId": "example-company",
+              "workId": "work-onboarding",
+              "revision": "r1"
+            },
+            "datasetSha256": "68316d9e04a5065bce0165500182d3171c7849b4045e3c8dd16aec6d799d4a08",
+            "client": "host-client-b",
+            "provider": "configured-provider-b",
+            "model": "configured-model-b",
+            "outputs": [
+              {
+                "caseId": "amount",
+                "caseInputSha256": "84cf96b5a30e2f881857fb26ba0b2394a456cf3d4df3d4614dcdefcf146b60c9",
+                "value": {
+                  "amount": 120
+                }
+              },
+              {
+                "caseId": "status",
+                "caseInputSha256": "f0798f475f35a1e18d9515c6b4b6f939231d67c0584e003981ea2b11eb13e426",
+                "value": "待验收"
+              },
+              {
+                "caseId": "owner",
+                "caseInputSha256": "2ee92223cea9dfa8196f47eb1b5a36fc9d7ffbf5bfa7e27cfd5db12b816a64c9",
+                "value": "operator"
+              }
+            ]
+          }
+        ],
+        "budget": {
+          "currency": "CNY",
+          "maxTotalCost": 1,
+          "maxCaseLatencyMs": 1000
+        }
+      },
+      "candidateOutputExcerpt": {
+        "context": {
+          "organizationId": "example-company",
+          "workId": "work-onboarding",
+          "revision": "r1"
+        }
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "示例只能用于演示结构；实际结果通过本地测试复算，真实业务效果另核。",
+      "diagnosticRefs": [
+        "scope",
+        "evidence"
+      ],
+      "decisionRuleRefs": [
+        "missing-output",
+        "critical-failure"
+      ]
+    },
+    {
+      "id": "failure-case",
+      "capabilityId": "agent-evaluation-deliver",
+      "category": "failure_boundary",
+      "scenario": "把另一版本事项的结果用于当前输入，尽管外观完整仍应拒绝。",
+      "input": {
+        "context": {
+          "organizationId": "example-company",
+          "workId": "work-onboarding",
+          "revision": "r1"
+        },
+        "dataset": {
+          "id": "onboarding-checks",
+          "revision": "r1",
+          "context": {
+            "organizationId": "example-company",
+            "workId": "work-onboarding",
+            "revision": "r1"
+          },
+          "cases": [
+            {
+              "id": "amount",
+              "input": {
+                "amount": 1200,
+                "currency": "CNY"
+              },
+              "tags": [
+                "critical",
+                "finance"
+              ],
+              "assertions": [
+                {
+                  "id": "amount",
+                  "type": "json_pointer_equals",
+                  "path": "/amount",
+                  "value": 1200,
+                  "critical": true
+                }
+              ]
+            },
+            {
+              "id": "status",
+              "input": "还没有收到正式验收回执",
+              "tags": [
+                "receipt"
+              ],
+              "assertions": [
+                {
+                  "id": "claim",
+                  "type": "contains",
+                  "value": "待验收",
+                  "critical": true
+                }
+              ]
+            },
+            {
+              "id": "owner",
+              "input": "把工作交给当前负责人",
+              "tags": [
+                "handoff"
+              ],
+              "assertions": [
+                {
+                  "id": "owner",
+                  "type": "equals",
+                  "value": "operator",
+                  "critical": false
+                }
+              ]
+            }
+          ]
+        },
+        "baselineRunId": "baseline",
+        "runs": [
+          {
+            "id": "baseline",
+            "context": {
+              "organizationId": "example-company",
+              "workId": "work-onboarding",
+              "revision": "r1"
+            },
+            "datasetSha256": "68316d9e04a5065bce0165500182d3171c7849b4045e3c8dd16aec6d799d4a08",
+            "client": "host-client-a",
+            "provider": "configured-provider-a",
+            "model": "configured-model-a",
+            "outputs": [
+              {
+                "caseId": "amount",
+                "caseInputSha256": "84cf96b5a30e2f881857fb26ba0b2394a456cf3d4df3d4614dcdefcf146b60c9",
+                "value": {
+                  "amount": 1200
+                }
+              },
+              {
+                "caseId": "status",
+                "caseInputSha256": "f0798f475f35a1e18d9515c6b4b6f939231d67c0584e003981ea2b11eb13e426",
+                "value": "已完成"
+              }
+            ]
+          },
+          {
+            "id": "candidate",
+            "context": {
+              "organizationId": "example-company",
+              "workId": "work-onboarding",
+              "revision": "r1"
+            },
+            "datasetSha256": "68316d9e04a5065bce0165500182d3171c7849b4045e3c8dd16aec6d799d4a08",
+            "client": "host-client-b",
+            "provider": "configured-provider-b",
+            "model": "configured-model-b",
+            "outputs": [
+              {
+                "caseId": "amount",
+                "caseInputSha256": "84cf96b5a30e2f881857fb26ba0b2394a456cf3d4df3d4614dcdefcf146b60c9",
+                "value": {
+                  "amount": 120
+                }
+              },
+              {
+                "caseId": "status",
+                "caseInputSha256": "f0798f475f35a1e18d9515c6b4b6f939231d67c0584e003981ea2b11eb13e426",
+                "value": "待验收"
+              },
+              {
+                "caseId": "owner",
+                "caseInputSha256": "2ee92223cea9dfa8196f47eb1b5a36fc9d7ffbf5bfa7e27cfd5db12b816a64c9",
+                "value": "operator"
+              }
+            ]
+          }
+        ],
+        "budget": {
+          "currency": "CNY",
+          "maxTotalCost": 1,
+          "maxCaseLatencyMs": 1000
+        }
+      },
+      "candidateOutputExcerpt": {
+        "context": {
+          "organizationId": "example-company",
+          "workId": "work-onboarding",
+          "revision": "stale"
+        }
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "上下文和证据版本不匹配不能成为当前任务的验收依据。",
+      "diagnosticRefs": [
+        "scope"
+      ],
+      "decisionRuleRefs": [
+        "missing-output"
+      ]
+    }
+  ]
+}

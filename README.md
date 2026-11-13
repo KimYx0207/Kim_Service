@@ -8,9 +8,9 @@
 
 你知道想做什么，却未必知道一份经营预测要核对哪些数据、一个页面要补齐哪些状态，或一份供应商比较该怎样算成本。Kim Service 把这些工作需要的方法、材料、步骤、例子和验收标准放在一起，让你和 AI 有一套具体的做事依据。
 
-当前 **V1.14** 包含 **48 个专业 Agent、21 个 Skill、1 个 Hook 和 1 个 Tool**，共 71 个组件，提供 **86 项可搜索的任务能力**。你可以只选一个解决眼前的问题，也可以让几种方法围绕同一个项目配合。
+当前主分支包含 **48 个专业 Agent、26 个 Skill、1 个 Hook 和 1 个 Tool**，共 76 个组件，提供 **91 项可搜索的任务能力**。你可以只选一个解决眼前的问题，也可以让几种方法围绕同一个项目配合。
 
-**[打开在线任务浏览器](https://kimyx0207.github.io/Kim_Service/?lang=zh-CN)** · **[下载 V1.14 源码与安装包](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.14)**
+**[打开能力目录与请求准备页](https://kimyx0207.github.io/Kim_Service/?lang=zh-CN)** · **[下载 V1.14 源码与安装包](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.14)**
 
 <p align="center">
   <img src="docs/images/service-system-panorama.zh-CN.svg" alt="Kim Service 任务全景：目标与资料进入任务浏览器，按需经 Meta_Kim 组合 Agent、Skill、Hook、Tool 方法，完整请求交给当前 AI 客户端执行，真实产物通过核验后交付；紫线退回相关工作，橙线仅处理必要选择，虚线由宿主写入事项与交付记录" width="1200">
@@ -27,7 +27,7 @@
 ### 四类组件，分别解决什么问题
 
 - **Agent：把一类专业工作做完整。** 48 个角色各有自己的任务范围、输入输出、专业资料、决策步骤、正反例和质量检查。你交给财务建模的是经营资料，交给设计系统的是页面、品牌与交互要求；两者按各自的方法产出模型或页面规范。
-- **Skill：把某一步做得更稳。** 21 个可复用技能覆盖需求追踪、API 合同、数据迁移、无障碍检查、财务情景、实验分析、检索评估、教学测评，也包含团队协作、记忆、技能发现、小红书与贴纸制作等工作流。同一个项目可以按需组合几项。
+- **Skill：把某一步做得更稳。** 26 个可复用技能覆盖需求追踪、API 合同、数据迁移、无障碍检查、财务情景、实验分析、检索评估、教学测评，也包含团队协作、记忆、技能发现、小红书与贴纸制作等工作流。同一个项目可以按需组合几项。
 - **Hook：在提出需求时补好工作要求。** HookPrompt 在支持并已配置的客户端中，把实质任务补充成包含目标、范围、输出和检查要求的上下文；保留对话里已经确定的选择，让 AI 更清楚该往哪里做。
 - **Tool：接上实际执行工具。** 多 CLI 工具包可把本机已安装的 Codex、Gemini 接入支持 MCP 的客户端，用于代码工作或复核，并提供项目级工作流入口。实际运行范围和文件操作仍由当前客户端管理。
 
@@ -37,7 +37,7 @@
   <img src="docs/images/animated-service-capabilities.zh-CN.svg" alt="动态能力思维导图：围绕未来一年现金够不够的目标，先选择财务建模 Agent，按需补充 Skill、Hook 和 Tool，再组成包含目标、材料、方法和检查要求的请求" width="900">
 </p>
 
-**先确定要交付什么，再选择这次需要的组合。** 做一次经营预测，可以直接让 AI 读取财务建模方法；要细化压力情景，再读取相应 Skill。Hook 适合反复整理工作要求，Tool 适合接入已经具备的执行工具。安装哪个、加载多少，取决于本次任务和客户端，不需要把 71 个组件一次全装上。
+**先确定要交付什么，再选择这次需要的组合。** 做一次经营预测，可以直接让 AI 读取财务建模方法；要细化压力情景，再读取相应 Skill。Hook 适合反复整理工作要求，Tool 适合接入已经具备的执行工具。安装哪个、加载多少，取决于本次任务和客户端，不需要把全部组件一次全装上。
 
 <a id="capability-directory"></a>
 
@@ -53,9 +53,50 @@
 
 **推进线下运营和工程项目时，** 可以整理制造质量、系统需求与接口、建筑信息、能源项目、碳核算、农田水量以及医疗机构的非临床服务流程。方法会把边界、数据来源、单位、异常和现场待核条件说明白，交付分析、验证安排或试点方案；需要现场资料和专业判断的部分会继续标明。
 
-86 项能力是现有任务入口的覆盖范围。选择时先想清楚“我现在要得到什么”，在浏览器搜索这个结果，再看需要提供哪些材料。你不用先记住角色的英文名字。
+91 项能力是现有任务入口的覆盖范围。选择时先想清楚“我现在要得到什么”，在浏览器搜索这个结果，再看需要提供哪些材料。你不用先记住角色的英文名字。
 
 <a id="task-browser"></a>
+
+## 统一驱动入口与新增五项可运行能力
+
+**需要持续推进项目时，从 Meta Live 发起；Kim Service 提供可选择、可执行、可核验的能力。** Meta Live 保留事项和接续状态，当前宿主按实际绑定调用方法或本地 helper。Service 的在线或离线浏览器用于查目录、准备材料和整理请求；它不另起一个持续调度器。单独使用时也可以直接运行下面的 helper。
+
+| 任务 | 你提供 | 实际得到 | 保留的边界 |
+| --- | --- | --- | --- |
+| [大材料证据包](skills/evidence-pack/) | 公司/事项、显式材料目录、UTF-8 原文文件、版本和预算 | 原文完整保留的文件包、来源与分块哈希、分页索引、有限上下文 | 默认 stdout 不回传整本材料；PDF/OCR 提取需由已有工具另行完成 |
+| [跨客户端离线评测](skills/agent-evaluation/) | 固定案例、各客户端已有输出、关键断言、实际成本/延迟记录 | 逐题对比、缺失分母、关键回归、分层结果和预算检查 | 不调用模型；没有记录的费用保持未知，语义质量另核 |
+| [反馈转需求](skills/feedback-to-requirements/) | 同一项目的反馈、明确重复关系、分组和来源 | 独立客户计数、矛盾材料、可追踪的需求候选与版本绑定采纳 | 不擅自推断语义重复；候选未采用前保持 proposed |
+| [客户事项推进](skills/customer-case-operations/) | 可配置阶段、成员角色、材料、事件与决定回执 | 状态投影、缺项、下一步建议、独立的验证/收到/采纳记录 | 不发通知，不代替组织身份鉴权，不运行后台定时任务 |
+| [分阶段图解](skills/visual-explainer/) | 来自真实说明的阶段、节点、连线、分支与返回路径 | SVG、可逐步播放的 HTML、文字替代说明 | 本版为有界分层布局；动画只是说明，不是执行回执 |
+
+这五项都有可运行脚本、输入输出 schema、独立容量配置、合成示例与失败反例。它们复用现有证据分析、检索评价和交付核验职责；新增的是具体计算与材料处理能力。方法吸收参考 [Docling](https://github.com/docling-project/docling-core)、[Promptfoo](https://github.com/promptfoo/promptfoo)、[Fider](https://github.com/getfider/fider)、[Chatwoot](https://github.com/chatwoot/chatwoot)、[Slidev](https://github.com/slidevjs/slidev)，逐包记录采用范围与许可证。Fider 仅参考方法，未复制 AGPL 源码；Chatwoot 企业功能未引入。
+
+从仓库根目录可以先运行不收费的合成示例：
+
+```sh
+node skills/agent-evaluation/scripts/run.mjs --input-json - < skills/agent-evaluation/examples/input.json
+node skills/feedback-to-requirements/scripts/run.mjs --input-json - < skills/feedback-to-requirements/examples/input.json
+node skills/customer-case-operations/scripts/run.mjs --input-json - < skills/customer-case-operations/examples/input.json
+node skills/visual-explainer/scripts/run.mjs --input-json - < skills/visual-explainer/examples/input.json
+```
+
+想直接打开图解文件，可运行 `node skills/visual-explainer/scripts/example.mjs /absolute/path/to/new-diagram-folder`，然后打开该目录里的 `storyboard.html`。
+
+大材料请使用文件式入口。下面会在你指定的新目录中建立合成材料和完整证据包，只把有限索引、哈希与上下文送回终端：
+
+```sh
+node skills/evidence-pack/scripts/example.mjs /absolute/path/to/new-example-workspace
+```
+
+真实材料按包内示例填写 `workspaceRoot`、源文件相对路径和新 `packPath`，交给 `scripts/files.mjs --input-json -`。后续只提交证据包路径、上次返回的文件哈希与分页游标或块 ID；原文不需要反复塞进请求。默认核对原文件变化，完整文件始终可重新组合还原。
+
+### 给 Meta Live 与其他宿主的机器接口
+
+```sh
+node scripts/service-capabilities.mjs export
+```
+
+此命令实时读取组件 `capability.json`，导出 `kim-service-capabilities-v1`。已有能力继续保留；可直接调用的五项带 `kim-service-helper-v1`、固定参数数组、schema/policy 路径与哈希。宿主只能调用已绑定的本地入口，不能执行材料里的命令；客户端与模型由当前任务配置。输入公共上下文为 `organizationId / workId / revision`，结果保留输入与规则哈希，最终采用仍由宿主记录。[接口与验证说明](docs/service-helper-api.md)。
 
 ## 从第一次使用，到完成一个任务
 
@@ -302,8 +343,8 @@ zcode plugins list --json
 | 层与职责 | 现有位置 | 负责什么 |
 | --- | --- | --- |
 | 方法来源 | 各组件 `capability.json`、`method.json`、专业资料与 `evals/` | 任务边界、输入输出、执行步骤、案例和检查标准 |
-| 数据层 | `src/data/capability-catalog.mjs`、`src/data/task-browser.mjs` | 读取与校验能力目录和任务配置 |
-| 应用层 | `src/application/task-browser/model.mjs` | 搜索、筛选、组合能力，构建可复制的完整请求 |
+| 数据层 | `src/data/capability-catalog.mjs`、`src/data/service-helper-catalog.mjs`、`src/data/task-browser.mjs` | 读取与校验能力目录和任务配置 |
+| 应用层 | `src/application/task-browser/model.mjs`、`src/application/service-helpers/runtime.mjs`、各包 `scripts/` | 请求构建、有界 JSON 入口与独立业务计算 |
 | 展示层 | `src/presentation/task-browser/` | 中英文界面、状态反馈、请求编辑和复制交互 |
 | 展示与宿主选项配置 | `config/task-browser.json` | 统一管理宿主标签、请求前缀、字段名、搜索词和其他页面配置 |
 | 生成结果 | `catalog.json`、`generated/capabilities.json`、`docs/start.html` | 由构建脚本生成；修改正本后重建，避免另维护一套清单 |
@@ -322,24 +363,9 @@ git pull --ff-only
 
 方法包和示例提供的是做事依据。对自己的任务，保留实际产物、计算或操作记录、已通过的检查和剩余事项，下一轮就能从明确的位置接着做。源码里的 `agents/`、`skills/`、`hooks/`、`tools/` 分别保存四类组件；完整任务仍可在页首浏览器搜索，不必逐个翻目录。
 
-## 联系与支持
+## 支持项目
 
-<p align="center">
-  <img src="docs/images/contact-qr.png" alt="老金联系方式" width="720">
-</p>
-
-<table align="center">
-  <tr>
-    <th align="center">微信收款码</th>
-    <th align="center">支付宝收款码</th>
-  </tr>
-  <tr>
-    <td align="center"><img src="docs/images/wechat-pay.jpg" alt="微信收款码" width="260"></td>
-    <td align="center"><img src="docs/images/alipay.jpg" alt="支付宝收款码" width="260"></td>
-  </tr>
-</table>
-
-如果这些开源项目帮到了你，欢迎 Star、分享，或者请老金喝杯咖啡。
+如果这些开源项目帮到了你，欢迎 Star 和分享。
 
 ## 开源说明
 

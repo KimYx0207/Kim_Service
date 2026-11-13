@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "repository": "KimYx0207/Kim_Service",
-  "componentCount": 71,
+  "componentCount": 76,
   "release": {
     "repository": "KimYx0207/Kim_Service",
     "remoteName": "origin",
@@ -1015,6 +1015,29 @@
       ]
     },
     {
+      "id": "agent-evaluation",
+      "kind": "skill",
+      "path": "skills/agent-evaluation",
+      "source": "canonical:skills/agent-evaluation",
+      "revision": "pending-local:80d4be3ffb907dd06db482b5e9af24098473038e0e1659f78428ffb65c6a135e",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.0",
+      "contractSha256": "80d4be3ffb907dd06db482b5e9af24098473038e0e1659f78428ffb65c6a135e",
+      "contentSha256": "0283dd48edf87b698d8301c87c7b9364ced9fea3278df05e3fc44e8b1b9d8475",
+      "required": [
+        "capability.json",
+        "CHANGELOG.md",
+        "LICENSE",
+        "NOTICE",
+        "README.md",
+        "SKILL.md",
+        "tests/helper.test.mjs"
+      ],
+      "validation": [
+        "node tests/helper.test.mjs"
+      ]
+    },
+    {
       "id": "agent-teams-playbook",
       "kind": "skill",
       "path": "skills/agent-teams-playbook",
@@ -1087,6 +1110,29 @@
       ]
     },
     {
+      "id": "customer-case-operations",
+      "kind": "skill",
+      "path": "skills/customer-case-operations",
+      "source": "canonical:skills/customer-case-operations",
+      "revision": "pending-local:db2d5cb8163d0c1a2e4efc2cdefd71f22497c17fc13703e8efd30b5c901f1919",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.0",
+      "contractSha256": "db2d5cb8163d0c1a2e4efc2cdefd71f22497c17fc13703e8efd30b5c901f1919",
+      "contentSha256": "fad157f63d13e318d86547c8e3433d57da2f61d4452d6b8b73f81982302ef0a1",
+      "required": [
+        "capability.json",
+        "CHANGELOG.md",
+        "LICENSE",
+        "NOTICE",
+        "README.md",
+        "SKILL.md",
+        "tests/helper.test.mjs"
+      ],
+      "validation": [
+        "node tests/helper.test.mjs"
+      ]
+    },
+    {
       "id": "database-migration",
       "kind": "skill",
       "path": "skills/database-migration",
@@ -1110,6 +1156,29 @@
       ]
     },
     {
+      "id": "evidence-pack",
+      "kind": "skill",
+      "path": "skills/evidence-pack",
+      "source": "canonical:skills/evidence-pack",
+      "revision": "pending-local:2fb9e3eb9e64469a51eaece8cf8d8c9bad0e74b2400093491874c8ed0dc77a35",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.0",
+      "contractSha256": "2fb9e3eb9e64469a51eaece8cf8d8c9bad0e74b2400093491874c8ed0dc77a35",
+      "contentSha256": "b98ea4bb343f4309efa0cf35decb5051b843623d6a395e3377474a34abe1e191",
+      "required": [
+        "capability.json",
+        "CHANGELOG.md",
+        "LICENSE",
+        "NOTICE",
+        "README.md",
+        "SKILL.md",
+        "tests/helper.test.mjs"
+      ],
+      "validation": [
+        "node tests/helper.test.mjs"
+      ]
+    },
+    {
       "id": "experiment-analysis",
       "kind": "skill",
       "path": "skills/experiment-analysis",
@@ -1130,6 +1199,29 @@
       ],
       "validation": [
         "node tests/contract.test.mjs"
+      ]
+    },
+    {
+      "id": "feedback-to-requirements",
+      "kind": "skill",
+      "path": "skills/feedback-to-requirements",
+      "source": "canonical:skills/feedback-to-requirements",
+      "revision": "pending-local:62da1f35071fd93855309789ca7c2776162ee6d9f46b6416929a4ddf443de346",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.0",
+      "contractSha256": "62da1f35071fd93855309789ca7c2776162ee6d9f46b6416929a4ddf443de346",
+      "contentSha256": "af0a029bce700acf9f8e9d17db98d2ab8214a2daef10e99ac10925800510cacd",
+      "required": [
+        "capability.json",
+        "CHANGELOG.md",
+        "LICENSE",
+        "NOTICE",
+        "README.md",
+        "SKILL.md",
+        "tests/helper.test.mjs"
+      ],
+      "validation": [
+        "node tests/helper.test.mjs"
       ]
     },
     {
@@ -1498,6 +1590,29 @@
       ],
       "validation": [
         "node tests/contract.test.mjs"
+      ]
+    },
+    {
+      "id": "visual-explainer",
+      "kind": "skill",
+      "path": "skills/visual-explainer",
+      "source": "canonical:skills/visual-explainer",
+      "revision": "pending-local:279f3007508fd0532ae9d7ac70731a77135ac00c3a50a7e2987b56c037841339",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.0",
+      "contractSha256": "279f3007508fd0532ae9d7ac70731a77135ac00c3a50a7e2987b56c037841339",
+      "contentSha256": "2bb91dfce77e68f1ee16b1f1cecd9a954699ed14691ee406685ac6d263afa131",
+      "required": [
+        "capability.json",
+        "CHANGELOG.md",
+        "LICENSE",
+        "NOTICE",
+        "README.md",
+        "SKILL.md",
+        "tests/helper.test.mjs"
+      ],
+      "validation": [
+        "node tests/helper.test.mjs"
       ]
     },
     {

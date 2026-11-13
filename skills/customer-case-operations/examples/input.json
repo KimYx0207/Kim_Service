@@ -1,0 +1,114 @@
+{
+  "context": {
+    "organizationId": "example-company",
+    "workId": "work-onboarding",
+    "revision": "r1"
+  },
+  "workflow": {
+    "id": "onboarding",
+    "revision": "r1",
+    "initialState": "received",
+    "managerRole": "ops-manager",
+    "adoptionRole": "ops-manager",
+    "verificationRole": "reviewer",
+    "states": [
+      {
+        "id": "received",
+        "label": "已收到申请",
+        "requiredMaterials": [],
+        "terminal": false
+      },
+      {
+        "id": "review",
+        "label": "复核材料",
+        "requiredMaterials": [
+          "brief"
+        ],
+        "terminal": false
+      },
+      {
+        "id": "ready",
+        "label": "已形成结论",
+        "requiredMaterials": [
+          "brief"
+        ],
+        "terminal": true
+      }
+    ],
+    "transitions": [
+      {
+        "id": "start-review",
+        "from": "received",
+        "to": "review",
+        "roles": [
+          "operator"
+        ],
+        "requiredMaterials": [
+          "brief"
+        ],
+        "requiresDecision": false,
+        "decisionRoles": []
+      },
+      {
+        "id": "accept",
+        "from": "review",
+        "to": "ready",
+        "roles": [
+          "operator"
+        ],
+        "requiredMaterials": [],
+        "requiresDecision": true,
+        "decisionRoles": [
+          "ops-manager"
+        ]
+      }
+    ]
+  },
+  "members": [
+    {
+      "id": "ops",
+      "roles": [
+        "operator"
+      ]
+    },
+    {
+      "id": "manager",
+      "roles": [
+        "ops-manager"
+      ]
+    },
+    {
+      "id": "reviewer",
+      "roles": [
+        "reviewer"
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "id": "case-1",
+      "customerId": "customer-1",
+      "state": "received",
+      "ownerId": "ops",
+      "version": 1,
+      "artifactVersion": "v1",
+      "materials": [
+        {
+          "id": "brief",
+          "sha256": "4f5d83948c65e9a386ee896eac0b2b3cc2d91da1f429c08523da4d2ae3ab4060",
+          "sourceRef": "brief.md"
+        }
+      ]
+    }
+  ],
+  "events": [
+    {
+      "id": "e1",
+      "kind": "transition",
+      "caseId": "case-1",
+      "actorId": "ops",
+      "expectedVersion": 1,
+      "transitionId": "start-review"
+    }
+  ]
+}

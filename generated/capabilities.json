@@ -266,6 +266,462 @@
       ]
     },
     {
+      "componentContentSha256": "0283dd48edf87b698d8301c87c7b9364ced9fea3278df05e3fc44e8b1b9d8475",
+      "componentId": "agent-evaluation",
+      "componentPath": "skills/agent-evaluation",
+      "componentType": "skill",
+      "componentVersion": "0.1.0",
+      "contractSha256": "80d4be3ffb907dd06db482b5e9af24098473038e0e1659f78428ffb65c6a135e",
+      "doNotUseWhen": [
+        "不复制实现，不调用模型，不执行用户提供的 JavaScript 或 Python 断言，不硬编码模型价格。",
+        "需要新增账号权限或未经授权的外部数据读取。",
+        "需要把离线投影当作业务系统真实写入或最终验收。"
+      ],
+      "entrypoint": "SKILL.md",
+      "helperContract": "helper-contract.json",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "业务取舍、采纳及新增外部动作沿用当前宿主授权；已有决定不重复询问，纯本地核验可继续。"
+        ]
+      },
+      "id": "agent-evaluation-deliver",
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "baselineRunId": {
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          },
+          "budget": {
+            "additionalProperties": false,
+            "properties": {
+              "currency": {
+                "maxLength": 12,
+                "minLength": 1,
+                "type": "string"
+              },
+              "maxCaseLatencyMs": {
+                "minimum": 0,
+                "type": "number"
+              },
+              "maxTotalCost": {
+                "minimum": 0,
+                "type": "number"
+              }
+            },
+            "required": [],
+            "type": "object"
+          },
+          "context": {
+            "additionalProperties": false,
+            "properties": {
+              "organizationId": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "revision": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "workId": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "organizationId",
+              "workId",
+              "revision"
+            ],
+            "type": "object"
+          },
+          "dataset": {
+            "additionalProperties": false,
+            "properties": {
+              "cases": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "assertions": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "critical": {
+                            "type": "boolean"
+                          },
+                          "id": {
+                            "maxLength": 128,
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "path": {
+                            "maxLength": 2000,
+                            "minLength": 0,
+                            "type": "string"
+                          },
+                          "type": {
+                            "enum": [
+                              "equals",
+                              "contains",
+                              "json_pointer_equals"
+                            ]
+                          },
+                          "value": {}
+                        },
+                        "required": [
+                          "id",
+                          "type",
+                          "value",
+                          "critical"
+                        ],
+                        "type": "object"
+                      },
+                      "minItems": 1,
+                      "type": "array"
+                    },
+                    "id": {
+                      "maxLength": 128,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "input": {},
+                    "tags": {
+                      "items": {
+                        "maxLength": 128,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "minItems": 0,
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "input",
+                    "tags",
+                    "assertions"
+                  ],
+                  "type": "object"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "context": {
+                "additionalProperties": false,
+                "properties": {
+                  "organizationId": {
+                    "maxLength": 128,
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "revision": {
+                    "maxLength": 128,
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "workId": {
+                    "maxLength": 128,
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "organizationId",
+                  "workId",
+                  "revision"
+                ],
+                "type": "object"
+              },
+              "id": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "revision": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "revision",
+              "context",
+              "cases"
+            ],
+            "type": "object"
+          },
+          "runs": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "client": {
+                  "maxLength": 200,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "context": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "organizationId": {
+                      "maxLength": 128,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "revision": {
+                      "maxLength": 128,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "workId": {
+                      "maxLength": 128,
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "organizationId",
+                    "workId",
+                    "revision"
+                  ],
+                  "type": "object"
+                },
+                "datasetSha256": {
+                  "pattern": "^[a-f0-9]{64}$",
+                  "type": "string"
+                },
+                "id": {
+                  "maxLength": 128,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "model": {
+                  "maxLength": 200,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "outputs": {
+                  "items": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "caseId": {
+                        "maxLength": 128,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "caseInputSha256": {
+                        "pattern": "^[a-f0-9]{64}$",
+                        "type": "string"
+                      },
+                      "measurement": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "cost": {
+                            "minimum": 0,
+                            "type": "number"
+                          },
+                          "currency": {
+                            "maxLength": 12,
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "latencyMs": {
+                            "minimum": 0,
+                            "type": "number"
+                          }
+                        },
+                        "required": [],
+                        "type": "object"
+                      },
+                      "outputSha256": {
+                        "pattern": "^[a-f0-9]{64}$",
+                        "type": "string"
+                      },
+                      "value": {}
+                    },
+                    "required": [
+                      "caseId",
+                      "caseInputSha256",
+                      "value"
+                    ],
+                    "type": "object"
+                  },
+                  "minItems": 0,
+                  "type": "array"
+                },
+                "provider": {
+                  "maxLength": 200,
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "context",
+                "datasetSha256",
+                "client",
+                "provider",
+                "model",
+                "outputs"
+              ],
+              "type": "object"
+            },
+            "minItems": 1,
+            "type": "array"
+          }
+        },
+        "required": [
+          "context",
+          "dataset",
+          "runs"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "additionalProperties": false,
+        "properties": {
+          "capabilityId": {
+            "const": "agent-evaluation-deliver"
+          },
+          "claims": {
+            "additionalProperties": false,
+            "properties": {
+              "businessStatePersisted": {
+                "const": false
+              },
+              "finalAcceptance": {
+                "const": "not_decided"
+              },
+              "modelCalled": {
+                "const": false
+              },
+              "networkAccessed": {
+                "const": false
+              }
+            },
+            "required": [
+              "modelCalled",
+              "networkAccessed",
+              "businessStatePersisted",
+              "finalAcceptance"
+            ],
+            "type": "object"
+          },
+          "context": {
+            "additionalProperties": false,
+            "properties": {
+              "organizationId": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "revision": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "workId": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "organizationId",
+              "workId",
+              "revision"
+            ],
+            "type": "object"
+          },
+          "inputSha256": {
+            "pattern": "^[a-f0-9]{64}$",
+            "type": "string"
+          },
+          "policySha256": {
+            "pattern": "^[a-f0-9]{64}$",
+            "type": "string"
+          },
+          "protocol": {
+            "const": "kim-service-helper-v1"
+          },
+          "result": {
+            "additionalProperties": false,
+            "properties": {
+              "comparisons": {
+                "type": "array"
+              },
+              "datasetSha256": {
+                "pattern": "^[a-f0-9]{64}$",
+                "type": "string"
+              },
+              "generalization": {
+                "type": "string"
+              },
+              "providerExecutionObserved": {
+                "const": false
+              },
+              "rows": {
+                "type": "array"
+              },
+              "semanticQuality": {
+                "type": "string"
+              },
+              "summaries": {
+                "type": "array"
+              }
+            },
+            "required": [
+              "datasetSha256",
+              "rows",
+              "summaries",
+              "comparisons",
+              "semanticQuality",
+              "generalization",
+              "providerExecutionObserved"
+            ],
+            "type": "object"
+          },
+          "schemaVersion": {
+            "const": 1
+          },
+          "status": {
+            "enum": [
+              "completed",
+              "needs_review"
+            ]
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "protocol",
+          "capabilityId",
+          "context",
+          "inputSha256",
+          "policySha256",
+          "status",
+          "result",
+          "claims"
+        ],
+        "type": "object"
+      },
+      "permissions": [],
+      "sideEffects": [],
+      "summary": "用相同数据集比较不同模型客户端的已有输出，保留缺失项、关键断言、分层回归和成本延迟预算。 agent evaluation offline regression budget",
+      "useWhen": [
+        "跨客户端离线评测",
+        "冻结案例、输入、关键断言和标签；为同题各运行绑定 datasetSha256 与 caseInputSha256。",
+        "运行离线比较，检查完整分母、关键失败、群体切片和基线回归。"
+      ],
+      "validation": [
+        "tests/helper.test.mjs"
+      ]
+    },
+    {
       "componentContentSha256": "531c61dc18224ea97575a8c871cbd329be8e6bcff4e7663dcfc2cb9b82b69a13",
       "componentId": "agent-teams-playbook",
       "componentPath": "skills/agent-teams-playbook",
@@ -2515,6 +2971,721 @@
       ]
     },
     {
+      "componentContentSha256": "fad157f63d13e318d86547c8e3433d57da2f61d4452d6b8b73f81982302ef0a1",
+      "componentId": "customer-case-operations",
+      "componentPath": "skills/customer-case-operations",
+      "componentType": "skill",
+      "componentVersion": "0.1.0",
+      "contractSha256": "db2d5cb8163d0c1a2e4efc2cdefd71f22497c17fc13703e8efd30b5c901f1919",
+      "doNotUseWhen": [
+        "不复制实现，不引入企业 SLA 代码，不自动发消息，不创建后台调度或冒充授权服务。",
+        "需要新增账号权限或未经授权的外部数据读取。",
+        "需要把离线投影当作业务系统真实写入或最终验收。"
+      ],
+      "entrypoint": "SKILL.md",
+      "helperContract": "helper-contract.json",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "业务取舍、采纳及新增外部动作沿用当前宿主授权；已有决定不重复询问，纯本地核验可继续。"
+        ]
+      },
+      "id": "customer-case-operations-deliver",
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "cases": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "artifactVersion": {
+                  "maxLength": 128,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "customerId": {
+                  "maxLength": 128,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "id": {
+                  "maxLength": 128,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "materials": {
+                  "items": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "id": {
+                        "maxLength": 128,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "sha256": {
+                        "pattern": "^[a-f0-9]{64}$",
+                        "type": "string"
+                      },
+                      "sourceRef": {
+                        "maxLength": 2048,
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "sha256",
+                      "sourceRef"
+                    ],
+                    "type": "object"
+                  },
+                  "minItems": 0,
+                  "type": "array"
+                },
+                "ownerId": {
+                  "maxLength": 128,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "state": {
+                  "maxLength": 128,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "version": {
+                  "minimum": 1,
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "id",
+                "customerId",
+                "state",
+                "ownerId",
+                "version",
+                "artifactVersion",
+                "materials"
+              ],
+              "type": "object"
+            },
+            "minItems": 1,
+            "type": "array"
+          },
+          "context": {
+            "additionalProperties": false,
+            "properties": {
+              "organizationId": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "revision": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "workId": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "organizationId",
+              "workId",
+              "revision"
+            ],
+            "type": "object"
+          },
+          "events": {
+            "items": {
+              "anyOf": [
+                {
+                  "additionalProperties": false,
+                  "properties": {
+                    "actorId": {
+                      "maxLength": 128,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "caseId": {
+                      "maxLength": 128,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "decision": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "actorId": {
+                          "maxLength": 128,
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "caseSnapshotSha256": {
+                          "pattern": "^[a-f0-9]{64}$",
+                          "type": "string"
+                        },
+                        "evidenceRef": {
+                          "maxLength": 2048,
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "reason": {
+                          "maxLength": 2000,
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "transitionId": {
+                          "maxLength": 128,
+                          "minLength": 1,
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "actorId",
+                        "caseSnapshotSha256",
+                        "transitionId",
+                        "reason",
+                        "evidenceRef"
+                      ],
+                      "type": "object"
+                    },
+                    "expectedVersion": {
+                      "minimum": 1,
+                      "type": "integer"
+                    },
+                    "id": {
+                      "maxLength": 128,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "kind": {
+                      "const": "transition"
+                    },
+                    "transitionId": {
+                      "maxLength": 128,
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "caseId",
+                    "actorId",
+                    "expectedVersion",
+                    "kind",
+                    "transitionId"
+                  ],
+                  "type": "object"
+                },
+                {
+                  "additionalProperties": false,
+                  "properties": {
+                    "actorId": {
+                      "maxLength": 128,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "caseId": {
+                      "maxLength": 128,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "expectedVersion": {
+                      "minimum": 1,
+                      "type": "integer"
+                    },
+                    "id": {
+                      "maxLength": 128,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "kind": {
+                      "const": "material"
+                    },
+                    "material": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "id": {
+                          "maxLength": 128,
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "sha256": {
+                          "pattern": "^[a-f0-9]{64}$",
+                          "type": "string"
+                        },
+                        "sourceRef": {
+                          "maxLength": 2048,
+                          "minLength": 1,
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "sha256",
+                        "sourceRef"
+                      ],
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "caseId",
+                    "actorId",
+                    "expectedVersion",
+                    "kind",
+                    "material"
+                  ],
+                  "type": "object"
+                },
+                {
+                  "additionalProperties": false,
+                  "properties": {
+                    "actorId": {
+                      "maxLength": 128,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "artifactVersion": {
+                      "maxLength": 128,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "caseId": {
+                      "maxLength": 128,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "evidenceRef": {
+                      "maxLength": 2048,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "expectedVersion": {
+                      "minimum": 1,
+                      "type": "integer"
+                    },
+                    "id": {
+                      "maxLength": 128,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "kind": {
+                      "const": "receipt"
+                    },
+                    "receiptKind": {
+                      "enum": [
+                        "produced",
+                        "verified",
+                        "received"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "caseId",
+                    "actorId",
+                    "expectedVersion",
+                    "kind",
+                    "receiptKind",
+                    "artifactVersion",
+                    "evidenceRef"
+                  ],
+                  "type": "object"
+                },
+                {
+                  "additionalProperties": false,
+                  "properties": {
+                    "actorId": {
+                      "maxLength": 128,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "artifactVersion": {
+                      "maxLength": 128,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "caseId": {
+                      "maxLength": 128,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "evidenceRef": {
+                      "maxLength": 2048,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "expectedVersion": {
+                      "minimum": 1,
+                      "type": "integer"
+                    },
+                    "id": {
+                      "maxLength": 128,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "kind": {
+                      "const": "adoption"
+                    },
+                    "reason": {
+                      "maxLength": 2000,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "status": {
+                      "enum": [
+                        "adopted",
+                        "rejected"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "caseId",
+                    "actorId",
+                    "expectedVersion",
+                    "kind",
+                    "artifactVersion",
+                    "status",
+                    "reason",
+                    "evidenceRef"
+                  ],
+                  "type": "object"
+                }
+              ]
+            },
+            "minItems": 0,
+            "type": "array"
+          },
+          "members": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "maxLength": 128,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "roles": {
+                  "items": {
+                    "maxLength": 128,
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "minItems": 1,
+                  "type": "array"
+                }
+              },
+              "required": [
+                "id",
+                "roles"
+              ],
+              "type": "object"
+            },
+            "minItems": 1,
+            "type": "array"
+          },
+          "workflow": {
+            "additionalProperties": false,
+            "properties": {
+              "adoptionRole": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "id": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "initialState": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "managerRole": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "revision": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "states": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "id": {
+                      "maxLength": 128,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "label": {
+                      "maxLength": 200,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "requiredMaterials": {
+                      "items": {
+                        "maxLength": 128,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "minItems": 0,
+                      "type": "array"
+                    },
+                    "terminal": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "label",
+                    "requiredMaterials",
+                    "terminal"
+                  ],
+                  "type": "object"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "transitions": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "decisionRoles": {
+                      "items": {
+                        "maxLength": 128,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "minItems": 0,
+                      "type": "array"
+                    },
+                    "from": {
+                      "maxLength": 128,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "id": {
+                      "maxLength": 128,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "requiredMaterials": {
+                      "items": {
+                        "maxLength": 128,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "minItems": 0,
+                      "type": "array"
+                    },
+                    "requiresDecision": {
+                      "type": "boolean"
+                    },
+                    "roles": {
+                      "items": {
+                        "maxLength": 128,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "minItems": 1,
+                      "type": "array"
+                    },
+                    "to": {
+                      "maxLength": 128,
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "from",
+                    "to",
+                    "roles",
+                    "requiredMaterials",
+                    "requiresDecision",
+                    "decisionRoles"
+                  ],
+                  "type": "object"
+                },
+                "minItems": 0,
+                "type": "array"
+              },
+              "verificationRole": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "revision",
+              "initialState",
+              "managerRole",
+              "adoptionRole",
+              "states",
+              "transitions",
+              "verificationRole"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "context",
+          "workflow",
+          "members",
+          "cases",
+          "events"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "additionalProperties": false,
+        "properties": {
+          "capabilityId": {
+            "const": "customer-case-operations-deliver"
+          },
+          "claims": {
+            "additionalProperties": false,
+            "properties": {
+              "businessStatePersisted": {
+                "const": false
+              },
+              "finalAcceptance": {
+                "const": "not_decided"
+              },
+              "modelCalled": {
+                "const": false
+              },
+              "networkAccessed": {
+                "const": false
+              }
+            },
+            "required": [
+              "modelCalled",
+              "networkAccessed",
+              "businessStatePersisted",
+              "finalAcceptance"
+            ],
+            "type": "object"
+          },
+          "context": {
+            "additionalProperties": false,
+            "properties": {
+              "organizationId": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "revision": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "workId": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "organizationId",
+              "workId",
+              "revision"
+            ],
+            "type": "object"
+          },
+          "inputSha256": {
+            "pattern": "^[a-f0-9]{64}$",
+            "type": "string"
+          },
+          "policySha256": {
+            "pattern": "^[a-f0-9]{64}$",
+            "type": "string"
+          },
+          "protocol": {
+            "const": "kim-service-helper-v1"
+          },
+          "result": {
+            "additionalProperties": false,
+            "properties": {
+              "cases": {
+                "type": "array"
+              },
+              "eventHistorySha256": {
+                "pattern": "^[a-f0-9]{64}$",
+                "type": "string"
+              },
+              "events": {
+                "type": "array"
+              },
+              "notificationsSent": {
+                "const": false
+              },
+              "schedulerRunning": {
+                "const": false
+              },
+              "stateKind": {
+                "const": "deterministic_projection"
+              },
+              "workflowSha256": {
+                "pattern": "^[a-f0-9]{64}$",
+                "type": "string"
+              }
+            },
+            "required": [
+              "workflowSha256",
+              "cases",
+              "events",
+              "stateKind",
+              "notificationsSent",
+              "schedulerRunning",
+              "eventHistorySha256"
+            ],
+            "type": "object"
+          },
+          "schemaVersion": {
+            "const": 1
+          },
+          "status": {
+            "enum": [
+              "completed",
+              "needs_review"
+            ]
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "protocol",
+          "capabilityId",
+          "context",
+          "inputSha256",
+          "policySha256",
+          "status",
+          "result",
+          "claims"
+        ],
+        "type": "object"
+      },
+      "permissions": [],
+      "sideEffects": [],
+      "summary": "按可配置阶段、角色、材料和事件重放客户事项，输出下一步与缺项，独立保留验证、回执与采纳。 customer case operations workflow receipt",
+      "useWhen": [
+        "公司客户事项推进",
+        "固定公司事项、负责人、材料版本和阶段/角色配置。",
+        "核对阶段、材料、角色及版本绑定决定，再输出当前状态投影和下一步建议。"
+      ],
+      "validation": [
+        "tests/helper.test.mjs"
+      ]
+    },
+    {
       "componentContentSha256": "853eebd58b5602831ff6d8d8dc4371efae773763e7e40d3647de3a7277fc2fec",
       "componentId": "customer-service-writer",
       "componentPath": "agents/customer-service-writer",
@@ -3409,6 +4580,356 @@
       ]
     },
     {
+      "componentContentSha256": "b98ea4bb343f4309efa0cf35decb5051b843623d6a395e3377474a34abe1e191",
+      "componentId": "evidence-pack",
+      "componentPath": "skills/evidence-pack",
+      "componentType": "skill",
+      "componentVersion": "0.1.0",
+      "contractSha256": "2fb9e3eb9e64469a51eaece8cf8d8c9bad0e74b2400093491874c8ed0dc77a35",
+      "doNotUseWhen": [
+        "不复制上游代码，不安装 OCR 或模型，不声明已提取 PDF 页面。",
+        "需要新增账号权限或未经授权的外部数据读取。",
+        "需要把离线投影当作业务系统真实写入或最终验收。"
+      ],
+      "entrypoint": "SKILL.md",
+      "helperContract": "helper-contract.json",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "业务取舍、采纳及新增外部动作沿用当前宿主授权；已有决定不重复询问，纯本地核验可继续。"
+        ]
+      },
+      "id": "evidence-pack-deliver",
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "chunkBytes": {
+            "minimum": 1,
+            "type": "integer"
+          },
+          "chunkIds": {
+            "items": {
+              "maxLength": 180,
+              "minLength": 1,
+              "type": "string"
+            },
+            "minItems": 0,
+            "type": "array"
+          },
+          "context": {
+            "additionalProperties": false,
+            "properties": {
+              "organizationId": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "revision": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "workId": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "organizationId",
+              "workId",
+              "revision"
+            ],
+            "type": "object"
+          },
+          "contextBudgetBytes": {
+            "minimum": 1,
+            "type": "integer"
+          },
+          "expectedPackSha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "indexOffset": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "indexPageSize": {
+            "minimum": 1,
+            "type": "integer"
+          },
+          "operation": {
+            "enum": [
+              "build",
+              "read"
+            ]
+          },
+          "packPath": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "selectionOffset": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "sourceFiles": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "expectedSha256": {
+                  "pattern": "^[a-f0-9]{64}$",
+                  "type": "string"
+                },
+                "id": {
+                  "maxLength": 128,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "pages": {
+                  "items": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "endByte": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "id": {
+                        "maxLength": 128,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "startByte": {
+                        "minimum": 0,
+                        "type": "integer"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "startByte",
+                      "endByte"
+                    ],
+                    "type": "object"
+                  },
+                  "minItems": 0,
+                  "type": "array"
+                },
+                "path": {
+                  "maxLength": 512,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "revision": {
+                  "maxLength": 128,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "title": {
+                  "maxLength": 300,
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "title",
+                "revision",
+                "path"
+              ],
+              "type": "object"
+            },
+            "minItems": 1,
+            "type": "array"
+          },
+          "verifySourceFiles": {
+            "type": "boolean"
+          },
+          "workspaceRoot": {
+            "maxLength": 2048,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "context",
+          "operation",
+          "workspaceRoot",
+          "packPath"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "additionalProperties": false,
+        "properties": {
+          "capabilityId": {
+            "const": "evidence-pack-deliver"
+          },
+          "claims": {
+            "additionalProperties": false,
+            "properties": {
+              "businessStatePersisted": {
+                "const": false
+              },
+              "finalAcceptance": {
+                "const": "not_decided"
+              },
+              "modelCalled": {
+                "const": false
+              },
+              "networkAccessed": {
+                "const": false
+              }
+            },
+            "required": [
+              "modelCalled",
+              "networkAccessed",
+              "businessStatePersisted",
+              "finalAcceptance"
+            ],
+            "type": "object"
+          },
+          "context": {
+            "additionalProperties": false,
+            "properties": {
+              "organizationId": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "revision": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "workId": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "organizationId",
+              "workId",
+              "revision"
+            ],
+            "type": "object"
+          },
+          "inputSha256": {
+            "pattern": "^[a-f0-9]{64}$",
+            "type": "string"
+          },
+          "policySha256": {
+            "pattern": "^[a-f0-9]{64}$",
+            "type": "string"
+          },
+          "protocol": {
+            "const": "kim-service-helper-v1"
+          },
+          "result": {
+            "additionalProperties": false,
+            "properties": {
+              "context": {
+                "type": "object"
+              },
+              "coreInputSha256": {
+                "pattern": "^[0-9a-f]{64}$",
+                "type": "string"
+              },
+              "extraction": {
+                "type": "object"
+              },
+              "handoff": {
+                "type": "object"
+              },
+              "index": {
+                "type": "object"
+              },
+              "packRef": {
+                "additionalProperties": false,
+                "properties": {
+                  "bytes": {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "path": {
+                    "type": "string"
+                  },
+                  "sha256": {
+                    "pattern": "^[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  "sourceVerification": {
+                    "enum": [
+                      "verified_against_supplied_files",
+                      "snapshot_only"
+                    ]
+                  }
+                },
+                "required": [
+                  "path",
+                  "sha256",
+                  "bytes",
+                  "sourceVerification"
+                ],
+                "type": "object"
+              },
+              "packSha256": {
+                "pattern": "^[a-f0-9]{64}$",
+                "type": "string"
+              }
+            },
+            "required": [
+              "packSha256",
+              "index",
+              "context",
+              "extraction",
+              "handoff",
+              "coreInputSha256",
+              "packRef"
+            ],
+            "type": "object"
+          },
+          "schemaVersion": {
+            "const": 1
+          },
+          "status": {
+            "enum": [
+              "completed",
+              "needs_review"
+            ]
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "protocol",
+          "capabilityId",
+          "context",
+          "inputSha256",
+          "policySha256",
+          "status",
+          "result",
+          "claims"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials",
+        "filesystem:write-artifacts"
+      ],
+      "sideEffects": [
+        "writes-new-evidence-pack-inside-explicit-workspace"
+      ],
+      "summary": "把长文原文保留成带来源哈希的分页分块索引，按字节预算取回当前模块所需材料。 evidence source chunk context budget",
+      "useWhen": [
+        "大材料证据包",
+        "先固定公司、Work、材料版本和授权范围，读取 UTF-8 原文或已有提取结果。",
+        "用 read 和分页游标取索引，再明确选择 chunkIds，在字节预算内装配上下文。"
+      ],
+      "validation": [
+        "tests/helper.test.mjs"
+      ]
+    },
+    {
       "componentContentSha256": "1636b2b78fef8b3f2112640f1dd43b71a18c2528f44a1192e68f4a2cb39d3107",
       "componentId": "exercise-designer",
       "componentPath": "agents/exercise-designer",
@@ -3649,6 +5170,431 @@
       ],
       "validation": [
         "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "af0a029bce700acf9f8e9d17db98d2ab8214a2daef10e99ac10925800510cacd",
+      "componentId": "feedback-to-requirements",
+      "componentPath": "skills/feedback-to-requirements",
+      "componentType": "skill",
+      "componentVersion": "0.1.0",
+      "contractSha256": "62da1f35071fd93855309789ca7c2776162ee6d9f46b6416929a4ddf443de346",
+      "doNotUseWhen": [
+        "不复制 AGPL 源码，不接管产品库，不自动判定语义重复，不用点赞数冒充独立客户数。",
+        "需要新增账号权限或未经授权的外部数据读取。",
+        "需要把离线投影当作业务系统真实写入或最终验收。"
+      ],
+      "entrypoint": "SKILL.md",
+      "helperContract": "helper-contract.json",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "业务取舍、采纳及新增外部动作沿用当前宿主授权；已有决定不重复询问，纯本地核验可继续。"
+        ]
+      },
+      "id": "feedback-to-requirements-deliver",
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "adoptionRole": {
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          },
+          "context": {
+            "additionalProperties": false,
+            "properties": {
+              "organizationId": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "revision": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "workId": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "organizationId",
+              "workId",
+              "revision"
+            ],
+            "type": "object"
+          },
+          "contradictions": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "maxLength": 128,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "reason": {
+                  "maxLength": 2000,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "recordIds": {
+                  "items": {
+                    "maxLength": 128,
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "minItems": 2,
+                  "type": "array"
+                }
+              },
+              "required": [
+                "id",
+                "recordIds",
+                "reason"
+              ],
+              "type": "object"
+            },
+            "minItems": 0,
+            "type": "array"
+          },
+          "decisions": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "actorId": {
+                  "maxLength": 128,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "candidateId": {
+                  "maxLength": 128,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "candidateSha256": {
+                  "pattern": "^[a-f0-9]{64}$",
+                  "type": "string"
+                },
+                "evidenceRef": {
+                  "maxLength": 2048,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "reason": {
+                  "maxLength": 2000,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "status": {
+                  "enum": [
+                    "adopted",
+                    "rejected"
+                  ]
+                }
+              },
+              "required": [
+                "candidateId",
+                "candidateSha256",
+                "actorId",
+                "status",
+                "reason",
+                "evidenceRef"
+              ],
+              "type": "object"
+            },
+            "minItems": 0,
+            "type": "array"
+          },
+          "groups": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "acceptanceCriteria": {
+                  "items": {
+                    "maxLength": 1000,
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "minItems": 1,
+                  "type": "array"
+                },
+                "id": {
+                  "maxLength": 128,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "recordIds": {
+                  "items": {
+                    "maxLength": 128,
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "minItems": 1,
+                  "type": "array"
+                },
+                "title": {
+                  "maxLength": 300,
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "title",
+                "recordIds",
+                "acceptanceCriteria"
+              ],
+              "type": "object"
+            },
+            "minItems": 0,
+            "type": "array"
+          },
+          "members": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "maxLength": 128,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "roles": {
+                  "items": {
+                    "maxLength": 128,
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "minItems": 1,
+                  "type": "array"
+                }
+              },
+              "required": [
+                "id",
+                "roles"
+              ],
+              "type": "object"
+            },
+            "minItems": 1,
+            "type": "array"
+          },
+          "projectId": {
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          },
+          "records": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "customerId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "duplicateOf": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "id": {
+                  "maxLength": 128,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "projectId": {
+                  "maxLength": 128,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "sourceRef": {
+                  "maxLength": 2048,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "text": {
+                  "maxLength": 50000,
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "projectId",
+                "customerId",
+                "text",
+                "sourceRef"
+              ],
+              "type": "object"
+            },
+            "minItems": 1,
+            "type": "array"
+          }
+        },
+        "required": [
+          "context",
+          "projectId",
+          "records",
+          "groups",
+          "members",
+          "adoptionRole"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "additionalProperties": false,
+        "properties": {
+          "capabilityId": {
+            "const": "feedback-to-requirements-deliver"
+          },
+          "claims": {
+            "additionalProperties": false,
+            "properties": {
+              "businessStatePersisted": {
+                "const": false
+              },
+              "finalAcceptance": {
+                "const": "not_decided"
+              },
+              "modelCalled": {
+                "const": false
+              },
+              "networkAccessed": {
+                "const": false
+              }
+            },
+            "required": [
+              "modelCalled",
+              "networkAccessed",
+              "businessStatePersisted",
+              "finalAcceptance"
+            ],
+            "type": "object"
+          },
+          "context": {
+            "additionalProperties": false,
+            "properties": {
+              "organizationId": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "revision": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "workId": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "organizationId",
+              "workId",
+              "revision"
+            ],
+            "type": "object"
+          },
+          "inputSha256": {
+            "pattern": "^[a-f0-9]{64}$",
+            "type": "string"
+          },
+          "policySha256": {
+            "pattern": "^[a-f0-9]{64}$",
+            "type": "string"
+          },
+          "protocol": {
+            "const": "kim-service-helper-v1"
+          },
+          "result": {
+            "additionalProperties": false,
+            "properties": {
+              "candidates": {
+                "type": "array"
+              },
+              "contradictions": {
+                "type": "array"
+              },
+              "counts": {
+                "type": "object"
+              },
+              "feedbackSha256": {
+                "pattern": "^[a-f0-9]{64}$",
+                "type": "string"
+              },
+              "interpretation": {
+                "type": "object"
+              },
+              "lineage": {
+                "type": "array"
+              },
+              "projectId": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "unclassifiedRecordIds": {
+                "items": {
+                  "maxLength": 128,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "minItems": 0,
+                "type": "array"
+              }
+            },
+            "required": [
+              "projectId",
+              "feedbackSha256",
+              "lineage",
+              "candidates",
+              "contradictions",
+              "unclassifiedRecordIds",
+              "counts",
+              "interpretation"
+            ],
+            "type": "object"
+          },
+          "schemaVersion": {
+            "const": 1
+          },
+          "status": {
+            "enum": [
+              "completed",
+              "needs_review"
+            ]
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "protocol",
+          "capabilityId",
+          "context",
+          "inputSha256",
+          "policySha256",
+          "status",
+          "result",
+          "claims"
+        ],
+        "type": "object"
+      },
+      "permissions": [],
+      "sideEffects": [],
+      "summary": "将客户反馈、明确重复关系与分组转成需求候选，计算独立客户数，保留矛盾证据和版本绑定采纳记录。 feedback requirements evidence ledger",
+      "useWhen": [
+        "反馈转需求证据台账",
+        "接收同一公司 Work/项目内的原始反馈及来源，保留客户 ID 或匿名状态。",
+        "生成带证据哈希的需求候选、客户去重计数、未分类和矛盾清单。"
+      ],
+      "validation": [
+        "tests/helper.test.mjs"
       ]
     },
     {
@@ -13547,6 +15493,413 @@
       ]
     },
     {
+      "componentContentSha256": "2bb91dfce77e68f1ee16b1f1cecd9a954699ed14691ee406685ac6d263afa131",
+      "componentId": "visual-explainer",
+      "componentPath": "skills/visual-explainer",
+      "componentType": "skill",
+      "componentVersion": "0.1.0",
+      "contractSha256": "279f3007508fd0532ae9d7ac70731a77135ac00c3a50a7e2987b56c037841339",
+      "doNotUseWhen": [
+        "不复制实现，不用图生绘制精确架构，不声称动画代表真实执行；本版只支持有界分层布局。",
+        "需要新增账号权限或未经授权的外部数据读取。",
+        "需要把离线投影当作业务系统真实写入或最终验收。"
+      ],
+      "entrypoint": "SKILL.md",
+      "helperContract": "helper-contract.json",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "业务取舍、采纳及新增外部动作沿用当前宿主授权；已有决定不重复询问，纯本地核验可继续。"
+        ]
+      },
+      "id": "visual-explainer-deliver",
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "caption": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "context": {
+            "additionalProperties": false,
+            "properties": {
+              "organizationId": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "revision": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "workId": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "organizationId",
+              "workId",
+              "revision"
+            ],
+            "type": "object"
+          },
+          "diagram": {
+            "additionalProperties": false,
+            "properties": {
+              "edges": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "from": {
+                      "maxLength": 128,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "id": {
+                      "maxLength": 128,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "kind": {
+                      "enum": [
+                        "flow",
+                        "return",
+                        "decision"
+                      ]
+                    },
+                    "label": {
+                      "maxLength": 30,
+                      "minLength": 0,
+                      "type": "string"
+                    },
+                    "to": {
+                      "maxLength": 128,
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "from",
+                    "to",
+                    "kind"
+                  ],
+                  "type": "object"
+                },
+                "minItems": 0,
+                "type": "array"
+              },
+              "nodes": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "id": {
+                      "maxLength": 128,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "kind": {
+                      "enum": [
+                        "input",
+                        "action",
+                        "decision",
+                        "result"
+                      ]
+                    },
+                    "label": {
+                      "maxLength": 80,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "stageId": {
+                      "maxLength": 128,
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "label",
+                    "stageId",
+                    "kind"
+                  ],
+                  "type": "object"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "sources": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "label": {
+                      "maxLength": 100,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "ref": {
+                      "maxLength": 2048,
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "label",
+                    "ref"
+                  ],
+                  "type": "object"
+                },
+                "minItems": 0,
+                "type": "array"
+              },
+              "stages": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "explanation": {
+                      "maxLength": 1200,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "id": {
+                      "maxLength": 128,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "title": {
+                      "maxLength": 80,
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "title",
+                    "explanation"
+                  ],
+                  "type": "object"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "title": {
+                "maxLength": 80,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "title",
+              "stages",
+              "nodes",
+              "edges"
+            ],
+            "type": "object"
+          },
+          "locale": {
+            "enum": [
+              "zh-CN",
+              "en"
+            ]
+          },
+          "palette": {
+            "additionalProperties": false,
+            "properties": {
+              "background": {
+                "pattern": "^#[0-9a-fA-F]{6}$",
+                "type": "string"
+              },
+              "border": {
+                "pattern": "^#[0-9a-fA-F]{6}$",
+                "type": "string"
+              },
+              "card": {
+                "pattern": "^#[0-9a-fA-F]{6}$",
+                "type": "string"
+              },
+              "decision": {
+                "pattern": "^#[0-9a-fA-F]{6}$",
+                "type": "string"
+              },
+              "line": {
+                "pattern": "^#[0-9a-fA-F]{6}$",
+                "type": "string"
+              },
+              "panel": {
+                "pattern": "^#[0-9a-fA-F]{6}$",
+                "type": "string"
+              },
+              "panelAlt": {
+                "pattern": "^#[0-9a-fA-F]{6}$",
+                "type": "string"
+              },
+              "return": {
+                "pattern": "^#[0-9a-fA-F]{6}$",
+                "type": "string"
+              },
+              "text": {
+                "pattern": "^#[0-9a-fA-F]{6}$",
+                "type": "string"
+              }
+            },
+            "required": [],
+            "type": "object"
+          }
+        },
+        "required": [
+          "context",
+          "diagram"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "additionalProperties": false,
+        "properties": {
+          "capabilityId": {
+            "const": "visual-explainer-deliver"
+          },
+          "claims": {
+            "additionalProperties": false,
+            "properties": {
+              "businessStatePersisted": {
+                "const": false
+              },
+              "finalAcceptance": {
+                "const": "not_decided"
+              },
+              "modelCalled": {
+                "const": false
+              },
+              "networkAccessed": {
+                "const": false
+              }
+            },
+            "required": [
+              "modelCalled",
+              "networkAccessed",
+              "businessStatePersisted",
+              "finalAcceptance"
+            ],
+            "type": "object"
+          },
+          "context": {
+            "additionalProperties": false,
+            "properties": {
+              "organizationId": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "revision": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              },
+              "workId": {
+                "maxLength": 128,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "organizationId",
+              "workId",
+              "revision"
+            ],
+            "type": "object"
+          },
+          "inputSha256": {
+            "pattern": "^[a-f0-9]{64}$",
+            "type": "string"
+          },
+          "policySha256": {
+            "pattern": "^[a-f0-9]{64}$",
+            "type": "string"
+          },
+          "protocol": {
+            "const": "kim-service-helper-v1"
+          },
+          "result": {
+            "additionalProperties": false,
+            "properties": {
+              "diagramSha256": {
+                "pattern": "^[a-f0-9]{64}$",
+                "type": "string"
+              },
+              "files": {
+                "type": "array"
+              },
+              "layout": {
+                "const": "layered"
+              },
+              "nodePositions": {
+                "type": "array"
+              },
+              "renderingObserved": {
+                "type": "string"
+              },
+              "runtimeStatus": {
+                "const": "illustration_only"
+              },
+              "semanticAccuracy": {
+                "type": "string"
+              },
+              "sourceSpec": {
+                "type": "object"
+              }
+            },
+            "required": [
+              "diagramSha256",
+              "layout",
+              "nodePositions",
+              "files",
+              "sourceSpec",
+              "semanticAccuracy",
+              "renderingObserved",
+              "runtimeStatus"
+            ],
+            "type": "object"
+          },
+          "schemaVersion": {
+            "const": 1
+          },
+          "status": {
+            "enum": [
+              "completed",
+              "needs_review"
+            ]
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "protocol",
+          "capabilityId",
+          "context",
+          "inputSha256",
+          "policySha256",
+          "status",
+          "result",
+          "claims"
+        ],
+        "type": "object"
+      },
+      "permissions": [],
+      "sideEffects": [],
+      "summary": "用单一图数据生成居中分层 SVG、可逐步播放的 HTML 与文字说明，核查边、阶段及退回路径。 visual explainer storyboard SVG diagram",
+      "useWhen": [
+        "分阶段图解",
+        "从真实系统说明提取阶段、节点、分支、返回路径与来源，人工判断内容是否准确。",
+        "生成 SVG、storyboard.html 和文字替代文本；首尾沿共同中轴布局。"
+      ],
+      "validation": [
+        "tests/helper.test.mjs"
+      ]
+    },
+    {
       "componentContentSha256": "31579c26c8afa9edbca4208a2a38b87fdaae9bb4a23490ed1dc98013dd229513",
       "componentId": "workplace-writer",
       "componentPath": "agents/workplace-writer",
@@ -13763,8 +16116,8 @@
       ]
     }
   ],
-  "capabilityCount": 86,
-  "componentCount": 71,
+  "capabilityCount": 91,
+  "componentCount": 76,
   "components": [
     {
       "capabilityIds": [
@@ -14532,6 +16885,21 @@
     },
     {
       "capabilityIds": [
+        "agent-evaluation-deliver"
+      ],
+      "componentType": "skill",
+      "componentVersion": "0.1.0",
+      "contentSha256": "0283dd48edf87b698d8301c87c7b9364ced9fea3278df05e3fc44e8b1b9d8475",
+      "contractSha256": "80d4be3ffb907dd06db482b5e9af24098473038e0e1659f78428ffb65c6a135e",
+      "entrypoint": "SKILL.md",
+      "id": "agent-evaluation",
+      "path": "skills/agent-evaluation",
+      "validation": [
+        "tests/helper.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
         "agent-teams-orchestrate"
       ],
       "componentType": "skill",
@@ -14578,6 +16946,21 @@
     },
     {
       "capabilityIds": [
+        "customer-case-operations-deliver"
+      ],
+      "componentType": "skill",
+      "componentVersion": "0.1.0",
+      "contentSha256": "fad157f63d13e318d86547c8e3433d57da2f61d4452d6b8b73f81982302ef0a1",
+      "contractSha256": "db2d5cb8163d0c1a2e4efc2cdefd71f22497c17fc13703e8efd30b5c901f1919",
+      "entrypoint": "SKILL.md",
+      "id": "customer-case-operations",
+      "path": "skills/customer-case-operations",
+      "validation": [
+        "tests/helper.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
         "database-migration-deliver"
       ],
       "componentType": "skill",
@@ -14593,6 +16976,21 @@
     },
     {
       "capabilityIds": [
+        "evidence-pack-deliver"
+      ],
+      "componentType": "skill",
+      "componentVersion": "0.1.0",
+      "contentSha256": "b98ea4bb343f4309efa0cf35decb5051b843623d6a395e3377474a34abe1e191",
+      "contractSha256": "2fb9e3eb9e64469a51eaece8cf8d8c9bad0e74b2400093491874c8ed0dc77a35",
+      "entrypoint": "SKILL.md",
+      "id": "evidence-pack",
+      "path": "skills/evidence-pack",
+      "validation": [
+        "tests/helper.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
         "experiment-analysis-deliver"
       ],
       "componentType": "skill",
@@ -14604,6 +17002,21 @@
       "path": "skills/experiment-analysis",
       "validation": [
         "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "feedback-to-requirements-deliver"
+      ],
+      "componentType": "skill",
+      "componentVersion": "0.1.0",
+      "contentSha256": "af0a029bce700acf9f8e9d17db98d2ab8214a2daef10e99ac10925800510cacd",
+      "contractSha256": "62da1f35071fd93855309789ca7c2776162ee6d9f46b6416929a4ddf443de346",
+      "entrypoint": "SKILL.md",
+      "id": "feedback-to-requirements",
+      "path": "skills/feedback-to-requirements",
+      "validation": [
+        "tests/helper.test.mjs"
       ]
     },
     {
@@ -14838,6 +17251,21 @@
       "path": "skills/sop-runbook",
       "validation": [
         "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "visual-explainer-deliver"
+      ],
+      "componentType": "skill",
+      "componentVersion": "0.1.0",
+      "contentSha256": "2bb91dfce77e68f1ee16b1f1cecd9a954699ed14691ee406685ac6d263afa131",
+      "contractSha256": "279f3007508fd0532ae9d7ac70731a77135ac00c3a50a7e2987b56c037841339",
+      "entrypoint": "SKILL.md",
+      "id": "visual-explainer",
+      "path": "skills/visual-explainer",
+      "validation": [
+        "tests/helper.test.mjs"
       ]
     },
     {

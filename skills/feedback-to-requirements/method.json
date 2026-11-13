@@ -1,0 +1,237 @@
+{
+  "schemaVersion": 1,
+  "roleId": "feedback-to-requirements",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "coordinationOwner": "caller",
+  "finalAcceptance": "caller_only",
+  "permissionSource": "current_task_host_authorization",
+  "steps": [
+    "接收同一公司 Work/项目内的原始反馈及来源，保留客户 ID 或匿名状态。",
+    "检查重复引用存在性和环路，只采用调用方明确的分组。",
+    "生成带证据哈希的需求候选、客户去重计数、未分类和矛盾清单。",
+    "只有匹配候选版本与材料的既有采纳回执生效；新候选保持 proposed。"
+  ],
+  "acceptance": [
+    "重复反馈显式引用原条目；状态、引用和操作者边界分开核查。",
+    "核对本次输出哈希、未完成项及宿主采纳边界。"
+  ],
+  "knowledgeAssets": [
+    {
+      "id": "feedback-to-requirements-method",
+      "path": "references/method.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "fider-method"
+      ]
+    }
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "反馈转需求证据台账",
+    "scope": [
+      "重复反馈显式引用原条目；状态、引用和操作者边界分开核查。",
+      "不复制 AGPL 源码，不接管产品库，不自动判定语义重复，不用点赞数冒充独立客户数。"
+    ],
+    "knowledgeAssetIds": [
+      "feedback-to-requirements-method"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "scope",
+        "question": "当前材料属于哪个组织、事项和版本？",
+        "evidenceRequired": [
+          "context",
+          "输入材料"
+        ],
+        "whenMissing": "补齐身份范围后进行关联计算，其他独立解释可继续。"
+      },
+      {
+        "id": "evidence",
+        "question": "当前结果是否有原始材料和可复算依据？",
+        "evidenceRequired": [
+          "运行 JSON",
+          "输出哈希"
+        ],
+        "whenMissing": "保留未知和未完成项，不生成完成记录。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "duplicate-cycle",
+        "when": "重复引用缺失或成环",
+        "action": "拒绝错误台账并指出引用",
+        "avoid": "悄悄丢弃反馈"
+      },
+      {
+        "id": "stale-adoption",
+        "when": "候选或证据版本改变",
+        "action": "要求当前版本有效记录",
+        "avoid": "把历史决定套到新需求"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "feedback-to-requirements-deliver",
+        "inputGuidance": [
+          {
+            "field": "context",
+            "interpretation": "context 详见 schemas/input.schema.json。",
+            "onMissing": "缺失必填结构时修正输入；不要猜造真实数据。"
+          },
+          {
+            "field": "projectId",
+            "interpretation": "projectId 详见 schemas/input.schema.json。",
+            "onMissing": "缺失必填结构时修正输入；不要猜造真实数据。"
+          },
+          {
+            "field": "records",
+            "interpretation": "records 详见 schemas/input.schema.json。",
+            "onMissing": "缺失必填结构时修正输入；不要猜造真实数据。"
+          },
+          {
+            "field": "groups",
+            "interpretation": "groups 详见 schemas/input.schema.json。",
+            "onMissing": "缺失必填结构时修正输入；不要猜造真实数据。"
+          },
+          {
+            "field": "members",
+            "interpretation": "members 详见 schemas/input.schema.json。",
+            "onMissing": "缺失必填结构时修正输入；不要猜造真实数据。"
+          },
+          {
+            "field": "adoptionRole",
+            "interpretation": "adoptionRole 详见 schemas/input.schema.json。",
+            "onMissing": "缺失必填结构时修正输入；不要猜造真实数据。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "feedback-to-requirements-schemaversion",
+            "field": "schemaVersion",
+            "criterion": "结果必须满足包内可执行 schema、输入哈希及当前公司事项版本。",
+            "rejectWhen": "该字段缺失、伪造或不匹配当前运行。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "examples/input.json",
+              "schemas/output.schema.json"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "feedback-to-requirements-protocol",
+            "field": "protocol",
+            "criterion": "结果必须满足包内可执行 schema、输入哈希及当前公司事项版本。",
+            "rejectWhen": "该字段缺失、伪造或不匹配当前运行。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "examples/input.json",
+              "schemas/output.schema.json"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "feedback-to-requirements-capabilityid",
+            "field": "capabilityId",
+            "criterion": "结果必须满足包内可执行 schema、输入哈希及当前公司事项版本。",
+            "rejectWhen": "该字段缺失、伪造或不匹配当前运行。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "examples/input.json",
+              "schemas/output.schema.json"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "feedback-to-requirements-context",
+            "field": "context",
+            "criterion": "结果必须满足包内可执行 schema、输入哈希及当前公司事项版本。",
+            "rejectWhen": "该字段缺失、伪造或不匹配当前运行。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "examples/input.json",
+              "schemas/output.schema.json"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "feedback-to-requirements-inputsha256",
+            "field": "inputSha256",
+            "criterion": "结果必须满足包内可执行 schema、输入哈希及当前公司事项版本。",
+            "rejectWhen": "该字段缺失、伪造或不匹配当前运行。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "examples/input.json",
+              "schemas/output.schema.json"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "feedback-to-requirements-policysha256",
+            "field": "policySha256",
+            "criterion": "结果必须满足包内可执行 schema、输入哈希及当前公司事项版本。",
+            "rejectWhen": "该字段缺失、伪造或不匹配当前运行。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "examples/input.json",
+              "schemas/output.schema.json"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "feedback-to-requirements-status",
+            "field": "status",
+            "criterion": "结果必须满足包内可执行 schema、输入哈希及当前公司事项版本。",
+            "rejectWhen": "该字段缺失、伪造或不匹配当前运行。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "examples/input.json",
+              "schemas/output.schema.json"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "feedback-to-requirements-result",
+            "field": "result",
+            "criterion": "结果必须满足包内可执行 schema、输入哈希及当前公司事项版本。",
+            "rejectWhen": "同一客户多次反馈算成多个人，或跨项目合并后隐藏来源。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "examples/input.json",
+              "schemas/output.schema.json"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "feedback-to-requirements-claims",
+            "field": "claims",
+            "criterion": "仅声明本次实际离线运算，不扩成模型调用、真实写入或最终采纳。",
+            "rejectWhen": "该字段缺失、伪造或不匹配当前运行。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "examples/input.json",
+              "schemas/output.schema.json"
+            ],
+            "blocking": true
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "沿用既有授权，只有尚未决定的实质业务取舍交由宿主处理。"
+      ],
+      "prohibitedClaims": [
+        "不复制 AGPL 源码，不接管产品库，不自动判定语义重复，不用点赞数冒充独立客户数。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
+}

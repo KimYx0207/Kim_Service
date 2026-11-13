@@ -1,0 +1,141 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$comment": "Generated from capability.json output; edit the contract and rebuild.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "protocol": {
+      "const": "kim-service-helper-v1"
+    },
+    "capabilityId": {
+      "const": "feedback-to-requirements-deliver"
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "organizationId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "workId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "revision": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        }
+      },
+      "required": [
+        "organizationId",
+        "workId",
+        "revision"
+      ]
+    },
+    "inputSha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "policySha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "status": {
+      "enum": [
+        "completed",
+        "needs_review"
+      ]
+    },
+    "result": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "projectId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "feedbackSha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "lineage": {
+          "type": "array"
+        },
+        "candidates": {
+          "type": "array"
+        },
+        "contradictions": {
+          "type": "array"
+        },
+        "unclassifiedRecordIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "minItems": 0
+        },
+        "counts": {
+          "type": "object"
+        },
+        "interpretation": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "projectId",
+        "feedbackSha256",
+        "lineage",
+        "candidates",
+        "contradictions",
+        "unclassifiedRecordIds",
+        "counts",
+        "interpretation"
+      ]
+    },
+    "claims": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "modelCalled": {
+          "const": false
+        },
+        "networkAccessed": {
+          "const": false
+        },
+        "businessStatePersisted": {
+          "const": false
+        },
+        "finalAcceptance": {
+          "const": "not_decided"
+        }
+      },
+      "required": [
+        "modelCalled",
+        "networkAccessed",
+        "businessStatePersisted",
+        "finalAcceptance"
+      ]
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "protocol",
+    "capabilityId",
+    "context",
+    "inputSha256",
+    "policySha256",
+    "status",
+    "result",
+    "claims"
+  ]
+}

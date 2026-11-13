@@ -1,0 +1,201 @@
+{
+  "schemaVersion": 1,
+  "roleId": "feedback-to-requirements",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "worked-case",
+      "capabilityId": "feedback-to-requirements-deliver",
+      "category": "worked_example",
+      "scenario": "对示例材料运行实际本地 helper，核对输入版本、输出哈希与未完成边界。",
+      "input": {
+        "context": {
+          "organizationId": "example-company",
+          "workId": "work-onboarding",
+          "revision": "r1"
+        },
+        "projectId": "onboarding",
+        "records": [
+          {
+            "id": "f1",
+            "projectId": "onboarding",
+            "customerId": "c1",
+            "text": "希望看材料缺项",
+            "sourceRef": "interview/c1#p2"
+          },
+          {
+            "id": "f2",
+            "projectId": "onboarding",
+            "customerId": "c1",
+            "text": "再问一次，材料还差什么",
+            "sourceRef": "ticket/42",
+            "duplicateOf": "f1"
+          },
+          {
+            "id": "f3",
+            "projectId": "onboarding",
+            "customerId": "c2",
+            "text": "默认只看当前阶段，别把后面材料都展开",
+            "sourceRef": "interview/c2#p3"
+          },
+          {
+            "id": "f4",
+            "projectId": "onboarding",
+            "customerId": null,
+            "text": "希望预览全部阶段",
+            "sourceRef": "survey/anonymous-7"
+          }
+        ],
+        "groups": [
+          {
+            "id": "material-visibility",
+            "title": "客户材料进度视图",
+            "recordIds": [
+              "f1",
+              "f2",
+              "f3",
+              "f4"
+            ],
+            "acceptanceCriteria": [
+              "当前阶段显示未提交材料",
+              "支持手动展开后续阶段"
+            ]
+          }
+        ],
+        "members": [
+          {
+            "id": "pm",
+            "roles": [
+              "product-owner"
+            ]
+          }
+        ],
+        "adoptionRole": "product-owner",
+        "contradictions": [
+          {
+            "id": "density",
+            "recordIds": [
+              "f3",
+              "f4"
+            ],
+            "reason": "默认展示范围不同，需按场景核对"
+          }
+        ]
+      },
+      "candidateOutputExcerpt": {
+        "context": {
+          "organizationId": "example-company",
+          "workId": "work-onboarding",
+          "revision": "r1"
+        }
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "示例只能用于演示结构；实际结果通过本地测试复算，真实业务效果另核。",
+      "diagnosticRefs": [
+        "scope",
+        "evidence"
+      ],
+      "decisionRuleRefs": [
+        "duplicate-cycle",
+        "stale-adoption"
+      ]
+    },
+    {
+      "id": "failure-case",
+      "capabilityId": "feedback-to-requirements-deliver",
+      "category": "failure_boundary",
+      "scenario": "把另一版本事项的结果用于当前输入，尽管外观完整仍应拒绝。",
+      "input": {
+        "context": {
+          "organizationId": "example-company",
+          "workId": "work-onboarding",
+          "revision": "r1"
+        },
+        "projectId": "onboarding",
+        "records": [
+          {
+            "id": "f1",
+            "projectId": "onboarding",
+            "customerId": "c1",
+            "text": "希望看材料缺项",
+            "sourceRef": "interview/c1#p2"
+          },
+          {
+            "id": "f2",
+            "projectId": "onboarding",
+            "customerId": "c1",
+            "text": "再问一次，材料还差什么",
+            "sourceRef": "ticket/42",
+            "duplicateOf": "f1"
+          },
+          {
+            "id": "f3",
+            "projectId": "onboarding",
+            "customerId": "c2",
+            "text": "默认只看当前阶段，别把后面材料都展开",
+            "sourceRef": "interview/c2#p3"
+          },
+          {
+            "id": "f4",
+            "projectId": "onboarding",
+            "customerId": null,
+            "text": "希望预览全部阶段",
+            "sourceRef": "survey/anonymous-7"
+          }
+        ],
+        "groups": [
+          {
+            "id": "material-visibility",
+            "title": "客户材料进度视图",
+            "recordIds": [
+              "f1",
+              "f2",
+              "f3",
+              "f4"
+            ],
+            "acceptanceCriteria": [
+              "当前阶段显示未提交材料",
+              "支持手动展开后续阶段"
+            ]
+          }
+        ],
+        "members": [
+          {
+            "id": "pm",
+            "roles": [
+              "product-owner"
+            ]
+          }
+        ],
+        "adoptionRole": "product-owner",
+        "contradictions": [
+          {
+            "id": "density",
+            "recordIds": [
+              "f3",
+              "f4"
+            ],
+            "reason": "默认展示范围不同，需按场景核对"
+          }
+        ]
+      },
+      "candidateOutputExcerpt": {
+        "context": {
+          "organizationId": "example-company",
+          "workId": "work-onboarding",
+          "revision": "stale"
+        }
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "上下文和证据版本不匹配不能成为当前任务的验收依据。",
+      "diagnosticRefs": [
+        "scope"
+      ],
+      "decisionRuleRefs": [
+        "duplicate-cycle"
+      ]
+    }
+  ]
+}

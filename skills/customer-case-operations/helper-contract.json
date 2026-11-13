@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "protocol": "kim-service-helper-v1",
+  "capabilityId": "customer-case-operations-deliver",
+  "inputSchema": "schemas/input.schema.json",
+  "outputSchema": "schemas/output.schema.json",
+  "policy": "policy.json",
+  "invocation": {
+    "runtime": "node",
+    "entrypoint": "scripts/run.mjs",
+    "argv": [
+      "--input-json",
+      "-"
+    ],
+    "inputTransport": "stdin_json",
+    "outputTransport": "stdout_json",
+    "shell": false
+  },
+  "authority": {
+    "modelCalls": false,
+    "networkAccess": false,
+    "businessWrites": false,
+    "finalAcceptance": "caller_only"
+  }
+}

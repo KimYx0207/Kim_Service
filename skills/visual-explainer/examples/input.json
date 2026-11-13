@@ -1,0 +1,87 @@
+{
+  "context": {
+    "organizationId": "example-company",
+    "workId": "work-onboarding",
+    "revision": "r1"
+  },
+  "locale": "zh-CN",
+  "diagram": {
+    "title": "同一件事，从资料到交付",
+    "stages": [
+      {
+        "id": "intake",
+        "title": "资料与目标",
+        "explanation": "把本次目标、来源和有效决定挂到同一个 Work；大材料保留文件，只读取当前需要的章节。"
+      },
+      {
+        "id": "work",
+        "title": "按能力分工",
+        "explanation": "先确认系统模块，再逐个细化。独立模块可以并行，局部问题只退回受影响部分。"
+      },
+      {
+        "id": "review",
+        "title": "核验与采纳",
+        "explanation": "核验文件和回执；产出、验证、采用各自留证。播放动画只解释规则。"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "goal",
+        "label": "同一 Work 与资料",
+        "stageId": "intake",
+        "kind": "input"
+      },
+      {
+        "id": "prd",
+        "label": "模块 PRD",
+        "stageId": "work",
+        "kind": "action"
+      },
+      {
+        "id": "detail",
+        "label": "模块详细设计",
+        "stageId": "work",
+        "kind": "action"
+      },
+      {
+        "id": "receipt",
+        "label": "交付回执与采纳",
+        "stageId": "review",
+        "kind": "result"
+      }
+    ],
+    "edges": [
+      {
+        "id": "g-p",
+        "from": "goal",
+        "to": "prd",
+        "kind": "flow"
+      },
+      {
+        "id": "p-d",
+        "from": "prd",
+        "to": "detail",
+        "kind": "flow"
+      },
+      {
+        "id": "d-r",
+        "from": "detail",
+        "to": "receipt",
+        "kind": "flow"
+      },
+      {
+        "id": "r-d",
+        "from": "receipt",
+        "to": "detail",
+        "kind": "return",
+        "label": "局部修订"
+      }
+    ],
+    "sources": [
+      {
+        "label": "示例边界",
+        "ref": "synthetic://work-lifecycle-example"
+      }
+    ]
+  }
+}

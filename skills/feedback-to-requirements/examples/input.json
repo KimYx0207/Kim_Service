@@ -1,0 +1,74 @@
+{
+  "context": {
+    "organizationId": "example-company",
+    "workId": "work-onboarding",
+    "revision": "r1"
+  },
+  "projectId": "onboarding",
+  "records": [
+    {
+      "id": "f1",
+      "projectId": "onboarding",
+      "customerId": "c1",
+      "text": "希望看材料缺项",
+      "sourceRef": "interview/c1#p2"
+    },
+    {
+      "id": "f2",
+      "projectId": "onboarding",
+      "customerId": "c1",
+      "text": "再问一次，材料还差什么",
+      "sourceRef": "ticket/42",
+      "duplicateOf": "f1"
+    },
+    {
+      "id": "f3",
+      "projectId": "onboarding",
+      "customerId": "c2",
+      "text": "默认只看当前阶段，别把后面材料都展开",
+      "sourceRef": "interview/c2#p3"
+    },
+    {
+      "id": "f4",
+      "projectId": "onboarding",
+      "customerId": null,
+      "text": "希望预览全部阶段",
+      "sourceRef": "survey/anonymous-7"
+    }
+  ],
+  "groups": [
+    {
+      "id": "material-visibility",
+      "title": "客户材料进度视图",
+      "recordIds": [
+        "f1",
+        "f2",
+        "f3",
+        "f4"
+      ],
+      "acceptanceCriteria": [
+        "当前阶段显示未提交材料",
+        "支持手动展开后续阶段"
+      ]
+    }
+  ],
+  "members": [
+    {
+      "id": "pm",
+      "roles": [
+        "product-owner"
+      ]
+    }
+  ],
+  "adoptionRole": "product-owner",
+  "contradictions": [
+    {
+      "id": "density",
+      "recordIds": [
+        "f3",
+        "f4"
+      ],
+      "reason": "默认展示范围不同，需按场景核对"
+    }
+  ]
+}

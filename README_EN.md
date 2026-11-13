@@ -8,9 +8,9 @@
 
 You may know what you want without knowing which numbers a forecast must reconcile, which states a page needs, or how to compare the full cost of supplier quotes. Kim Service brings the methods, materials, steps, examples, and acceptance criteria together, giving you and your AI a concrete basis for the work.
 
-**V1.14** includes **48 specialist Agents, 21 Skills, 1 Hook, and 1 Tool**: 71 components with **86 searchable task capabilities**. Choose one for the job in front of you, or combine several methods within a project.
+The current main branch includes **48 specialist Agents, 26 Skills, 1 Hook, and 1 Tool**: 76 components with **91 searchable task capabilities**. Choose one for the job in front of you, or combine several methods within a project.
 
-**[Open the online task browser](https://kimyx0207.github.io/Kim_Service/?lang=en)** · **[Download V1.14 source and packages](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.14)**
+**[Browse capabilities and prepare a request](https://kimyx0207.github.io/Kim_Service/?lang=en)** · **[Download V1.14 source and packages](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.14)**
 
 <p align="center">
   <img src="docs/images/service-system-panorama.en.svg" alt="Kim Service task panorama: goals and materials enter the task browser; optional Meta_Kim orchestration combines Agent, Skill, Hook and Tool methods into a request; the current AI client produces real artifacts and verifies the handoff, with repair paths, necessary human choices and host-owned Work records" width="1200">
@@ -27,7 +27,7 @@ Financial modeling starts with periods, currency, and units, then connects sales
 ### What the four kinds of component do
 
 - **Agents handle a complete professional task.** Each of the 48 roles has a defined scope, inputs and outputs, reference material, decision steps, positive and negative examples, and quality checks. Financial modeling receives business data; design-system work receives screens, brand choices, and interaction requirements. Their methods lead to different, concrete deliverables.
-- **Skills support a particular step.** The 21 reusable skills cover requirements tracing, API contracts, database migration, accessibility, financial scenarios, experiments, retrieval evaluation, and learning assessment. They also include workflows for teamwork, memory, skill discovery, Xiaohongshu, and sticker production. Select the ones the current job needs.
+- **Skills support a particular step.** The 26 reusable skills cover requirements tracing, API contracts, database migration, accessibility, financial scenarios, experiments, retrieval evaluation, and learning assessment. They also include workflows for teamwork, memory, skill discovery, Xiaohongshu, and sticker production. Select the ones the current job needs.
 - **The Hook helps clarify the request.** In a supported, configured client, HookPrompt adds context about the goal, scope, output, and checks to substantive task prompts. It preserves decisions already made in the conversation so the AI can continue in the intended direction.
 - **The Tool connects execution capabilities.** The multi-CLI package can expose locally installed Codex and Gemini through MCP to a compatible client for coding or review, with project-level workflow entries. The current client still controls the working directory and permitted file operations.
 
@@ -53,9 +53,45 @@ Together, the specialist Agent supplies the professional method, Skills support 
 
 **For physical operations and engineering projects,** work through manufacturing quality, system requirements and interfaces, construction information, energy projects, emissions accounting, field-water planning, or nonclinical healthcare service processes. The methods make scope, sources, units, exceptions, and on-site checks explicit, producing analysis, verification plans, or pilot proposals while retaining the items that need local evidence and professional judgment.
 
-The 86 capabilities describe the available task entries. Start with the result you need, search for it in the browser, and check the required materials. You do not need to memorize role names.
+The 91 capabilities describe the available task entries. Start with the result you need, search for it in the browser, and check the required materials. You do not need to memorize role names.
 
 <a id="task-browser"></a>
+
+## One driving interface, five executable additions
+
+**Start continuing project work in Meta Live; Kim Service supplies the capabilities.** Meta Live owns Work records and continuation. The current host invokes methods or locally bound helpers. Service's standalone online/offline browser is a catalog and request preparation tool. It does not start a separate scheduler. The helpers can also be used directly.
+
+| Capability | Inputs | Actual outputs | Boundary |
+| --- | --- | --- | --- |
+| [Evidence pack](skills/evidence-pack/) | Organization/Work, explicit workspace, UTF-8 source files, revision and budget | Lossless file pack, source/chunk hashes, paginated index, bounded context | Default stdout excludes the complete source; PDF/OCR extraction remains an external tool step |
+| [Agent evaluation](skills/agent-evaluation/) | Frozen cases, existing client outputs, critical assertions, measured costs/latencies | Per-case comparison, missing-result denominator, critical regressions, slices and budgets | No model calls; missing costs stay unknown; semantic quality needs separate review |
+| [Feedback to requirements](skills/feedback-to-requirements/) | Same-project feedback, explicit duplicates/groups and sources | Distinct customer counts, disagreements, evidence-bound candidates and adoption | No inferred semantic merges; an unadopted candidate remains proposed |
+| [Customer case operations](skills/customer-case-operations/) | Configurable phases, member roles, materials, events and decisions | State projection, missing materials, next-action proposals, independent receipts/adoption | No messages, identity authentication or background daemon |
+| [Visual explainer](skills/visual-explainer/) | Source-based phases, nodes, links, branches and return paths | SVG, step-controlled HTML and text alternative | Bounded layered layout; animation is an explanation, not execution evidence |
+
+Each addition includes a runnable helper, input/output schemas, a policy file, synthetic inputs and failure cases. The methods draw from [Docling](https://github.com/docling-project/docling-core), [Promptfoo](https://github.com/promptfoo/promptfoo), [Fider](https://github.com/getfider/fider), [Chatwoot](https://github.com/chatwoot/chatwoot), and [Slidev](https://github.com/slidevjs/slidev), with per-package provenance. No upstream source code is copied. Fider is a method-only reference; Chatwoot enterprise features are excluded.
+
+Run these offline examples from the repository root:
+
+```sh
+node skills/agent-evaluation/scripts/run.mjs --input-json - < skills/agent-evaluation/examples/input.json
+node skills/feedback-to-requirements/scripts/run.mjs --input-json - < skills/feedback-to-requirements/examples/input.json
+node skills/customer-case-operations/scripts/run.mjs --input-json - < skills/customer-case-operations/examples/input.json
+node skills/visual-explainer/scripts/run.mjs --input-json - < skills/visual-explainer/examples/input.json
+node skills/evidence-pack/scripts/example.mjs /absolute/path/to/new-example-workspace
+```
+
+To open actual diagram files, run `node skills/visual-explainer/scripts/example.mjs /absolute/path/to/new-diagram-folder` and open the generated `storyboard.html`.
+
+For real evidence, give `scripts/files.mjs --input-json -` an explicit workspace, relative source paths and a new pack path. Later reads use the saved path/hash and chunk IDs or pagination cursor. The original text stays in a recoverable file instead of returning to the model on every request. Source drift is checked by default.
+
+### Machine interface for Meta Live and other hosts
+
+```sh
+node scripts/service-capabilities.mjs export
+```
+
+`kim-service-capabilities-v1` is derived directly from canonical `capability.json` files. Existing capabilities remain available. The five locally invocable helpers advertise `kim-service-helper-v1`, fixed argument arrays, schema/policy paths and hashes. Hosts bind a registered local entrypoint; they do not execute commands supplied inside materials. Client/model selection stays with task configuration. Every request binds `organizationId / workId / revision`, and results retain input and policy hashes. Acceptance stays with the host. See [the helper API](docs/service-helper-api.md).
 
 ## From your first visit to a completed task
 
@@ -322,24 +358,9 @@ Reopen the online entry point or local `docs/start.html`. If you download ZIP fi
 
 Methods and examples provide a working basis. For your own task, retain the actual outputs, calculation or operation records, completed checks, and remaining work so the next iteration starts from a clear point. The source directories `agents/`, `skills/`, `hooks/`, and `tools/` contain the four component types. Use the browser above to search the complete task collection without opening each directory.
 
-## Contact and support
+## Support the project
 
-<p align="center">
-  <img src="docs/images/contact-qr.png" alt="Contact Lao Jin" width="720">
-</p>
-
-<table align="center">
-  <tr>
-    <th align="center">WeChat Pay</th>
-    <th align="center">Alipay</th>
-  </tr>
-  <tr>
-    <td align="center"><img src="docs/images/wechat-pay.jpg" alt="WeChat Pay QR code" width="260"></td>
-    <td align="center"><img src="docs/images/alipay.jpg" alt="Alipay QR code" width="260"></td>
-  </tr>
-</table>
-
-If these open-source projects help you, please consider starring, sharing, or buying Lao Jin a coffee.
+If these open-source projects help you, please consider starring and sharing them.
 
 ## Open source
 

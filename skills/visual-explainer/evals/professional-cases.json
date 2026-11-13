@@ -1,0 +1,227 @@
+{
+  "schemaVersion": 1,
+  "roleId": "visual-explainer",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "worked-case",
+      "capabilityId": "visual-explainer-deliver",
+      "category": "worked_example",
+      "scenario": "对示例材料运行实际本地 helper，核对输入版本、输出哈希与未完成边界。",
+      "input": {
+        "context": {
+          "organizationId": "example-company",
+          "workId": "work-onboarding",
+          "revision": "r1"
+        },
+        "locale": "zh-CN",
+        "diagram": {
+          "title": "同一件事，从资料到交付",
+          "stages": [
+            {
+              "id": "intake",
+              "title": "资料与目标",
+              "explanation": "把本次目标、来源和有效决定挂到同一个 Work；大材料保留文件，只读取当前需要的章节。"
+            },
+            {
+              "id": "work",
+              "title": "按能力分工",
+              "explanation": "先确认系统模块，再逐个细化。独立模块可以并行，局部问题只退回受影响部分。"
+            },
+            {
+              "id": "review",
+              "title": "核验与采纳",
+              "explanation": "核验文件和回执；产出、验证、采用各自留证。播放动画只解释规则。"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "goal",
+              "label": "同一 Work 与资料",
+              "stageId": "intake",
+              "kind": "input"
+            },
+            {
+              "id": "prd",
+              "label": "模块 PRD",
+              "stageId": "work",
+              "kind": "action"
+            },
+            {
+              "id": "detail",
+              "label": "模块详细设计",
+              "stageId": "work",
+              "kind": "action"
+            },
+            {
+              "id": "receipt",
+              "label": "交付回执与采纳",
+              "stageId": "review",
+              "kind": "result"
+            }
+          ],
+          "edges": [
+            {
+              "id": "g-p",
+              "from": "goal",
+              "to": "prd",
+              "kind": "flow"
+            },
+            {
+              "id": "p-d",
+              "from": "prd",
+              "to": "detail",
+              "kind": "flow"
+            },
+            {
+              "id": "d-r",
+              "from": "detail",
+              "to": "receipt",
+              "kind": "flow"
+            },
+            {
+              "id": "r-d",
+              "from": "receipt",
+              "to": "detail",
+              "kind": "return",
+              "label": "局部修订"
+            }
+          ],
+          "sources": [
+            {
+              "label": "示例边界",
+              "ref": "synthetic://work-lifecycle-example"
+            }
+          ]
+        }
+      },
+      "candidateOutputExcerpt": {
+        "context": {
+          "organizationId": "example-company",
+          "workId": "work-onboarding",
+          "revision": "r1"
+        }
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "示例只能用于演示结构；实际结果通过本地测试复算，真实业务效果另核。",
+      "diagnosticRefs": [
+        "scope",
+        "evidence"
+      ],
+      "decisionRuleRefs": [
+        "dangling-edge",
+        "motion-truth"
+      ]
+    },
+    {
+      "id": "failure-case",
+      "capabilityId": "visual-explainer-deliver",
+      "category": "failure_boundary",
+      "scenario": "把另一版本事项的结果用于当前输入，尽管外观完整仍应拒绝。",
+      "input": {
+        "context": {
+          "organizationId": "example-company",
+          "workId": "work-onboarding",
+          "revision": "r1"
+        },
+        "locale": "zh-CN",
+        "diagram": {
+          "title": "同一件事，从资料到交付",
+          "stages": [
+            {
+              "id": "intake",
+              "title": "资料与目标",
+              "explanation": "把本次目标、来源和有效决定挂到同一个 Work；大材料保留文件，只读取当前需要的章节。"
+            },
+            {
+              "id": "work",
+              "title": "按能力分工",
+              "explanation": "先确认系统模块，再逐个细化。独立模块可以并行，局部问题只退回受影响部分。"
+            },
+            {
+              "id": "review",
+              "title": "核验与采纳",
+              "explanation": "核验文件和回执；产出、验证、采用各自留证。播放动画只解释规则。"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "goal",
+              "label": "同一 Work 与资料",
+              "stageId": "intake",
+              "kind": "input"
+            },
+            {
+              "id": "prd",
+              "label": "模块 PRD",
+              "stageId": "work",
+              "kind": "action"
+            },
+            {
+              "id": "detail",
+              "label": "模块详细设计",
+              "stageId": "work",
+              "kind": "action"
+            },
+            {
+              "id": "receipt",
+              "label": "交付回执与采纳",
+              "stageId": "review",
+              "kind": "result"
+            }
+          ],
+          "edges": [
+            {
+              "id": "g-p",
+              "from": "goal",
+              "to": "prd",
+              "kind": "flow"
+            },
+            {
+              "id": "p-d",
+              "from": "prd",
+              "to": "detail",
+              "kind": "flow"
+            },
+            {
+              "id": "d-r",
+              "from": "detail",
+              "to": "receipt",
+              "kind": "flow"
+            },
+            {
+              "id": "r-d",
+              "from": "receipt",
+              "to": "detail",
+              "kind": "return",
+              "label": "局部修订"
+            }
+          ],
+          "sources": [
+            {
+              "label": "示例边界",
+              "ref": "synthetic://work-lifecycle-example"
+            }
+          ]
+        }
+      },
+      "candidateOutputExcerpt": {
+        "context": {
+          "organizationId": "example-company",
+          "workId": "work-onboarding",
+          "revision": "stale"
+        }
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "上下文和证据版本不匹配不能成为当前任务的验收依据。",
+      "diagnosticRefs": [
+        "scope"
+      ],
+      "decisionRuleRefs": [
+        "dangling-edge"
+      ]
+    }
+  ]
+}

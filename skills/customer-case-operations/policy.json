@@ -1,0 +1,8 @@
+{
+  "maxInputBytes": 8388608,
+  "maxOutputBytes": 8388608,
+  "maxJsonNodes": 200000,
+  "maxJsonDepth": 32,
+  "maxCases": 2000,
+  "maxEvents": 10000
+}

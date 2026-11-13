@@ -1,0 +1,156 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$comment": "Generated from capability.json output; edit the contract and rebuild.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "protocol": {
+      "const": "kim-service-helper-v1"
+    },
+    "capabilityId": {
+      "const": "evidence-pack-deliver"
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "organizationId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "workId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "revision": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        }
+      },
+      "required": [
+        "organizationId",
+        "workId",
+        "revision"
+      ]
+    },
+    "inputSha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "policySha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "status": {
+      "enum": [
+        "completed",
+        "needs_review"
+      ]
+    },
+    "result": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "packSha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "index": {
+          "type": "object"
+        },
+        "context": {
+          "type": "object"
+        },
+        "extraction": {
+          "type": "object"
+        },
+        "handoff": {
+          "type": "object"
+        },
+        "coreInputSha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "packRef": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "path": {
+              "type": "string"
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "bytes": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "sourceVerification": {
+              "enum": [
+                "verified_against_supplied_files",
+                "snapshot_only"
+              ]
+            }
+          },
+          "required": [
+            "path",
+            "sha256",
+            "bytes",
+            "sourceVerification"
+          ]
+        }
+      },
+      "required": [
+        "packSha256",
+        "index",
+        "context",
+        "extraction",
+        "handoff",
+        "coreInputSha256",
+        "packRef"
+      ]
+    },
+    "claims": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "modelCalled": {
+          "const": false
+        },
+        "networkAccessed": {
+          "const": false
+        },
+        "businessStatePersisted": {
+          "const": false
+        },
+        "finalAcceptance": {
+          "const": "not_decided"
+        }
+      },
+      "required": [
+        "modelCalled",
+        "networkAccessed",
+        "businessStatePersisted",
+        "finalAcceptance"
+      ]
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "protocol",
+    "capabilityId",
+    "context",
+    "inputSha256",
+    "policySha256",
+    "status",
+    "result",
+    "claims"
+  ]
+}

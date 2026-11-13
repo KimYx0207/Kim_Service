@@ -1,0 +1,352 @@
+{
+  "schemaVersion": 1,
+  "id": "evidence-pack",
+  "componentType": "skill",
+  "componentVersion": "0.1.0",
+  "entrypoint": "SKILL.md",
+  "capabilities": [
+    {
+      "id": "evidence-pack-deliver",
+      "summary": "把长文原文保留成带来源哈希的分页分块索引，按字节预算取回当前模块所需材料。 evidence source chunk context budget",
+      "useWhen": [
+        "大材料证据包",
+        "先固定公司、Work、材料版本和授权范围，读取 UTF-8 原文或已有提取结果。",
+        "用 read 和分页游标取索引，再明确选择 chunkIds，在字节预算内装配上下文。"
+      ],
+      "doNotUseWhen": [
+        "不复制上游代码，不安装 OCR 或模型，不声明已提取 PDF 页面。",
+        "需要新增账号权限或未经授权的外部数据读取。",
+        "需要把离线投影当作业务系统真实写入或最终验收。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "context": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "organizationId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "workId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "revision": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              }
+            },
+            "required": [
+              "organizationId",
+              "workId",
+              "revision"
+            ]
+          },
+          "operation": {
+            "enum": [
+              "build",
+              "read"
+            ]
+          },
+          "chunkBytes": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "indexOffset": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "indexPageSize": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "contextBudgetBytes": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "chunkIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 180
+            },
+            "minItems": 0
+          },
+          "selectionOffset": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "workspaceRoot": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          },
+          "packPath": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512
+          },
+          "sourceFiles": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "title": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 300
+                },
+                "revision": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "expectedSha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                },
+                "pages": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 128
+                      },
+                      "startByte": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "endByte": {
+                        "type": "integer",
+                        "minimum": 0
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "startByte",
+                      "endByte"
+                    ]
+                  },
+                  "minItems": 0
+                },
+                "path": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 512
+                }
+              },
+              "required": [
+                "id",
+                "title",
+                "revision",
+                "path"
+              ]
+            }
+          },
+          "expectedPackSha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "verifySourceFiles": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "context",
+          "operation",
+          "workspaceRoot",
+          "packPath"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "schemaVersion": {
+            "const": 1
+          },
+          "protocol": {
+            "const": "kim-service-helper-v1"
+          },
+          "capabilityId": {
+            "const": "evidence-pack-deliver"
+          },
+          "context": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "organizationId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "workId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "revision": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              }
+            },
+            "required": [
+              "organizationId",
+              "workId",
+              "revision"
+            ]
+          },
+          "inputSha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "policySha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "status": {
+            "enum": [
+              "completed",
+              "needs_review"
+            ]
+          },
+          "result": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "packSha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "index": {
+                "type": "object"
+              },
+              "context": {
+                "type": "object"
+              },
+              "extraction": {
+                "type": "object"
+              },
+              "handoff": {
+                "type": "object"
+              },
+              "coreInputSha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "packRef": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "path": {
+                    "type": "string"
+                  },
+                  "sha256": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{64}$"
+                  },
+                  "bytes": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "sourceVerification": {
+                    "enum": [
+                      "verified_against_supplied_files",
+                      "snapshot_only"
+                    ]
+                  }
+                },
+                "required": [
+                  "path",
+                  "sha256",
+                  "bytes",
+                  "sourceVerification"
+                ]
+              }
+            },
+            "required": [
+              "packSha256",
+              "index",
+              "context",
+              "extraction",
+              "handoff",
+              "coreInputSha256",
+              "packRef"
+            ]
+          },
+          "claims": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "modelCalled": {
+                "const": false
+              },
+              "networkAccessed": {
+                "const": false
+              },
+              "businessStatePersisted": {
+                "const": false
+              },
+              "finalAcceptance": {
+                "const": "not_decided"
+              }
+            },
+            "required": [
+              "modelCalled",
+              "networkAccessed",
+              "businessStatePersisted",
+              "finalAcceptance"
+            ]
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "protocol",
+          "capabilityId",
+          "context",
+          "inputSha256",
+          "policySha256",
+          "status",
+          "result",
+          "claims"
+        ]
+      },
+      "permissions": [
+        "filesystem:read-user-materials",
+        "filesystem:write-artifacts"
+      ],
+      "sideEffects": [
+        "writes-new-evidence-pack-inside-explicit-workspace"
+      ],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "业务取舍、采纳及新增外部动作沿用当前宿主授权；已有决定不重复询问，纯本地核验可继续。"
+        ]
+      },
+      "helperContract": "helper-contract.json",
+      "validation": [
+        "tests/helper.test.mjs"
+      ]
+    }
+  ]
+}

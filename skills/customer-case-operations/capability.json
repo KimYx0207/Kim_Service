@@ -1,0 +1,717 @@
+{
+  "schemaVersion": 1,
+  "id": "customer-case-operations",
+  "componentType": "skill",
+  "componentVersion": "0.1.0",
+  "entrypoint": "SKILL.md",
+  "capabilities": [
+    {
+      "id": "customer-case-operations-deliver",
+      "summary": "按可配置阶段、角色、材料和事件重放客户事项，输出下一步与缺项，独立保留验证、回执与采纳。 customer case operations workflow receipt",
+      "useWhen": [
+        "公司客户事项推进",
+        "固定公司事项、负责人、材料版本和阶段/角色配置。",
+        "核对阶段、材料、角色及版本绑定决定，再输出当前状态投影和下一步建议。"
+      ],
+      "doNotUseWhen": [
+        "不复制实现，不引入企业 SLA 代码，不自动发消息，不创建后台调度或冒充授权服务。",
+        "需要新增账号权限或未经授权的外部数据读取。",
+        "需要把离线投影当作业务系统真实写入或最终验收。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "context": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "organizationId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "workId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "revision": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              }
+            },
+            "required": [
+              "organizationId",
+              "workId",
+              "revision"
+            ]
+          },
+          "workflow": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "revision": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "initialState": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "managerRole": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "adoptionRole": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "states": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "label": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 200
+                    },
+                    "requiredMaterials": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 128
+                      },
+                      "minItems": 0
+                    },
+                    "terminal": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "label",
+                    "requiredMaterials",
+                    "terminal"
+                  ]
+                },
+                "minItems": 1
+              },
+              "transitions": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "from": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "to": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "roles": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 128
+                      },
+                      "minItems": 1
+                    },
+                    "requiredMaterials": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 128
+                      },
+                      "minItems": 0
+                    },
+                    "requiresDecision": {
+                      "type": "boolean"
+                    },
+                    "decisionRoles": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 128
+                      },
+                      "minItems": 0
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "from",
+                    "to",
+                    "roles",
+                    "requiredMaterials",
+                    "requiresDecision",
+                    "decisionRoles"
+                  ]
+                },
+                "minItems": 0
+              },
+              "verificationRole": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              }
+            },
+            "required": [
+              "id",
+              "revision",
+              "initialState",
+              "managerRole",
+              "adoptionRole",
+              "states",
+              "transitions",
+              "verificationRole"
+            ]
+          },
+          "members": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "roles": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  },
+                  "minItems": 1
+                }
+              },
+              "required": [
+                "id",
+                "roles"
+              ]
+            },
+            "minItems": 1
+          },
+          "cases": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "customerId": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "state": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "ownerId": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "version": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "artifactVersion": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "materials": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 128
+                      },
+                      "sha256": {
+                        "type": "string",
+                        "pattern": "^[a-f0-9]{64}$"
+                      },
+                      "sourceRef": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 2048
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "sha256",
+                      "sourceRef"
+                    ]
+                  },
+                  "minItems": 0
+                }
+              },
+              "required": [
+                "id",
+                "customerId",
+                "state",
+                "ownerId",
+                "version",
+                "artifactVersion",
+                "materials"
+              ]
+            },
+            "minItems": 1
+          },
+          "events": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "caseId": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "actorId": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "expectedVersion": {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    "kind": {
+                      "const": "transition"
+                    },
+                    "transitionId": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "decision": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "actorId": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 128
+                        },
+                        "caseSnapshotSha256": {
+                          "type": "string",
+                          "pattern": "^[a-f0-9]{64}$"
+                        },
+                        "transitionId": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 128
+                        },
+                        "reason": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 2000
+                        },
+                        "evidenceRef": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 2048
+                        }
+                      },
+                      "required": [
+                        "actorId",
+                        "caseSnapshotSha256",
+                        "transitionId",
+                        "reason",
+                        "evidenceRef"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "caseId",
+                    "actorId",
+                    "expectedVersion",
+                    "kind",
+                    "transitionId"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "caseId": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "actorId": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "expectedVersion": {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    "kind": {
+                      "const": "material"
+                    },
+                    "material": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 128
+                        },
+                        "sha256": {
+                          "type": "string",
+                          "pattern": "^[a-f0-9]{64}$"
+                        },
+                        "sourceRef": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 2048
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "sha256",
+                        "sourceRef"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "caseId",
+                    "actorId",
+                    "expectedVersion",
+                    "kind",
+                    "material"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "caseId": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "actorId": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "expectedVersion": {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    "kind": {
+                      "const": "receipt"
+                    },
+                    "receiptKind": {
+                      "enum": [
+                        "produced",
+                        "verified",
+                        "received"
+                      ]
+                    },
+                    "artifactVersion": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "evidenceRef": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 2048
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "caseId",
+                    "actorId",
+                    "expectedVersion",
+                    "kind",
+                    "receiptKind",
+                    "artifactVersion",
+                    "evidenceRef"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "caseId": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "actorId": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "expectedVersion": {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    "kind": {
+                      "const": "adoption"
+                    },
+                    "artifactVersion": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "status": {
+                      "enum": [
+                        "adopted",
+                        "rejected"
+                      ]
+                    },
+                    "reason": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 2000
+                    },
+                    "evidenceRef": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 2048
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "caseId",
+                    "actorId",
+                    "expectedVersion",
+                    "kind",
+                    "artifactVersion",
+                    "status",
+                    "reason",
+                    "evidenceRef"
+                  ]
+                }
+              ]
+            },
+            "minItems": 0
+          }
+        },
+        "required": [
+          "context",
+          "workflow",
+          "members",
+          "cases",
+          "events"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "schemaVersion": {
+            "const": 1
+          },
+          "protocol": {
+            "const": "kim-service-helper-v1"
+          },
+          "capabilityId": {
+            "const": "customer-case-operations-deliver"
+          },
+          "context": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "organizationId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "workId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "revision": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              }
+            },
+            "required": [
+              "organizationId",
+              "workId",
+              "revision"
+            ]
+          },
+          "inputSha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "policySha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "status": {
+            "enum": [
+              "completed",
+              "needs_review"
+            ]
+          },
+          "result": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "workflowSha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "cases": {
+                "type": "array"
+              },
+              "events": {
+                "type": "array"
+              },
+              "stateKind": {
+                "const": "deterministic_projection"
+              },
+              "notificationsSent": {
+                "const": false
+              },
+              "schedulerRunning": {
+                "const": false
+              },
+              "eventHistorySha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "required": [
+              "workflowSha256",
+              "cases",
+              "events",
+              "stateKind",
+              "notificationsSent",
+              "schedulerRunning",
+              "eventHistorySha256"
+            ]
+          },
+          "claims": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "modelCalled": {
+                "const": false
+              },
+              "networkAccessed": {
+                "const": false
+              },
+              "businessStatePersisted": {
+                "const": false
+              },
+              "finalAcceptance": {
+                "const": "not_decided"
+              }
+            },
+            "required": [
+              "modelCalled",
+              "networkAccessed",
+              "businessStatePersisted",
+              "finalAcceptance"
+            ]
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "protocol",
+          "capabilityId",
+          "context",
+          "inputSha256",
+          "policySha256",
+          "status",
+          "result",
+          "claims"
+        ]
+      },
+      "permissions": [],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "业务取舍、采纳及新增外部动作沿用当前宿主授权；已有决定不重复询问，纯本地核验可继续。"
+        ]
+      },
+      "helperContract": "helper-contract.json",
+      "validation": [
+        "tests/helper.test.mjs"
+      ]
+    }
+  ]
+}

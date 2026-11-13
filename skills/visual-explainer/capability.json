@@ -1,0 +1,409 @@
+{
+  "schemaVersion": 1,
+  "id": "visual-explainer",
+  "componentType": "skill",
+  "componentVersion": "0.1.0",
+  "entrypoint": "SKILL.md",
+  "capabilities": [
+    {
+      "id": "visual-explainer-deliver",
+      "summary": "用单一图数据生成居中分层 SVG、可逐步播放的 HTML 与文字说明，核查边、阶段及退回路径。 visual explainer storyboard SVG diagram",
+      "useWhen": [
+        "分阶段图解",
+        "从真实系统说明提取阶段、节点、分支、返回路径与来源，人工判断内容是否准确。",
+        "生成 SVG、storyboard.html 和文字替代文本；首尾沿共同中轴布局。"
+      ],
+      "doNotUseWhen": [
+        "不复制实现，不用图生绘制精确架构，不声称动画代表真实执行；本版只支持有界分层布局。",
+        "需要新增账号权限或未经授权的外部数据读取。",
+        "需要把离线投影当作业务系统真实写入或最终验收。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "context": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "organizationId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "workId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "revision": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              }
+            },
+            "required": [
+              "organizationId",
+              "workId",
+              "revision"
+            ]
+          },
+          "diagram": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "title": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 80
+              },
+              "stages": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "title": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 80
+                    },
+                    "explanation": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 1200
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "title",
+                    "explanation"
+                  ]
+                },
+                "minItems": 1
+              },
+              "nodes": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "label": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 80
+                    },
+                    "stageId": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "kind": {
+                      "enum": [
+                        "input",
+                        "action",
+                        "decision",
+                        "result"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "label",
+                    "stageId",
+                    "kind"
+                  ]
+                },
+                "minItems": 1
+              },
+              "edges": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "from": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "to": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "kind": {
+                      "enum": [
+                        "flow",
+                        "return",
+                        "decision"
+                      ]
+                    },
+                    "label": {
+                      "type": "string",
+                      "minLength": 0,
+                      "maxLength": 30
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "from",
+                    "to",
+                    "kind"
+                  ]
+                },
+                "minItems": 0
+              },
+              "sources": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "label": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 100
+                    },
+                    "ref": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 2048
+                    }
+                  },
+                  "required": [
+                    "label",
+                    "ref"
+                  ]
+                },
+                "minItems": 0
+              }
+            },
+            "required": [
+              "title",
+              "stages",
+              "nodes",
+              "edges"
+            ]
+          },
+          "locale": {
+            "enum": [
+              "zh-CN",
+              "en"
+            ]
+          },
+          "caption": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "palette": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "background": {
+                "type": "string",
+                "pattern": "^#[0-9a-fA-F]{6}$"
+              },
+              "text": {
+                "type": "string",
+                "pattern": "^#[0-9a-fA-F]{6}$"
+              },
+              "panel": {
+                "type": "string",
+                "pattern": "^#[0-9a-fA-F]{6}$"
+              },
+              "panelAlt": {
+                "type": "string",
+                "pattern": "^#[0-9a-fA-F]{6}$"
+              },
+              "card": {
+                "type": "string",
+                "pattern": "^#[0-9a-fA-F]{6}$"
+              },
+              "border": {
+                "type": "string",
+                "pattern": "^#[0-9a-fA-F]{6}$"
+              },
+              "line": {
+                "type": "string",
+                "pattern": "^#[0-9a-fA-F]{6}$"
+              },
+              "return": {
+                "type": "string",
+                "pattern": "^#[0-9a-fA-F]{6}$"
+              },
+              "decision": {
+                "type": "string",
+                "pattern": "^#[0-9a-fA-F]{6}$"
+              }
+            },
+            "required": []
+          }
+        },
+        "required": [
+          "context",
+          "diagram"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "schemaVersion": {
+            "const": 1
+          },
+          "protocol": {
+            "const": "kim-service-helper-v1"
+          },
+          "capabilityId": {
+            "const": "visual-explainer-deliver"
+          },
+          "context": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "organizationId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "workId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "revision": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              }
+            },
+            "required": [
+              "organizationId",
+              "workId",
+              "revision"
+            ]
+          },
+          "inputSha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "policySha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "status": {
+            "enum": [
+              "completed",
+              "needs_review"
+            ]
+          },
+          "result": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "diagramSha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "layout": {
+                "const": "layered"
+              },
+              "nodePositions": {
+                "type": "array"
+              },
+              "files": {
+                "type": "array"
+              },
+              "sourceSpec": {
+                "type": "object"
+              },
+              "semanticAccuracy": {
+                "type": "string"
+              },
+              "renderingObserved": {
+                "type": "string"
+              },
+              "runtimeStatus": {
+                "const": "illustration_only"
+              }
+            },
+            "required": [
+              "diagramSha256",
+              "layout",
+              "nodePositions",
+              "files",
+              "sourceSpec",
+              "semanticAccuracy",
+              "renderingObserved",
+              "runtimeStatus"
+            ]
+          },
+          "claims": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "modelCalled": {
+                "const": false
+              },
+              "networkAccessed": {
+                "const": false
+              },
+              "businessStatePersisted": {
+                "const": false
+              },
+              "finalAcceptance": {
+                "const": "not_decided"
+              }
+            },
+            "required": [
+              "modelCalled",
+              "networkAccessed",
+              "businessStatePersisted",
+              "finalAcceptance"
+            ]
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "protocol",
+          "capabilityId",
+          "context",
+          "inputSha256",
+          "policySha256",
+          "status",
+          "result",
+          "claims"
+        ]
+      },
+      "permissions": [],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "业务取舍、采纳及新增外部动作沿用当前宿主授权；已有决定不重复询问，纯本地核验可继续。"
+        ]
+      },
+      "helperContract": "helper-contract.json",
+      "validation": [
+        "tests/helper.test.mjs"
+      ]
+    }
+  ]
+}
