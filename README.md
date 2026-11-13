@@ -71,6 +71,16 @@
 
 这五项都有可运行脚本、输入输出 schema、独立容量配置、合成示例与失败反例。它们复用现有证据分析、检索评价和交付核验职责；新增的是具体计算与材料处理能力。方法吸收参考 [Docling](https://github.com/docling-project/docling-core)、[Promptfoo](https://github.com/promptfoo/promptfoo)、[Fider](https://github.com/getfider/fider)、[Chatwoot](https://github.com/chatwoot/chatwoot)、[Slidev](https://github.com/slidevjs/slidev)，逐包记录采用范围与许可证。Fider 仅参考方法，未复制 AGPL 源码；Chatwoot 企业功能未引入。
 
+**分阶段图解的实际输出。** 下面由正式 helper 生成的合成示例，展示同一事项如何从资料进入模块设计，再到核验与采纳；紫色回路说明局部修订。顶部和底部节点居中，三个阶段既能合起来看，也能逐步展开说明。
+
+<p align="center">
+  <img src="docs/images/visual-helper.zh-CN.svg" alt="合成示例的三阶段四节点流程：同一 Work 与资料进入目标阶段，模块 PRD 接着细化为模块详细设计，再核验交付回执与采纳；紫色局部修订回路从回执返回详细设计，顶部和底部节点居中；这张说明图不代表任务已经实际执行" width="1200">
+</p>
+
+[下载中文交互 HTML](docs/examples/visual-helper/zh-CN/storyboard.html?raw=1) · [文字替代说明](docs/examples/visual-helper/zh-CN/alternative.txt) · [对应输入 JSON](docs/examples/visual-helper/zh-CN/input.json)
+
+把 HTML 下载后用本地浏览器打开，即可上一阶段、下一阶段、播放或显示全图。若打开的是 GitHub 文件页，点击 **Download raw file** 保存文件；源文件页本身不播放交互。HTML 已内嵌 SVG、样式和脚本，无外部依赖。图中内容是合成演示，动画不表示实际运行状态、验证通过或已经采纳。
+
 从仓库根目录可以先运行不收费的合成示例：
 
 ```sh

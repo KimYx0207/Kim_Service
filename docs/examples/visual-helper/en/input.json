@@ -1,0 +1,88 @@
+{
+  "context": {
+    "organizationId": "synthetic-company",
+    "workId": "synthetic-work-lifecycle",
+    "revision": "readme-example-v1"
+  },
+  "locale": "en",
+  "diagram": {
+    "title": "One Work, from sources to delivery",
+    "stages": [
+      {
+        "id": "intake",
+        "title": "Sources and goals",
+        "explanation": "Synthetic example: keep the goal, sources and valid decisions on one Work. Preserve large materials in files and read only the sections needed now."
+      },
+      {
+        "id": "work",
+        "title": "Capability roles",
+        "explanation": "Confirm system modules first, then refine each module. Independent modules can proceed in parallel; local problems return only the affected part for revision."
+      },
+      {
+        "id": "review",
+        "title": "Verify and adopt",
+        "explanation": "Check delivered files and receipts. Record output, verification and adoption separately; the animation explains the rules and does not prove execution."
+      }
+    ],
+    "nodes": [
+      {
+        "id": "goal",
+        "label": "Work + inputs",
+        "stageId": "intake",
+        "kind": "input"
+      },
+      {
+        "id": "prd",
+        "label": "Module PRD",
+        "stageId": "work",
+        "kind": "action"
+      },
+      {
+        "id": "detail",
+        "label": "Module design",
+        "stageId": "work",
+        "kind": "action"
+      },
+      {
+        "id": "receipt",
+        "label": "Receipt plus adoption",
+        "stageId": "review",
+        "kind": "result"
+      }
+    ],
+    "edges": [
+      {
+        "id": "g-p",
+        "from": "goal",
+        "to": "prd",
+        "kind": "flow"
+      },
+      {
+        "id": "p-d",
+        "from": "prd",
+        "to": "detail",
+        "kind": "flow"
+      },
+      {
+        "id": "d-r",
+        "from": "detail",
+        "to": "receipt",
+        "kind": "flow"
+      },
+      {
+        "id": "r-d",
+        "from": "receipt",
+        "to": "detail",
+        "kind": "return",
+        "label": "Local edit"
+      }
+    ],
+    "sources": [
+      {
+        "label": "Synthetic example boundary",
+        "ref": "synthetic://work-lifecycle-example"
+      }
+    ]
+  },
+  "caption": "Synthetic example · A workflow explanation, not execution evidence"
+}

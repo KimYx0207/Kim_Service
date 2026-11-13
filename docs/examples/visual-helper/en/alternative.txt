@@ -1,0 +1,12 @@
+1. Sources and goals
+Synthetic example: keep the goal, sources and valid decisions on one Work. Preserve large materials in files and read only the sections needed now.
+- Work + inputs
+
+2. Capability roles
+Confirm system modules first, then refine each module. Independent modules can proceed in parallel; local problems return only the affected part for revision.
+- Module PRD
+- Module design
+
+3. Verify and adopt
+Check delivered files and receipts. Record output, verification and adoption separately; the animation explains the rules and does not prove execution.
+- Receipt plus adoption
