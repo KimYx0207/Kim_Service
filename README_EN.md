@@ -13,10 +13,10 @@ You may know what you want without knowing which numbers a forecast must reconci
 **[Open the online task browser](https://kimyx0207.github.io/Kim_Service/?lang=en)** · **[Download V1.14 source and packages](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.14)**
 
 <p align="center">
-  <img src="docs/images/service-overview.webp" alt="Conceptual Kim Service workbench: task materials on the left, reusable method cards in the center, and reports, spreadsheets, page layouts, and a checked folder on the right" width="900">
+  <img src="docs/images/service-system-panorama.en.svg" alt="Kim Service task panorama: goals and materials enter the task browser; optional Meta_Kim orchestration combines Agent, Skill, Hook and Tool methods into a request; the current AI client produces real artifacts and verifies the handoff, with repair paths, necessary human choices and host-owned Work records" width="1200">
 </p>
 
-*Conceptual illustration: bring the task materials on the left, select the professional methods in the center, and produce reports, spreadsheets, pages, and other results you can open, change, and check.*
+Start with the goal and materials at the top, then follow the dark arrows through method selection, the complete request, client execution and delivery checks. Meta_Kim is optional for complex work. Purple paths return issues to the affected task; orange paths request human input only when needed; dashed gray paths lead to records owned by the host. The client, model and tools are configured separately. Service supplies methods, references, examples and check criteria. [Open the scalable panorama](docs/images/service-system-panorama.en.svg).
 
 ## How it helps you do the work thoroughly
 
@@ -177,10 +177,10 @@ Use [Meta_Kim](https://github.com/KimYx0207/Meta_Kim#readme) when you need that 
 ## Keep company work continuous across conversations and people
 
 <p align="center">
-  <img src="docs/images/service-shared-work.webp" alt="Conceptual shared workbench: a central binder retains materials, the adopted document, and a decision note while collaborators continue the same work" width="900">
+  <img src="docs/images/service-work-handoff.en.svg" alt="Company Work handoff: the host retains context, access, sources, valid decisions and adopted versions; real execution and independent verification lead to adoption records and a handoff; only a necessary open choice calls for a human, while production, verification, adoption and impact remain separate observations" width="1200">
 </p>
 
-*Conceptual illustration: keep the goal, materials, adopted version, decision reasons, and next action attached to the same work so the next collaborator can build on existing results.*
+Begin with the host-owned Work at the top, then follow execution, verification, the adoption record and the handoff back to that same Work. The four observations below are independent: producing v2, passing verification and continuing to adopt v1 can all be true. Unresolved adoption stays pending; impact without real-use evidence stays unknown. Only a necessary open choice takes the orange branch; existing authority and valid decisions remain usable. Feedback is reviewed and checked for applicability before reuse in later work. [Open the scalable handoff diagram](docs/images/service-work-handoff.en.svg).
 
 A company with one operator still needs a working record that a future colleague can continue. The host attaches the goal, sources, adopted version and decisions to one **Work**, a long-lived business matter. Many conversations and runs can refer to it; Service supplies the professional methods. The host's existing permissions determine access to company assets, personal preferences and sensitive decisions.
 
