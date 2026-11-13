@@ -1,0 +1,152 @@
+name: Enterprise knowledge evidence
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'examples/enterprise-knowledge/**'
+      - '.github/workflows/enterprise-knowledge.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: enterprise-knowledge-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  reproduce:
+    name: Full corpus, retrieval evaluation and real browser evidence
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    defaults:
+      run:
+        shell: bash
+        working-directory: examples/enterprise-knowledge
+    env:
+      PYTHONUTF8: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+      TOKENIZERS_PARALLELISM: 'false'
+      OMP_NUM_THREADS: '3'
+      OPENBLAS_NUM_THREADS: '1'
+    steps:
+      - name: Check out the actual source revision
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12'
+      - name: Set up Node
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '24'
+      - name: Install pinned runtime and real browser
+        run: |
+          python -m pip install -r requirements.txt playwright==1.62.0
+          python -m playwright install --with-deps chromium
+          sudo apt-get install -y fonts-noto-cjk
+          mkdir -p evidence/ci
+          python -m pip freeze > evidence/ci/installed-packages.txt
+          git rev-parse HEAD > evidence/ci/source-commit.txt
+      - name: Run isolated risk and recovery tests
+        run: |
+          python -m unittest discover -s tests -v 2>&1 | tee evidence/ci/risk-tests.log
+          node --check public/app.js
+      - name: Restore only pinned public source downloads
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3, official tag verified
+        with:
+          path: |
+            examples/enterprise-knowledge/data/source/cloud.jsonl.zip
+            examples/enterprise-knowledge/data/source/cloud-documents.jsonl.zip
+            examples/enterprise-knowledge/data/source/cloud_lastturn.jsonl
+            examples/enterprise-knowledge/data/source/cloud_questions.jsonl
+            examples/enterprise-knowledge/data/source/cloud_rewrite.jsonl
+            examples/enterprise-knowledge/data/source/qrels.tsv
+            examples/enterprise-knowledge/data/source/LICENSE
+          key: enterprise-source-e0970de1b1207c2a9506adf238e6e1a22037e38a-${{ hashFiles('examples/enterprise-knowledge/scripts/ingest.py') }}
+      - name: Restore only revision-pinned model downloads
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+        with:
+          path: examples/enterprise-knowledge/models/
+          key: enterprise-models-1110a243-233902d2-${{ hashFiles('examples/enterprise-knowledge/scripts/download_models.py') }}
+      - name: Import the complete pinned official corpus
+        run: python scripts/ingest.py 2>&1 | tee evidence/ci/ingest.log
+      - name: Independently audit the document-level source
+        run: python scripts/audit_documents.py 2>&1 | tee evidence/ci/document-audit.log
+      - name: Download fixed public ONNX models
+        run: python scripts/download_models.py 2>&1 | tee evidence/ci/models.log
+      - name: Build and adopt a fresh full-corpus generation
+        run: python scripts/build_index.py --generation cloud-ci-v2 --threads 3 --activate 2>&1 | tee evidence/ci/build.log
+      - name: Evaluate all 188 lastturn questions with four real methods
+        run: python scripts/evaluate.py --generation cloud-ci-v2 --id cloud-lastturn-float32 --methods bm25,dense,hybrid,rerank --vector-kind float32 2>&1 | tee evidence/ci/evaluation-float32.log
+      - name: Evaluate output-vector int8 storage on the same 188 questions
+        run: python scripts/evaluate.py --generation cloud-ci-v2 --id cloud-lastturn-int8 --methods dense --vector-kind int8 2>&1 | tee evidence/ci/evaluation-int8.log
+      - name: Independently recompute retrieval metrics
+        run: |
+          node scripts/verify-service-metrics.mjs --run evidence/evaluations/cloud-lastturn-float32
+          node scripts/verify-service-metrics.mjs --run evidence/evaluations/cloud-lastturn-int8
+      - name: Verify full coverage and record real compression differences
+        run: |
+          python - <<'PY'
+          import json, pathlib, statistics
+          from app.storage import atomic_json
+          root=pathlib.Path('evidence/evaluations')
+          reports={kind:json.loads((root/f'cloud-lastturn-{kind}'/'report.json').read_text()) for kind in ['float32','int8']}
+          for kind,required in [('float32',{'bm25','dense','hybrid','rerank'}),('int8',{'dense'})]:
+              report=reports[kind]; assert report['status']=='complete' and report['query_count']==188
+              methods={m['mode']:m for m in report['methods']};assert set(methods)==required
+              for method in methods.values():
+                  assert method['status']=='complete' and method['query_count']==188
+                  assert all(method[k] is not None for k in ['recall_5','recall_10','recall_50','ndcg_10','mrr_10'])
+          rows={kind:[json.loads(x) for x in (root/f'cloud-lastturn-{kind}'/'queries.jsonl').read_text().splitlines()] for kind in reports}
+          dense={kind:{x['query_id']:x for x in data if x['mode']=='dense'} for kind,data in rows.items()}
+          assert set(dense['float32'])==set(dense['int8']) and len(dense['float32'])==188
+          differences=[]
+          for qid,a in dense['float32'].items():
+              b=dense['int8'][qid];aa=[x['id'] for x in a['results'][:10]];bb=[x['id'] for x in b['results'][:10]]
+              differences.append({'query_id':qid,'top10_identical_order':aa==bb,'top10_overlap':len(set(aa)&set(bb))/max(1,len(aa)),'float32_recall_10':a['metrics']['recall_10'],'int8_recall_10':b['metrics']['recall_10']})
+          generation=json.loads(pathlib.Path('data/indexes/cloud-ci-v2/manifest.json').read_text())
+          atomic_json('evidence/int8-comparison.json',{'query_count':188,'storage_experiment':generation['storage_experiment'],'top10_mean_overlap':statistics.mean(x['top10_overlap'] for x in differences),'top10_identical_order_count':sum(x['top10_identical_order'] for x in differences),'methods':{k:next(m for m in r['methods'] if m['mode']=='dense') for k,r in reports.items()},'queries':differences,'boundary':'output-vector storage only; not model weight quantization or answer accuracy'})
+          PY
+      - name: Capture actual Chromium tutorial pages
+        run: |
+          browser_path=$(python -c 'from playwright.sync_api import sync_playwright; p=sync_playwright().start(); print(p.chromium.executable_path); p.stop()')
+          python scripts/capture-tutorial.py --browser-path "$browser_path" --server-python "$(command -v python)" --output evidence/tutorial-captures --no-resume
+      - name: Require genuine completed capture records
+        run: |
+          python - <<'PY'
+          import hashlib,json,pathlib,re
+          root=pathlib.Path('evidence/tutorial-captures');m=json.loads((root/'manifest.json').read_text());run=m['runs'][-1]
+          assert run['status']=='capture_run_finished' and not run.get('page_errors')
+          captures={x['step']:x for x in run['steps'] if x.get('capture_status')=='captured'}
+          for key in ['01-overall-prd','03-stage-records','04-corpus-jobs','05-bm25','05b-source','06-dense','07-hybrid','08-rerank']:
+              assert key in captures and captures[key]['data_status']!='blocked',key
+          assert any(x['data_status']=='full_report_observed' for x in captures.values())
+          modules=[key for key in captures if re.fullmatch(r'02-\d{2}-module-prd',key)]
+          assert len(modules)==7, 'All seven module PRDs require real captures'
+          for base in ['01-overall-prd',*modules]:
+              parts=[x for key,x in captures.items() if key==base or key.startswith(base+'-p')]
+              pages=[json.loads((root/x['state_file']).read_text())['document_page'] for x in parts]
+              assert {p['page'] for p in pages}==set(range(1,pages[0]['pages']+1))
+              last=max(pages,key=lambda p:p['page'])
+              assert last['scroll_top']+last['client_height']>=last['scroll_height']-1
+          assert any(x['data_status']=='native_status_record_not_pass_claim' for x in captures.values())
+          for item in captures.values():
+              assert hashlib.sha256((root/item['file']).read_bytes()).hexdigest()==item['sha256']
+          PY
+      - name: Upload only public evidence and actual screenshots
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: enterprise-knowledge-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            examples/enterprise-knowledge/evidence/
+            examples/enterprise-knowledge/data/source/manifest.json
+            examples/enterprise-knowledge/data/indexes/*/manifest.json
+            examples/enterprise-knowledge/data/indexes/*/checkpoint.json
+            examples/enterprise-knowledge/models/*/manifest.json
+          if-no-files-found: error
+          retention-days: 14

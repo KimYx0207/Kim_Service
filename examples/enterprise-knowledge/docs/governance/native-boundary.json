@@ -1,0 +1,8 @@
+{
+  "verified": false,
+  "status": "not_certified",
+  "boundary": "Public design and CI observations are not native Meta Live verification.",
+  "evidence_refs": [
+    "docs/governance/native-boundary.json"
+  ]
+}

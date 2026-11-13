@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "record_kind": "public_prepared_design",
+  "native_meta": {
+    "verified": false,
+    "status": "not_certified",
+    "boundary": "Public design and CI observations are not native Meta Live verification.",
+    "evidence_refs": [
+      "docs/governance/native-boundary.json"
+    ]
+  },
+  "stages": [
+    {
+      "id": "critical",
+      "status": "prepared",
+      "claim": "公开设计已准备；实际执行状态见独立 CI artifacts，不是原生阶段完成。",
+      "evidence_refs": [
+        "docs/project-brief.md"
+      ]
+    },
+    {
+      "id": "fetch",
+      "status": "prepared",
+      "claim": "公开设计已准备；实际执行状态见独立 CI artifacts，不是原生阶段完成。",
+      "evidence_refs": [
+        "docs/governance/modules/corpus.md"
+      ]
+    },
+    {
+      "id": "thinking",
+      "status": "prepared",
+      "claim": "公开设计已准备；实际执行状态见独立 CI artifacts，不是原生阶段完成。",
+      "evidence_refs": [
+        "docs/governance/prd-outline.md"
+      ]
+    },
+    {
+      "id": "execution",
+      "status": "prepared",
+      "claim": "公开设计已准备；实际执行状态见独立 CI artifacts，不是原生阶段完成。",
+      "evidence_refs": [
+        "docs/governance/modules/workbench.md"
+      ]
+    },
+    {
+      "id": "review",
+      "status": "prepared",
+      "claim": "公开设计已准备；实际执行状态见独立 CI artifacts，不是原生阶段完成。",
+      "evidence_refs": [
+        "docs/governance/modules/lifecycle.md"
+      ]
+    },
+    {
+      "id": "meta-review",
+      "status": "prepared",
+      "claim": "公开设计已准备；实际执行状态见独立 CI artifacts，不是原生阶段完成。",
+      "evidence_refs": [
+        "docs/governance/native-boundary.json"
+      ]
+    },
+    {
+      "id": "verification",
+      "status": "prepared",
+      "claim": "公开设计已准备；实际执行状态见独立 CI artifacts，不是原生阶段完成。",
+      "evidence_refs": [
+        "docs/governance/modules/evaluation.md"
+      ]
+    },
+    {
+      "id": "evolution",
+      "status": "prepared",
+      "claim": "公开设计已准备；实际执行状态见独立 CI artifacts，不是原生阶段完成。",
+      "evidence_refs": [
+        "docs/governance/modules/governance.md"
+      ]
+    }
+  ]
+}

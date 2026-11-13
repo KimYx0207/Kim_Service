@@ -84,6 +84,26 @@ cd Kim_Service
 
 Agent 从各目录的 `AGENT.md` 进入，Skill 从 `SKILL.md` 进入，再按入口读取引用资料。只选择当前任务需要的方法；每一步的产物交给下一步，最后检查助手能否回答实际问题、给出来源，并处理找不到答案的情况。
 
+### 完整资料库实操：企业技术支持知识工作台
+
+`examples/enterprise-knowledge/` 提供可运行的完整案例：导入固定公开 IBM Cloud 历史资料，逐条核对文档与段落，建立关键词和向量索引，用同一组 188 道公开问题比较 BM25、语义检索、RRF 混合与重排。你可以打开原文、查看引用和失败题，继续验证权限撤回、删除、索引回滚与中断恢复。固定原包实数为 8,578 篇文档、72,442 个段落；每次运行仍重新核对。
+
+本案例随 **main 分支源码**提供。先用页首的 `git clone` 命令取得当前源码；V1.16 的组件安装与本节源码示例分别取用。在 Linux 或 WSL 中，安装 Python 3.12 后，从仓库根目录运行：
+
+```bash
+cd examples/enterprise-knowledge
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+python scripts/ingest.py
+python scripts/audit_documents.py
+python scripts/download_models.py
+python scripts/build_index.py --generation cloud-minilm-v2 --threads 3 --activate
+python -m app.main --port 4180
+```
+
+打开 `http://127.0.0.1:4180`，输入技术问题并切换检索方式。该目录的 README 给出完整评测、int8 存储对照和真实浏览器截图命令；CI 保留逐题报告与截图。这里验证公开资料上的检索和工程行为，企业实际采用效果需要继续接入自己的资料、权限和用户问题。
+
 <a id="capability-directory"></a>
 
 ## 哪些工作可以从这里开始

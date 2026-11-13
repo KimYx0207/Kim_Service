@@ -84,6 +84,26 @@ First determine whether the difficulty comes from retrieval, missing information
 
 Read an Agent's `AGENT.md` or a Skill's `SKILL.md`, then follow its references. Select the methods needed for the task and pass each result to the next step. Finally, check whether the assistant answers actual questions, cites its sources, and handles questions it cannot answer.
 
+### Full-corpus practice: an enterprise technical-support knowledge workbench
+
+`examples/enterprise-knowledge/` contains a runnable case: import a fixed public IBM Cloud historical corpus, audit documents and passages, build lexical and vector indexes, and compare BM25, dense retrieval, RRF fusion and reranking on the same 188 public benchmark questions. Open source passages, inspect citations and failed queries, and exercise permission withdrawal, deletion, index rollback and interrupted-job recovery. The pinned archives contain 8,578 document records and 72,442 passages; every run audits its own inputs.
+
+This example is provided in the **main branch source**. Get the current source with the `git clone` command above; use the V1.16 assets for component installation and the main checkout for this example. On Linux or WSL with Python 3.12 installed, run from the repository root:
+
+```bash
+cd examples/enterprise-knowledge
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+python scripts/ingest.py
+python scripts/audit_documents.py
+python scripts/download_models.py
+python scripts/build_index.py --generation cloud-minilm-v2 --threads 3 --activate
+python -m app.main --port 4180
+```
+
+Open `http://127.0.0.1:4180`, enter a technical question and switch retrieval methods. The example README includes full evaluation, int8 storage comparison and actual browser-capture commands; CI retains per-query reports and screenshots. This evaluates retrieval and engineering behavior on public materials. Business outcomes still need an organization's own documents, permissions and user questions.
+
 <a id="capability-directory"></a>
 
 ## Work you can start here
