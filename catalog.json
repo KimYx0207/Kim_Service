@@ -1154,7 +1154,7 @@
       "kind": "hook",
       "path": "hooks/evidence-receipt",
       "source": "canonical:hooks/evidence-receipt",
-      "revision": "39671621d9490718500451b784bbe363dd40a334",
+      "revision": "79251f2ab0a7e955613ea9fc7247114ae87d738e",
       "snapshot": "committed-component-tree",
       "version": "0.1.0",
       "contractSha256": "9d8de5ef7eb02220907467560e28f1db09318cccb4f7feb9c86dc3f951373d1e",
