@@ -91,6 +91,12 @@ def main():
                     return record_response(context.request.get(base + path))
 
                 def capture(step, evidence, view=page):
+                    # Observe the app's own 3.5s dismissal and CSS fade. Do not
+                    # hide/remove notifications or alter the rendered page.
+                    # Playwright visibility alone includes opacity:0 elements.
+                    toast = view.locator('#toast')
+                    if toast.count():
+                        expect(toast).to_have_css('opacity', '0', timeout=10000)
                     state_file = step + '.json'
                     filename = step + '.png'
                     write_json(out / state_file, {'step': step, 'at': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()), 'evidence': evidence, 'boundary': manifest['boundary']})
