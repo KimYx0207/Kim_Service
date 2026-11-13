@@ -11588,12 +11588,12 @@
       ]
     },
     {
-      "componentContentSha256": "1a0f6e670ce29d47b50229fcfc4b94303c30063c6dc22c4b2e2dca30272c275c",
+      "componentContentSha256": "d139db31b3ff86de63fd46df93b99ae4cb1d073d0504dd58f0cbc346eaa4d3a1",
       "componentId": "mcp-contract-auditor",
       "componentPath": "tools/mcp-contract-auditor",
       "componentType": "tool",
-      "componentVersion": "0.1.0",
-      "contractSha256": "d238c20f56bdcc9041fc9dcaf4cf267ae7c745a35a57fd41c4d6a073c5d2684e",
+      "componentVersion": "0.1.1",
+      "contractSha256": "1b39ca9631d55fd33448566266cf5de840e7de9039675eee5a70e0aaf337d8b7",
       "doNotUseWhen": [
         "不主动连接MCP、读取凭证、调用tools/call或修改宿主设置。",
         "不提供完整JSON Schema有效性/语义兼容认证；组合和引用保留为需检查。",
@@ -21077,9 +21077,9 @@
         "mcp-contract-auditor-deliver"
       ],
       "componentType": "tool",
-      "componentVersion": "0.1.0",
-      "contentSha256": "1a0f6e670ce29d47b50229fcfc4b94303c30063c6dc22c4b2e2dca30272c275c",
-      "contractSha256": "d238c20f56bdcc9041fc9dcaf4cf267ae7c745a35a57fd41c4d6a073c5d2684e",
+      "componentVersion": "0.1.1",
+      "contentSha256": "d139db31b3ff86de63fd46df93b99ae4cb1d073d0504dd58f0cbc346eaa4d3a1",
+      "contractSha256": "1b39ca9631d55fd33448566266cf5de840e7de9039675eee5a70e0aaf337d8b7",
       "entrypoint": "README.md",
       "id": "mcp-contract-auditor",
       "path": "tools/mcp-contract-auditor",

@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "tool": "delivery-verify",
+  "toolVersion": "0.2.0",
+  "taskId": "real-hook-review",
+  "status": "blocked",
+  "verificationScope": "local_manifest_and_evidence_consistency",
+  "artifactRefs": [
+    {
+      "id": "report",
+      "path": "report.txt",
+      "bytes": 1997,
+      "sha256": "c06cf6eead03a1618fddb461ee622833201f48c6298a7e417867090668056f36",
+      "actualBytes": 2078,
+      "actualSha256": "e92bd6d2ca2b010459c35092d8f4fcc5b0f47fe1e23746a1902e8f54d5ff8002",
+      "status": "failed",
+      "code": "bytes_mismatch"
+    }
+  ],
+  "criterionResults": [
+    {
+      "id": "report-integrity",
+      "type": "artifact_integrity",
+      "status": "failed",
+      "code": "artifact_not_verified",
+      "evidenceArtifactIds": [
+        "report"
+      ]
+    }
+  ],
+  "missingCapabilities": [],
+  "failures": [
+    {
+      "target": "report",
+      "code": "bytes_mismatch"
+    },
+    {
+      "target": "report-integrity",
+      "code": "artifact_not_verified"
+    }
+  ],
+  "stopReason": "no_verifiable_evidence",
+  "handoff": {
+    "status": "blocked",
+    "decisionOwner": "caller_or_meta",
+    "finalAcceptance": "not_decided",
+    "nextActions": [
+      "Resolve listed failures or supply missing review evidence; caller decides final acceptance."
+    ]
+  },
+  "runtimeVerification": {
+    "host": "not_tested",
+    "browser": "not_tested",
+    "model": "not_tested",
+    "nativeAgent": "needs_probe",
+    "hostBinding": "requires_host_binding"
+  },
+  "receiptAuthenticity": "not_verified",
+  "networkUsed": false,
+  "filesModified": false
+}

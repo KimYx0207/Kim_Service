@@ -1,0 +1,9 @@
+{
+  "workspaceRoot": "/tmp/kim-real-materials-RT3mww/after-workspace",
+  "artifactPaths": [
+    "report.txt"
+  ],
+  "receiptsDir": "receipts",
+  "workId": "real-hook-source-review",
+  "revision": "1"
+}

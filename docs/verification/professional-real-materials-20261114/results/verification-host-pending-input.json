@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "taskId": "real-hook-review",
+  "artifacts": [
+    {
+      "id": "report",
+      "path": "report.txt",
+      "bytes": 2078,
+      "sha256": "e92bd6d2ca2b010459c35092d8f4fcc5b0f47fe1e23746a1902e8f54d5ff8002"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "report-integrity",
+      "description": "Reviewed report bytes match",
+      "type": "artifact_integrity",
+      "artifactId": "report"
+    },
+    {
+      "id": "host-activation",
+      "description": "Actual host registration and event verified",
+      "type": "external_review",
+      "capability": "real-host-probe"
+    }
+  ]
+}

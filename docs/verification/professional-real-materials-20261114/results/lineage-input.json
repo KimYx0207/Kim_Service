@@ -1,0 +1,38 @@
+{
+  "context": {
+    "organizationId": "Kim_Service",
+    "workId": "source-dependency-review",
+    "revision": "1"
+  },
+  "nodes": [
+    {
+      "id": "tools/claudecode-codex-gemini/mcp/runtime.mjs",
+      "owner": ""
+    },
+    {
+      "id": "tools/claudecode-codex-gemini/mcp/adapters.mjs",
+      "owner": ""
+    },
+    {
+      "id": "tools/claudecode-codex-gemini/mcp/codex-server.mjs",
+      "owner": ""
+    }
+  ],
+  "edges": [
+    {
+      "from": "tools/claudecode-codex-gemini/mcp/runtime.mjs",
+      "to": "tools/claudecode-codex-gemini/mcp/adapters.mjs",
+      "confidence": "observed",
+      "evidenceRef": "tools/claudecode-codex-gemini/mcp/adapters.mjs:1-4"
+    },
+    {
+      "from": "tools/claudecode-codex-gemini/mcp/adapters.mjs",
+      "to": "tools/claudecode-codex-gemini/mcp/codex-server.mjs",
+      "confidence": "observed",
+      "evidenceRef": "tools/claudecode-codex-gemini/mcp/codex-server.mjs:2"
+    }
+  ],
+  "changed": [
+    "tools/claudecode-codex-gemini/mcp/runtime.mjs"
+  ]
+}

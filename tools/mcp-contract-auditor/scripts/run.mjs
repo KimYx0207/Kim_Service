@@ -7,7 +7,27 @@ function inspectSchema(schema, isInput) {
     const item = stack.pop(); if (!item || typeof item !== 'object') continue;
     if (Object.hasOwn(item, '$ref') || Object.hasOwn(item, '$dynamicRef')) refs++;
     if (['$ref','$dynamicRef','allOf','anyOf','oneOf','not','if','then','else','dependentSchemas'].some(key => Object.hasOwn(item,key))) complex = true;
-    for (const value of Object.values(item)) if (value && typeof value === 'object') stack.push(value);
+    // Schema maps contain property names, not schema keywords. Annotation values
+    // (examples/default/const/enum) are instance data and must never be scanned.
+    for (const key of ['properties','patternProperties','$defs','definitions','dependentSchemas']) {
+      const map = item[key];
+      if (map && typeof map === 'object' && !Array.isArray(map)) stack.push(...Object.values(map));
+    }
+    for (const key of ['additionalProperties','unevaluatedProperties','propertyNames','contains',
+      'additionalItems','unevaluatedItems','not','if','then','else','contentSchema']) {
+      if (item[key] && typeof item[key] === 'object') stack.push(item[key]);
+    }
+    for (const key of ['allOf','anyOf','oneOf','prefixItems']) {
+      if (Array.isArray(item[key])) stack.push(...item[key]);
+    }
+    if (Array.isArray(item.items)) stack.push(...item.items);
+    else if (item.items && typeof item.items === 'object') stack.push(item.items);
+    // Older drafts allow schema dependencies alongside arrays of property names.
+    if (item.dependencies && typeof item.dependencies === 'object') {
+      for (const value of Object.values(item.dependencies)) {
+        if (value && typeof value === 'object' && !Array.isArray(value)) stack.push(value);
+      }
+    }
   }
   if (!isInput) return { assessment: complex ? 'requires_schema_review' : 'captured_not_validated', refs, complex };
   return { assessment: !complex && schema && typeof schema === 'object' && !Array.isArray(schema) && schema.type === 'object'

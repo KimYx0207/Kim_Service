@@ -4,6 +4,30 @@
 
 Kim Service collection releases use `V<major>.<minor>`. Each component keeps its own version and source history. Detailed past checks are in the [testing record](docs/verification-history.md).
 
+## V1.16 - 2026-11-14
+
+### Affected components
+
+MCP Contract Auditor 0.1.1, reproducible professional checks against actual repository materials, host installation guidance and the paired Meta_Kim 3.12.1 distribution. The collection retains 92 components and 107 capabilities.
+
+### User-visible changes
+
+- Scan actual JSON Schema locations without interpreting keyword-shaped business field names or default/example instance data as schema rules. Nested real references and conditional schemas still require review.
+- Preserve a reproducible software-delivery trial: offline actual tool definitions, observed source imports, the historical receipt CLI fault, changed-file rejection and corrected evidence verification. Reliability and delivery methods explain sources, missing owners, recovery and follow-up.
+- Keep real host discovery, install/update, local file verification and business outcomes distinct. The MCP auditor remains offline; the receipt Hook remains explicitly enabled and scoped by its caller.
+
+### Breaking changes and migration
+
+No existing capability or input/output shape is removed. Pull main with `git pull --ff-only`, or use the complete V1.16 source, DSH or ZCode package. The combined ZCode package pairs Meta_Kim 3.12.1 with Kim 1.16.0 and uses the previous public V1.15 bundle for upgrade comparison. Actual client upgrade acceptance requires the documented local evidence; it is not inferred from a successful build.
+
+### Verification
+
+Targeted Schema, dependency-impact and receipt tests plus the independent real-material replay cover the repaired boundary. Repository CI checks source contracts, complete component resources, the generated catalog and task browser on declared platforms. See [the real-material verification record](docs/verification/professional-real-materials-20261114/README.md) for exact inputs, outputs and limitations. Software repository materials are real; boundary fixtures remain synthetic and customer industry effects remain `not_evaluated`.
+
+### Source revisions
+
+Previous release: [V1.15](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.15). The V1.16 tag and manifests bind final source bytes; unchanged component provenance is retained. The package takes the Meta_Kim version declared in `.github/release.json`; Meta's single dependency baseline points back to this reviewed Service source.
+
 ## V1.15 - 2026-11-13
 
 ### Affected components

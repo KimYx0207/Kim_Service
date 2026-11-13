@@ -1,0 +1,56 @@
+{
+  "classification": "real_repository_material",
+  "baseCommit": "64e4ec32326bf3e4f289ac178913d2639a835926",
+  "sources": [
+    {
+      "path": "tools/claudecode-codex-gemini/mcp/adapters.mjs",
+      "bytes": 5757,
+      "sha256": "9b89c74e891282d3de2a677f3837d8e2b8ecf27309433e1829c53e873a7104cc"
+    },
+    {
+      "path": "tools/claudecode-codex-gemini/mcp/runtime.mjs",
+      "bytes": 14565,
+      "sha256": "8e66e5d91826bb9e28b2ec1e87b0619ed988e5409cf2f9a4847752103f3ec2b1"
+    },
+    {
+      "path": "tools/claudecode-codex-gemini/mcp/codex-server.mjs",
+      "bytes": 160,
+      "sha256": "a9aebb3feb36b2abb6ef3eb2ce11da17b4d348f9b75a9c01130cadff7119ca5b"
+    },
+    {
+      "path": "tools/mcp-contract-auditor/scripts/run.mjs",
+      "bytes": 5490,
+      "sha256": "f5aea3d86af5c026d8aa74580b50cd979dd22fae76082c33d8a0338822075360"
+    },
+    {
+      "path": "tools/mcp-contract-auditor/capability.json",
+      "bytes": 16367,
+      "sha256": "b48d7c9c1630dbc44c00b0bfb628ecab1413e091ed772626fe1af433318c9a3e"
+    },
+    {
+      "path": "hooks/evidence-receipt/scripts/hook.mjs",
+      "bytes": 8058,
+      "sha256": "7f04aa6ee328be0c288387daafe149e284ddab98e8df5896caaaf72c69325398"
+    },
+    {
+      "path": "hooks/evidence-receipt/policy.json",
+      "bytes": 245,
+      "sha256": "bf0ea3610653158f1ee8e4e167e2c6c620aac674034b2beb6b0a4bb47eaf1d7d"
+    },
+    {
+      "path": "agents/reliability-engineer/method.json",
+      "bytes": 8941,
+      "sha256": "cec9620ca88a2406da6a4bec2141c1237683482ccac32427fd29d044489a37b0"
+    },
+    {
+      "path": "skills/incident-postmortem/schemas/input.schema.json",
+      "bytes": 4880,
+      "sha256": "8e758dfa899ff19772da241fa10cdccda4730e6635c567aadb601d2d8d8b8487"
+    },
+    {
+      "path": "skills/data-lineage-impact/scripts/run.mjs",
+      "bytes": 2928,
+      "sha256": "acb63c2e485d0e7135cd28a03a9a0a8f639767bf81e3a6fe505ed07729027965"
+    }
+  ]
+}

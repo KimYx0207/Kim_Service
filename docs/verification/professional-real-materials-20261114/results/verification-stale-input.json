@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "taskId": "real-hook-review",
+  "artifacts": [
+    {
+      "id": "report",
+      "path": "report.txt",
+      "bytes": 1997,
+      "sha256": "c06cf6eead03a1618fddb461ee622833201f48c6298a7e417867090668056f36"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "report-integrity",
+      "description": "Reviewed report bytes match",
+      "type": "artifact_integrity",
+      "artifactId": "report"
+    }
+  ]
+}

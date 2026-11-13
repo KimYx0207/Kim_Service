@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "protocol": "kim-artifact-byte-snapshot-v1",
+  "workId": "real-hook-source-review",
+  "revision": "1",
+  "configSha256": "712d183793e6640c0ca17d828cb9506b2e844bfb187fb858dcd6ae883811468b",
+  "policySha256": "24dc0db295ba31ca035c27d3a9050ee7d7b2e8bcc3d6d9175dd0183c6d508bee",
+  "artifacts": [
+    {
+      "relativePath": "report.txt",
+      "bytes": 2078,
+      "sha256": "e92bd6d2ca2b010459c35092d8f4fcc5b0f47fe1e23746a1902e8f54d5ff8002"
+    }
+  ],
+  "observation": "local_file_bytes",
+  "qualityVerification": "not_performed",
+  "finalAcceptance": "not_decided"
+}

@@ -1,0 +1,42 @@
+commit 79251f2ab0a7e955613ea9fc7247114ae87d738e
+Author:     KimYx0207 <130755848+KimYx0207@users.noreply.github.com>
+AuthorDate: Fri Nov 13 07:07:56 2026 -0800
+Commit:     KimYx0207 <130755848+KimYx0207@users.noreply.github.com>
+CommitDate: Fri Nov 13 07:07:56 2026 -0800
+
+    fix(hook): execute the receipt CLI through real directory aliases
+    
+    Compare real entry files so macOS temporary-directory aliases and other symlinked package paths run the CLI. Preserve inert imports and nonblocking policy errors. Add a real directory-link regression with Unicode and spaces and refresh only the hook's derived content fingerprints.
+
+diff --git a/hooks/evidence-receipt/scripts/hook.mjs b/hooks/evidence-receipt/scripts/hook.mjs
+index 217db03..af8975b 100644
+--- a/hooks/evidence-receipt/scripts/hook.mjs
++++ b/hooks/evidence-receipt/scripts/hook.mjs
+@@ -1,7 +1,7 @@
+ import fs from 'node:fs';
+ import path from 'node:path';
+ import crypto from 'node:crypto';
+-import { pathToFileURL } from 'node:url';
++import { fileURLToPath } from 'node:url';
+ 
+ function loadPolicy() {
+   const value = JSON.parse(fs.readFileSync(new URL('../policy.json', import.meta.url), 'utf8'));
+@@ -101,7 +101,15 @@ async function eventFromStdin(policy) {
+     process.stdin.on('data',onData);process.stdin.once('end',onEnd);process.stdin.once('error',onError);
+   });
+ }
+-if (process.argv[1] && pathToFileURL(path.resolve(process.argv[1])).href === import.meta.url) {
++function isCliEntry() {
++  if (!process.argv[1]) return false;
++  try {
++    // Node resolves imported modules through links, while argv may retain /var
++    // or another directory alias. Compare actual files before running the CLI.
++    return fs.realpathSync(process.argv[1]) === fs.realpathSync(fileURLToPath(import.meta.url));
++  } catch { return false; }
++}
++if (isCliEntry()) {
+   try {
+     check(process.argv.length === 4 && process.argv[2] === '--config', 'config_argument_required');
+     const event = await eventFromStdin(loadPolicy());
+
+Review: local alias replay now records bytes; host activation remains untested.

@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "protocol": "kim-service-helper-v1",
+  "capabilityId": "mcp-contract-auditor-deliver",
+  "context": {
+    "organizationId": "Kim_Service",
+    "workId": "repository-definition-review",
+    "revision": "1"
+  },
+  "inputSha256": "b80c1efa2a4b309e81a9dab1b7bd06e3915941ef0ec0875c2f94b827c52bb375",
+  "policySha256": "55f0cf7bb28eef701bf67019fff9880aa96ca1f31e62fe484472ddc3a4525da3",
+  "status": "needs_review",
+  "result": {
+    "serverIdentityChanged": false,
+    "protocolVersionChanged": false,
+    "comparisonComplete": true,
+    "added": [],
+    "removed": [],
+    "possibleAdded": [],
+    "possibleRemoved": [],
+    "changed": [],
+    "unapproved": [
+      "codex"
+    ],
+    "schemaReviews": [
+      {
+        "name": "codex",
+        "inputAssessment": "object_root_declared_not_validated",
+        "outputAssessment": "not_declared",
+        "referenceCount": 0,
+        "annotationHints": {
+          "readOnlyHint": "unknown",
+          "destructiveHint": "unknown",
+          "idempotentHint": "unknown",
+          "openWorldHint": "unknown"
+        },
+        "reviewReasons": [
+          "annotation_hints_incomplete_or_nonboolean"
+        ]
+      }
+    ],
+    "trust": "not_established_by_annotations",
+    "schemaValidation": "structural_inventory_only_not_full_json_schema_validation",
+    "liveConnectionObserved": false
+  },
+  "claims": {
+    "modelCalled": false,
+    "networkAccessed": false,
+    "businessStatePersisted": false,
+    "finalAcceptance": "not_decided"
+  }
+}

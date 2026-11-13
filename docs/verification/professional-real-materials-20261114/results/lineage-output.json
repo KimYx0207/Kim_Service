@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "protocol": "kim-service-helper-v1",
+  "capabilityId": "data-lineage-impact-deliver",
+  "context": {
+    "organizationId": "Kim_Service",
+    "workId": "source-dependency-review",
+    "revision": "1"
+  },
+  "inputSha256": "ba2658ab53f9a918cdf2f5c764986255a7b5b63a41db00bbdebb104293cd1267",
+  "policySha256": "55f0cf7bb28eef701bf67019fff9880aa96ca1f31e62fe484472ddc3a4525da3",
+  "status": "needs_review",
+  "result": {
+    "affected": [
+      {
+        "id": "tools/claudecode-codex-gemini/mcp/adapters.mjs",
+        "owner": "",
+        "certainty": "observed_path",
+        "path": [
+          "tools/claudecode-codex-gemini/mcp/runtime.mjs",
+          "tools/claudecode-codex-gemini/mcp/adapters.mjs"
+        ]
+      },
+      {
+        "id": "tools/claudecode-codex-gemini/mcp/codex-server.mjs",
+        "owner": "",
+        "certainty": "observed_path",
+        "path": [
+          "tools/claudecode-codex-gemini/mcp/runtime.mjs",
+          "tools/claudecode-codex-gemini/mcp/adapters.mjs",
+          "tools/claudecode-codex-gemini/mcp/codex-server.mjs"
+        ]
+      }
+    ],
+    "unmatchedSeeds": [],
+    "cycleDetected": false,
+    "evidenceMissing": [],
+    "coverage": "supplied_edges_only"
+  },
+  "claims": {
+    "modelCalled": false,
+    "networkAccessed": false,
+    "businessStatePersisted": false,
+    "finalAcceptance": "not_decided"
+  }
+}

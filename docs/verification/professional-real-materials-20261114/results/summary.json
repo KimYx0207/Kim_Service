@@ -1,0 +1,10 @@
+{
+  "classification": "real_repository_software_delivery_material",
+  "checks": "passed",
+  "mcp": "offline_definition_only",
+  "lineage": "static_import_paths_only_owners_unknown",
+  "hook": "explicit_local_invocation_not_host_enabled",
+  "industryEffect": "not_evaluated",
+  "customerImpact": "unknown",
+  "productionMTTR": "unknown"
+}

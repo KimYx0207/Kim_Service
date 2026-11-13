@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "tool": "delivery-verify",
+  "toolVersion": "0.2.0",
+  "taskId": "real-hook-review",
+  "status": "partial",
+  "verificationScope": "local_manifest_and_evidence_consistency",
+  "artifactRefs": [
+    {
+      "id": "report",
+      "path": "report.txt",
+      "bytes": 2078,
+      "sha256": "e92bd6d2ca2b010459c35092d8f4fcc5b0f47fe1e23746a1902e8f54d5ff8002",
+      "actualBytes": 2078,
+      "actualSha256": "e92bd6d2ca2b010459c35092d8f4fcc5b0f47fe1e23746a1902e8f54d5ff8002",
+      "status": "verified",
+      "code": null
+    }
+  ],
+  "criterionResults": [
+    {
+      "id": "report-integrity",
+      "type": "artifact_integrity",
+      "status": "passed",
+      "code": null,
+      "evidenceArtifactIds": [
+        "report"
+      ]
+    },
+    {
+      "id": "host-activation",
+      "type": "external_review",
+      "status": "unverified",
+      "code": "missing_capability",
+      "evidenceArtifactIds": []
+    }
+  ],
+  "missingCapabilities": [
+    {
+      "criterionId": "host-activation",
+      "capability": "real-host-probe"
+    }
+  ],
+  "failures": [],
+  "stopReason": "verification_incomplete",
+  "handoff": {
+    "status": "needs_evidence",
+    "decisionOwner": "caller_or_meta",
+    "finalAcceptance": "not_decided",
+    "nextActions": [
+      "Resolve listed failures or supply missing review evidence; caller decides final acceptance."
+    ]
+  },
+  "runtimeVerification": {
+    "host": "not_tested",
+    "browser": "not_tested",
+    "model": "not_tested",
+    "nativeAgent": "needs_probe",
+    "hostBinding": "requires_host_binding"
+  },
+  "receiptAuthenticity": "not_verified",
+  "networkUsed": false,
+  "filesModified": false
+}

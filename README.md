@@ -10,7 +10,7 @@
 
 当前主分支包含 **58 个专业 Agent、30 个 Skill、2 个 Hook 和 2 个 Tool**，共 92 个组件，提供 **107 项可搜索的任务能力**。你可以只选一个解决眼前的问题，也可以让几种方法围绕同一个项目配合。
 
-**[打开能力目录与请求准备页](https://kimyx0207.github.io/Kim_Service/?lang=zh-CN)** · **[下载 V1.15 源码与安装包](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.15)**
+**[打开能力目录与请求准备页](https://kimyx0207.github.io/Kim_Service/?lang=zh-CN)** · **[下载 V1.16 源码与安装包](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.16)**
 
 <p align="center">
   <img src="docs/images/service-system-panorama.zh-CN.svg" alt="Kim Service 任务全景：目标与资料进入任务浏览器，按需经 Meta_Kim 组合 Agent、Skill、Hook、Tool 方法，完整请求交给当前 AI 客户端执行，真实产物通过核验后交付；紫线退回相关工作，橙线仅处理必要选择，虚线由宿主写入事项与交付记录" width="1200">
@@ -324,7 +324,7 @@ DSH 里，专业 Agent 方法和 Skill 会作为原生 Skills 被发现，并保
 npm install --global @deepseek-ai/dsh@0.2.2-rc.1
 ```
 
-**准备 Service 包。** 在页首发布下载中选择 `Kim_Service-DSH-V1.15.zip`，解压并记住包含 `dsh-package.json` 的目录。也可以在 Kim_Service 仓库构建，下面的输出路径要换成自己的完整路径，且目录尚不存在：
+**准备 Service 包。** 在页首发布下载中选择 `Kim_Service-DSH-V1.16.zip`，解压并记住包含 `dsh-package.json` 的目录。也可以在 Kim_Service 仓库构建，下面的输出路径要换成自己的完整路径，且目录尚不存在：
 
 ```sh
 node scripts/build-dsh-package.mjs --output "/absolute/path/kim-service-dsh"
@@ -359,7 +359,7 @@ node bin/meta-kim.mjs dsh check --scope project --project-root "/absolute/path/m
 
 ### ZCode
 
-先在页首发布下载中取得 **`Kim-ZCode-V1.15.zip`**，完整解压到准备长期保留的位置。选择包含 `marketplace.json` 的目录，保留其下全部插件和资料；V1.15 的 Kim 插件版本为 **1.15.0**。
+先在页首发布下载中取得 **`Kim-ZCode-V1.16.zip`**，完整解压到准备长期保留的位置。选择包含 `marketplace.json` 的目录，保留其下全部插件和资料；V1.16 的 Kim 插件版本为 **1.16.0**。
 
 在 ZCode 打开一个项目，再进入**设置 → 插件 → 创建 → 添加市场**，选择刚才的本地目录。在个人来源里安装并启用 `kim-service-local`；想同时使用 Meta_Kim 的任务组织方法，再安装 `meta-kim-local`。安装后，在插件详情核对角色和技能，在子 Agent 列表找到对应角色，例如 `kim-service-local:financial-modeler`，然后带上目标与材料开始任务。
 

@@ -23,3 +23,9 @@ readOnlyHint、destructiveHint、idempotentHint、openWorldHint是服务提供�
 lookup_customer的必填参数从id改为customerId，另增加delete_customer。审计返回lookup_customer的inputSchema变化及delete_customer未批准。服务同样叫crm-readonly也不能隐藏新增删除能力；更不能因为原查询工具自报readOnlyHint=true就允许整个服务所有工具。
 
 未调用SDK或真实服务，不承诺MCP协议完整认证。官方SDK当前许可处于Apache/MIT迁移，文档另有CC-BY条款；本包没有复制其实现。
+
+## Schema 位置与实例数据（2026-11-14 修订）
+
+引用/组合检查只遍历已知 Schema 位置（properties 的值、items、$defs、组合/条件及附加属性等），不把 properties 下名为 `$ref`、`not`、`if` 的业务字段名当关键词，也不扫描 default/examples/const/enum 内的实例值。实例里的字符串即使长得像外部引用也不触发引用计数或网络读取。自定义 vocabulary 和未识别位置不在这项有限扫描覆盖范围，不能据此宣称完整有效性。
+
+[JSON Schema 官方注解说明](https://json-schema.org/understanding-json-schema/reference/annotations)区分 default/examples 与校验规则；本次按这一边界修正扫描。对工具输入，[MCP 2025-11-25 Tools](https://modelcontextprotocol.io/specification/2025-11-25/server/tools#tool)要求有效 JSON Schema object。审计输入容纳 boolean 是为保留待诊断原定义；它总会标 requires_schema_review，绝不视为有效 MCP 工具证书。null 由当前输入合同拒收。completed 仅指有限离线比较完成。

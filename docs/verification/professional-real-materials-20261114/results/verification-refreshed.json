@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "tool": "delivery-verify",
+  "toolVersion": "0.2.0",
+  "taskId": "real-hook-review",
+  "status": "completed",
+  "verificationScope": "local_manifest_and_evidence_consistency",
+  "artifactRefs": [
+    {
+      "id": "report",
+      "path": "report.txt",
+      "bytes": 2078,
+      "sha256": "e92bd6d2ca2b010459c35092d8f4fcc5b0f47fe1e23746a1902e8f54d5ff8002",
+      "actualBytes": 2078,
+      "actualSha256": "e92bd6d2ca2b010459c35092d8f4fcc5b0f47fe1e23746a1902e8f54d5ff8002",
+      "status": "verified",
+      "code": null
+    }
+  ],
+  "criterionResults": [
+    {
+      "id": "report-integrity",
+      "type": "artifact_integrity",
+      "status": "passed",
+      "code": null,
+      "evidenceArtifactIds": [
+        "report"
+      ]
+    }
+  ],
+  "missingCapabilities": [],
+  "failures": [],
+  "stopReason": "local_checks_completed",
+  "handoff": {
+    "status": "ready_for_caller_review",
+    "decisionOwner": "caller_or_meta",
+    "finalAcceptance": "not_decided",
+    "nextActions": [
+      "Caller must verify evidence provenance and decide final acceptance."
+    ]
+  },
+  "runtimeVerification": {
+    "host": "not_tested",
+    "browser": "not_tested",
+    "model": "not_tested",
+    "nativeAgent": "needs_probe",
+    "hostBinding": "requires_host_binding"
+  },
+  "receiptAuthenticity": "not_verified",
+  "networkUsed": false,
+  "filesModified": false
+}

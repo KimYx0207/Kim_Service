@@ -1,0 +1,100 @@
+{
+  "context": {
+    "organizationId": "Kim_Service",
+    "workId": "repository-definition-review",
+    "revision": "1"
+  },
+  "previous": {
+    "serverId": "kim-service-codex-mcp",
+    "protocolVersion": "2025-06-18",
+    "complete": true,
+    "tools": [
+      {
+        "name": "codex",
+        "description": "Invoke the local Codex CLI inside a realpath-contained workspace. Defaults to read-only.",
+        "inputSchema": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "prompt"
+          ],
+          "properties": {
+            "prompt": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 131072
+            },
+            "cwd": {
+              "type": "string"
+            },
+            "model": {
+              "type": "string"
+            },
+            "sandbox": {
+              "enum": [
+                "read-only",
+                "workspace-write"
+              ]
+            },
+            "timeoutMs": {
+              "type": "integer",
+              "minimum": 1000,
+              "maximum": 600000
+            },
+            "forwardProxy": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        }
+      }
+    ]
+  },
+  "current": {
+    "serverId": "kim-service-codex-mcp",
+    "protocolVersion": "2025-06-18",
+    "complete": true,
+    "tools": [
+      {
+        "name": "codex",
+        "description": "Invoke the local Codex CLI inside a realpath-contained workspace. Defaults to read-only.",
+        "inputSchema": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "prompt"
+          ],
+          "properties": {
+            "prompt": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 131072
+            },
+            "cwd": {
+              "type": "string"
+            },
+            "model": {
+              "type": "string"
+            },
+            "sandbox": {
+              "enum": [
+                "read-only",
+                "workspace-write"
+              ]
+            },
+            "timeoutMs": {
+              "type": "integer",
+              "minimum": 1000,
+              "maximum": 600000
+            },
+            "forwardProxy": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        }
+      }
+    ]
+  },
+  "approvedToolNames": []
+}

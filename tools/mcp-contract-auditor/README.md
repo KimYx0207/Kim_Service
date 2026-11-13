@@ -29,7 +29,7 @@ node tools/mcp-contract-auditor/scripts/run.mjs --input-json - < tools/mcp-contr
 ## 范围
 
 - 不主动连接MCP、读取凭证、调用tools/call或修改宿主设置。
-- 不提供完整JSON Schema有效性/语义兼容认证；组合和引用保留为需检查。
+- 不提供完整JSON Schema有效性/语义兼容认证；组合和引用保留为需检查。Schema位置与default/examples实例数据分开，boolean输入定义仅用于诊断并始终需复核。
 - 工具annotations仅为声明，不授权操作或证明服务器可信。
 
 新增工具执行权限、外部写入及凭证范围变更沿用宿主现有授权；离线比较可直接进行。 普通可逆的读取、复算与草稿编制直接按当前任务授权推进。`needs_probe` 表示宿主未认证，不意味着本地脚本不可运行。包保留完整目录即可独立运行；复制入口一份不会携带资料。

@@ -1,0 +1,25 @@
+{
+  "classification": "real_historical_code_with_controlled_local_replay",
+  "platform": "linux",
+  "node": "v24.22.1",
+  "hostRegistration": "not_performed",
+  "professionalEffect": "not_evaluated",
+  "observations": [
+    {
+      "label": "before",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "",
+      "receiptCount": 0,
+      "sourceSha256": "8f7ab15434888826bf5be592d4107c958291abc447cd92096610429ea9b6a1c3"
+    },
+    {
+      "label": "after",
+      "exitCode": 0,
+      "stdout": "{\"hookSpecificOutput\":{\"hookEventName\":\"PostToolUse\",\"additionalContext\":\"Local artifact byte snapshot recorded for 1 configured file(s), SHA256 a9a0c365eb6065c259dd3c7b3dd2fb62cf1a03941c217b795d9bdd4b513dc072. Content quality and final acceptance are not decided.\"}}\n",
+      "stderr": "",
+      "receiptCount": 1,
+      "sourceSha256": "7f04aa6ee328be0c288387daafe149e284ddab98e8df5896caaaf72c69325398"
+    }
+  ]
+}
