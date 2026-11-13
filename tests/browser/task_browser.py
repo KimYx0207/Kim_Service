@@ -116,7 +116,7 @@ class BrowserAcceptance(unittest.TestCase):
         expect(self.page.locator('#cards article')).to_have_count(1)
         self.page.locator('#cards .details-button').click()
         self.page.locator('#request-materials').fill('真实仓库材料：hooks/evidence-receipt/scripts/hook.mjs；git commit 79251f2；未提供客户影响时间。')
-        self.assertIn('agents/reliability-engineer/AGENT.md', self.page.locator('.request-box textarea').input_value())
+        self.assertIn('agents/reliability-engineer/AGENT.md', self.page.get_by_label('可编辑的使用请求', exact=True).input_value())
         with self.page.expect_download() as download:
             self.page.get_by_role('button', name='下载草稿', exact=True).click()
         saved = json.loads(pathlib.Path(download.value.path()).read_text())
