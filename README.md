@@ -12,6 +12,8 @@
 
 **[打开能力目录与请求准备页](https://kimyx0207.github.io/Kim_Service/?lang=zh-CN)** · **[下载 V1.16 源码与安装包](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.16)**
 
+Agent 现在可按 **行业或通用领域 → 角色／岗位** 选择，例如金融保险 → 保险理赔分析师、酒店与住宿 → 酒店收益分析师；[分类说明](docs/agent-classification.md)解释跨行业岗位与使用路径。[WorkBuddy](docs/workbuddy.md) 与[豆包工作](docs/doubao-work.md) 提供完整技能包导出和本机验收步骤，原生客户端运行状态单独记录。
+
 <p align="center">
   <img src="docs/images/service-system-panorama.zh-CN.svg" alt="Kim Service 任务全景：目标与资料进入任务浏览器，按需经 Meta_Kim 组合 Agent、Skill、Hook、Tool 方法，完整请求交给当前 AI 客户端执行，真实产物通过核验后交付；紫线退回相关工作，橙线仅处理必要选择，虚线由宿主写入事项与交付记录" width="1200">
 </p>

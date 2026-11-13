@@ -8,9 +8,12 @@ Kim Service collection releases use `V<major>.<minor>`. Each component keeps its
 
 ### Affected components
 
-MCP Contract Auditor 0.1.1, reproducible professional checks against actual repository materials, host installation guidance and the paired Meta_Kim 3.12.1 distribution. The collection retains 92 components and 107 capabilities.
+MCP Contract Auditor 0.1.1, reproducible professional checks against actual repository materials, industry/role classification, desktop Skill import and the paired Meta_Kim 3.13.0 distribution. The collection retains 92 components and 107 capabilities.
 
 ### User-visible changes
+
+- Browse all 58 Agents by industry or cross-industry profession, then role/job. One classification source drives both languages while stable IDs, original professional contracts, selected roles and user materials remain intact. See [classification](docs/agent-classification.md).
+- Export one complete Agent/Skill method for [WorkBuddy](docs/workbuddy.md) or [Doubao Work](docs/doubao-work.md), preserving resources and executable scripts through the shared Meta exporter and exact version/source checks. This does not register native experts, connectors or Hooks, and native client acceptance remains unverified.
 
 - Scan actual JSON Schema locations without interpreting keyword-shaped business field names or default/example instance data as schema rules. Nested real references and conditional schemas still require review.
 - Preserve a reproducible software-delivery trial: offline actual tool definitions, observed source imports, the historical receipt CLI fault, changed-file rejection and corrected evidence verification. Reliability and delivery methods explain sources, missing owners, recovery and follow-up.
@@ -19,7 +22,7 @@ MCP Contract Auditor 0.1.1, reproducible professional checks against actual repo
 
 ### Breaking changes and migration
 
-No existing capability or input/output shape is removed. Pull main with `git pull --ff-only`, or use the complete V1.16 source, DSH or ZCode package. The combined ZCode package pairs Meta_Kim 3.12.1 with Kim 1.16.0 and uses the previous public V1.15 bundle for upgrade comparison. Actual client upgrade acceptance requires the documented local evidence; it is not inferred from a successful build.
+No existing capability or input/output shape is removed. Pull main with `git pull --ff-only`, or use the complete V1.16 source, DSH or ZCode package. The combined ZCode package pairs Meta_Kim 3.13.0 with Kim 1.16.0 and uses the previous public V1.15 bundle for upgrade comparison. Actual client upgrade acceptance requires the documented local evidence; it is not inferred from a successful build.
 
 ### Verification
 

@@ -159,7 +159,14 @@
         "request.outputUnspecified": "- 按入口说明交付，包合同没有逐项列出输出字段。",
         "request.toolsAndScope": "先核对本次已具备的工具、材料和授权；只补问阻塞任务的缺项。普通已授权工作继续执行。",
         "request.unexecuted": "缺少工具或证据时明确标记未执行和剩余工作。不要把读取入口、示例或静态检查写成已安装、已原生加载、已实际执行或已通过最终验收。",
-        "request.permissions": "需要新增安装、外部发布、付费或扩大访问范围时，按包内规则和本次授权处理。"
+        "request.permissions": "需要新增安装、外部发布、付费或扩大访问范围时，按包内规则和本次授权处理。",
+        "page.agentNavigation": "按行业与岗位浏览",
+        "page.agentGroup": "行业 / 通用领域",
+        "page.agentRole": "岗位 / 角色",
+        "page.classificationNote": "按主要工作场景归类；通用岗位可服务多个行业。分类不代表资格认证或自动执行。",
+        "ui.allAgentGroups": "全部行业与通用领域",
+        "ui.allAgentRoles": "该领域全部岗位",
+        "ui.chooseAgentGroup": "先选择行业或通用领域"
       }
     },
     "en": {
@@ -319,7 +326,14 @@
         "request.outputUnspecified": "- Follow the entry point; the package does not enumerate individual output fields.",
         "request.toolsAndScope": "First check the tools, materials, and authorization available for this task. Ask only for missing details that block the work; continue ordinary work that is already authorized.",
         "request.unexecuted": "If tools or evidence are missing, state what was not executed and what remains. Reading an entry point, example, or static check does not establish installation, native loading, actual execution, or final acceptance.",
-        "request.permissions": "For new installations, external publication, payment, or broader access, follow the package rules and the authorization for this task."
+        "request.permissions": "For new installations, external publication, payment, or broader access, follow the package rules and the authorization for this task.",
+        "page.agentNavigation": "Browse industries and roles",
+        "page.agentGroup": "Industry / Cross-industry field",
+        "page.agentRole": "Job / Role",
+        "page.classificationNote": "Grouped by primary work context; cross-industry roles serve multiple sectors. Classification does not certify qualifications or execute work.",
+        "ui.allAgentGroups": "All industries and cross-industry fields",
+        "ui.allAgentRoles": "All roles in this field",
+        "ui.chooseAgentGroup": "Choose an industry or field first"
       },
       "typeNames": {
         "all": "All",

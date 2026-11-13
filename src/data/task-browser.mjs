@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildCapabilityIndex } from './capability-catalog.mjs';
+import { validateAgentTaxonomy } from './agent-taxonomy.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const EXAMPLE_FILES = ['example.json', 'examples/example-input.md', 'examples/example-output.md', 'docs/examples.md', 'assets/case-study.md'];
@@ -90,15 +91,22 @@ export function readShowcases(root, capabilities) {
 /** Repository declarations remain the only capability source; the page is a view. */
 export function buildStartPageData(root = ROOT) {
   const index = buildCapabilityIndex(root);
+  const agentIds = index.components.filter(component => component.componentType === 'agent').map(component => component.id);
+  const taxonomyFile = regularFile(root, 'config/agent-taxonomy.json', { optional: true });
+  const taxonomy = validateAgentTaxonomy(taxonomyFile ? JSON.parse(fs.readFileSync(taxonomyFile, 'utf8'))
+    : { schemaVersion: 1, groups: [] }, agentIds);
+  const classification = new Map(taxonomy.groups.flatMap(group => group.roles.map(role => [role.componentId,
+    { groupId: group.id, groupTitle: group.title, roleTitle: role.title }])));
   const capabilities = index.capabilities.map((capability) => {
     const base = capability.componentPath;
     const readme = `${base}/README.md`;
     return {
       ...capability,
+      ...(classification.has(capability.componentId) ? { classification: classification.get(capability.componentId) } : {}),
       readme: regularFile(root, readme, { optional: true }) ? readme : null,
       examples: EXAMPLE_FILES.map((file) => `${base}/${file}`).filter((file) => regularFile(root, file, { optional: true }))
     };
   });
   return { componentCount: index.componentCount, capabilityCount: index.capabilityCount,
-    ui: readBrowserConfig(root), showcases: readShowcases(root, capabilities), capabilities };
+    ui: { ...readBrowserConfig(root), agentTaxonomy: taxonomy }, showcases: readShowcases(root, capabilities), capabilities };
 }

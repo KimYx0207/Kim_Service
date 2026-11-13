@@ -12,6 +12,8 @@ The current main branch includes **58 specialist Agents, 30 Skills, 2 Hooks, and
 
 **[Browse capabilities and prepare a request](https://kimyx0207.github.io/Kim_Service/?lang=en)** · **[Download V1.16 source and packages](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.16)**
 
+Find an Agent by **industry or shared profession → role/job**, such as Financial services and insurance → Insurance claims analyst. See [classification](docs/agent-classification.md) for the stable role mapping and complete task path. [WorkBuddy](docs/workbuddy.md) and [Doubao Work](docs/doubao-work.md) have complete Skill export and local acceptance instructions; native client results remain separately recorded.
+
 <p align="center">
   <img src="docs/images/service-system-panorama.en.svg" alt="Kim Service task panorama: goals and materials enter the task browser; optional Meta_Kim orchestration combines Agent, Skill, Hook and Tool methods into a request; the current AI client produces real artifacts and verifies the handoff, with repair paths, necessary human choices and host-owned Work records" width="1200">
 </p>

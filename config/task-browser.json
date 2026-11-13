@@ -470,6 +470,16 @@
       "id": "dsh",
       "label": "DeepSeek Harness",
       "prefix": ""
+    },
+    {
+      "id": "workbuddy",
+      "label": "WorkBuddy",
+      "prefix": ""
+    },
+    {
+      "id": "doubao",
+      "label": "豆包工作 / Doubao Work",
+      "prefix": ""
     }
   ]
 }

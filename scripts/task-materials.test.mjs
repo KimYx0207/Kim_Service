@@ -144,7 +144,7 @@ function pageFixture({storageRecords=new Map()}={}){
     closest(selector){return this.matches(selector)?this:this.parentElement?.closest(selector);}
     focus(){document.activeElement=this;} select(){} showModal(){this.open=true;} close(){this.open=false;}
   }
-  const staticIds=['capability-data','inventory','search','cards','detail','detail-content','detail-type','types','empty','clear-search','result-count','suggestions','reset','close-detail','showcase-cards','showcases'];
+  const staticIds=['agent-group','agent-role','capability-data','inventory','search','cards','detail','detail-content','detail-type','types','empty','clear-search','result-count','suggestions','reset','close-detail','showcase-cards','showcases'];
   for(const id of staticIds){const node=new Element('div');node.id=id;}
   ids.get('capability-data').textContent=JSON.stringify(data);
   ids.get('detail').append(ids.get('detail-content'));
@@ -216,4 +216,24 @@ test('an authored request above the draft limit still has a complete text downlo
   assert.equal(await page.downloads[0].blob.text(),authored);
   page.picker.value='en';await page.picker.dispatch('change');
   assert.equal(page.request().value,authored,'a storage failure must not lose authored text on language change');
+});
+
+test('actual classification events preserve selected role across language changes and clear it across package types',async()=>{
+  const page=pageFixture();
+  const group=page.ids.get('agent-group'),role=page.ids.get('agent-role');
+  assert.equal(role.disabled,true);
+  group.value='financial-services';await group.dispatch('change');
+  role.value='insurance-claims-analyst';await role.dispatch('change');
+  assert.deepEqual(page.ids.get('cards').children.map(card=>card.dataset.capability),['insurance-claims-analyst-deliver']);
+  page.picker.value='en';await page.picker.dispatch('change');
+  assert.equal(group.value,'financial-services');assert.equal(role.value,'insurance-claims-analyst');
+  assert.match(page.ids.get('cards').textContent,/Insurance claims analyst/);
+  group.value='software';await group.dispatch('change');
+  assert.equal(role.value,'');assert.equal(role.disabled,false);
+  assert.ok(page.ids.get('cards').children.every(card=>!card.dataset.capability.startsWith('insurance-')));
+  await page.ids.get('types').children.find(button=>button.dataset.type==='skill').click();
+  assert.equal(group.value,'');assert.equal(role.disabled,true);
+  assert.ok(page.ids.get('cards').children.length>0);
+  await page.ids.get('reset').click();
+  assert.equal(page.ids.get('cards').children.length,data.capabilityCount);
 });

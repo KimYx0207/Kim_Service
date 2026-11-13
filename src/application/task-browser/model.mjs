@@ -60,8 +60,13 @@ export function createTaskBrowser(config, { locale: requestedLocale = config.def
     return sentence.length > 56 ? sentence.slice(0, 54) + '…' : sentence;
   }
 
+  function classificationOf(capability) {
+    const c = capability.classification;
+    return c ? { group: c.groupTitle[locale], role: c.roleTitle[locale] } : null;
+  }
   function searchableText(capability) {
     return [capability.id, capability.componentId, capability.summary, summaryOf(capability), titleOf(capability),
+      ...(capability.classification ? [...Object.values(capability.classification.groupTitle), ...Object.values(capability.classification.roleTitle)] : []),
       ...(capability.useWhen || []), ...(detailOf(capability)?.useWhen || []),
       ...fields(capability.input, { capability }).flatMap(field => [field.key, field.label, field.description]),
       ...fields(capability.output, { capability }).flatMap(field => [field.key, field.label, field.description])]
@@ -78,10 +83,12 @@ export function createTaskBrowser(config, { locale: requestedLocale = config.def
     });
   }
 
-  function filterCapabilities(capabilities, query = '', type = 'all') {
+  function filterCapabilities(capabilities, query = '', type = 'all', { groupId = '', componentId = '' } = {}) {
     const terms = queryTerms(query);
     return capabilities.filter(capability => {
       if (type !== 'all' && capability.componentType !== type) return false;
+      if (groupId && capability.classification?.groupId !== groupId) return false;
+      if (componentId && capability.componentId !== componentId) return false;
       const value = searchableText(capability);
       return terms.every(alternatives => alternatives.some(word => {
         if (/^[a-z0-9][a-z0-9 -]*$/u.test(word)) {
@@ -155,7 +162,7 @@ export function createTaskBrowser(config, { locale: requestedLocale = config.def
     return translated ? { ...sample, title: translated.title, description: translated.description,
       inputs: translated.inputs, outputs: translated.outputs } : sample;
   }
-  return Object.freeze({ locale, text, hosts, suggestions, detailOf, summaryOf, showcaseOf,
+  return Object.freeze({ locale, text, hosts, suggestions, detailOf, summaryOf, showcaseOf, classificationOf,
     filterCapabilities, buildRequest, requestAttachments, requestForDraft, fields, titleOf, briefLabel, sourceUrl, sampleUrl,
     commonFields: COMMON_FIELDS, typeNames: TYPE_NAMES });
 }

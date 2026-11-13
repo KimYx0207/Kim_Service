@@ -1,0 +1,602 @@
+{
+  "schemaVersion": 1,
+  "scope": "Primary discovery classification only; not an exclusive professional scope, qualification or runtime binding. Stable Agent contracts remain authoritative.",
+  "groups": [
+    {
+      "id": "financial-services",
+      "kind": "industry",
+      "title": {
+        "zh-CN": "金融保险",
+        "en": "Financial services and insurance"
+      },
+      "roles": [
+        {
+          "componentId": "credit-risk-analyst",
+          "title": {
+            "zh-CN": "信贷风险分析师",
+            "en": "Credit risk analyst"
+          }
+        },
+        {
+          "componentId": "investment-research-analyst",
+          "title": {
+            "zh-CN": "投资研究分析师",
+            "en": "Investment research analyst"
+          }
+        },
+        {
+          "componentId": "quantitative-researcher",
+          "title": {
+            "zh-CN": "量化研究员",
+            "en": "Quantitative researcher"
+          }
+        },
+        {
+          "componentId": "insurance-claims-analyst",
+          "title": {
+            "zh-CN": "保险理赔分析师",
+            "en": "Insurance claims analyst"
+          }
+        }
+      ]
+    },
+    {
+      "id": "commerce",
+      "kind": "industry",
+      "title": {
+        "zh-CN": "零售与电商",
+        "en": "Retail and commerce"
+      },
+      "roles": [
+        {
+          "componentId": "commerce-operations-designer",
+          "title": {
+            "zh-CN": "商业运营设计师",
+            "en": "Commerce operations designer"
+          }
+        },
+        {
+          "componentId": "product-listing-writer",
+          "title": {
+            "zh-CN": "商品内容编辑",
+            "en": "Product listing writer"
+          }
+        },
+        {
+          "componentId": "customer-service-writer",
+          "title": {
+            "zh-CN": "客户服务文案专员",
+            "en": "Customer service writer"
+          }
+        },
+        {
+          "componentId": "store-performance-analyst",
+          "title": {
+            "zh-CN": "店铺经营分析师",
+            "en": "Store performance analyst"
+          }
+        }
+      ]
+    },
+    {
+      "id": "manufacturing",
+      "kind": "industry",
+      "title": {
+        "zh-CN": "制造与设备运维",
+        "en": "Manufacturing and equipment operations"
+      },
+      "roles": [
+        {
+          "componentId": "manufacturing-quality-analyst",
+          "title": {
+            "zh-CN": "制造质量分析师",
+            "en": "Manufacturing quality analyst"
+          }
+        },
+        {
+          "componentId": "maintenance-reliability-engineer",
+          "title": {
+            "zh-CN": "设备维护与可靠性工程师",
+            "en": "Maintenance reliability engineer"
+          }
+        }
+      ]
+    },
+    {
+      "id": "construction",
+      "kind": "industry",
+      "title": {
+        "zh-CN": "建筑与工程建设",
+        "en": "Construction and engineering projects"
+      },
+      "roles": [
+        {
+          "componentId": "construction-project-controller",
+          "title": {
+            "zh-CN": "建筑项目控制师",
+            "en": "Construction project controller"
+          }
+        }
+      ]
+    },
+    {
+      "id": "energy",
+      "kind": "industry",
+      "title": {
+        "zh-CN": "能源",
+        "en": "Energy"
+      },
+      "roles": [
+        {
+          "componentId": "energy-project-analyst",
+          "title": {
+            "zh-CN": "能源项目分析师",
+            "en": "Energy project analyst"
+          }
+        }
+      ]
+    },
+    {
+      "id": "agriculture",
+      "kind": "industry",
+      "title": {
+        "zh-CN": "农业",
+        "en": "Agriculture"
+      },
+      "roles": [
+        {
+          "componentId": "agronomy-planner",
+          "title": {
+            "zh-CN": "农艺规划师",
+            "en": "Agronomy planner"
+          }
+        }
+      ]
+    },
+    {
+      "id": "healthcare",
+      "kind": "industry",
+      "title": {
+        "zh-CN": "医疗服务运营",
+        "en": "Healthcare service operations"
+      },
+      "roles": [
+        {
+          "componentId": "healthcare-operations-analyst",
+          "title": {
+            "zh-CN": "医疗服务运营分析师",
+            "en": "Healthcare operations analyst"
+          }
+        }
+      ]
+    },
+    {
+      "id": "hospitality",
+      "kind": "industry",
+      "title": {
+        "zh-CN": "酒店与住宿",
+        "en": "Hospitality and accommodation"
+      },
+      "roles": [
+        {
+          "componentId": "hospitality-revenue-analyst",
+          "title": {
+            "zh-CN": "酒店收益分析师",
+            "en": "Hospitality revenue analyst"
+          }
+        }
+      ]
+    },
+    {
+      "id": "games",
+      "kind": "industry",
+      "title": {
+        "zh-CN": "游戏",
+        "en": "Games"
+      },
+      "roles": [
+        {
+          "componentId": "game-economy-designer",
+          "title": {
+            "zh-CN": "游戏经济设计师",
+            "en": "Game economy designer"
+          }
+        }
+      ]
+    },
+    {
+      "id": "education",
+      "kind": "industry",
+      "title": {
+        "zh-CN": "教育与学习",
+        "en": "Education and learning"
+      },
+      "roles": [
+        {
+          "componentId": "lesson-planner",
+          "title": {
+            "zh-CN": "课程规划师",
+            "en": "Lesson planner"
+          }
+        },
+        {
+          "componentId": "concept-tutor",
+          "title": {
+            "zh-CN": "概念讲解导师",
+            "en": "Concept tutor"
+          }
+        },
+        {
+          "componentId": "exercise-designer",
+          "title": {
+            "zh-CN": "练习设计师",
+            "en": "Exercise designer"
+          }
+        }
+      ]
+    },
+    {
+      "id": "media",
+      "kind": "industry",
+      "title": {
+        "zh-CN": "内容与媒体制作",
+        "en": "Content and media production"
+      },
+      "roles": [
+        {
+          "componentId": "topic-planner",
+          "title": {
+            "zh-CN": "选题策划",
+            "en": "Topic planner"
+          }
+        },
+        {
+          "componentId": "headline-cover-optimizer",
+          "title": {
+            "zh-CN": "标题与封面优化师",
+            "en": "Headline and cover optimizer"
+          }
+        },
+        {
+          "componentId": "script-writer",
+          "title": {
+            "zh-CN": "脚本编剧",
+            "en": "Script writer"
+          }
+        },
+        {
+          "componentId": "media-production-engineer",
+          "title": {
+            "zh-CN": "媒体制作工程师",
+            "en": "Media production engineer"
+          }
+        }
+      ]
+    },
+    {
+      "id": "software",
+      "kind": "cross-industry",
+      "title": {
+        "zh-CN": "通用 · 软件、数据与系统工程",
+        "en": "Cross-industry · Software, data and systems engineering"
+      },
+      "roles": [
+        {
+          "componentId": "frontend-engineer",
+          "title": {
+            "zh-CN": "前端工程师",
+            "en": "Frontend engineer"
+          }
+        },
+        {
+          "componentId": "backend-data-engineer",
+          "title": {
+            "zh-CN": "后端与数据工程师",
+            "en": "Backend and data engineer"
+          }
+        },
+        {
+          "componentId": "mobile-app-engineer",
+          "title": {
+            "zh-CN": "移动应用工程师",
+            "en": "Mobile app engineer"
+          }
+        },
+        {
+          "componentId": "data-pipeline-engineer",
+          "title": {
+            "zh-CN": "数据管道工程师",
+            "en": "Data pipeline engineer"
+          }
+        },
+        {
+          "componentId": "applied-ai-engineer",
+          "title": {
+            "zh-CN": "AI应用工程师",
+            "en": "Applied AI engineer"
+          }
+        },
+        {
+          "componentId": "reliability-engineer",
+          "title": {
+            "zh-CN": "可靠性工程师",
+            "en": "Reliability engineer"
+          }
+        },
+        {
+          "componentId": "test-automation-engineer",
+          "title": {
+            "zh-CN": "测试自动化工程师",
+            "en": "Test automation engineer"
+          }
+        },
+        {
+          "componentId": "data-quality-analyst",
+          "title": {
+            "zh-CN": "数据质量分析师",
+            "en": "Data quality analyst"
+          }
+        },
+        {
+          "componentId": "systems-engineering-analyst",
+          "title": {
+            "zh-CN": "系统工程分析师",
+            "en": "Systems engineering analyst"
+          }
+        }
+      ]
+    },
+    {
+      "id": "security",
+      "kind": "cross-industry",
+      "title": {
+        "zh-CN": "通用 · 安全",
+        "en": "Cross-industry · Security"
+      },
+      "roles": [
+        {
+          "componentId": "application-security-reviewer",
+          "title": {
+            "zh-CN": "应用安全审查员",
+            "en": "Application security reviewer"
+          }
+        },
+        {
+          "componentId": "security-incident-responder",
+          "title": {
+            "zh-CN": "安全事件调查与响应分析师",
+            "en": "Security incident responder"
+          }
+        }
+      ]
+    },
+    {
+      "id": "product-design",
+      "kind": "cross-industry",
+      "title": {
+        "zh-CN": "通用 · 产品与设计",
+        "en": "Cross-industry · Product and design"
+      },
+      "roles": [
+        {
+          "componentId": "product-architect",
+          "title": {
+            "zh-CN": "产品架构师",
+            "en": "Product architect"
+          }
+        },
+        {
+          "componentId": "interaction-designer",
+          "title": {
+            "zh-CN": "交互设计师",
+            "en": "Interaction designer"
+          }
+        },
+        {
+          "componentId": "design-system-designer",
+          "title": {
+            "zh-CN": "设计系统设计师",
+            "en": "Design system designer"
+          }
+        },
+        {
+          "componentId": "brand-visual-designer",
+          "title": {
+            "zh-CN": "品牌视觉设计师",
+            "en": "Brand visual designer"
+          }
+        },
+        {
+          "componentId": "user-researcher",
+          "title": {
+            "zh-CN": "用户研究员",
+            "en": "User researcher"
+          }
+        }
+      ]
+    },
+    {
+      "id": "corporate-finance",
+      "kind": "cross-industry",
+      "title": {
+        "zh-CN": "通用 · 企业财务与经营分析",
+        "en": "Cross-industry · Corporate finance and business analysis"
+      },
+      "roles": [
+        {
+          "componentId": "financial-modeler",
+          "title": {
+            "zh-CN": "财务建模师",
+            "en": "Financial modeler"
+          }
+        },
+        {
+          "componentId": "accounting-reconciliation-analyst",
+          "title": {
+            "zh-CN": "会计对账分析师",
+            "en": "Accounting reconciliation analyst"
+          }
+        },
+        {
+          "componentId": "business-finance-analyst",
+          "title": {
+            "zh-CN": "经营财务分析师",
+            "en": "Business finance analyst"
+          }
+        },
+        {
+          "componentId": "treasury-liquidity-analyst",
+          "title": {
+            "zh-CN": "资金流动性分析师",
+            "en": "Treasury liquidity analyst"
+          }
+        },
+        {
+          "componentId": "pricing-cost-analyst",
+          "title": {
+            "zh-CN": "定价与成本分析师",
+            "en": "Pricing and cost analyst"
+          }
+        }
+      ]
+    },
+    {
+      "id": "supply-chain",
+      "kind": "cross-industry",
+      "title": {
+        "zh-CN": "通用 · 采购、供应链与仓储",
+        "en": "Cross-industry · Procurement, supply chain and warehousing"
+      },
+      "roles": [
+        {
+          "componentId": "supplier-comparison-analyst",
+          "title": {
+            "zh-CN": "供应商比较分析师",
+            "en": "Supplier comparison analyst"
+          }
+        },
+        {
+          "componentId": "supply-chain-planner",
+          "title": {
+            "zh-CN": "供应链计划师",
+            "en": "Supply chain planner"
+          }
+        },
+        {
+          "componentId": "warehouse-operations-analyst",
+          "title": {
+            "zh-CN": "仓储运营分析师",
+            "en": "Warehouse operations analyst"
+          }
+        }
+      ]
+    },
+    {
+      "id": "business-management",
+      "kind": "cross-industry",
+      "title": {
+        "zh-CN": "通用 · 创业与业务运营",
+        "en": "Cross-industry · Business and commercial operations"
+      },
+      "roles": [
+        {
+          "componentId": "side-business-evaluator",
+          "title": {
+            "zh-CN": "创业机会评估师",
+            "en": "Side business evaluator"
+          }
+        },
+        {
+          "componentId": "launch-planner",
+          "title": {
+            "zh-CN": "上市与发布策划师",
+            "en": "Launch planner"
+          }
+        },
+        {
+          "componentId": "sales-operations-analyst",
+          "title": {
+            "zh-CN": "销售运营分析师",
+            "en": "Sales operations analyst"
+          }
+        },
+        {
+          "componentId": "sustainability-analyst",
+          "title": {
+            "zh-CN": "可持续发展分析师",
+            "en": "Sustainability analyst"
+          }
+        },
+        {
+          "componentId": "contract-review-analyst",
+          "title": {
+            "zh-CN": "合同审查分析师",
+            "en": "Contract review analyst"
+          }
+        }
+      ]
+    },
+    {
+      "id": "people-work",
+      "kind": "cross-industry",
+      "title": {
+        "zh-CN": "通用 · 人才与职场",
+        "en": "Cross-industry · People and workplace"
+      },
+      "roles": [
+        {
+          "componentId": "hiring-process-designer",
+          "title": {
+            "zh-CN": "招聘流程设计师",
+            "en": "Hiring process designer"
+          }
+        },
+        {
+          "componentId": "resume-editor",
+          "title": {
+            "zh-CN": "简历编辑",
+            "en": "Resume editor"
+          }
+        },
+        {
+          "componentId": "interview-coach",
+          "title": {
+            "zh-CN": "面试教练",
+            "en": "Interview coach"
+          }
+        },
+        {
+          "componentId": "workplace-writer",
+          "title": {
+            "zh-CN": "职场写作专员",
+            "en": "Workplace writer"
+          }
+        }
+      ]
+    },
+    {
+      "id": "evidence-delivery",
+      "kind": "cross-industry",
+      "title": {
+        "zh-CN": "通用 · 证据与交付核验",
+        "en": "Cross-industry · Evidence and delivery verification"
+      },
+      "roles": [
+        {
+          "componentId": "source-evidence-analyst",
+          "title": {
+            "zh-CN": "来源证据分析师",
+            "en": "Source evidence analyst"
+          }
+        },
+        {
+          "componentId": "delivery-verifier",
+          "title": {
+            "zh-CN": "交付核验员",
+            "en": "Delivery verifier"
+          }
+        }
+      ]
+    }
+  ]
+}

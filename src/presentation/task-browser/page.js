@@ -6,7 +6,7 @@
   let app = createTaskBrowser(data.ui, { locale: pageUrl.searchParams.get('lang') });
   let {filterCapabilities,buildRequest,requestAttachments,requestForDraft,fields,titleOf,briefLabel,sourceUrl,sampleUrl,
     commonFields:COMMON_FIELDS,typeNames:TYPE_NAMES,locale,text:t,hosts,suggestions,
-    detailOf,summaryOf,showcaseOf}=app;
+    detailOf,summaryOf,showcaseOf,classificationOf}=app;
   function applyStaticLanguage() {
     // Explicit template keys select authored messages; source text is never searched or replaced.
     document.documentElement.lang = locale;
@@ -28,6 +28,9 @@
   const dialog = document.getElementById('detail');
   const detailContent = document.getElementById('detail-content');
   let selectedType = 'all';
+  let selectedGroup = '', selectedRole = '';
+  const groupPicker = document.getElementById('agent-group');
+  const rolePicker = document.getElementById('agent-role');
   let lastTrigger = null;
   let activeId = null;
   const types = ['all', ...data.ui.typeOrder.filter((type) => data.capabilities.some((capability) => capability.componentType === type))];
@@ -39,10 +42,10 @@
     app = createTaskBrowser(data.ui,{locale:value});
     ({filterCapabilities,buildRequest,requestAttachments,requestForDraft,fields,titleOf,briefLabel,sourceUrl,sampleUrl,
       commonFields:COMMON_FIELDS,typeNames:TYPE_NAMES,locale,text:t,hosts,suggestions,
-      detailOf,summaryOf,showcaseOf}=app);
+      detailOf,summaryOf,showcaseOf,classificationOf}=app);
     applyStaticLanguage();
     browsingOrder.sort((left,right)=>types.indexOf(left.componentType)-types.indexOf(right.componentType)||titleOf(left).localeCompare(titleOf(right),locale));
-    renderTypeFilters();renderSuggestions();renderShowcases();renderResults();
+    renderTypeFilters();renderSuggestions();renderShowcases();renderAgentNavigation();renderResults();
     if(activeId){
       const capability=data.capabilities.find(item=>item.id===activeId);
       lastTrigger=[...cards.querySelectorAll('.details-button')].find(button=>button.closest('[data-capability]').dataset.capability===activeId)||null;
@@ -95,7 +98,9 @@
     const label = element('span','type-label',TYPE_NAMES[capability.componentType]);
     label.dataset.type = capability.componentType;
     meta.append(label,element('span','version','v'+capability.componentVersion));
-    const title = element('h3','',titleOf(capability));
+    const classification = classificationOf(capability);
+    if (classification) meta.append(element('span','classification',classification.group + ' → ' + classification.role));
+    const title = element('h3','',classification?.role || titleOf(capability));
     const description = element('p','card-description',locale==='en'?summaryOf(capability):capability.useWhen[0]);
     const io = element('dl','card-io');
     for (const [name,schema] of [[t('ui.youProvide'),capability.input],[t('ui.deliver'),capability.output]]) {
@@ -115,7 +120,7 @@
   }
 
   function renderResults() {
-    const filtered = filterCapabilities(browsingOrder,search.value,selectedType);
+    const filtered = filterCapabilities(browsingOrder,search.value,selectedType,{groupId:selectedGroup,componentId:selectedRole});
     cards.replaceChildren(...filtered.map(renderCard));
     document.getElementById('empty').hidden = filtered.length !== 0;
     document.getElementById('clear-search').hidden = !search.value;
@@ -161,7 +166,8 @@
       notices.push(t('ui.hostRemoved'));
     }
     if (trigger) lastTrigger = trigger;
-    document.getElementById('detail-type').textContent = `${TYPE_NAMES[capability.componentType]} · v${capability.componentVersion}`;
+    const classification = classificationOf(capability);
+    document.getElementById('detail-type').textContent = `${TYPE_NAMES[capability.componentType]} · v${capability.componentVersion}` + (classification ? ` · ${classification.group} → ${classification.role}` : '');
     const heading = element('h2','detail-title',titleOf(capability));
     heading.id = 'detail-title';
     heading.tabIndex = -1;
@@ -339,6 +345,28 @@
     dialog.close();
   }
 
+  function renderAgentNavigation(){
+    groupPicker.replaceChildren(element('option','',t('ui.allAgentGroups')));
+    groupPicker.children[0].value = '';
+    for(const group of data.ui.agentTaxonomy.groups){
+      const option=element('option','',group.title[locale] + ' (' + group.roles.length + ')');
+      option.value=group.id;groupPicker.append(option);
+    }
+    groupPicker.value=selectedGroup;
+    rolePicker.replaceChildren(element('option','',t(selectedGroup?'ui.allAgentRoles':'ui.chooseAgentGroup')));
+    rolePicker.children[0].value='';
+    const group=data.ui.agentTaxonomy.groups.find(item=>item.id===selectedGroup);
+    for(const role of group?.roles || []){
+      const option=element('option','',role.title[locale]);option.value=role.componentId;rolePicker.append(option);
+    }
+    rolePicker.value=selectedRole;rolePicker.disabled=!selectedGroup;
+  }
+  groupPicker.addEventListener('change',()=>{
+    selectedGroup=groupPicker.value;selectedRole='';selectedType=selectedGroup?'agent':'all';
+    renderAgentNavigation();renderResults();
+  });
+  rolePicker.addEventListener('change',()=>{selectedRole=rolePicker.value;renderResults();});
+  function clearClassification(){selectedGroup='';selectedRole='';renderAgentNavigation();}
   function renderTypeFilters(){
     const filters = document.getElementById('types');
     filters.replaceChildren();
@@ -348,7 +376,7 @@
       button.dataset.type = type;
       button.setAttribute('aria-pressed',String(type===selectedType));
       button.append(element('span','',String(type==='all' ? data.capabilityCount : data.capabilities.filter((capability)=>capability.componentType===type).length)));
-      button.addEventListener('click',()=>{selectedType=type;renderResults();});
+      button.addEventListener('click',()=>{selectedType=type;if(type!=='agent')clearClassification();renderResults();});
       filters.append(button);
     });
   }
@@ -359,11 +387,11 @@
     container.replaceChildren(element('span','',t('page.suggestionsLabel')));
     for(const query of suggestions){
       const button=element('button','',query);button.type='button';button.dataset.query=query;
-      button.addEventListener('click',()=>{search.value=query;selectedType='all';renderResults();search.focus();});
+      button.addEventListener('click',()=>{search.value=query;selectedType='all';clearClassification();renderResults();search.focus();});
       container.append(button);
     }
   }
-  document.getElementById('reset').addEventListener('click',()=>{search.value='';selectedType='all';renderResults();search.focus();});
+  document.getElementById('reset').addEventListener('click',()=>{search.value='';selectedType='all';clearClassification();renderResults();search.focus();});
   document.getElementById('close-detail').addEventListener('click',closeDetail);
   dialog.addEventListener('click',(event)=>{if(event.target===dialog){const box=dialog.getBoundingClientRect();if(event.clientX<box.left||event.clientX>box.right||event.clientY<box.top||event.clientY>box.bottom)closeDetail();}});
   dialog.addEventListener('close',()=>{
@@ -398,6 +426,7 @@
     document.getElementById('showcases').hidden=data.showcases.length===0;
   }
   applyStaticLanguage();
+  renderAgentNavigation();
   renderTypeFilters();
   renderSuggestions();
   renderShowcases();
