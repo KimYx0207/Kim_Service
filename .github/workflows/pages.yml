@@ -14,8 +14,11 @@ jobs:
     if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push'
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    env:
+      PAGES_ARTIFACT_NAME: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
     permissions:
       contents: read
+      actions: read
       pages: write
       id-token: write
     environment:
@@ -35,9 +38,42 @@ jobs:
         run: node scripts/build-site.mjs
       - name: Configure Pages
         uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5
-      - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
+      - id: pages-artifact
+        uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
         with:
           path: .site
+          name: ${{ env.PAGES_ARTIFACT_NAME }}
+      - name: Wait for this uploaded artifact to be visible
+        timeout-minutes: 2
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EXPECTED_ARTIFACT_ID: ${{ steps.pages-artifact.outputs.artifact_id }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$EXPECTED_ARTIFACT_ID" =~ ^[0-9]+$ ]] || { echo "Missing upload artifact ID" >&2; exit 1; }
+          # Only poll metadata; never retry upload/deployment or delete old artifacts.
+          for attempt in {1..8}; do
+            metadata=$(timeout 5s gh api --method GET \
+              "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/artifacts" \
+              -f name="$PAGES_ARTIFACT_NAME" -f per_page=100)
+            count=$(jq -er '.total_count' <<< "$metadata")
+            if [[ "$count" != "0" ]]; then
+              jq -e --arg name "$PAGES_ARTIFACT_NAME" --arg id "$EXPECTED_ARTIFACT_ID" --arg run "$GITHUB_RUN_ID" '
+                .total_count == 1 and (.artifacts | length) == 1 and
+                .artifacts[0].name == $name and (.artifacts[0].id | tostring) == $id and
+                (.artifacts[0].workflow_run.id | tostring) == $run and
+                .artifacts[0].expired == false and .artifacts[0].size_in_bytes > 0
+              ' <<< "$metadata" > /dev/null || { echo "Artifact identity or count mismatch" >&2; exit 1; }
+              echo "Verified artifact $EXPECTED_ARTIFACT_ID for run $GITHUB_RUN_ID, name $PAGES_ARTIFACT_NAME"
+              exit 0
+            fi
+            if (( attempt < 8 )); then sleep 3; fi
+          done
+          echo "Uploaded artifact is still absent after bounded metadata checks" >&2
+          exit 1
       - name: Deploy Pages
         id: deployment
         uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4
+        with:
+          artifact_name: ${{ env.PAGES_ARTIFACT_NAME }}

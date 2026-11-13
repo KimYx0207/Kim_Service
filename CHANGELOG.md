@@ -15,6 +15,7 @@ MCP Contract Auditor 0.1.1, reproducible professional checks against actual repo
 - Scan actual JSON Schema locations without interpreting keyword-shaped business field names or default/example instance data as schema rules. Nested real references and conditional schemas still require review.
 - Preserve a reproducible software-delivery trial: offline actual tool definitions, observed source imports, the historical receipt CLI fault, changed-file rejection and corrected evidence verification. Reliability and delivery methods explain sources, missing owners, recovery and follow-up.
 - Keep real host discovery, install/update, local file verification and business outcomes distinct. The MCP auditor remains offline; the receipt Hook remains explicitly enabled and scoped by its caller.
+- Publish the online catalog using an artifact name unique to each workflow attempt, and check that the uploaded artifact is visible before deployment. A retry no longer collides with a prior attempt's artifact.
 
 ### Breaking changes and migration
 
