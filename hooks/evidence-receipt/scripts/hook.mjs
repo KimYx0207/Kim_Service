@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
-import { pathToFileURL } from 'node:url';
+import { fileURLToPath } from 'node:url';
 
 function loadPolicy() {
   const value = JSON.parse(fs.readFileSync(new URL('../policy.json', import.meta.url), 'utf8'));
@@ -101,7 +101,15 @@ async function eventFromStdin(policy) {
     process.stdin.on('data',onData);process.stdin.once('end',onEnd);process.stdin.once('error',onError);
   });
 }
-if (process.argv[1] && pathToFileURL(path.resolve(process.argv[1])).href === import.meta.url) {
+function isCliEntry() {
+  if (!process.argv[1]) return false;
+  try {
+    // Node resolves imported modules through links, while argv may retain /var
+    // or another directory alias. Compare actual files before running the CLI.
+    return fs.realpathSync(process.argv[1]) === fs.realpathSync(fileURLToPath(import.meta.url));
+  } catch { return false; }
+}
+if (isCliEntry()) {
   try {
     check(process.argv.length === 4 && process.argv[2] === '--config', 'config_argument_required');
     const event = await eventFromStdin(loadPolicy());

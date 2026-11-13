@@ -1158,7 +1158,7 @@
       "snapshot": "committed-component-tree",
       "version": "0.1.0",
       "contractSha256": "9d8de5ef7eb02220907467560e28f1db09318cccb4f7feb9c86dc3f951373d1e",
-      "contentSha256": "4f1f10f6579587ce78114c9e2542c45f772887de52530a8ae85bc6494745d800",
+      "contentSha256": "01ef2d47ccf07835edc13454736c2b365b86039b0819ff638045aaea4db96ac4",
       "required": [
         "capability.json",
         "CHANGELOG.md",
