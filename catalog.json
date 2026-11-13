@@ -1980,7 +1980,7 @@
       "kind": "tool",
       "path": "tools/mcp-contract-auditor",
       "source": "canonical:tools/mcp-contract-auditor",
-      "revision": "39671621d9490718500451b784bbe363dd40a334",
+      "revision": "8bc7012db947c4964c7d2f1461ec31f8f2582aa1",
       "snapshot": "committed-component-tree",
       "version": "0.1.1",
       "contractSha256": "1b39ca9631d55fd33448566266cf5de840e7de9039675eee5a70e0aaf337d8b7",
