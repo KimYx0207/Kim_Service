@@ -6,19 +6,45 @@
 
 **把专业工作的做法交给 AI，把能打开、修改和检查的成果交给你。**
 
-你知道想做什么，却未必知道一份经营预测要核对哪些数据、一个页面要补齐哪些状态，或一份供应商比较该怎样算成本。Kim Service 把这些工作需要的方法、材料、步骤、例子和验收标准放在一起，让你和 AI 有一套具体的做事依据。
+Kim Service 是一套开源的 **AI 专业工作方法库**。你提供业务目标和资料，它提供可以交给现有 AI 客户端使用的角色方法、参考资料、示例、计算脚本和验收标准，把“帮我分析一下”推进到可以打开、修改和核对的文件。
 
-当前主分支包含 **58 个专业 Agent、30 个 Skill、2 个 Hook 和 2 个 Tool**，共 92 个组件，提供 **107 项可搜索的任务能力**。你可以只选一个解决眼前的问题，也可以让几种方法围绕同一个项目配合。
+你知道想做什么，却未必知道经营预测该核对哪些数据、预约页面要补哪些状态，或供应商报价该怎样比较。这里把这些工作拆成具体做法：先查材料和依据，再做分析、设计或制作，最后检查实际成果。
+
+当前正式版 **V1.16** 包含 **58 个专业 Agent、30 个 Skill、2 个 Hook 和 2 个 Tool**，共 92 个组件，提供 **107 项可搜索的任务能力**。你可以只选一个解决眼前的问题，也可以让几种方法围绕同一个项目配合。
 
 **[打开能力目录与请求准备页](https://kimyx0207.github.io/Kim_Service/?lang=zh-CN)** · **[下载 V1.16 源码与安装包](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.16)**
 
-Agent 现在可按 **行业或通用领域 → 角色／岗位** 选择，例如金融保险 → 保险理赔分析师、酒店与住宿 → 酒店收益分析师；[分类说明](docs/agent-classification.md)解释跨行业岗位与使用路径。[WorkBuddy](docs/workbuddy.md) 与[豆包工作](docs/doubao-work.md) 提供完整技能包导出和本机验收步骤，原生客户端运行状态单独记录。
+目录按 **11 个行业、8 个通用领域 → 角色／岗位** 浏览，也能直接搜索要完成的事。例如搜索“现金预测”“供应商比较”或“预约页面”，查看所需材料与交付物后再选择方法。Agent 在这里首先是完整的专业方法包；由当前客户端读取并执行，是否注册为原生 Agent 取决于接入方式。
+
+## 先跑通一次：目标、资料、方法、交付
+
+1. **取得源码。** 下载页首 V1.16 源码并解压，或运行下面两条命令。
+2. **让 AI 能读到文件。** 在 Codex、Claude Code、Cursor、Gemini CLI 等项目客户端打开 `Kim_Service` 目录。若任务项目在别处，告诉 AI 方法库和业务材料各自的完整路径。
+3. **挑一个任务。** 打开页首能力目录，或用浏览器打开本地 `docs/start.html`；搜索目标，核对“你提供”和“会交付”，填写材料位置，复制完整请求到 AI 客户端。网页本身只整理请求。
+4. **打开成果再判断完成。** 让 AI 给出输出文件路径、实际执行的检查和未完成项。检查发现问题后，返回对应步骤修正并保留上一版。
+
+```sh
+git clone https://github.com/KimYx0207/Kim_Service.git
+cd Kim_Service
+```
+
+也可以先跳过选任务页面，把下面这段完整请求交给已打开仓库的 AI，使用随仓库提供的合成数据体验财务预测：
+
+```text
+请读取 agents/financial-modeler/AGENT.md、agents/financial-modeler/method.json，以及其中与经营预测有关的资料。
+输入使用 agents/financial-modeler/examples/operating-forecast/sample-data.js 的合成数据。
+完成未来 12 个月经营预测，比较基础、乐观、保守情景，解释利润增长但现金不足的月份。
+实际运行可用计算，把可编辑输入、结果 JSON、月度 CSV 和说明保存到当前项目的 deliveries/forecast/。
+核对期间、币种、单位和现金勾稽，列出实际输出路径、检查结果、假设及未完成项。
+```
+
+**输入 → 输出：** 业务目标＋可读取资料＋选定方法 → 可编辑产物＋计算或操作依据＋逐项检查＋下一步。先看下面完整流程，再按自己的客户端接入；首次任务直接读取方法即可。
 
 <p align="center">
   <img src="docs/images/service-system-panorama.zh-CN.svg" alt="Kim Service 任务全景：目标与资料进入任务浏览器，按需经 Meta_Kim 组合 Agent、Skill、Hook、Tool 方法，完整请求交给当前 AI 客户端执行，真实产物通过核验后交付；紫线退回相关工作，橙线仅处理必要选择，虚线由宿主写入事项与交付记录" width="1200">
 </p>
 
-从顶部的目标与资料进入，沿深色箭头看方法如何组成请求、客户端如何执行、成果如何核验。复杂任务可接入 Meta_Kim；紫线把问题送回相关任务，橙线只在必要时请你补充或决定，灰色虚线指向宿主持有的记录。客户端、模型和工具分别配置，Service 提供方法、资料、示例和检查标准。[打开可缩放的全景图](docs/images/service-system-panorama.zh-CN.svg)。
+从顶部的目标与资料进入，沿深色箭头看方法如何组成请求、客户端如何执行、成果如何核验。复杂任务可接入 Meta_Kim；紫线把问题送回相关任务，橙线只在必要时请你补充或决定，灰色虚线指向宿主持有的记录。客户端、模型和工具分别配置，Service 提供方法、资料、示例和检查标准。
 
 ## 它怎样帮助你把事情做扎实
 
@@ -30,8 +56,8 @@ Agent 现在可按 **行业或通用领域 → 角色／岗位** 选择，例如
 
 - **Agent：把一类专业工作做完整。** 58 个角色各有自己的任务范围、输入输出、专业资料、决策步骤、正反例和质量检查。你交给财务建模的是经营资料，交给设计系统的是页面、品牌与交互要求；两者按各自的方法产出模型或页面规范。
 - **Skill：把某一步做得更稳。** 30 个可复用技能覆盖需求追踪、API 合同、数据迁移、无障碍检查、财务情景、实验分析、检索评估、教学测评，也包含团队协作、记忆、技能发现、小红书与贴纸制作等工作流。同一个项目可以按需组合几项。
-- **Hook：在提出需求时补好工作要求。** HookPrompt 补充目标、范围、输出和检查要求；新增本地回执 Hook 在配置后记录选定产物的版本。两者各司其职，保留对话里已经确定的选择。
-- **Tool：接上实际执行工具。** 多 CLI 工具包可把本机已安装的 Codex、Gemini 接入支持 MCP 的客户端，用于代码工作或复核，并提供项目级工作流入口。新增的 MCP 契约审计工具离线检查工具定义变化。实际运行范围和文件操作仍由当前客户端管理。
+- **Hook：在提出需求时补好工作要求。** HookPrompt 补充目标、范围、输出和检查要求；可选本地回执 Hook 在配置后记录选定产物的版本。两者各司其职，保留对话里已经确定的选择。
+- **Tool：接上实际执行工具。** 多 CLI 工具包可把本机已安装的 Codex、Gemini 接入支持 MCP 的客户端，用于代码工作或复核，并提供项目级工作流入口。MCP 契约审计工具离线检查工具定义变化。实际运行范围和文件操作仍由当前客户端管理。
 
 它们可以这样配合：专业 Agent 判断任务该怎么做，相关 Skill 提供某一步的做法，Hook 帮助表达需求，工具承担实际操作。你只需要加载与当前任务有关的部分。方法包中的说明、参考资料、案例和检查脚本都随源码保留，成果可以追溯到用了什么材料、做过什么检查。
 
@@ -40,6 +66,23 @@ Agent 现在可按 **行业或通用领域 → 角色／岗位** 选择，例如
 </p>
 
 **先确定要交付什么，再选择这次需要的组合。** 做一次经营预测，可以直接让 AI 读取财务建模方法；要细化压力情景，再读取相应 Skill。Hook 适合反复整理工作要求，Tool 适合接入已经具备的执行工具。安装哪个、加载多少，取决于本次任务和客户端，不需要把全部组件一次全装上。
+
+## 例子：为销售团队做一个产品资料助手
+
+客户说：“销售同事找产品资料太慢，想做一个 AI 助手。”你可以带来实际询问记录、产品文档、现有流程和权限要求，让下面的方法分工推进。
+
+先找出困难是检索、资料缺失还是流程问题，再查原始来源、比较方案。选定检索助手后，设计引用、更新和失败处理，实现一个能演示的切片，用真实问题检查，再把使用反馈送回需求。最终交付可以是一份需求与证据表、一套方案、可运行的助手、问题评测记录，以及后续维护说明。
+
+| 当前工作 | 复用的现有方法 | 交给下一步的具体产物 |
+| --- | --- | --- |
+| 了解业务、拆解问题 | `agents/user-researcher/`、`skills/feedback-to-requirements/` | 行为证据、来源与分歧、需求候选及待验证问题 |
+| 搜索、核对与研究 | `agents/source-evidence-analyst/`、`skills/evidence-pack/` | 有来源和日期的事实、冲突证据、完整资料包与缺口 |
+| 思考方案和取舍 | `agents/product-architect/` | 范围、备选与推荐依据、系统与模块设计、可演示切片 |
+| 制作和接入 | `agents/applied-ai-engineer/`、`agents/data-pipeline-engineer/`，按任务配合前后端角色 | AI 功能、数据处理和接口等实际产物，评测或运行记录 |
+| 核验、恢复和交接 | `agents/reliability-engineer/`、`agents/delivery-verifier/` | 可靠性与恢复方案、实际文件检查、未验证项和下一步 |
+| 跟进使用与新反馈 | `skills/customer-case-operations/`、`skills/feedback-to-requirements/` | 事项阶段、接收与采用记录、待处理反馈和需求候选 |
+
+Agent 从各目录的 `AGENT.md` 进入，Skill 从 `SKILL.md` 进入，再按入口读取引用资料。只选择当前任务需要的方法；每一步的产物交给下一步，最后检查助手能否回答实际问题、给出来源，并处理找不到答案的情况。
 
 <a id="capability-directory"></a>
 
@@ -59,9 +102,9 @@ Agent 现在可按 **行业或通用领域 → 角色／岗位** 选择，例如
 
 <a id="task-browser"></a>
 
-## V1.15 新增的专业行业方法
+### 具体业务需要什么输入，会得到什么
 
-这次补的是具体业务问题。每个新 Agent 都有材料口径、判断分支、完整交付模板、可接受与拒收案例，以及逐项检查依据。角色入口只保留本次工作需要的说明，详细资料按需读取。
+下面这些方法处理具体业务问题。每个 Agent 都有材料口径、判断分支、完整交付模板、可接受与拒收案例，以及逐项检查依据。角色入口只保留本次工作需要的说明，详细资料按需读取。
 
 | 在目录里搜索 | 带来什么材料 | 要交付什么 |
 | --- | --- | --- |
@@ -76,9 +119,9 @@ Agent 现在可按 **行业或通用领域 → 角色／岗位** 选择，例如
 | 游戏经济 | 货币来源与消耗、奖励、物品和玩家分层 | 货币收支、通胀风险和可验证的经济调整方案 |
 | 安全事件 | 已授权的告警、日志、时间线和资产范围 | 证据时间线、影响范围及处置与恢复方案 |
 
-在上方目录搜索中文业务词，查看“你提供”和“会交付”，复制请求到能读取仓库和材料的客户端即可。材料不全时先完成有依据的部分，保留影响结论的缺口。合同结论、信贷决定、理赔决定或生产处置由当前业务责任人负责；示例不是实际业务结论。
+在上方目录搜索中文业务词，查看“你提供”和“会交付”，复制请求到能读取仓库和材料的客户端即可。材料不全时先完成有依据的部分，把影响结论的缺口列在交付里。
 
-### 同时补进来的 Skill、MCP 与 Hook
+### 按需补充某一步的能力
 
 | 能力 | 实际用途 |
 | --- | --- |
@@ -89,77 +132,11 @@ Agent 现在可按 **行业或通用领域 → 角色／岗位** 选择，例如
 | MCP 契约审计 | 比较工具清单、输入输出定义和风险提示的变化，形成离线检查结果 |
 | 本地交付回执 Hook | 对明确选定的文件记录哈希，供交接时核对产物版本 |
 
-前四项 Skill 和 MCP 审计工具均提供可运行的合成输入与本地脚本，沿用下方统一机器接口。MCP 审计不连接远端服务器、不替代权限控制；Hook 需按包内说明接入支持的客户端，只记录指定本地文件，不自动外发或改写宿主配置。
-
-方法参考包括 Apache Fineract、Open Source Risk Engine、openIMIS、CUAD、ERPNext、OpenProject、QloApps、Nakama、DFIR-IRIS、OpenLineage、Google SRE、OCDS 与 MCP 官方资料。具体吸收点、未引入内容、版本与许可证分别保留在新包的 `PROVENANCE.md`，汇总见[行业方法吸收记录](docs/research/industry-agents-2026-11-13.md)与[技能及接口吸收记录](docs/research/skills-integrations-2026-11-13.md)。原创方法和合成案例可用于检查流程；真实专业效果仍以本次任务的实际产物和审查为准。
-
-## 统一驱动入口与项目协作能力
-
-**需要持续推进项目时，从 Meta Live 发起；Kim Service 提供可选择、可执行、可核验的能力。** Meta Live 保留事项和接续状态，当前宿主按实际绑定调用方法或本地 helper。Service 的在线或离线浏览器用于查目录、准备材料和整理请求；它不另起一个持续调度器。单独使用时也可以直接运行下面的 helper。
-
-| 任务 | 你提供 | 实际得到 | 保留的边界 |
-| --- | --- | --- | --- |
-| [大材料证据包](skills/evidence-pack/) | 公司/事项、显式材料目录、UTF-8 原文文件、版本和预算 | 原文完整保留的文件包、来源与分块哈希、分页索引、有限上下文 | 默认 stdout 不回传整本材料；PDF/OCR 提取需由已有工具另行完成 |
-| [跨客户端离线评测](skills/agent-evaluation/) | 固定案例、各客户端已有输出、关键断言、实际成本/延迟记录 | 逐题对比、缺失分母、关键回归、分层结果和预算检查 | 不调用模型；没有记录的费用保持未知，语义质量另核 |
-| [反馈转需求](skills/feedback-to-requirements/) | 同一项目的反馈、明确重复关系、分组和来源 | 独立客户计数、矛盾材料、可追踪的需求候选与版本绑定采纳 | 不擅自推断语义重复；候选未采用前保持 proposed |
-| [客户事项推进](skills/customer-case-operations/) | 可配置阶段、成员角色、材料、事件与决定回执 | 状态投影、缺项、下一步建议、独立的验证/收到/采纳记录 | 不发通知，不代替组织身份鉴权，不运行后台定时任务 |
-| [分阶段图解](skills/visual-explainer/) | 来自真实说明的阶段、节点、连线、分支与返回路径 | SVG、可逐步播放的 HTML、文字替代说明 | 本版为有界分层布局；动画只是说明，不是执行回执 |
-
-这五项都有可运行脚本、输入输出 schema、独立容量配置、合成示例与失败反例。它们复用现有证据分析、检索评价和交付核验职责；新增的是具体计算与材料处理能力。方法吸收参考 [Docling](https://github.com/docling-project/docling-core)、[Promptfoo](https://github.com/promptfoo/promptfoo)、[Fider](https://github.com/getfider/fider)、[Chatwoot](https://github.com/chatwoot/chatwoot)、[Slidev](https://github.com/slidevjs/slidev)，逐包记录采用范围与许可证。Fider 仅参考方法，未复制 AGPL 源码；Chatwoot 企业功能未引入。
-
-**分阶段图解的实际输出。** 下面由正式 helper 生成的合成示例，展示同一事项如何从资料进入模块设计，再到核验与采纳；紫色回路说明局部修订。顶部和底部节点居中，三个阶段既能合起来看，也能逐步展开说明。
-
-<p align="center">
-  <img src="docs/images/visual-helper.zh-CN.svg" alt="合成示例的三阶段四节点流程：同一 Work 与资料进入目标阶段，模块 PRD 接着细化为模块详细设计，再核验交付回执与采纳；紫色局部修订回路从回执返回详细设计，顶部和底部节点居中；这张说明图不代表任务已经实际执行" width="1200">
-</p>
-
-[下载中文交互 HTML](docs/examples/visual-helper/zh-CN/storyboard.html?raw=1) · [文字替代说明](docs/examples/visual-helper/zh-CN/alternative.txt) · [对应输入 JSON](docs/examples/visual-helper/zh-CN/input.json)
-
-把 HTML 下载后用本地浏览器打开，即可上一阶段、下一阶段、播放或显示全图。若打开的是 GitHub 文件页，点击 **Download raw file** 保存文件；源文件页本身不播放交互。HTML 已内嵌 SVG、样式和脚本，无外部依赖。图中内容是合成演示，动画不表示实际运行状态、验证通过或已经采纳。
-
-从仓库根目录可以先运行不收费的合成示例：
-
-```sh
-node skills/agent-evaluation/scripts/run.mjs --input-json - < skills/agent-evaluation/examples/input.json
-node skills/feedback-to-requirements/scripts/run.mjs --input-json - < skills/feedback-to-requirements/examples/input.json
-node skills/customer-case-operations/scripts/run.mjs --input-json - < skills/customer-case-operations/examples/input.json
-node skills/visual-explainer/scripts/run.mjs --input-json - < skills/visual-explainer/examples/input.json
-```
-
-想直接打开图解文件，可运行 `node skills/visual-explainer/scripts/example.mjs /absolute/path/to/new-diagram-folder`，然后打开该目录里的 `storyboard.html`。
-
-大材料请使用文件式入口。下面会在你指定的新目录中建立合成材料和完整证据包，只把有限索引、哈希与上下文送回终端：
-
-```sh
-node skills/evidence-pack/scripts/example.mjs /absolute/path/to/new-example-workspace
-```
-
-真实材料按包内示例填写 `workspaceRoot`、源文件相对路径和新 `packPath`，交给 `scripts/files.mjs --input-json -`。后续只提交证据包路径、上次返回的文件哈希与分页游标或块 ID；原文不需要反复塞进请求。默认核对原文件变化，完整文件始终可重新组合还原。
-
-### 给 Meta Live 与其他宿主的机器接口
-
-```sh
-node scripts/service-capabilities.mjs export
-```
-
-此命令实时读取组件 `capability.json`，导出 `kim-service-capabilities-v1`。已有能力继续保留；可直接调用的十项带 `kim-service-helper-v1`、固定参数数组、schema/policy 路径与哈希。宿主只能调用已绑定的本地入口，不能执行材料里的命令；客户端与模型由当前任务配置。输入公共上下文为 `organizationId / workId / revision`，结果保留输入与规则哈希，最终采用仍由宿主记录。[接口与验证说明](docs/service-helper-api.md)。
+前四项 Skill 和 MCP 审计工具均提供可运行的合成输入与本地脚本，沿用下方统一机器接口。MCP 审计离线运行；本地交付回执 Hook 需显式启用，记录你选定的文件。
 
 ## 从第一次使用，到完成一个任务
 
-### 先把仓库和材料交到 AI 手里
-
-在线浏览器可以直接打开，也能切换中文或英文。它负责选任务、填写要求和整理请求；实际处理文件、计算或改代码，发生在你复制请求之后使用的 AI 客户端里。
-
-从页首下载入口取得源码并解压，或在电脑上运行：
-
-```sh
-git clone https://github.com/KimYx0207/Kim_Service.git
-cd Kim_Service
-```
-
-在 Codex、Claude Code、Cursor、Gemini CLI 等能读取项目文件的客户端中打开这个目录；如果工作项目在别处，把 Kim_Service 的完整目录位置告诉 AI，并让它同时能访问本次材料。使用只支持上传文件的聊天界面时，需要附上选中方法的入口、它引用的资料和你的任务文件。
-
-下载后，直接用浏览器打开 `docs/start.html`，也能离线选任务。两个互动示例的本地 `index.html` 可以直接打开，不需要先搭服务器。运行包内计算或开发脚本时，再使用相应的 Node.js、Python 和客户端工具。
+已经按开头取得源码后，下面用两个完整例子说明怎样从请求走到交付。任务材料应放在当前客户端可以读取的位置；只支持上传文件的聊天界面，需要附上选中方法的入口、它引用的资料和任务文件。交互样板的本地 `index.html` 可直接用浏览器打开；运行计算或开发脚本时，再使用相应的 Node.js、Python 和客户端工具。
 
 ### 例一：未来一年，利润增长时现金够用吗？
 
@@ -259,7 +236,7 @@ Service 为这条链提供可读取的专业方法、材料说明和检查标准
 
 也可以在启动 AI 客户端的同一终端设置 `META_KIM_KIM_SERVICE_ROOT`：macOS/Linux 使用 `export META_KIM_KIM_SERVICE_ROOT="/absolute/path/Kim_Service"`，PowerShell 使用 `$env:META_KIM_KIM_SERVICE_ROOT="C:/work/Kim_Service"`。环境变量优先于项目配置；路径失效时先修正该路径，系统不会悄悄换成另一份副本。
 
-接着，在已接入 Meta_Kim 的项目里打开客户端，在任务浏览器选择 **Meta_Kim**，复制带 `/meta-theory` 的请求，并说明业务材料的位置。让它先确认发现的 Service 路径和本次选中的方法，再开始任务。随后从整体结果检查各项工作是否接上：设计是否符合需求、实现是否遵守设计、测试是否覆盖用户流程。仅安装方法包不会增加客户端原本没有的浏览器、文件或外部系统权限。
+接着，在已接入 Meta_Kim 的项目里打开客户端，在任务浏览器选择 **Meta_Kim**，复制带 `/meta-theory` 的请求，并说明业务材料的位置。让它先确认发现的 Service 路径和本次选中的方法，再开始任务。随后从整体结果检查各项工作是否接上：设计是否符合需求、实现是否遵守设计、测试是否覆盖用户流程。
 
 需要这个整体工作方式时，可以使用 [Meta_Kim](https://github.com/KimYx0207/Meta_Kim#readme)；继续只做一个任务，也能使用这里完整的方法和示例。
 
@@ -269,7 +246,7 @@ Service 为这条链提供可读取的专业方法、材料说明和检查标准
   <img src="docs/images/service-work-handoff.zh-CN.svg" alt="公司事项交接图：宿主保留同一 Work 的目标、权限、来源、有效决定和采用版本；本轮工作形成产物并独立核验，仅未决关键选择需要人参与；产出、验证、采用、效果各自留证，接手者回到同一事项，真实反馈经复核形成待审方法候选" width="1200">
 </p>
 
-先看顶部由宿主持有的 Work，再顺着本轮执行、核验、采用记录和交接包回到同一事项。底部四项是独立事实：产出 v2、验证通过、继续采用 v1 可以同时成立；采用未定就保留待定，没有真实使用观察就保留未知。只有必要的未决关键选择进入橙色分支，已有授权和有效决定继续沿用。反馈经过复核和适用性判断后才用于后续任务。[打开可缩放的交接图](docs/images/service-work-handoff.zh-CN.svg)。
+先看顶部由宿主持有的 Work，再顺着本轮执行、核验、采用记录和交接包回到同一事项。底部四项是独立事实：产出 v2、验证通过、继续采用 v1 可以同时成立；采用未定就保留待定，没有真实使用观察就保留未知。只有必要的未决关键选择进入橙色分支，已有授权和有效决定继续沿用。反馈经过复核和适用性判断后才用于后续任务。
 
 公司现在只有一个人，也需要保留下一位同事能接住的工作现场。宿主把目标、来源、当前采用版和决定挂在同一个 **Work（业务事项）** 上；会话和执行可以有很多次，Service 沿用这个引用提供专业方法。公司资产、个人偏好和敏感决策的可见范围由宿主已有授权决定。
 
@@ -277,12 +254,12 @@ Service 为这条链提供可读取的专业方法、材料说明和检查标准
   <img src="docs/images/animated-service-work-context.zh-CN.svg" alt="公司事项、交付回执、采用与经验的动态说明" width="900">
 </p>
 
-| 已有方法 | 本次补齐的具体工作 |
+| 已有方法 | 怎样帮助接续 |
 | --- | --- |
-| [agent-teams-playbook](skills/agent-teams-playbook/) | 用可选 WorkContext 关联同一事项的分工、来源和版本，交接含范围、采用稿、下一步与接手回执 |
-| [sop-runbook](skills/sop-runbook/) | 把产出、核验、采用、效果分别写进现有规程与交付；人工选择有确切版本、理由或 unknown |
-| [memory-3layer](skills/memory-3layer/) | 保留成功、失败、拒用、适用/不适用、过期条件及实际复用反馈；先作为公司内部候选复查 |
-| [delivery-verifier](agents/delivery-verifier/) | 可选 work_handoff 实读文件、核版本/hash、事项/context/run、采用观察与接手一致性 |
+| `skills/agent-teams-playbook/` | 用可选 WorkContext 关联同一事项的分工、来源和版本，交接含范围、采用稿、下一步与接手回执 |
+| `skills/sop-runbook/` | 把产出、核验、采用、效果分别写进现有规程与交付；人工选择有确切版本、理由或 unknown |
+| `skills/memory-3layer/` | 保留成功、失败、拒用、适用/不适用、过期条件及实际复用反馈；先作为公司内部候选复查 |
+| `agents/delivery-verifier/` | 可选 work_handoff 实读文件、核版本/hash、事项/context/run、采用观察与接手一致性 |
 
 例如，课程资料本次生成了 v2，技术检查通过，但负责人仍沿用以前已采用的 v1。交接时两版分别标清；原有效决定继续引用，不请人再批一遍。收到通知不等于接手，接手不等于办完；没有业务效果证据就保留 unknown。拒用新稿的原因也可成为经验候选。
 
@@ -292,13 +269,15 @@ Service 为这条链提供可读取的专业方法、材料说明和检查标准
 node agents/delivery-verifier/scripts/demo-work-handoff.mjs
 ```
 
-演示包含上述正例、失败/拒用/未知例、旧上下文回执和采用版本偷换两个反例。它实际创建临时文件并调用只读核验器，证明列明的本地一致性行为；真实人员、采用来源、线上宿主和业务效果仍未验证。完整字段与边界见 [delivery API](agents/delivery-verifier/docs/delivery-api.md)。
+演示会创建临时文件并调用只读核验器，检查正常交接、失败或拒用记录，以及旧上下文和采用版本不一致的情况。完整字段见 [delivery API](agents/delivery-verifier/docs/delivery-api.md)。
 
-已有独立任务没有 WorkContext 时继续原有用法。Service 不新增业务数据库、调度、组织权限或审批；公司私有经验先留内部，通用方法经过脱敏、泛化与针对性验证后再按已有授权准备公共版本。自动检索适用条件、定时整理及对外消息都由宿主已有能力执行。
+已有独立任务继续原有用法；需要跨会话交接时再带上 WorkContext。公司内部经验经过复查后用于后续任务，事项记录、定时整理和消息由实际业务宿主管理。
 
 ## 按你使用的客户端接入
 
 **专业方法不指定你必须使用哪家模型。** 客户端、模型、可用工具分别由当前任务和宿主配置决定。Claude Code、Codex、Gemini CLI、ZCode、MiniMax Code 或其他能读取方法资料的客户端，可以按自身能力使用同一份方法。任务浏览器的客户端列表统一来自 `config/task-browser.json`；选择“我正在用的 Agent”可直接沿用现有环境。
+
+**接入条件：** 客户端需要能读取完整方法和业务材料，并具备本次工作需要的工具与授权。导入方法后，请在该客户端实际跑一次样例、打开成果，再确认执行和接续是否正常。
 
 | 项目 | 配置与行为 |
 | --- | --- |
@@ -308,7 +287,7 @@ node agents/delivery-verifier/scripts/demo-work-handoff.mjs
 | 其他客户端的 Skills 目录 | `--target custom --skills-dir /absolute/host/skills` 只安装通用方法包；目录由宿主提供，原生加载需在该客户端核实 |
 | Memory 的客户端与模型来源 | `MEMORY_HOST` 或载荷中的 `runtime / host / client` 标识宿主；模型单独记录，缺少宿主声明时保留 `manual` |
 
-例如，客户端声明为 Claude Code、模型标签为 MiniMax 时，会分别保留两者；只有一个模型名时不会反推客户端。载荷自报模型仍标为未验证，不作为真实模型调用证据。账户连接、模型权限和工具 schema 由宿主提供；可选多 CLI 工具只通过已实现的适配器传参，未填写模型时沿用对应 CLI 配置。
+例如，Claude Code 客户端使用 MiniMax 模型时，分别保留客户端和模型信息。账户、模型与工具由宿主配置；可选多 CLI 工具未填写模型时，沿用对应 CLI 的设置。
 
 ### 普通项目客户端
 
@@ -378,6 +357,85 @@ zcode plugins list --json
 
 更新时，保留个人修改，再用新发布的整包更新原市场目录；在来源管理里刷新该市场，再到已安装插件中检查更新，核对实际版本。停用或卸载也在插件管理里操作。本地插件的安装位置和实际加载状态可在这些界面直接核对。
 
+### WorkBuddy 与豆包工作：导出一个完整 Skill（beta）
+
+这两个客户端当前提供**选定一个 Agent 或 Skill，导出完整技能 ZIP，再在客户端导入**的 beta 接入。包内保留原方法、知识、案例、脚本和许可；Agent 作为 Skill 里的专业方法使用。
+
+**准备文件。** 先安装 Node.js **22.13.0 或更高版本**，运行 `node --version` 核对。取得页首 Service V1.16 源码，以及配套的 [Meta_Kim v3.13.0 源码](https://github.com/KimYx0207/Meta_Kim/releases/tag/v3.13.0)，完整解压。在终端进入 Kim_Service 根目录，把下面的 Meta 路径改成实际绝对路径。输出目录必须是尚不存在的新目录，其父目录须已存在；例子导出财务建模：
+
+```sh
+node scripts/build-desktop-skill-package.mjs --meta-root "/absolute/path/Meta_Kim" --host workbuddy --component financial-modeler --output "/absolute/path/new-workbuddy-finance"
+node scripts/build-desktop-skill-package.mjs --meta-root "/absolute/path/Meta_Kim" --host workbuddy --component financial-modeler --output "/absolute/path/new-workbuddy-finance" --check
+```
+
+豆包工作把两条命令中的 `--host workbuddy` 改为 `--host doubao`，并选新的输出目录。Windows PowerShell 可用以下完整写法，只需修改 Meta 源码目录和客户端选择：
+
+```powershell
+$KimMeta = (Resolve-Path 'C:/work/Meta_Kim-3.13.0').Path
+$KimClient = 'workbuddy' # 豆包工作改为 'doubao'
+$KimOutput = Join-Path ([IO.Path]::GetTempPath()) ('kim-finance-' + [guid]::NewGuid().ToString('N'))
+node scripts/build-desktop-skill-package.mjs --meta-root $KimMeta --host $KimClient --component financial-modeler --output $KimOutput
+if ($LASTEXITCODE -ne 0) { throw '导出失败' }
+node scripts/build-desktop-skill-package.mjs --meta-root $KimMeta --host $KimClient --component financial-modeler --output $KimOutput --check
+if ($LASTEXITCODE -ne 0) { throw '输出文件核验失败' }
+Write-Host (Join-Path $KimOutput 'kim-financial-modeler.zip')
+```
+
+**导入并实际验收。** 在 WorkBuddy 打开“专家·技能·连接器 → 技能 → 添加技能 → 上传技能”，上传输出目录中的 `kim-financial-modeler.zip`。在豆包工作使用本地技能导入入口选择同一 ZIP。核对名称、版本和启用状态，开新任务要求它读取完整方法，用包内合成样例实际计算，再打开输出文件检查；退出客户端后重新进入，确认能接着处理未完成项。界面名称以本机版本为准。
+
+`--check` 核对导出内容、ZIP 和来源哈希；客户端的执行与恢复按上面的步骤另行检查。更新时另存个人修改，导出到新目录，在客户端管理同名技能更新并重复核对。
+
+## 处理大材料、反馈和交接的本地工具
+
+**需要持续推进项目时，从 Meta Live 发起；Kim Service 提供可选择、可执行、可核验的能力。** Meta Live 保留事项和接续状态，当前宿主按实际绑定调用方法或本地 helper。Service 的在线或离线浏览器用于查目录、准备材料和整理请求；它不另起一个持续调度器。单独使用时也可以直接运行下面的 helper。
+
+| 任务 | 你提供 | 实际得到 | 保留的边界 |
+| --- | --- | --- | --- |
+| 大材料证据包（`skills/evidence-pack/`） | 公司/事项、显式材料目录、UTF-8 原文文件、版本和预算 | 原文完整保留的文件包、来源与分块哈希、分页索引、有限上下文 | 默认 stdout 不回传整本材料；PDF/OCR 提取需由已有工具另行完成 |
+| 跨客户端离线评测（`skills/agent-evaluation/`） | 固定案例、各客户端已有输出、关键断言、实际成本/延迟记录 | 逐题对比、缺失分母、关键回归、分层结果和预算检查 | 不调用模型；没有记录的费用保持未知，语义质量另核 |
+| 反馈转需求（`skills/feedback-to-requirements/`） | 同一项目的反馈、明确重复关系、分组和来源 | 独立客户计数、矛盾材料、可追踪的需求候选与版本绑定采纳 | 不擅自推断语义重复；候选未采用前保持 proposed |
+| 客户事项推进（`skills/customer-case-operations/`） | 可配置阶段、成员角色、材料、事件与决定回执 | 状态投影、缺项、下一步建议、独立的验证/收到/采纳记录 | 不发通知，不代替组织身份鉴权，不运行后台定时任务 |
+| 分阶段图解（`skills/visual-explainer/`） | 来自真实说明的阶段、节点、连线、分支与返回路径 | SVG、可逐步播放的 HTML、文字替代说明 | 采用有界分层布局；动画只是说明，不是执行回执 |
+
+这五项都有可运行脚本、输入输出 schema、独立容量配置、合成示例与失败反例。它们复用现有证据分析、检索评价和交付核验职责；具体计算与材料处理由各自的 helper 承担。
+
+**分阶段图解的实际输出。** 下面由正式 helper 生成的合成示例，展示同一事项如何从资料进入模块设计，再到核验与采纳；紫色回路说明局部修订。顶部和底部节点居中，三个阶段既能合起来看，也能逐步展开说明。
+
+<p align="center">
+  <img src="docs/images/visual-helper.zh-CN.svg" alt="合成示例的三阶段四节点流程：同一 Work 与资料进入目标阶段，模块 PRD 接着细化为模块详细设计，再核验交付回执与采纳；紫色局部修订回路从回执返回详细设计，顶部和底部节点居中；这张说明图不代表任务已经实际执行" width="1200">
+</p>
+
+[下载中文交互 HTML](docs/examples/visual-helper/zh-CN/storyboard.html?raw=1) · [文字替代说明](docs/examples/visual-helper/zh-CN/alternative.txt) · [对应输入 JSON](docs/examples/visual-helper/zh-CN/input.json)
+
+把 HTML 下载后用本地浏览器打开，即可上一阶段、下一阶段、播放或显示全图。若打开的是 GitHub 文件页，点击 **Download raw file** 保存文件；源文件页本身不播放交互。HTML 已内嵌 SVG、样式和脚本，无外部依赖。
+
+从仓库根目录可以先运行不收费的合成示例：
+
+```sh
+node skills/agent-evaluation/scripts/run.mjs --input-json - < skills/agent-evaluation/examples/input.json
+node skills/feedback-to-requirements/scripts/run.mjs --input-json - < skills/feedback-to-requirements/examples/input.json
+node skills/customer-case-operations/scripts/run.mjs --input-json - < skills/customer-case-operations/examples/input.json
+node skills/visual-explainer/scripts/run.mjs --input-json - < skills/visual-explainer/examples/input.json
+```
+
+想直接打开图解文件，可运行 `node skills/visual-explainer/scripts/example.mjs /absolute/path/to/new-diagram-folder`，然后打开该目录里的 `storyboard.html`。
+
+大材料请使用文件式入口。下面会在你指定的新目录中建立合成材料和完整证据包，只把有限索引、哈希与上下文送回终端：
+
+```sh
+node skills/evidence-pack/scripts/example.mjs /absolute/path/to/new-example-workspace
+```
+
+真实材料按包内示例填写 `workspaceRoot`、源文件相对路径和新 `packPath`，交给 `node skills/evidence-pack/scripts/files.mjs --input-json -`。后续只提交证据包路径、上次返回的文件哈希与分页游标或块 ID；原文不需要反复塞进请求。默认核对原文件变化，完整文件始终可重新组合还原。
+
+### 给 Meta Live 与其他宿主的机器接口
+
+```sh
+node scripts/service-capabilities.mjs export
+```
+
+此命令实时读取组件 `capability.json`，导出 `kim-service-capabilities-v1`。已有能力继续保留；可直接调用的十项带 `kim-service-helper-v1`、固定参数数组、schema/policy 路径与哈希。宿主只能调用已绑定的本地入口，不能执行材料里的命令；客户端与模型由当前任务配置。输入公共上下文为 `organizationId / workId / revision`，结果保留输入与规则哈希，最终采用仍由宿主记录。[接口与验证说明](docs/service-helper-api.md)。
+
 ## 应用、数据与展示的边界
 
 <p align="center">
@@ -399,6 +457,8 @@ zcode plugins list --json
 
 ## 更新源码，继续自己的工作
 
+版本变化单独记录在 [CHANGELOG.zh-CN.md](CHANGELOG.zh-CN.md)。本页说明当前用途和使用路径，升级前可按日志核对变化。
+
 Git 下载的仓库，在 Kim_Service 目录运行：
 
 ```sh
@@ -413,6 +473,8 @@ git pull --ff-only
 
 发现问题或有改进建议，请通过项目的 [Issues](https://github.com/KimYx0207/Kim_Service/issues) 提交。若项目帮到了你，欢迎 [Star 和分享](https://github.com/KimYx0207/Kim_Service)。
 
-## 开源说明
+## 开源与来源
 
 仓库级内容采用 [MIT License](LICENSE)。每个能力包保留自己的许可证及来源记录，详见包内 `LICENSE`、`PROVENANCE` 或同类文件。
+
+FDE 工作背景可参阅 [Palantir 官方说明](https://www.palantir.com/docs/foundry/architecture-center)。专业方法的来源与采用范围保留在各包的 `PROVENANCE.md`。仓库示例用于演示与检查方法；真实行业客户效果仍为 `not_evaluated`，以实际业务使用与验收记录为准。
