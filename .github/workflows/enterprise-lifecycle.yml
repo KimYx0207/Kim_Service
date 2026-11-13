@@ -1,0 +1,75 @@
+name: Enterprise lifecycle browser evidence
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/enterprise-lifecycle.yml'
+      - 'tests/browser/enterprise_lifecycle.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: enterprise-lifecycle-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  controlled-lifecycle:
+    name: Full public corpus, isolated lifecycle, actual Chromium
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      PYTHONUTF8: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+      TOKENIZERS_PARALLELISM: 'false'
+      OPENBLAS_NUM_THREADS: '1'
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '24'
+      - name: Install pinned runtime and actual Chromium
+        run: |
+          python -m pip install -r examples/enterprise-knowledge/requirements.txt playwright==1.62.0
+          python -m playwright install --with-deps chromium
+          sudo apt-get install -y fonts-noto-cjk
+          mkdir -p artifacts/enterprise-lifecycle
+          python -m pip freeze > artifacts/enterprise-lifecycle/installed-packages.txt
+      - name: Import the same complete fixed public corpus
+        run: |
+          python examples/enterprise-knowledge/scripts/ingest.py 2>&1 | tee artifacts/enterprise-lifecycle/ingest.log
+          cp examples/enterprise-knowledge/evidence/ingest-manifest.json artifacts/enterprise-lifecycle/
+      - name: Submit real UI events and verify HTTP visibility
+        run: python tests/browser/enterprise_lifecycle.py --output artifacts/enterprise-lifecycle
+      - name: Require all actual screenshots and bound state hashes
+        run: |
+          python - <<'PY'
+          import hashlib,json,pathlib
+          root=pathlib.Path('artifacts/enterprise-lifecycle')
+          manifest=json.loads((root/'manifest.json').read_text())
+          assert manifest['status']=='passed' and not manifest['page_errors']
+          assert len(manifest['captures'])==16
+          assert len({x['step'] for x in manifest['captures']})==16
+          for x in manifest['captures']:
+              assert x['render_kind']=='actual_chromium_screenshot'
+              for file_key,hash_key in [('file','sha256'),('state_file','state_sha256')]:
+                  assert hashlib.sha256((root/x[file_key]).read_bytes()).hexdigest()==x[hash_key]
+          PY
+      - name: Upload lifecycle-only public evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: enterprise-lifecycle-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: artifacts/enterprise-lifecycle/
+          if-no-files-found: error
+          retention-days: 14
