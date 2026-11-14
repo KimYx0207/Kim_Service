@@ -18,9 +18,11 @@ Browse **11 industries and 8 shared professional domains → role/job**, or sear
 
 ## Run one task: goal, materials, method, delivery
 
+If Service is already connected through Meta_Kim or your current client, describe your goal, material locations, and constraints directly in the conversation for your actual work project. The source setup below is for a first standalone connection.
+
 1. **Get the source.** Download and extract the V1.16 source from the release above, or run the two commands below.
 2. **Make the files accessible to your AI.** Open `Kim_Service` in a project client such as Codex, Claude Code, Cursor, or Gemini CLI. If your work lives elsewhere, provide the full paths to both the method library and the task materials.
-3. **Choose a task.** Open the catalog above or local `docs/start.html` in a browser. Search for the goal, check “You provide” and “You receive,” identify your materials, and copy the complete request into the AI client. The web page prepares the request.
+3. **Describe the task directly.** In your AI client, say what you want to achieve, where the materials are, and what requirements apply. Ask it to find and read the appropriate complete method. To browse capabilities or prepare a request first, optionally open the catalog above or `docs/start.html` from the source checkout. The web page only prepares the request.
 4. **Open the delivery before calling it done.** Ask for file paths, checks actually performed, and unfinished items. Repair the affected step when a check fails, keeping the previous version.
 
 ```sh
@@ -258,7 +260,7 @@ Set shared dependencies first, then run independent work in parallel. If a new b
 
 Service supplies readable professional methods, input guidance, and check criteria. Meta manages task order, method selection, and handoffs. The client performs actual tool calls and concurrent work. After a search match, the workflow still checks whether the method fits the scope, the inputs are accessible, and the needed tools are available before starting the relevant operations.
 
-**First, tell Meta_Kim which Service source to use.** If Meta_Kim's installer has registered a managed Service source, it can use that installation. When you download the two repositories yourself, bind them explicitly; placing them beside each other does not connect them automatically. In the root of the project you actually work on, create or edit `.meta-kim/local.overrides.json`, keep existing fields, and add:
+**Use an existing managed source; bind a manual copy only when needed.** Meta_Kim automatically discovers a managed Service method source registered by its installer, so each project does not need a repeated path setting. If no source is connected, or you want to use a separately downloaded copy, bind it explicitly; placing the two folders beside each other does not connect them. For a manual binding, create or edit `.meta-kim/local.overrides.json` in the root of your actual work project, keep existing fields, and add:
 
 ```json
 {
@@ -272,7 +274,7 @@ Replace the value with your full Kim_Service path; `C:/work/Kim_Service` works a
 
 Alternatively, set `META_KIM_KIM_SERVICE_ROOT` in the same terminal that launches your AI client: use `export META_KIM_KIM_SERVICE_ROOT="/absolute/path/Kim_Service"` on macOS/Linux, or `$env:META_KIM_KIM_SERVICE_ROOT="C:/work/Kim_Service"` in PowerShell. The environment variable takes precedence over project settings. Fix an invalid path directly; the resolver will not silently switch to another copy.
 
-Then open the client in the project already configured for Meta_Kim, select **Meta_Kim** in the task browser, copy the request prefixed with `/meta-theory`, and identify the task materials. Ask it to confirm the discovered Service path and selected method before starting. Check how the parts connect: does the design meet the requirements, does the implementation follow the design, and do the tests cover the user journey?
+After connecting the source, reopen your AI client in the actual work project and describe your goal and material locations in natural language. On first use, ask it to confirm that it can discover the Service source and read the relevant methods. Meta selects and coordinates methods for the task; the current host reads and executes them. `/meta-theory` is an optional explicit entry, and the task browser is optional for browsing or preparing requests. Check how the parts connect: does the design meet the requirements, does the implementation follow the design, and do the tests cover the user journey?
 
 Use [Meta_Kim](https://github.com/KimYx0207/Meta_Kim#readme) when you need that overall workflow. The complete methods and examples here also support a single independent task.
 
@@ -427,7 +429,7 @@ Write-Host (Join-Path $KimOutput 'kim-financial-modeler.zip')
 
 ## Local helpers for large materials, feedback, and handoffs
 
-**Start continuing project work in Meta Live; Kim Service supplies the capabilities.** Meta Live owns Work records and continuation. The current host invokes methods or locally bound helpers. Service's standalone online/offline browser is a catalog and request preparation tool. It does not start a separate scheduler. The helpers can also be used directly.
+**Continue project work directly in the AI client configured for Meta_Kim; Kim Service supplies professional methods and tools.** Open Meta Live when you need to inspect, review, or continue registered Work. The current host invokes methods or locally bound helpers. Service's online/offline browser is an optional aid for browsing the catalog, preparing materials, and drafting requests. It does not start a separate scheduler. The helpers can also be used directly.
 
 | Capability | Inputs | Actual outputs | Boundary |
 | --- | --- | --- | --- |
