@@ -7,7 +7,7 @@ from pathlib import Path
 
 from .storage import ROOT, AppError, canonical, digest, ensure, file_digest, model_fingerprint
 
-IDENTITY_SCHEMA = 2
+IDENTITY_SCHEMA = 3
 ENCODER_SOURCE = ROOT / 'app/embedding.py'
 SCORER_SOURCE = ROOT / 'scripts/evaluate.py'
 
@@ -24,7 +24,24 @@ def runtime_identity(threads=3):
     }
 
 
-def encoder_execution(metadata, threads=3):
+def coverage_configuration(metadata, strategy='sliding', overlap=32, kind='embedding'):
+    ensure(strategy in ('head', 'sliding'), 'invalid_coverage', '文本覆盖策略不正确')
+    ensure(type(overlap) is int and overlap >= 0, 'invalid_overlap', '窗口重叠须为非负整数')
+    capacity = metadata['max_length'] - (2 if kind == 'embedding' else 3)
+    ensure(capacity >= (1 if kind == 'embedding' else 2), 'invalid_model_length', '模型窗口长度不足')
+    return {'strategy': strategy, 'window_tokens': capacity,
+            'overlap_tokens': min(overlap, capacity - 1) if strategy == 'sliding' else 0,
+            'tokenization': 'verified BERT tokenizer IDs; no decode/re-tokenize',
+            'aggregation': ('new-token-count weighted mean of L2 window vectors, then L2'
+                            if kind == 'embedding' and strategy == 'sliding' else
+                            'maximum logit across all query/document window pairs'
+                            if kind == 'reranker' and strategy == 'sliding' else
+                            'single head window; discarded tokens explicitly counted'),
+            'query_windows': 'at most half of pair token budget; full Cartesian window coverage'
+                             if kind == 'reranker' and strategy == 'sliding' else None}
+
+
+def encoder_execution(metadata, threads=3, coverage_strategy='sliding', window_overlap=32):
     return {
         'identity_schema': IDENTITY_SCHEMA,
         'artifact_fingerprint': model_fingerprint(metadata),
@@ -34,7 +51,8 @@ def encoder_execution(metadata, threads=3):
         'document_input': '(title + "\\n" + text).strip()',
         'query_input': 'raw query string',
         'tokenizer': {'max_length': metadata['max_length'], 'padding_id': 0,
-                      'pad_symbol': '[PAD]', 'truncation': 'tokenizers default longest_first'},
+                      'pad_symbol': '[PAD]', 'special_tokens': 'BERT CLS/A/SEP; IDs from tokenizer'},
+        'coverage': coverage_configuration(metadata, coverage_strategy, window_overlap),
         'pooling': 'attention_mask weighted mean; denominator >= 1',
         'normalization': 'L2; denominator >= 1e-12; float32; finite required',
         'dimension': metadata['output_dimension'],
@@ -66,7 +84,8 @@ def validate_execution(manifest, metadata, execution=None):
     saved = manifest.get('encoder_execution', {})
     try:
         current = execution or encoder_execution(
-            metadata, saved['runtime']['session']['intra_op_num_threads'])
+            metadata, saved['runtime']['session']['intra_op_num_threads'],
+            saved['coverage']['strategy'], saved['coverage']['overlap_tokens'])
     except (KeyError, TypeError, OSError) as exc:
         raise AppError('execution_mismatch', '执行身份缺失或实现文件不可读取', 409) from exc
     ensure(manifest.get('execution_fingerprint') == fingerprint(saved) == fingerprint(current),
@@ -116,13 +135,12 @@ def evaluation_execution(retriever, modes, generation=None):
     if any(mode != 'bm25' for mode in modes):
         g = retriever.storage.validate_generation(generation)
         threads = g['manifest']['encoder_execution']['runtime']['session']['intra_op_num_threads']
-        retriever.models('rerank' in modes, threads)
-        validate_execution(g['manifest'], retriever.embedding.metadata,
-                           retriever.embedding.execution_identity)
+        encoder, reranker = retriever.models('rerank' in modes, threads, g['manifest']['encoder_execution']['coverage'])
+        validate_execution(g['manifest'], encoder.metadata, encoder.execution_identity)
         identity['generation_manifest_sha256'] = fingerprint(g['manifest'])
-        identity['models']['embedding'] = retriever.embedding.execution_identity
+        identity['models']['embedding'] = encoder.execution_identity
     if 'rerank' in modes:
-        identity['models']['reranker'] = retriever.reranker.execution_identity
+        identity['models']['reranker'] = reranker.execution_identity
     return identity
 
 

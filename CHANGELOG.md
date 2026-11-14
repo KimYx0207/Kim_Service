@@ -4,6 +4,31 @@
 
 Kim Service collection releases use `V<major>.<minor>`. Each component keeps its own version and source history. Detailed past checks are in the [testing record](docs/verification-history.md).
 
+## V1.17 - 2026-11-15
+
+### Affected components
+
+Technology Option Evaluation 0.1.0 and Knowledge Architecture Evaluation 0.1.0 join the collection. Product architecture, applied AI, retrieval evaluation, value decisions and four UX roles gain project-specific professional inputs and checks. The collection contains 94 components and 109 capabilities, paired with Meta_Kim 3.14.0.
+
+### User-visible changes
+
+- Research technical choices using versioned primary sources, materially different options, compatibility evidence, project constraints and a validation plan. Knowledge work compares retrieval, long context and caching, wikis and graphs by workload, evidence, updates, permission revocation and cost.
+- Carry each project's professional requirements into its own capabilities. Shared methods provide foundations; project-owned Agents, Skills and rules preserve the domain, brand, tools and acceptance cases needed for continued work.
+- Evaluate value according to project type and phase. Commercial products, internal efficiency and open-source work can have different outcomes and evidence needs.
+- Apply UX rules from common foundations through domain, brand and task. Check critical states, progressive disclosure, exact comparisons, input recovery and source revisions against actual deliverable evidence.
+- Preserve first-design preparation and product handoff checks. Repair the enterprise-knowledge example's retrieval cutoff, duplicate visibility, identity propagation and evaluation evidence paths, with targeted regression cases.
+- Update both READMEs and localized diagrams. Begin in the installed agent conversation; open Live and the catalog when useful.
+
+### Migration and verification
+
+Use the complete V1.17 source or package. New UX project-context inputs remain optional for existing standalone calls; Meta_Kim uses them for project-specific work. The ZCode package pairs Meta_Kim 3.14.0 with Kim 1.17.0, using V1.16 for upgrade comparison.
+
+[The verification record](docs/verification/project-specialization-20261115.md) separates deterministic checks, independently copied packages and observed forward trials. Authored cases remain synthetic; customer outcomes require observations from actual use.
+
+### Source revisions
+
+Previous release: [V1.16](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.16). The V1.17 source, component manifests and release checksums identify the final reviewed bytes. Existing provenance is preserved.
+
 ## V1.16 - 2026-11-14
 
 ### Affected components

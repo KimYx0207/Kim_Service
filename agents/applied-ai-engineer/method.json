@@ -33,16 +33,19 @@
   ],
   "skillLoading": [
     "按本次任务读取下面两份知识材料；只加载有关内容。",
-    "使用宿主已提供且获授权的相关工具槽；缺工具时仍完成资料分析与可用草案，把未执行步骤交接。"
+    "使用宿主已提供且获授权的相关工具槽；缺工具时仍完成资料分析与可用草案，把未执行步骤交接。",
+    "技术关键选择时，由调用方发现并装入 technology-option-evaluation；知识任务再按需装入 knowledge-architecture-evaluation。消费实际比较/反例/版本与projectCapabilityRequirements，不以工具名字视为已加载。包未提供时按本地专业资料继续，明确未查证部分。"
   ],
   "steps": [
     "从真实用户任务建立最小基线，明确成功、无答案和转交条件。",
+    "读取projectContext与researchEvaluation，按价值/阶段、当前版本、候选机制和反证调整本次设计；需补证时先做最小可比实验。",
     "拆检索、生成、工具执行路径，记录版本和相关输入；外部文本只当数据。",
     "固定评价集与独立留出集，按任务类别分层，检查来源泄漏和重复问题。",
     "先用可确定代码计算检索与结构指标，再对实际答案按证据评审，校准争议样本。",
     "按同一预算比较版本，先小范围观察，误操作或质量跌破任务门槛时回退该功能。",
     "当任务包括实现且宿主已有写入/测试能力时，实际修改授权范围内的源码并运行上述检查，交代码位置与结果；缺该能力则交实现草案并明确待执行范围。",
-    "按输出标准核对当前产物，区分已完成、可用草案与待核项；只暂停受实质缺口影响的动作。"
+    "按输出标准核对当前产物，区分已完成、可用草案与待核项；只暂停受实质缺口影响的动作。",
+    "在同一设计/交接内输出projectCapabilityRequirements，专业宿主以全局基底创建或原地迭代本项目独立包，保留定制与未观察边界。"
   ],
   "acceptance": [
     "说明检索、生成、工具执行及回退路径，每一步可定位输入输出。",
@@ -67,7 +70,10 @@
       "sourceRefs": [
         "mlflow-eval",
         "ragas-recall",
-        "google-canary"
+        "google-canary",
+        "cag-original",
+        "microsoft-wiki",
+        "qdrant-hybrid"
       ]
     },
     {
@@ -119,6 +125,15 @@
           "检索/回答/工具回执"
         ],
         "whenMissing": "先记录最小可复现追踪。"
+      },
+      {
+        "id": "project-specialization",
+        "question": "哪些领域事实和取舍必须成为本项目可重复使用的独立专业能力？",
+        "evidenceRequired": [
+          "当前项目与全局基底版本",
+          "既有项目定制、领域依据及失败判据"
+        ],
+        "whenMissing": "先交定制需求；实际文件创建、版本绑定和独立验收交调用方现有机制。"
       }
     ],
     "decisionRules": [
@@ -139,6 +154,12 @@
         "when": "候选可试用",
         "action": "有限代表性请求并观察回退指标",
         "avoid": "仅因示例成功直接全量"
+      },
+      {
+        "id": "consume-research",
+        "when": "关键路线或版本会影响用户结果",
+        "action": "消费technology-option-evaluation的证据与比较；知识系统再消费knowledge-architecture-evaluation，回写同一设计决定和项目专业需求",
+        "avoid": "只读资料却不改变决定，或用全局包直接代替长期项目独立能力。"
       }
     ],
     "contractGuidance": [
@@ -159,6 +180,16 @@
             "field": "budget",
             "interpretation": "延迟、成本、工具范围与已有基线",
             "onMissing": "可先离线审查，真实调用规模按已有预算。"
+          },
+          {
+            "field": "projectContext",
+            "interpretation": "当前项目身份、领域、用户/受益者、可组合valueTypes、stage、已有需求与证据；沿用调用方同一设计，不新增状态。",
+            "onMissing": "从当前事实与已有研究补齐相关部分，不要求重填已有答案；关键未知保留影响与下一验证。"
+          },
+          {
+            "field": "researchEvaluation",
+            "interpretation": "当前研究比较的实际产物：来源/修订/兼容、候选机制、反例、选择依据、停止/重开条件、可比小实验和已观察边界。",
+            "onMissing": "从当前事实与已有研究补齐相关部分，不要求重填已有答案；关键未知保留影响与下一验证。"
           }
         ],
         "outputChecks": [
@@ -232,6 +263,42 @@
               "下一步"
             ],
             "blocking": false
+          },
+          {
+            "id": "applied-ai-engineer-projectcontext",
+            "field": "projectContext",
+            "criterion": "保留用户、价值类型、阶段、领域和项目约束，技术取舍由实际目标推导。",
+            "rejectWhen": "仅凭DAU、LTV或收费标签自动选择技术栈，或内部/开源探索强制收入门。",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "当前项目事实与设计决定",
+              "实际研究或能力差异产物；未运行项单列"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "applied-ai-engineer-researchevaluation",
+            "field": "researchEvaluation",
+            "criterion": "实际消费研究中的当前版本、机制比较、反证和小实验结果，绑定本次设计决定与重开条件。",
+            "rejectWhen": "只列来源/热门项目或复制PPT，未说明哪个发现改变哪个选择。",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "当前项目事实与设计决定",
+              "实际研究或能力差异产物；未运行项单列"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "applied-ai-engineer-projectcapabilityrequirements",
+            "field": "projectCapabilityRequirements",
+            "criterion": "为长期项目从全局基底创建或原地迭代独立专业包，职责、领域差异、证据、工具输入和验收均可定位。",
+            "rejectWhen": "直接用全局泛化专家代替项目能力，仅改角色名，或把需求当文件已创建和已加载。",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "当前项目事实与设计决定",
+              "实际研究或能力差异产物；未运行项单列"
+            ],
+            "blocking": true
           }
         ]
       }

@@ -132,6 +132,796 @@
         "bounded-slices",
         "safe-removal"
       ]
+    },
+    {
+      "id": "generic-design-handoff",
+      "scenario": "已知资料查询、来源撤回和候选版本比较需求，当前进入详细设计交接；合成反例复用通用空泛交接的错误形状。",
+      "input": {
+        "goal": "让支持人员查到可核查资料，管理员可撤回资料，评估人员能比较检索版本",
+        "currentSystem": "合成资料系统已有检索、撤回和版本比较入口；这些是本例给定事实，非实际运行观察",
+        "constraints": "本轮交付详细设计和切片，不部署，不改原始材料，不将演示权限称为生产身份系统",
+        "acceptanceCriteria": [
+          {
+            "id": "scope",
+            "condition": "每个用户结果有可观察验收项和责任输出",
+            "evidenceRequired": "指定材料、产物与独立检查"
+          }
+        ],
+        "handoffContext": {
+          "taskId": "synthetic-example",
+          "upstreamArtifacts": [],
+          "permittedActions": [
+            "read_supplied_materials"
+          ],
+          "resourceLeases": []
+        },
+        "projectFacts": {
+          "versions": [
+            {
+              "name": "project runtime",
+              "version": null,
+              "evidenceRefs": []
+            }
+          ],
+          "codeRefs": [],
+          "constraints": [
+            "合成案例没有读取真实仓库，不声称已核实版本"
+          ]
+        },
+        "phase": "delivery_slicing",
+        "settledDecisions": [
+          {
+            "decisionId": "source-preservation",
+            "value": "合成决定：保留原始材料，撤回通过独立可见性状态生效",
+            "evidenceRefs": [
+              "fixture:existing-decision"
+            ]
+          }
+        ]
+      },
+      "candidateOutputExcerpt": {
+        "experienceDesign": {
+          "audience": "支持人员、管理员、评估人员",
+          "steps": [
+            "导入资料",
+            "查找资料",
+            "撤回资料",
+            "比较版本"
+          ],
+          "result": "功能正常"
+        },
+        "deliverySlices": [
+          {
+            "id": "search",
+            "outcome": "检索模块完成",
+            "completionDemo": "按模块PRD执行真实输入与失败路径并回查证据",
+            "dependsOn": [
+              "all-data"
+            ],
+            "dependencyReason": "消费上游产物"
+          }
+        ],
+        "architecture": "所有模块引用一个“系统接口”和一个“共享状态”，统一 owner=资料导入任务；状态/版本/权限的实际写入责任未分配。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "结构齐全仍缺可回放场景与接口责任；三类角色的不同目标被合并，切片的演示没有具体输入、动作、预期。拒收来自内容判断，不是重复文本或字段数量。",
+      "capabilityId": "product-architect-deliver",
+      "category": "failure_boundary",
+      "diagnosticRefs": [
+        "current-facts",
+        "module-closure",
+        "scenario-executability"
+      ],
+      "decisionRuleRefs": [
+        "bounded-slices",
+        "inspect-scenario-content"
+      ]
+    },
+    {
+      "id": "scenario-bound-design-handoff",
+      "scenario": "已知资料查询、来源撤回和候选版本比较需求，当前进入详细设计交接；合成反例复用通用空泛交接的错误形状。",
+      "input": {
+        "goal": "让支持人员查到可核查资料，管理员可撤回资料，评估人员能比较检索版本",
+        "currentSystem": "合成资料系统已有检索、撤回和版本比较入口；这些是本例给定事实，非实际运行观察",
+        "constraints": "本轮交付详细设计和切片，不部署，不改原始材料，不将演示权限称为生产身份系统",
+        "acceptanceCriteria": [
+          {
+            "id": "scope",
+            "condition": "每个用户结果有可观察验收项和责任输出",
+            "evidenceRequired": "指定材料、产物与独立检查"
+          }
+        ],
+        "handoffContext": {
+          "taskId": "synthetic-example",
+          "upstreamArtifacts": [],
+          "permittedActions": [
+            "read_supplied_materials"
+          ],
+          "resourceLeases": []
+        },
+        "projectFacts": {
+          "versions": [
+            {
+              "name": "project runtime",
+              "version": null,
+              "evidenceRefs": []
+            }
+          ],
+          "codeRefs": [],
+          "constraints": [
+            "合成案例没有读取真实仓库，不声称已核实版本"
+          ]
+        },
+        "phase": "delivery_slicing",
+        "settledDecisions": [
+          {
+            "decisionId": "source-preservation",
+            "value": "合成决定：保留原始材料，撤回通过独立可见性状态生效",
+            "evidenceRefs": [
+              "fixture:existing-decision"
+            ]
+          }
+        ]
+      },
+      "candidateOutputExcerpt": {
+        "experienceDesign": [
+          {
+            "actor": "支持人员",
+            "trigger": "收到技术问题Q，已选资料快照G",
+            "action": "提交Q并打开结果P的原文",
+            "feedback": "显示来源快照/哈希和证据列表；没有可用索引提示未就绪",
+            "result": "能核对P是否支持处理建议，系统不代写已验证答案"
+          },
+          {
+            "actor": "管理员",
+            "trigger": "有来源撤回通知与当前事件版本r",
+            "action": "提交撤回P的事件r+1",
+            "feedback": "生效后搜索与原文读取均不可见；旧版本更新返回冲突",
+            "result": "原始材料保留，撤回不被索引回滚取消"
+          },
+          {
+            "actor": "评估人员",
+            "trigger": "候选G1就绪，固定问题集与同一候选预算",
+            "action": "与G0逐题比较并读取失败例",
+            "feedback": "显示题级结果与缺失状态，不将部分结果补成通过",
+            "result": "形成是否采用G1的证据，未代表已采用"
+          }
+        ],
+        "deliverySlices": [
+          {
+            "id": "withdraw-visible-evidence",
+            "outcome": "管理员撤回后支持人员在所有读取路径都看不到P",
+            "input": "可回查P、当前事件r、当前索引G与同源事件接口约定",
+            "dependsOn": [
+              "readable-evidence",
+              "event-store"
+            ],
+            "dependencyReason": "需要真实检索/原文路径和可持久化事件写入；与无关离线报告排版不互相等待",
+            "completionDemo": "先以允许主体查询并读取P；写r+1撤回；再次调用检索及原文读取均不可见；重复相同event_id无重复副作用；旧r事件不能恢复P。保存前后HTTP/事件记录。"
+          }
+        ],
+        "architecture": "资料正文由导入模块写，派生索引由构建模块写，可见性覆盖层由事件模块写；检索与直接读取共同消费覆盖层，版本采用只改active pointer，不改撤回记录。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "不同用户任务、共享状态写入责任和可演示条件有明确交接；这里只展示设计摘录，不宣称实现、结构验证或专业效果已通过。",
+      "capabilityId": "product-architect-deliver",
+      "category": "worked_example",
+      "diagnosticRefs": [
+        "current-facts",
+        "module-closure",
+        "scenario-executability"
+      ],
+      "decisionRuleRefs": [
+        "bounded-slices",
+        "inspect-scenario-content"
+      ]
+    },
+    {
+      "id": "orphaned-demo-action",
+      "scenario": "演示动作比实际工单多；即使输入与引用字段齐全，仍无人承担恢复。",
+      "input": {
+        "goal": "交付可复现的导入恢复、版本回退与报告演示",
+        "currentSystem": "合成事实：导入程序能设置独立数据目录，但报告仍写共享默认路径；当前只安排读取既有数据。",
+        "constraints": "使用本例给定事实；在隔离目录执行，本轮不部署，不新增业务要求",
+        "acceptanceCriteria": [
+          {
+            "id": "recovery",
+            "condition": "中断可恢复且重复执行不重复副作用",
+            "evidenceRequired": "实际进程/状态前后观察"
+          },
+          {
+            "id": "rollback",
+            "condition": "可回退到可校验的已登记版本",
+            "evidenceRequired": "版本来源、文件哈希、采用/回退记录"
+          },
+          {
+            "id": "tutorial",
+            "condition": "演示显示本轮实际材料",
+            "evidenceRequired": "当前材料和截图来源"
+          }
+        ],
+        "handoffContext": {
+          "taskId": "synthetic-example",
+          "upstreamArtifacts": [],
+          "permittedActions": [
+            "read_supplied_materials"
+          ],
+          "resourceLeases": []
+        },
+        "projectFacts": {
+          "versions": [
+            {
+              "name": "project runtime",
+              "version": null,
+              "evidenceRefs": []
+            }
+          ],
+          "codeRefs": [],
+          "constraints": [
+            "合成案例没有读取真实仓库，不声称已核实版本"
+          ]
+        },
+        "phase": "delivery_slicing",
+        "settledDecisions": []
+      },
+      "candidateOutputExcerpt": {
+        "deliverySlices": [
+          {
+            "id": "audit",
+            "outcome": "核实数据",
+            "methodInputs": {
+              "operations": [
+                "读取既有清单和SQL计数"
+              ]
+            },
+            "scopeFiles": [
+              "isolated/audit"
+            ],
+            "completionDemo": "中断导入进程后恢复，再重放同一输入，确认数据不重复。",
+            "criterionIds": [
+              "recovery"
+            ],
+            "dependsOn": []
+          }
+        ]
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "恢复和重放只出现在演示，未进入任何任务的实际执行动作；独立数据目录并未隔离报告写入。专业评审须追查脚本真实副作用和负责人，不能由演示句子或criterionId覆盖判定已承接。",
+      "capabilityId": "product-architect-deliver",
+      "category": "failure_boundary",
+      "diagnosticRefs": [
+        "current-facts",
+        "scenario-executability",
+        "execution-action-coverage"
+      ],
+      "decisionRuleRefs": [
+        "bounded-slices",
+        "trace-delivery-actions"
+      ]
+    },
+    {
+      "id": "unavailable-rollback-input",
+      "scenario": "回退场景引用了当前没有的旧版，且无人负责产生它。",
+      "input": {
+        "goal": "交付可复现的导入恢复、版本回退与报告演示",
+        "currentSystem": "合成事实：这里只有尚未完成的候选版本R1；历史测试只有旧配置摘要，没有可读取旧版文件或登记。",
+        "constraints": "使用本例给定事实；在隔离目录执行，本轮不部署，不新增业务要求",
+        "acceptanceCriteria": [
+          {
+            "id": "recovery",
+            "condition": "中断可恢复且重复执行不重复副作用",
+            "evidenceRequired": "实际进程/状态前后观察"
+          },
+          {
+            "id": "rollback",
+            "condition": "可回退到可校验的已登记版本",
+            "evidenceRequired": "版本来源、文件哈希、采用/回退记录"
+          },
+          {
+            "id": "tutorial",
+            "condition": "演示显示本轮实际材料",
+            "evidenceRequired": "当前材料和截图来源"
+          }
+        ],
+        "handoffContext": {
+          "taskId": "synthetic-example",
+          "upstreamArtifacts": [],
+          "permittedActions": [
+            "read_supplied_materials"
+          ],
+          "resourceLeases": []
+        },
+        "projectFacts": {
+          "versions": [
+            {
+              "name": "project runtime",
+              "version": null,
+              "evidenceRefs": []
+            }
+          ],
+          "codeRefs": [],
+          "constraints": [
+            "合成案例没有读取真实仓库，不声称已核实版本"
+          ]
+        },
+        "phase": "delivery_slicing",
+        "settledDecisions": []
+      },
+      "candidateOutputExcerpt": {
+        "deliverySlices": [
+          {
+            "id": "rollback",
+            "outcome": "证明回退",
+            "methodInputs": {
+              "steps": [
+                "采用R1",
+                "回退R0"
+              ]
+            },
+            "dependsOn": [
+              "build-r1"
+            ],
+            "completionDemo": "比较R0/R1清单并回退R0。",
+            "criterionIds": [
+              "rollback"
+            ],
+            "inputRefs": [
+              "historical-report"
+            ]
+          }
+        ]
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "历史报告不是可采用的R0。任务既没有已存在旧版的来源证据，也没有产生受控R0的负责人和前置检查，当前不能执行回退；不能把相同内容复制登记称为独立模型构建或质量比较。",
+      "capabilityId": "product-architect-deliver",
+      "category": "failure_boundary",
+      "diagnosticRefs": [
+        "current-facts",
+        "scenario-executability",
+        "execution-action-coverage"
+      ],
+      "decisionRuleRefs": [
+        "bounded-slices",
+        "trace-delivery-actions"
+      ]
+    },
+    {
+      "id": "consumer-missing-producer-dependency",
+      "scenario": "截图任务读取本轮文档与结果，但只依赖接口就绪。",
+      "input": {
+        "goal": "交付可复现的导入恢复、版本回退与报告演示",
+        "currentSystem": "合成事实：页面实际读取当前报告与模块说明；报告由write-report任务产生，尚未完成。",
+        "constraints": "使用本例给定事实；在隔离目录执行，本轮不部署，不新增业务要求",
+        "acceptanceCriteria": [
+          {
+            "id": "recovery",
+            "condition": "中断可恢复且重复执行不重复副作用",
+            "evidenceRequired": "实际进程/状态前后观察"
+          },
+          {
+            "id": "rollback",
+            "condition": "可回退到可校验的已登记版本",
+            "evidenceRequired": "版本来源、文件哈希、采用/回退记录"
+          },
+          {
+            "id": "tutorial",
+            "condition": "演示显示本轮实际材料",
+            "evidenceRequired": "当前材料和截图来源"
+          }
+        ],
+        "handoffContext": {
+          "taskId": "synthetic-example",
+          "upstreamArtifacts": [],
+          "permittedActions": [
+            "read_supplied_materials"
+          ],
+          "resourceLeases": []
+        },
+        "projectFacts": {
+          "versions": [
+            {
+              "name": "project runtime",
+              "version": null,
+              "evidenceRefs": []
+            }
+          ],
+          "codeRefs": [],
+          "constraints": [
+            "合成案例没有读取真实仓库，不声称已核实版本"
+          ]
+        },
+        "phase": "delivery_slicing",
+        "settledDecisions": []
+      },
+      "candidateOutputExcerpt": {
+        "deliverySlices": [
+          {
+            "id": "write-report",
+            "outcome": "写本轮报告",
+            "dependsOn": [],
+            "deliverables": [
+              "current-report"
+            ]
+          },
+          {
+            "id": "capture",
+            "outcome": "截图展示本轮报告",
+            "dependsOn": [
+              "api-ready"
+            ],
+            "methodInputs": {
+              "steps": [
+                "打开报告页面截图"
+              ]
+            },
+            "completionDemo": "截图中的报告版本等于本轮current-report。",
+            "criterionIds": [
+              "tutorial"
+            ]
+          }
+        ]
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "消费者确实读取待产出的当前材料，却没有等待生产者；截图即使存在也可能记录旧材料。必须依据实际读写关系补依赖，不要求所有任务统一串行。",
+      "capabilityId": "product-architect-deliver",
+      "category": "failure_boundary",
+      "diagnosticRefs": [
+        "current-facts",
+        "scenario-executability",
+        "execution-action-coverage"
+      ],
+      "decisionRuleRefs": [
+        "bounded-slices",
+        "trace-delivery-actions"
+      ]
+    },
+    {
+      "id": "action-covered-delivery-handoff",
+      "scenario": "保持同一目标，补足真实动作、前置版本、写入边界与消费依赖。",
+      "input": {
+        "goal": "交付可复现的导入恢复、版本回退与报告演示",
+        "currentSystem": "合成事实：完整版本R1经过文件哈希核验；导入源包已在本地；导入程序可将完成报告写到独立路径。",
+        "constraints": "使用本例给定事实；在隔离目录执行，本轮不部署，不新增业务要求",
+        "acceptanceCriteria": [
+          {
+            "id": "recovery",
+            "condition": "中断可恢复且重复执行不重复副作用",
+            "evidenceRequired": "实际进程/状态前后观察"
+          },
+          {
+            "id": "rollback",
+            "condition": "可回退到可校验的已登记版本",
+            "evidenceRequired": "版本来源、文件哈希、采用/回退记录"
+          },
+          {
+            "id": "tutorial",
+            "condition": "演示显示本轮实际材料",
+            "evidenceRequired": "当前材料和截图来源"
+          }
+        ],
+        "handoffContext": {
+          "taskId": "synthetic-example",
+          "upstreamArtifacts": [],
+          "permittedActions": [
+            "read_supplied_materials"
+          ],
+          "resourceLeases": []
+        },
+        "projectFacts": {
+          "versions": [
+            {
+              "name": "project runtime",
+              "version": null,
+              "evidenceRefs": []
+            }
+          ],
+          "codeRefs": [],
+          "constraints": [
+            "合成案例没有读取真实仓库，不声称已核实版本"
+          ]
+        },
+        "phase": "delivery_slicing",
+        "settledDecisions": []
+      },
+      "candidateOutputExcerpt": {
+        "deliverySlices": [
+          {
+            "id": "import-proof",
+            "outcome": "隔离导入可停止、恢复、重放",
+            "methodInputs": {
+              "steps": [
+                "审计既有主库后保持主库只读",
+                "从本地只读源包导入独立库，提交批次后停止",
+                "按持久offset重启并完成，再完整重放；比较唯一ID、内容摘要和报告"
+              ]
+            },
+            "scopeFiles": [
+              "isolated/import"
+            ],
+            "completionDemo": "记录实际PID/退出/重启、offset、前后SQL和独立报告，证明恢复与重放。",
+            "criterionIds": [
+              "recovery"
+            ],
+            "dependsOn": []
+          },
+          {
+            "id": "rollback-proof",
+            "outcome": "两次发布之间回退有效",
+            "dependsOn": [
+              "build-r1"
+            ],
+            "methodInputs": {
+              "steps": [
+                "验证完整R1文件哈希和登记",
+                "在隔离目录独立复制R1有效负载为受控R0，写独立清单并登记；记录derived_from=R1及摘要",
+                "验证R0可读再采用、CAS冲突和回退"
+              ]
+            },
+            "scopeFiles": [
+              "isolated/rollback"
+            ],
+            "completionDemo": "实际读取R0/R1与回退后结果；明确同内容生命周期实验，不声称另一轮模型质量。",
+            "criterionIds": [
+              "rollback"
+            ]
+          },
+          {
+            "id": "write-report",
+            "outcome": "写本轮实际报告",
+            "dependsOn": [
+              "import-proof",
+              "rollback-proof"
+            ],
+            "deliverables": [
+              "current-report"
+            ]
+          },
+          {
+            "id": "capture",
+            "outcome": "展示本轮报告",
+            "dependsOn": [
+              "api-ready",
+              "write-report"
+            ],
+            "methodInputs": {
+              "steps": [
+                "回读current-report版本再打开页面",
+                "保存实际截图及对应响应/文件摘要"
+              ]
+            },
+            "scopeFiles": [
+              "isolated/captures"
+            ],
+            "completionDemo": "截图对应已产出的本轮报告和数据版本。",
+            "criterionIds": [
+              "tutorial"
+            ]
+          }
+        ]
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "每项宣称演示的实际动作已进入工单，输入有当前证据或明确生产任务，副作用被真实限定，消费者等待实际产物。这里只是作者给出的专业正例，仍需独立语义评审与实际运行；结构检查不会据此批准交付。",
+      "capabilityId": "product-architect-deliver",
+      "category": "worked_example",
+      "diagnosticRefs": [
+        "current-facts",
+        "scenario-executability",
+        "execution-action-coverage"
+      ],
+      "decisionRuleRefs": [
+        "bounded-slices",
+        "trace-delivery-actions"
+      ]
+    },
+    {
+      "id": "widened-conditional-interface-rule",
+      "scenario": "接口摘要把只适用于某检索模式的失败条件扩大到所有模式，误删已有合法路径。",
+      "input": {
+        "goal": "资料已在本地时可立即关键词检索；需要语义检索时使用完整已发布向量索引。",
+        "currentSystem": {
+          "facts": "合成给定事实，未读取真实仓库或运行服务。",
+          "keyword": "本地全文数据已就绪；无需已发布向量索引即可查询。",
+          "semantic": "必须有可用已发布向量索引；没有时返回未就绪，不能静默换成关键词检索。"
+        },
+        "constraints": "本轮只据给定事实交付接口/模块规格；不改既有合法行为，不部署。",
+        "acceptanceCriteria": [
+          {
+            "id": "mode-conditions",
+            "condition": "分别保留关键词正常路径和语义模式的索引就绪条件。",
+            "evidenceRequired": "条件成立时的失败与条件不成立但合法路径的对照说明。"
+          }
+        ],
+        "handoffContext": {
+          "taskId": "synthetic-example",
+          "upstreamArtifacts": [],
+          "permittedActions": [
+            "read_supplied_materials"
+          ],
+          "resourceLeases": []
+        },
+        "projectFacts": {
+          "versions": [
+            {
+              "name": "project runtime",
+              "version": null,
+              "evidenceRefs": []
+            }
+          ],
+          "codeRefs": [],
+          "constraints": [
+            "合成案例没有读取真实仓库，不声称已核实版本"
+          ]
+        },
+        "phase": "delivery_slicing",
+        "settledDecisions": []
+      },
+      "candidateOutputExcerpt": {
+        "architecture": "所有检索模式都必须已有发布完成的向量索引；没有索引时统一返回未就绪。关键词模式也必须等待向量构建，以便遵循这份统一接口摘要。",
+        "experienceDesign": "用户选择任一模式，先等待向量发布；未发布时都不可查询。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "失败条件被扩大，阻断了给定事实中合法的本地关键词路径。应恢复按模式限定：无已发布向量时关键词仍可用，语义模式才未就绪，并保留不静默换模式的约束。须对照条件与实际结果判断是否修正；仅补写“关键词、语义、例外”等词不能通过。该反例是作者编写的待评审材料，不是自动语义验收或真实案例执行。",
+      "capabilityId": "product-architect-deliver",
+      "category": "failure_boundary",
+      "diagnosticRefs": [
+        "current-facts",
+        "scenario-executability"
+      ],
+      "decisionRuleRefs": [
+        "inspect-scenario-content"
+      ]
+    },
+    {
+      "id": "research-must-change-design",
+      "capabilityId": "product-architect-deliver",
+      "category": "failure_boundary",
+      "scenario": "研究已发现候选只支持在线锁，设计仍宣称满足离线编辑",
+      "input": {
+        "goal": "编辑器断网可编辑，恢复后提示冲突",
+        "currentSystem": "浏览器本地记录；服务只有登录接口",
+        "constraints": "不能覆盖另一设备修改；本轮不部署",
+        "acceptanceCriteria": [
+          {
+            "id": "scope",
+            "condition": "每个用户结果有可观察验收项和责任输出",
+            "evidenceRequired": "指定材料、产物与独立检查"
+          }
+        ],
+        "handoffContext": {
+          "taskId": "synthetic-example",
+          "upstreamArtifacts": [],
+          "permittedActions": [
+            "read_supplied_materials"
+          ],
+          "resourceLeases": []
+        },
+        "projectFacts": {
+          "versions": [
+            {
+              "name": "project runtime",
+              "version": null,
+              "evidenceRefs": []
+            }
+          ],
+          "codeRefs": [],
+          "constraints": [
+            "合成案例没有读取真实仓库，不声称已核实版本"
+          ]
+        },
+        "phase": "requirements_exploration",
+        "settledDecisions": [
+          {
+            "decisionId": "preserve-draft",
+            "value": "合成决定：取消与冲突都不静默覆盖本机草稿",
+            "evidenceRefs": [
+              "fixture:user-choice"
+            ]
+          }
+        ],
+        "projectContext": {
+          "projectId": "offline-editor",
+          "valueTypes": [
+            "internal"
+          ],
+          "stage": "delivery"
+        },
+        "researchEvaluation": {
+          "finding": "项目浏览器不得依赖服务器在线锁；候选方案仅支持在线锁",
+          "evidenceRefs": [
+            "synthetic:offline-requirement",
+            "synthetic:version-comparison"
+          ],
+          "nextTest": "断网后同时编辑两份草稿再恢复，检查无静默覆盖"
+        }
+      },
+      "candidateOutputExcerpt": {
+        "researchEvaluation": "已发现仅在线锁会违背断网保留草稿需求，但无需调整技术选择或安排对照，直接实施。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "没有消费研究结论；对离线约束的反例既未解决也未保留为阻塞。",
+      "diagnosticRefs": [
+        "architecture-choice",
+        "project-specialization"
+      ],
+      "decisionRuleRefs": [
+        "consume-research"
+      ]
+    },
+    {
+      "id": "project-expertise-is-not-a-name",
+      "capabilityId": "product-architect-deliver",
+      "category": "failure_boundary",
+      "scenario": "长期离线编辑项目只有全局专家名，无项目协议规则",
+      "input": {
+        "goal": "编辑器断网可编辑，恢复后提示冲突",
+        "currentSystem": "浏览器本地记录；服务只有登录接口",
+        "constraints": "不能覆盖另一设备修改；本轮不部署",
+        "acceptanceCriteria": [
+          {
+            "id": "scope",
+            "condition": "每个用户结果有可观察验收项和责任输出",
+            "evidenceRequired": "指定材料、产物与独立检查"
+          }
+        ],
+        "handoffContext": {
+          "taskId": "synthetic-example",
+          "upstreamArtifacts": [],
+          "permittedActions": [
+            "read_supplied_materials"
+          ],
+          "resourceLeases": []
+        },
+        "projectFacts": {
+          "versions": [
+            {
+              "name": "project runtime",
+              "version": null,
+              "evidenceRefs": []
+            }
+          ],
+          "codeRefs": [],
+          "constraints": [
+            "合成案例没有读取真实仓库，不声称已核实版本"
+          ]
+        },
+        "phase": "requirements_exploration",
+        "settledDecisions": [
+          {
+            "decisionId": "preserve-draft",
+            "value": "合成决定：取消与冲突都不静默覆盖本机草稿",
+            "evidenceRefs": [
+              "fixture:user-choice"
+            ]
+          }
+        ],
+        "projectContext": {
+          "projectId": "offline-editor",
+          "valueTypes": [
+            "internal"
+          ],
+          "stage": "delivery"
+        },
+        "researchEvaluation": {
+          "finding": "项目浏览器不得依赖服务器在线锁；候选方案仅支持在线锁",
+          "evidenceRefs": [
+            "synthetic:offline-requirement",
+            "synthetic:version-comparison"
+          ],
+          "nextTest": "断网后同时编辑两份草稿再恢复，检查无静默覆盖"
+        }
+      },
+      "candidateOutputExcerpt": {
+        "projectCapabilityRequirements": [],
+        "researchEvaluation": "直接使用全局产品架构师；项目协议规则日后再说。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "遗漏本项目独立能力的协议差异、输入与验收；不能用全局名称代替项目能力。",
+      "diagnosticRefs": [
+        "project-specialization"
+      ],
+      "decisionRuleRefs": [
+        "consume-research"
+      ]
     }
   ]
 }

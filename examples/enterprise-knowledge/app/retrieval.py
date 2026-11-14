@@ -4,24 +4,29 @@ import numpy as np
 from .storage import AppError,ensure,model_fingerprint
 from .identity import validate_execution
 class Retriever:
- def __init__(self,storage,embedding=None,reranker=None):
-  self.storage=storage;self.embedding=embedding;self.reranker=reranker;self._indexes={};self._lock=threading.RLock()
- def models(self,need_reranker=False,encoder_threads=3):
+ def __init__(self,storage,embedding=None,reranker=None,reranker_strategy='sliding',reranker_overlap=32):
+  self.storage=storage;self.embedding=embedding;self.reranker=reranker;self.reranker_strategy=reranker_strategy;self.reranker_overlap=reranker_overlap;self._indexes={};self._encoders={};self._injected_embedding=embedding is not None;self._lock=threading.RLock()
+ def models(self,need_reranker=False,encoder_threads=3,coverage=None):
   with self._lock:
-   if self.embedding is None:
+   if not self._injected_embedding and (self.embedding is None or coverage is not None):
     try:
      from .embedding import EmbeddingModel
-     self.embedding=EmbeddingModel(threads=encoder_threads)
+     policy=coverage or {'strategy':'sliding','overlap_tokens':32}
+     key=(encoder_threads,policy['strategy'],policy['overlap_tokens'])
+     if key not in self._encoders:self._encoders[key]=EmbeddingModel(threads=encoder_threads,coverage_strategy=policy['strategy'],window_overlap=policy['overlap_tokens'])
+     self.embedding=self._encoders[key]
     except (OSError,ImportError) as e:raise AppError('index_not_ready','语义模型尚未就绪',409) from e
    if need_reranker and self.reranker is None:
     try:
      from .embedding import Reranker
-     self.reranker=Reranker()
+     self.reranker=Reranker(coverage_strategy=self.reranker_strategy,window_overlap=self.reranker_overlap)
     except (OSError,ImportError) as e:raise AppError('index_not_ready','重排模型尚未就绪',409) from e
- def load_index(self,generation=None,vector_kind='float32'):
+   return self.embedding,self.reranker
+ def load_index(self,generation=None,vector_kind='float32',embedding=None):
   name=generation or self.storage.setting('active_generation');ensure(name,'index_not_ready','尚未采用索引版本',409);g=self.storage.validate_generation(name);key=(g['generation'],vector_kind)
-  if self.embedding is not None:ensure(model_fingerprint(self.embedding.metadata)==g['manifest']['model_fingerprint'],'model_mismatch','查询模型与索引模型不一致',409)
-  if self.embedding is not None:validate_execution(g['manifest'],self.embedding.metadata,self.embedding.execution_identity)
+  encoder=embedding if embedding is not None else self.embedding
+  if encoder is not None:ensure(model_fingerprint(encoder.metadata)==g['manifest']['model_fingerprint'],'model_mismatch','查询模型与索引模型不一致',409)
+  if encoder is not None:validate_execution(g['manifest'],encoder.metadata,encoder.execution_identity)
   with self._lock:
    if key not in self._indexes:
     folder=self.storage.index_root/g['generation'];ids=json.loads((folder/'ids.json').read_text())
@@ -41,13 +46,15 @@ class Retriever:
    rows=db.execute('SELECT f.id,bm25(passage_fts) AS score FROM passage_fts f WHERE passage_fts MATCH ?'+clause+' ORDER BY score ASC,f.id ASC LIMIT ?',params+[limit]).fetchall()
   return [(r['id'],-r['score']) for r in rows]
  def dense(self,query,principal,generation=None,limit=50,vector_kind='float32',query_vector=None):
-  g=self.storage.validate_generation(generation);self.models(encoder_threads=g['manifest']['encoder_execution']['runtime']['session']['intra_op_num_threads']);generation,ids,vectors=self.load_index(generation,vector_kind);v=self.embedding.encode([query])[0] if query_vector is None else query_vector;scores=vectors@v;hidden=self.storage.allowed_ids(principal)
+  g=self.storage.validate_generation(generation);encoder,_=self.models(encoder_threads=g['manifest']['encoder_execution']['runtime']['session']['intra_op_num_threads'],coverage=g['manifest']['encoder_execution']['coverage']);generation,ids,vectors=self.load_index(g['generation'],vector_kind,encoder);v=encoder.encode([query])[0] if query_vector is None else query_vector;scores=vectors@v;hidden=self.storage.allowed_ids(principal)
   if hidden:
    for i,key in enumerate(ids):
     if key in hidden:scores[i]=-np.inf
   count=min(limit,int(np.isfinite(scores).sum()))
   if not count:return generation,[]
-  indices=np.argpartition(-scores,count-1)[:count];indices=sorted(indices,key=lambda i:(-float(scores[i]),ids[i]));return generation,[(ids[i],float(scores[i])) for i in indices]
+  # Rank every eligible tied candidate before cutting off the result set.
+  # Sorting a partial argpartition cannot recover excluded lower-ID ties.
+  indices=sorted(np.flatnonzero(np.isfinite(scores)),key=lambda i:(-float(scores[i]),ids[i]))[:count];return generation,[(ids[i],float(scores[i])) for i in indices]
  @staticmethod
  def fuse(lexical,dense,limit=50):
   scores={}
@@ -65,12 +72,12 @@ class Retriever:
   elif mode=='dense':ranked=dense
   else:ranked=self.fuse(lexical,dense)
   if mode=='rerank':
-   self.models(True);available=[]
+   _,reranker=self.models(True);available=[]
    for key,score in ranked:
     try:available.append((key,self.storage.get(key,principal)))
     except AppError as e:
      if e.status!=404:raise
-   scores=self.reranker.score(query,[(p['title']+'\n'+p['text']).strip() for _,p in available]);rerank_scores={key:float(score) for (key,_),score in zip(available,scores)};ranked=sorted(rerank_scores.items(),key=lambda x:(-x[1],x[0]))
+   scores=reranker.score(query,[(p['title']+'\n'+p['text']).strip() for _,p in available]);rerank_scores={key:float(score) for (key,_),score in zip(available,scores)};ranked=sorted(rerank_scores.items(),key=lambda x:(-x[1],x[0]))
   bm={key:i for i,(key,_) in enumerate(lexical,1)};de={key:i for i,(key,_) in enumerate(dense,1)};results=[]
   for key,score in ranked:
    try:passage=self.storage.get(key,principal)

@@ -21,7 +21,8 @@ export function checkDesignHandoff(input) {
     return result('invalid');
   }
   const design = input.productDesign;
-  if (!Object.hasOwn(design, 'softwareDesign')) return result('not_applicable');
+  const hasSoftware = Object.hasOwn(design, 'softwareDesign');
+  if (!hasSoftware && !Object.hasOwn(design, 'projectCapabilityRequirements')) return result('not_applicable');
   const noAuthority = (value, location) => {
     if (object(value)) for (const key of authorityKeys) if (Object.hasOwn(value, key)) issue('content_cannot_grant_authority', `${location}.${key}`);
   };
@@ -52,7 +53,30 @@ export function checkDesignHandoff(input) {
     if (ids.some(id => !known.has(id))) issue('unknown_reference', location);
     return ids;
   };
+  if (Object.hasOwn(design, 'projectCapabilityRequirements')) {
+    const targets = new Set();
+    for (const [i, requirement] of list(design.projectCapabilityRequirements, 'productDesign.projectCapabilityRequirements').entries()) {
+      const rp = `productDesign.projectCapabilityRequirements[${i}]`;
+      if (!object(requirement)) { issue('project_requirement_object_required', rp); continue; }
+      noAuthority(requirement, rp);
+      for (const key of ['projectId', 'baseComponentId', 'baseComponentVersion', 'role', 'targetPath']) requireText(requirement[key], `${rp}.${key}`);
+      for (const key of ['domainEvidenceRefs', 'responsibilities', 'boundaries', 'reuseConditions', 'requiredInputs', 'toolRequirements', 'acceptance']) strings(requirement[key], `${rp}.${key}`, { nonempty: true });
+      // New project deltas use an array; preserve legacy text byte-for-byte so
+      // the creator and governance record can bind the same requirement digest.
+      if (typeof requirement.projectDelta === 'string') requireText(requirement.projectDelta, `${rp}.projectDelta`);
+      else strings(requirement.projectDelta, `${rp}.projectDelta`, { nonempty: true });
+      const target = requirement.targetPath;
+      if (text(target)) {
+        const segments = target.replace(/\/$/, '').split('/');
+        if (/^[A-Za-z]:|^[\\/~]|\\|\x00/.test(target) || segments.some(part => ['', '.', '..'].includes(part))) issue('project_relative_target_required', `${rp}.targetPath`);
+        if (targets.has(target.replace(/\/$/, ''))) issue('duplicate_project_target', `${rp}.targetPath`);
+        targets.add(target.replace(/\/$/, ''));
+      }
+      if (text(design.projectId) && requirement.projectId !== design.projectId) issue('project_identity_mismatch', `${rp}.projectId`);
+    }
+  }
   noAuthority(design, 'productDesign');
+  if (!hasSoftware) return result(issues.length ? 'invalid' : 'structure_valid');
   if (design.schemaVersion !== 1) issue('schema_version_mismatch', 'productDesign.schemaVersion');
   requireText(design.designId, 'productDesign.designId');
   if (!Number.isInteger(design.revision) || design.revision < 1) issue('positive_revision_required', 'productDesign.revision');
@@ -96,21 +120,44 @@ export function checkDesignHandoff(input) {
   const moduleIds = references(architecture.moduleIds, modules.ids, `${ap}.moduleIds`);
   if (moduleIds.length !== modules.ids.size || [...modules.ids].some(id => !moduleIds.includes(id))) issue('architecture_modules_mismatch', `${ap}.moduleIds`);
   if (design.mode === 'delivery' && modules.values.length === 0) issue('delivery_modules_required', 'productDesign.softwareDesign.modules');
-  const tasksById = new Map(tasks.values.map(task => [task.id, task]));
+  const referenceKinds = [['journeyRefs', journeys.ids], ['decisionRefs', declaredDecisions], ['interfaceRefs', interfaces.ids], ['stateRefs', shared.ids]];
+  const journeyCriteria = new Set();
+  for (const journey of journeys.values) {
+    for (const id of references(journey.criterionIds ?? [], criteria.ids, `userJourneys.${journey.id}.criterionIds`)) journeyCriteria.add(id);
+  }
+  // Validate every task, including support work outside the software modules.
+  const taskDetails = new Map();
+  const supportCriteria = new Set();
+  for (const task of tasks.values) {
+    const criterionIds = references(task.criterionIds, criteria.ids, `taskSlices.${task.id}.criterionIds`, { nonempty: true });
+    const refs = Object.fromEntries(referenceKinds.map(([key, known]) =>
+      [key, references(task[key] ?? [], known, `taskSlices.${task.id}.${key}`)]));
+    const support = task.workKind === 'support';
+    if (support) for (const id of criterionIds) supportCriteria.add(id);
+    taskDetails.set(task.id, { criterionIds, refs, support });
+  }
+  const assignedTasks = new Set();
+  const assignedJourneys = new Set();
+  const assignedCriteria = new Set();
   for (const [i, module] of modules.values.entries()) {
     const mp = `productDesign.softwareDesign.modules[${i}]`;
     noAuthority(module, mp);
     requireText(module.purpose, `${mp}.purpose`);
     const detail = key => module[key] ?? (design.mode === "exploration" ? [] : undefined);
     const refSets = {};
-    for (const [key, known] of [['journeyRefs', journeys.ids], ['decisionRefs', declaredDecisions], ['interfaceRefs', interfaces.ids], ['stateRefs', shared.ids]]) {
+    for (const [key, known] of referenceKinds) {
       refSets[key] = new Set(references(detail(key), known, `${mp}.${key}`));
     }
     const moduleTasks = references(detail("taskIds"), tasks.ids, `${mp}.taskIds`, { nonempty: design.mode === 'delivery' });
     const moduleCriteria = references(detail("acceptanceCriterionIds"), criteria.ids, `${mp}.acceptanceCriterionIds`, { nonempty: design.mode === 'delivery' });
+    for (const id of moduleTasks) assignedTasks.add(id);
+    for (const id of moduleCriteria) assignedCriteria.add(id);
+    for (const id of refSets.journeyRefs) assignedJourneys.add(id);
     for (const [j, state] of rows(detail("states"), `${mp}.states`, 'name').values.entries()) requireText(state.behavior, `${mp}.states[${j}].behavior`);
     strings(detail("businessRules"), `${mp}.businessRules`);
-    strings(detail("implementationNotes"), `${mp}.implementationNotes`);
+    const implementationNotes = detail("implementationNotes");
+    if (typeof implementationNotes === 'string') requireText(implementationNotes, `${mp}.implementationNotes`);
+    else strings(implementationNotes, `${mp}.implementationNotes`);
     for (const [j, removal] of list(detail("removalCandidates"), `${mp}.removalCandidates`).entries()) {
       const rp = `${mp}.removalCandidates[${j}]`;
       if (!object(removal)) { issue('removal_candidate_object_required', rp); continue; }
@@ -119,18 +166,37 @@ export function checkDesignHandoff(input) {
       strings(removal.evidenceRefs, `${rp}.evidenceRefs`, { nonempty: true });
     }
     const covered = new Set();
+    const coveredJourneys = new Set();
     for (const taskId of moduleTasks) {
-      const task = tasksById.get(taskId);
+      const task = taskDetails.get(taskId);
       if (!task) continue;
-      const taskCriteria = references(task.criterionIds, criteria.ids, `taskSlices.${taskId}.criterionIds`, { nonempty: true });
-      for (const id of taskCriteria) covered.add(id);
-      if (taskCriteria.some(id => !moduleCriteria.includes(id))) issue('task_criterion_outside_module', `${mp}.acceptanceCriterionIds`);
+      if (!task.support) {
+        for (const id of task.criterionIds) covered.add(id);
+        for (const id of task.refs.journeyRefs) coveredJourneys.add(id);
+      }
+      if (task.criterionIds.some(id => !moduleCriteria.includes(id))) issue('task_criterion_outside_module', `${mp}.acceptanceCriterionIds`);
       for (const key of Object.keys(refSets)) {
-        const taskRefs = strings(task[key] ?? [], `taskSlices.${taskId}.${key}`);
-        if (taskRefs.some(id => !refSets[key].has(id))) issue('task_reference_outside_module', `${mp}.${key}`);
+        if (task.refs[key].some(id => !refSets[key].has(id))) issue('task_reference_outside_module', `${mp}.${key}`);
       }
     }
     if (design.mode === 'delivery' && moduleCriteria.some(id => !covered.has(id))) issue('module_criterion_has_no_task', `${mp}.acceptanceCriterionIds`);
+    if (design.mode === 'delivery' && [...refSets.journeyRefs].some(id => !coveredJourneys.has(id))) issue('module_journey_has_no_task', `${mp}.journeyRefs`);
+  }
+  if (design.mode === 'delivery') {
+    for (const task of tasks.values) if (task.workKind !== 'support' && !assignedTasks.has(task.id)) {
+      issue('delivery_task_has_no_module', `taskSlices.${task.id}`);
+    }
+    for (const journey of journeys.values) if (!assignedJourneys.has(journey.id)) {
+      issue('delivery_journey_has_no_module', `userJourneys.${journey.id}`);
+    }
+    for (const criterion of criteria.values) {
+      if (criterion.required !== false && !assignedCriteria.has(criterion.id) && !supportCriteria.has(criterion.id)) {
+        issue('delivery_criterion_uncovered', `acceptanceCriteria.${criterion.id}`);
+      }
+      if (journeyCriteria.has(criterion.id) && !assignedCriteria.has(criterion.id)) {
+        issue('delivery_criterion_has_no_module', `acceptanceCriteria.${criterion.id}`);
+      }
+    }
   }
   return result(issues.length ? 'invalid' : 'structure_valid');
 }

@@ -384,7 +384,7 @@ Common models:
 
 Use gates to stop skipped steps. A stage reached is not a stage passed.
 
-Load `references/gates.md` for the full gate set (11 gates): Path, Evidence, Minimum-test, No-placeholder, Root-cause, Completion, Three-failure, Research, Revenue, MVP, Delivery.
+Load `references/gates.md` for the full gate set (11 gates): Path, Evidence, Minimum-test, No-placeholder, Root-cause, Completion, Three-failure, Research, Value/stage, MVP, Delivery.
 
 ### Output
 
@@ -409,13 +409,13 @@ Load one file at a time, only when the task needs it.
 - `references/method.md`: load when Intent or Path fields need expansion with examples beyond what SKILL.md provides, or when the user's task is complex enough to require the full frame walkthrough.
 - `references/path.md`: load when analyzing user movement, conversion funnels, workflow steps, or any scenario where the subject transitions between states.
 - `references/models.md`: load when the current analysis misses a decision-relevant dimension; choose models by the uncertainty they resolve, not by a required count.
-- `references/gates.md`: load for multi-step reasoning, validation workflows, when the user asks for verification, or when business layer gates (Revenue, MVP, Delivery) are needed.
+- `references/gates.md`: load for multi-step reasoning, validation workflows, when the user asks for verification, or when value and business gates (Value/stage, MVP, Delivery) are needed.
 - `references/output.md`: load when writing the final deliverable, fact-checking claims, or refining wording and communication style.
 - `references/verification.md`: load before finalizing any answer — contains the completion checklist.
 - `references/execution.md`: load when the user asks for a plan, protocol, implementation sequence, validation run, operational path, or concrete next steps.
 - `references/distillation.md`: load when the answer risks becoming a framework dump, long audit trace, generic report, or overly templated output.
 - `references/master-lens.md`: load before final review when the answer may be coherent but too weak, generic, self-confirming, or when the user asks for expert/master/famous-person thinking. Use it as backend pressure tests, not persona output.
-- `references/business.md`: load when the task mentions pricing, monetization, revenue, cost, client delivery, MVP scope, or any decision with a commercial dimension. Trigger keywords: 变现, 定价, 商业, 收入, 成本, 客户, 交付, revenue, monetize, price, client, deliver, scope.
+- `references/business.md`: load when the task concerns product value, pricing, monetization, cost, internal improvement, open-source adoption, client delivery or MVP scope. Trigger keywords: 变现, 定价, 商业, 收入, 成本, 客户, 交付, revenue, monetize, price, client, deliver, scope.
 - `examples/decision.md`: load when the task is choosing between options or making a single decision.
 - `examples/creation.md`: load when the task involves designing or building something new.
 - `examples/debugging.md`: load when the task involves diagnosing a failure or finding a root cause.
@@ -524,14 +524,13 @@ If the answer starts to look like a form, rewrite it as a working note: conclusi
 
 Never expose internal sections named "Backend checks" in normal user output. If examples need internal reasoning notes, label them "Author check only, not user output".
 
-### Business check (when business layer is loaded)
+### Value and business check (when this layer is loaded)
 
-When `references/business.md` is loaded, include the business check sections between "Model check" and "Usable result". Use the templates and rules defined in that file:
+Use `references/business.md` to identify composable `valueTypes` (`paid`, `internal`, `open-source`) and the current `stage` (`exploration`, `validation`, `delivery`, `scale`). Keep them in the existing projectContext. Read available project facts first and ask only about a decision-changing gap.
 
-- Revenue check (six questions, verdict)
-- MVP scope (one sentence, exclusions, delivery time)
-- Boss perspective (why buy, quick win)
-- Delivery loop (input through confirmation)
+Select evidence for this decision: paid commitments need applicable commercial evidence; internal work needs outcome, adoption and operating evidence; open-source work needs reproducible use and maintainability. Exploration may proceed with a bounded test while pricing remains unknown. One-time paid offers use one-time economics, with a reason when repeat purchase is inapplicable.
+
+Explain the useful result, smallest test, resource limit, beneficiary and delivery acceptance in natural prose. Missing evidence limits the corresponding conclusion, not unrelated project value. Research findings must change a named option or acceptance check. For a continuing project, carry the context and domain differences into requirements for its independent professional capabilities; actual creation and invocation require separate evidence.
 
 ## Short output
 
@@ -582,8 +581,8 @@ Core checks:
 
 Business layer (when loaded):
 
-- revenue check (six questions answered or gaps flagged)
+- valueTypes and stage select applicable evidence; commercial promises identify remaining commercial gaps
 - MVP scope (specific testable result, exclusions listed, delivery within the user's actual budget and business feedback cycle; no universal 14-day limit)
-- boss perspective (at least one quick win identified)
+- beneficiary perspective and first useful observation match the actual feedback cycle
 - delivery loop (input through confirmation complete)
 - no D-tier evidence used as decision basis

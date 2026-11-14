@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "product-architect",
   "componentType": "agent",
-  "componentVersion": "0.5.1",
+  "componentVersion": "0.6.0",
   "entrypoint": "AGENT.md",
   "capabilities": [
     {
@@ -269,6 +269,22 @@
               "codeRefs"
             ],
             "description": "本轮已核实的项目版本/代码入口/边界；未知版本写 null，不把网上最新版当安装版本。"
+          },
+          "projectContext": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前项目身份、领域、用户/受益者、可组合valueTypes、stage、已有需求与证据；沿用调用方同一设计，不新增状态。"
+          },
+          "researchEvaluation": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前研究比较的实际产物：来源/修订/兼容、候选机制、反例、选择依据、停止/重开条件、可比小实验和已观察边界。"
           }
         },
         "required": [
@@ -817,12 +833,21 @@
                           }
                         },
                         "implementationNotes": {
-                          "type": "array",
-                          "uniqueItems": true,
-                          "items": {
-                            "type": "string",
-                            "minLength": 1
-                          }
+                          "oneOf": [
+                            {
+                              "type": "array",
+                              "uniqueItems": true,
+                              "items": {
+                                "type": "string",
+                                "minLength": 1
+                              }
+                            },
+                            {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          ],
+                          "description": "Module implementation notes; preserve a supplied list or legacy nonempty text for shared design binding."
                         },
                         "removalCandidates": {
                           "type": "array",
@@ -874,6 +899,148 @@
                   "modules"
                 ],
                 "description": "当前 productDesign 内的两层软件设计；architecture 与 modules 引用同一设计的既有决定、旅程、状态、接口、任务和验收；没有独立批准或调度状态。探索允许未定项，小任务不强制新增。"
+              },
+              "projectCapabilityRequirements": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "projectId": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "baseComponentId": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "baseComponentVersion": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "role": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "targetPath": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "domainEvidenceRefs": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "uniqueItems": true,
+                      "minItems": 1
+                    },
+                    "responsibilities": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "uniqueItems": true,
+                      "minItems": 1
+                    },
+                    "boundaries": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "uniqueItems": true,
+                      "minItems": 1
+                    },
+                    "projectDelta": {
+                      "description": "Project-specific professional differences; new records use an array. Legacy nonempty text remains unchanged for source-bound digest compatibility.",
+                      "oneOf": [
+                        {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "uniqueItems": true,
+                          "minItems": 1
+                        },
+                        {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      ]
+                    },
+                    "reuseConditions": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "uniqueItems": true,
+                      "minItems": 1
+                    },
+                    "requiredInputs": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "uniqueItems": true,
+                      "minItems": 1
+                    },
+                    "toolRequirements": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "uniqueItems": true,
+                      "minItems": 1
+                    },
+                    "acceptance": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "uniqueItems": true,
+                      "minItems": 1
+                    }
+                  },
+                  "required": [
+                    "projectId",
+                    "baseComponentId",
+                    "baseComponentVersion",
+                    "role",
+                    "targetPath",
+                    "domainEvidenceRefs",
+                    "responsibilities",
+                    "boundaries",
+                    "projectDelta",
+                    "reuseConditions",
+                    "requiredInputs",
+                    "toolRequirements",
+                    "acceptance"
+                  ]
+                },
+                "description": "给专业宿主创建/原地迭代本项目独立能力的完整需求，绑定基底版本、领域差异、来源和可证伪验收。"
+              },
+              "researchEvaluation": {
+                "type": [
+                  "string",
+                  "object",
+                  "array"
+                ],
+                "description": "当前研究比较的实际产物：来源/修订/兼容、候选机制、反例、选择依据、停止/重开条件、可比小实验和已观察边界。"
+              },
+              "projectContext": {
+                "type": [
+                  "string",
+                  "object",
+                  "array"
+                ],
+                "description": "当前项目身份、领域、用户/受益者、可组合valueTypes、stage、已有需求与证据；沿用调用方同一设计，不新增状态。"
               }
             },
             "description": "当前任务同一份 productDesign 的候选内容或修订；其他字段沿用调用方 PRD。不是新的状态库、批准或调度器。",
@@ -918,6 +1085,148 @@
                 }
               }
             ]
+          },
+          "projectCapabilityRequirements": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "projectId": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "baseComponentId": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "baseComponentVersion": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "role": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "targetPath": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "domainEvidenceRefs": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "uniqueItems": true,
+                  "minItems": 1
+                },
+                "responsibilities": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "uniqueItems": true,
+                  "minItems": 1
+                },
+                "boundaries": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "uniqueItems": true,
+                  "minItems": 1
+                },
+                "projectDelta": {
+                  "description": "Project-specific professional differences; new records use an array. Legacy nonempty text remains unchanged for source-bound digest compatibility.",
+                  "oneOf": [
+                    {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "uniqueItems": true,
+                      "minItems": 1
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  ]
+                },
+                "reuseConditions": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "uniqueItems": true,
+                  "minItems": 1
+                },
+                "requiredInputs": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "uniqueItems": true,
+                  "minItems": 1
+                },
+                "toolRequirements": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "uniqueItems": true,
+                  "minItems": 1
+                },
+                "acceptance": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "uniqueItems": true,
+                  "minItems": 1
+                }
+              },
+              "required": [
+                "projectId",
+                "baseComponentId",
+                "baseComponentVersion",
+                "role",
+                "targetPath",
+                "domainEvidenceRefs",
+                "responsibilities",
+                "boundaries",
+                "projectDelta",
+                "reuseConditions",
+                "requiredInputs",
+                "toolRequirements",
+                "acceptance"
+              ]
+            },
+            "description": "给专业宿主创建/原地迭代本项目独立能力的完整需求，绑定基底版本、领域差异、来源和可证伪验收。"
+          },
+          "researchEvaluation": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前研究比较的实际产物：来源/修订/兼容、候选机制、反例、选择依据、停止/重开条件、可比小实验和已观察边界。"
+          },
+          "projectContext": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前项目身份、领域、用户/受益者、可组合valueTypes、stage、已有需求与证据；沿用调用方同一设计，不新增状态。"
           }
         },
         "required": [

@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.0
+
+- Bind current project value/stage and decision-relevant research to professional delivery.
+- Preserve project-owned specialization, source/version boundaries and actual-observation limits.
+- Add applicable regression coverage; authored cases remain not_evaluated.
+
+
 ## 0.1.0 - 2026-11-11
 
 - 为全部 1 项现有能力补充具体诊断、决策、逐字段验收、所需证据与不可抵消的阻断项。

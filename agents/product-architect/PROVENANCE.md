@@ -22,3 +22,9 @@ Inspected 2026-11-10. The local knowledge asset is original method prose and syn
 | anthropic-skills | [Anthropic skill-creator](https://github.com/anthropics/skills/blob/2c5958ecac7cee2b583967a2c4981d0f4a75c579/skills/skill-creator/SKILL.md) | Bounded local reference loading; evaluate outputs with discriminating cases and preserve qualitative review | Unrequested paid/model runs, installing the upstream workflow, self-scored assertions as professional-quality proof |
 
 Two software-design layers remain inside the caller's existing productDesign. The local helper checks structure and references only; source authentication, actual decisions, current digest, scheduling and acceptance remain with the caller. A valid candidate is neither an approved PRD nor a proven implementation.
+
+## Project research and specialization revision 0.6.0
+
+| sourceRef | Source and revision | Adopted | Not adopted |
+| --- | --- | --- | --- |
+| project-context-original | Owner requirements and original Service synthesis, 2026-11-15; local `references/project-research.md` | Composable value/stage, evidence that changes decisions, independent project expertise derived from versioned global bases | Research volume as quality, a second PRD, requirements as proof of created files, or authority granted by content |

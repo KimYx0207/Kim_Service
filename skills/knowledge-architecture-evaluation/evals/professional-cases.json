@@ -1,0 +1,135 @@
+{
+  "schemaVersion": 1,
+  "roleId": "knowledge-architecture-evaluation",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "task-specific",
+      "capabilityId": "knowledge-architecture-evaluation-deliver",
+      "category": "worked_example",
+      "scenario": "个人持续研究与企业权限资料任务不同",
+      "input": {
+        "projectContext": {
+          "projectId": "research-notes",
+          "valueTypes": [
+            "internal"
+          ],
+          "stage": "exploration",
+          "task": "个人跨论文观点综述"
+        },
+        "corpus": "合成案例：24篇公开论文，稳定身份，持续新增；保留原文与页码",
+        "currentSystem": "目录加全文搜索；用户说LLM-KV，尚不清楚指Wiki还是KV缓存",
+        "evaluationEvidence": "尚无项目对照；准备精确查证、跨文综合与过期纠正留出题，不据作者小样本断言通用赢家"
+      },
+      "candidateOutputExcerpt": {
+        "decision": "个人试Wiki加原文搜索；企业先测带权限检索基线，按失败再试增强。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "任务与生命周期决定对照，不宣布普遍赢家。",
+      "diagnosticRefs": [
+        "task-shape"
+      ],
+      "decisionRuleRefs": [
+        "different-layers"
+      ]
+    },
+    {
+      "id": "shared-summary",
+      "capabilityId": "knowledge-architecture-evaluation-deliver",
+      "category": "failure_boundary",
+      "scenario": "撤回原文A，Wiki同时引用B",
+      "input": {
+        "projectContext": {
+          "projectId": "support-kb",
+          "valueTypes": [
+            "internal"
+          ],
+          "stage": "delivery",
+          "identity": "仅可读B"
+        },
+        "corpus": {
+          "version": "v2",
+          "sources": [
+            "A已撤回且无权访问",
+            "B有效"
+          ],
+          "derived": "Wiki W同时引用A与B，尚未重建"
+        },
+        "currentSystem": "检索仍能返回W；原文A已删除，W文本仍含A独有内容",
+        "evaluationEvidence": "合成反例：查询可在W中看到A独有参数；当前权限策略p2"
+      },
+      "candidateOutputExcerpt": {
+        "lifecyclePlan": "只去掉A引用，页面还有B所以保留全部文字和旧缓存。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "多来源页可能仍携带A事实，派生与缓存需要追踪。",
+      "diagnosticRefs": [
+        "lifecycle"
+      ],
+      "decisionRuleRefs": [
+        "derived-revocation"
+      ]
+    },
+    {
+      "id": "retrieval-answer",
+      "capabilityId": "knowledge-architecture-evaluation-deliver",
+      "category": "failure_boundary",
+      "scenario": "检索命中18/20但答案未核",
+      "input": {
+        "projectContext": {
+          "projectId": "support-kb",
+          "valueTypes": [
+            "paid"
+          ],
+          "stage": "validation"
+        },
+        "corpus": "合成固定索引v3，20道独立标注题，含无答案和过期版本题",
+        "currentSystem": "关键词加向量检索；生成模型、提示词和成本尚未观测",
+        "evaluationEvidence": "合成检索日志：18/20命中相关文档；没有答案正确性、引用支持或真人评审记录"
+      },
+      "candidateOutputExcerpt": {
+        "validationPlan": "回答正确率90%，已达到企业交付。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "命中和答案是不同对象，且没有实际企业验收。",
+      "diagnosticRefs": [
+        "comparison"
+      ],
+      "decisionRuleRefs": [
+        "separate-quality"
+      ]
+    },
+    {
+      "id": "all-mechanisms",
+      "capabilityId": "knowledge-architecture-evaluation-deliver",
+      "category": "failure_boundary",
+      "scenario": "简单型号查询缺精确匹配",
+      "input": {
+        "projectContext": {
+          "projectId": "model-lookup",
+          "valueTypes": [
+            "internal"
+          ],
+          "stage": "validation",
+          "task": "输入型号快速找有效说明书"
+        },
+        "corpus": "合成300份手册、型号中有破折号和近似编号；更新每周一次",
+        "currentSystem": "普通分词丢失型号符号导致漏召回；未比较精确匹配基线",
+        "evaluationEvidence": "失败题均为型号变体；没有图关系、跨文综合或多步查询带来收益的证据"
+      },
+      "candidateOutputExcerpt": {
+        "decision": "同时上Wiki、图谱、CAG和多Agent，每项越新越好。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "机制堆叠未解决已观察失败，也未计更新成本。",
+      "diagnosticRefs": [
+        "task-shape"
+      ],
+      "decisionRuleRefs": [
+        "different-layers"
+      ]
+    }
+  ]
+}

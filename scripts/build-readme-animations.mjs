@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { layerCopy } from './readme-layer-copy.mjs';
+import { projectCopy } from './readme-project-copy.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const check = process.argv.includes('--check');
@@ -20,8 +21,8 @@ const copy = {
       phases: ['从目标检索，先看角色需要什么材料', '阅读案例，再补上需要的专业步骤', 'Hook 和工具按实际需要配置', '把目标、材料、方法组成这次请求'],
       foot: '这次带给 AI 的完整请求', footLines: ['目标与材料 · 所选方法 · 交付文件 · 检查要求'] },
     delivery: { title: '从经营资料，到可复算的结果', sub: '经营预测流程示意 · 亮线展示这一轮走到哪里',
-      cards: [ ['说清目标，搜索任务', ['想知道明年现金够不够', '在任务浏览器搜索“经营预测”']], ['核对材料与示例', ['看财务建模的输入、输出和完整案例', '准备报表、销量、成本与回款假设']], ['选用方法，交给 AI', ['让 AI 读完整方法，复制这次请求', '常用方法按客户端需要安装']], ['按专业方法计算', ['先统一期间、币种、单位', '连接收入、成本、回款，比较三种情景']], ['打开文件，复算验收', ['抽查：期初现金＋流入－流出', '确认情景差异与文件能否实际打开']], ['保留成果，继续下一轮', ['输入 JSON · 结果 JSON · 月度 CSV', '保存已确认的假设、待核项和下一步']] ],
-      phases: ['1 / 用要得到的结果搜索任务', '2 / 看懂示例，补齐本次需要的材料', '3 / 选用方法，让当前 AI 客户端执行', '4 / 先核口径，再计算三种情景', '5 / 实际打开和复算，查清异常原因', '6 / 留下可继续的结果，修改时有依据'],
+      cards: [ ['在 Agent 对话里说目标', ['想知道明年现金够不够', '让当前 Agent 发现财务建模方法']], ['核对材料与示例', ['看财务建模的输入、输出和完整案例', '准备报表、销量、成本与回款假设']], ['选用方法，交给 AI', ['让 AI 读取方法，结合项目要求', '常用方法按客户端需要安装']], ['按专业方法计算', ['先统一期间、币种、单位', '连接收入、成本、回款，比较三种情景']], ['打开文件，复算验收', ['抽查：期初现金＋流入－流出', '确认情景差异与文件能否实际打开']], ['保留成果，继续下一轮', ['输入 JSON · 结果 JSON · 月度 CSV', '保存已确认的假设、待核项和下一步']] ],
+      phases: ['1 / 在当前 Agent 中提出需求', '2 / 看懂示例，补齐本次需要的材料', '3 / 选用方法，让当前 AI 客户端执行', '4 / 先核口径，再计算三种情景', '5 / 实际打开和复算，查清异常原因', '6 / 留下可继续的结果，修改时有依据'],
       iterate: '把当月回款从 65% 改成 45%？', iterateSub: '改输入 → 重算相关结果 → 再检查', note: '示例假设；实际处理发生在 AI 客户端中' },
     collaboration: { title: 'Meta 安排工作，Service 提供方法', sub: '同一份 PRD 分两轮展开，再按依赖安排任务',
       goal: ['目标与验收要求', '把预约页做成可继续开发的产品'], plan: ['第一轮 PRD：系统与模块大纲', '定范围、模块边界和共同约定'], detail: ['第二轮 PRD：逐模块详细设计', '明确页面状态、接口字段和验收方法'],
@@ -37,8 +38,8 @@ const copy = {
       phases: ['Search by goal; inspect the inputs the role needs', 'Read an example and choose relevant Skills', 'Configure Hooks and tools when useful', 'Combine the goal, materials, and method'],
       foot: 'A complete request for this task', footLines: ['Goal + materials · method · files · acceptance checks'] },
     delivery: { title: 'From business data to usable results', sub: 'Forecast workflow · the bright path shows the current step',
-      cards: [ ['Describe the goal and search', ['Will cash last through the next year?', 'Search the task browser for a forecast']], ['Check the inputs and example', ['Read the role’s inputs, outputs, and example', 'Bring statements, sales, costs, collections']], ['Select a method and use your AI', ['Load the full method; paste your request', 'Install a reusable entry when useful']], ['Calculate with the method', ['Align periods, currency, and units first', 'Connect profit and cash; compare scenarios']], ['Open files and verify results', ['Check: opening cash + receipts − payments', 'Inspect scenario changes and actual files']], ['Keep results for the next revision', ['Input JSON · result JSON · monthly CSV', 'Save decisions, unresolved items, next steps']] ],
-      phases: ['1 / Search for the result you want', '2 / Inspect the example and prepare the inputs', '3 / Give the method to your current AI client', '4 / Reconcile inputs, then calculate scenarios', '5 / Open and recalculate; investigate any gaps', '6 / Preserve a result you can continue from'],
+      cards: [ ['Describe the goal in your agent', ['Will cash last through the next year?', 'Let the agent discover the forecast method']], ['Check the inputs and example', ['Read the role’s inputs, outputs, and example', 'Bring statements, sales, costs, collections']], ['Select a method and use your AI', ['Load the method and project requirements', 'Install a reusable entry when useful']], ['Calculate with the method', ['Align periods, currency, and units first', 'Connect profit and cash; compare scenarios']], ['Open files and verify results', ['Check: opening cash + receipts − payments', 'Inspect scenario changes and actual files']], ['Keep results for the next revision', ['Input JSON · result JSON · monthly CSV', 'Save decisions, unresolved items, next steps']] ],
+      phases: ['1 / Describe the result in your current agent', '2 / Inspect the example and prepare the inputs', '3 / Give the method to your current AI client', '4 / Reconcile inputs, then calculate scenarios', '5 / Open and recalculate; investigate any gaps', '6 / Preserve a result you can continue from'],
       iterate: 'Change collections: 65% → 45%?', iterateSub: 'Edit inputs → recalculate → check again', note: 'Example assumptions; the AI client performs the work' },
     collaboration: { title: 'Meta plans. Service supplies methods.', sub: 'One PRD, two passes; dependencies determine the order',
       goal: ['Goal and acceptance criteria', 'Turn a booking page into a working product'], plan: ['PRD pass 1: system and modules', 'Set the scope, boundaries, and shared contracts'], detail: ['PRD pass 2: each module in detail', 'Define page states, interface fields, and checks'],
@@ -221,9 +222,26 @@ function layers(lang) {
   return svg(lang,'05',1485,t.title,t.sub,out,4,24);
 }
 
+function projectExpertise(lang) {
+  const t=projectCopy[lang];
+  const card=(x,y,w,h,row,color,phase,center=false)=>{
+    const tx=center?x+w/2:x+24,align=center?' center':'';
+    return `<g class="node" data-label="${esc(row[0])}">`+panel(x,y,w,h,color,phase)+text(tx,y+51,row[0],'label'+align)+lines(tx,y+104,row[1],'note'+align,41)+'</g>';
+  };
+  let out=card(64,205,832,150,t.source,C.blue,0,true);
+  out+=route('M480 355 V396 H262 V437',1,C.teal)+route('M480 355 V396 H698 V437',1,C.purple)+arrow(262,443,C.teal)+arrow(698,443,C.purple);
+  t.projects.forEach((row,i)=>{
+    const x=i?500:64,col=i?C.purple:C.teal,cx=x+198;
+    out+=card(x,449,396,190,row,col,1)+route(`M${cx} 639 V693`,2,col)+arrow(cx,699,col);
+    out+=card(x,705,396,190,t.owners[i],col,2);
+  });
+  out+='<rect x="48" y="937" width="864" height="69" rx="18" fill="#eaf0fb"/>'+text(480,981,t.steady,'note center')+lines(480,1060,t.foot,'note center',42);
+  return svg(lang,'06',1140,t.title,t.sub,out,4,24);
+}
+
 const generated=[];
 for (const lang of Object.keys(copy)) {
-  for (const [name,build] of Object.entries({ capabilities, delivery, collaboration, 'work-context': workContext, layers })) {
+  for (const [name,build] of Object.entries({ capabilities, delivery, collaboration, 'work-context': workContext, layers, 'project-expertise': projectExpertise })) {
     const relative=`docs/images/animated-service-${name}.${lang}.svg`;
     const content=build(lang), target=path.join(root,relative);
     if(check) {

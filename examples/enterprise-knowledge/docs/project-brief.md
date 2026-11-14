@@ -18,6 +18,8 @@ Python 3.12、SQLite/FTS5、NumPy、ONNX Runtime 和 Tokenizers。关键词 BM25
 
 Embedding 固定 `sentence-transformers/all-MiniLM-L6-v2@1110a243fdf4706b3f48f1d95db1a4f5529b4d41`；reranker 固定 `cross-encoder/ms-marco-MiniLM-L6-v2@233902d25c440f23af6f7d6e94d2946bac0bee0a`。默认下载官方 float32 ONNX；不调用付费生成模型。模型和执行指纹用于阻止不同执行条件混合恢复。
 
+schema 3 默认分窗覆盖全部输入 token，embedding 加权归并，reranker 对全部窗口对取每段最高分。完整覆盖是可检查的执行约束，检索质量单独评价；不把“处理过全部内容”当作“全部内容都能正确召回”。官方 lastturn、history 和 rewrite 条件分别记录。
+
 原始公开快照不改写。ACL/删除/乱序/幂等使用隔离受控覆盖层；不声称生产 SSO、私有连接器、PDF/OCR、当前厂商功能适用性或企业 SLA。应用、存储、检索、UI 分层。界面只显示 API 实数，未运行即待运行。
 
 ## 可复核标准
@@ -28,7 +30,7 @@ Embedding 固定 `sentence-transformers/all-MiniLM-L6-v2@1110a243fdf4706b3f48f1d
 | K02 | 全语料真实向量化、BM25、dense、RRF 与 reranker 均有实际调用 | 模型与索引 manifest、任务 checkpoint、逐 query top-k 与时延 |
 | K03 | 全部 188 条 lastturn 问题按同一语料和候选预算比较；不注入 gold positives | 固定评测协议、逐题结果、Recall@5/10/50、nDCG@10、MRR@10、失败题 |
 | K04 | 原文、段落 ID、来源 URL、快照和内容 hash 可回查，显示检索结果的两路排名与重排分数 | API 回执、真实界面截图、引用读取测试 |
-| K05 | 受控撤权/删除后所有检索分支及直接读取均不泄露受限内容；旧事件不能复活删除 | 隔离测试数据标记、事件日志、拒绝/过滤结果、回归 |
+| K05 | 受控撤权/删除后所有检索分支及直接读取均不泄露受限内容，包括完全相同正文副本；旧事件及另一来源的恢复不能复活删除 | 隔离测试数据标记、同文组计数、事件日志、拒绝/过滤结果、回归 |
 | K06 | 导入/向量任务中断后按持久 checkpoint 继续；重复请求不重复副作用；乱序与 CAS 冲突明确 | 实际进程停启记录、前后 SQL/哈希、幂等与并发检查 |
 | K07 | 候选 generation 与 active pointer 分离，采用/回滚为原子操作且保留可复查旧版；覆盖层不随回滚撤销安全删除 | generation 记录、采用/回滚回执、同题对照 |
 | K08 | 向量 int8 存储压缩真实运行并报告字节/检索差异，不借用厂商成绩 | 量化 manifest、Recall 相对 float32 及 qrels 指标、实测时延 |

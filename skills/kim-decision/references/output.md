@@ -210,12 +210,12 @@ Rules:
 
 0. **Localize visible labels.** Headings, section names, field labels, gate status, and evidence labels must use the user's language unless they are product names, commands, API fields, file paths, code identifiers, or common acronyms.
 1. **Lead with the verdict.** State the decision and the key number upfront. "This can make X. The logic is Y. Proceed." not "Intent: ... Subject: ..."
-2. **Explain revenue logic in plain language.** "X pays Y for Z because..." not template fields.
+2. **Explain the applicable value in plain language.** For paid work explain why someone pays; for internal work explain the task improvement; for open source explain reproducible adoption and maintenance.
 3. **Present evidence as experience.** "This is validated by competitor data (tier B)" or "I could not verify this — you need to confirm (tier D)" not "Confirmed: ... Inference: ..."
 4. **Use business phrasing.** "The play is...", "The risk here is...", "My recommendation is..." — talk like you are at a table, not writing a report.
 5. **Hide template headings.** The analytical framework is the backend thinking. The output should flow as natural paragraphs with transitions, not as a list of template sections.
 6. **MVP scope reads like a commitment.** "V1 does X only, ships in Y days, nothing else." not "V1 scope: ... Fastest delivery: ..."
-7. **Boss perspective reads like a pitch.** "They buy because X. Week one they see Y." not "Why buy: ... Quick win: ..."
+7. **Use the beneficiary perspective.** Explain why they would use the result and when the real feedback cycle can show value.
 8. **Delivery loop reads like a handoff.** "You give me X, I give you Y, acceptance criteria is Z, and the whole process is reusable next time." not "Input: ... Output: ..."
 9. **Execution beats explanation.** If a paragraph explains a principle but does not change the user's next move, cut it or turn it into an action.
 10. **Leave one useful image.** For creative, product, offer, and strategy work, include one concrete scene or example that lets the user picture the result.

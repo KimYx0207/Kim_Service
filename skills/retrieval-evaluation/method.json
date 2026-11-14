@@ -22,6 +22,7 @@
   ],
   "steps": [
     "固定问题、语料、权限范围和相关性定义，检查重复或泄漏标签。",
+    "核语料、身份和策略版本；更新/撤回或派生知识影响检索时，保留完整暴露轨迹，交knowledge-architecture-evaluation检查专项生命周期。",
     "按相同k取得各版本有序结果，记录无结果和异常。",
     "逐题去重计算命中、召回及首个相关位置，再按约定聚合。",
     "分语言/任务/难度比较结果，回读失败文档定位原因。",
@@ -50,7 +51,9 @@
       ],
       "sourceRefs": [
         "ragas-recall",
-        "mlflow-eval"
+        "mlflow-eval",
+        "lightrag-core",
+        "wiki-comparison"
       ]
     },
     {
@@ -121,6 +124,12 @@
         "when": "文档命中",
         "action": "另检回答引用和事实",
         "avoid": "宣称回答正确"
+      },
+      {
+        "id": "lifecycle-separate",
+        "when": "出现资料更新、撤回、权限变化或编纂派生内容",
+        "action": "按当前身份/来源版本单列失败，不用平均检索分抵消；生命周期轨迹交专项评审",
+        "avoid": "旧索引仍命中就称知识库正确或已完成撤回。"
       }
     ],
     "contractGuidance": [
@@ -214,6 +223,30 @@
               "下一步"
             ],
             "blocking": false
+          },
+          {
+            "id": "retrieval-evaluation-lifecyclefindings",
+            "field": "lifecycleFindings",
+            "criterion": "当前语料/身份/策略版本的更新、撤回、权限与派生缓存观察；未运行明确标记。",
+            "rejectWhen": "检索指标掩盖越权/过期证据，或合成样本和自动评分冒充真人观察。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "当前版本/身份/来源与实际输出",
+              "原始记录和未观察项"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "retrieval-evaluation-evaluationboundary",
+            "field": "evaluationBoundary",
+            "criterion": "检索、答案、引用、成本与人工/自动评分边界，保留独立题集和人工救援。",
+            "rejectWhen": "检索指标掩盖越权/过期证据，或合成样本和自动评分冒充真人观察。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "当前版本/身份/来源与实际输出",
+              "原始记录和未观察项"
+            ],
+            "blocking": true
           }
         ]
       }

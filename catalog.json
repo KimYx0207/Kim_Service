@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "repository": "KimYx0207/Kim_Service",
-  "componentCount": 92,
+  "componentCount": 94,
   "release": {
     "repository": "KimYx0207/Kim_Service",
     "remoteName": "origin",
@@ -87,9 +87,9 @@
       "source": "canonical:agents/applied-ai-engineer",
       "revision": "38cc340bb6225666f7fa1637aa70d2db39936a52",
       "snapshot": "committed-component-tree",
-      "version": "0.1.0",
-      "contractSha256": "0dd096d25ac8773a8897ba5b6a03289d425235646070060256ae01db6f28b80e",
-      "contentSha256": "bb7c2766fd0e5029dd544fdf9e189940f5577f58eeba23970b7d74e8abf30556",
+      "version": "0.2.0",
+      "contractSha256": "3f2f4e760209869a0edd1d2a57f56c9394bef2f04f18852567252c0425b95c58",
+      "contentSha256": "cc58be6b1b76e368d922231aa6c3208e7849da8e80756c78654a6363d7de1b48",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -340,17 +340,19 @@
       "source": "canonical:agents/design-system-designer",
       "revision": "38cc340bb6225666f7fa1637aa70d2db39936a52",
       "snapshot": "committed-component-tree",
-      "version": "0.2.1",
-      "contractSha256": "82dab737ed93d98fd2d526d89242c4b688791f67d29343209a304e4f77458154",
-      "contentSha256": "6125077d0adf43451bd281b1a446fb7fe440d9298222c44d724a0cd1748da42f",
+      "version": "0.3.0",
+      "contractSha256": "d41b6c9177e2c451ee414d2e36bfc4be7c50eef2b3f01f214fd1c09bbbe68115",
+      "contentSha256": "c48a4c1439dcfaded9b470c60f8ec0e3d2daf78242744fadcfc266b36ec4f4b1",
       "required": [
         "AGENT.md",
         "capability.json",
         "tests/contract.test.mjs",
-        "tests/tokens.test.mjs"
+        "tests/tokens.test.mjs",
+        "tests/project-experience.test.mjs"
       ],
       "validation": [
         "node tests/contract.test.mjs",
+        "node tests/project-experience.test.mjs",
         "node tests/tokens.test.mjs"
       ]
     },
@@ -424,16 +426,18 @@
       "source": "canonical:agents/frontend-engineer",
       "revision": "2ced5b407c206072041dae4604352eb13715ba9d",
       "snapshot": "committed-component-tree",
-      "version": "0.4.3",
-      "contractSha256": "5f2e5b2706fd2bcdceeae27ca8aafec4f852f876649530b6d9e0edc1c0f9f204",
-      "contentSha256": "91380a7ccae3c2051694290a4b63b6c0853388982a1e0f3a6dc46743fccb4de6",
+      "version": "0.5.0",
+      "contractSha256": "91cf73b1d7802f6846fda9375d808f2983fca5ff7d5f85a81f1c1466c406a2dc",
+      "contentSha256": "c524b790ebaf68f397f6ffe54320b654159cd7aa41297d922c9dbc42cce8002d",
       "required": [
         "AGENT.md",
         "capability.json",
-        "tests/contract.test.mjs"
+        "tests/contract.test.mjs",
+        "tests/project-experience.test.mjs"
       ],
       "validation": [
-        "node tests/contract.test.mjs"
+        "node tests/contract.test.mjs",
+        "node tests/project-experience.test.mjs"
       ]
     },
     {
@@ -557,16 +561,18 @@
       "source": "canonical:agents/interaction-designer",
       "revision": "2ced5b407c206072041dae4604352eb13715ba9d",
       "snapshot": "committed-component-tree",
-      "version": "0.5.1",
-      "contractSha256": "9fd28ee39d92382ccbbe4d6cf7cfd1e9552fa201ff4de0e37ede7aef3dbe66ac",
-      "contentSha256": "6c7a4265b2b9e85affaefc9578379eb86b21cbd7b1b26931d98d0fde4fb38843",
+      "version": "0.6.0",
+      "contractSha256": "d58d77aed0d5b48e6c834afdcc2dbf8c0faf90de76fb3725d4b0d7283be46446",
+      "contentSha256": "c703007c885a793e2fa9b85bc8fbe216fc019aad063f30a0b26bb466b51087d2",
       "required": [
         "AGENT.md",
         "capability.json",
-        "tests/contract.test.mjs"
+        "tests/contract.test.mjs",
+        "tests/project-experience.test.mjs"
       ],
       "validation": [
-        "node tests/contract.test.mjs"
+        "node tests/contract.test.mjs",
+        "node tests/project-experience.test.mjs"
       ]
     },
     {
@@ -747,9 +753,9 @@
       "source": "canonical:agents/product-architect",
       "revision": "2ced5b407c206072041dae4604352eb13715ba9d",
       "snapshot": "committed-component-tree",
-      "version": "0.5.1",
-      "contractSha256": "b01ea07f0f75557468412c9c35dc728cee59443d221ee94b6224585559298e6f",
-      "contentSha256": "37aef092ac95f75a5f2ca54197b50c25b843a4a8b02b9c21a66e3858b6d7cb38",
+      "version": "0.6.0",
+      "contractSha256": "8b4c10ae655aeb224a12402af7c33473b29253ad3acdc06f739dde5b6007deff",
+      "contentSha256": "b222dd0fad87edd952964bbd042b60d369503ef3033d15f7d435f8af972ae174",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -1099,16 +1105,18 @@
       "source": "canonical:agents/user-researcher",
       "revision": "2ced5b407c206072041dae4604352eb13715ba9d",
       "snapshot": "committed-component-tree",
-      "version": "0.1.2",
-      "contractSha256": "631459fcc86a20ebd33d5bc6127be65cad5a5fb0e44cae8d79eb4e151859640b",
-      "contentSha256": "8cd3bed9226f19f3c8dd78be7e29aa36953b21f502f1bbebc2303525db894720",
+      "version": "0.2.0",
+      "contractSha256": "3f6c9443aeba0981309e0954cf84df8ebf3d31e035aafa0080f8f7674cb5ca29",
+      "contentSha256": "6abcb2ceac62888af4a2baa785520bc2fe605f2ba2f4e432a55cc1151d4bcdfc",
       "required": [
         "AGENT.md",
         "capability.json",
-        "tests/contract.test.mjs"
+        "tests/contract.test.mjs",
+        "tests/project-experience.test.mjs"
       ],
       "validation": [
-        "node tests/contract.test.mjs"
+        "node tests/contract.test.mjs",
+        "node tests/project-experience.test.mjs"
       ]
     },
     {
@@ -1614,9 +1622,9 @@
       "source": "https://github.com/KimYx0207/Kim_Decision",
       "revision": "fbbe41cb6155ffd605c65b5af3f876ec25cfc0ea",
       "snapshot": "self-contained-public-package-with-privacy-and-monorepo-install-doc-adapter",
-      "version": "0.1.0",
-      "contractSha256": "6032112fb1d454d3c8fb73419ed204d5455b8e75c886a0514196382b175bd17c",
-      "contentSha256": "a3be44f79ab7abd2e287675d206f0a17b9e0beb166e61e807f9ef8366af25745",
+      "version": "0.2.0",
+      "contractSha256": "3d5cbfc814980f2519c1618824384549e0d3401a0f258122ef0f719eed29e158",
+      "contentSha256": "f4ec6f7315e4740c1a514d760b28ab719f77334e45d6d82079bf57a6c5d42d38",
       "required": [
         "SKILL.md",
         "references/method.md",
@@ -1629,11 +1637,15 @@
         "NOTICE",
         "capability.json",
         "tests/behavior.test.mjs",
-        "tests/boundary.test.mjs"
+        "tests/boundary.test.mjs",
+        "tests/cli.test.mjs",
+        "tests/value-stage.test.mjs"
       ],
       "validation": [
         "node tests/behavior.test.mjs",
-        "node tests/boundary.test.mjs"
+        "node tests/boundary.test.mjs",
+        "node tests/cli.test.mjs",
+        "node tests/value-stage.test.mjs"
       ]
     },
     {
@@ -1659,6 +1671,33 @@
       "validation": [
         "python evals/test_finish_frames.py",
         "python evals/test_install_skill.py"
+      ]
+    },
+    {
+      "id": "knowledge-architecture-evaluation",
+      "kind": "skill",
+      "path": "skills/knowledge-architecture-evaluation",
+      "source": "canonical:skills/knowledge-architecture-evaluation",
+      "revision": "pending-local:1c01304cf2123d09ce75624eaf3bc90b66aafd276c2b118192cbbd885b4f02ac",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.0",
+      "contractSha256": "1c01304cf2123d09ce75624eaf3bc90b66aafd276c2b118192cbbd885b4f02ac",
+      "contentSha256": "086f957fa680f6b6ce718ec0c596733e687d4755aedc3a5add6a4759cf80e733",
+      "required": [
+        "capability.json",
+        "CHANGELOG.md",
+        "LICENSE",
+        "NOTICE",
+        "README.md",
+        "SKILL.md",
+        "tests/cli.test.mjs",
+        "tests/contract.test.mjs",
+        "tests/lineage.test.mjs"
+      ],
+      "validation": [
+        "node tests/cli.test.mjs",
+        "node tests/contract.test.mjs",
+        "node tests/lineage.test.mjs"
       ]
     },
     {
@@ -1803,9 +1842,9 @@
       "source": "canonical:skills/retrieval-evaluation",
       "revision": "38cc340bb6225666f7fa1637aa70d2db39936a52",
       "snapshot": "committed-component-tree",
-      "version": "0.1.0",
-      "contractSha256": "513e412226c7a3d77b6645aed12599572252bf775bb28ccad8f8d55279e88acd",
-      "contentSha256": "3b1441765b9121a1e72edf9fc7534433fd73dd8ff9940bb7b661b4d6284a48c0",
+      "version": "0.2.0",
+      "contractSha256": "beabea36d951884a5715a5dfc60b8fb41e5c4ea7d9350a3023d7303440d2ec60",
+      "contentSha256": "f7d1d9a151b2ba01c8e4b8910547e8005617499a1d439a83d7162c1b70ebb1dc",
       "required": [
         "capability.json",
         "CHANGELOG.md",
@@ -1872,6 +1911,33 @@
       ],
       "validation": [
         "node tests/contract.test.mjs"
+      ]
+    },
+    {
+      "id": "technology-option-evaluation",
+      "kind": "skill",
+      "path": "skills/technology-option-evaluation",
+      "source": "canonical:skills/technology-option-evaluation",
+      "revision": "pending-local:456550d4c280f8635b80508ebfb92f80ea28778e10e61fe7188130a88972cbe1",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.0",
+      "contractSha256": "456550d4c280f8635b80508ebfb92f80ea28778e10e61fe7188130a88972cbe1",
+      "contentSha256": "ede83b360fa316a3aa517829c724de4cdddfb420791a03e12a751bc72e92be49",
+      "required": [
+        "capability.json",
+        "CHANGELOG.md",
+        "LICENSE",
+        "NOTICE",
+        "README.md",
+        "SKILL.md",
+        "tests/cli.test.mjs",
+        "tests/contract.test.mjs",
+        "tests/decision.test.mjs"
+      ],
+      "validation": [
+        "node tests/cli.test.mjs",
+        "node tests/contract.test.mjs",
+        "node tests/decision.test.mjs"
       ]
     },
     {

@@ -5,6 +5,7 @@
   "runtimeStatus": "needs_probe",
   "automaticInvocation": false,
   "steps": [
+    "按当前项目上下文识别可组合价值类型和阶段；读取business.md，先查可得事实再问真正改变选择的未知。",
     "把决策写成对象、备选方案、时间窗口、成功条件和不能违反的约束，区分建议与执行授权。",
     "先做证据台账：原始来源、时间、样本或覆盖范围、单位、缺失项，以及它影响哪条判断。",
     "先排除违反硬约束的方案，再比较可权衡目标；分数与权重只是明确假设的辅助，不掩盖红线。",
@@ -40,6 +41,17 @@
       "sourceRefs": [
         "existing-package"
       ]
+    },
+    {
+      "id": "kim-decision-business",
+      "path": "references/business.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "existing-package",
+        "nasa-design"
+      ]
     }
   ],
   "expertise": {
@@ -50,7 +62,8 @@
     ],
     "knowledgeAssetIds": [
       "kim-decision-acceptance",
-      "kim-decision-verification"
+      "kim-decision-verification",
+      "kim-decision-business"
     ],
     "diagnosticSequence": [
       {
@@ -79,6 +92,15 @@
           "硬约束与推荐翻转点"
         ],
         "whenMissing": "不输出精确但无依据的评分；说明无法稳定排序的原因。"
+      },
+      {
+        "id": "value-stage",
+        "question": "本项目创造什么价值，当前是在探索、验证、交付还是扩大？",
+        "evidenceRequired": [
+          "受益者与结果",
+          "可组合价值类型与阶段"
+        ],
+        "whenMissing": "先明确最小验证，不强制已有收入或复购。"
       }
     ],
     "decisionRules": [
@@ -99,6 +121,12 @@
         "when": "提出 MVP 或验证行动",
         "action": "按业务反馈周期、资源和用户时限推导范围与判据",
         "avoid": "机械要求14天、任意阈值或借模型数量制造可信度。"
+      },
+      {
+        "id": "value-stage-fit",
+        "when": "判断产品、成本或商业方案",
+        "action": "按可组合paid/internal/open-source及阶段选择证据；收入缺口只限制相关商业承诺，合理一次性交付按其经济账",
+        "avoid": "内部/开源无付款人就停止，或探索阶段要求已证明规模收入。"
       }
     ],
     "contractGuidance": [
@@ -124,6 +152,11 @@
             "field": "constraints",
             "interpretation": "不可违反的限制与可权衡偏好。",
             "onMissing": "说明暂定假设，路线会变化时请决策者确认。"
+          },
+          {
+            "field": "projectContext",
+            "interpretation": "当前项目身份、领域、用户/受益者、可组合valueTypes、stage、已有需求与证据；沿用调用方同一设计，不新增状态。",
+            "onMissing": "从用户任务和可得材料判适用价值与阶段；不能据收入未知否决所有项目。"
           }
         ],
         "outputChecks": [
@@ -217,6 +250,18 @@
             "verificationMethod": "artifact_inspection",
             "evidenceRequired": [
               "验收主体与待确认项"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "kim-decision-project-context",
+            "field": "projectContext",
+            "criterion": "可组合价值类型和阶段对应实际证据；内部、开源和商业探索有各自最小验证。",
+            "rejectWhen": "所有项目被统一收入硬门阻断，或仅因六项有答案就宣称已证明商业可行。",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "当前价值/阶段依据",
+              "适用指标与最小验证"
             ],
             "blocking": true
           }

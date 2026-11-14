@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.6.0
+
+- Align projectDelta and module implementationNotes with Meta: preserve shared string arrays and legacy nonempty text without changing the source-bound representation.
+
+- Bind current project value/stage and decision-relevant research to professional delivery.
+- Preserve project-owned specialization, source/version boundaries and actual-observation limits.
+- Add applicable regression coverage; authored cases remain not_evaluated.
+
+
 ## 0.5.1 - 2026-11-11
 
 - Use task-specific handling for material unknowns and existing authorization.

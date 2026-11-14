@@ -1,0 +1,271 @@
+{
+  "schemaVersion": 1,
+  "id": "technology-option-evaluation",
+  "componentType": "skill",
+  "componentVersion": "0.1.0",
+  "entrypoint": "SKILL.md",
+  "capabilities": [
+    {
+      "id": "technology-option-evaluation-deliver",
+      "summary": "技术路线研究与比较：用当前证据、可比候选和反例形成有边界的专业建议。",
+      "useWhen": [
+        "用户请求技术路线或知识系统的研究、比较与适用判断。",
+        "当前实现暴露选型、版本、质量或维护问题。"
+      ],
+      "doNotUseWhen": [
+        "已定的局部实现无需重新做完整选型。",
+        "不负责调度、批准、自动安装、模型调用或发布。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "projectContext": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "项目、用户、可组合价值类型、阶段与验收"
+          },
+          "decisionScope": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "本次需要选择的边界与已有决定"
+          },
+          "currentSystem": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "实际现状、版本与代码/环境证据"
+          },
+          "constraints": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "不可交换约束、偏好、预算与授权范围"
+          }
+        },
+        "required": [
+          "projectContext",
+          "decisionScope",
+          "currentSystem",
+          "constraints"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "projectContext": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前项目价值、阶段和场景得到保留，不把收费模型推广为所有项目硬门。"
+          },
+          "comparisons": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "比较机制实质不同的可行选项，先筛硬约束，再比较真实适用条件和全周期成本。"
+          },
+          "evidenceLedger": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "来源绑定主张、版本、时间、适用环境、反证与消费它的决定。"
+          },
+          "decision": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "选择关联当前需求与证据，说明拒绝理由、关键假设、翻转条件和研究停止理由。"
+          },
+          "validationPlan": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "用最小对照解决剩余关键未知，冻结任务/数据/版本/预算和留出题，分别记录人工救援。"
+          },
+          "projectCapabilityRequirements": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "projectId": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "baseComponentId": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "baseComponentVersion": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "role": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "targetPath": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "domainEvidenceRefs": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "uniqueItems": true,
+                  "minItems": 1
+                },
+                "responsibilities": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "uniqueItems": true,
+                  "minItems": 1
+                },
+                "boundaries": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "uniqueItems": true,
+                  "minItems": 1
+                },
+                "projectDelta": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "uniqueItems": true,
+                  "minItems": 1
+                },
+                "reuseConditions": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "uniqueItems": true,
+                  "minItems": 1
+                },
+                "requiredInputs": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "uniqueItems": true,
+                  "minItems": 1
+                },
+                "toolRequirements": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "uniqueItems": true,
+                  "minItems": 1
+                },
+                "acceptance": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "uniqueItems": true,
+                  "minItems": 1
+                }
+              },
+              "required": [
+                "projectId",
+                "baseComponentId",
+                "baseComponentVersion",
+                "role",
+                "targetPath",
+                "domainEvidenceRefs",
+                "responsibilities",
+                "boundaries",
+                "projectDelta",
+                "reuseConditions",
+                "requiredInputs",
+                "toolRequirements",
+                "acceptance"
+              ]
+            },
+            "description": "给专业宿主创建/原地迭代本项目独立能力的完整需求，绑定基底版本、领域差异、来源和可证伪验收。"
+          },
+          "facts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "明确事实、来源主张、测量、假设与未观察范围。"
+          },
+          "handoff": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "交回当前设计的决定/需求引用、可用产物、局部缺口和下一验证，不新建状态源。"
+          }
+        },
+        "required": [
+          "projectContext",
+          "comparisons",
+          "evidenceLedger",
+          "decision",
+          "validationPlan",
+          "projectCapabilityRequirements",
+          "facts",
+          "handoff"
+        ]
+      },
+      "permissions": [
+        "filesystem:read-user-materials",
+        "web:read-public-sources"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "仅超出已有授权的付费模型、生产数据外发、发布或不可逆动作交调用方决定；已授权可逆研究与离线检查继续。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs",
+        "tests/decision.test.mjs",
+        "tests/cli.test.mjs"
+      ]
+    }
+  ]
+}

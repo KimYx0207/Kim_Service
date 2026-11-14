@@ -41,7 +41,9 @@ class ModelBytesIdentityTests(unittest.TestCase):
                 model_fixture(folder)
                 session = Mock()
                 session.get_inputs.return_value = []
-                with patch('app.embedding.Tokenizer.from_file'), patch(
+                tokenizer = Mock()
+                tokenizer.token_to_id.side_effect = {'[CLS]': 1, '[SEP]': 2, '[PAD]': 0}.get
+                with patch('app.embedding.Tokenizer.from_file', return_value=tokenizer), patch(
                         'app.embedding.ort.InferenceSession', return_value=session) as load:
                     EmbeddingModel(folder)
                     load.reset_mock()
@@ -59,10 +61,18 @@ class ControlledEncoder:
     max_length = 8
     truncated_count = 0
 
-    def __init__(self, threads=3):
-        self.execution_identity = encoder_execution(self.metadata, threads)
+    def __init__(self, threads=3, coverage_strategy='sliding', window_overlap=32):
+        self.execution_identity = encoder_execution(self.metadata, threads, coverage_strategy, window_overlap)
+        self.coverage_stats = {'inputs': 0, 'input_tokens': 0, 'covered_tokens': 0,
+                               'dropped_tokens': 0, 'window_count': 0, 'long_inputs': 0}
+        self.truncated_count = 0
 
     def encode(self, texts, batch_size=32):
+        tokens = sum(len(text.split()) for text in texts)
+        self.coverage_stats['inputs'] += len(texts)
+        self.coverage_stats['input_tokens'] += tokens
+        self.coverage_stats['covered_tokens'] += tokens
+        self.coverage_stats['window_count'] += len(texts)
         return np.array([[1., 0.] for _ in texts], dtype=np.float32)
 
 
@@ -131,6 +141,27 @@ class CheckpointIdentityTests(unittest.TestCase):
                    'changed-version' if name == 'tokenizers' else original(name)):
             with self.assertRaises(AppError):
                 self.run_build()
+
+    def test_duplicate_inputs_across_resume_keep_ids_and_count_only_unique_encoding(self):
+        with self.store.connect() as db:
+            db.execute('UPDATE passages SET text=?,sha256=? WHERE id=?',
+                       ('zebra 1', digest('zebra 1'), 'doc-2'))
+            db.execute('INSERT INTO passages VALUES(?,?,?,?,?,?,?)',
+                       (3, 'doc-3', 'zebra 3', '', '', digest('zebra 3'), 'fixture'))
+        self.store.set_setting('corpus', {'passages': 3, 'sha256': 'fixture', 'source_commit': 'fixture'})
+        self.run_build('--stop-after', '1')
+        folder = self.store.index_root/'test-v2'
+        first = np.load(folder/'vectors.f32.npy')[0].copy()
+        self.run_build()
+        manifest = self.store.generation('test-v2')['manifest']
+        self.assertEqual(json.loads((folder/'ids.json').read_text()), ['doc-1', 'doc-2', 'doc-3'])
+        self.assertEqual(manifest['embedded'], 3)
+        self.assertEqual(manifest['coverage_stats']['inputs'], 2)
+        self.assertEqual(manifest['deduplication']['unique_input_count'], 2)
+        self.assertEqual(manifest['deduplication']['reused_passage_vectors'], 1)
+        values = np.load(folder/'vectors.f32.npy')
+        np.testing.assert_array_equal(values[0], first)
+        np.testing.assert_array_equal(values[0], values[1])
 
 
 class EvaluationIdentityTests(unittest.TestCase):

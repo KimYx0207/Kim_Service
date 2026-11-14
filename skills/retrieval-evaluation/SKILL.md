@@ -18,6 +18,7 @@ description: 检索质量评估（retrieval evaluation RAG recall precision MRR�
 ## 执行
 
 1. 固定问题、语料、权限范围和相关性定义，检查重复或泄漏标签。
+   核语料、用户身份与策略版本；来源更新/撤回涉及派生知识时，记录模型实际看到的材料，按需把生命周期审查交 `knowledge-architecture-evaluation`。
 2. 按相同k取得各版本有序结果，记录无结果和异常。
 3. 逐题去重计算命中、召回及首个相关位置，再按约定聚合。
 4. 分语言/任务/难度比较结果，回读失败文档定位原因。
@@ -31,6 +32,7 @@ description: 检索质量评估（retrieval evaluation RAG recall precision MRR�
 - `slices`：分层和回归结果。
 - `diagnosis`：错误归因。
 - `nextExperiment`：下次试验。
+- `lifecycleFindings` / `evaluationBoundary`：适用时记录更新、撤回、权限、派生缓存和真实/合成观察边界；检索 ID 算分不能证明这些操作已执行。
 
 ## 检查结果
 

@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 1,
+  "roleId": "technology-option-evaluation",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "internal",
+      "capabilityId": "technology-option-evaluation-deliver",
+      "category": "worked_example",
+      "scenario": "内部工具月预算100，候选150但更快",
+      "input": {
+        "projectContext": {
+          "projectId": "shift-assistant",
+          "valueTypes": [
+            "internal"
+          ],
+          "stage": "validation",
+          "beneficiary": "8位轮班主管",
+          "outcome": "降低排班耗时且保持规则正确"
+        },
+        "decisionScope": "保留本地规则脚本或更换托管优化器",
+        "currentSystem": "合成案例：Python 3.11、本地脚本；每周3小时排班；托管候选兼容性未知",
+        "constraints": [
+          "月支出上限100元",
+          "候选托管方案报价150元/月",
+          "本轮仅离线验证，不发出采购承诺"
+        ]
+      },
+      "candidateOutputExcerpt": {
+        "decision": "先保留预算内基线；内部价值按耗时和差错验证，收入不是本轮门槛。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "硬约束优先，未把付费假设强加内部项目。",
+      "diagnosticRefs": [
+        "choice"
+      ],
+      "decisionRuleRefs": [
+        "hard-first"
+      ]
+    },
+    {
+      "id": "score",
+      "capabilityId": "technology-option-evaluation-deliver",
+      "category": "failure_boundary",
+      "scenario": "候选超预算但综合分95",
+      "input": {
+        "projectContext": {
+          "projectId": "shift-assistant",
+          "valueTypes": [
+            "internal"
+          ],
+          "stage": "delivery"
+        },
+        "decisionScope": "在冻结预算内选择能交付的排班方案",
+        "currentSystem": "合成对照：现有脚本80元/月、耗时20秒；新服务150元/月、耗时2秒；加权展示分95",
+        "constraints": [
+          "硬预算100元/月",
+          "排班规则错误率不得上升",
+          "无提高预算的授权"
+        ]
+      },
+      "candidateOutputExcerpt": {
+        "decision": "速度最好所以立即采用超预算方案。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "不能用偏好补硬约束，方案未获改变预算授权。",
+      "diagnosticRefs": [
+        "comparison"
+      ],
+      "decisionRuleRefs": [
+        "hard-first"
+      ]
+    },
+    {
+      "id": "search-count",
+      "capabilityId": "technology-option-evaluation-deliver",
+      "category": "failure_boundary",
+      "scenario": "列十个仓库但没有适用差异和版本",
+      "input": {
+        "projectContext": {
+          "projectId": "catalog-search",
+          "valueTypes": [
+            "paid"
+          ],
+          "stage": "exploration"
+        },
+        "decisionScope": "现有关键词检索是否改成混合检索",
+        "currentSystem": "Python3.10，依赖锁文件待读取；现有组件0.9；资料只有十个仓库首页链接和Star数",
+        "constraints": [
+          "需兼容实际环境",
+          "精确型号召回必须保留",
+          "当前版本与部署成本未核"
+        ]
+      },
+      "candidateOutputExcerpt": {
+        "evidenceLedger": "十个热门项目都推荐，所以本项目一定最优。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "来源数量不证明环境适配或改变选择。",
+      "diagnosticRefs": [
+        "evidence"
+      ],
+      "decisionRuleRefs": [
+        "decision-evidence"
+      ]
+    },
+    {
+      "id": "global-only",
+      "capabilityId": "technology-option-evaluation-deliver",
+      "category": "failure_boundary",
+      "scenario": "项目有独有型号表与权限合同",
+      "input": {
+        "projectContext": {
+          "projectId": "motor-support",
+          "valueTypes": [
+            "internal"
+          ],
+          "stage": "delivery",
+          "domain": "机电型号知识服务"
+        },
+        "decisionScope": "形成长期维护的本项目检索能力及适用技术方案",
+        "currentSystem": "已有全局applied-ai-engineer@0.2.0；项目有独有型号词表和部门权限合同；尚无本项目专业包",
+        "constraints": [
+          "每个长期项目建立独立专业能力",
+          "保留型号精确匹配规则",
+          "权限与资料撤回必须沿派生链生效"
+        ]
+      },
+      "candidateOutputExcerpt": {
+        "handoff": "直接调用全局专家即可，无需项目独立专业规则。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "忽略领域证据和可复用项目能力要求。",
+      "diagnosticRefs": [
+        "specialization"
+      ],
+      "decisionRuleRefs": [
+        "project-owned"
+      ]
+    }
+  ]
+}

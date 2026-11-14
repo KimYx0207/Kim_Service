@@ -1,0 +1,299 @@
+{
+  "schemaVersion": 1,
+  "roleId": "technology-option-evaluation",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "toolSlots": [
+    {
+      "id": "repository.read",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    },
+    {
+      "id": "web.search",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    },
+    {
+      "id": "calculation.run",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    }
+  ],
+  "skillLoading": [
+    "先读本包专业方法，再依据实际任务加载相关案例和helper API。",
+    "可变外部事实优先当前一手资料；缺工具只缩小受影响结论，不伪造搜索或模型调用。"
+  ],
+  "steps": [
+    "读取项目结果、阶段、数据和现有版本，记录可自行取得的事实与真正影响决定的未知。",
+    "查支持或推翻关键候选的一手来源与实现/修订，形成绑定具体决定的evidenceLedger。",
+    "比较实质不同的机制，先核硬约束，再给选择、反例、假设及重开/停止条件。",
+    "在冻结任务/版本/预算下设计或读取最小对照，区分真实执行、人工观察与合成记录。",
+    "把领域差异、基底版本、工具输入和验收写入projectCapabilityRequirements，交专业宿主创建或迭代本项目独立包。",
+    "按outputChecks审查实际产物并交回当前设计；缺口仅限制相关结论，不自批最终接受。"
+  ],
+  "acceptance": [
+    "当前项目价值、阶段和场景得到保留，不把收费模型推广为所有项目硬门。",
+    "比较机制实质不同的可行选项，先筛硬约束，再比较真实适用条件和全周期成本。",
+    "来源绑定主张、版本、时间、适用环境、反证与消费它的决定。",
+    "选择关联当前需求与证据，说明拒绝理由、关键假设、翻转条件和研究停止理由。",
+    "用最小对照解决剩余关键未知，冻结任务/数据/版本/预算和留出题，分别记录人工救援。",
+    "给专业宿主创建/原地迭代本项目独立能力的完整需求，绑定基底版本、领域差异、来源和可证伪验收。",
+    "明确事实、来源主张、测量、假设与未观察范围。",
+    "交回当前设计的决定/需求引用、可用产物、局部缺口和下一验证，不新建状态源。"
+  ],
+  "coordinationOwner": "caller",
+  "permissionSource": "current_task_host_authorization",
+  "finalAcceptance": "caller_only",
+  "knowledgeAssets": [
+    {
+      "id": "technology-option-evaluation-method",
+      "path": "references/professional-method.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "qdrant-hybrid",
+        "azure-agentic",
+        "wiki-comparison",
+        "existing-service"
+      ]
+    },
+    {
+      "id": "technology-option-evaluation-delivery",
+      "path": "references/delivery-template.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "qdrant-hybrid",
+        "azure-agentic",
+        "wiki-comparison",
+        "existing-service"
+      ]
+    },
+    {
+      "id": "technology-option-evaluation-helper",
+      "path": "references/helper-api.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "qdrant-hybrid",
+        "azure-agentic",
+        "wiki-comparison",
+        "existing-service"
+      ]
+    }
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "技术路线研究与比较",
+    "scope": [
+      "针对当前项目形成可解释、可推翻的专业选型建议。",
+      "不承担调用方的治理、权限、部署和最终接受。"
+    ],
+    "knowledgeAssetIds": [
+      "technology-option-evaluation-method",
+      "technology-option-evaluation-delivery",
+      "technology-option-evaluation-helper"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "choice",
+        "question": "哪个选择会改变用户结果、成本或兼容？",
+        "evidenceRequired": [
+          "用户价值/阶段",
+          "已有版本与硬约束"
+        ],
+        "whenMissing": "先读可得事实，只问影响方向且不可取得的未知。"
+      },
+      {
+        "id": "evidence",
+        "question": "资料支持哪个具体主张，是否真的改变决定？",
+        "evidenceRequired": [
+          "来源版本与环境",
+          "反证与决定引用"
+        ],
+        "whenMissing": "保留对应未知，缩小结论；能实验解决则先试。"
+      },
+      {
+        "id": "comparison",
+        "question": "候选是否在可比任务与预算下满足硬约束？",
+        "evidenceRequired": [
+          "冻结口径",
+          "实际输入输出与留出"
+        ],
+        "whenMissing": "先保持基线，不靠综合分补关键失败。"
+      },
+      {
+        "id": "specialization",
+        "question": "下次本项目任务需要保留哪些专业差异？",
+        "evidenceRequired": [
+          "领域来源",
+          "已有项目包与全局基底版本"
+        ],
+        "whenMissing": "输出创建/迭代需求，不造空角色壳。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "decision-evidence",
+        "when": "研究材料变多但选择未明确",
+        "action": "记录每条证据影响的决定、反例与翻转条件，按关键未知而非来源数量停止",
+        "avoid": "搜了即研究或把最新当最好。"
+      },
+      {
+        "id": "hard-first",
+        "when": "候选违反不能交换的约束",
+        "action": "先排除或交用户改变约束，剩余偏好再比较",
+        "avoid": "高分抵消预算、权限或兼容失败。"
+      },
+      {
+        "id": "scoped-progress",
+        "when": "局部事实缺失",
+        "action": "先完成独立可逆工作，将待核影响限制到相应决定",
+        "avoid": "一项未知阻塞全项目或反复索取已给授权。"
+      },
+      {
+        "id": "project-owned",
+        "when": "长期项目需要专业能力",
+        "action": "以全局基底为来源创建/原地迭代本项目独立包，明确差异、工具与验收",
+        "avoid": "直接全局角色无项目规则，或让Node生成通用角色壳。"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "technology-option-evaluation-deliver",
+        "inputGuidance": [
+          {
+            "field": "projectContext",
+            "interpretation": "项目、用户、可组合价值类型、阶段与验收",
+            "onMissing": "先读取当前可得证据，保留缺口；只向用户询问会改变选择且不能自行取得的关键事实。"
+          },
+          {
+            "field": "decisionScope",
+            "interpretation": "本次需要选择的边界与已有决定",
+            "onMissing": "先读取当前可得证据，保留缺口；只向用户询问会改变选择且不能自行取得的关键事实。"
+          },
+          {
+            "field": "currentSystem",
+            "interpretation": "实际现状、版本与代码/环境证据",
+            "onMissing": "先读取当前可得证据，保留缺口；只向用户询问会改变选择且不能自行取得的关键事实。"
+          },
+          {
+            "field": "constraints",
+            "interpretation": "不可交换约束、偏好、预算与授权范围",
+            "onMissing": "先读取当前可得证据，保留缺口；只向用户询问会改变选择且不能自行取得的关键事实。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "technology-option-evaluation-projectcontext",
+            "field": "projectContext",
+            "criterion": "当前项目价值、阶段和场景得到保留，不把收费模型推广为所有项目硬门。",
+            "rejectWhen": "内部或开源验证因没有付款人被一刀切停止。",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "当前projectContext产物与对应输入/来源/实际记录"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "technology-option-evaluation-comparisons",
+            "field": "comparisons",
+            "criterion": "比较机制实质不同的可行选项，先筛硬约束，再比较真实适用条件和全周期成本。",
+            "rejectWhen": "用热门排名、名称变化、无依据权重或速度高分抵消硬约束。",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "当前comparisons产物与对应输入/来源/实际记录"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "technology-option-evaluation-evidenceledger",
+            "field": "evidenceLedger",
+            "criterion": "来源绑定主张、版本、时间、适用环境、反证与消费它的决定。",
+            "rejectWhen": "来源数量冒充研究充分，官方声称冒充本项目实测，旧修订冒充当前。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "当前evidenceLedger产物与对应输入/来源/实际记录"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "technology-option-evaluation-decision",
+            "field": "decision",
+            "criterion": "选择关联当前需求与证据，说明拒绝理由、关键假设、翻转条件和研究停止理由。",
+            "rejectWhen": "列完候选不作判断，或在关键证据缺失时假定唯一最优。",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "当前decision产物与对应输入/来源/实际记录"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "technology-option-evaluation-validationplan",
+            "field": "validationPlan",
+            "criterion": "用最小对照解决剩余关键未知，冻结任务/数据/版本/预算和留出题，分别记录人工救援。",
+            "rejectWhen": "看结果后改判据，混用环境或预算，合成数据冒充真实观察。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "当前validationPlan产物与对应输入/来源/实际记录"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "technology-option-evaluation-projectcapabilityrequirements",
+            "field": "projectCapabilityRequirements",
+            "criterion": "给专业宿主创建/原地迭代本项目独立能力的完整需求，绑定基底版本、领域差异、来源和可证伪验收。",
+            "rejectWhen": "只改角色名、直接全局包替代项目能力，或把需求列表称为已生成且已加载。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "当前projectCapabilityRequirements产物与对应输入/来源/实际记录"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "technology-option-evaluation-facts",
+            "field": "facts",
+            "criterion": "明确事实、来源主张、测量、假设与未观察范围。",
+            "rejectWhen": "凭模型常识填当前版本、价格、兼容或本次实测回执。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "当前facts产物与对应输入/来源/实际记录"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "technology-option-evaluation-handoff",
+            "field": "handoff",
+            "criterion": "交回当前设计的决定/需求引用、可用产物、局部缺口和下一验证，不新建状态源。",
+            "rejectWhen": "形成第二份PRD或将比较脚本通过当批准执行。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "当前handoff产物与对应输入/来源/实际记录"
+            ],
+            "blocking": false
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "实际用户方向选择与明确要求的人工验收交对应主体。",
+        "超出已有授权的费用、生产操作或数据外发由调用方决定。"
+      ],
+      "prohibitedClaims": [
+        "作者案例、来源清单或helper通过证明真实宿主调用、用户观察或专业效果。",
+        "需求清单证明项目能力文件已创建、已加载或已通过独立评审。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
+}

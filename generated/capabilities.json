@@ -1302,12 +1302,12 @@
       ]
     },
     {
-      "componentContentSha256": "bb7c2766fd0e5029dd544fdf9e189940f5577f58eeba23970b7d74e8abf30556",
+      "componentContentSha256": "cc58be6b1b76e368d922231aa6c3208e7849da8e80756c78654a6363d7de1b48",
       "componentId": "applied-ai-engineer",
       "componentPath": "agents/applied-ai-engineer",
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contractSha256": "0dd096d25ac8773a8897ba5b6a03289d425235646070060256ae01db6f28b80e",
+      "componentVersion": "0.2.0",
+      "contractSha256": "3f2f4e760209869a0edd1d2a57f56c9394bef2f04f18852567252c0425b95c58",
       "doNotUseWhen": [
         "纯数据管道交data-pipeline-engineer。",
         "训练底层大模型或采集无授权语料不属于本包。",
@@ -1334,6 +1334,22 @@
           },
           "materials": {
             "description": "数据源、访问范围、模型/索引版本",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "projectContext": {
+            "description": "当前项目身份、领域、用户/受益者、可组合valueTypes、stage、已有需求与证据；沿用调用方同一设计，不新增状态。",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "researchEvaluation": {
+            "description": "当前研究比较的实际产物：来源/修订/兼容、候选机制、反例、选择依据、停止/重开条件、可比小实验和已观察边界。",
             "type": [
               "string",
               "object",
@@ -1400,8 +1416,141 @@
               "array"
             ]
           },
+          "projectCapabilityRequirements": {
+            "description": "给专业宿主创建/原地迭代本项目独立能力的完整需求，绑定基底版本、领域差异、来源和可证伪验收。",
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "acceptance": {
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "minItems": 1,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "baseComponentId": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "baseComponentVersion": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "boundaries": {
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "minItems": 1,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "domainEvidenceRefs": {
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "minItems": 1,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "projectDelta": {
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "minItems": 1,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "projectId": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "requiredInputs": {
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "minItems": 1,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "responsibilities": {
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "minItems": 1,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "reuseConditions": {
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "minItems": 1,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "role": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "targetPath": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "toolRequirements": {
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "minItems": 1,
+                  "type": "array",
+                  "uniqueItems": true
+                }
+              },
+              "required": [
+                "projectId",
+                "baseComponentId",
+                "baseComponentVersion",
+                "role",
+                "targetPath",
+                "domainEvidenceRefs",
+                "responsibilities",
+                "boundaries",
+                "projectDelta",
+                "reuseConditions",
+                "requiredInputs",
+                "toolRequirements",
+                "acceptance"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "projectContext": {
+            "description": "当前项目身份、领域、用户/受益者、可组合valueTypes、stage、已有需求与证据；沿用调用方同一设计，不新增状态。",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
           "releasePolicy": {
             "description": "小范围试用与熔断策略",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "researchEvaluation": {
+            "description": "当前研究比较的实际产物：来源/修订/兼容、候选机制、反例、选择依据、停止/重开条件、可比小实验和已观察边界。",
             "type": [
               "string",
               "object",
@@ -5069,12 +5218,12 @@
       ]
     },
     {
-      "componentContentSha256": "6125077d0adf43451bd281b1a446fb7fe440d9298222c44d724a0cd1748da42f",
+      "componentContentSha256": "c48a4c1439dcfaded9b470c60f8ec0e3d2daf78242744fadcfc266b36ec4f4b1",
       "componentId": "design-system-designer",
       "componentPath": "agents/design-system-designer",
       "componentType": "agent",
-      "componentVersion": "0.2.1",
-      "contractSha256": "82dab737ed93d98fd2d526d89242c4b688791f67d29343209a304e4f77458154",
+      "componentVersion": "0.3.0",
+      "contractSha256": "d41b6c9177e2c451ee414d2e36bfc4be7c50eef2b3f01f214fd1c09bbbe68115",
       "doNotUseWhen": [
         "单页流程交interaction-designer。",
         "具体前端实现交frontend-engineer协作。",
@@ -5099,6 +5248,205 @@
               "array"
             ]
           },
+          "designBinding": {
+            "description": "由调用方提供的现行设计绑定；仅引用，不授予权限或自行认定当前版本。",
+            "properties": {
+              "contextDigest": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "designDigest": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "designId": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "revision": {
+                "minimum": 1,
+                "type": "integer"
+              },
+              "sliceId": {
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "designId",
+              "revision"
+            ],
+            "type": "object"
+          },
+          "designContext": {
+            "description": "调用方投影的当前模块/决定/状态/接口/上游产物；只读任务上下文，不是权限或另一份PRD真源。",
+            "properties": {
+              "applicableExperienceTaskIds": {
+                "description": "调用方当前切片负责的projectExperience任务子集；省略时采用完整profile，共享规则保留。",
+                "items": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array",
+                "uniqueItems": true
+              },
+              "projectExperience": {
+                "description": "当前 productDesign.projectExperience 的任务投影；引用项目独立专业规则与四层来源，不产生另一份设计或批准状态。字段及检查见 references/project-experience-api.md。",
+                "properties": {
+                  "layers": {
+                    "items": {
+                      "properties": {
+                        "level": {
+                          "enum": [
+                            "base",
+                            "domain",
+                            "brand",
+                            "task"
+                          ]
+                        },
+                        "rules": {
+                          "items": {
+                            "properties": {
+                              "id": {
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "invariant": {
+                                "type": "boolean"
+                              },
+                              "kind": {
+                                "enum": [
+                                  "visible_information",
+                                  "representation",
+                                  "recovery",
+                                  "theme",
+                                  "professional_judgment"
+                                ]
+                              },
+                              "overrides": {
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "requirement": {
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "target": {
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "taskIds": {
+                                "items": {
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "minItems": 1,
+                                "type": "array",
+                                "uniqueItems": true
+                              },
+                              "value": {},
+                              "verification": {
+                                "minLength": 1,
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "kind",
+                              "target",
+                              "requirement",
+                              "verification"
+                            ],
+                            "type": "object"
+                          },
+                          "type": "array"
+                        },
+                        "source": {
+                          "properties": {
+                            "digest": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "ref": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "version": {
+                              "minLength": 1,
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "ref",
+                            "version"
+                          ],
+                          "type": "object"
+                        }
+                      },
+                      "required": [
+                        "level",
+                        "source",
+                        "rules"
+                      ],
+                      "type": "object"
+                    },
+                    "type": "array"
+                  },
+                  "projectId": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "revision": {
+                    "minimum": 1,
+                    "type": "integer"
+                  },
+                  "schemaVersion": {
+                    "const": 1
+                  },
+                  "tasks": {
+                    "items": {
+                      "properties": {
+                        "actor": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "goal": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "id": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "successCondition": {
+                          "minLength": 1,
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "actor",
+                        "goal",
+                        "successCondition"
+                      ],
+                      "type": "object"
+                    },
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "schemaVersion",
+                  "projectId",
+                  "revision",
+                  "layers",
+                  "tasks"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
           "identity": {
             "description": "品牌色、字体、语言、密度和平台",
             "type": [
@@ -5106,6 +5454,65 @@
               "object",
               "array"
             ]
+          },
+          "projectFacts": {
+            "additionalProperties": false,
+            "description": "本轮已核实的项目版本/代码入口/边界；未知版本写 null，不把网上最新版当安装版本。",
+            "properties": {
+              "codeRefs": {
+                "items": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "type": "array",
+                "uniqueItems": true
+              },
+              "constraints": {
+                "items": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "type": "array",
+                "uniqueItems": true
+              },
+              "versions": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "evidenceRefs": {
+                      "items": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "type": "array",
+                      "uniqueItems": true
+                    },
+                    "name": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "version": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "version",
+                    "evidenceRefs"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "versions",
+              "codeRefs"
+            ],
+            "type": "object"
           },
           "surfaces": {
             "description": "已有页面、组件、真实内容和用户任务",
@@ -5127,6 +5534,37 @@
         "additionalProperties": false,
         "deliveryFormat": "conceptual-human-delivery",
         "properties": {
+          "artifactRefs": {
+            "items": {
+              "properties": {
+                "evidenceLevel": {
+                  "enum": [
+                    "design",
+                    "fixture",
+                    "local_execution",
+                    "host_execution",
+                    "external_verified"
+                  ]
+                },
+                "kind": {
+                  "type": "string"
+                },
+                "ref": {
+                  "type": "string"
+                },
+                "sha256": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "ref",
+                "kind",
+                "evidenceLevel"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
           "components": {
             "description": "组件行为与状态",
             "type": [
@@ -5135,6 +5573,70 @@
               "array"
             ]
           },
+          "criterionResults": {
+            "items": {
+              "properties": {
+                "evidenceRefs": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "id": {
+                  "type": "string"
+                },
+                "scope": {
+                  "type": "string"
+                },
+                "status": {
+                  "enum": [
+                    "pass",
+                    "fail",
+                    "not_run",
+                    "blocked"
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "status",
+                "evidenceRefs",
+                "scope"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "designBinding": {
+            "description": "由调用方提供的现行设计绑定；仅引用，不授予权限或自行认定当前版本。",
+            "properties": {
+              "contextDigest": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "designDigest": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "designId": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "revision": {
+                "minimum": 1,
+                "type": "integer"
+              },
+              "sliceId": {
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "designId",
+              "revision"
+            ],
+            "type": "object"
+          },
           "examples": {
             "description": "真实页面与多语言示例",
             "type": [
@@ -5142,6 +5644,154 @@
               "object",
               "array"
             ]
+          },
+          "experienceApplication": {
+            "description": "本轮提供 projectExperience 时，记录有效规则如何改变实际专业成果、当前页面状态及证据。规则ID回显不证明消费；helper只检查候选模型，实际体验仍需观察。",
+            "properties": {
+              "projectId": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "revision": {
+                "minimum": 1,
+                "type": "integer"
+              },
+              "ruleApplications": {
+                "items": {
+                  "properties": {
+                    "application": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "artifactRefs": {
+                      "items": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "type": "array",
+                      "uniqueItems": true
+                    },
+                    "observationRefs": {
+                      "items": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "type": "array",
+                      "uniqueItems": true
+                    },
+                    "ruleId": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "status": {
+                      "enum": [
+                        "specified",
+                        "observed",
+                        "not_run"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "ruleId",
+                    "status",
+                    "application"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "scope": {
+                "enum": [
+                  "research",
+                  "design",
+                  "implementation"
+                ]
+              },
+              "surfaceModels": {
+                "items": {
+                  "properties": {
+                    "information": {
+                      "items": {
+                        "properties": {
+                          "id": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "purpose": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "visibility": {
+                            "enum": [
+                              "primary",
+                              "visible",
+                              "on_demand"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "visibility"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "recovery": {
+                      "properties": {
+                        "actions": {
+                          "items": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "type": "array",
+                          "uniqueItems": true
+                        },
+                        "preserve": {
+                          "items": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "type": "array",
+                          "uniqueItems": true
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "representations": {
+                      "items": {
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "target": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "taskId": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "target",
+                    "taskId"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "themeTokens": {
+                "type": "object"
+              }
+            },
+            "required": [
+              "projectId",
+              "revision",
+              "scope",
+              "ruleApplications"
+            ],
+            "type": "object"
           },
           "facts": {
             "description": "本次材料、版本、单位和假设",
@@ -5158,6 +5808,51 @@
               "object",
               "array"
             ]
+          },
+          "knowledgeUsage": {
+            "description": "仅记录本轮实际装入或核实并使用的知识；PROVENANCE 清单不是本轮读取证据，不证明产物专业质量。",
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "appliedTo": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "assetId": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "limitations": {
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "sourceRefs": {
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "verification": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "assetId",
+                "sourceRefs",
+                "appliedTo",
+                "verification",
+                "limitations"
+              ],
+              "type": "object"
+            },
+            "type": "array"
           },
           "migration": {
             "description": "迁移和版本方案",
@@ -5198,7 +5893,8 @@
       ],
       "validation": [
         "tests/contract.test.mjs",
-        "tests/tokens.test.mjs"
+        "tests/tokens.test.mjs",
+        "tests/project-experience.test.mjs"
       ]
     },
     {
@@ -6700,12 +7396,12 @@
       ]
     },
     {
-      "componentContentSha256": "91380a7ccae3c2051694290a4b63b6c0853388982a1e0f3a6dc46743fccb4de6",
+      "componentContentSha256": "c524b790ebaf68f397f6ffe54320b654159cd7aa41297d922c9dbc42cce8002d",
       "componentId": "frontend-engineer",
       "componentPath": "agents/frontend-engineer",
       "componentType": "agent",
-      "componentVersion": "0.4.3",
-      "contractSha256": "5f2e5b2706fd2bcdceeae27ca8aafec4f852f876649530b6d9e0edc1c0f9f204",
+      "componentVersion": "0.5.0",
+      "contractSha256": "91cf73b1d7802f6846fda9375d808f2983fca5ff7d5f85a81f1c1466c406a2dc",
       "doNotUseWhen": [
         "未明确产品范围：交 product-architect",
         "更改服务认证和数据库：交 backend-data-engineer",
@@ -6778,6 +7474,171 @@
           },
           "designContext": {
             "description": "调用方投影的当前模块/决定/状态/接口/上游产物；只读任务上下文，不是权限或另一份PRD真源。",
+            "properties": {
+              "applicableExperienceTaskIds": {
+                "description": "调用方当前切片负责的projectExperience任务子集；省略时采用完整profile，共享规则保留。",
+                "items": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array",
+                "uniqueItems": true
+              },
+              "projectExperience": {
+                "description": "当前 productDesign.projectExperience 的任务投影；引用项目独立专业规则与四层来源，不产生另一份设计或批准状态。字段及检查见 references/project-experience-api.md。",
+                "properties": {
+                  "layers": {
+                    "items": {
+                      "properties": {
+                        "level": {
+                          "enum": [
+                            "base",
+                            "domain",
+                            "brand",
+                            "task"
+                          ]
+                        },
+                        "rules": {
+                          "items": {
+                            "properties": {
+                              "id": {
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "invariant": {
+                                "type": "boolean"
+                              },
+                              "kind": {
+                                "enum": [
+                                  "visible_information",
+                                  "representation",
+                                  "recovery",
+                                  "theme",
+                                  "professional_judgment"
+                                ]
+                              },
+                              "overrides": {
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "requirement": {
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "target": {
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "taskIds": {
+                                "items": {
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "minItems": 1,
+                                "type": "array",
+                                "uniqueItems": true
+                              },
+                              "value": {},
+                              "verification": {
+                                "minLength": 1,
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "kind",
+                              "target",
+                              "requirement",
+                              "verification"
+                            ],
+                            "type": "object"
+                          },
+                          "type": "array"
+                        },
+                        "source": {
+                          "properties": {
+                            "digest": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "ref": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "version": {
+                              "minLength": 1,
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "ref",
+                            "version"
+                          ],
+                          "type": "object"
+                        }
+                      },
+                      "required": [
+                        "level",
+                        "source",
+                        "rules"
+                      ],
+                      "type": "object"
+                    },
+                    "type": "array"
+                  },
+                  "projectId": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "revision": {
+                    "minimum": 1,
+                    "type": "integer"
+                  },
+                  "schemaVersion": {
+                    "const": 1
+                  },
+                  "tasks": {
+                    "items": {
+                      "properties": {
+                        "actor": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "goal": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "id": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "successCondition": {
+                          "minLength": 1,
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "actor",
+                        "goal",
+                        "successCondition"
+                      ],
+                      "type": "object"
+                    },
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "schemaVersion",
+                  "projectId",
+                  "revision",
+                  "layers",
+                  "tasks"
+                ],
+                "type": "object"
+              }
+            },
             "type": "object"
           },
           "handoffContext": {
@@ -7070,6 +7931,154 @@
             ],
             "type": "object"
           },
+          "experienceApplication": {
+            "description": "本轮提供 projectExperience 时，记录有效规则如何改变实际专业成果、当前页面状态及证据。规则ID回显不证明消费；helper只检查候选模型，实际体验仍需观察。",
+            "properties": {
+              "projectId": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "revision": {
+                "minimum": 1,
+                "type": "integer"
+              },
+              "ruleApplications": {
+                "items": {
+                  "properties": {
+                    "application": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "artifactRefs": {
+                      "items": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "type": "array",
+                      "uniqueItems": true
+                    },
+                    "observationRefs": {
+                      "items": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "type": "array",
+                      "uniqueItems": true
+                    },
+                    "ruleId": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "status": {
+                      "enum": [
+                        "specified",
+                        "observed",
+                        "not_run"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "ruleId",
+                    "status",
+                    "application"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "scope": {
+                "enum": [
+                  "research",
+                  "design",
+                  "implementation"
+                ]
+              },
+              "surfaceModels": {
+                "items": {
+                  "properties": {
+                    "information": {
+                      "items": {
+                        "properties": {
+                          "id": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "purpose": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "visibility": {
+                            "enum": [
+                              "primary",
+                              "visible",
+                              "on_demand"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "visibility"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "recovery": {
+                      "properties": {
+                        "actions": {
+                          "items": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "type": "array",
+                          "uniqueItems": true
+                        },
+                        "preserve": {
+                          "items": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "type": "array",
+                          "uniqueItems": true
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "representations": {
+                      "items": {
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "target": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "taskId": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "target",
+                    "taskId"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "themeTokens": {
+                "type": "object"
+              }
+            },
+            "required": [
+              "projectId",
+              "revision",
+              "scope",
+              "ruleApplications"
+            ],
+            "type": "object"
+          },
           "failures": {
             "items": {
               "properties": {
@@ -7259,7 +8268,8 @@
         "修复工作台执行状态，区分业务阶段与实时执行并展示来源缺失"
       ],
       "validation": [
-        "tests/contract.test.mjs"
+        "tests/contract.test.mjs",
+        "tests/project-experience.test.mjs"
       ]
     },
     {
@@ -8949,12 +9959,12 @@
       ]
     },
     {
-      "componentContentSha256": "6c7a4265b2b9e85affaefc9578379eb86b21cbd7b1b26931d98d0fde4fb38843",
+      "componentContentSha256": "c703007c885a793e2fa9b85bc8fbe216fc019aad063f30a0b26bb466b51087d2",
       "componentId": "interaction-designer",
       "componentPath": "agents/interaction-designer",
       "componentType": "agent",
-      "componentVersion": "0.5.1",
-      "contractSha256": "9fd28ee39d92382ccbbe4d6cf7cfd1e9552fa201ff4de0e37ede7aef3dbe66ac",
+      "componentVersion": "0.6.0",
+      "contractSha256": "d58d77aed0d5b48e6c834afdcc2dbf8c0faf90de76fb3725d4b0d7283be46446",
       "doNotUseWhen": [
         "需要改后端权限：交 backend-data-engineer",
         "纯代码实现：交 frontend-engineer",
@@ -9035,6 +10045,171 @@
           },
           "designContext": {
             "description": "调用方投影的当前模块/决定/状态/接口/上游产物；只读任务上下文，不是权限或另一份PRD真源。",
+            "properties": {
+              "applicableExperienceTaskIds": {
+                "description": "调用方当前切片负责的projectExperience任务子集；省略时采用完整profile，共享规则保留。",
+                "items": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array",
+                "uniqueItems": true
+              },
+              "projectExperience": {
+                "description": "当前 productDesign.projectExperience 的任务投影；引用项目独立专业规则与四层来源，不产生另一份设计或批准状态。字段及检查见 references/project-experience-api.md。",
+                "properties": {
+                  "layers": {
+                    "items": {
+                      "properties": {
+                        "level": {
+                          "enum": [
+                            "base",
+                            "domain",
+                            "brand",
+                            "task"
+                          ]
+                        },
+                        "rules": {
+                          "items": {
+                            "properties": {
+                              "id": {
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "invariant": {
+                                "type": "boolean"
+                              },
+                              "kind": {
+                                "enum": [
+                                  "visible_information",
+                                  "representation",
+                                  "recovery",
+                                  "theme",
+                                  "professional_judgment"
+                                ]
+                              },
+                              "overrides": {
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "requirement": {
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "target": {
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "taskIds": {
+                                "items": {
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "minItems": 1,
+                                "type": "array",
+                                "uniqueItems": true
+                              },
+                              "value": {},
+                              "verification": {
+                                "minLength": 1,
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "kind",
+                              "target",
+                              "requirement",
+                              "verification"
+                            ],
+                            "type": "object"
+                          },
+                          "type": "array"
+                        },
+                        "source": {
+                          "properties": {
+                            "digest": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "ref": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "version": {
+                              "minLength": 1,
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "ref",
+                            "version"
+                          ],
+                          "type": "object"
+                        }
+                      },
+                      "required": [
+                        "level",
+                        "source",
+                        "rules"
+                      ],
+                      "type": "object"
+                    },
+                    "type": "array"
+                  },
+                  "projectId": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "revision": {
+                    "minimum": 1,
+                    "type": "integer"
+                  },
+                  "schemaVersion": {
+                    "const": 1
+                  },
+                  "tasks": {
+                    "items": {
+                      "properties": {
+                        "actor": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "goal": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "id": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "successCondition": {
+                          "minLength": 1,
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "actor",
+                        "goal",
+                        "successCondition"
+                      ],
+                      "type": "object"
+                    },
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "schemaVersion",
+                  "projectId",
+                  "revision",
+                  "layers",
+                  "tasks"
+                ],
+                "type": "object"
+              }
+            },
             "type": "object"
           },
           "handoffContext": {
@@ -9324,6 +10499,154 @@
             "required": [
               "designId",
               "revision"
+            ],
+            "type": "object"
+          },
+          "experienceApplication": {
+            "description": "本轮提供 projectExperience 时，记录有效规则如何改变实际专业成果、当前页面状态及证据。规则ID回显不证明消费；helper只检查候选模型，实际体验仍需观察。",
+            "properties": {
+              "projectId": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "revision": {
+                "minimum": 1,
+                "type": "integer"
+              },
+              "ruleApplications": {
+                "items": {
+                  "properties": {
+                    "application": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "artifactRefs": {
+                      "items": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "type": "array",
+                      "uniqueItems": true
+                    },
+                    "observationRefs": {
+                      "items": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "type": "array",
+                      "uniqueItems": true
+                    },
+                    "ruleId": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "status": {
+                      "enum": [
+                        "specified",
+                        "observed",
+                        "not_run"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "ruleId",
+                    "status",
+                    "application"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "scope": {
+                "enum": [
+                  "research",
+                  "design",
+                  "implementation"
+                ]
+              },
+              "surfaceModels": {
+                "items": {
+                  "properties": {
+                    "information": {
+                      "items": {
+                        "properties": {
+                          "id": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "purpose": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "visibility": {
+                            "enum": [
+                              "primary",
+                              "visible",
+                              "on_demand"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "visibility"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "recovery": {
+                      "properties": {
+                        "actions": {
+                          "items": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "type": "array",
+                          "uniqueItems": true
+                        },
+                        "preserve": {
+                          "items": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "type": "array",
+                          "uniqueItems": true
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "representations": {
+                      "items": {
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "target": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "taskId": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "target",
+                    "taskId"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "themeTokens": {
+                "type": "object"
+              }
+            },
+            "required": [
+              "projectId",
+              "revision",
+              "scope",
+              "ruleApplications"
             ],
             "type": "object"
           },
@@ -9878,7 +11201,8 @@
         "需要按截图或原型验证交互是否完整"
       ],
       "validation": [
-        "tests/contract.test.mjs"
+        "tests/contract.test.mjs",
+        "tests/project-experience.test.mjs"
       ]
     },
     {
@@ -10471,12 +11795,12 @@
       ]
     },
     {
-      "componentContentSha256": "a3be44f79ab7abd2e287675d206f0a17b9e0beb166e61e807f9ef8366af25745",
+      "componentContentSha256": "f4ec6f7315e4740c1a514d760b28ab719f77334e45d6d82079bf57a6c5d42d38",
       "componentId": "kim-decision",
       "componentPath": "skills/kim-decision",
       "componentType": "skill",
-      "componentVersion": "0.1.0",
-      "contractSha256": "6032112fb1d454d3c8fb73419ed204d5455b8e75c886a0514196382b175bd17c",
+      "componentVersion": "0.2.0",
+      "contractSha256": "3d5cbfc814980f2519c1618824384549e0d3401a0f258122ef0f719eed29e158",
       "doNotUseWhen": [
         "The requested artifact is a Goal Prompt or Loop Prompt; use GoalPro instead.",
         "The request is to select or route components, coordinate a cross-component state machine, execute the recommendation, or claim final acceptance."
@@ -10510,6 +11834,14 @@
               "type": "string"
             },
             "type": "array"
+          },
+          "projectContext": {
+            "description": "当前项目身份、领域、用户/受益者、可组合valueTypes、stage、已有需求与证据；沿用调用方同一设计，不新增状态。",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
           }
         },
         "required": [
@@ -10609,6 +11941,14 @@
             "minLength": 1,
             "type": "string"
           },
+          "projectContext": {
+            "description": "当前项目身份、领域、用户/受益者、可组合valueTypes、stage、已有需求与证据；沿用调用方同一设计，不新增状态。",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
           "status": {
             "enum": [
               "decision-ready",
@@ -10641,7 +11981,9 @@
       ],
       "validation": [
         "tests/behavior.test.mjs",
-        "tests/boundary.test.mjs"
+        "tests/boundary.test.mjs",
+        "tests/value-stage.test.mjs",
+        "tests/cli.test.mjs"
       ]
     },
     {
@@ -10734,6 +12076,284 @@
       "validation": [
         "evals/test_finish_frames.py",
         "evals/test_install_skill.py"
+      ]
+    },
+    {
+      "componentContentSha256": "086f957fa680f6b6ce718ec0c596733e687d4755aedc3a5add6a4759cf80e733",
+      "componentId": "knowledge-architecture-evaluation",
+      "componentPath": "skills/knowledge-architecture-evaluation",
+      "componentType": "skill",
+      "componentVersion": "0.1.0",
+      "contractSha256": "1c01304cf2123d09ce75624eaf3bc90b66aafd276c2b118192cbbd885b4f02ac",
+      "doNotUseWhen": [
+        "已定的局部实现无需重新做完整选型。",
+        "不负责调度、批准、自动安装、模型调用或发布。"
+      ],
+      "entrypoint": "SKILL.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "仅超出已有授权的付费模型、生产数据外发、发布或不可逆动作交调用方决定；已授权可逆研究与离线检查继续。"
+        ]
+      },
+      "id": "knowledge-architecture-evaluation-deliver",
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "corpus": {
+            "description": "来源、语言、规模/token、变化、权限与撤回要求",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "currentSystem": {
+            "description": "模型/索引/运行时版本及现有路线",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "evaluationEvidence": {
+            "description": "问题、原文、运行轨迹、质量/成本数据及缺口",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "projectContext": {
+            "description": "项目用户、知识任务、价值类型、阶段与预算",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "projectContext",
+          "corpus",
+          "currentSystem",
+          "evaluationEvidence"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "comparisons": {
+            "description": "区分RAG取证、Wiki编纂、KV计算复用与图/Agentic策略，比较适用反例及组合必要性。",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "decision": {
+            "description": "给当前范围基线、候选与重开条件；用观察推动路线而非名词热度。",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "evidenceLedger": {
+            "description": "研究来源绑定作者版本、任务/环境、限制、修订、反证及当前决定。",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "facts": {
+            "description": "区分当前输入、来源主张、实际测量、合成教学和未观察。",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "handoff": {
+            "description": "交回同一设计、实际证据与受影响缺口；把实现、调度和最终接受交调用方。",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "lifecyclePlan": {
+            "description": "原文版本/权限追到切块、Wiki/图、缓存和引用，更新/撤回/ACL变化有真实回放和恢复。",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "projectCapabilityRequirements": {
+            "description": "为本项目独立知识工程/评测能力明确基底版本、领域规则、来源、工具和验收。",
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "acceptance": {
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "minItems": 1,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "baseComponentId": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "baseComponentVersion": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "boundaries": {
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "minItems": 1,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "domainEvidenceRefs": {
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "minItems": 1,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "projectDelta": {
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "minItems": 1,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "projectId": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "requiredInputs": {
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "minItems": 1,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "responsibilities": {
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "minItems": 1,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "reuseConditions": {
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "minItems": 1,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "role": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "targetPath": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "toolRequirements": {
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "minItems": 1,
+                  "type": "array",
+                  "uniqueItems": true
+                }
+              },
+              "required": [
+                "projectId",
+                "baseComponentId",
+                "baseComponentVersion",
+                "role",
+                "targetPath",
+                "domainEvidenceRefs",
+                "responsibilities",
+                "boundaries",
+                "projectDelta",
+                "reuseConditions",
+                "requiredInputs",
+                "toolRequirements",
+                "acceptance"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "projectContext": {
+            "description": "按照事实定位、综合研究、持续复用等任务及项目价值/阶段定义结果。",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "validationPlan": {
+            "description": "分开检索、答案、引用、权限、撤回、延迟和全周期成本，冻结可比条件并保留留出与人工救援。",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "projectContext",
+          "comparisons",
+          "evidenceLedger",
+          "decision",
+          "lifecyclePlan",
+          "validationPlan",
+          "projectCapabilityRequirements",
+          "facts",
+          "handoff"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials",
+        "web:read-public-sources"
+      ],
+      "sideEffects": [],
+      "summary": "知识库架构评估：用当前证据、可比候选和反例形成有边界的专业建议。",
+      "useWhen": [
+        "用户请求技术路线或知识系统的研究、比较与适用判断。",
+        "当前实现暴露选型、版本、质量或维护问题。"
+      ],
+      "validation": [
+        "tests/contract.test.mjs",
+        "tests/lineage.test.mjs",
+        "tests/cli.test.mjs"
       ]
     },
     {
@@ -13653,12 +15273,12 @@
       ]
     },
     {
-      "componentContentSha256": "37aef092ac95f75a5f2ca54197b50c25b843a4a8b02b9c21a66e3858b6d7cb38",
+      "componentContentSha256": "b222dd0fad87edd952964bbd042b60d369503ef3033d15f7d435f8af972ae174",
       "componentId": "product-architect",
       "componentPath": "agents/product-architect",
       "componentType": "agent",
-      "componentVersion": "0.5.1",
-      "contractSha256": "b01ea07f0f75557468412c9c35dc728cee59443d221ee94b6224585559298e6f",
+      "componentVersion": "0.6.0",
+      "contractSha256": "8b4c10ae655aeb224a12402af7c33473b29253ad3acdc06f739dde5b6007deff",
       "doNotUseWhen": [
         "只要短文改稿：使用 script-writer",
         "只要界面视觉：交 interaction-designer",
@@ -13817,6 +15437,14 @@
             ],
             "type": "string"
           },
+          "projectContext": {
+            "description": "当前项目身份、领域、用户/受益者、可组合valueTypes、stage、已有需求与证据；沿用调用方同一设计，不新增状态。",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
           "projectFacts": {
             "additionalProperties": false,
             "description": "本轮已核实的项目版本/代码入口/边界；未知版本写 null，不把网上最新版当安装版本。",
@@ -13875,6 +15503,14 @@
               "codeRefs"
             ],
             "type": "object"
+          },
+          "researchEvaluation": {
+            "description": "当前研究比较的实际产物：来源/修订/兼容、候选机制、反例、选择依据、停止/重开条件、可比小实验和已观察边界。",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
           },
           "runtimeBindings": {
             "description": "宿主对本次任务实际工具的绑定；需求不等于权限。未知/拒绝必须保留",
@@ -14262,6 +15898,148 @@
                   "delivery"
                 ]
               },
+              "projectCapabilityRequirements": {
+                "description": "给专业宿主创建/原地迭代本项目独立能力的完整需求，绑定基底版本、领域差异、来源和可证伪验收。",
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "acceptance": {
+                      "items": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "minItems": 1,
+                      "type": "array",
+                      "uniqueItems": true
+                    },
+                    "baseComponentId": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "baseComponentVersion": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "boundaries": {
+                      "items": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "minItems": 1,
+                      "type": "array",
+                      "uniqueItems": true
+                    },
+                    "domainEvidenceRefs": {
+                      "items": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "minItems": 1,
+                      "type": "array",
+                      "uniqueItems": true
+                    },
+                    "projectDelta": {
+                      "description": "Project-specific professional differences; new records use an array. Legacy nonempty text remains unchanged for source-bound digest compatibility.",
+                      "oneOf": [
+                        {
+                          "items": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "minItems": 1,
+                          "type": "array",
+                          "uniqueItems": true
+                        },
+                        {
+                          "minLength": 1,
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "projectId": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "requiredInputs": {
+                      "items": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "minItems": 1,
+                      "type": "array",
+                      "uniqueItems": true
+                    },
+                    "responsibilities": {
+                      "items": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "minItems": 1,
+                      "type": "array",
+                      "uniqueItems": true
+                    },
+                    "reuseConditions": {
+                      "items": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "minItems": 1,
+                      "type": "array",
+                      "uniqueItems": true
+                    },
+                    "role": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "targetPath": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "toolRequirements": {
+                      "items": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "minItems": 1,
+                      "type": "array",
+                      "uniqueItems": true
+                    }
+                  },
+                  "required": [
+                    "projectId",
+                    "baseComponentId",
+                    "baseComponentVersion",
+                    "role",
+                    "targetPath",
+                    "domainEvidenceRefs",
+                    "responsibilities",
+                    "boundaries",
+                    "projectDelta",
+                    "reuseConditions",
+                    "requiredInputs",
+                    "toolRequirements",
+                    "acceptance"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "projectContext": {
+                "description": "当前项目身份、领域、用户/受益者、可组合valueTypes、stage、已有需求与证据；沿用调用方同一设计，不新增状态。",
+                "type": [
+                  "string",
+                  "object",
+                  "array"
+                ]
+              },
+              "researchEvaluation": {
+                "description": "当前研究比较的实际产物：来源/修订/兼容、候选机制、反例、选择依据、停止/重开条件、可比小实验和已观察边界。",
+                "type": [
+                  "string",
+                  "object",
+                  "array"
+                ]
+              },
               "revision": {
                 "minimum": 1,
                 "type": "integer"
@@ -14424,12 +16202,21 @@
                           "type": "string"
                         },
                         "implementationNotes": {
-                          "items": {
-                            "minLength": 1,
-                            "type": "string"
-                          },
-                          "type": "array",
-                          "uniqueItems": true
+                          "description": "Module implementation notes; preserve a supplied list or legacy nonempty text for shared design binding.",
+                          "oneOf": [
+                            {
+                              "items": {
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "type": "array",
+                              "uniqueItems": true
+                            },
+                            {
+                              "minLength": 1,
+                              "type": "string"
+                            }
+                          ]
                         },
                         "interfaceRefs": {
                           "items": {
@@ -14554,6 +16341,148 @@
               }
             },
             "type": "object"
+          },
+          "projectCapabilityRequirements": {
+            "description": "给专业宿主创建/原地迭代本项目独立能力的完整需求，绑定基底版本、领域差异、来源和可证伪验收。",
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "acceptance": {
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "minItems": 1,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "baseComponentId": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "baseComponentVersion": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "boundaries": {
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "minItems": 1,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "domainEvidenceRefs": {
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "minItems": 1,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "projectDelta": {
+                  "description": "Project-specific professional differences; new records use an array. Legacy nonempty text remains unchanged for source-bound digest compatibility.",
+                  "oneOf": [
+                    {
+                      "items": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "minItems": 1,
+                      "type": "array",
+                      "uniqueItems": true
+                    },
+                    {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  ]
+                },
+                "projectId": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "requiredInputs": {
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "minItems": 1,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "responsibilities": {
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "minItems": 1,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "reuseConditions": {
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "minItems": 1,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "role": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "targetPath": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "toolRequirements": {
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "minItems": 1,
+                  "type": "array",
+                  "uniqueItems": true
+                }
+              },
+              "required": [
+                "projectId",
+                "baseComponentId",
+                "baseComponentVersion",
+                "role",
+                "targetPath",
+                "domainEvidenceRefs",
+                "responsibilities",
+                "boundaries",
+                "projectDelta",
+                "reuseConditions",
+                "requiredInputs",
+                "toolRequirements",
+                "acceptance"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "projectContext": {
+            "description": "当前项目身份、领域、用户/受益者、可组合valueTypes、stage、已有需求与证据；沿用调用方同一设计，不新增状态。",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "researchEvaluation": {
+            "description": "当前研究比较的实际产物：来源/修订/兼容、候选机制、反例、选择依据、停止/重开条件、可比小实验和已观察边界。",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
           },
           "scope": {
             "description": "范围、非目标和最小可演示切片",
@@ -15600,12 +17529,12 @@
       ]
     },
     {
-      "componentContentSha256": "3b1441765b9121a1e72edf9fc7534433fd73dd8ff9940bb7b661b4d6284a48c0",
+      "componentContentSha256": "f7d1d9a151b2ba01c8e4b8910547e8005617499a1d439a83d7162c1b70ebb1dc",
       "componentId": "retrieval-evaluation",
       "componentPath": "skills/retrieval-evaluation",
       "componentType": "skill",
-      "componentVersion": "0.1.0",
-      "contractSha256": "513e412226c7a3d77b6645aed12599572252bf775bb28ccad8f8d55279e88acd",
+      "componentVersion": "0.2.0",
+      "contractSha256": "beabea36d951884a5715a5dfc60b8fb41e5c4ea7d9350a3023d7303440d2ec60",
       "doNotUseWhen": [
         "答案事实评估需另读答案与原文。",
         "未授权数据采集不属于本包。",
@@ -15666,6 +17595,14 @@
               "array"
             ]
           },
+          "evaluationBoundary": {
+            "description": "检索、答案、引用、成本与人工/自动评分边界，保留独立题集和人工救援。",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
           "facts": {
             "description": "本次材料、版本、单位和假设",
             "type": [
@@ -15676,6 +17613,14 @@
           },
           "handoff": {
             "description": "产物位置、未完成项和下一步",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "lifecycleFindings": {
+            "description": "当前语料/身份/策略版本的更新、撤回、权限与派生缓存观察；未运行明确标记。",
             "type": [
               "string",
               "object",
@@ -17858,6 +19803,275 @@
       ]
     },
     {
+      "componentContentSha256": "ede83b360fa316a3aa517829c724de4cdddfb420791a03e12a751bc72e92be49",
+      "componentId": "technology-option-evaluation",
+      "componentPath": "skills/technology-option-evaluation",
+      "componentType": "skill",
+      "componentVersion": "0.1.0",
+      "contractSha256": "456550d4c280f8635b80508ebfb92f80ea28778e10e61fe7188130a88972cbe1",
+      "doNotUseWhen": [
+        "已定的局部实现无需重新做完整选型。",
+        "不负责调度、批准、自动安装、模型调用或发布。"
+      ],
+      "entrypoint": "SKILL.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "仅超出已有授权的付费模型、生产数据外发、发布或不可逆动作交调用方决定；已授权可逆研究与离线检查继续。"
+        ]
+      },
+      "id": "technology-option-evaluation-deliver",
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "constraints": {
+            "description": "不可交换约束、偏好、预算与授权范围",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "currentSystem": {
+            "description": "实际现状、版本与代码/环境证据",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "decisionScope": {
+            "description": "本次需要选择的边界与已有决定",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "projectContext": {
+            "description": "项目、用户、可组合价值类型、阶段与验收",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "projectContext",
+          "decisionScope",
+          "currentSystem",
+          "constraints"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "comparisons": {
+            "description": "比较机制实质不同的可行选项，先筛硬约束，再比较真实适用条件和全周期成本。",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "decision": {
+            "description": "选择关联当前需求与证据，说明拒绝理由、关键假设、翻转条件和研究停止理由。",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "evidenceLedger": {
+            "description": "来源绑定主张、版本、时间、适用环境、反证与消费它的决定。",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "facts": {
+            "description": "明确事实、来源主张、测量、假设与未观察范围。",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "handoff": {
+            "description": "交回当前设计的决定/需求引用、可用产物、局部缺口和下一验证，不新建状态源。",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "projectCapabilityRequirements": {
+            "description": "给专业宿主创建/原地迭代本项目独立能力的完整需求，绑定基底版本、领域差异、来源和可证伪验收。",
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "acceptance": {
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "minItems": 1,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "baseComponentId": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "baseComponentVersion": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "boundaries": {
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "minItems": 1,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "domainEvidenceRefs": {
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "minItems": 1,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "projectDelta": {
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "minItems": 1,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "projectId": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "requiredInputs": {
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "minItems": 1,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "responsibilities": {
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "minItems": 1,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "reuseConditions": {
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "minItems": 1,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "role": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "targetPath": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "toolRequirements": {
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "minItems": 1,
+                  "type": "array",
+                  "uniqueItems": true
+                }
+              },
+              "required": [
+                "projectId",
+                "baseComponentId",
+                "baseComponentVersion",
+                "role",
+                "targetPath",
+                "domainEvidenceRefs",
+                "responsibilities",
+                "boundaries",
+                "projectDelta",
+                "reuseConditions",
+                "requiredInputs",
+                "toolRequirements",
+                "acceptance"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "projectContext": {
+            "description": "当前项目价值、阶段和场景得到保留，不把收费模型推广为所有项目硬门。",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "validationPlan": {
+            "description": "用最小对照解决剩余关键未知，冻结任务/数据/版本/预算和留出题，分别记录人工救援。",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "projectContext",
+          "comparisons",
+          "evidenceLedger",
+          "decision",
+          "validationPlan",
+          "projectCapabilityRequirements",
+          "facts",
+          "handoff"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials",
+        "web:read-public-sources"
+      ],
+      "sideEffects": [],
+      "summary": "技术路线研究与比较：用当前证据、可比候选和反例形成有边界的专业建议。",
+      "useWhen": [
+        "用户请求技术路线或知识系统的研究、比较与适用判断。",
+        "当前实现暴露选型、版本、质量或维护问题。"
+      ],
+      "validation": [
+        "tests/contract.test.mjs",
+        "tests/decision.test.mjs",
+        "tests/cli.test.mjs"
+      ]
+    },
+    {
       "componentContentSha256": "9e1f9122c1f1691a8e4c36725eccaf9b990bad043bc6d0817fc945cbe74b0933",
       "componentId": "tender-compliance",
       "componentPath": "skills/tender-compliance",
@@ -18751,12 +20965,12 @@
       ]
     },
     {
-      "componentContentSha256": "8cd3bed9226f19f3c8dd78be7e29aa36953b21f502f1bbebc2303525db894720",
+      "componentContentSha256": "6abcb2ceac62888af4a2baa785520bc2fe605f2ba2f4e432a55cc1151d4bcdfc",
       "componentId": "user-researcher",
       "componentPath": "agents/user-researcher",
       "componentType": "agent",
-      "componentVersion": "0.1.2",
-      "contractSha256": "631459fcc86a20ebd33d5bc6127be65cad5a5fb0e44cae8d79eb4e151859640b",
+      "componentVersion": "0.2.0",
+      "contractSha256": "3f6c9443aeba0981309e0954cf84df8ebf3d31e035aafa0080f8f7674cb5ca29",
       "doNotUseWhen": [
         "不把虚构访谈当真人记录，不自动招募或联系用户；页面方案由interaction-designer等角色承接。",
         "要求自动发布、付款、修改生产系统或联系第三方时交调用方授权处理。",
@@ -18781,6 +20995,205 @@
               "array"
             ]
           },
+          "designBinding": {
+            "description": "由调用方提供的现行设计绑定；仅引用，不授予权限或自行认定当前版本。",
+            "properties": {
+              "contextDigest": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "designDigest": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "designId": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "revision": {
+                "minimum": 1,
+                "type": "integer"
+              },
+              "sliceId": {
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "designId",
+              "revision"
+            ],
+            "type": "object"
+          },
+          "designContext": {
+            "description": "调用方投影的当前模块/决定/状态/接口/上游产物；只读任务上下文，不是权限或另一份PRD真源。",
+            "properties": {
+              "applicableExperienceTaskIds": {
+                "description": "调用方当前切片负责的projectExperience任务子集；省略时采用完整profile，共享规则保留。",
+                "items": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array",
+                "uniqueItems": true
+              },
+              "projectExperience": {
+                "description": "当前 productDesign.projectExperience 的任务投影；引用项目独立专业规则与四层来源，不产生另一份设计或批准状态。字段及检查见 references/project-experience-api.md。",
+                "properties": {
+                  "layers": {
+                    "items": {
+                      "properties": {
+                        "level": {
+                          "enum": [
+                            "base",
+                            "domain",
+                            "brand",
+                            "task"
+                          ]
+                        },
+                        "rules": {
+                          "items": {
+                            "properties": {
+                              "id": {
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "invariant": {
+                                "type": "boolean"
+                              },
+                              "kind": {
+                                "enum": [
+                                  "visible_information",
+                                  "representation",
+                                  "recovery",
+                                  "theme",
+                                  "professional_judgment"
+                                ]
+                              },
+                              "overrides": {
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "requirement": {
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "target": {
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "taskIds": {
+                                "items": {
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "minItems": 1,
+                                "type": "array",
+                                "uniqueItems": true
+                              },
+                              "value": {},
+                              "verification": {
+                                "minLength": 1,
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "kind",
+                              "target",
+                              "requirement",
+                              "verification"
+                            ],
+                            "type": "object"
+                          },
+                          "type": "array"
+                        },
+                        "source": {
+                          "properties": {
+                            "digest": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "ref": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "version": {
+                              "minLength": 1,
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "ref",
+                            "version"
+                          ],
+                          "type": "object"
+                        }
+                      },
+                      "required": [
+                        "level",
+                        "source",
+                        "rules"
+                      ],
+                      "type": "object"
+                    },
+                    "type": "array"
+                  },
+                  "projectId": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "revision": {
+                    "minimum": 1,
+                    "type": "integer"
+                  },
+                  "schemaVersion": {
+                    "const": 1
+                  },
+                  "tasks": {
+                    "items": {
+                      "properties": {
+                        "actor": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "goal": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "id": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "successCondition": {
+                          "minLength": 1,
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "actor",
+                        "goal",
+                        "successCondition"
+                      ],
+                      "type": "object"
+                    },
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "schemaVersion",
+                  "projectId",
+                  "revision",
+                  "layers",
+                  "tasks"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
           "materials": {
             "description": "授权访谈、反馈、任务记录及招募来源；没有记录时明确是研究计划",
             "type": [
@@ -18788,6 +21201,65 @@
               "object",
               "array"
             ]
+          },
+          "projectFacts": {
+            "additionalProperties": false,
+            "description": "本轮已核实的项目版本/代码入口/边界；未知版本写 null，不把网上最新版当安装版本。",
+            "properties": {
+              "codeRefs": {
+                "items": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "type": "array",
+                "uniqueItems": true
+              },
+              "constraints": {
+                "items": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "type": "array",
+                "uniqueItems": true
+              },
+              "versions": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "evidenceRefs": {
+                      "items": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "type": "array",
+                      "uniqueItems": true
+                    },
+                    "name": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "version": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "version",
+                    "evidenceRefs"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "versions",
+              "codeRefs"
+            ],
+            "type": "object"
           },
           "question": {
             "description": "要支持的产品决定、目标用户、任务和限制",
@@ -18809,6 +21281,71 @@
         "additionalProperties": false,
         "deliveryFormat": "conceptual-human-delivery",
         "properties": {
+          "artifactRefs": {
+            "items": {
+              "properties": {
+                "evidenceLevel": {
+                  "enum": [
+                    "design",
+                    "fixture",
+                    "local_execution",
+                    "host_execution",
+                    "external_verified"
+                  ]
+                },
+                "kind": {
+                  "type": "string"
+                },
+                "ref": {
+                  "type": "string"
+                },
+                "sha256": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "ref",
+                "kind",
+                "evidenceLevel"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "criterionResults": {
+            "items": {
+              "properties": {
+                "evidenceRefs": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "id": {
+                  "type": "string"
+                },
+                "scope": {
+                  "type": "string"
+                },
+                "status": {
+                  "enum": [
+                    "pass",
+                    "fail",
+                    "not_run",
+                    "blocked"
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "status",
+                "evidenceRefs",
+                "scope"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
           "decisionTests": {
             "description": "需求候选与下一次可观察的验证任务",
             "type": [
@@ -18817,6 +21354,36 @@
               "array"
             ]
           },
+          "designBinding": {
+            "description": "由调用方提供的现行设计绑定；仅引用，不授予权限或自行认定当前版本。",
+            "properties": {
+              "contextDigest": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "designDigest": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "designId": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "revision": {
+                "minimum": 1,
+                "type": "integer"
+              },
+              "sliceId": {
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "designId",
+              "revision"
+            ],
+            "type": "object"
+          },
           "evidenceMatrix": {
             "description": "原始行为、原话、情境、来源与解释的分离表",
             "type": [
@@ -18824,6 +21391,154 @@
               "object",
               "array"
             ]
+          },
+          "experienceApplication": {
+            "description": "本轮提供 projectExperience 时，记录有效规则如何改变实际专业成果、当前页面状态及证据。规则ID回显不证明消费；helper只检查候选模型，实际体验仍需观察。",
+            "properties": {
+              "projectId": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "revision": {
+                "minimum": 1,
+                "type": "integer"
+              },
+              "ruleApplications": {
+                "items": {
+                  "properties": {
+                    "application": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "artifactRefs": {
+                      "items": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "type": "array",
+                      "uniqueItems": true
+                    },
+                    "observationRefs": {
+                      "items": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "type": "array",
+                      "uniqueItems": true
+                    },
+                    "ruleId": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "status": {
+                      "enum": [
+                        "specified",
+                        "observed",
+                        "not_run"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "ruleId",
+                    "status",
+                    "application"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "scope": {
+                "enum": [
+                  "research",
+                  "design",
+                  "implementation"
+                ]
+              },
+              "surfaceModels": {
+                "items": {
+                  "properties": {
+                    "information": {
+                      "items": {
+                        "properties": {
+                          "id": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "purpose": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "visibility": {
+                            "enum": [
+                              "primary",
+                              "visible",
+                              "on_demand"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "visibility"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "recovery": {
+                      "properties": {
+                        "actions": {
+                          "items": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "type": "array",
+                          "uniqueItems": true
+                        },
+                        "preserve": {
+                          "items": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "type": "array",
+                          "uniqueItems": true
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "representations": {
+                      "items": {
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "target": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "taskId": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "target",
+                    "taskId"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "themeTokens": {
+                "type": "object"
+              }
+            },
+            "required": [
+              "projectId",
+              "revision",
+              "scope",
+              "ruleApplications"
+            ],
+            "type": "object"
           },
           "facts": {
             "description": "当前输入、来源、期间单位及证据缺口",
@@ -18848,6 +21563,51 @@
               "object",
               "array"
             ]
+          },
+          "knowledgeUsage": {
+            "description": "仅记录本轮实际装入或核实并使用的知识；PROVENANCE 清单不是本轮读取证据，不证明产物专业质量。",
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "appliedTo": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "assetId": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "limitations": {
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "sourceRefs": {
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "verification": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "assetId",
+                "sourceRefs",
+                "appliedTo",
+                "verification",
+                "limitations"
+              ],
+              "type": "object"
+            },
+            "type": "array"
           },
           "limitations": {
             "description": "未执行、未观察、方法假设和外推边界",
@@ -18888,7 +21648,8 @@
         "想把零散反馈转成有证据的产品需求。"
       ],
       "validation": [
-        "tests/contract.test.mjs"
+        "tests/contract.test.mjs",
+        "tests/project-experience.test.mjs"
       ]
     },
     {
@@ -19656,8 +22417,8 @@
       ]
     }
   ],
-  "capabilityCount": 107,
-  "componentCount": 92,
+  "capabilityCount": 109,
+  "componentCount": 94,
   "components": [
     {
       "capabilityIds": [
@@ -19710,9 +22471,9 @@
         "applied-ai-engineer-deliver"
       ],
       "componentType": "agent",
-      "componentVersion": "0.1.0",
-      "contentSha256": "bb7c2766fd0e5029dd544fdf9e189940f5577f58eeba23970b7d74e8abf30556",
-      "contractSha256": "0dd096d25ac8773a8897ba5b6a03289d425235646070060256ae01db6f28b80e",
+      "componentVersion": "0.2.0",
+      "contentSha256": "cc58be6b1b76e368d922231aa6c3208e7849da8e80756c78654a6363d7de1b48",
+      "contractSha256": "3f2f4e760209869a0edd1d2a57f56c9394bef2f04f18852567252c0425b95c58",
       "entrypoint": "AGENT.md",
       "id": "applied-ai-engineer",
       "path": "agents/applied-ai-engineer",
@@ -19908,14 +22669,15 @@
         "design-system-designer-deliver"
       ],
       "componentType": "agent",
-      "componentVersion": "0.2.1",
-      "contentSha256": "6125077d0adf43451bd281b1a446fb7fe440d9298222c44d724a0cd1748da42f",
-      "contractSha256": "82dab737ed93d98fd2d526d89242c4b688791f67d29343209a304e4f77458154",
+      "componentVersion": "0.3.0",
+      "contentSha256": "c48a4c1439dcfaded9b470c60f8ec0e3d2daf78242744fadcfc266b36ec4f4b1",
+      "contractSha256": "d41b6c9177e2c451ee414d2e36bfc4be7c50eef2b3f01f214fd1c09bbbe68115",
       "entrypoint": "AGENT.md",
       "id": "design-system-designer",
       "path": "agents/design-system-designer",
       "validation": [
         "tests/contract.test.mjs",
+        "tests/project-experience.test.mjs",
         "tests/tokens.test.mjs"
       ]
     },
@@ -19972,14 +22734,15 @@
         "frontend-engineer-deliver"
       ],
       "componentType": "agent",
-      "componentVersion": "0.4.3",
-      "contentSha256": "91380a7ccae3c2051694290a4b63b6c0853388982a1e0f3a6dc46743fccb4de6",
-      "contractSha256": "5f2e5b2706fd2bcdceeae27ca8aafec4f852f876649530b6d9e0edc1c0f9f204",
+      "componentVersion": "0.5.0",
+      "contentSha256": "c524b790ebaf68f397f6ffe54320b654159cd7aa41297d922c9dbc42cce8002d",
+      "contractSha256": "91cf73b1d7802f6846fda9375d808f2983fca5ff7d5f85a81f1c1466c406a2dc",
       "entrypoint": "AGENT.md",
       "id": "frontend-engineer",
       "path": "agents/frontend-engineer",
       "validation": [
-        "tests/contract.test.mjs"
+        "tests/contract.test.mjs",
+        "tests/project-experience.test.mjs"
       ]
     },
     {
@@ -20077,14 +22840,15 @@
         "interaction-designer-deliver"
       ],
       "componentType": "agent",
-      "componentVersion": "0.5.1",
-      "contentSha256": "6c7a4265b2b9e85affaefc9578379eb86b21cbd7b1b26931d98d0fde4fb38843",
-      "contractSha256": "9fd28ee39d92382ccbbe4d6cf7cfd1e9552fa201ff4de0e37ede7aef3dbe66ac",
+      "componentVersion": "0.6.0",
+      "contentSha256": "c703007c885a793e2fa9b85bc8fbe216fc019aad063f30a0b26bb466b51087d2",
+      "contractSha256": "d58d77aed0d5b48e6c834afdcc2dbf8c0faf90de76fb3725d4b0d7283be46446",
       "entrypoint": "AGENT.md",
       "id": "interaction-designer",
       "path": "agents/interaction-designer",
       "validation": [
-        "tests/contract.test.mjs"
+        "tests/contract.test.mjs",
+        "tests/project-experience.test.mjs"
       ]
     },
     {
@@ -20227,9 +22991,9 @@
         "product-architect-deliver"
       ],
       "componentType": "agent",
-      "componentVersion": "0.5.1",
-      "contentSha256": "37aef092ac95f75a5f2ca54197b50c25b843a4a8b02b9c21a66e3858b6d7cb38",
-      "contractSha256": "b01ea07f0f75557468412c9c35dc728cee59443d221ee94b6224585559298e6f",
+      "componentVersion": "0.6.0",
+      "contentSha256": "b222dd0fad87edd952964bbd042b60d369503ef3033d15f7d435f8af972ae174",
+      "contractSha256": "8b4c10ae655aeb224a12402af7c33473b29253ad3acdc06f739dde5b6007deff",
       "entrypoint": "AGENT.md",
       "id": "product-architect",
       "path": "agents/product-architect",
@@ -20502,14 +23266,15 @@
         "user-researcher-deliver"
       ],
       "componentType": "agent",
-      "componentVersion": "0.1.2",
-      "contentSha256": "8cd3bed9226f19f3c8dd78be7e29aa36953b21f502f1bbebc2303525db894720",
-      "contractSha256": "631459fcc86a20ebd33d5bc6127be65cad5a5fb0e44cae8d79eb4e151859640b",
+      "componentVersion": "0.2.0",
+      "contentSha256": "6abcb2ceac62888af4a2baa785520bc2fe605f2ba2f4e432a55cc1151d4bcdfc",
+      "contractSha256": "3f6c9443aeba0981309e0954cf84df8ebf3d31e035aafa0080f8f7674cb5ca29",
       "entrypoint": "AGENT.md",
       "id": "user-researcher",
       "path": "agents/user-researcher",
       "validation": [
-        "tests/contract.test.mjs"
+        "tests/contract.test.mjs",
+        "tests/project-experience.test.mjs"
       ]
     },
     {
@@ -20840,15 +23605,17 @@
         "kim-decision-analysis"
       ],
       "componentType": "skill",
-      "componentVersion": "0.1.0",
-      "contentSha256": "a3be44f79ab7abd2e287675d206f0a17b9e0beb166e61e807f9ef8366af25745",
-      "contractSha256": "6032112fb1d454d3c8fb73419ed204d5455b8e75c886a0514196382b175bd17c",
+      "componentVersion": "0.2.0",
+      "contentSha256": "f4ec6f7315e4740c1a514d760b28ab719f77334e45d6d82079bf57a6c5d42d38",
+      "contractSha256": "3d5cbfc814980f2519c1618824384549e0d3401a0f258122ef0f719eed29e158",
       "entrypoint": "SKILL.md",
       "id": "kim-decision",
       "path": "skills/kim-decision",
       "validation": [
         "tests/behavior.test.mjs",
-        "tests/boundary.test.mjs"
+        "tests/boundary.test.mjs",
+        "tests/cli.test.mjs",
+        "tests/value-stage.test.mjs"
       ]
     },
     {
@@ -20865,6 +23632,23 @@
       "validation": [
         "evals/test_finish_frames.py",
         "evals/test_install_skill.py"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "knowledge-architecture-evaluation-deliver"
+      ],
+      "componentType": "skill",
+      "componentVersion": "0.1.0",
+      "contentSha256": "086f957fa680f6b6ce718ec0c596733e687d4755aedc3a5add6a4759cf80e733",
+      "contractSha256": "1c01304cf2123d09ce75624eaf3bc90b66aafd276c2b118192cbbd885b4f02ac",
+      "entrypoint": "SKILL.md",
+      "id": "knowledge-architecture-evaluation",
+      "path": "skills/knowledge-architecture-evaluation",
+      "validation": [
+        "tests/cli.test.mjs",
+        "tests/contract.test.mjs",
+        "tests/lineage.test.mjs"
       ]
     },
     {
@@ -20957,9 +23741,9 @@
         "retrieval-evaluation-deliver"
       ],
       "componentType": "skill",
-      "componentVersion": "0.1.0",
-      "contentSha256": "3b1441765b9121a1e72edf9fc7534433fd73dd8ff9940bb7b661b4d6284a48c0",
-      "contractSha256": "513e412226c7a3d77b6645aed12599572252bf775bb28ccad8f8d55279e88acd",
+      "componentVersion": "0.2.0",
+      "contentSha256": "f7d1d9a151b2ba01c8e4b8910547e8005617499a1d439a83d7162c1b70ebb1dc",
+      "contractSha256": "beabea36d951884a5715a5dfc60b8fb41e5c4ea7d9350a3023d7303440d2ec60",
       "entrypoint": "SKILL.md",
       "id": "retrieval-evaluation",
       "path": "skills/retrieval-evaluation",
@@ -21001,6 +23785,23 @@
       "path": "skills/sop-runbook",
       "validation": [
         "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "technology-option-evaluation-deliver"
+      ],
+      "componentType": "skill",
+      "componentVersion": "0.1.0",
+      "contentSha256": "ede83b360fa316a3aa517829c724de4cdddfb420791a03e12a751bc72e92be49",
+      "contractSha256": "456550d4c280f8635b80508ebfb92f80ea28778e10e61fe7188130a88972cbe1",
+      "entrypoint": "SKILL.md",
+      "id": "technology-option-evaluation",
+      "path": "skills/technology-option-evaluation",
+      "validation": [
+        "tests/cli.test.mjs",
+        "tests/contract.test.mjs",
+        "tests/decision.test.mjs"
       ]
     },
     {

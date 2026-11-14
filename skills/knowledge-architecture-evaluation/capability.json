@@ -1,0 +1,280 @@
+{
+  "schemaVersion": 1,
+  "id": "knowledge-architecture-evaluation",
+  "componentType": "skill",
+  "componentVersion": "0.1.0",
+  "entrypoint": "SKILL.md",
+  "capabilities": [
+    {
+      "id": "knowledge-architecture-evaluation-deliver",
+      "summary": "知识库架构评估：用当前证据、可比候选和反例形成有边界的专业建议。",
+      "useWhen": [
+        "用户请求技术路线或知识系统的研究、比较与适用判断。",
+        "当前实现暴露选型、版本、质量或维护问题。"
+      ],
+      "doNotUseWhen": [
+        "已定的局部实现无需重新做完整选型。",
+        "不负责调度、批准、自动安装、模型调用或发布。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "projectContext": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "项目用户、知识任务、价值类型、阶段与预算"
+          },
+          "corpus": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "来源、语言、规模/token、变化、权限与撤回要求"
+          },
+          "currentSystem": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "模型/索引/运行时版本及现有路线"
+          },
+          "evaluationEvidence": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "问题、原文、运行轨迹、质量/成本数据及缺口"
+          }
+        },
+        "required": [
+          "projectContext",
+          "corpus",
+          "currentSystem",
+          "evaluationEvidence"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "projectContext": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "按照事实定位、综合研究、持续复用等任务及项目价值/阶段定义结果。"
+          },
+          "comparisons": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "区分RAG取证、Wiki编纂、KV计算复用与图/Agentic策略，比较适用反例及组合必要性。"
+          },
+          "evidenceLedger": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "研究来源绑定作者版本、任务/环境、限制、修订、反证及当前决定。"
+          },
+          "decision": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "给当前范围基线、候选与重开条件；用观察推动路线而非名词热度。"
+          },
+          "lifecyclePlan": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "原文版本/权限追到切块、Wiki/图、缓存和引用，更新/撤回/ACL变化有真实回放和恢复。"
+          },
+          "validationPlan": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "分开检索、答案、引用、权限、撤回、延迟和全周期成本，冻结可比条件并保留留出与人工救援。"
+          },
+          "projectCapabilityRequirements": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "projectId": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "baseComponentId": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "baseComponentVersion": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "role": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "targetPath": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "domainEvidenceRefs": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "uniqueItems": true,
+                  "minItems": 1
+                },
+                "responsibilities": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "uniqueItems": true,
+                  "minItems": 1
+                },
+                "boundaries": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "uniqueItems": true,
+                  "minItems": 1
+                },
+                "projectDelta": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "uniqueItems": true,
+                  "minItems": 1
+                },
+                "reuseConditions": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "uniqueItems": true,
+                  "minItems": 1
+                },
+                "requiredInputs": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "uniqueItems": true,
+                  "minItems": 1
+                },
+                "toolRequirements": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "uniqueItems": true,
+                  "minItems": 1
+                },
+                "acceptance": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "uniqueItems": true,
+                  "minItems": 1
+                }
+              },
+              "required": [
+                "projectId",
+                "baseComponentId",
+                "baseComponentVersion",
+                "role",
+                "targetPath",
+                "domainEvidenceRefs",
+                "responsibilities",
+                "boundaries",
+                "projectDelta",
+                "reuseConditions",
+                "requiredInputs",
+                "toolRequirements",
+                "acceptance"
+              ]
+            },
+            "description": "为本项目独立知识工程/评测能力明确基底版本、领域规则、来源、工具和验收。"
+          },
+          "facts": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "区分当前输入、来源主张、实际测量、合成教学和未观察。"
+          },
+          "handoff": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "交回同一设计、实际证据与受影响缺口；把实现、调度和最终接受交调用方。"
+          }
+        },
+        "required": [
+          "projectContext",
+          "comparisons",
+          "evidenceLedger",
+          "decision",
+          "lifecyclePlan",
+          "validationPlan",
+          "projectCapabilityRequirements",
+          "facts",
+          "handoff"
+        ]
+      },
+      "permissions": [
+        "filesystem:read-user-materials",
+        "web:read-public-sources"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "仅超出已有授权的付费模型、生产数据外发、发布或不可逆动作交调用方决定；已授权可逆研究与离线检查继续。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs",
+        "tests/lineage.test.mjs",
+        "tests/cli.test.mjs"
+      ]
+    }
+  ]
+}

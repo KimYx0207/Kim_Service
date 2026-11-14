@@ -13,6 +13,49 @@ function candidate() {
 }
 const codes = result => result.issues.map(issue => issue.code);
 
+function projectRequirement() {
+  return { projectId: 'offline-editor', baseComponentId: 'product-architect', baseComponentVersion: '0.6.0',
+    role: 'Offline editing architect', domainEvidenceRefs: ['fixture:conflict-policy'],
+    responsibilities: ['Preserve offline edits'], boundaries: ['No silent overwrite'], projectDelta: ['Use the existing revision protocol'],
+    reuseConditions: ['Same project and protocol version'], targetPath: 'agents/offline-editor/', requiredInputs: ['Current storage contract'],
+    toolRequirements: ['Read repository'], acceptance: ['Two-device edits preserve both drafts'] };
+}
+
+test('project capability requirements retain domain differences without becoming creation proof', () => {
+  const input = candidate(); input.productDesign.projectCapabilityRequirements = [projectRequirement()];
+  assert.equal(checkDesignHandoff(input).status, 'structure_valid');
+  input.productDesign.projectCapabilityRequirements[0].projectDelta = [];
+  assert.equal(checkDesignHandoff(input).status, 'invalid');
+});
+
+test('project delta accepts the shared array contract and legacy nonempty text without rewriting it', () => {
+  for (const delta of [['Use the current project protocol'], 'Use the current project protocol']) {
+    const requirement = {...projectRequirement(), projectDelta: delta};
+    const before = structuredClone(requirement);
+    assert.equal(checkDesignHandoff({productDesign: {projectCapabilityRequirements: [requirement]}}).status, 'structure_valid');
+    assert.deepEqual(requirement, before);
+  }
+  for (const delta of ['', ' ', [], [''], [' '], true]) {
+    assert.equal(checkDesignHandoff({productDesign: {projectCapabilityRequirements: [{...projectRequirement(), projectDelta: delta}]}}).status, 'invalid');
+  }
+});
+
+test('project capability targets cannot escape the project or grant themselves authority', () => {
+  const input = candidate(); input.productDesign.projectCapabilityRequirements = [projectRequirement()];
+  input.productDesign.projectCapabilityRequirements[0].targetPath = '../../global/agents';
+  assert.ok(codes(checkDesignHandoff(input)).includes('project_relative_target_required'));
+  input.productDesign.projectCapabilityRequirements[0].targetPath = 'agents/local/';
+  input.productDesign.projectCapabilityRequirements[0].executionAllowed = true;
+  assert.ok(codes(checkDesignHandoff(input)).includes('content_cannot_grant_authority'));
+});
+
+test('non-software project requirements do not grant design-level authority', () => {
+  const productDesign = { projectId: 'offline-editor', projectCapabilityRequirements: [projectRequirement()] };
+  assert.equal(checkDesignHandoff({ productDesign }).status, 'structure_valid');
+  productDesign.executionAllowed = true;
+  assert.ok(codes(checkDesignHandoff({ productDesign })).includes('content_cannot_grant_authority'));
+});
+
 test('an actual candidate output can pass the relational check without becoming accepted or mutating input', () => {
   const input = candidate(); const before = structuredClone(input);
   const result = checkDesignHandoff(input);
@@ -22,6 +65,17 @@ test('an actual candidate output can pass the relational check without becoming 
   assert.equal(result.nativeRuntimeVerified, false);
   assert.match(result.claimBoundary, /no source, digest, decision-authority, professional-quality/);
   assert.deepEqual(input, before);
+});
+
+test('implementation notes preserve legacy text and the shared list shape', () => {
+  for (const notes of ['Implement the current module state contract', ['Implement the current module state contract']]) {
+    const input = candidate();
+    const module = input.productDesign.softwareDesign.modules[0];
+    module.implementationNotes = notes;
+    const before = structuredClone(input);
+    assert.equal(checkDesignHandoff(input).status, 'structure_valid');
+    assert.deepEqual(input, before);
+  }
 });
 
 test('small non-software work is not forced into a new PRD or claimed as checked', () => {
@@ -94,4 +148,57 @@ test('the real stdin CLI returns structured results and fails on malformed or ov
   const oversized = invoke(' '.repeat(MAX_INPUT_BYTES + 1));
   assert.equal(oversized.status, 1);
   assert.equal(JSON.parse(oversized.stdout).issues[0].code, 'input_too_large');
+});
+
+test('delivery reverse coverage catches obligations omitted from the module map', async t => {
+  const cases = [
+    ['required criterion omitted', input => input.acceptanceCriteria.push({ id: 'restart', required: true }), 'delivery_criterion_uncovered'],
+    ['implementation task omitted', input => input.productDesign.softwareDesign.modules[0].taskIds.pop(), 'delivery_task_has_no_module'],
+    ['journey omitted', input => input.productDesign.userJourneys.push({ id: 'offline', criterionIds: ['scope'] }), 'delivery_journey_has_no_module'],
+    ['journey criterion has no module', input => {
+      input.acceptanceCriteria.push({ id: 'restart', required: true });
+      input.productDesign.userJourneys[0].criterionIds.push('restart');
+      input.productDesign.taskSlices.push({ id: 'review', workKind: 'support', criterionIds: ['restart'] });
+    }, 'delivery_criterion_has_no_module'],
+    ['review tasks cannot substitute for implementation', input => {
+      for (const task of input.productDesign.taskSlices) task.workKind = 'support';
+    }, 'module_criterion_has_no_task'],
+    ['module journey has no implementing task', input => {
+      input.productDesign.userJourneys.push({ id: 'offline', criterionIds: ['scope'] });
+      input.productDesign.softwareDesign.modules[0].journeyRefs.push('offline');
+    }, 'module_journey_has_no_task'],
+    ['independent support references must resolve', input => input.productDesign.taskSlices.push({
+      id: 'review', workKind: 'support', criterionIds: ['scope'], journeyRefs: ['absent']
+    }), 'unknown_reference']
+  ];
+  for (const [name, mutate, code] of cases) await t.test(name, () => {
+    const input = candidate(); input.productDesign.mode = 'delivery'; mutate(input);
+    const result = checkDesignHandoff(input);
+    assert.equal(result.status, 'invalid');
+    assert.ok(codes(result).includes(code), JSON.stringify(result.issues));
+    assert.equal(result.productAccepted, false);
+  });
+});
+
+test('delivery reverse coverage preserves optional criteria, independent support and shared modules', () => {
+  const input = candidate(); input.productDesign.mode = 'delivery';
+  input.acceptanceCriteria.push({ id: 'optional-research', required: false }, { id: 'governance', required: true });
+  input.productDesign.taskSlices.push({ id: 'review', workKind: 'support', criterionIds: ['governance'] });
+  const shared = structuredClone(input.productDesign.softwareDesign.modules[0]); shared.id = 'shared-service';
+  input.productDesign.softwareDesign.modules.push(shared);
+  input.productDesign.softwareDesign.architecture.moduleIds.push(shared.id);
+  const before = structuredClone(input);
+  assert.equal(checkDesignHandoff(input).status, 'structure_valid');
+  assert.deepEqual(input, before);
+  input.productDesign.mode = 'exploration';
+  input.productDesign.softwareDesign.modules = [];
+  input.productDesign.softwareDesign.architecture.moduleIds = [];
+  assert.equal(checkDesignHandoff(input).status, 'structure_valid');
+});
+
+test('delivery reverse coverage does not let optional module claims pass with support alone', () => {
+  const input = candidate(); input.productDesign.mode = 'delivery';
+  input.acceptanceCriteria[0].required = false;
+  for (const task of input.productDesign.taskSlices) task.workKind = 'support';
+  assert.ok(codes(checkDesignHandoff(input)).includes('module_criterion_has_no_task'));
 });

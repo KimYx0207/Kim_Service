@@ -174,9 +174,16 @@
           "facts": "Materials, versions, units, and assumptions used for this task",
           "handoff": "Output locations, unfinished items, and next steps",
           "migration": "Migration and version plan",
-          "tokens": "Semantic design tokens and their references"
+          "tokens": "Semantic design tokens and their references",
+          "designBinding": "Reference to the caller's current design; it does not grant additional authority",
+          "designContext": "Task-scoped modules, decisions, states, interfaces, and upstream artifacts",
+          "projectFacts": "Verified current versions, code, and boundaries; preserve unknown facts as null",
+          "criterionResults": "Results for the applicable acceptance criteria, with supporting evidence and unresolved gaps",
+          "artifactRefs": "References to the actual delivered artifacts",
+          "knowledgeUsage": "Resources actually read and used for this task; provenance alone does not show use",
+          "experienceApplication": "Effective project rules applied to the current surfaces, with evidence and any review still needed"
         },
-        "sourceContractSha256": "82dab737ed93d98fd2d526d89242c4b688791f67d29343209a304e4f77458154"
+        "sourceContractSha256": "d41b6c9177e2c451ee414d2e36bfc4be7c50eef2b3f01f214fd1c09bbbe68115"
       }
     },
     "energy-project-analyst-deliver": {
@@ -335,6 +342,39 @@
       "sourceSummary": "Plan a character-sticker workflow with explicit character and sample approvals, then finish supplied transparent motion frames with authored timing and captions.",
       "title": "Produce an animated sticker pack",
       "summary": "Plan character and sample approvals, then finish supplied transparent motion frames with authored timing and captions."
+    },
+    "knowledge-architecture-evaluation-deliver": {
+      "sourceSummary": "知识库架构评估：用当前证据、可比候选和反例形成有边界的专业建议。",
+      "title": "Choose a knowledge-system architecture",
+      "summary": "Compare retrieval, context, cache, graph, and agent approaches against the actual corpus, access rules, and evaluation evidence.",
+      "detail": {
+        "useWhen": [
+          "Research and compare technology approaches or knowledge-system architectures for the current project.",
+          "Resolve selection, version, quality, or maintenance issues exposed by the current implementation."
+        ],
+        "doNotUseWhen": [
+          "A bounded implementation task with a settled choice does not need a complete new comparison.",
+          "This method does not schedule work, approve actions, install components, invoke models, or publish releases."
+        ],
+        "humanGate": [
+          "Refer paid model use, production-data disclosure, publication, or irreversible actions to the responsible caller only when they exceed existing authorization. Continue authorized reversible research and offline checks."
+        ],
+        "fields": {
+          "comparisons": "Feasible options with distinct mechanisms, hard constraints, applicability, and lifecycle costs",
+          "corpus": "Source types, scale, change rate, access boundaries, citation needs, and deletion requirements",
+          "currentSystem": "Observed implementation, exact versions, and code or environment evidence",
+          "decision": "Selected option, rejected alternatives, assumptions, reversal conditions, and the reason to stop researching",
+          "evaluationEvidence": "Existing questions, baselines, failures, measurements, and gaps in evaluation",
+          "evidenceLedger": "Claims linked to sources, dates, versions, conditions, counterevidence, and the decisions using them",
+          "facts": "Distinguish observed facts, source claims, measurements, assumptions, and unobserved behavior",
+          "handoff": "References back to the current design, available outputs, remaining gaps, and the next verification",
+          "lifecyclePlan": "Source versioning, access checks, updates, deletion, citations, cache invalidation, and their verification",
+          "projectCapabilityRequirements": "Requirements for this project's own capabilities, including the foundation version, domain differences, evidence, and testable acceptance criteria",
+          "projectContext": "Current project, users, value models, stage, and acceptance criteria",
+          "validationPlan": "Small comparisons that resolve remaining unknowns, with fixed tasks, data, versions, budgets, held-out cases, and recorded interventions"
+        },
+        "sourceContractSha256": "1c01304cf2123d09ce75624eaf3bc90b66aafd276c2b118192cbbd885b4f02ac"
+      }
     },
     "launch-planner-assist": {
       "sourceSummary": "小项目启动计划：把已选方向变成按依赖排列的一周启动计划。每一步都有具体产物、检查方式和投入上限，先完成最小可交付，再依据反馈决定下一步；不自行替用户开店或收款。",
@@ -545,6 +585,38 @@
       "sourceSummary": "拆解系统要求、接口责任、验证与确认、变更影响 systems engineering requirements verification validation",
       "title": "Connect system requirements and interfaces",
       "summary": "Break down requirements, interface responsibilities, verification, validation, and the impact of changes."
+    },
+    "technology-option-evaluation-deliver": {
+      "sourceSummary": "技术路线研究与比较：用当前证据、可比候选和反例形成有边界的专业建议。",
+      "title": "Compare technology options for a project",
+      "summary": "Compare feasible approaches using current primary evidence, compatibility checks, costs, and project-specific validation.",
+      "detail": {
+        "useWhen": [
+          "Research and compare technology approaches or knowledge-system architectures for the current project.",
+          "Resolve selection, version, quality, or maintenance issues exposed by the current implementation."
+        ],
+        "doNotUseWhen": [
+          "A bounded implementation task with a settled choice does not need a complete new comparison.",
+          "This method does not schedule work, approve actions, install components, invoke models, or publish releases."
+        ],
+        "humanGate": [
+          "Refer paid model use, production-data disclosure, publication, or irreversible actions to the responsible caller only when they exceed existing authorization. Continue authorized reversible research and offline checks."
+        ],
+        "fields": {
+          "comparisons": "Feasible options with distinct mechanisms, hard constraints, applicability, and lifecycle costs",
+          "constraints": "Hard constraints, preferences, budget, and the authorized scope",
+          "currentSystem": "Observed implementation, exact versions, and code or environment evidence",
+          "decision": "Selected option, rejected alternatives, assumptions, reversal conditions, and the reason to stop researching",
+          "decisionScope": "The decision to make now and relevant existing decisions",
+          "evidenceLedger": "Claims linked to sources, dates, versions, conditions, counterevidence, and the decisions using them",
+          "facts": "Distinguish observed facts, source claims, measurements, assumptions, and unobserved behavior",
+          "handoff": "References back to the current design, available outputs, remaining gaps, and the next verification",
+          "projectCapabilityRequirements": "Requirements for this project's own capabilities, including the foundation version, domain differences, evidence, and testable acceptance criteria",
+          "projectContext": "Current project, users, value models, stage, and acceptance criteria",
+          "validationPlan": "Small comparisons that resolve remaining unknowns, with fixed tasks, data, versions, budgets, held-out cases, and recorded interventions"
+        },
+        "sourceContractSha256": "456550d4c280f8635b80508ebfb92f80ea28778e10e61fe7188130a88972cbe1"
+      }
     },
     "tender-compliance-deliver": {
       "sourceSummary": "把招标条款、补遗版本和响应证据逐项绑定 tender bid compliance response evidence matrix",

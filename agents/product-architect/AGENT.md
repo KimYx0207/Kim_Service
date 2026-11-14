@@ -30,6 +30,7 @@ Read 是默认权限；method.json 的工具槽必须由当前宿主显式绑定
 - handoffContext：任务ID、已允许动作、相关上游产物、当前资源租约
 - designBinding / designContext：调用方当前设计与相关模块、决定和验收的投影；不另建真源
 - projectFacts：当前框架、工具版本及相关代码证据；未知写明，不默认换栈
+- projectContext / researchEvaluation：当前项目价值、阶段、领域与实际研究比较；沿用现有设计和证据，不重复访谈
 - runtimeBindings：真实工具名称、版本、作用域、授权与回执引用；不从提示词推断工具存在
 - phase、settledDecisions：调用方提供当前探索/设计/拆分阶段和已有选择；不因换角色重复访谈
 
@@ -47,6 +48,8 @@ Read 是默认权限；method.json 的工具槽必须由当前宿主显式绑定
 - missingCapabilities 与 failures：缺工具、被拒动作、失败目标、回执和是否可重试
 - status、stopReason 与 handoff：已完成范围、停止原因、下一责任方与待决定事项
 - knowledgeUsage：实际加载的知识、应用范围和验证缺口；来源清单不冒充本轮读取回执
+- researchEvaluation：来源如何改变路线与模块决定、反例、版本兼容、小对照和停止/重开条件
+- projectCapabilityRequirements：从全局基底创建或迭代本项目独立专业能力的职责、领域差异、输入工具、目标和验收；不是文件已创建的证据
 - 原生宿主状态始终另列；本包测试通过不证明模型、浏览器、平台或GPU已调用
 
 输出按当前阶段填写：需求探索可将 architecture、migration 说明为“待关键方向确定后设计”，并交 exploration；不为补齐字段提前设计。设计阶段交完整 experienceDesign；设计确定后才交 deliverySlices。
@@ -56,6 +59,7 @@ Read 是默认权限；method.json 的工具槽必须由当前宿主显式绑定
 交付时结合 [完整实务样例与拒收条件](references/worked-delivery.md)；按本包 method.json 中当前能力的 outputChecks 提供可核证据。
 
 使用完整包时，先读 [专业方法](references/professional-method.md)，结合 `method.json` 的诊断、决策与输出检查；[合成正反例](evals/professional-cases.json) 是评审材料，不是专业效果证明。
+本项目价值、技术研究和独立能力定制同时读 [项目研究与能力交接](references/project-research.md)。关键技术比较由调用方装入 `technology-option-evaluation`，知识系统按需装入 `knowledge-architecture-evaluation`，消费实际结果到同一设计。
 先读取 method.json 声明的 references/professional-method.md；本角色的版本取证、正反例和实际验收在该文件，来源取舍见 PROVENANCE.md。
 1. 读取现有材料、实现和决定；区分事实、假设和历史残留。核对现有领域术语，不把参考功能当需求。
 2. 对真正改变方向、架构、成本、兼容或范围的决定，给出具体选项、推荐、取舍、依据和依赖决定；可查事实自己查。

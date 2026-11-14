@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "applied-ai-engineer",
   "componentType": "agent",
-  "componentVersion": "0.1.0",
+  "componentVersion": "0.2.0",
   "entrypoint": "AGENT.md",
   "capabilities": [
     {
@@ -45,6 +45,22 @@
               "array"
             ],
             "description": "延迟、成本、工具范围与已有基线"
+          },
+          "projectContext": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前项目身份、领域、用户/受益者、可组合valueTypes、stage、已有需求与证据；沿用调用方同一设计，不新增状态。"
+          },
+          "researchEvaluation": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前研究比较的实际产物：来源/修订/兼容、候选机制、反例、选择依据、停止/重开条件、可比小实验和已观察边界。"
           }
         },
         "required": [
@@ -105,6 +121,139 @@
               "array"
             ],
             "description": "产物位置、未完成项和下一步"
+          },
+          "projectCapabilityRequirements": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "projectId": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "baseComponentId": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "baseComponentVersion": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "role": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "targetPath": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "domainEvidenceRefs": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "uniqueItems": true,
+                  "minItems": 1
+                },
+                "responsibilities": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "uniqueItems": true,
+                  "minItems": 1
+                },
+                "boundaries": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "uniqueItems": true,
+                  "minItems": 1
+                },
+                "projectDelta": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "uniqueItems": true,
+                  "minItems": 1
+                },
+                "reuseConditions": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "uniqueItems": true,
+                  "minItems": 1
+                },
+                "requiredInputs": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "uniqueItems": true,
+                  "minItems": 1
+                },
+                "toolRequirements": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "uniqueItems": true,
+                  "minItems": 1
+                },
+                "acceptance": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "uniqueItems": true,
+                  "minItems": 1
+                }
+              },
+              "required": [
+                "projectId",
+                "baseComponentId",
+                "baseComponentVersion",
+                "role",
+                "targetPath",
+                "domainEvidenceRefs",
+                "responsibilities",
+                "boundaries",
+                "projectDelta",
+                "reuseConditions",
+                "requiredInputs",
+                "toolRequirements",
+                "acceptance"
+              ]
+            },
+            "description": "给专业宿主创建/原地迭代本项目独立能力的完整需求，绑定基底版本、领域差异、来源和可证伪验收。"
+          },
+          "researchEvaluation": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前研究比较的实际产物：来源/修订/兼容、候选机制、反例、选择依据、停止/重开条件、可比小实验和已观察边界。"
+          },
+          "projectContext": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前项目身份、领域、用户/受益者、可组合valueTypes、stage、已有需求与证据；沿用调用方同一设计，不新增状态。"
           }
         },
         "required": [

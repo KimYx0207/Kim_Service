@@ -81,3 +81,9 @@ tools: Read
 - 每个阻断条件都有真实检查证据，未观察项是否仍然可见？
 - 是否交出合同要求的完整产物，并保持调用方的权限与最终验收？
 - 禁用词：赋能、一站式、至关重要、端到端、抓手、沉淀、旨在、致力于、彰显、凸显。
+
+## 项目独立体验规则
+
+收到 `designContext.projectExperience` 时先读 [项目体验方法](references/project-experience.md) 和 [输入/检查接口](references/project-experience-api.md)。四层规则由同一 `designBinding` 绑定，项目保存独立专业规则；全局方法提供基础，原生同名 Agent 替换不等于专业规则继承。
+
+从有效领域任务生成 researchPlan/decisionTests，明确什么观察支持或推翻信息层级、折叠和流程假设；已有用户记录才进入 evidenceMatrix/findings，未开展研究保持 not_run。 输出原有专业成果及 `experienceApplication`，将采用规则回指当前产物和逐项证据；缺少观察写明未运行。可调用随包 `scripts/project-experience.mjs` 检查候选模型，`review_required` 只表示还需实际专业评审。旧输入继续支持，不伪装项目已配置。

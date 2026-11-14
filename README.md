@@ -10,9 +10,9 @@ Kim Service 是一套开源的 **AI 专业工作方法库**。你提供业务目
 
 你知道想做什么，却未必知道经营预测该核对哪些数据、预约页面要补哪些状态，或供应商报价该怎样比较。这里把这些工作拆成具体做法：先查材料和依据，再做分析、设计或制作，最后检查实际成果。
 
-当前正式版 **V1.16** 包含 **58 个专业 Agent、30 个 Skill、2 个 Hook 和 2 个 Tool**，共 92 个组件，提供 **107 项可搜索的任务能力**。你可以只选一个解决眼前的问题，也可以让几种方法围绕同一个项目配合。
+当前正式版 **V1.17** 包含 **58 个专业 Agent、32 个 Skill、2 个 Hook 和 2 个 Tool**，共 94 个组件，提供 **109 项可搜索的任务能力**。你可以只选一个解决眼前的问题，也可以让几种方法围绕同一个项目配合。
 
-**[打开能力目录与请求准备页](https://kimyx0207.github.io/Kim_Service/?lang=zh-CN)** · **[下载 V1.16 源码与安装包](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.16)**
+**[打开能力目录与请求准备页](https://kimyx0207.github.io/Kim_Service/?lang=zh-CN)** · **[下载 V1.17 源码与安装包](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.17)**
 
 目录按 **11 个行业、8 个通用领域 → 角色／岗位** 浏览，也能直接搜索要完成的事。例如搜索“现金预测”“供应商比较”或“预约页面”，查看所需材料与交付物后再选择方法。Agent 在这里首先是完整的专业方法包；由当前客户端读取并执行，是否注册为原生 Agent 取决于接入方式。
 
@@ -20,7 +20,7 @@ Kim Service 是一套开源的 **AI 专业工作方法库**。你提供业务目
 
 如果已经通过 Meta_Kim 或当前客户端接入了 Service，可以直接在实际工作项目的对话里说明目标、材料位置和限制。下面的源码步骤适用于第一次单独接入。
 
-1. **取得源码。** 下载页首 V1.16 源码并解压，或运行下面两条命令。
+1. **取得源码。** 下载页首 V1.17 源码并解压，或运行下面两条命令。
 2. **让 AI 能读到文件。** 在 Codex、Claude Code、Cursor、Gemini CLI 等项目客户端打开 `Kim_Service` 目录。若任务项目在别处，告诉 AI 方法库和业务材料各自的完整路径。
 3. **直接说明任务。** 在 AI 客户端的对话里说出要做什么、材料在哪里、有什么要求，让它查找并读取适合的完整方法。需要先浏览能力或整理请求时，可以打开页首目录，或用浏览器打开源码中的 `docs/start.html`；这是可选入口，网页本身只整理请求。
 4. **打开成果再判断完成。** 让 AI 给出输出文件路径、实际执行的检查和未完成项。检查发现问题后，返回对应步骤修正并保留上一版。
@@ -59,7 +59,7 @@ cd Kim_Service
 ### 四类组件，分别解决什么问题
 
 - **Agent：把一类专业工作做完整。** 58 个角色各有自己的任务范围、输入输出、专业资料、决策步骤、正反例和质量检查。你交给财务建模的是经营资料，交给设计系统的是页面、品牌与交互要求；两者按各自的方法产出模型或页面规范。
-- **Skill：把某一步做得更稳。** 30 个可复用技能覆盖需求追踪、API 合同、数据迁移、无障碍检查、财务情景、实验分析、检索评估、教学测评，也包含团队协作、记忆、技能发现、小红书与贴纸制作等工作流。同一个项目可以按需组合几项。
+- **Skill：把某一步做得更稳。** 32 个可复用技能覆盖需求追踪、API 合同、数据迁移、无障碍检查、财务情景、实验分析、检索评估、教学测评，也包含团队协作、记忆、技能发现、小红书与贴纸制作等工作流。同一个项目可以按需组合几项。
 - **Hook：在提出需求时补好工作要求。** HookPrompt 补充目标、范围、输出和检查要求；可选本地回执 Hook 在配置后记录选定产物的版本。两者各司其职，保留对话里已经确定的选择。
 - **Tool：接上实际执行工具。** 多 CLI 工具包可把本机已安装的 Codex、Gemini 接入支持 MCP 的客户端，用于代码工作或复核，并提供项目级工作流入口。MCP 契约审计工具离线检查工具定义变化。实际运行范围和文件操作仍由当前客户端管理。
 
@@ -72,6 +72,22 @@ cd Kim_Service
 </p>
 
 **先确定要交付什么，再选择这次需要的组合。** 做一次经营预测，可以直接让 AI 读取财务建模方法；要细化压力情景，再读取相应 Skill。Hook 适合反复整理工作要求，Tool 适合接入已经具备的执行工具。安装哪个、加载多少，取决于本次任务和客户端，不需要把全部组件一次全装上。
+
+## 通用方法进入项目，形成项目自己的专业能力
+
+**全局保留通用基础，每个持续项目维护自己的专业 Agent、Skill 与规则。** 研究当前项目后，把行业知识、品牌风格、数据权限、技术版本、可用工具和验收案例写进本地能力。下一次任务继续加载它，项目经验也随之积累。
+
+这次补充了两项专业方法：**技术方案比较**把候选方案、版本兼容性、证据、代价与验证计划放在一起；**知识架构评估**比较检索、长上下文与缓存、知识 Wiki、图谱等方案如何组合，并检查引用、更新、权限撤回和运行成本。价值判断也会结合商业产品、内部效率或开源项目，以及当前所处阶段。
+
+体验设计从通用原则继续细化到领域、品牌和当前任务。设备维护要把告警与操作后果说清楚；国风服装要照顾风格、版型和购买判断。专业方法会要求把规则对应到实际产物、页面状态和观察证据。
+
+<p align="center">
+  <a href="docs/images/animated-service-project-expertise.zh-CN.svg"><img src="docs/images/animated-service-project-expertise.zh-CN.svg" alt="全局专业基础分别形成设备维护与国风服装项目的独立 Agent、Skill、规则和验收案例" width="720"></a>
+  <br>
+  <a href="docs/images/animated-service-project-expertise.zh-CN.svg">打开原图</a>
+</p>
+
+安装好两个项目后，直接在当前 Agent 对话里提出需求。Meta_Kim 组织研究、项目能力创建、执行与验收；Service 提供可阅读、可调用的专业方法。能力目录用于按需浏览，Live 用于按需查看过程和成果。
 
 ## 例子：为销售团队做一个产品资料助手
 
@@ -94,7 +110,7 @@ Agent 从各目录的 `AGENT.md` 进入，Skill 从 `SKILL.md` 进入，再按�
 
 `examples/enterprise-knowledge/` 提供可运行的完整案例：导入固定公开 IBM Cloud 历史资料，逐条核对文档与段落，建立关键词和向量索引，用同一组 188 道公开问题比较 BM25、语义检索、RRF 混合与重排。你可以打开原文、查看引用和失败题，继续验证权限撤回、删除、索引回滚与中断恢复。固定原包实数为 8,578 篇文档、72,442 个段落；每次运行仍重新核对。
 
-本案例随 **main 分支源码**提供。先用页首的 `git clone` 命令取得当前源码；V1.16 的组件安装与本节源码示例分别取用。在 Linux 或 WSL 中，安装 Python 3.12 后，从仓库根目录运行：
+本案例随 **V1.17 源码与 main 分支**提供。下载完整源码，或用页首的 `git clone` 命令取得仓库。在 Linux 或 WSL 中，安装 Python 3.12 后，从仓库根目录运行：
 
 ```bash
 cd examples/enterprise-knowledge
@@ -124,7 +140,7 @@ python -m app.main --port 4180
 
 **推进线下运营和工程项目时，** 可以整理制造质量、系统需求与接口、建筑信息、能源项目、碳核算、农田水量以及医疗机构的非临床服务流程。方法会把边界、数据来源、单位、异常和现场待核条件说明白，交付分析、验证安排或试点方案；需要现场资料和专业判断的部分会继续标明。
 
-107 项能力是现有任务入口的覆盖范围。选择时先想清楚“我现在要得到什么”，在浏览器搜索这个结果，再看需要提供哪些材料。你不用先记住角色的英文名字。
+109 项能力是现有任务入口的覆盖范围。选择时先想清楚“我现在要得到什么”，在浏览器搜索这个结果，再看需要提供哪些材料。你不用先记住角色的英文名字。
 
 <a id="task-browser"></a>
 
@@ -347,7 +363,7 @@ DSH 里，专业 Agent 方法和 Skill 会作为原生 Skills 被发现，并保
 npm install --global @deepseek-ai/dsh@0.2.2-rc.1
 ```
 
-**准备 Service 包。** 在页首发布下载中选择 `Kim_Service-DSH-V1.16.zip`，解压并记住包含 `dsh-package.json` 的目录。也可以在 Kim_Service 仓库构建，下面的输出路径要换成自己的完整路径，且目录尚不存在：
+**准备 Service 包。** 在页首发布下载中选择 `Kim_Service-DSH-V1.17.zip`，解压并记住包含 `dsh-package.json` 的目录。也可以在 Kim_Service 仓库构建，下面的输出路径要换成自己的完整路径，且目录尚不存在：
 
 ```sh
 node scripts/build-dsh-package.mjs --output "/absolute/path/kim-service-dsh"
@@ -382,7 +398,7 @@ node bin/meta-kim.mjs dsh check --scope project --project-root "/absolute/path/m
 
 ### ZCode
 
-先在页首发布下载中取得 **`Kim-ZCode-V1.16.zip`**，完整解压到准备长期保留的位置。选择包含 `marketplace.json` 的目录，保留其下全部插件和资料；V1.16 的 Kim 插件版本为 **1.16.0**。
+先在页首发布下载中取得 **`Kim-ZCode-V1.17.zip`**，完整解压到准备长期保留的位置。选择包含 `marketplace.json` 的目录，保留其下全部插件和资料；V1.17 的 Kim 插件版本为 **1.17.0**。
 
 在 ZCode 打开一个项目，再进入**设置 → 插件 → 创建 → 添加市场**，选择刚才的本地目录。在个人来源里安装并启用 `kim-service-local`；想同时使用 Meta_Kim 的任务组织方法，再安装 `meta-kim-local`。安装后，在插件详情核对角色和技能，在子 Agent 列表找到对应角色，例如 `kim-service-local:financial-modeler`，然后带上目标与材料开始任务。
 
@@ -403,7 +419,7 @@ zcode plugins list --json
 
 这两个客户端当前提供**选定一个 Agent 或 Skill，导出完整技能 ZIP，再在客户端导入**的 beta 接入。包内保留原方法、知识、案例、脚本和许可；Agent 作为 Skill 里的专业方法使用。
 
-**准备文件。** 先安装 Node.js **22.13.0 或更高版本**，运行 `node --version` 核对。取得页首 Service V1.16 源码，以及配套的 [Meta_Kim v3.13.0 源码](https://github.com/KimYx0207/Meta_Kim/releases/tag/v3.13.0)，完整解压。在终端进入 Kim_Service 根目录，把下面的 Meta 路径改成实际绝对路径。输出目录必须是尚不存在的新目录，其父目录须已存在；例子导出财务建模：
+**准备文件。** 先安装 Node.js **22.13.0 或更高版本**，运行 `node --version` 核对。取得页首 Service V1.17 源码，以及配套的 [Meta_Kim v3.14.0 源码](https://github.com/KimYx0207/Meta_Kim/releases/tag/v3.14.0)，完整解压。在终端进入 Kim_Service 根目录，把下面的 Meta 路径改成实际绝对路径。输出目录必须是尚不存在的新目录，其父目录须已存在；例子导出财务建模：
 
 ```sh
 node scripts/build-desktop-skill-package.mjs --meta-root "/absolute/path/Meta_Kim" --host workbuddy --component financial-modeler --output "/absolute/path/new-workbuddy-finance"
@@ -413,7 +429,7 @@ node scripts/build-desktop-skill-package.mjs --meta-root "/absolute/path/Meta_Ki
 豆包工作把两条命令中的 `--host workbuddy` 改为 `--host doubao`，并选新的输出目录。Windows PowerShell 可用以下完整写法，只需修改 Meta 源码目录和客户端选择：
 
 ```powershell
-$KimMeta = (Resolve-Path 'C:/work/Meta_Kim-3.13.0').Path
+$KimMeta = (Resolve-Path 'C:/work/Meta_Kim-3.14.0').Path
 $KimClient = 'workbuddy' # 豆包工作改为 'doubao'
 $KimOutput = Join-Path ([IO.Path]::GetTempPath()) ('kim-finance-' + [guid]::NewGuid().ToString('N'))
 node scripts/build-desktop-skill-package.mjs --meta-root $KimMeta --host $KimClient --component financial-modeler --output $KimOutput

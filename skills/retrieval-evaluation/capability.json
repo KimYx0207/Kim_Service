@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "retrieval-evaluation",
   "componentType": "skill",
-  "componentVersion": "0.1.0",
+  "componentVersion": "0.2.0",
   "entrypoint": "SKILL.md",
   "capabilities": [
     {
@@ -105,6 +105,22 @@
               "array"
             ],
             "description": "产物位置、未完成项和下一步"
+          },
+          "lifecycleFindings": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前语料/身份/策略版本的更新、撤回、权限与派生缓存观察；未运行明确标记。"
+          },
+          "evaluationBoundary": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "检索、答案、引用、成本与人工/自动评分边界，保留独立题集和人工救援。"
           }
         },
         "required": [

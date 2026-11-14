@@ -119,6 +119,38 @@
         "empty-gold",
         "retrieval-not-answer"
       ]
+    },
+    {
+      "id": "revoked-gold-is-not-quality",
+      "capabilityId": "retrieval-evaluation-deliver",
+      "category": "failure_boundary",
+      "scenario": "旧相关集合包含用户当前无权查看的文档",
+      "input": {
+        "dataset": {
+          "q1": [
+            "A"
+          ]
+        },
+        "runs": {
+          "q1": [
+            "A"
+          ]
+        },
+        "policy": "合成：k=1；题集创建于p1，当前p2已撤销用户对A的读取权"
+      },
+      "candidateOutputExcerpt": {
+        "evaluationBoundary": "Recall@1等于1，因此生产权限和答案均通过。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "检索算术不等于当前权限或答案验证；需冻结身份、策略、语料版本重核题集。",
+      "diagnosticRefs": [
+        "labels",
+        "leak"
+      ],
+      "decisionRuleRefs": [
+        "lifecycle-separate",
+        "retrieval-not-answer"
+      ]
     }
   ]
 }

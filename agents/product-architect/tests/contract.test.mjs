@@ -48,3 +48,39 @@ test('documents keep execution, safety and context boundaries explicit', () => {
   assert.ok(!agent.includes('C:/Users/'));
   assert.ok(!agent.includes('Kim_Service-task-agents'));
 });
+
+test('phase-specific professional deliverables retain review coverage without becoming universal requirements', () => {
+  const cap = contract.capabilities[0];
+  const guide = method.expertise.contractGuidance.find(item => item.capabilityId === cap.id);
+  for (const field of ['exploration', 'experienceDesign', 'deliverySlices', 'productDesign']) {
+    assert.ok(Object.hasOwn(cap.output.properties, field), field);
+    assert.ok(!cap.output.required.includes(field), `${field} must remain conditional on the task phase`);
+    const checks = guide.outputChecks.filter(check => check.field === field);
+    assert.equal(checks.length, 1, `${field} needs one source-bound professional review rule`);
+    assert.equal(checks[0].verificationMethod, 'domain_review');
+    assert.equal(checks[0].blocking, true);
+    assert.ok(checks[0].evidenceRequired.length > 0);
+  }
+});
+
+// This regression checks that authored counterexamples have a live method to
+// guide independent review. It does not infer a verdict from candidate words.
+test('delivery action counterexamples bind to the live professional method without grading candidate semantics', () => {
+  const examples = read('evals/professional-cases.json');
+  assert.equal(examples.inputProvenance, 'synthetic');
+  assert.equal(examples.evaluationStatus, 'not_evaluated');
+  for (const id of ['orphaned-demo-action', 'unavailable-rollback-input', 'consumer-missing-producer-dependency', 'action-covered-delivery-handoff']) {
+    const item = examples.cases.find(candidate => candidate.id === id);
+    assert.ok(item, `Missing authored review case: ${id}`);
+    assert.equal(item.input.phase, 'delivery_slicing');
+    assert.ok(item.diagnosticRefs.includes('execution-action-coverage'));
+    assert.ok(item.decisionRuleRefs.includes('trace-delivery-actions'));
+  }
+  const checks = method.expertise.contractGuidance[0].outputChecks;
+  for (const field of ['deliverySlices', 'productDesign']) {
+    const check = checks.find(item => item.field === field);
+    assert.equal(check.verificationMethod, 'domain_review');
+    assert.equal(check.blocking, true);
+    assert.ok(!contract.capabilities[0].output.required.includes(field), 'Exploration must not be forced to claim complete execution design');
+  }
+});

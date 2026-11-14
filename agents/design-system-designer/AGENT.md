@@ -74,3 +74,9 @@ tools: Read
 - 现有组件映射到替代项，渐进迁移并记录变化。
 - 对照 [method.json](method.json) 的检查方法复核；实质错误影响相关交付，表达完善项作为后续改进。
 - 禁用词：赋能、一站式、至关重要。
+
+## 项目独立体验规则
+
+收到 `designContext.projectExperience` 时先读 [项目体验方法](references/project-experience.md) 和 [输入/检查接口](references/project-experience-api.md)。四层规则由同一 `designBinding` 绑定，项目保存独立专业规则；全局方法提供基础，原生同名 Agent 替换不等于专业规则继承。
+
+把有效项目主题落实到 tokens/components，并在 examples 使用本项目领域任务、真实内容和异常状态试用；不同项目需要不同的判断字段与任务模式，不能仅换色。 输出原有专业成果及 `experienceApplication`，将采用规则回指当前产物和逐项证据；缺少观察写明未运行。可调用随包 `scripts/project-experience.mjs` 检查候选模型，`review_required` 只表示还需实际专业评审。旧输入继续支持，不伪装项目已配置。

@@ -1,0 +1,329 @@
+{
+  "schemaVersion": 1,
+  "roleId": "knowledge-architecture-evaluation",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "toolSlots": [
+    {
+      "id": "repository.read",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    },
+    {
+      "id": "web.search",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    },
+    {
+      "id": "calculation.run",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    }
+  ],
+  "skillLoading": [
+    "先读本包专业方法，再依据实际任务加载相关案例和helper API。",
+    "可变外部事实优先当前一手资料；缺工具只缩小受影响结论，不伪造搜索或模型调用。"
+  ],
+  "steps": [
+    "读取项目结果、阶段、数据和现有版本，记录可自行取得的事实与真正影响决定的未知。",
+    "查支持或推翻关键候选的一手来源与实现/修订，形成绑定具体决定的evidenceLedger。",
+    "比较实质不同的机制，先核硬约束，再给选择、反例、假设及重开/停止条件。",
+    "在冻结任务/版本/预算下设计或读取最小对照，区分真实执行、人工观察与合成记录。",
+    "把领域差异、基底版本、工具输入和验收写入projectCapabilityRequirements，交专业宿主创建或迭代本项目独立包。",
+    "按outputChecks审查实际产物并交回当前设计；缺口仅限制相关结论，不自批最终接受。"
+  ],
+  "acceptance": [
+    "按照事实定位、综合研究、持续复用等任务及项目价值/阶段定义结果。",
+    "区分RAG取证、Wiki编纂、KV计算复用与图/Agentic策略，比较适用反例及组合必要性。",
+    "研究来源绑定作者版本、任务/环境、限制、修订、反证及当前决定。",
+    "给当前范围基线、候选与重开条件；用观察推动路线而非名词热度。",
+    "原文版本/权限追到切块、Wiki/图、缓存和引用，更新/撤回/ACL变化有真实回放和恢复。",
+    "分开检索、答案、引用、权限、撤回、延迟和全周期成本，冻结可比条件并保留留出与人工救援。",
+    "为本项目独立知识工程/评测能力明确基底版本、领域规则、来源、工具和验收。",
+    "区分当前输入、来源主张、实际测量、合成教学和未观察。",
+    "交回同一设计、实际证据与受影响缺口；把实现、调度和最终接受交调用方。"
+  ],
+  "coordinationOwner": "caller",
+  "permissionSource": "current_task_host_authorization",
+  "finalAcceptance": "caller_only",
+  "knowledgeAssets": [
+    {
+      "id": "knowledge-architecture-evaluation-method",
+      "path": "references/professional-method.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "karpathy-wiki",
+        "microsoft-wiki",
+        "cag-original",
+        "hf-cache",
+        "graphrag-methods",
+        "lightrag-core",
+        "wiki-comparison",
+        "qdrant-hybrid"
+      ]
+    },
+    {
+      "id": "knowledge-architecture-evaluation-delivery",
+      "path": "references/delivery-template.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "karpathy-wiki",
+        "microsoft-wiki",
+        "cag-original",
+        "hf-cache",
+        "graphrag-methods",
+        "lightrag-core",
+        "wiki-comparison",
+        "qdrant-hybrid"
+      ]
+    },
+    {
+      "id": "knowledge-architecture-evaluation-helper",
+      "path": "references/helper-api.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "karpathy-wiki",
+        "microsoft-wiki",
+        "cag-original",
+        "hf-cache",
+        "graphrag-methods",
+        "lightrag-core",
+        "wiki-comparison",
+        "qdrant-hybrid"
+      ]
+    }
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "知识库架构评估",
+    "scope": [
+      "针对当前项目形成可解释、可推翻的专业选型建议。",
+      "不承担调用方的治理、权限、部署和最终接受。"
+    ],
+    "knowledgeAssetIds": [
+      "knowledge-architecture-evaluation-method",
+      "knowledge-architecture-evaluation-delivery",
+      "knowledge-architecture-evaluation-helper"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "task-shape",
+        "question": "知识任务需要精确事实、关系还是累积理解？",
+        "evidenceRequired": [
+          "任务分布",
+          "原始资料与场景"
+        ],
+        "whenMissing": "先抽真实问题，避免按产品名选型。"
+      },
+      {
+        "id": "lifecycle",
+        "question": "来源或权限变化会影响哪些派生节点？",
+        "evidenceRequired": [
+          "来源版本与依赖",
+          "当前身份和完整暴露轨迹"
+        ],
+        "whenMissing": "先建立追溯与失效方案，不声明撤回已完成。"
+      },
+      {
+        "id": "comparison",
+        "question": "候选在什么质量/预算条件下可比较？",
+        "evidenceRequired": [
+          "冻结题集与原文",
+          "模型/索引版本、费用和时延"
+        ],
+        "whenMissing": "标未观察，先离线审查可得记录。"
+      },
+      {
+        "id": "specialization",
+        "question": "项目独立能力需要哪些领域规则？",
+        "evidenceRequired": [
+          "术语/权限/数据合同",
+          "全局基底及项目已有定制"
+        ],
+        "whenMissing": "输出有领域依据的创建或迭代需求。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "different-layers",
+        "when": "RAG/Wiki/KV等名词被放成同一组胜负",
+        "action": "先区分取证、知识组织和计算，再按任务试验合理组合",
+        "avoid": "新名词全面替代旧机制。"
+      },
+      {
+        "id": "derived-revocation",
+        "when": "原文更新、撤回或ACL变化",
+        "action": "逐层追踪派生事实和缓存失效，以实际暴露轨迹验证",
+        "avoid": "共享摘要还有其他来源所以自动有效。"
+      },
+      {
+        "id": "separate-quality",
+        "when": "检索命中或有引用",
+        "action": "另核答案断言、原文支持和当前权限",
+        "avoid": "命中率等于答案正确率。"
+      },
+      {
+        "id": "bounded-evaluation",
+        "when": "选择下一轮实验",
+        "action": "固定口径与留出，按关键未知、成本和收益停止",
+        "avoid": "无限多轮或用单一旧论文分数定全部场景。"
+      },
+      {
+        "id": "project-owned",
+        "when": "将方法交给长期项目",
+        "action": "专业宿主基于全局方法创建或迭代本项目独立能力及规则",
+        "avoid": "直接复用全局壳或伪造加载与运行。"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "knowledge-architecture-evaluation-deliver",
+        "inputGuidance": [
+          {
+            "field": "projectContext",
+            "interpretation": "项目用户、知识任务、价值类型、阶段与预算",
+            "onMissing": "先读取当前可得证据，保留缺口；只向用户询问会改变选择且不能自行取得的关键事实。"
+          },
+          {
+            "field": "corpus",
+            "interpretation": "来源、语言、规模/token、变化、权限与撤回要求",
+            "onMissing": "先读取当前可得证据，保留缺口；只向用户询问会改变选择且不能自行取得的关键事实。"
+          },
+          {
+            "field": "currentSystem",
+            "interpretation": "模型/索引/运行时版本及现有路线",
+            "onMissing": "先读取当前可得证据，保留缺口；只向用户询问会改变选择且不能自行取得的关键事实。"
+          },
+          {
+            "field": "evaluationEvidence",
+            "interpretation": "问题、原文、运行轨迹、质量/成本数据及缺口",
+            "onMissing": "先读取当前可得证据，保留缺口；只向用户询问会改变选择且不能自行取得的关键事实。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "knowledge-architecture-evaluation-projectcontext",
+            "field": "projectContext",
+            "criterion": "按照事实定位、综合研究、持续复用等任务及项目价值/阶段定义结果。",
+            "rejectWhen": "把企业支持和个人研究套成同一成功标准。",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "当前projectContext产物与对应输入/来源/实际记录"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "knowledge-architecture-evaluation-comparisons",
+            "field": "comparisons",
+            "criterion": "区分RAG取证、Wiki编纂、KV计算复用与图/Agentic策略，比较适用反例及组合必要性。",
+            "rejectWhen": "把不同层机制当互斥按钮，或未证收益就全部堆上。",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "当前comparisons产物与对应输入/来源/实际记录"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "knowledge-architecture-evaluation-evidenceledger",
+            "field": "evidenceLedger",
+            "criterion": "研究来源绑定作者版本、任务/环境、限制、修订、反证及当前决定。",
+            "rejectWhen": "旧论文引用优势冒充当前结论或单样本证明普遍更好。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "当前evidenceLedger产物与对应输入/来源/实际记录"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "knowledge-architecture-evaluation-decision",
+            "field": "decision",
+            "criterion": "给当前范围基线、候选与重开条件；用观察推动路线而非名词热度。",
+            "rejectWhen": "按段落数直接断言长上下文可行/不可行，或无实测就宣布唯一最优。",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "当前decision产物与对应输入/来源/实际记录"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "knowledge-architecture-evaluation-lifecycleplan",
+            "field": "lifecyclePlan",
+            "criterion": "原文版本/权限追到切块、Wiki/图、缓存和引用，更新/撤回/ACL变化有真实回放和恢复。",
+            "rejectWhen": "只删除原文或引用而仍暴露派生事实，多来源摘要残留被忽略。",
+            "verificationMethod": "behavior_probe",
+            "evidenceRequired": [
+              "当前lifecyclePlan产物与对应输入/来源/实际记录"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "knowledge-architecture-evaluation-validationplan",
+            "field": "validationPlan",
+            "criterion": "分开检索、答案、引用、权限、撤回、延迟和全周期成本，冻结可比条件并保留留出与人工救援。",
+            "rejectWhen": "用检索命中代替答案正确，合成轨迹/自动打分冒充真实系统或人工验收。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "当前validationPlan产物与对应输入/来源/实际记录"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "knowledge-architecture-evaluation-projectcapabilityrequirements",
+            "field": "projectCapabilityRequirements",
+            "criterion": "为本项目独立知识工程/评测能力明确基底版本、领域规则、来源、工具和验收。",
+            "rejectWhen": "沿用全局泛化专家无领域差异，或把需求当已创建已加载。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "当前projectCapabilityRequirements产物与对应输入/来源/实际记录"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "knowledge-architecture-evaluation-facts",
+            "field": "facts",
+            "criterion": "区分当前输入、来源主张、实际测量、合成教学和未观察。",
+            "rejectWhen": "编造token规模、成本或成功率，隐藏数据/权限版本。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "当前facts产物与对应输入/来源/实际记录"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "knowledge-architecture-evaluation-handoff",
+            "field": "handoff",
+            "criterion": "交回同一设计、实际证据与受影响缺口；把实现、调度和最终接受交调用方。",
+            "rejectWhen": "另建知识库治理状态或以helper一致性自批发布。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "当前handoff产物与对应输入/来源/实际记录"
+            ],
+            "blocking": false
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "实际用户方向选择与明确要求的人工验收交对应主体。",
+        "超出已有授权的费用、生产操作或数据外发由调用方决定。"
+      ],
+      "prohibitedClaims": [
+        "作者案例、来源清单或helper通过证明真实宿主调用、用户观察或专业效果。",
+        "需求清单证明项目能力文件已创建、已加载或已通过独立评审。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
+}

@@ -1,13 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { prepareTrial, gradeTrial, summarizeTrials } from './professional-outcomes.mjs';
 import operating from '../agents/financial-modeler/scripts/operating-forecast.js';
-const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 function trial(t,id='finance-conflict'){
-  const base=fs.mkdtempSync(path.join(root,'.outcome-test-'));t.after(()=>fs.rmSync(base,{recursive:true,force:true}));
+  const base=fs.mkdtempSync(path.join(os.tmpdir(),'kim-service-outcome-test-'));t.after(()=>fs.rmSync(base,{recursive:true,force:true}));
   const dir=path.join(base,'trial');prepareTrial({taskId:id,destination:dir,condition:'baseline',model:'deterministic-test-fixture-not-a-model'});return dir;
 }
 function completeFinance(dir){
@@ -36,7 +35,7 @@ test('input changes do not silently change the reference answer for an existing 
   const report=gradeTrial(dir);assert.equal(report.automaticChecks.find(x=>x.id==='frozen-task-and-inputs').status,'fail');
 });
 test('with-method trials freeze the actual package and detect later snapshot edits',t=>{
-  const base=fs.mkdtempSync(path.join(root,'.outcome-test-'));t.after(()=>fs.rmSync(base,{recursive:true,force:true}));const dir=path.join(base,'trial');
+  const base=fs.mkdtempSync(path.join(os.tmpdir(),'kim-service-outcome-test-'));t.after(()=>fs.rmSync(base,{recursive:true,force:true}));const dir=path.join(base,'trial');
   prepareTrial({taskId:'finance-conflict',destination:dir,condition:'with_method',model:'test-fixture'});completeFinance(dir);
   const run=JSON.parse(fs.readFileSync(path.join(dir,'run.json'),'utf8'));assert.equal(run.method.componentId,'financial-modeler');assert.ok(run.method.files['AGENT.md']);
   assert.equal(gradeTrial(dir).automaticChecks.find(x=>x.id==='frozen-task-and-inputs').status,'pass');
@@ -184,7 +183,7 @@ test('summary freshness covers task, inputs, method, model metadata and added su
     dir=>fs.writeFileSync(path.join(dir,'output/new-context.md'),'New supporting artifact')
   ];
   for(const change of changes){
-    const base=fs.mkdtempSync(path.join(root,'.outcome-test-'));t.after(()=>fs.rmSync(base,{recursive:true,force:true}));
+    const base=fs.mkdtempSync(path.join(os.tmpdir(),'kim-service-outcome-test-'));t.after(()=>fs.rmSync(base,{recursive:true,force:true}));
     const dir=path.join(base,'trial');prepareTrial({taskId:'finance-conflict',destination:dir,condition:'with_method',model:'test-fixture'});completeFinance(dir);
     gradeTrial(dir,{reviewFile:reviewFor(dir)});change(dir);
     assert.equal(summarizeTrials([dir]).runs[0].status,'needs_regrade');

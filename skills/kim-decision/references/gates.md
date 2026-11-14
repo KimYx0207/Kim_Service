@@ -180,22 +180,13 @@ Rules:
 - Local/user-provided material can stay local-only when no external changing fact affects the decision
 - If no search tools are available, skip the search and flag the gap explicitly
 
-## Revenue gate
+## Value and stage gate
 
 Load: references/business.md
 
-Required:
+Record composable `valueTypes` and the current `stage` in the existing project context. Check outcome evidence for each applicable value type and proportion it to this decision. Exploration can continue with a bounded probe; delivery needs an acceptance method and owner; scale needs repeatability, capacity and applicable economics or nonfinancial value.
 
-```text
-Revenue model
-Payer
-Why pay now
-Deal size
-Delivery cost
-Repeat purchase
-```
-
-If questions 1-3 unanswered → downgrade to "do not proceed".
+For a paid delivery or scale commitment, inspect revenue model, payer, urgency, deal size, delivery cost and applicable repeat purchase. For a one-time offer, record the reason and one-time economics. Missing evidence limits the paid commitment. Internal and open-source value do not require an external payer.
 
 ## MVP gate
 
@@ -206,13 +197,13 @@ Required:
 ```text
 V1 scope (one sentence)
 Explicit exclusions
-Fastest delivery (days)
-Minimum customer
-Minimum deal size
+Actual time and resource limit
+Beneficiary and test setting
+Applicable value signal (transaction, time/error improvement, reproducible adoption)
 Failure criteria
 ```
 
-If scope exceeds one sentence or no exclusions → compress.
+Make the first result clear and bounded. Keep exclusions only where they prevent a real scope misunderstanding.
 
 ## Delivery gate
 
@@ -225,8 +216,8 @@ Input
 Process
 Output
 Acceptance criteria
-Client confirmation
-Reuse potential
+Acceptance owner and observed review state
+Reuse potential where useful
 ```
 
-If input through confirmation incomplete → deliverable not ready.
+An incomplete acceptance path limits readiness; an actual review must be recorded separately from its plan. Existing authorization remains valid and ordinary reversible work does not require repeated approval.

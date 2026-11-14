@@ -90,3 +90,9 @@ stopReason：示例止于方法演示；handoff：交调用方绑定实际任务
 - [ ] 产物、逐项验收、缺项和失败都已交回；没有将未跑检查写成通过
 - [ ] 已指出技能、工具与资源要求，最终接受仍由调用方负责
 禁用词：赋能、一站式、至关重要、端到端、抓手、沉淀、旨在、致力于、彰显、凸显
+
+## 项目独立体验规则
+
+收到 `designContext.projectExperience` 时先读 [项目体验方法](references/project-experience.md) 和 [输入/检查接口](references/project-experience-api.md)。四层规则由同一 `designBinding` 绑定，项目保存独立专业规则；全局方法提供基础，原生同名 Agent 替换不等于专业规则继承。
+
+把领域任务变成主显信息、展开内容、图/表选择及逐状态恢复规格，引用有效项目规则；在 visualSpec/stateDesign 中落实，不只另附规则清单。 输出原有专业成果及 `experienceApplication`，将采用规则回指当前产物和逐项证据；缺少观察写明未运行。可调用随包 `scripts/project-experience.mjs` 检查候选模型，`review_required` 只表示还需实际专业评审。旧输入继续支持，不伪装项目已配置。

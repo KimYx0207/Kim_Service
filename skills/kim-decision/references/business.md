@@ -1,83 +1,50 @@
-# Business layer
+# Value and business layer
 
-Load when the task involves a proposal, plan, business decision, monetization, product strategy, pricing, client delivery, or any decision with a commercial dimension.
+Load for product value, cost, pricing, internal workflow improvement, open-source adoption, client delivery or MVP scope. Start from the user's result, not a universal revenue questionnaire.
 
-Trigger keywords: 方案, 商业, 变现, 定价, 客户, 交付, 产品决策, 挣钱, 复购, 老板, MVP, 收入, 成本, revenue, monetize, price, client, deliver, scope.
+## Value types and stage
 
-## Revenue Judge gate
+Record `valueTypes` as a combination of `paid`, `internal`, `open-source`, and `stage` as `exploration`, `validation`, `delivery` or `scale`. These describe the current decision, not mutually exclusive product templates. A public project may sell hosting; an internal service may indirectly support revenue.
 
-Before finalizing any business output, answer all six:
+| Value type | Evidence that matters | Inapplicable shortcut |
+|---|---|---|
+| paid | Buyer problem, revenue model, willingness to pay, delivery cost, applicable retention/repeat | Treating a hypothetical buyer as proven revenue |
+| internal | Work outcome, time/error baseline, adoption, operating cost, owner | Requiring an external payer before testing internal value |
+| open-source | Reproducible use, adoption/contribution, maintenance burden, distribution and owner | Requiring a transaction or equating stars with successful use |
 
-1. Revenue model: how does this make money?
-2. Payer: who pays?
-3. Urgency: why pay now?
-4. Deal size: what amount closes a deal?
-5. Delivery cost: what does it cost to fulfill?
-6. Repeat: can they buy again?
+For mixed types, retain applicable measures separately. DAU, conversion, price, LTV and support burden are distinct assumptions; do not derive a technical stack from one label. Use observed denominators, windows and current prices for numerical claims.
 
-Decision rule:
+| Stage | Minimum useful evidence and next move |
+|---|---|
+| exploration | Clarify beneficiary and outcome; compare alternatives and choose a falsifiable probe. Unknown pricing does not block an interview or local prototype. |
+| validation | Observe adoption/outcome and cost under a bounded test. Keep willingness to pay and nonfinancial value as separate hypotheses. |
+| delivery | Check promised scope, actual resources, acceptance method and owner. Commercial promises additionally need commercial evidence. |
+| scale | Check repeatability, capacity and economics or applicable nonfinancial value. A successful demonstration does not establish reliable scale. |
 
-- Questions 1-3 unanswered → output downgrades to "do not proceed" with specific gaps listed
-- Questions 4-6 unanswered → flag as "needs verification" and list specific gaps
-- All six answered → proceed with revenue estimate
+## Revenue questions when a paid commitment is at stake
 
-## MVP Converger gate
+Inspect revenue model, payer, why now, deal size, delivery cost, and repeat purchase/retention where applicable. An intrinsically one-time offer may have no repeat purchase; record one-time economics rather than invent recurrence.
 
-For every proposal, force scope compression:
+Missing revenue evidence limits the related commercial conclusion. It does not veto an internal/open-source project or bounded commercial exploration. Distinguish a worthwhile test from an evidenced commitment or scale decision. Answering six questions is not proof of demand.
 
-1. V1 scope: what does the first version do? (one sentence maximum)
-2. Exclusions: which plausible extensions would distract from the current validation? Name the relevant exclusions; do not invent three merely to satisfy a count.
-3. Fastest delivery: how many days to ship V1?
-4. Minimum customer: who is the smallest viable customer?
-5. Minimum deal: what is the smallest transaction that validates the model?
-6. Failure criteria: what measurable result means "stop, this does not work"?
+## Smallest useful version
 
-Compression rules:
+State one clear user result, the actual audience, inputs, artifact, time/resource limit, success observation and failure/reopen condition. Name relevant exclusions only. For paid validation use a suitable transaction signal; for internal work use time, errors or task success; for open source use reproducible adoption and maintenance evidence. Delivery time follows the real feedback cycle, not a universal day limit.
 
-- V1 scope exceeds one sentence → compress until it fits
-- No exclusions listed → scope is too broad, cut until exclusions appear
-- Fastest delivery exceeds the user's time/resource budget or cannot expose the critical uncertainty within the business feedback cycle → reduce scope or renegotiate the constraint; no universal 14-day cutoff
-- No failure criteria → add one before proceeding
+## Beneficiary and delivery review
 
-## Boss Perspective model
+Read the proposal from the actual beneficiary's position: why use it, how adoption happens, what effort precedes the first result, and what visible observation supports continued investment. A quick win must match the task's real cycle; do not promise a first-week outcome if the process takes longer.
 
-View the proposal from the buyer's chair:
+Close the delivery path: source/input, processing/tools, output/destination, acceptance method and owner, plus reuse where useful. Record whether actual user review occurred; an identified reviewer is not a completed review. Existing authorization remains valid, and ordinary reversible work does not need repeated sign-off.
 
-1. Why buy: what pain does this solve for the person holding budget?
-2. Adoption: will employees use it without being forced?
-3. Implementation: how many steps from "buy" to "first result"?
-4. Quick win: what visible result appears in the first week?
-5. FOMO: what happens if they do not buy?
+## Research and project context
 
-Output:
+Inspect available project facts before asking. Research current facts using primary sources and installed versions. Record which finding changes which option, the strongest counterexample, remaining uncertainty, and when to stop or reopen. More links do not make an unsupported decision ready. For technical comparison, return the decision context for `technology-option-evaluation`; knowledge systems may need `knowledge-architecture-evaluation`. The caller selects and invokes components.
 
-```text
-Finding: [what the buyer would reject or question]
-Fix: [how to address it]
-```
+For a continuing project, preserve value/stage context in the existing design and requirements for its independent professional abilities. Global methods provide a base; project domain, vocabulary, constraints and acceptance must be explicit. This analysis does not create those files or own their lifecycle.
 
-Rule: if no quick win exists, the proposal relies on long-term promises only. Flag as "needs short-term visible result".
+## Optional evidence routing helper
 
-## Delivery Loop gate
+`node scripts/assess-value-stage.mjs --input-json -` consumes `{valueTypes, stage, evidence, recurrence?, recurrenceReason?}`. Evidence booleans indicate material supplied for review, not truth or approval. It reports required categories and gaps; `executionAuthorized` and `finalAcceptanceClaimed` stay false. `ready-for-next-test` means routing requirements were supplied. Professional judgment must still check quality and applicability. Explain legitimate one-time economics in the actual decision rather than converting inapplicable recurrence into a veto.
 
-Every deliverable must close the loop:
-
-1. Input: what goes in? (format, source, quality bar)
-2. Process: what happens to it? (steps, tools, time)
-3. Output: what comes out? (format, destination, quality bar)
-4. Acceptance criteria: how does the client verify it is done?
-5. Client confirmation: what does the client sign, send, or say to confirm?
-6. Reuse: what can be reused for the next client or project?
-
-Rules:
-
-- Steps 1-5 missing any item → deliverable is not ready
-- Step 6 missing → flag as "one-time work, no leverage"
-- Reuse can be: template, process, tool, script, checklist, framework
-
-## Interaction with core frame
-
-- Revenue Judge: runs after Evidence, before Output
-- MVP Converger: runs after Path, before Minimum Test
-- Boss Perspective: runs as a Model alongside other models
-- Delivery Loop: runs as the final gate before Output
+`recurrence` is `unknown`, `recurring` or `one-time`. One-time delivery requires a nonempty `recurrenceReason`; the helper then excludes `repeatPurchase` while retaining all other applicable evidence.

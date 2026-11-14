@@ -29,14 +29,22 @@
       "id": "browser.inspect",
       "required": false,
       "onMissing": "narrow_delivery_and_report"
+    },
+    {
+      "id": "test.run",
+      "required": false,
+      "onMissing": "review_supplied_design_model_and_report_helper_not_run"
     }
   ],
   "skillLoading": [
     "按本次任务读取下面两份知识材料；只加载有关内容。",
     "使用宿主已提供且获授权的相关工具槽；缺工具时仍完成资料分析与可用草案，把未执行步骤交接。",
-    "按需读取 references/editable-example.md；样板为合成数据，可用工具和实际任务验收仍由宿主绑定，不默认加载全部示例源码。"
+    "按需读取 references/editable-example.md；样板为合成数据，可用工具和实际任务验收仍由宿主绑定，不默认加载全部示例源码。",
+    "收到 designContext.projectExperience 时读取 references/project-experience.md 与 project-experience-api.md，消费本项目已保存的四层规则；按需使用包内 helper，保留实际运行与未验证边界。"
   ],
   "steps": [
+    "绑定同一 designBinding 与调用方投影的 projectExperience，核对项目独立规则、四层来源版本和本任务适用差异。缺少项目规则时交具体缺口与建议由调用方沿项目能力生命周期保存，不默认全局通用方法已经满足项目。",
+    "把有效项目主题落实到 tokens/components，并在 examples 使用本项目领域任务、真实内容和异常状态试用；不同项目需要不同的判断字段与任务模式，不能仅换色。",
     "盘点现有组件和页面，用截图及代码位置合并真正同义的模式。",
     "先定义颜色、排版、间距的语义角色，再绑定原始值；按项目格式验证引用。",
     "为每组件补状态矩阵、键盘行为、错误恢复和可访问名称。",
@@ -51,7 +59,8 @@
     "在至少一个真实任务上验证层级、长文本、缩放和浅深主题。",
     "现有组件映射到替代项，渐进迁移并记录变化。 可以先交明确范围的草案；只把拒收条件中的实质错误限制在相关结论或动作。",
     "用于当前实质结论的关键事实与原始输入一致；来源未全时明确标注未知或假设，其他资料充分部分继续。",
-    "给当前可用成果和受影响的待核项，独立部分可以继续。"
+    "给当前可用成果和受影响的待核项，独立部分可以继续。",
+    "提供 projectExperience 的任务须能从专业成果回读项目任务、有效规则、当前设计版本和真实/未运行证据；不能用规则ID回显、颜色替换或helper通过替代体验验收。"
   ],
   "coordinationOwner": "caller",
   "permissionSource": "current_task_host_authorization",
@@ -92,6 +101,32 @@
       "sourceRefs": [
         "original-editable-sample"
       ]
+    },
+    {
+      "id": "design-system-designer-project-experience",
+      "path": "references/project-experience.md",
+      "appliesTo": [
+        "design-system-designer-deliver"
+      ],
+      "sourceRefs": [
+        "carbon-disclosure",
+        "shopify-theme-segments",
+        "uswds-visualization",
+        "wcag22"
+      ]
+    },
+    {
+      "id": "design-system-designer-project-experience-api",
+      "path": "references/project-experience-api.md",
+      "appliesTo": [
+        "design-system-designer-deliver"
+      ],
+      "sourceRefs": [
+        "carbon-disclosure",
+        "shopify-theme-segments",
+        "uswds-visualization",
+        "wcag22"
+      ]
     }
   ],
   "expertise": {
@@ -104,7 +139,9 @@
     "knowledgeAssetIds": [
       "design-system-designer-method",
       "design-system-designer-delivery",
-      "design-system-editable-example"
+      "design-system-editable-example",
+      "design-system-designer-project-experience",
+      "design-system-designer-project-experience-api"
     ],
     "diagnosticSequence": [
       {
@@ -131,6 +168,15 @@
           "调用位置"
         ],
         "whenMissing": "先试一个页面。"
+      },
+      {
+        "id": "project-experience-fit",
+        "question": "这个项目的领域任务、品牌和当次状态怎样改变当前专业成果？",
+        "evidenceRequired": [
+          "已保存的项目独立规则、四层来源与版本",
+          "同一设计的任务、当前产物和实际观察或明确未运行项"
+        ],
+        "whenMissing": "先给具体适配差异和材料缺口，交调用方形成项目规则；探索继续，不冒称已配置或已验收。"
       }
     ],
     "decisionRules": [
@@ -151,6 +197,12 @@
         "when": "组件视觉评审",
         "action": "使用真实内容和异常状态",
         "avoid": "空白占位页代表所有场景"
+      },
+      {
+        "id": "project-experience-application",
+        "when": "收到项目体验规则或涉及行业/品牌差异",
+        "action": "把有效项目主题落实到 tokens/components，并在 examples 使用本项目领域任务、真实内容和异常状态试用；不同项目需要不同的判断字段与任务模式，不能仅换色。 按当前决定选择披露与图形，保留可发现的关键状态。",
+        "avoid": "把通用模板换色后称为行业设计，或只回写规则ID没有产物差异。"
       }
     ],
     "contractGuidance": [
@@ -171,6 +223,21 @@
             "field": "constraints",
             "interpretation": "框架、兼容范围、可访问性目标和迁移节奏",
             "onMissing": "先完成一个组件族试用。"
+          },
+          {
+            "field": "designBinding",
+            "interpretation": "由调用方提供的现行设计绑定；仅引用，不授予权限或自行认定当前版本。",
+            "onMissing": "旧有输入仍可处理；项目规则和设计身份未知时明确影响，不自行编造来源版本或独立观察。"
+          },
+          {
+            "field": "designContext",
+            "interpretation": "调用方投影的当前模块/决定/状态/接口/上游产物；只读任务上下文，不是权限或另一份PRD真源。",
+            "onMissing": "旧有输入仍可处理；项目规则和设计身份未知时明确影响，不自行编造来源版本或独立观察。"
+          },
+          {
+            "field": "projectFacts",
+            "interpretation": "本轮已核实的项目版本/代码入口/边界；未知版本写 null，不把网上最新版当安装版本。",
+            "onMissing": "旧有输入仍可处理；项目规则和设计身份未知时明确影响，不自行编造来源版本或独立观察。"
           }
         ],
         "outputChecks": [
@@ -244,6 +311,67 @@
               "下一步"
             ],
             "blocking": false
+          },
+          {
+            "id": "design-system-designer-design-binding",
+            "field": "designBinding",
+            "criterion": "本轮使用此项时，绑定当前项目、设计与实际资料；事实、自报和未运行分别记录。",
+            "rejectWhen": "引用其他项目、旧版本或不存在的来源冒充本轮验证。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "本轮输入/产物版本与定位",
+              "已观察与未运行范围"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "design-system-designer-criterion-results",
+            "field": "criterionResults",
+            "criterion": "本轮使用此项时，绑定当前项目、设计与实际资料；事实、自报和未运行分别记录。",
+            "rejectWhen": "引用其他项目、旧版本或不存在的来源冒充本轮验证。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "本轮输入/产物版本与定位",
+              "已观察与未运行范围"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "design-system-designer-artifact-refs",
+            "field": "artifactRefs",
+            "criterion": "本轮使用此项时，绑定当前项目、设计与实际资料；事实、自报和未运行分别记录。",
+            "rejectWhen": "引用其他项目、旧版本或不存在的来源冒充本轮验证。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "本轮输入/产物版本与定位",
+              "已观察与未运行范围"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "design-system-designer-knowledge-usage",
+            "field": "knowledgeUsage",
+            "criterion": "本轮使用此项时，绑定当前项目、设计与实际资料；事实、自报和未运行分别记录。",
+            "rejectWhen": "引用其他项目、旧版本或不存在的来源冒充本轮验证。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "本轮输入/产物版本与定位",
+              "已观察与未运行范围"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "design-system-designer-experience-application",
+            "field": "experienceApplication",
+            "criterion": "本轮提供 projectExperience 时适用：四层来源和有效规则进入当前专业输出；设计/实现覆盖必需页面状态、主显信息、合适图/表和输入恢复。研究阶段说明如何验证本项目假设及尚未观察范围。输出绑定同一项目与designBinding，实际观察另有材料。",
+            "rejectWhen": "只有ruleId回显、换色或通用形容词；关键状态藏于折叠、精确比较只有图、失败丢输入；以合成模型或helper结果声称用户测试、浏览器或体验通过。",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "原有角色产物中本项目规则的具体应用与位置",
+              "当前页面状态/研究任务及未运行项",
+              "包内helper结果（若运行）与独立实际产物观察分开"
+            ],
+            "blocking": true
           }
         ]
       }

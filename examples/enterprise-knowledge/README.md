@@ -23,7 +23,7 @@ python -m pip install -r requirements.txt
 python scripts/ingest.py
 python scripts/audit_documents.py
 python scripts/download_models.py
-python scripts/build_index.py --generation cloud-minilm-v2 --threads 3 --activate
+python scripts/build_index.py --generation cloud-minilm-v3 --threads 3 --activate
 python -m app.main --port 4180
 ```
 
@@ -37,22 +37,28 @@ python -m app.main --port 4180
 
 ```bash
 python -m unittest discover -s tests -v
-python scripts/evaluate.py --generation cloud-minilm-v2 --id cloud-lastturn-float32 --methods bm25,dense,hybrid,rerank --vector-kind float32
-python scripts/evaluate.py --generation cloud-minilm-v2 --id cloud-lastturn-int8 --methods dense --vector-kind int8
-node scripts/verify-service-metrics.mjs --run evidence/evaluations/cloud-lastturn-float32
+python scripts/evaluate.py --generation cloud-minilm-v3 --id cloud-lastturn-v3-float32 --methods bm25,dense,hybrid,rerank --vector-kind float32
+python scripts/evaluate.py --generation cloud-minilm-v3 --id cloud-lastturn-v3-int8 --methods dense --vector-kind int8
+node scripts/verify-service-metrics.mjs --run evidence/evaluations/cloud-lastturn-v3-float32
 ```
 
 主实验使用全部 188 条官方 lastturn 问题、相同完整语料和候选预算，输出 Recall@5/10/50、nDCG@10、MRR@10、时延和失败题。int8 实验保持模型不变，仅改变输出向量存储，比较真实字节数、top-k 与相关性指标。它不是模型权重量化实验。
 
 qrels 仅用于评价，不能补入检索候选。质量不预填通过率，召回率不等于回答正确率。同一评测 ID 不允许更换执行条件；模型或执行指纹变化时，应新建 generation 与评测 ID。
 
-当前 schema 2 不续接或追写旧 schema 1 generation。已有旧索引时，请使用新名称从零构建，保留旧记录供核查。
+当前 schema 3 绑定实际编码实现、运行库及文本覆盖策略，不续接或追写旧 schema 1/2 generation。已有旧索引时，请使用新名称从零构建，保留旧记录供核查。
+
+默认滑动窗口让长文本的尾部也进入编码和重排，并在报告中记录覆盖与丢弃 token 数；这不等于语义检索质量已经达标。`build_index.py --coverage-strategy head` 与 `evaluate.py --reranker-strategy head` 仅用于明确的截断基线，应另用 generation 和评测 ID。完全相同的编码输入可以复用向量，保留全部原段落 ID；覆盖计数统计实际编码的唯一输入。
 
 ## 中断恢复与安全实验
 
 `ingest.py` 与 `build_index.py` 保存检查点，可原命令续接；`--stop-after` 可用于本地受控停止。完整候选 generation 与 active 指针分开，采用时执行 CAS。
 
 生命周期页中的 public/support 是本地受控实验身份，不是生产 SSO。删除和权限覆盖层独立于索引回滚。正式 benchmark 不得混入有效权限覆盖事件；风险测试使用隔离临时数据库，避免污染正式评测。
+
+撤权和删除作用于正文 SHA-256 相同的全部副本，包括之后导入的副本。各来源的限制取交集；恢复一个来源不会解除另一个来源仍有效的限制。检索分数相同时按段落 ID 排序后截断，避免同分候选因内部数组顺序改变结果。
+
+需要隔离证据时，导入可显式传入 `--data-dir /实际数据目录 --output-manifest /独立证据目录/ingest-manifest.json`，不覆盖示例默认导入报告。截图脚本支持同一个 `--data-dir`；省略时沿用 `KNOWLEDGE_DATA_DIR` 或应用默认目录，不另选一份数据。
 
 ## 真实教程截图与 GitHub Actions
 

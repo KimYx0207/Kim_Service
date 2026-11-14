@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "kim-decision",
   "componentType": "skill",
-  "componentVersion": "0.1.0",
+  "componentVersion": "0.2.0",
   "entrypoint": "SKILL.md",
   "capabilities": [
     {
@@ -40,6 +40,14 @@
             "items": {
               "type": "string"
             }
+          },
+          "projectContext": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前项目身份、领域、用户/受益者、可组合valueTypes、stage、已有需求与证据；沿用调用方同一设计，不新增状态。"
           }
         },
         "required": [
@@ -108,6 +116,14 @@
           },
           "finalAcceptanceClaimed": {
             "const": false
+          },
+          "projectContext": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前项目身份、领域、用户/受益者、可组合valueTypes、stage、已有需求与证据；沿用调用方同一设计，不新增状态。"
           }
         },
         "required": [
@@ -169,7 +185,9 @@
       },
       "validation": [
         "tests/behavior.test.mjs",
-        "tests/boundary.test.mjs"
+        "tests/boundary.test.mjs",
+        "tests/value-stage.test.mjs",
+        "tests/cli.test.mjs"
       ]
     }
   ]

@@ -4,7 +4,9 @@ from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from app.storage import Storage,ROOT,atomic_json,now,digest,canonical,ensure
 from app.retrieval import Retriever
-from app.identity import evaluation_execution, fingerprint, bind_evaluation_protocol, measurement_source
+from app.identity import IDENTITY_SCHEMA, evaluation_execution, fingerprint, bind_evaluation_protocol, measurement_source
+
+QUERY_CONDITIONS={'cloud_lastturn.jsonl':'lastturn','cloud_questions.jsonl':'question_history','cloud_rewrite.jsonl':'official_rewrite'}
 
 def score(ids,relevant):
  if not relevant:return {'recall_5':None,'recall_10':None,'recall_50':None,'ndcg_10':None,'mrr_10':None}
@@ -36,23 +38,27 @@ def read_records(path):
  return records
 
 def main():
- p=argparse.ArgumentParser(description=__doc__);p.add_argument('--data-dir');p.add_argument('--generation',default='cloud-minilm-v2');p.add_argument('--id');p.add_argument('--methods',default='bm25,dense,hybrid,rerank');p.add_argument('--vector-kind',choices=['float32','int8'],default='float32');p.add_argument('--query-file',default='cloud_lastturn.jsonl');a=p.parse_args();s=Storage(a.data_dir);corpus=s.setting('corpus');ensure(corpus and corpus['qrels_coverage']==1.0,'corpus_not_ready','请先完成正式语料导入');ensure(not s.allowed_ids('public'),'overlay_active','正式基准运行前需移除隔离受控覆盖层；不得混用权限实验',409)
- modes=a.methods.split(',');ensure(all(m in ('bm25','dense','hybrid','rerank') for m in modes),'invalid_mode','评测方法不正确');run_id=a.id or f'cloud-lastturn-{a.vector_kind}-{time.strftime("%Y%m%dT%H%M%S")}';ensure(all(c.isalnum() or c in '-_' for c in run_id),'invalid_id','评测编号不正确');out=ROOT/'evidence'/'evaluations'/run_id;out.mkdir(parents=True,exist_ok=True)
+ p=argparse.ArgumentParser(description=__doc__);p.add_argument('--data-dir');p.add_argument('--generation',default='cloud-minilm-v3');p.add_argument('--id');p.add_argument('--methods',default='bm25,dense,hybrid,rerank');p.add_argument('--vector-kind',choices=['float32','int8'],default='float32');p.add_argument('--query-file',choices=list(QUERY_CONDITIONS),default='cloud_lastturn.jsonl');p.add_argument('--reranker-strategy',choices=['sliding','head'],default='sliding');p.add_argument('--window-overlap',type=int,default=32);a=p.parse_args();s=Storage(a.data_dir);corpus=s.setting('corpus');ensure(corpus and corpus['qrels_coverage']==1.0,'corpus_not_ready','请先完成正式语料导入');ensure(not s.allowed_ids('public'),'overlay_active','正式基准运行前需移除隔离受控覆盖层；不得混用权限实验',409)
+ modes=a.methods.split(',');ensure(len(modes)==len(set(modes)) and all(m in ('bm25','dense','hybrid','rerank') for m in modes),'invalid_mode','评测方法不正确或重复');run_id=a.id or f'cloud-{QUERY_CONDITIONS[a.query_file]}-{a.vector_kind}-{time.strftime("%Y%m%dT%H%M%S")}';ensure(all(c.isalnum() or c in '-_' for c in run_id),'invalid_id','评测编号不正确');out=ROOT/'evidence'/'evaluations'/run_id;out.mkdir(parents=True,exist_ok=True)
  with (out/'run.lock').open('a') as run_lock:
   fcntl.flock(run_lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
-  queries_path=s.root/'source'/a.query_file;queries=[json.loads(x) for x in queries_path.read_text().splitlines() if x.strip()];ensure(len(queries)==188,'query_count','必须完整运行188条官方问题');qrels_path=s.root/'source'/'qrels.tsv';labels={}
+  queries_path=s.root/'source'/a.query_file;queries=[json.loads(x) for x in queries_path.read_text().splitlines() if x.strip()];ensure(len(queries)==188 and len({q['_id'] for q in queries})==188,'query_count','必须完整运行188条唯一官方问题');qrels_path=s.root/'source'/'qrels.tsv';labels={}
+  if a.query_file!='cloud_lastturn.jsonl':
+   canonical_queries=[json.loads(x) for x in (s.root/'source'/'cloud_lastturn.jsonl').read_text().splitlines() if x.strip()]
+   ensure({q['_id'] for q in queries}=={q['_id'] for q in canonical_queries},'query_identity','不同查询条件必须覆盖同一组官方问题ID',409)
   with qrels_path.open() as qrels_file:
    for row in csv.DictReader(qrels_file,delimiter='\t'):
     if int(row['score'])>0:labels.setdefault(row['query-id'],set()).add(row['corpus-id'])
   protocol={'generation':a.generation,'vector_kind':a.vector_kind,'methods':modes,'query_file':a.query_file,'query_sha256':digest(queries_path.read_bytes()),'qrels_sha256':digest(qrels_path.read_bytes()),'corpus_sha256':corpus['sha256'],'candidate_budget':50,'rrf_constant':60,'gold_injection':False,'principal':'public','metric_granularity':'official_passage_id','empty_result':'zero for labeled queries','unlabeled':'null and excluded; count separately'}
-  r=Retriever(s);execution=evaluation_execution(r,modes,a.generation);protocol.update({'identity_schema':2,'execution':execution,'execution_fingerprint':fingerprint(execution)})
+  protocol['query_condition']=QUERY_CONDITIONS[a.query_file]
+  r=Retriever(s,reranker_strategy=a.reranker_strategy,reranker_overlap=a.window_overlap);execution=evaluation_execution(r,modes,a.generation);protocol.update({'identity_schema':IDENTITY_SCHEMA,'execution':execution,'execution_fingerprint':fingerprint(execution)})
   previous=out/'protocol.json';bind_evaluation_protocol(previous,protocol)
   records=[];results_path=out/'queries.jsonl'
   if results_path.exists():records=read_records(results_path)
   ensure(all(x['query_id'] in {q['_id'] for q in queries} and x['mode'] in modes for x in records),'result_scope','已存结果不属于当前问题或方法',409);done={(row['query_id'],row['mode']) for row in records};job_id='evaluate-'+run_id;total=len(queries)*len(modes);failures=[]
   report={'id':run_id,'status':'running','query_count':len(queries),'corpus_count':corpus['passages'],'created_at':now(),'generation':a.generation,'vector_kind':a.vector_kind,'protocol':protocol,'measurement_source':measurement_source(),'methods':[],'limitations':['检索指标不是答案正确率','指标按query宏平均；BM25为FTS5 porter unicode61+去重词OR查询、移除前导|user|标记，最多128词','固定公开dev集未用于本轮参数调优；不声称独立隐藏测试泛化','公开人工benchmark问题，不是真实企业私有工单'],'failures':[],'records_path':f'/api/evaluations/{run_id}/queries','download_url':f'/api/evaluations/{run_id}/queries','per_query_download':f'/api/evaluations/{run_id}/queries'}
   def progress(status):
-   report['status']=status;report['processed']=len(records);summaries=[]
+   report['status']=status;report['processed']=len(records);report['coverage_observation']={kind:getattr(model,'coverage_stats',{}) for kind,model in [('embedding',r.embedding),('reranker',r.reranker)] if model is not None};report['coverage_observation_scope']='current process only; a resumed run must retain earlier protocol/records';summaries=[]
    for mode in modes:
     rr=[x for x in records if x['mode']==mode];ok=[x for x in rr if not x.get('error')];ms=sorted(x['elapsed_ms'] for x in ok);m={'mode':mode,'status':'complete' if len(rr)==len(queries) and len(ok)==len(rr) else 'running' if status=='running' else 'partial','query_count':len(rr),'unlabeled_queries':sum(x.get('metrics',{}).get('recall_10') is None for x in rr)}
     for metric in ['recall_5','recall_10','recall_50','ndcg_10','mrr_10']:

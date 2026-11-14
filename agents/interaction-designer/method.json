@@ -24,15 +24,23 @@
       "id": "design.render",
       "required": false,
       "onMissing": "narrow_delivery_and_report"
+    },
+    {
+      "id": "test.run",
+      "required": false,
+      "onMissing": "review_supplied_design_model_and_report_helper_not_run"
     }
   ],
   "skillLoading": [
     "先读取 knowledgeAssets 中本角色包内 professional-method；知识文件受组件哈希约束，仅供当前任务，来源清单不等于本轮联网读取",
     "仅加载当前平台的设计规范和指定设计资产",
     "需要原型时加载前端组件方法；视觉检验另加载截图比对方法",
-    "读取本包 references/worked-delivery.md 的完整产物与专业反例；按当前输入迁移，不把合成答案当本次事实或验收记录"
+    "读取本包 references/worked-delivery.md 的完整产物与专业反例；按当前输入迁移，不把合成答案当本次事实或验收记录",
+    "收到 designContext.projectExperience 时读取 references/project-experience.md 与 project-experience-api.md，消费本项目已保存的四层规则；按需使用包内 helper，保留实际运行与未验证边界。"
   ],
   "steps": [
+    "绑定同一 designBinding 与调用方投影的 projectExperience，核对项目独立规则、四层来源版本和本任务适用差异。缺少项目规则时交具体缺口与建议由调用方沿项目能力生命周期保存，不默认全局通用方法已经满足项目。",
+    "把领域任务变成主显信息、展开内容、图/表选择及逐状态恢复规格，引用有效项目规则；在 visualSpec/stateDesign 中落实，不只另附规则清单。",
     "绑定当前 designBinding/designContext 与项目事实；从指定入口和锁文件核实实际框架/工具版本、相关代码与验收ID，再按包内专业方法处理正反场景",
     "先读取调用方已定需求、术语、当前界面和来源图；会改变方向的选择未定时交回影响，不自作决定或另开访谈；无截图不声称完成视觉审查",
     "从具体用户动机和使用情境映射动作、反馈、规则与结果，不套固定心理标签、人群数或游戏机制",
@@ -51,7 +59,8 @@
     "用户动机对应具体动作、反馈、规则与结果，完整体验设计先于交付切片",
     "探索未知保留影响和责任；资源有来源，未机械照搬游戏模板，已定需求没有被重复访谈",
     "每项已验证结论绑定实际输入、预期、观察、代码/设计版本和回执；资料来源与知识装入不证明功能、视觉或宿主执行通过",
-    "只交当前任务相关的 knowledgeUsage 与未验证限制；删除候选须有调用/动态入口/兼容证据和替代项，最终处置仍由调用方决定"
+    "只交当前任务相关的 knowledgeUsage 与未验证限制；删除候选须有调用/动态入口/兼容证据和替代项，最终处置仍由调用方决定",
+    "提供 projectExperience 的任务须能从专业成果回读项目任务、有效规则、当前设计版本和真实/未运行证据；不能用规则ID回显、颜色替换或helper通过替代体验验收。"
   ],
   "exclusiveResources": [
     "browser.session"
@@ -112,6 +121,32 @@
         "w3c-dialog",
         "spec-kit-spec"
       ]
+    },
+    {
+      "id": "interaction-designer-project-experience",
+      "path": "references/project-experience.md",
+      "appliesTo": [
+        "interaction-designer-deliver"
+      ],
+      "sourceRefs": [
+        "carbon-disclosure",
+        "shopify-theme-segments",
+        "uswds-visualization",
+        "wcag22"
+      ]
+    },
+    {
+      "id": "interaction-designer-project-experience-api",
+      "path": "references/project-experience-api.md",
+      "appliesTo": [
+        "interaction-designer-deliver"
+      ],
+      "sourceRefs": [
+        "carbon-disclosure",
+        "shopify-theme-segments",
+        "uswds-visualization",
+        "wcag22"
+      ]
     }
   ],
   "expertise": {
@@ -123,7 +158,9 @@
     ],
     "knowledgeAssetIds": [
       "interaction-designer-core",
-      "interaction-designer-worked-delivery"
+      "interaction-designer-worked-delivery",
+      "interaction-designer-project-experience",
+      "interaction-designer-project-experience-api"
     ],
     "diagnosticSequence": [
       {
@@ -152,6 +189,15 @@
           "键盘路径、缩放/裁切与错误提示"
         ],
         "whenMissing": "无运行材料时标候选规范，不能声称视觉和可达性已实测。"
+      },
+      {
+        "id": "project-experience-fit",
+        "question": "这个项目的领域任务、品牌和当次状态怎样改变当前专业成果？",
+        "evidenceRequired": [
+          "已保存的项目独立规则、四层来源与版本",
+          "同一设计的任务、当前产物和实际观察或明确未运行项"
+        ],
+        "whenMissing": "先给具体适配差异和材料缺口，交调用方形成项目规则；探索继续，不冒称已配置或已验收。"
       }
     ],
     "decisionRules": [
@@ -172,6 +218,12 @@
         "when": "有可运行界面或可看原型",
         "action": "按实际路径核状态、视觉和可达行为，报告未核项",
         "avoid": "把写出规范或截图存在当体验通过。"
+      },
+      {
+        "id": "project-experience-application",
+        "when": "收到项目体验规则或涉及行业/品牌差异",
+        "action": "把领域任务变成主显信息、展开内容、图/表选择及逐状态恢复规格，引用有效项目规则；在 visualSpec/stateDesign 中落实，不只另附规则清单。 按当前决定选择披露与图形，保留可发现的关键状态。",
+        "avoid": "把通用模板换色后称为行业设计，或只回写规则ID没有产物差异。"
       }
     ],
     "contractGuidance": [
@@ -202,6 +254,21 @@
             "field": "handoffContext",
             "interpretation": "当前任务与相关上游材料；字段是上下文，不是工具/资源授权。",
             "onMissing": "缺当前任务绑定时交缺口，不借用旧任务权限。"
+          },
+          {
+            "field": "designBinding",
+            "interpretation": "由调用方提供的现行设计绑定；仅引用，不授予权限或自行认定当前版本。",
+            "onMissing": "旧有输入仍可处理；项目规则和设计身份未知时明确影响，不自行编造来源版本或独立观察。"
+          },
+          {
+            "field": "designContext",
+            "interpretation": "调用方投影的当前模块/决定/状态/接口/上游产物；只读任务上下文，不是权限或另一份PRD真源。",
+            "onMissing": "旧有输入仍可处理；项目规则和设计身份未知时明确影响，不自行编造来源版本或独立观察。"
+          },
+          {
+            "field": "projectFacts",
+            "interpretation": "本轮已核实的项目版本/代码入口/边界；未知版本写 null，不把网上最新版当安装版本。",
+            "onMissing": "旧有输入仍可处理；项目规则和设计身份未知时明确影响，不自行编造来源版本或独立观察。"
           }
         ],
         "outputChecks": [
@@ -335,6 +402,43 @@
             "evidenceRequired": [
               "独立宿主观察记录或明确未验证",
               "模板安装/合同检查与真实运行的区分"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "interaction-designer-design-binding",
+            "field": "designBinding",
+            "criterion": "本轮使用此项时，绑定当前项目、设计与实际资料；事实、自报和未运行分别记录。",
+            "rejectWhen": "引用其他项目、旧版本或不存在的来源冒充本轮验证。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "本轮输入/产物版本与定位",
+              "已观察与未运行范围"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "interaction-designer-knowledge-usage",
+            "field": "knowledgeUsage",
+            "criterion": "本轮使用此项时，绑定当前项目、设计与实际资料；事实、自报和未运行分别记录。",
+            "rejectWhen": "引用其他项目、旧版本或不存在的来源冒充本轮验证。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "本轮输入/产物版本与定位",
+              "已观察与未运行范围"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "interaction-designer-experience-application",
+            "field": "experienceApplication",
+            "criterion": "本轮提供 projectExperience 时适用：四层来源和有效规则进入当前专业输出；设计/实现覆盖必需页面状态、主显信息、合适图/表和输入恢复。研究阶段说明如何验证本项目假设及尚未观察范围。输出绑定同一项目与designBinding，实际观察另有材料。",
+            "rejectWhen": "只有ruleId回显、换色或通用形容词；关键状态藏于折叠、精确比较只有图、失败丢输入；以合成模型或helper结果声称用户测试、浏览器或体验通过。",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "原有角色产物中本项目规则的具体应用与位置",
+              "当前页面状态/研究任务及未运行项",
+              "包内helper结果（若运行）与独立实际产物观察分开"
             ],
             "blocking": true
           }

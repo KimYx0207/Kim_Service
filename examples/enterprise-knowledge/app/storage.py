@@ -35,6 +35,7 @@ class Storage:
             db.executescript('''
               PRAGMA journal_mode=WAL;
               CREATE TABLE IF NOT EXISTS passages(row_no INTEGER PRIMARY KEY,id TEXT UNIQUE NOT NULL,text TEXT NOT NULL,title TEXT NOT NULL,url TEXT NOT NULL,sha256 TEXT NOT NULL,source_revision TEXT NOT NULL);
+              CREATE INDEX IF NOT EXISTS passages_content_sha256 ON passages(sha256);
               CREATE VIRTUAL TABLE IF NOT EXISTS passage_fts USING fts5(id UNINDEXED,title,text,tokenize='porter unicode61');
               CREATE TABLE IF NOT EXISTS settings(key TEXT PRIMARY KEY,value TEXT NOT NULL);
               CREATE TABLE IF NOT EXISTS jobs(id TEXT PRIMARY KEY,kind TEXT,status TEXT,processed INTEGER,total INTEGER,checkpoint TEXT,error TEXT,updated_at TEXT);
@@ -69,21 +70,56 @@ class Storage:
     def allowed(self,id,principal='public',db=None):
         if db is None:
             with self.connect() as c:return self.allowed(id,principal,c)
-        r=db.execute('SELECT * FROM overlays WHERE passage_id=?',(id,)).fetchone()
-        return r is None or (r['operation']!='delete' and (r['operation']=='restore' or principal in json.loads(r['allowed_principals'])))
-    def allowed_ids(self,principal='public'):
-        with self.connect() as db:
-            hidden={r['passage_id'] for r in db.execute('SELECT * FROM overlays') if r['operation']=='delete' or (r['operation']=='restrict' and principal not in json.loads(r['allowed_principals']))}
-            return hidden
+        # Events remain owned by their source ID. Visibility is shared by exact
+        # body SHA-256: every still-active restriction must allow the principal.
+        # Restoring one source must never erase another copy's restriction.
+        rows=db.execute('''
+            SELECT o.operation,o.allowed_principals FROM overlays o
+            JOIN passages origin ON origin.id=o.passage_id
+            JOIN passages target ON target.sha256=origin.sha256
+            WHERE target.id=?
+        ''',(id,))
+        return all(self._overlay_allows(r,principal) for r in rows)
+    @staticmethod
+    def _overlay_allows(row,principal):
+        return row['operation']=='restore' or (row['operation']=='restrict' and principal in json.loads(row['allowed_principals']))
+    def allowed_ids(self,principal='public',db=None):
+        """Return denied IDs, including every identical copy in the corpus.
+
+        The historic name is kept for callers. Resolve the group dynamically so
+        a newly ingested copy cannot escape an already effective revocation.
+        """
+        if db is None:
+            with self.connect() as c:return self.allowed_ids(principal,c)
+        rows=db.execute('''
+            SELECT copies.id,o.operation,o.allowed_principals FROM overlays o
+            JOIN passages origin ON origin.id=o.passage_id
+            JOIN passages copies ON copies.sha256=origin.sha256
+        ''')
+        return {r['id'] for r in rows if not self._overlay_allows(r,principal)}
+    def _visibility_summary(self,id,db):
+        """Current effective group state, not a second permission authority."""
+        row=db.execute('SELECT sha256 FROM passages WHERE id=?',(id,)).fetchone()
+        controls=db.execute('''
+            SELECT o.operation FROM overlays o
+            JOIN passages p ON p.id=o.passage_id
+            WHERE p.sha256=? AND o.operation!='restore'
+        ''',(row['sha256'],)).fetchall()
+        operations=[r['operation'] for r in controls]
+        return {'scope':'exact_body_sha256','sha256':row['sha256'],
+                'copy_count':db.execute('SELECT count(*) FROM passages WHERE sha256=?',(row['sha256'],)).fetchone()[0],
+                'active_control_count':len(controls),
+                'state':'deleted' if 'delete' in operations else 'restricted' if operations else 'visible'}
     def get(self,id,principal='public'):
         with self.connect() as db:
+            db.execute('BEGIN')
             if not self.allowed(id,principal,db):raise AppError('not_found','资料不存在或当前无权读取',404)
             r=db.execute('SELECT * FROM passages WHERE id=?',(id,)).fetchone()
             ensure(r is not None,'not_found','资料不存在或当前无权读取',404)
             result=dict(r);ensure(digest(result['text'])==result['sha256'],'passage_corrupt','资料正文与来源摘要不一致',409);return result
     def list_passages(self,offset=0,limit=20,q='',principal='public'):
-        hidden=self.allowed_ids(principal)
         with self.connect() as db:
+            db.execute('BEGIN');hidden=self.allowed_ids(principal,db)
             clause=' WHERE (title LIKE ? OR text LIKE ?)' if q else '';params=[f'%{q}%',f'%{q}%'] if q else []
             if hidden:
                 clause+=(' AND ' if clause else ' WHERE ')+f"id NOT IN ({','.join('?' for _ in hidden)})";params+=list(hidden)
@@ -149,13 +185,13 @@ class Storage:
         with self.connect() as db:
             db.execute('BEGIN IMMEDIATE');old=db.execute('SELECT * FROM events WHERE event_id=?',(body['event_id'],)).fetchone()
             if old:
-                ensure(old['digest']==h,'idempotency_conflict','事件编号已用于不同内容',409);return {'event':json.loads(old['body']),'applied':False,'idempotent':True}
+                ensure(old['digest']==h,'idempotency_conflict','事件编号已用于不同内容',409);return {'event':json.loads(old['body']),'applied':False,'idempotent':True,'visibility':self._visibility_summary(body['passage_id'],db)}
             exists=db.execute('SELECT 1 FROM passages WHERE id=?',(body['passage_id'],)).fetchone();ensure(exists,'not_found','资料不存在',404)
             prior=db.execute('SELECT revision FROM overlays WHERE passage_id=?',(body['passage_id'],)).fetchone()
             ensure(prior is None or body['revision']>prior[0],'stale_revision','旧事件不能覆盖当前权限或恢复已删除资料',409)
             db.execute('INSERT OR REPLACE INTO overlays VALUES(?,?,?,?,?)',(body['passage_id'],body['revision'],body['operation'],canonical(body['allowed_principals']),body['label']))
             db.execute('INSERT INTO events VALUES(?,?,?,?)',(body['event_id'],h,canonical(body),now()))
             self.set_setting('overlay_epoch',self.setting('overlay_epoch',0,db)+1,db)
-            return {'event':body,'applied':True,'idempotent':False}
+            return {'event':body,'applied':True,'idempotent':False,'visibility':self._visibility_summary(body['passage_id'],db)}
     def events(self):
         with self.connect() as db:return [{'id':r['event_id'],'at':r['created_at'],**json.loads(r['body'])} for r in db.execute('SELECT * FROM events ORDER BY created_at DESC LIMIT 100')]

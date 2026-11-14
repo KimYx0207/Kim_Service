@@ -35,3 +35,9 @@
 - W3C WCAG 2.2 quick reference：按适用成功标准检查键盘、焦点、名称、对比度和错误恢复。
 
 出处和适用边界见 [PROVENANCE.md](../PROVENANCE.md)。本包方法、案例和工作单为原创整理。
+
+## 项目规则的实际应用
+
+读取 [四层项目体验方法](project-experience.md)，将项目独立规则与当前设计版本一并使用。把有效项目主题落实到 tokens/components，并在 examples 使用本项目领域任务、真实内容和异常状态试用；不同项目需要不同的判断字段与任务模式，不能仅换色。
+
+给出 `experienceApplication` 时同时交当前专业产物的位置和具体差异；来源链、输入版本和缺项保留。`project-experience-api.md` 的 helper 仅核候选模型和声明，真正交付仍依本角色原有实际观察标准，用户未测试的地方不填通过。

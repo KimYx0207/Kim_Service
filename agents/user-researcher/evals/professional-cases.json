@@ -103,6 +103,474 @@
       "decisionRuleRefs": [
         "sample-boundary"
       ]
+    },
+    {
+      "id": "project-experience-context",
+      "capabilityId": "user-researcher-deliver",
+      "category": "worked_example",
+      "scenario": "消费项目独立知识工作台规则并保留实际观察边界",
+      "input": {
+        "question": "员工能否发现答复依据、版本边界及无依据后的继续路径？",
+        "materials": [],
+        "constraints": "无真实参与者材料；仅形成非诱导任务与验证假设",
+        "designBinding": {
+          "designId": "design-current",
+          "revision": 3
+        },
+        "designContext": {
+          "projectExperience": {
+            "schemaVersion": 1,
+            "projectId": "fixture:enterprise-knowledge",
+            "revision": 1,
+            "tasks": [
+              {
+                "id": "verify-answer",
+                "actor": "寻找技术依据的员工",
+                "goal": "提问后判断回答是否有依据并打开适用版本的来源",
+                "successCondition": "理解答复边界并能回到原文；无依据时保留问题并修改范围继续查询"
+              }
+            ],
+            "layers": [
+              {
+                "level": "base",
+                "source": {
+                  "ref": "fixture:common-experience-baseline",
+                  "version": "1"
+                },
+                "rules": [
+                  {
+                    "id": "current-status",
+                    "kind": "visible_information",
+                    "target": "answer/answered",
+                    "requirement": "当前任务状态保持可发现",
+                    "verification": "在当前产物的真实入口回放本任务；合成模型不代表实际观察",
+                    "value": [
+                      "system-status"
+                    ],
+                    "invariant": true
+                  },
+                  {
+                    "id": "keyboard-recovery",
+                    "kind": "professional_judgment",
+                    "target": "accessibility",
+                    "requirement": "用键盘、真实内容、放大和失败恢复检查任务；错误不只靠颜色",
+                    "verification": "在当前产物的真实入口回放本任务；合成模型不代表实际观察",
+                    "value": {
+                      "checks": [
+                        "keyboard",
+                        "focus",
+                        "reflow",
+                        "error-label"
+                      ]
+                    },
+                    "invariant": true
+                  }
+                ]
+              },
+              {
+                "level": "domain",
+                "source": {
+                  "ref": "fixture:enterprise-knowledge/project-domain-rules",
+                  "version": "1"
+                },
+                "rules": [
+                  {
+                    "id": "domain-decision",
+                    "kind": "visible_information",
+                    "target": "answer/answered",
+                    "requirement": "回答与来源可以逐项核对，无依据状态直接说明并提供继续路径",
+                    "verification": "在当前产物的真实入口回放本任务；合成模型不代表实际观察",
+                    "value": [
+                      "system-status",
+                      "answer-boundary",
+                      "source-version",
+                      "source-entry"
+                    ],
+                    "overrides": "current-status",
+                    "taskIds": [
+                      "verify-answer"
+                    ]
+                  },
+                  {
+                    "id": "domain-representation",
+                    "kind": "representation",
+                    "target": "answer/answered",
+                    "requirement": "回答与来源可以逐项核对，无依据状态直接说明并提供继续路径",
+                    "verification": "在当前产物的真实入口回放本任务；合成模型不代表实际观察",
+                    "value": {
+                      "informationId": "evidence-links",
+                      "purpose": "instruction"
+                    },
+                    "taskIds": [
+                      "verify-answer"
+                    ]
+                  }
+                ]
+              },
+              {
+                "level": "brand",
+                "source": {
+                  "ref": "fixture:enterprise-knowledge/project-brand-rules",
+                  "version": "1"
+                },
+                "rules": [
+                  {
+                    "id": "project-accent",
+                    "kind": "theme",
+                    "target": "color.action",
+                    "requirement": "阅读和查证优先；维护日志放维护视图，答复边界与来源入口主显",
+                    "verification": "在当前产物的真实入口回放本任务；合成模型不代表实际观察",
+                    "value": "#245e53"
+                  },
+                  {
+                    "id": "art-direction",
+                    "kind": "professional_judgment",
+                    "target": "brand-art-direction",
+                    "requirement": "阅读和查证优先；维护日志放维护视图，答复边界与来源入口主显",
+                    "verification": "在当前产物的真实入口回放本任务；合成模型不代表实际观察",
+                    "value": {
+                      "reference": "本例为作者设计假设；正式项目替换为已核实品牌资料"
+                    }
+                  }
+                ]
+              },
+              {
+                "level": "task",
+                "source": {
+                  "ref": "fixture:enterprise-knowledge/current-flow-rules",
+                  "version": "1"
+                },
+                "rules": [
+                  {
+                    "id": "failure-visible",
+                    "kind": "visible_information",
+                    "target": "answer/no_evidence",
+                    "requirement": "失败原因与下一动作当场可见",
+                    "verification": "在当前产物的真实入口回放本任务；合成模型不代表实际观察",
+                    "value": [
+                      "failure-reason",
+                      "next-action"
+                    ],
+                    "taskIds": [
+                      "verify-answer"
+                    ]
+                  },
+                  {
+                    "id": "failure-recovery",
+                    "kind": "recovery",
+                    "target": "answer/no_evidence",
+                    "requirement": "理解答复边界并能回到原文；无依据时保留问题并修改范围继续查询",
+                    "verification": "在当前产物的真实入口回放本任务；合成模型不代表实际观察",
+                    "value": {
+                      "preserve": [
+                        "question",
+                        "scope"
+                      ],
+                      "actions": [
+                        "refine-question",
+                        "adjust-scope"
+                      ]
+                    },
+                    "taskIds": [
+                      "verify-answer"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "candidateOutputExcerpt": {
+        "designBinding": {
+          "designId": "design-current",
+          "revision": 3
+        },
+        "experienceApplication": {
+          "projectId": "fixture:enterprise-knowledge",
+          "revision": 1,
+          "scope": "research",
+          "ruleApplications": [
+            {
+              "ruleId": "keyboard-recovery",
+              "status": "specified",
+              "application": "用键盘、真实内容、放大和失败恢复检查任务；错误不只靠颜色",
+              "artifactRefs": [
+                "fixture-artifact:enterprise-knowledge/all"
+              ]
+            },
+            {
+              "ruleId": "domain-decision",
+              "status": "specified",
+              "application": "回答与来源可以逐项核对，无依据状态直接说明并提供继续路径",
+              "artifactRefs": [
+                "fixture-artifact:enterprise-knowledge/answer/answered"
+              ]
+            },
+            {
+              "ruleId": "domain-representation",
+              "status": "specified",
+              "application": "回答与来源可以逐项核对，无依据状态直接说明并提供继续路径",
+              "artifactRefs": [
+                "fixture-artifact:enterprise-knowledge/answer/answered"
+              ]
+            },
+            {
+              "ruleId": "project-accent",
+              "status": "specified",
+              "application": "阅读和查证优先；维护日志放维护视图，答复边界与来源入口主显",
+              "artifactRefs": [
+                "fixture-artifact:enterprise-knowledge/tokens"
+              ]
+            },
+            {
+              "ruleId": "art-direction",
+              "status": "specified",
+              "application": "阅读和查证优先；维护日志放维护视图，答复边界与来源入口主显",
+              "artifactRefs": [
+                "fixture-artifact:enterprise-knowledge/all"
+              ]
+            },
+            {
+              "ruleId": "failure-visible",
+              "status": "specified",
+              "application": "失败原因与下一动作当场可见",
+              "artifactRefs": [
+                "fixture-artifact:enterprise-knowledge/answer/no_evidence"
+              ]
+            },
+            {
+              "ruleId": "failure-recovery",
+              "status": "specified",
+              "application": "理解答复边界并能回到原文；无依据时保留问题并修改范围继续查询",
+              "artifactRefs": [
+                "fixture-artifact:enterprise-knowledge/answer/no_evidence"
+              ]
+            }
+          ],
+          "themeTokens": {
+            "color.action": "#245e53"
+          }
+        },
+        "decisionTests": [
+          {
+            "task": "请找出这份答复的适用版本并打开原文；若无依据，继续寻找可核实材料。",
+            "observation": "观察是否独立找到边界和来源，将主持人提示后的完成另列。",
+            "status": "not_run",
+            "reason": "尚无真实参与者记录。"
+          }
+        ]
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "项目领域任务改变实际专业成果；研究/设计模型与真实用户和运行观察分开。",
+      "diagnosticRefs": [
+        "project-experience-fit"
+      ],
+      "decisionRuleRefs": [
+        "project-experience-application"
+      ]
+    },
+    {
+      "id": "project-experience-false-consumption",
+      "capabilityId": "user-researcher-deliver",
+      "category": "failure_boundary",
+      "scenario": "规则ID已回显，关键状态却隐藏；或无参与者材料却自报用户通过",
+      "input": {
+        "question": "员工能否发现答复依据、版本边界及无依据后的继续路径？",
+        "materials": [],
+        "constraints": "无真实参与者材料；仅形成非诱导任务与验证假设",
+        "designBinding": {
+          "designId": "design-current",
+          "revision": 3
+        },
+        "designContext": {
+          "projectExperience": {
+            "schemaVersion": 1,
+            "projectId": "fixture:enterprise-knowledge",
+            "revision": 1,
+            "tasks": [
+              {
+                "id": "verify-answer",
+                "actor": "寻找技术依据的员工",
+                "goal": "提问后判断回答是否有依据并打开适用版本的来源",
+                "successCondition": "理解答复边界并能回到原文；无依据时保留问题并修改范围继续查询"
+              }
+            ],
+            "layers": [
+              {
+                "level": "base",
+                "source": {
+                  "ref": "fixture:common-experience-baseline",
+                  "version": "1"
+                },
+                "rules": [
+                  {
+                    "id": "current-status",
+                    "kind": "visible_information",
+                    "target": "answer/answered",
+                    "requirement": "当前任务状态保持可发现",
+                    "verification": "在当前产物的真实入口回放本任务；合成模型不代表实际观察",
+                    "value": [
+                      "system-status"
+                    ],
+                    "invariant": true
+                  },
+                  {
+                    "id": "keyboard-recovery",
+                    "kind": "professional_judgment",
+                    "target": "accessibility",
+                    "requirement": "用键盘、真实内容、放大和失败恢复检查任务；错误不只靠颜色",
+                    "verification": "在当前产物的真实入口回放本任务；合成模型不代表实际观察",
+                    "value": {
+                      "checks": [
+                        "keyboard",
+                        "focus",
+                        "reflow",
+                        "error-label"
+                      ]
+                    },
+                    "invariant": true
+                  }
+                ]
+              },
+              {
+                "level": "domain",
+                "source": {
+                  "ref": "fixture:enterprise-knowledge/project-domain-rules",
+                  "version": "1"
+                },
+                "rules": [
+                  {
+                    "id": "domain-decision",
+                    "kind": "visible_information",
+                    "target": "answer/answered",
+                    "requirement": "回答与来源可以逐项核对，无依据状态直接说明并提供继续路径",
+                    "verification": "在当前产物的真实入口回放本任务；合成模型不代表实际观察",
+                    "value": [
+                      "system-status",
+                      "answer-boundary",
+                      "source-version",
+                      "source-entry"
+                    ],
+                    "overrides": "current-status",
+                    "taskIds": [
+                      "verify-answer"
+                    ]
+                  },
+                  {
+                    "id": "domain-representation",
+                    "kind": "representation",
+                    "target": "answer/answered",
+                    "requirement": "回答与来源可以逐项核对，无依据状态直接说明并提供继续路径",
+                    "verification": "在当前产物的真实入口回放本任务；合成模型不代表实际观察",
+                    "value": {
+                      "informationId": "evidence-links",
+                      "purpose": "instruction"
+                    },
+                    "taskIds": [
+                      "verify-answer"
+                    ]
+                  }
+                ]
+              },
+              {
+                "level": "brand",
+                "source": {
+                  "ref": "fixture:enterprise-knowledge/project-brand-rules",
+                  "version": "1"
+                },
+                "rules": [
+                  {
+                    "id": "project-accent",
+                    "kind": "theme",
+                    "target": "color.action",
+                    "requirement": "阅读和查证优先；维护日志放维护视图，答复边界与来源入口主显",
+                    "verification": "在当前产物的真实入口回放本任务；合成模型不代表实际观察",
+                    "value": "#245e53"
+                  },
+                  {
+                    "id": "art-direction",
+                    "kind": "professional_judgment",
+                    "target": "brand-art-direction",
+                    "requirement": "阅读和查证优先；维护日志放维护视图，答复边界与来源入口主显",
+                    "verification": "在当前产物的真实入口回放本任务；合成模型不代表实际观察",
+                    "value": {
+                      "reference": "本例为作者设计假设；正式项目替换为已核实品牌资料"
+                    }
+                  }
+                ]
+              },
+              {
+                "level": "task",
+                "source": {
+                  "ref": "fixture:enterprise-knowledge/current-flow-rules",
+                  "version": "1"
+                },
+                "rules": [
+                  {
+                    "id": "failure-visible",
+                    "kind": "visible_information",
+                    "target": "answer/no_evidence",
+                    "requirement": "失败原因与下一动作当场可见",
+                    "verification": "在当前产物的真实入口回放本任务；合成模型不代表实际观察",
+                    "value": [
+                      "failure-reason",
+                      "next-action"
+                    ],
+                    "taskIds": [
+                      "verify-answer"
+                    ]
+                  },
+                  {
+                    "id": "failure-recovery",
+                    "kind": "recovery",
+                    "target": "answer/no_evidence",
+                    "requirement": "理解答复边界并能回到原文；无依据时保留问题并修改范围继续查询",
+                    "verification": "在当前产物的真实入口回放本任务；合成模型不代表实际观察",
+                    "value": {
+                      "preserve": [
+                        "question",
+                        "scope"
+                      ],
+                      "actions": [
+                        "refine-question",
+                        "adjust-scope"
+                      ]
+                    },
+                    "taskIds": [
+                      "verify-answer"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "candidateOutputExcerpt": {
+        "findings": "10名真实员工全部在10秒内找到来源，满意度100%；无需再观察。",
+        "experienceApplication": {
+          "projectId": "fixture:enterprise-knowledge",
+          "revision": 1,
+          "scope": "research",
+          "ruleApplications": [
+            {
+              "ruleId": "domain-decision",
+              "status": "observed",
+              "application": "真实用户已确认",
+              "artifactRefs": []
+            }
+          ]
+        }
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "实际成果与项目决定信息不符；规则回显不抵消缺状态，无材料不能制造用户观察。",
+      "diagnosticRefs": [
+        "project-experience-fit"
+      ],
+      "decisionRuleRefs": [
+        "project-experience-application"
+      ]
     }
   ]
 }

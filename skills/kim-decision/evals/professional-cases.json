@@ -102,6 +102,41 @@
         "decision-reversal",
         "budgeted-test"
       ]
+    },
+    {
+      "id": "internal-outcome-does-not-need-a-payer",
+      "capabilityId": "kim-decision-analysis",
+      "category": "failure_boundary",
+      "scenario": "内部排班工具有耗时基线，可离线试用但没有外部买家",
+      "input": {
+        "decisionQuestion": "是否先验证内部排班工具",
+        "context": [
+          "每周排班3小时，8位主管；内部预算100元/月"
+        ],
+        "evidence": [
+          "合成现状：已有规则表与试验负责人，尚无成效数据"
+        ],
+        "constraints": [
+          "离线试验不改变生产排班"
+        ],
+        "projectContext": {
+          "valueTypes": [
+            "internal"
+          ],
+          "stage": "exploration"
+        }
+      },
+      "candidateOutputExcerpt": {
+        "verdict": "没有付款人，所以不建议继续验证。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "外部付费不是本项目价值门槛；应以耗时、差错和采用设计有界试验。",
+      "diagnosticRefs": [
+        "value-stage"
+      ],
+      "decisionRuleRefs": [
+        "value-stage-fit"
+      ]
     }
   ]
 }

@@ -13,3 +13,11 @@ Inspected 2026-11-11. Kim Service authored the workflows, examples and acceptanc
 | 来源ID | 来源与范围 | 采用方式 |
 | --- | --- | --- |
 | original-editable-sample | 本包原创合成数据、计算或交互示例，2026-11-11 | 数据配置、纯工具与展示分层；不复制第三方源码，不声称客户成果或专业效果已通过。 |
+
+## 项目体验方法来源
+
+| sourceRef | Primary source | Adopted | Not adopted | Rights |
+| --- | --- | --- | --- | --- |
+| carbon-disclosure | [Carbon Accordion](https://www.carbondesignsystem.com/building-blocks/core/components/accordion/guidelines); 页面修订 2026-09-09，检索 2026-11-14 | 按用户是否需读全部内容选择展开；次要说明可渐进披露。 | 不把关键状态、必须阅读的内容或购买约束默认隐藏。 | Reference only; original adaptation, no upstream code copied |
+| shopify-theme-segments | [Shopify Designing themes](https://shopify.dev/docs/storefronts/themes/best-practices/design); 检索 2026-11-14 | 按购买决定、品牌、受众和库存结构定领域组件与主题；以真实任务验证。 | 不把商店组件或视觉风格机械用于机电、知识库等其他领域。 | Reference only; original adaptation, no upstream code copied |
+| uswds-visualization | [USWDS Data visualizations](https://designsystem.digital.gov/components/data-visualizations/); 检索 2026-11-14 | 图表达明确消息，保留文字说明与可访问精确数据；关注真实任务。 | 不以标签存在或图已生成判定语义、用户理解或实际可访问性通过。 | Reference only; original adaptation, no upstream code copied |

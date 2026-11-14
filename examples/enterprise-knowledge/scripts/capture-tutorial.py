@@ -41,6 +41,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--browser-path', help='Installed Chrome/Chromium executable; default: discover installed browser, then Playwright Chromium')
     parser.add_argument('--output', default=str(ROOT/'evidence/tutorial-captures'), help='Evidence directory; existing valid screenshots are preserved')
+    parser.add_argument('--data-dir', help='Explicit data directory served by the API child; otherwise retain KNOWLEDGE_DATA_DIR or the application default')
     parser.add_argument('--server-python', default=str(ROOT/'.venv/bin/python') if (ROOT/'.venv/bin/python').exists() else sys.executable)
     parser.add_argument('--port', type=int, default=0, help='Local API port; 0 selects an unused port')
     parser.add_argument('--query', default='Kubernetes logging')
@@ -50,13 +51,19 @@ def main():
     parser.add_argument('--resume', action=argparse.BooleanOptionalAction, default=True)
     parser.add_argument('--headed', action='store_true', help='Show the real browser instead of headless capture')
     args = parser.parse_args()
+    if args.data_dir is not None:
+        data_dir = pathlib.Path(args.data_dir).expanduser().resolve()
+    else:
+        # Match Storage's inherited environment resolution in the child's cwd.
+        data_dir = pathlib.Path(os.environ.get('KNOWLEDGE_DATA_DIR', ROOT/'data'))
+        data_dir = (ROOT/data_dir).resolve() if not data_dir.is_absolute() else data_dir.resolve()
     out = pathlib.Path(args.output).expanduser().resolve(); out.mkdir(parents=True, exist_ok=True)
     manifest_path = out/'manifest.json'
     manifest = json.loads(manifest_path.read_text()) if args.resume and manifest_path.exists() else {'schema_version':1,'runs':[],'captures':[]}
     run_id = dt.datetime.now(dt.timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
     run = {'id':run_id,'started_at':now(),'status':'running','viewport':[args.width,args.height],
            'browser_path':args.browser_path or available_browser() or 'playwright-installed-chromium',
-           'query':args.query,'api_mutations':'none; only /api/search POST',
+           'query':args.query,'data_dir':str(data_dir),'api_mutations':'none; only /api/search POST',
            'source_hashes':{str(p.relative_to(ROOT)):digest(p.read_bytes()) for folder in ('app','scripts','public') for p in sorted((ROOT/folder).glob('*')) if p.is_file() and p.suffix in ('.py','.js','.mjs','.css','.html')},'steps':[]}
     manifest['runs'].append(run)
     def save():
@@ -75,7 +82,9 @@ def main():
         except urllib.error.HTTPError as e:return {'url':base+path,'status':e.code,'body':json.load(e)}
     try:
         log=open(out/f'{run_id}-server.log','w')
-        server=subprocess.Popen([args.server_python,'-m','app.main','--port',str(port)],cwd=ROOT,stdout=log,stderr=log)
+        server_command=[args.server_python,'-m','app.main','--port',str(port)]
+        if args.data_dir is not None:server_command.extend(['--data-dir',str(data_dir)])
+        server=subprocess.Popen(server_command,cwd=ROOT,stdout=log,stderr=log)
         for _ in range(120):
             try:
                 initial=http('/api/status')
@@ -86,6 +95,7 @@ def main():
         else:raise RuntimeError('API did not become ready within 30 seconds')
         (out/f'{run_id}-initial-status.json').write_bytes(json_bytes(initial))
         run['initial_status_file']=f'{run_id}-initial-status.json'
+        run['observed_generations']=[{'generation':g.get('generation'),'status':g.get('status')} for g in initial['body'].get('generations',[])]
         from playwright.sync_api import sync_playwright, expect
         with sync_playwright() as pw:
             launch={'headless':not args.headed}

@@ -9,12 +9,20 @@
       "id": "documents.read",
       "required": false,
       "onMissing": "use_supplied_materials_and_report_unread_sources"
+    },
+    {
+      "id": "test.run",
+      "required": false,
+      "onMissing": "review_supplied_design_model_and_report_helper_not_run"
     }
   ],
   "skillLoading": [
-    "读取knowledgeAssets对应的完整资料；方法与样例不代表当前任务联网、工具权限或实际效果。"
+    "读取knowledgeAssets对应的完整资料；方法与样例不代表当前任务联网、工具权限或实际效果。",
+    "收到 designContext.projectExperience 时读取 references/project-experience.md 与 project-experience-api.md，消费本项目已保存的四层规则；按需使用包内 helper，保留实际运行与未验证边界。"
   ],
   "steps": [
+    "绑定同一 designBinding 与调用方投影的 projectExperience，核对项目独立规则、四层来源版本和本任务适用差异。缺少项目规则时交具体缺口与建议由调用方沿项目能力生命周期保存，不默认全局通用方法已经满足项目。",
+    "从有效领域任务生成 researchPlan/decisionTests，明确什么观察支持或推翻信息层级、折叠和流程假设；已有用户记录才进入 evidenceMatrix/findings，未开展研究保持 not_run。",
     "从当前产品决定反推研究问题、目标用户及可推翻的判断，产出researchPlan；需求和材料不足时先给待验证假设，不生成访谈经历。",
     "核对参与者来源、任务场景、同意和记录条件，选择能观察目标行为的方法；招募与目标人群不符就标外推范围，不能拿固定样本数保证代表性。",
     "逐条编码本次原话、行为、任务结果和研究者解释，写入带来源定位的evidenceMatrix；把提示后完成与独立完成分开，无法回读的内容留未知。",
@@ -29,7 +37,8 @@
     "每个候选包含预期行为、可观察成功/失败、所需材料及改变决定的条件。",
     "列出本次所用材料、日期/版本、分析单位与事实缺口，引用能追溯到原始记录。 只阻断将未核实材料当关键事实的结论；明确标注未知或假设时，其余资料充分部分可继续。",
     "明确说明未执行、未观察和不能外推的范围，并指出其对当前决定的影响。 未执行或未知可如实保留，不阻断独立成果；只有虚假通过或无依据外推影响相应结论。",
-    "交回当前产物、逐项判定、证据位置和待解决事项，调用方保有调度与最终验收。 交接格式和后续清单可补齐，不要求全任务停止；越权批准或虚报已执行动作影响相应交付。"
+    "交回当前产物、逐项判定、证据位置和待解决事项，调用方保有调度与最终验收。 交接格式和后续清单可补齐，不要求全任务停止；越权批准或虚报已执行动作影响相应交付。",
+    "提供 projectExperience 的任务须能从专业成果回读项目任务、有效规则、当前设计版本和真实/未运行证据；不能用规则ID回显、颜色替换或helper通过替代体验验收。"
   ],
   "coordinationOwner": "caller",
   "permissionSource": "current_task_host_authorization",
@@ -58,6 +67,32 @@
         "18f-methods",
         "18f-fundamentals"
       ]
+    },
+    {
+      "id": "user-researcher-project-experience",
+      "path": "references/project-experience.md",
+      "appliesTo": [
+        "user-researcher-deliver"
+      ],
+      "sourceRefs": [
+        "carbon-disclosure",
+        "shopify-theme-segments",
+        "uswds-visualization",
+        "wcag22"
+      ]
+    },
+    {
+      "id": "user-researcher-project-experience-api",
+      "path": "references/project-experience-api.md",
+      "appliesTo": [
+        "user-researcher-deliver"
+      ],
+      "sourceRefs": [
+        "carbon-disclosure",
+        "shopify-theme-segments",
+        "uswds-visualization",
+        "wcag22"
+      ]
     }
   ],
   "expertise": {
@@ -69,7 +104,9 @@
     ],
     "knowledgeAssetIds": [
       "user-researcher-method",
-      "user-researcher-delivery"
+      "user-researcher-delivery",
+      "user-researcher-project-experience",
+      "user-researcher-project-experience-api"
     ],
     "diagnosticSequence": [
       {
@@ -107,6 +144,15 @@
           "不同用户反馈"
         ],
         "whenMissing": "主动列未验证反例。"
+      },
+      {
+        "id": "project-experience-fit",
+        "question": "这个项目的领域任务、品牌和当次状态怎样改变当前专业成果？",
+        "evidenceRequired": [
+          "已保存的项目独立规则、四层来源与版本",
+          "同一设计的任务、当前产物和实际观察或明确未运行项"
+        ],
+        "whenMissing": "先给具体适配差异和材料缺口，交调用方形成项目规则；探索继续，不冒称已配置或已验收。"
       }
     ],
     "decisionRules": [
@@ -133,6 +179,12 @@
         "when": "判断可用性改善",
         "action": "使用不提示路径的任务与观察",
         "avoid": "用主观喜欢替代完成任务。"
+      },
+      {
+        "id": "project-experience-application",
+        "when": "收到项目体验规则或涉及行业/品牌差异",
+        "action": "从有效领域任务生成 researchPlan/decisionTests，明确什么观察支持或推翻信息层级、折叠和流程假设；已有用户记录才进入 evidenceMatrix/findings，未开展研究保持 not_run。 按当前决定选择披露与图形，保留可发现的关键状态。",
+        "avoid": "把通用模板换色后称为行业设计，或只回写规则ID没有产物差异。"
       }
     ],
     "contractGuidance": [
@@ -153,6 +205,21 @@
             "field": "constraints",
             "interpretation": "可用时间、接触方式、同意范围与已有验收标准",
             "onMissing": "在现有范围提出研究方案，不擅自联系或录制。"
+          },
+          {
+            "field": "designBinding",
+            "interpretation": "由调用方提供的现行设计绑定；仅引用，不授予权限或自行认定当前版本。",
+            "onMissing": "旧有输入仍可处理；项目规则和设计身份未知时明确影响，不自行编造来源版本或独立观察。"
+          },
+          {
+            "field": "designContext",
+            "interpretation": "调用方投影的当前模块/决定/状态/接口/上游产物；只读任务上下文，不是权限或另一份PRD真源。",
+            "onMissing": "旧有输入仍可处理；项目规则和设计身份未知时明确影响，不自行编造来源版本或独立观察。"
+          },
+          {
+            "field": "projectFacts",
+            "interpretation": "本轮已核实的项目版本/代码入口/边界；未知版本写 null，不把网上最新版当安装版本。",
+            "onMissing": "旧有输入仍可处理；项目规则和设计身份未知时明确影响，不自行编造来源版本或独立观察。"
           }
         ],
         "outputChecks": [
@@ -241,6 +308,67 @@
             "evidenceRequired": [
               "交付产物版本及位置",
               "每个阻断项的处理人或下一步"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "user-researcher-design-binding",
+            "field": "designBinding",
+            "criterion": "本轮使用此项时，绑定当前项目、设计与实际资料；事实、自报和未运行分别记录。",
+            "rejectWhen": "引用其他项目、旧版本或不存在的来源冒充本轮验证。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "本轮输入/产物版本与定位",
+              "已观察与未运行范围"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "user-researcher-criterion-results",
+            "field": "criterionResults",
+            "criterion": "本轮使用此项时，绑定当前项目、设计与实际资料；事实、自报和未运行分别记录。",
+            "rejectWhen": "引用其他项目、旧版本或不存在的来源冒充本轮验证。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "本轮输入/产物版本与定位",
+              "已观察与未运行范围"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "user-researcher-artifact-refs",
+            "field": "artifactRefs",
+            "criterion": "本轮使用此项时，绑定当前项目、设计与实际资料；事实、自报和未运行分别记录。",
+            "rejectWhen": "引用其他项目、旧版本或不存在的来源冒充本轮验证。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "本轮输入/产物版本与定位",
+              "已观察与未运行范围"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "user-researcher-knowledge-usage",
+            "field": "knowledgeUsage",
+            "criterion": "本轮使用此项时，绑定当前项目、设计与实际资料；事实、自报和未运行分别记录。",
+            "rejectWhen": "引用其他项目、旧版本或不存在的来源冒充本轮验证。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "本轮输入/产物版本与定位",
+              "已观察与未运行范围"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "user-researcher-experience-application",
+            "field": "experienceApplication",
+            "criterion": "本轮提供 projectExperience 时适用：四层来源和有效规则进入当前专业输出；设计/实现覆盖必需页面状态、主显信息、合适图/表和输入恢复。研究阶段说明如何验证本项目假设及尚未观察范围。输出绑定同一项目与designBinding，实际观察另有材料。",
+            "rejectWhen": "只有ruleId回显、换色或通用形容词；关键状态藏于折叠、精确比较只有图、失败丢输入；以合成模型或helper结果声称用户测试、浏览器或体验通过。",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "原有角色产物中本项目规则的具体应用与位置",
+              "当前页面状态/研究任务及未运行项",
+              "包内helper结果（若运行）与独立实际产物观察分开"
             ],
             "blocking": true
           }

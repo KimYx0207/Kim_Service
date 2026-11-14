@@ -1,0 +1,1181 @@
+{
+  "schemaVersion": 1,
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "notice": "原创合成项目与候选设计模型；不是用户访谈、真实页面、原生Agent调用或专业效果记录。",
+  "cases": [
+    {
+      "id": "mechanical-maintenance",
+      "profile": {
+        "schemaVersion": 1,
+        "projectId": "fixture:mechanical-maintenance",
+        "revision": 1,
+        "tasks": [
+          {
+            "id": "triage",
+            "actor": "维修值班人员",
+            "goal": "按设备影响判断下一张工单并保存处置记录",
+            "successCondition": "能确定设备、异常影响、责任人；保存失败后保留处置记录并重试"
+          }
+        ],
+        "layers": [
+          {
+            "level": "base",
+            "source": {
+              "ref": "fixture:common-experience-baseline",
+              "version": "1"
+            },
+            "rules": [
+              {
+                "id": "current-status",
+                "kind": "visible_information",
+                "target": "equipment/triage",
+                "requirement": "当前任务状态保持可发现",
+                "verification": "在当前产物的真实入口回放本任务；合成模型不代表实际观察",
+                "value": [
+                  "system-status"
+                ],
+                "invariant": true
+              },
+              {
+                "id": "keyboard-recovery",
+                "kind": "professional_judgment",
+                "target": "accessibility",
+                "requirement": "用键盘、真实内容、放大和失败恢复检查任务；错误不只靠颜色",
+                "verification": "在当前产物的真实入口回放本任务；合成模型不代表实际观察",
+                "value": {
+                  "checks": [
+                    "keyboard",
+                    "focus",
+                    "reflow",
+                    "error-label"
+                  ]
+                },
+                "invariant": true
+              }
+            ]
+          },
+          {
+            "level": "domain",
+            "source": {
+              "ref": "fixture:mechanical-maintenance/project-domain-rules",
+              "version": "1"
+            },
+            "rules": [
+              {
+                "id": "domain-decision",
+                "kind": "visible_information",
+                "target": "equipment/triage",
+                "requirement": "先比较异常严重度和设备影响，再打开对应工单",
+                "verification": "在当前产物的真实入口回放本任务；合成模型不代表实际观察",
+                "value": [
+                  "system-status",
+                  "equipment-id",
+                  "severity",
+                  "assignee"
+                ],
+                "overrides": "current-status",
+                "taskIds": [
+                  "triage"
+                ]
+              },
+              {
+                "id": "domain-representation",
+                "kind": "representation",
+                "target": "equipment/triage",
+                "requirement": "先比较异常严重度和设备影响，再打开对应工单",
+                "verification": "在当前产物的真实入口回放本任务；合成模型不代表实际观察",
+                "value": {
+                  "informationId": "equipment-priority",
+                  "purpose": "exact"
+                },
+                "taskIds": [
+                  "triage"
+                ]
+              }
+            ]
+          },
+          {
+            "level": "brand",
+            "source": {
+              "ref": "fixture:mechanical-maintenance/project-brand-rules",
+              "version": "1"
+            },
+            "rules": [
+              {
+                "id": "project-accent",
+                "kind": "theme",
+                "target": "color.action",
+                "requirement": "设备状态与工单优先，告警颜色用于异常含义",
+                "verification": "在当前产物的真实入口回放本任务；合成模型不代表实际观察",
+                "value": "#175675"
+              },
+              {
+                "id": "art-direction",
+                "kind": "professional_judgment",
+                "target": "brand-art-direction",
+                "requirement": "设备状态与工单优先，告警颜色用于异常含义",
+                "verification": "在当前产物的真实入口回放本任务；合成模型不代表实际观察",
+                "value": {
+                  "reference": "本例为作者设计假设；正式项目替换为已核实品牌资料"
+                }
+              }
+            ]
+          },
+          {
+            "level": "task",
+            "source": {
+              "ref": "fixture:mechanical-maintenance/current-flow-rules",
+              "version": "1"
+            },
+            "rules": [
+              {
+                "id": "failure-visible",
+                "kind": "visible_information",
+                "target": "equipment/save_failed",
+                "requirement": "失败原因与下一动作当场可见",
+                "verification": "在当前产物的真实入口回放本任务；合成模型不代表实际观察",
+                "value": [
+                  "failure-reason",
+                  "next-action"
+                ],
+                "taskIds": [
+                  "triage"
+                ]
+              },
+              {
+                "id": "failure-recovery",
+                "kind": "recovery",
+                "target": "equipment/save_failed",
+                "requirement": "能确定设备、异常影响、责任人；保存失败后保留处置记录并重试",
+                "verification": "在当前产物的真实入口回放本任务；合成模型不代表实际观察",
+                "value": {
+                  "preserve": [
+                    "equipment-id",
+                    "maintenance-notes"
+                  ],
+                  "actions": [
+                    "retry",
+                    "return-to-work-order"
+                  ]
+                },
+                "taskIds": [
+                  "triage"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "delivery": {
+        "designBinding": {
+          "designId": "design-current",
+          "revision": 3
+        },
+        "experienceApplication": {
+          "projectId": "fixture:mechanical-maintenance",
+          "revision": 1,
+          "scope": "design",
+          "ruleApplications": [
+            {
+              "ruleId": "keyboard-recovery",
+              "status": "specified",
+              "application": "用键盘、真实内容、放大和失败恢复检查任务；错误不只靠颜色",
+              "artifactRefs": [
+                "fixture-artifact:mechanical-maintenance/all"
+              ]
+            },
+            {
+              "ruleId": "domain-decision",
+              "status": "specified",
+              "application": "先比较异常严重度和设备影响，再打开对应工单",
+              "artifactRefs": [
+                "fixture-artifact:mechanical-maintenance/equipment/triage"
+              ]
+            },
+            {
+              "ruleId": "domain-representation",
+              "status": "specified",
+              "application": "先比较异常严重度和设备影响，再打开对应工单",
+              "artifactRefs": [
+                "fixture-artifact:mechanical-maintenance/equipment/triage"
+              ]
+            },
+            {
+              "ruleId": "project-accent",
+              "status": "specified",
+              "application": "设备状态与工单优先，告警颜色用于异常含义",
+              "artifactRefs": [
+                "fixture-artifact:mechanical-maintenance/tokens"
+              ]
+            },
+            {
+              "ruleId": "art-direction",
+              "status": "specified",
+              "application": "设备状态与工单优先，告警颜色用于异常含义",
+              "artifactRefs": [
+                "fixture-artifact:mechanical-maintenance/all"
+              ]
+            },
+            {
+              "ruleId": "failure-visible",
+              "status": "specified",
+              "application": "失败原因与下一动作当场可见",
+              "artifactRefs": [
+                "fixture-artifact:mechanical-maintenance/equipment/save_failed"
+              ]
+            },
+            {
+              "ruleId": "failure-recovery",
+              "status": "specified",
+              "application": "能确定设备、异常影响、责任人；保存失败后保留处置记录并重试",
+              "artifactRefs": [
+                "fixture-artifact:mechanical-maintenance/equipment/save_failed"
+              ]
+            }
+          ],
+          "themeTokens": {
+            "color.action": "#175675"
+          },
+          "surfaceModels": [
+            {
+              "target": "equipment/triage",
+              "taskId": "triage",
+              "information": [
+                {
+                  "id": "system-status",
+                  "visibility": "primary"
+                },
+                {
+                  "id": "equipment-id",
+                  "visibility": "primary"
+                },
+                {
+                  "id": "severity",
+                  "visibility": "primary"
+                },
+                {
+                  "id": "assignee",
+                  "visibility": "primary"
+                }
+              ],
+              "representations": [
+                {
+                  "informationId": "equipment-priority",
+                  "format": "table",
+                  "dataRef": "fixture-artifact:mechanical-maintenance/equipment-priority",
+                  "summary": "先比较异常严重度和设备影响，再打开对应工单"
+                }
+              ]
+            },
+            {
+              "target": "equipment/save_failed",
+              "taskId": "triage",
+              "information": [
+                {
+                  "id": "failure-reason",
+                  "visibility": "primary"
+                },
+                {
+                  "id": "next-action",
+                  "visibility": "visible"
+                }
+              ],
+              "recovery": {
+                "preserve": [
+                  "equipment-id",
+                  "maintenance-notes"
+                ],
+                "actions": [
+                  "retry",
+                  "return-to-work-order"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "heritage-fashion",
+      "profile": {
+        "schemaVersion": 1,
+        "projectId": "fixture:heritage-fashion",
+        "revision": 1,
+        "tasks": [
+          {
+            "id": "choose-fit",
+            "actor": "购买日常国风服装的顾客",
+            "goal": "根据版型、面料和尺码选择适合自己的款式",
+            "successCondition": "理解适用尺码与面料并选定有货规格；加购失败后保持款式和尺码"
+          }
+        ],
+        "layers": [
+          {
+            "level": "base",
+            "source": {
+              "ref": "fixture:common-experience-baseline",
+              "version": "1"
+            },
+            "rules": [
+              {
+                "id": "current-status",
+                "kind": "visible_information",
+                "target": "product/selection",
+                "requirement": "当前任务状态保持可发现",
+                "verification": "在当前产物的真实入口回放本任务；合成模型不代表实际观察",
+                "value": [
+                  "system-status"
+                ],
+                "invariant": true
+              },
+              {
+                "id": "keyboard-recovery",
+                "kind": "professional_judgment",
+                "target": "accessibility",
+                "requirement": "用键盘、真实内容、放大和失败恢复检查任务；错误不只靠颜色",
+                "verification": "在当前产物的真实入口回放本任务；合成模型不代表实际观察",
+                "value": {
+                  "checks": [
+                    "keyboard",
+                    "focus",
+                    "reflow",
+                    "error-label"
+                  ]
+                },
+                "invariant": true
+              }
+            ]
+          },
+          {
+            "level": "domain",
+            "source": {
+              "ref": "fixture:heritage-fashion/project-domain-rules",
+              "version": "1"
+            },
+            "rules": [
+              {
+                "id": "domain-decision",
+                "kind": "visible_information",
+                "target": "product/selection",
+                "requirement": "版型与尺码表帮助选择合适规格，价格和库存保持可见",
+                "verification": "在当前产物的真实入口回放本任务；合成模型不代表实际观察",
+                "value": [
+                  "system-status",
+                  "price",
+                  "size-availability",
+                  "fit",
+                  "fabric"
+                ],
+                "overrides": "current-status",
+                "taskIds": [
+                  "choose-fit"
+                ]
+              },
+              {
+                "id": "domain-representation",
+                "kind": "representation",
+                "target": "product/selection",
+                "requirement": "版型与尺码表帮助选择合适规格，价格和库存保持可见",
+                "verification": "在当前产物的真实入口回放本任务；合成模型不代表实际观察",
+                "value": {
+                  "informationId": "size-guide",
+                  "purpose": "exact"
+                },
+                "taskIds": [
+                  "choose-fit"
+                ]
+              }
+            ]
+          },
+          {
+            "level": "brand",
+            "source": {
+              "ref": "fixture:heritage-fashion/project-brand-rules",
+              "version": "1"
+            },
+            "rules": [
+              {
+                "id": "project-accent",
+                "kind": "theme",
+                "target": "color.action",
+                "requirement": "日常国风品牌；自然面料近景、克制排版；不以红金配色代替品牌依据",
+                "verification": "在当前产物的真实入口回放本任务；合成模型不代表实际观察",
+                "value": "#735943"
+              },
+              {
+                "id": "art-direction",
+                "kind": "professional_judgment",
+                "target": "brand-art-direction",
+                "requirement": "日常国风品牌；自然面料近景、克制排版；不以红金配色代替品牌依据",
+                "verification": "在当前产物的真实入口回放本任务；合成模型不代表实际观察",
+                "value": {
+                  "reference": "本例为作者设计假设；正式项目替换为已核实品牌资料"
+                }
+              }
+            ]
+          },
+          {
+            "level": "task",
+            "source": {
+              "ref": "fixture:heritage-fashion/current-flow-rules",
+              "version": "1"
+            },
+            "rules": [
+              {
+                "id": "failure-visible",
+                "kind": "visible_information",
+                "target": "product/cart_failed",
+                "requirement": "失败原因与下一动作当场可见",
+                "verification": "在当前产物的真实入口回放本任务；合成模型不代表实际观察",
+                "value": [
+                  "failure-reason",
+                  "next-action"
+                ],
+                "taskIds": [
+                  "choose-fit"
+                ]
+              },
+              {
+                "id": "failure-recovery",
+                "kind": "recovery",
+                "target": "product/cart_failed",
+                "requirement": "理解适用尺码与面料并选定有货规格；加购失败后保持款式和尺码",
+                "verification": "在当前产物的真实入口回放本任务；合成模型不代表实际观察",
+                "value": {
+                  "preserve": [
+                    "variant",
+                    "size"
+                  ],
+                  "actions": [
+                    "retry-cart",
+                    "adjust-selection"
+                  ]
+                },
+                "taskIds": [
+                  "choose-fit"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "delivery": {
+        "designBinding": {
+          "designId": "design-current",
+          "revision": 3
+        },
+        "experienceApplication": {
+          "projectId": "fixture:heritage-fashion",
+          "revision": 1,
+          "scope": "design",
+          "ruleApplications": [
+            {
+              "ruleId": "keyboard-recovery",
+              "status": "specified",
+              "application": "用键盘、真实内容、放大和失败恢复检查任务；错误不只靠颜色",
+              "artifactRefs": [
+                "fixture-artifact:heritage-fashion/all"
+              ]
+            },
+            {
+              "ruleId": "domain-decision",
+              "status": "specified",
+              "application": "版型与尺码表帮助选择合适规格，价格和库存保持可见",
+              "artifactRefs": [
+                "fixture-artifact:heritage-fashion/product/selection"
+              ]
+            },
+            {
+              "ruleId": "domain-representation",
+              "status": "specified",
+              "application": "版型与尺码表帮助选择合适规格，价格和库存保持可见",
+              "artifactRefs": [
+                "fixture-artifact:heritage-fashion/product/selection"
+              ]
+            },
+            {
+              "ruleId": "project-accent",
+              "status": "specified",
+              "application": "日常国风品牌；自然面料近景、克制排版；不以红金配色代替品牌依据",
+              "artifactRefs": [
+                "fixture-artifact:heritage-fashion/tokens"
+              ]
+            },
+            {
+              "ruleId": "art-direction",
+              "status": "specified",
+              "application": "日常国风品牌；自然面料近景、克制排版；不以红金配色代替品牌依据",
+              "artifactRefs": [
+                "fixture-artifact:heritage-fashion/all"
+              ]
+            },
+            {
+              "ruleId": "failure-visible",
+              "status": "specified",
+              "application": "失败原因与下一动作当场可见",
+              "artifactRefs": [
+                "fixture-artifact:heritage-fashion/product/cart_failed"
+              ]
+            },
+            {
+              "ruleId": "failure-recovery",
+              "status": "specified",
+              "application": "理解适用尺码与面料并选定有货规格；加购失败后保持款式和尺码",
+              "artifactRefs": [
+                "fixture-artifact:heritage-fashion/product/cart_failed"
+              ]
+            }
+          ],
+          "themeTokens": {
+            "color.action": "#735943"
+          },
+          "surfaceModels": [
+            {
+              "target": "product/selection",
+              "taskId": "choose-fit",
+              "information": [
+                {
+                  "id": "system-status",
+                  "visibility": "primary"
+                },
+                {
+                  "id": "price",
+                  "visibility": "primary"
+                },
+                {
+                  "id": "size-availability",
+                  "visibility": "primary"
+                },
+                {
+                  "id": "fit",
+                  "visibility": "primary"
+                },
+                {
+                  "id": "fabric",
+                  "visibility": "primary"
+                }
+              ],
+              "representations": [
+                {
+                  "informationId": "size-guide",
+                  "format": "table",
+                  "dataRef": "fixture-artifact:heritage-fashion/size-guide",
+                  "summary": "版型与尺码表帮助选择合适规格，价格和库存保持可见"
+                }
+              ]
+            },
+            {
+              "target": "product/cart_failed",
+              "taskId": "choose-fit",
+              "information": [
+                {
+                  "id": "failure-reason",
+                  "visibility": "primary"
+                },
+                {
+                  "id": "next-action",
+                  "visibility": "visible"
+                }
+              ],
+              "recovery": {
+                "preserve": [
+                  "variant",
+                  "size"
+                ],
+                "actions": [
+                  "retry-cart",
+                  "adjust-selection"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "appliance-commerce",
+      "profile": {
+        "schemaVersion": 1,
+        "projectId": "fixture:appliance-commerce",
+        "revision": 1,
+        "tasks": [
+          {
+            "id": "check-installation",
+            "actor": "准备更换家电的家庭用户",
+            "goal": "比较候选家电能否放入现有空间并满足安装条件",
+            "successCondition": "核对尺寸、接口、安装限制和总价；条件不符时保留测量值重新筛选"
+          }
+        ],
+        "layers": [
+          {
+            "level": "base",
+            "source": {
+              "ref": "fixture:common-experience-baseline",
+              "version": "1"
+            },
+            "rules": [
+              {
+                "id": "current-status",
+                "kind": "visible_information",
+                "target": "comparison/selection",
+                "requirement": "当前任务状态保持可发现",
+                "verification": "在当前产物的真实入口回放本任务；合成模型不代表实际观察",
+                "value": [
+                  "system-status"
+                ],
+                "invariant": true
+              },
+              {
+                "id": "keyboard-recovery",
+                "kind": "professional_judgment",
+                "target": "accessibility",
+                "requirement": "用键盘、真实内容、放大和失败恢复检查任务；错误不只靠颜色",
+                "verification": "在当前产物的真实入口回放本任务；合成模型不代表实际观察",
+                "value": {
+                  "checks": [
+                    "keyboard",
+                    "focus",
+                    "reflow",
+                    "error-label"
+                  ]
+                },
+                "invariant": true
+              }
+            ]
+          },
+          {
+            "level": "domain",
+            "source": {
+              "ref": "fixture:appliance-commerce/project-domain-rules",
+              "version": "1"
+            },
+            "rules": [
+              {
+                "id": "domain-decision",
+                "kind": "visible_information",
+                "target": "comparison/selection",
+                "requirement": "按精确尺寸与安装条件排除不适配的商品",
+                "verification": "在当前产物的真实入口回放本任务；合成模型不代表实际观察",
+                "value": [
+                  "system-status",
+                  "dimensions",
+                  "installation-constraints",
+                  "total-price"
+                ],
+                "overrides": "current-status",
+                "taskIds": [
+                  "check-installation"
+                ]
+              },
+              {
+                "id": "domain-representation",
+                "kind": "representation",
+                "target": "comparison/selection",
+                "requirement": "按精确尺寸与安装条件排除不适配的商品",
+                "verification": "在当前产物的真实入口回放本任务；合成模型不代表实际观察",
+                "value": {
+                  "informationId": "installation-specs",
+                  "purpose": "exact"
+                },
+                "taskIds": [
+                  "check-installation"
+                ]
+              }
+            ]
+          },
+          {
+            "level": "brand",
+            "source": {
+              "ref": "fixture:appliance-commerce/project-brand-rules",
+              "version": "1"
+            },
+            "rules": [
+              {
+                "id": "project-accent",
+                "kind": "theme",
+                "target": "color.action",
+                "requirement": "规格比较优先；品牌表现不隐藏安装条件和总费用",
+                "verification": "在当前产物的真实入口回放本任务；合成模型不代表实际观察",
+                "value": "#255f87"
+              },
+              {
+                "id": "art-direction",
+                "kind": "professional_judgment",
+                "target": "brand-art-direction",
+                "requirement": "规格比较优先；品牌表现不隐藏安装条件和总费用",
+                "verification": "在当前产物的真实入口回放本任务；合成模型不代表实际观察",
+                "value": {
+                  "reference": "本例为作者设计假设；正式项目替换为已核实品牌资料"
+                }
+              }
+            ]
+          },
+          {
+            "level": "task",
+            "source": {
+              "ref": "fixture:appliance-commerce/current-flow-rules",
+              "version": "1"
+            },
+            "rules": [
+              {
+                "id": "failure-visible",
+                "kind": "visible_information",
+                "target": "comparison/incompatible",
+                "requirement": "失败原因与下一动作当场可见",
+                "verification": "在当前产物的真实入口回放本任务；合成模型不代表实际观察",
+                "value": [
+                  "failure-reason",
+                  "next-action"
+                ],
+                "taskIds": [
+                  "check-installation"
+                ]
+              },
+              {
+                "id": "failure-recovery",
+                "kind": "recovery",
+                "target": "comparison/incompatible",
+                "requirement": "核对尺寸、接口、安装限制和总价；条件不符时保留测量值重新筛选",
+                "verification": "在当前产物的真实入口回放本任务；合成模型不代表实际观察",
+                "value": {
+                  "preserve": [
+                    "room-measurements",
+                    "selected-models"
+                  ],
+                  "actions": [
+                    "adjust-filters",
+                    "view-compatible-models"
+                  ]
+                },
+                "taskIds": [
+                  "check-installation"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "delivery": {
+        "designBinding": {
+          "designId": "design-current",
+          "revision": 3
+        },
+        "experienceApplication": {
+          "projectId": "fixture:appliance-commerce",
+          "revision": 1,
+          "scope": "design",
+          "ruleApplications": [
+            {
+              "ruleId": "keyboard-recovery",
+              "status": "specified",
+              "application": "用键盘、真实内容、放大和失败恢复检查任务；错误不只靠颜色",
+              "artifactRefs": [
+                "fixture-artifact:appliance-commerce/all"
+              ]
+            },
+            {
+              "ruleId": "domain-decision",
+              "status": "specified",
+              "application": "按精确尺寸与安装条件排除不适配的商品",
+              "artifactRefs": [
+                "fixture-artifact:appliance-commerce/comparison/selection"
+              ]
+            },
+            {
+              "ruleId": "domain-representation",
+              "status": "specified",
+              "application": "按精确尺寸与安装条件排除不适配的商品",
+              "artifactRefs": [
+                "fixture-artifact:appliance-commerce/comparison/selection"
+              ]
+            },
+            {
+              "ruleId": "project-accent",
+              "status": "specified",
+              "application": "规格比较优先；品牌表现不隐藏安装条件和总费用",
+              "artifactRefs": [
+                "fixture-artifact:appliance-commerce/tokens"
+              ]
+            },
+            {
+              "ruleId": "art-direction",
+              "status": "specified",
+              "application": "规格比较优先；品牌表现不隐藏安装条件和总费用",
+              "artifactRefs": [
+                "fixture-artifact:appliance-commerce/all"
+              ]
+            },
+            {
+              "ruleId": "failure-visible",
+              "status": "specified",
+              "application": "失败原因与下一动作当场可见",
+              "artifactRefs": [
+                "fixture-artifact:appliance-commerce/comparison/incompatible"
+              ]
+            },
+            {
+              "ruleId": "failure-recovery",
+              "status": "specified",
+              "application": "核对尺寸、接口、安装限制和总价；条件不符时保留测量值重新筛选",
+              "artifactRefs": [
+                "fixture-artifact:appliance-commerce/comparison/incompatible"
+              ]
+            }
+          ],
+          "themeTokens": {
+            "color.action": "#255f87"
+          },
+          "surfaceModels": [
+            {
+              "target": "comparison/selection",
+              "taskId": "check-installation",
+              "information": [
+                {
+                  "id": "system-status",
+                  "visibility": "primary"
+                },
+                {
+                  "id": "dimensions",
+                  "visibility": "primary"
+                },
+                {
+                  "id": "installation-constraints",
+                  "visibility": "primary"
+                },
+                {
+                  "id": "total-price",
+                  "visibility": "primary"
+                }
+              ],
+              "representations": [
+                {
+                  "informationId": "installation-specs",
+                  "format": "table",
+                  "dataRef": "fixture-artifact:appliance-commerce/installation-specs",
+                  "summary": "按精确尺寸与安装条件排除不适配的商品"
+                }
+              ]
+            },
+            {
+              "target": "comparison/incompatible",
+              "taskId": "check-installation",
+              "information": [
+                {
+                  "id": "failure-reason",
+                  "visibility": "primary"
+                },
+                {
+                  "id": "next-action",
+                  "visibility": "visible"
+                }
+              ],
+              "recovery": {
+                "preserve": [
+                  "room-measurements",
+                  "selected-models"
+                ],
+                "actions": [
+                  "adjust-filters",
+                  "view-compatible-models"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "enterprise-knowledge",
+      "profile": {
+        "schemaVersion": 1,
+        "projectId": "fixture:enterprise-knowledge",
+        "revision": 1,
+        "tasks": [
+          {
+            "id": "verify-answer",
+            "actor": "寻找技术依据的员工",
+            "goal": "提问后判断回答是否有依据并打开适用版本的来源",
+            "successCondition": "理解答复边界并能回到原文；无依据时保留问题并修改范围继续查询"
+          }
+        ],
+        "layers": [
+          {
+            "level": "base",
+            "source": {
+              "ref": "fixture:common-experience-baseline",
+              "version": "1"
+            },
+            "rules": [
+              {
+                "id": "current-status",
+                "kind": "visible_information",
+                "target": "answer/answered",
+                "requirement": "当前任务状态保持可发现",
+                "verification": "在当前产物的真实入口回放本任务；合成模型不代表实际观察",
+                "value": [
+                  "system-status"
+                ],
+                "invariant": true
+              },
+              {
+                "id": "keyboard-recovery",
+                "kind": "professional_judgment",
+                "target": "accessibility",
+                "requirement": "用键盘、真实内容、放大和失败恢复检查任务；错误不只靠颜色",
+                "verification": "在当前产物的真实入口回放本任务；合成模型不代表实际观察",
+                "value": {
+                  "checks": [
+                    "keyboard",
+                    "focus",
+                    "reflow",
+                    "error-label"
+                  ]
+                },
+                "invariant": true
+              }
+            ]
+          },
+          {
+            "level": "domain",
+            "source": {
+              "ref": "fixture:enterprise-knowledge/project-domain-rules",
+              "version": "1"
+            },
+            "rules": [
+              {
+                "id": "domain-decision",
+                "kind": "visible_information",
+                "target": "answer/answered",
+                "requirement": "回答与来源可以逐项核对，无依据状态直接说明并提供继续路径",
+                "verification": "在当前产物的真实入口回放本任务；合成模型不代表实际观察",
+                "value": [
+                  "system-status",
+                  "answer-boundary",
+                  "source-version",
+                  "source-entry"
+                ],
+                "overrides": "current-status",
+                "taskIds": [
+                  "verify-answer"
+                ]
+              },
+              {
+                "id": "domain-representation",
+                "kind": "representation",
+                "target": "answer/answered",
+                "requirement": "回答与来源可以逐项核对，无依据状态直接说明并提供继续路径",
+                "verification": "在当前产物的真实入口回放本任务；合成模型不代表实际观察",
+                "value": {
+                  "informationId": "evidence-links",
+                  "purpose": "instruction"
+                },
+                "taskIds": [
+                  "verify-answer"
+                ]
+              }
+            ]
+          },
+          {
+            "level": "brand",
+            "source": {
+              "ref": "fixture:enterprise-knowledge/project-brand-rules",
+              "version": "1"
+            },
+            "rules": [
+              {
+                "id": "project-accent",
+                "kind": "theme",
+                "target": "color.action",
+                "requirement": "阅读和查证优先；维护日志放维护视图，答复边界与来源入口主显",
+                "verification": "在当前产物的真实入口回放本任务；合成模型不代表实际观察",
+                "value": "#245e53"
+              },
+              {
+                "id": "art-direction",
+                "kind": "professional_judgment",
+                "target": "brand-art-direction",
+                "requirement": "阅读和查证优先；维护日志放维护视图，答复边界与来源入口主显",
+                "verification": "在当前产物的真实入口回放本任务；合成模型不代表实际观察",
+                "value": {
+                  "reference": "本例为作者设计假设；正式项目替换为已核实品牌资料"
+                }
+              }
+            ]
+          },
+          {
+            "level": "task",
+            "source": {
+              "ref": "fixture:enterprise-knowledge/current-flow-rules",
+              "version": "1"
+            },
+            "rules": [
+              {
+                "id": "failure-visible",
+                "kind": "visible_information",
+                "target": "answer/no_evidence",
+                "requirement": "失败原因与下一动作当场可见",
+                "verification": "在当前产物的真实入口回放本任务；合成模型不代表实际观察",
+                "value": [
+                  "failure-reason",
+                  "next-action"
+                ],
+                "taskIds": [
+                  "verify-answer"
+                ]
+              },
+              {
+                "id": "failure-recovery",
+                "kind": "recovery",
+                "target": "answer/no_evidence",
+                "requirement": "理解答复边界并能回到原文；无依据时保留问题并修改范围继续查询",
+                "verification": "在当前产物的真实入口回放本任务；合成模型不代表实际观察",
+                "value": {
+                  "preserve": [
+                    "question",
+                    "scope"
+                  ],
+                  "actions": [
+                    "refine-question",
+                    "adjust-scope"
+                  ]
+                },
+                "taskIds": [
+                  "verify-answer"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "delivery": {
+        "designBinding": {
+          "designId": "design-current",
+          "revision": 3
+        },
+        "experienceApplication": {
+          "projectId": "fixture:enterprise-knowledge",
+          "revision": 1,
+          "scope": "design",
+          "ruleApplications": [
+            {
+              "ruleId": "keyboard-recovery",
+              "status": "specified",
+              "application": "用键盘、真实内容、放大和失败恢复检查任务；错误不只靠颜色",
+              "artifactRefs": [
+                "fixture-artifact:enterprise-knowledge/all"
+              ]
+            },
+            {
+              "ruleId": "domain-decision",
+              "status": "specified",
+              "application": "回答与来源可以逐项核对，无依据状态直接说明并提供继续路径",
+              "artifactRefs": [
+                "fixture-artifact:enterprise-knowledge/answer/answered"
+              ]
+            },
+            {
+              "ruleId": "domain-representation",
+              "status": "specified",
+              "application": "回答与来源可以逐项核对，无依据状态直接说明并提供继续路径",
+              "artifactRefs": [
+                "fixture-artifact:enterprise-knowledge/answer/answered"
+              ]
+            },
+            {
+              "ruleId": "project-accent",
+              "status": "specified",
+              "application": "阅读和查证优先；维护日志放维护视图，答复边界与来源入口主显",
+              "artifactRefs": [
+                "fixture-artifact:enterprise-knowledge/tokens"
+              ]
+            },
+            {
+              "ruleId": "art-direction",
+              "status": "specified",
+              "application": "阅读和查证优先；维护日志放维护视图，答复边界与来源入口主显",
+              "artifactRefs": [
+                "fixture-artifact:enterprise-knowledge/all"
+              ]
+            },
+            {
+              "ruleId": "failure-visible",
+              "status": "specified",
+              "application": "失败原因与下一动作当场可见",
+              "artifactRefs": [
+                "fixture-artifact:enterprise-knowledge/answer/no_evidence"
+              ]
+            },
+            {
+              "ruleId": "failure-recovery",
+              "status": "specified",
+              "application": "理解答复边界并能回到原文；无依据时保留问题并修改范围继续查询",
+              "artifactRefs": [
+                "fixture-artifact:enterprise-knowledge/answer/no_evidence"
+              ]
+            }
+          ],
+          "themeTokens": {
+            "color.action": "#245e53"
+          },
+          "surfaceModels": [
+            {
+              "target": "answer/answered",
+              "taskId": "verify-answer",
+              "information": [
+                {
+                  "id": "system-status",
+                  "visibility": "primary"
+                },
+                {
+                  "id": "answer-boundary",
+                  "visibility": "primary"
+                },
+                {
+                  "id": "source-version",
+                  "visibility": "primary"
+                },
+                {
+                  "id": "source-entry",
+                  "visibility": "primary"
+                }
+              ],
+              "representations": [
+                {
+                  "informationId": "evidence-links",
+                  "format": "text",
+                  "dataRef": "fixture-artifact:enterprise-knowledge/evidence-links",
+                  "summary": "回答与来源可以逐项核对，无依据状态直接说明并提供继续路径"
+                }
+              ]
+            },
+            {
+              "target": "answer/no_evidence",
+              "taskId": "verify-answer",
+              "information": [
+                {
+                  "id": "failure-reason",
+                  "visibility": "primary"
+                },
+                {
+                  "id": "next-action",
+                  "visibility": "visible"
+                }
+              ],
+              "recovery": {
+                "preserve": [
+                  "question",
+                  "scope"
+                ],
+                "actions": [
+                  "refine-question",
+                  "adjust-scope"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

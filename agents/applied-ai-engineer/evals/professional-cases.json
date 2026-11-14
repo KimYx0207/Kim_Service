@@ -85,6 +85,36 @@
         "holdout",
         "bounded-rollout"
       ]
+    },
+    {
+      "id": "wiki-revocation-is-transitive",
+      "capabilityId": "applied-ai-engineer-deliver",
+      "category": "failure_boundary",
+      "scenario": "原文撤回后共享Wiki段落仍含受限事实",
+      "input": {
+        "task": "审查知识问答的资料撤回",
+        "materials": "合成：A已撤回，B有效；Wiki W同时由A/B派生，答案缓存仍引用W",
+        "budget": "离线检查依赖和当前权限，不调用模型",
+        "projectContext": {
+          "projectId": "support-kb",
+          "valueTypes": [
+            "internal"
+          ],
+          "stage": "delivery"
+        }
+      },
+      "candidateOutputExcerpt": {
+        "researchEvaluation": "原文已删，W还有B引用，因此无需重建W或失效缓存。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "共享引用不清除被撤回事实；需要派生依赖、版本与权限检查。",
+      "diagnosticRefs": [
+        "trace",
+        "project-specialization"
+      ],
+      "decisionRuleRefs": [
+        "consume-research"
+      ]
     }
   ]
 }

@@ -25,10 +25,12 @@
     "先读取 knowledgeAssets 中本角色包内 professional-method；知识文件受组件哈希约束，仅供当前任务，来源清单不等于本轮联网读取",
     "仅在涉及软件仓库时加载该仓库工程指南",
     "涉及数据指标时加载数据口径方法，涉及迁移时加载版本迁移指南",
-    "读取本包 references/worked-delivery.md 的完整产物与专业反例；按当前输入迁移，不把合成答案当本次事实或验收记录"
+    "读取本包 references/worked-delivery.md 的完整产物与专业反例；按当前输入迁移，不把合成答案当本次事实或验收记录",
+    "技术关键选择时，由调用方发现并装入 technology-option-evaluation；知识任务再按需装入 knowledge-architecture-evaluation。消费实际比较/反例/版本与projectCapabilityRequirements，不以工具名字视为已加载。包未提供时按本地专业资料继续，明确未查证部分。"
   ],
   "steps": [
     "绑定当前 designBinding/designContext 与项目事实；从指定入口和锁文件核实实际框架/工具版本、相关代码与验收ID，再按包内专业方法处理正反场景",
+    "读取projectContext与researchEvaluation，按价值/阶段、当前版本、候选机制和反证调整本次设计；需补证时先做最小可比实验。",
     "先读取现有材料、实现、术语和已定决定，区分事实、假设与历史残留；可查事实自行查，不把参考项目功能当需求",
     "探索需求：对改变方向、架构、成本、兼容或范围的关键决定列id、依赖、具体选项、推荐、取舍和依据；使用实际反例检查模糊术语",
     "把前置决定已明确的当前问题交调用方与用户交流；收到回答后重算依赖问题和建议，未回答不算批准，不另建访谈状态或重复已定问题",
@@ -37,8 +39,10 @@
     "在完整设计中画当前与目标数据流，确认唯一来源、写入者和权限边界；比较最小方案与可行替代的成本、迁移风险和未知，不编造数字",
     "定义状态转移前置、失败恢复、幂等与兼容；复用现有术语表，只有难逆、易误解且确有取舍的决定才补简短ADR",
     "完整设计确定后拆可独立演示的交付切片；每项包含用户结果、输入版本、产物、真实阻塞依赖、演示和验收，不以岗位列表代替任务",
+    "交付交接前逐项回放 completionDemo 与当前验收中的实际动作：在既有切片和 methodInputs 中定位负责人、当前输入来源或生产任务、真实文件/数据库副作用与写入范围、操作和证据；消费者必须等待所读当前产物，不以演示文案或字段覆盖替代执行安排。",
     "普通交付使用调用方现有任务板和调度；机械迁移按兼容扩展、分批迁移、收缩旧接口提出真实依赖，不创建第二套队列",
-    "将架构决定与用户验收逐项对应；缺关键选择交探索结果与待决定项，不冒充完整方案；明确小改动可复用现有设计直接推进"
+    "将架构决定与用户验收逐项对应；缺关键选择交探索结果与待决定项，不冒充完整方案；明确小改动可复用现有设计直接推进",
+    "在同一设计/交接内输出projectCapabilityRequirements，专业宿主以全局基底创建或原地迭代本项目独立包，保留定制与未观察边界。"
   ],
   "acceptance": [
     "按当前阶段验收：探索检查有依据的建议、取舍与决定依赖，不要求预先知道最终产品验收；设计定稿后每个用户结果有可观察验收项和责任输出",
@@ -48,7 +52,8 @@
     "完整体验设计在任务拆分之前；每个切片有用户结果、输入、产物、真实依赖和独立演示验收",
     "每项已验证结论绑定实际输入、预期、观察、代码/设计版本和回执；资料来源与知识装入不证明功能、视觉或宿主执行通过",
     "只交当前任务相关的 knowledgeUsage 与未验证限制；删除候选须有调用/动态入口/兼容证据和替代项，最终处置仍由调用方决定",
-    "需要软件详细设计时，候选产物可用 scripts/check-design-handoff.mjs 检查引用一致性；结构通过不证明专业质量或用户接受"
+    "需要软件详细设计时，候选产物可用 scripts/check-design-handoff.mjs 检查引用一致性；结构通过不证明专业质量或用户接受",
+    "交付阶段的演示和验收每个实际动作均有任务承接，前置产物有当前可用证据或明确生产责任，范围覆盖脚本真实副作用；截图/报告等消费者等待其实际输入生产者。探索阶段保留缺口和下一步，不伪造完成输入。"
   ],
   "exclusiveResources": [],
   "coordinationOwner": "caller",
@@ -109,6 +114,18 @@
         "spec-kit-tasks",
         "anthropic-skills"
       ]
+    },
+    {
+      "id": "product-architect-project-research",
+      "path": "references/project-research.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "spec-kit-plan",
+        "anthropic-skills",
+        "project-context-original"
+      ]
     }
   ],
   "expertise": {
@@ -120,7 +137,8 @@
     ],
     "knowledgeAssetIds": [
       "product-architect-core",
-      "product-architect-worked-delivery"
+      "product-architect-worked-delivery",
+      "product-architect-project-research"
     ],
     "diagnosticSequence": [
       {
@@ -149,6 +167,34 @@
           "接口/状态/任务/验收ID和删除候选证据"
         ],
         "whenMissing": "关键决定未定时保留轮廓；交付阶段才要求完整闭包。"
+      },
+      {
+        "id": "scenario-executability",
+        "question": "下一位执行者是否能从当前设计演示每个不同角色的真实任务，而不自行补出接口责任、输入或预期结果？",
+        "evidenceRequired": [
+          "逐角色的触发、动作、权限边界、可观察结果与失败恢复",
+          "至少一个跨模块交接的输入版本、生产者、消费者与验收观察"
+        ],
+        "whenMissing": "按当前阶段回到相应设计片段补具体条件；探索阶段保留待查事实，不强迫生成实施任务。"
+      },
+      {
+        "id": "execution-action-coverage",
+        "question": "演示与验收所宣称的每个实际动作，是否已由当前工单承担，且前置产物、真实写入和证据来源能落地？",
+        "evidenceRequired": [
+          "逐项回放演示/验收动作与既有工单、方法输入、负责人和真实副作用范围的对应",
+          "所需版本/数据/材料的当前来源和可用性，或产生它的明确任务及依赖",
+          "截图、报告、回滚等消费者读取的当前产物、生产者、验证回执和未满足前置"
+        ],
+        "whenMissing": "交付阶段补实际动作、前置生产或范围并重查消费者依赖；没有可用版本就不能承诺回滚。探索阶段标未知和下一验证，不要求虚构完整工单。"
+      },
+      {
+        "id": "project-specialization",
+        "question": "哪些领域事实和取舍必须成为本项目可重复使用的独立专业能力？",
+        "evidenceRequired": [
+          "当前项目与全局基底版本",
+          "既有项目定制、领域依据及失败判据"
+        ],
+        "whenMissing": "先交定制需求；实际文件创建、版本绑定和独立验收交调用方现有机制。"
       }
     ],
     "decisionRules": [
@@ -169,6 +215,24 @@
         "when": "候选旧代码看似不用",
         "action": "检查调用、动态入口、配置/兼容与替代证据再提出清理",
         "avoid": "把文本零引用直接等同可安全删除。"
+      },
+      {
+        "id": "inspect-scenario-content",
+        "when": "设计字段和引用已经齐全，准备作为详细设计或交付切片交接",
+        "action": "沿当前真实用户场景回读模块、状态、接口和演示，检查具体输入、前置条件、动作、预期、失败恢复及证据；复用公共协议时仍能定位各自责任。存在模式或状态分支时，摘要须保留触发条件、默认值、合法例外与判断顺序；对照回读条件成立的失败和条件不成立但合法的路径。UI与API默认值分别核实；实现若先对已是目标返回幂等成功，摘要保留这一优先例外。源材料、工单与实现不一致时先定位差异，不能修改实现来迎合误写的摘要。",
+        "avoid": "把 structure_valid、文件存在、字段数或一段通用“按PRD验证”文案当专业接受；不以文字重复或角色数量自动判坏。"
+      },
+      {
+        "id": "trace-delivery-actions",
+        "when": "从详细设计向当前执行工单交接，或独立评审发现演示与执行范围不一致",
+        "action": "沿每个验收和completionDemo回放实际动作，在同一设计/工单中核负责人、methodInputs、当前输入及其生产者、真实副作用范围、观察证据和消费者依赖。重放、恢复、回滚、截图都按实际调用和文件来源查；前置版本缺失时设计可追溯的受控生产过程并限定结论。",
+        "avoid": "演示里写了就算任务已承接；有历史报告就当旧版本可用；有data-dir参数就当所有输出已隔离；消费者未等当前材料就用旧截图冒充。不得靠关键词、词数、字段数量或自报状态自动接受。"
+      },
+      {
+        "id": "consume-research",
+        "when": "关键路线或版本会影响用户结果",
+        "action": "消费technology-option-evaluation的证据与比较；知识系统再消费knowledge-architecture-evaluation，回写同一设计决定和项目专业需求",
+        "avoid": "只读资料却不改变决定，或用全局包直接代替长期项目独立能力。"
       }
     ],
     "contractGuidance": [
@@ -199,6 +263,21 @@
             "field": "handoffContext",
             "interpretation": "当前任务与相关上游材料；字段是上下文，不是工具/资源授权。",
             "onMissing": "缺当前任务绑定时交缺口，不借用旧任务权限。"
+          },
+          {
+            "field": "phase",
+            "interpretation": "当前任务的需求探索、完整设计或交付拆分阶段，结合已有 settledDecisions/designBinding 判断哪些专业检查适用；阶段标记不是用户批准。",
+            "onMissing": "先按当前目标、已有设计与已定选择确定角色范围；只把无法查证且改变方向的问题交调用方，不为补字段提前完成后续阶段。"
+          },
+          {
+            "field": "projectContext",
+            "interpretation": "当前项目身份、领域、用户/受益者、可组合valueTypes、stage、已有需求与证据；沿用调用方同一设计，不新增状态。",
+            "onMissing": "从当前事实与已有研究补齐相关部分，不要求重填已有答案；关键未知保留影响与下一验证。"
+          },
+          {
+            "field": "researchEvaluation",
+            "interpretation": "当前研究比较的实际产物：来源/修订/兼容、候选机制、反例、选择依据、停止/重开条件、可比小实验和已观察边界。",
+            "onMissing": "从当前事实与已有研究补齐相关部分，不要求重填已有答案；关键未知保留影响与下一验证。"
           }
         ],
         "outputChecks": [
@@ -237,6 +316,56 @@
               "试迁移对账",
               "切换/回退条件",
               "兼容调用方列表"
+            ],
+            "blocking": true
+          },
+          {
+            "field": "exploration",
+            "criterion": "requirements_exploration 阶段适用：事实、推断和未定选择分开；每个影响方向的当前问题有可比较选项、依据、推荐及依赖，沿用已有决定。其他阶段只核新增未定项，无需重复访谈。",
+            "rejectWhen": "把可自行查证的事实全部交用户；将未回答当同意，或为补详细模块而悄悄确定关键选择。",
+            "id": "product-architect-exploration",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "当前阶段、已定决定及其来源",
+              "真正改变路线的未知、选项/取舍和下一验证；无新增决定时说明已有依据"
+            ],
+            "blocking": true
+          },
+          {
+            "field": "experienceDesign",
+            "criterion": "complete_design / delivery_slicing 或明确交付体验设计时适用：从当前来源逐一回放不同角色的任务，说明触发、权限、动作、反馈、结果、退出与失败恢复；共享流程可复用，但不能抹掉不同责任。探索阶段允许轮廓与有影响说明的未知。",
+            "rejectWhen": "将权限、动作或目标不同的角色合成一个无法实际走通的流程；只有通用状态名，无法说明用户会看到什么及如何恢复。不能只因角色共用流程或文本重复就拒收。",
+            "id": "product-architect-experience-design",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "源材料中的业务角色/用户结果与当前旅程映射",
+              "实际场景的开始条件、动作、可观察反馈/结果及失败恢复；探索期注明尚未确定部分"
+            ],
+            "blocking": true
+          },
+          {
+            "field": "deliverySlices",
+            "criterion": "仅设计已定且本轮要求拆分交付时适用：逐项回放completionDemo和验收的实际动作，在当前工单及methodInputs中定位负责人、操作、当前输入来源或其生产任务、真实副作用范围和观察证据；前置产物按版本可取得，支持任务以真实消费者验收。探索或纯设计阶段可保留未定项，不强制完整工单。",
+            "rejectWhen": "动作只出现在演示/验收却无人执行；任务输入只做审计却承诺恢复/重放；回滚所需版本只有历史报告或不存在且无生产责任；脚本真实报告/数据库写入超出所列范围；消费者未等待当前输入。公共程序可引用，但须绑定具体参数、来源与观察，不能按关键词或字段数自动判定。",
+            "id": "product-architect-delivery-slices",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "演示和验收每项实际动作到当前工单、方法输入、执行责任和证据去向的回读",
+              "输入版本的当前可用证据；缺失输入的生产任务、来源核验与阻塞依赖",
+              "实际脚本/API的读写位置、范围和副作用；未观察动作与未满足前置"
+            ],
+            "blocking": true
+          },
+          {
+            "field": "productDesign",
+            "criterion": "仅本轮涉及软件设计时适用，复用同一designId/revision：架构来源和约束落到模块、状态、接口责任、实际任务动作和验收；沿跨模块场景核输入可用性、生产者/消费者与副作用相容。截图、报告、教学材料等读取当前产物的任务须依赖该生产任务。exploration可保留未知；小改动可引用既有设计。",
+            "rejectWhen": "引用有效却不能指向当前可用产物；唯一写入者与实际变更责任矛盾；任务只承接部分演示动作；消费者只依赖接口但遗漏本轮数据或文档生产者；两层PRD重复目标却未形成可实施规格。不能据结构helper通过接受专业质量，也不能要求无关任务统一串行。",
+            "id": "product-architect-product-design",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "同一设计的架构依据、模块规格与实际当前输入",
+              "关键交接的输入来源、版本/文件可用性、生产者/消费者和真实读写责任",
+              "原需求/具体验收/演示动作到工单的双向回读；当前阶段缺口及其下一验证"
             ],
             "blocking": true
           },
@@ -333,6 +462,42 @@
             "evidenceRequired": [
               "独立宿主观察记录或明确未验证",
               "模板安装/合同检查与真实运行的区分"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "product-architect-projectcontext",
+            "field": "projectContext",
+            "criterion": "保留用户、价值类型、阶段、领域和项目约束，技术取舍由实际目标推导。",
+            "rejectWhen": "仅凭DAU、LTV或收费标签自动选择技术栈，或内部/开源探索强制收入门。",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "当前项目事实与设计决定",
+              "实际研究或能力差异产物；未运行项单列"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "product-architect-researchevaluation",
+            "field": "researchEvaluation",
+            "criterion": "实际消费研究中的当前版本、机制比较、反证和小实验结果，绑定本次设计决定与重开条件。",
+            "rejectWhen": "只列来源/热门项目或复制PPT，未说明哪个发现改变哪个选择。",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "当前项目事实与设计决定",
+              "实际研究或能力差异产物；未运行项单列"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "product-architect-projectcapabilityrequirements",
+            "field": "projectCapabilityRequirements",
+            "criterion": "为长期项目从全局基底创建或原地迭代独立专业包，职责、领域差异、证据、工具输入和验收均可定位。",
+            "rejectWhen": "直接用全局泛化专家代替项目能力，仅改角色名，或把需求当文件已创建和已加载。",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "当前项目事实与设计决定",
+              "实际研究或能力差异产物；未运行项单列"
             ],
             "blocking": true
           }
