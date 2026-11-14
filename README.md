@@ -41,7 +41,9 @@ cd Kim_Service
 **输入 → 输出：** 业务目标＋可读取资料＋选定方法 → 可编辑产物＋计算或操作依据＋逐项检查＋下一步。先看下面完整流程，再按自己的客户端接入；首次任务直接读取方法即可。
 
 <p align="center">
-  <img src="docs/images/service-system-panorama.zh-CN.svg" alt="Kim Service 任务全景：目标与资料进入任务浏览器，按需经 Meta_Kim 组合 Agent、Skill、Hook、Tool 方法，完整请求交给当前 AI 客户端执行，真实产物通过核验后交付；紫线退回相关工作，橙线仅处理必要选择，虚线由宿主写入事项与交付记录" width="1200">
+  <a href="docs/images/service-system-panorama.zh-CN.svg"><img src="docs/images/service-system-panorama.zh-CN.svg" alt="Kim Service 任务全景：目标与资料进入任务浏览器，按需经 Meta_Kim 组合 Agent、Skill、Hook、Tool 方法，完整请求交给当前 AI 客户端执行，真实产物通过核验后交付；紫线退回相关工作，橙线仅处理必要选择，虚线由宿主写入事项与交付记录" width="1000"></a>
+  <br>
+  <a href="docs/images/service-system-panorama.zh-CN.svg">打开原图</a>
 </p>
 
 从顶部的目标与资料进入，沿深色箭头看方法如何组成请求、客户端如何执行、成果如何核验。复杂任务可接入 Meta_Kim；紫线把问题送回相关任务，橙线只在必要时请你补充或决定，灰色虚线指向宿主持有的记录。客户端、模型和工具分别配置，Service 提供方法、资料、示例和检查标准。
@@ -62,7 +64,9 @@ cd Kim_Service
 它们可以这样配合：专业 Agent 判断任务该怎么做，相关 Skill 提供某一步的做法，Hook 帮助表达需求，工具承担实际操作。你只需要加载与当前任务有关的部分。方法包中的说明、参考资料、案例和检查脚本都随源码保留，成果可以追溯到用了什么材料、做过什么检查。
 
 <p align="center">
-  <img src="docs/images/animated-service-capabilities.zh-CN.svg" alt="动态能力思维导图：围绕未来一年现金够不够的目标，先选择财务建模 Agent，按需补充 Skill、Hook 和 Tool，再组成包含目标、材料、方法和检查要求的请求" width="900">
+  <a href="docs/images/animated-service-capabilities.zh-CN.svg"><img src="docs/images/animated-service-capabilities.zh-CN.svg" alt="动态能力思维导图：围绕未来一年现金够不够的目标，先选择财务建模 Agent，按需补充 Skill、Hook 和 Tool，再组成包含目标、材料、方法和检查要求的请求" width="520"></a>
+  <br>
+  <a href="docs/images/animated-service-capabilities.zh-CN.svg">打开原图</a>
 </p>
 
 **先确定要交付什么，再选择这次需要的组合。** 做一次经营预测，可以直接让 AI 读取财务建模方法；要细化压力情景，再读取相应 Skill。Hook 适合反复整理工作要求，Tool 适合接入已经具备的执行工具。安装哪个、加载多少，取决于本次任务和客户端，不需要把全部组件一次全装上。
@@ -163,13 +167,17 @@ python -m app.main --port 4180
 先拿合成数据练一遍，再替换成自己的业务。这个例子会把选任务、准备材料、实际执行、交付检查和下一轮调整连起来。
 
 <p align="center">
-  <img src="docs/images/animated-service-delivery.zh-CN.svg" alt="经营预测动态流程：搜索任务、核对材料与示例、选用方法、由 AI 客户端计算、打开文件复算、保留成果继续迭代；回款假设改变后返回计算步骤" width="900">
+  <a href="docs/images/animated-service-delivery.zh-CN.svg"><img src="docs/images/animated-service-delivery.zh-CN.svg" alt="经营预测动态流程：搜索任务、核对材料与示例、选用方法、由 AI 客户端计算、打开文件复算、保留成果继续迭代；回款假设改变后返回计算步骤" width="440"></a>
+  <br>
+  <a href="docs/images/animated-service-delivery.zh-CN.svg">打开原图</a>
 </p>
 
 **第 1 步：从一句话找到对应任务。** 先把问题说清楚：“明年利润看着在涨，现金够不够？”在任务浏览器搜索“经营预测”，打开财务建模。浏览器按任务说明、输入输出和已有别名检索，你可以先比较任务卡上的“你提供”和“会交付”，判断它是否适合这次问题。
 
 <p align="center">
-  <img src="docs/images/task-browser.png?v=V1.13" alt="第一步的真实界面：在 Kim Service 任务浏览器搜索工作目标，比较任务卡，打开财务建模的详情" width="900">
+  <a href="docs/images/task-browser.png?v=V1.13"><img src="docs/images/task-browser.png?v=V1.13" alt="第一步的真实界面：在 Kim Service 任务浏览器搜索工作目标，比较任务卡，打开财务建模的详情" width="900"></a>
+  <br>
+  <a href="docs/images/task-browser.png?v=V1.13">打开原图</a>
 </p>
 
 **第 2 步：先看示例，再核对自己的材料。** 任务详情列出所需输入、交付内容、方法入口和示例。第一次使用仓库中的 `agents/financial-modeler/examples/operating-forecast/sample-data.js`，其中已经声明销量、价格、成本、期初资金、回款比例和设备支出，金额是 CNY，全部为合成示例。做自己的业务时，用实际报表与假设替换，明确期间、币种和缺失项。材料栏用于说明文件在哪里，还需要让 AI 能实际读取这些文件。
@@ -177,7 +185,9 @@ python -m app.main --port 4180
 **第 3 步：选用方法，把这次要求交给 AI。** 选择你正在使用的 AI 客户端，目标写成：“比较未来 12 个月的基础、乐观、保守情景，找出现金紧张的月份，交付可编辑输入、月表和一份说明。”再填材料位置。页面把方法入口、输入和交付要求整理成完整请求，你可以展开修改，然后点击复制，粘贴到已经打开仓库的客户端。单次任务直接读取方法就能开始；准备反复使用时，再按下文的 DSH、ZCode 或当前客户端方式安装。
 
 <p align="center">
-  <img src="docs/images/task-request.png?v=V1.13" alt="填写好的财务建模任务：目标、合成样例资料、使用环境，以及可编辑和复制的完整请求" width="900">
+  <a href="docs/images/task-request.png?v=V1.13"><img src="docs/images/task-request.png?v=V1.13" alt="填写好的财务建模任务：目标、合成样例资料、使用环境，以及可编辑和复制的完整请求" width="760"></a>
+  <br>
+  <a href="docs/images/task-request.png?v=V1.13">打开原图</a>
 </p>
 
 **第 4 步：让 AI 按方法处理，看到实际计算。** 这时 AI 才开始读取材料、统一口径、连接收入与现金、比较三种情景。你可以在完整请求后补上下面这段，把执行和结果说清楚：
@@ -193,7 +203,9 @@ python -m app.main --port 4180
 **第 5 步：打开成果，动手验收。** 下面是随仓库提供的可操作样板，用来体验这种交付。在线打开，或在本地打开 `agents/financial-modeler/examples/operating-forecast/index.html`；修改售价、销量或回款比例，查看三种情景与月末现金曲线，下载输入、结果 JSON 和月表 CSV。
 
 <p align="center">
-  <img src="docs/images/operating-forecast-example.png?v=V1.13" alt="12 个月经营预测成果：可编辑的经营假设、三种情景和月末现金曲线" width="900">
+  <a href="docs/images/operating-forecast-example.png?v=V1.13"><img src="docs/images/operating-forecast-example.png?v=V1.13" alt="12 个月经营预测成果：可编辑的经营假设、三种情景和月末现金曲线" width="900"></a>
+  <br>
+  <a href="docs/images/operating-forecast-example.png?v=V1.13">打开原图</a>
 </p>
 
 **[亲手试试经营预测](https://kimyx0207.github.io/Kim_Service/agents/financial-modeler/examples/operating-forecast/index.html?lang=zh-CN)**
@@ -211,7 +223,9 @@ python -m app.main --port 4180
 给 AI 当前页面、品牌色、实际文案、使用设备和技术限制；第一次可使用 `agents/design-system-designer/examples/service-console/` 下的样板。请它读取设计系统角色的 `AGENT.md` 和所引用的方法，整理颜色、字号、间距的共同规则，定义组件状态，再在这个页面里实现与检查。
 
 <p align="center">
-  <img src="docs/images/design-system-example.png?v=V1.13" alt="可编辑的预约台设计系统：主题与密度控制、预约表单和示例预约列表" width="900">
+  <a href="docs/images/design-system-example.png?v=V1.13"><img src="docs/images/design-system-example.png?v=V1.13" alt="可编辑的预约台设计系统：主题与密度控制、预约表单和示例预约列表" width="900"></a>
+  <br>
+  <a href="docs/images/design-system-example.png?v=V1.13">打开原图</a>
 </p>
 
 **[亲手试试预约台](https://kimyx0207.github.io/Kim_Service/agents/design-system-designer/examples/service-console/index.html?lang=zh-CN)**
@@ -233,7 +247,9 @@ python -m app.main --port 4180
 **多个相互衔接的任务，可以配合 Meta_Kim。** 比如把预约台做成一个产品：先确定用户需求和功能范围，再统一设计、实现前后端、测试交付，下一次对话还要接着改。Meta_Kim 负责组织这些步骤、分配能够并行的工作、保留决定与进度、审查交接；Kim Service 提供每一步需要的专业方法和资料，AI 客户端承担实际操作。
 
 <p align="center">
-  <img src="docs/images/animated-service-collaboration.zh-CN.svg" alt="预约产品动态编排：Meta 先形成系统模块 PRD，再细化每个模块；独立页面与接口工作并行，中途待确认字段只阻塞相关接口，补齐后汇合验证并保存下一步" width="900">
+  <a href="docs/images/animated-service-collaboration.zh-CN.svg"><img src="docs/images/animated-service-collaboration.zh-CN.svg" alt="预约产品动态编排：Meta 先形成系统模块 PRD，再细化每个模块；独立页面与接口工作并行，中途待确认字段只阻塞相关接口，补齐后汇合验证并保存下一步" width="520"></a>
+  <br>
+  <a href="docs/images/animated-service-collaboration.zh-CN.svg">打开原图</a>
 </p>
 
 **看这张图时，顺着同一个预约项目走。** 两轮设计逐步展开同一份 PRD：第一轮先确定预约、时段、记录等模块及共同约定，第二轮逐个写清输入字段、页面状态、接口和验收要求。Meta 在调研时发现已有方法，在设计时选定本轮需要的组合：页面可用设计系统、前端方法，接口可用后端与数据方法。进入执行阶段，再把选定的方法和具体工作交给当前客户端的执行者。
@@ -263,7 +279,9 @@ Service 为这条链提供可读取的专业方法、材料说明和检查标准
 ## 一件公司的事，跨会话、跨成员继续
 
 <p align="center">
-  <img src="docs/images/service-work-handoff.zh-CN.svg" alt="公司事项交接图：宿主保留同一 Work 的目标、权限、来源、有效决定和采用版本；本轮工作形成产物并独立核验，仅未决关键选择需要人参与；产出、验证、采用、效果各自留证，接手者回到同一事项，真实反馈经复核形成待审方法候选" width="1200">
+  <a href="docs/images/service-work-handoff.zh-CN.svg"><img src="docs/images/service-work-handoff.zh-CN.svg" alt="公司事项交接图：宿主保留同一 Work 的目标、权限、来源、有效决定和采用版本；本轮工作形成产物并独立核验，仅未决关键选择需要人参与；产出、验证、采用、效果各自留证，接手者回到同一事项，真实反馈经复核形成待审方法候选" width="1000"></a>
+  <br>
+  <a href="docs/images/service-work-handoff.zh-CN.svg">打开原图</a>
 </p>
 
 先看顶部由宿主持有的 Work，再顺着本轮执行、核验、采用记录和交接包回到同一事项。底部四项是独立事实：产出 v2、验证通过、继续采用 v1 可以同时成立；采用未定就保留待定，没有真实使用观察就保留未知。只有必要的未决关键选择进入橙色分支，已有授权和有效决定继续沿用。反馈经过复核和适用性判断后才用于后续任务。
@@ -271,7 +289,9 @@ Service 为这条链提供可读取的专业方法、材料说明和检查标准
 公司现在只有一个人，也需要保留下一位同事能接住的工作现场。宿主把目标、来源、当前采用版和决定挂在同一个 **Work（业务事项）** 上；会话和执行可以有很多次，Service 沿用这个引用提供专业方法。公司资产、个人偏好和敏感决策的可见范围由宿主已有授权决定。
 
 <p align="center">
-  <img src="docs/images/animated-service-work-context.zh-CN.svg" alt="公司事项、交付回执、采用与经验的动态说明" width="900">
+  <a href="docs/images/animated-service-work-context.zh-CN.svg"><img src="docs/images/animated-service-work-context.zh-CN.svg" alt="公司事项、交付回执、采用与经验的动态说明" width="460"></a>
+  <br>
+  <a href="docs/images/animated-service-work-context.zh-CN.svg">打开原图</a>
 </p>
 
 | 已有方法 | 怎样帮助接续 |
@@ -422,7 +442,9 @@ Write-Host (Join-Path $KimOutput 'kim-financial-modeler.zip')
 **分阶段图解的实际输出。** 下面由正式 helper 生成的合成示例，展示同一事项如何从资料进入模块设计，再到核验与采纳；紫色回路说明局部修订。顶部和底部节点居中，三个阶段既能合起来看，也能逐步展开说明。
 
 <p align="center">
-  <img src="docs/images/visual-helper.zh-CN.svg" alt="合成示例的三阶段四节点流程：同一 Work 与资料进入目标阶段，模块 PRD 接着细化为模块详细设计，再核验交付回执与采纳；紫色局部修订回路从回执返回详细设计，顶部和底部节点居中；这张说明图不代表任务已经实际执行" width="1200">
+  <a href="docs/images/visual-helper.zh-CN.svg"><img src="docs/images/visual-helper.zh-CN.svg" alt="合成示例的三阶段四节点流程：同一 Work 与资料进入目标阶段，模块 PRD 接着细化为模块详细设计，再核验交付回执与采纳；紫色局部修订回路从回执返回详细设计，顶部和底部节点居中；这张说明图不代表任务已经实际执行" width="1120"></a>
+  <br>
+  <a href="docs/images/visual-helper.zh-CN.svg">打开原图</a>
 </p>
 
 [下载中文交互 HTML](docs/examples/visual-helper/zh-CN/storyboard.html?raw=1) · [文字替代说明](docs/examples/visual-helper/zh-CN/alternative.txt) · [对应输入 JSON](docs/examples/visual-helper/zh-CN/input.json)
@@ -459,7 +481,9 @@ node scripts/service-capabilities.mjs export
 ## 应用、数据与展示的边界
 
 <p align="center">
-  <img src="docs/images/animated-service-layers.zh-CN.svg" alt="从组件正本到数据目录、应用请求、展示页面，再交给所选客户端执行" width="900">
+  <a href="docs/images/animated-service-layers.zh-CN.svg"><img src="docs/images/animated-service-layers.zh-CN.svg" alt="从组件正本到数据目录、应用请求、展示页面，再交给所选客户端执行" width="520"></a>
+  <br>
+  <a href="docs/images/animated-service-layers.zh-CN.svg">打开原图</a>
 </p>
 
 **组件定义是方法的正本，页面是这些事实的展示。** 修改专业内容、任务交互或客户端选项时，各自进入对应位置，再生成目录和页面。

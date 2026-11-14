@@ -41,7 +41,9 @@ Check periods, currency, units, and cash reconciliation. List actual output path
 **Input → output:** business goal + readable materials + selected method → editable artifacts + calculation or operation evidence + checks + next step. The complete workflow follows below; choose your client integration afterward. A first task can read the method directly.
 
 <p align="center">
-  <img src="docs/images/service-system-panorama.en.svg" alt="Kim Service task panorama: goals and materials enter the task browser; optional Meta_Kim orchestration combines Agent, Skill, Hook and Tool methods into a request; the current AI client produces real artifacts and verifies the handoff, with repair paths, necessary human choices and host-owned Work records" width="1200">
+  <a href="docs/images/service-system-panorama.en.svg"><img src="docs/images/service-system-panorama.en.svg" alt="Kim Service task panorama: goals and materials enter the task browser; optional Meta_Kim orchestration combines Agent, Skill, Hook and Tool methods into a request; the current AI client produces real artifacts and verifies the handoff, with repair paths, necessary human choices and host-owned Work records" width="1000"></a>
+  <br>
+  <a href="docs/images/service-system-panorama.en.svg">Open full-size image</a>
 </p>
 
 Start with the goal and materials at the top, then follow the dark arrows through method selection, the complete request, client execution and delivery checks. Meta_Kim is optional for complex work. Purple paths return issues to the affected task; orange paths request human input only when needed; dashed gray paths lead to records owned by the host. The client, model and tools are configured separately. Service supplies methods, references, examples and check criteria.
@@ -62,7 +64,9 @@ Financial modeling starts with periods, currency, and units, then connects sales
 Together, the specialist Agent supplies the professional method, Skills support particular steps, the Hook helps express the request, and tools perform the operations. Load the parts relevant to the task. Instructions, references, examples, and check scripts stay with the source, so a result can be traced to the materials and checks behind it.
 
 <p align="center">
-  <img src="docs/images/animated-service-capabilities.en.svg" alt="Animated capability map: a cash-forecast goal leads to a financial-modeling Agent, relevant Skills, optional Hook and Tool configuration, and a request containing the goal, materials, method, and checks" width="900">
+  <a href="docs/images/animated-service-capabilities.en.svg"><img src="docs/images/animated-service-capabilities.en.svg" alt="Animated capability map: a cash-forecast goal leads to a financial-modeling Agent, relevant Skills, optional Hook and Tool configuration, and a request containing the goal, materials, method, and checks" width="520"></a>
+  <br>
+  <a href="docs/images/animated-service-capabilities.en.svg">Open full-size image</a>
 </p>
 
 **Start with the deliverable, then choose the combination this task needs.** For one operating forecast, ask the AI to read the financial-modeling method directly. Add the relevant Skill when you need more detailed stress scenarios. The Hook helps with recurring request preparation; the Tool connects available execution tools. Choose what to install and load based on the task and client. You can start with just the method you need.
@@ -163,13 +167,17 @@ After getting the source as described above, follow these two complete examples 
 Start with the synthetic data, then replace it with your own business inputs. This example connects task selection, materials, execution, delivery checks, and the next revision.
 
 <p align="center">
-  <img src="docs/images/animated-service-delivery.en.svg" alt="Animated forecast workflow: search, inspect materials and examples, choose a method, calculate in the AI client, open and verify files, then keep the result for the next revision; changed collection assumptions return to calculation" width="900">
+  <a href="docs/images/animated-service-delivery.en.svg"><img src="docs/images/animated-service-delivery.en.svg" alt="Animated forecast workflow: search, inspect materials and examples, choose a method, calculate in the AI client, open and verify files, then keep the result for the next revision; changed collection assumptions return to calculation" width="440"></a>
+  <br>
+  <a href="docs/images/animated-service-delivery.en.svg">Open full-size image</a>
 </p>
 
 **Step 1: turn a question into a task choice.** Start with “Profit appears to be growing next year. Will we have enough cash?” Search the task browser for “financial-modeler” and open financial modeling. The browser searches task descriptions, inputs, outputs, and existing aliases. Compare each card's required inputs and promised outputs to see whether it fits your question.
 
 <p align="center">
-  <img src="docs/images/task-browser.en.png?v=V1.13" alt="The actual first-step interface: search Kim Service by task, compare capability cards, and open financial-modeling details" width="900">
+  <a href="docs/images/task-browser.en.png?v=V1.13"><img src="docs/images/task-browser.en.png?v=V1.13" alt="The actual first-step interface: search Kim Service by task, compare capability cards, and open financial-modeling details" width="900"></a>
+  <br>
+  <a href="docs/images/task-browser.en.png?v=V1.13">Open full-size image</a>
 </p>
 
 **Step 2: inspect the example and check your materials.** Task details list the required inputs, outputs, method entry point, and examples. For the first attempt, use `agents/financial-modeler/examples/operating-forecast/sample-data.js`. It declares sales volume, prices, costs, opening balances, collection assumptions, and equipment spending. Amounts are in CNY, and all data is synthetic. For your business, replace it with actual statements and assumptions, stating the periods, currency, and missing items. The materials field describes where files are; give the AI actual access to those files too.
@@ -177,7 +185,9 @@ Start with the synthetic data, then replace it with your own business inputs. Th
 **Step 3: choose the method and give the request to your AI.** Select your current AI client. Set the goal to “Compare base, upside, and downside scenarios for the next 12 months, identify cash-pressure months, and deliver editable inputs, a monthly table, and an explanation.” Add the material locations. The page assembles the entry point, inputs, and output requirements into an editable request. Review it, copy it, and paste it into the client where you opened the repository. Direct reading works for a single task. For repeated use, install the entry through DSH, ZCode, or the supported mechanism described below for your client.
 
 <p align="center">
-  <img src="docs/images/task-request.en.png?v=V1.13" alt="Prepared financial-modeling task in English, including the goal, synthetic sample materials, AI client, and editable request" width="900">
+  <a href="docs/images/task-request.en.png?v=V1.13"><img src="docs/images/task-request.en.png?v=V1.13" alt="Prepared financial-modeling task in English, including the goal, synthetic sample materials, AI client, and editable request" width="760"></a>
+  <br>
+  <a href="docs/images/task-request.en.png?v=V1.13">Open full-size image</a>
 </p>
 
 **Step 4: let the AI follow the method and run the calculations.** It now reads the materials, aligns the data, connects income and cash, and compares scenarios. You can append this to the complete request to make execution and outputs explicit:
@@ -193,7 +203,9 @@ List the check results, where each file can be opened, and unfinished items. Rec
 **Step 5: open the result and check it yourself.** The interactive example below is supplied with the repository to demonstrate this kind of deliverable. Open it online, or open `agents/financial-modeler/examples/operating-forecast/index.html` locally. Change a price, sales volume, or collection assumption; inspect the scenarios and monthly cash curve; then download the inputs, result JSON, and monthly CSV.
 
 <p align="center">
-  <img src="docs/images/operating-forecast-example.en.png?v=V1.13" alt="12-month operating forecast in English, showing editable assumptions, three scenarios, and monthly cash balances" width="900">
+  <a href="docs/images/operating-forecast-example.en.png?v=V1.13"><img src="docs/images/operating-forecast-example.en.png?v=V1.13" alt="12-month operating forecast in English, showing editable assumptions, three scenarios, and monthly cash balances" width="900"></a>
+  <br>
+  <a href="docs/images/operating-forecast-example.en.png?v=V1.13">Open full-size image</a>
 </p>
 
 **[Try the operating forecast](https://kimyx0207.github.io/Kim_Service/agents/financial-modeler/examples/operating-forecast/index.html?lang=en)**
@@ -211,7 +223,9 @@ Describe the task: “Unify this booking console's buttons, form, and list. Supp
 Give the AI the current screen, brand colors, real copy, target devices, and technical constraints. For a first attempt, use the sample under `agents/design-system-designer/examples/service-console/`. Ask it to read the design-system role's `AGENT.md` and referenced methods, organize shared color, typography, and spacing rules, define component states, then implement and check them in this page.
 
 <p align="center">
-  <img src="docs/images/design-system-example.en.png?v=V1.13" alt="Editable booking design system in English, with theme and density controls, a booking form, and sample records" width="900">
+  <a href="docs/images/design-system-example.en.png?v=V1.13"><img src="docs/images/design-system-example.en.png?v=V1.13" alt="Editable booking design system in English, with theme and density controls, a booking form, and sample records" width="900"></a>
+  <br>
+  <a href="docs/images/design-system-example.en.png?v=V1.13">Open full-size image</a>
 </p>
 
 **[Try the booking console](https://kimyx0207.github.io/Kim_Service/agents/design-system-designer/examples/service-console/index.html?lang=en)**
@@ -233,7 +247,9 @@ When large materials exceed the inline budget, the request uses file references 
 **For several connected tasks, combine it with Meta_Kim.** Turning the booking console into a product involves understanding users and scope, agreeing on a design, building frontend and backend behavior, testing the delivery, and continuing in later sessions. Meta_Kim organizes those steps, assigns work that can run in parallel, retains decisions and progress, and reviews handoffs. Kim Service supplies the professional methods and references for each step; the AI client performs the operations.
 
 <p align="center">
-  <img src="docs/images/animated-service-collaboration.en.svg" alt="Animated booking-product coordination: Meta drafts the system and module PRD, details each module, runs independent page and interface work in parallel, pauses only an interface affected by a new field, then joins and verifies the result" width="900">
+  <a href="docs/images/animated-service-collaboration.en.svg"><img src="docs/images/animated-service-collaboration.en.svg" alt="Animated booking-product coordination: Meta drafts the system and module PRD, details each module, runs independent page and interface work in parallel, pauses only an interface affected by a new field, then joins and verifies the result" width="520"></a>
+  <br>
+  <a href="docs/images/animated-service-collaboration.en.svg">Open full-size image</a>
 </p>
 
 **Follow one booking project through the diagram.** Two design passes develop the same PRD. The first defines modules such as booking, time slots, and records, along with their shared contracts. The second details each module's inputs, page states, interfaces, and acceptance checks. Meta discovers available methods during research and selects the combination during design: design-system and frontend methods for the page, backend and data methods for the interface. Execution then passes the selected methods and concrete work to the current client's execution capabilities.
@@ -263,7 +279,9 @@ Use [Meta_Kim](https://github.com/KimYx0207/Meta_Kim#readme) when you need that 
 ## Keep company work continuous across conversations and people
 
 <p align="center">
-  <img src="docs/images/service-work-handoff.en.svg" alt="Company Work handoff: the host retains context, access, sources, valid decisions and adopted versions; real execution and independent verification lead to adoption records and a handoff; only a necessary open choice calls for a human, while production, verification, adoption and impact remain separate observations" width="1200">
+  <a href="docs/images/service-work-handoff.en.svg"><img src="docs/images/service-work-handoff.en.svg" alt="Company Work handoff: the host retains context, access, sources, valid decisions and adopted versions; real execution and independent verification lead to adoption records and a handoff; only a necessary open choice calls for a human, while production, verification, adoption and impact remain separate observations" width="1000"></a>
+  <br>
+  <a href="docs/images/service-work-handoff.en.svg">Open full-size image</a>
 </p>
 
 Begin with the host-owned Work at the top, then follow execution, verification, the adoption record and the handoff back to that same Work. The four observations below are independent: producing v2, passing verification and continuing to adopt v1 can all be true. Unresolved adoption stays pending; impact without real-use evidence stays unknown. Only a necessary open choice takes the orange branch; existing authority and valid decisions remain usable. Feedback is reviewed and checked for applicability before reuse in later work.
@@ -271,7 +289,9 @@ Begin with the host-owned Work at the top, then follow execution, verification, 
 A company with one operator still needs a working record that a future colleague can continue. The host attaches the goal, sources, adopted version and decisions to one **Work**, a long-lived business matter. Many conversations and runs can refer to it; Service supplies the professional methods. The host's existing permissions determine access to company assets, personal preferences and sensitive decisions.
 
 <p align="center">
-  <img src="docs/images/animated-service-work-context.en.svg" alt="Animated company Work, delivery receipt, adoption and experience flow" width="900">
+  <a href="docs/images/animated-service-work-context.en.svg"><img src="docs/images/animated-service-work-context.en.svg" alt="Animated company Work, delivery receipt, adoption and experience flow" width="440"></a>
+  <br>
+  <a href="docs/images/animated-service-work-context.en.svg">Open full-size image</a>
 </p>
 
 | Existing method | How it supports continuation |
@@ -422,7 +442,9 @@ Each of these five capabilities includes an executable script, input/output sche
 **Actual visual-explainer output.** This synthetic example was generated by the public helper. It follows one Work from source materials through module design to verification and adoption, with a purple return path for local revisions. The first and last nodes are centered; the three phases can be viewed together or explored one at a time.
 
 <p align="center">
-  <img src="docs/images/visual-helper.en.svg" alt="Synthetic flow with three phases and four nodes: one Work and its inputs lead to a module PRD, detailed module design, and delivery receipts and adoption; a purple local-revision loop returns from the receipt to the affected design, with centered first and last nodes; this diagram does not represent actual task execution" width="1200">
+  <a href="docs/images/visual-helper.en.svg"><img src="docs/images/visual-helper.en.svg" alt="Synthetic flow with three phases and four nodes: one Work and its inputs lead to a module PRD, detailed module design, and delivery receipts and adoption; a purple local-revision loop returns from the receipt to the affected design, with centered first and last nodes; this diagram does not represent actual task execution" width="1120"></a>
+  <br>
+  <a href="docs/images/visual-helper.en.svg">Open full-size image</a>
 </p>
 
 [Download the English interactive HTML](docs/examples/visual-helper/en/storyboard.html?raw=1) · [Text alternative](docs/examples/visual-helper/en/alternative.txt) · [Matching input JSON](docs/examples/visual-helper/en/input.json)
@@ -459,7 +481,9 @@ node scripts/service-capabilities.mjs export
 ## Application, data and presentation boundaries
 
 <p align="center">
-  <img src="docs/images/animated-service-layers.en.svg" alt="Component sources feed catalog data, application requests and the presentation layer before the chosen client executes" width="900">
+  <a href="docs/images/animated-service-layers.en.svg"><img src="docs/images/animated-service-layers.en.svg" alt="Component sources feed catalog data, application requests and the presentation layer before the chosen client executes" width="520"></a>
+  <br>
+  <a href="docs/images/animated-service-layers.en.svg">Open full-size image</a>
 </p>
 
 **Component definitions are the method source; the page presents those facts.** Edit professional content, request behavior or client options at its responsible source, then rebuild the catalog and page.
