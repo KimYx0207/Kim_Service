@@ -10,7 +10,7 @@ Kim Service is an open-source **library of professional methods for AI work**. Y
 
 You may know what you want without knowing which numbers a forecast must reconcile, which states a booking page needs, or how to compare supplier quotes. The methods make the work concrete: inspect materials and evidence, analyze or build the result, then check the actual delivery.
 
-The **V1.17 candidate on main** includes **58 specialist Agents, 32 Skills, 2 Hooks, and 2 Tools**: 94 components with **109 searchable task capabilities**. Choose one for the job in front of you, or combine several methods within a project. V1.17 packages await release verification of the paired Meta_Kim v3.14.0; the current published release is V1.16.
+The **V1.17 candidate on main** includes **58 specialist Agents, 32 Skills, 2 Hooks, and 2 Tools**: 94 components with **109 searchable task capabilities**. Choose one for the job in front of you, or combine several methods within a project. V1.17 is being prepared through the main-branch CI and package checks, paired with Meta_Kim v3.14.0; the published release is V1.16.
 
 **[Browse capabilities and prepare a request](https://kimyx0207.github.io/Kim_Service/?lang=en)** · **[Download the published V1.16 release](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.16)** · **[Browse V1.17 candidate source](https://github.com/KimYx0207/Kim_Service/tree/main)**
 
@@ -20,7 +20,7 @@ Browse **11 industries and 8 shared professional domains → role/job**, or sear
 
 If Service is already connected through Meta_Kim or your current client, describe your goal, material locations, and constraints directly in the conversation for your actual work project. The source setup below is for a first standalone connection.
 
-1. **Get the source.** Use the published V1.16 source for the released version, or run the two commands below to try the new methods in the V1.17 candidate.
+1. **Get the source.** Download the published version above, or use the two commands below to obtain the V1.17 candidate and try the new methods described here.
 2. **Make the files accessible to your AI.** Open `Kim_Service` in a project client such as Codex, Claude Code, Cursor, or Gemini CLI. If your work lives elsewhere, provide the full paths to both the method library and the task materials.
 3. **Describe the task directly.** In your AI client, say what you want to achieve, where the materials are, and what requirements apply. Ask it to find and read the appropriate complete method. To browse capabilities or prepare a request first, optionally open the catalog above or `docs/start.html` from the source checkout. The web page only prepares the request.
 4. **Open the delivery before calling it done.** Ask for file paths, checks actually performed, and unfinished items. Repair the affected step when a check fails, keeping the previous version.
@@ -363,7 +363,7 @@ In DSH, specialist Agent methods and Skills are discovered as native Skills, ret
 npm install --global @deepseek-ai/dsh@0.2.2-rc.1
 ```
 
-**Prepare the Service package.** The published V1.16 release provides its matching DSH package. `Kim_Service-DSH-V1.17.zip` will be available after V1.17 is released; you can currently build from the candidate source. Replace the output below with your own full path; the directory must not exist yet:
+**Prepare the Service package.** `Kim_Service-DSH-V1.17.zip` becomes available after V1.17 publication; you can also build it from the candidate source. The published V1.16 release provides its matching DSH package. Replace the output below with your own full path; the directory must not exist yet:
 
 ```sh
 node scripts/build-dsh-package.mjs --output "/absolute/path/kim-service-dsh"
@@ -398,7 +398,7 @@ Use the Git root if the project has a repository, or the project directory if it
 
 ### ZCode
 
-The published V1.16 release provides its matching ZCode package. **`Kim-ZCode-V1.17.zip`** will be available after V1.17 is released, with planned Kim plugin version **1.17.0**. Once you have a published package, extract it fully into a permanent location. Select the directory containing `marketplace.json` and keep all its plugin and resource folders.
+**`Kim-ZCode-V1.17.zip`** becomes available after V1.17 publication, with Kim plugin version **1.17.0**. The published V1.16 release provides its matching ZCode package. Once you have a published package, extract it fully into a permanent location. Select the directory containing `marketplace.json` and keep all its plugin and resource folders.
 
 Open a project in ZCode, then go to **Settings → Plugins → Create → Add marketplace** and choose that local directory. Install and enable `kim-service-local` from the personal source; add `meta-kim-local` if you also want Meta_Kim's task coordination. Inspect the installed roles and Skills in the plugin details, find a role such as `kim-service-local:financial-modeler` in the subagent list, and start with your goal and materials.
 
@@ -419,7 +419,7 @@ For an update, preserve personal changes and replace the original marketplace di
 
 The current beta integration lets you **select one Agent or Skill, export its complete Skill ZIP, and import it in the client**. Methods, knowledge, examples, scripts, and licenses stay together; an Agent is used as the professional method inside the Skill.
 
-**Prepare the sources.** Install Node.js **22.13.0 or later** and check it with `node --version`. The current published pair is [Service V1.16](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.16) and [Meta_Kim v3.13.0](https://github.com/KimYx0207/Meta_Kim/releases/tag/v3.13.0); download and extract both completely. The V1.17 candidate is intended to pair with Meta_Kim v3.14.0, which is still awaiting release verification. In a terminal at the selected Kim_Service root, replace the Meta path below with the matching source directory's actual absolute path. The output must be a new directory that does not yet exist, inside an existing parent directory. This exports financial modeling:
+**Prepare the sources.** Install Node.js **22.13.0 or later** and check it with `node --version`. Pair the V1.17 candidate source with Meta_Kim v3.14.0 candidate source. The published pair is [Service V1.16](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.16) and [Meta_Kim v3.13.0](https://github.com/KimYx0207/Meta_Kim/releases/tag/v3.13.0). In a terminal at the selected Kim_Service root, replace the Meta path below with the matching source directory's actual absolute path. The output must be a new directory inside an existing parent directory. This exports financial modeling:
 
 ```sh
 node scripts/build-desktop-skill-package.mjs --meta-root "/absolute/path/Meta_Kim" --host workbuddy --component financial-modeler --output "/absolute/path/new-workbuddy-finance"

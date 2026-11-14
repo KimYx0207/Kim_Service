@@ -23,7 +23,7 @@ Technology Option Evaluation 0.1.0 and Knowledge Architecture Evaluation 0.1.0 j
 
 Use the complete V1.17 source or package. New UX project-context inputs remain optional for existing standalone calls; Meta_Kim uses them for project-specific work. The ZCode package pairs Meta_Kim 3.14.0 with Kim 1.17.0, using V1.16 for upgrade comparison.
 
-[The verification record](docs/verification/project-specialization-20261115.md) separates deterministic checks, independently copied packages and observed forward trials. Authored cases remain synthetic; customer outcomes require observations from actual use.
+[Verification](docs/verification/project-specialization-20261115.md) records 243 passing root tests with one existing skip, successful validation of 137 files across 94 components, 27 enterprise-example regressions, and the completed repository and enterprise-knowledge CI runs. Publication uses the exact main commit and checks the source, DSH and ZCode packages against their declared sources. Native-host acceptance and actual user outcomes retain their separate scope.
 
 ### Source revisions
 
