@@ -44,4 +44,6 @@ Local verification of the reviewed source:
 - English catalog and release checks: **18/18** passed after adding the two new task translations and reviewing the changed design-system fields.
 - All six newly localized diagrams across the two repositories were rendered and visually inspected.
 
-Component provenance binds the exact reviewed source commit rather than a moving branch. [Main CI](https://github.com/KimYx0207/Kim_Service/actions/workflows/validate.yml) checks generated freshness, regressions on three operating systems and browser behavior. The [V1.17 release](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.17) publishes only after its exact main source passes the release workflow and includes the download checksums.
+Component provenance binds the exact reviewed source commit rather than a moving branch. The reviewed main commit `e5b3d894bcdbbced25c13395381e81d6f3990b21` passed [Validate repository run 43637237509](https://github.com/KimYx0207/Kim_Service/actions/runs/43637237509), including Windows, macOS, Linux and actual browser interactions.
+
+**V1.17 has not been published.** Its declared pair is Meta_Kim v3.14.0, whose full release verification remains incomplete. The available published pair is Service V1.16 and Meta_Kim v3.13.0. The additional full-corpus enterprise-knowledge workflow is separate from the checks above; no result is claimed here while it is still running. Publication and exact download checksums remain pending.
