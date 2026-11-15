@@ -6,3 +6,5 @@
 - Added serial story/continuity, localization/rights, accepted-minute economics and bounded pilot acceptance.
 - Added pinned primary-source/GitHub research, synthetic worked/rejection cases and a pure arithmetic helper.
 - Scope remains authored method and local checks; no upstream tests, paid generation, actual audience evaluation or host invocation is claimed.
+
+Source: `canonical:agents/short-drama-strategist`; authored in this repository, with research scope in `PROVENANCE.md`.

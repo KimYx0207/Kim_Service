@@ -6,3 +6,5 @@
 - 记录实际官方查询及Tolgee/PostHog固定commit源码、测试、依赖/许可阅读范围。
 - 提供完整合成案例、反例、交付模板与同币种单位贡献/容量复算。
 - 合同与计算检查限于新包；不宣称真实市场、原生宿主或上游测试已验证。
+
+Source: `canonical:agents/global-expansion-strategist`; authored in this repository, with research scope in `PROVENANCE.md`.

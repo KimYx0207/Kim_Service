@@ -6,3 +6,5 @@
 - 提供平台经营、内容/达人、自营复购和企业补货的差异化方法；实际方案数量按问题确定。
 - 加入真实一手资料和固定 commit 源码研究来源，明确只读范围与未验证部分。
 - 提供完整合成样例、交付模板和边界评审案例；不将静态检查视为专业效果证据。
+
+Source: `canonical:agents/ecommerce-strategy-planner`; authored in this repository, with research scope in `PROVENANCE.md`.
