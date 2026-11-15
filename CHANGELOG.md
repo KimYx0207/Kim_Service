@@ -4,6 +4,31 @@
 
 Kim Service collection releases use `V<major>.<minor>`. Each component keeps its own version and source history. Detailed past checks are in the [testing record](docs/verification-history.md).
 
+## V1.19 - 2026-11-15
+
+### Affected components
+
+This is a compatibility repair release for Memory 3Layer, the Claude host assets in the Codex/Gemini bridge, and HookPrompt documentation. The collection retains 61 Agents, 32 Skills, 2 Hooks and 2 Tools: 97 components and 112 searchable capabilities. It is paired with Meta_Kim v3.15.1 and follows the existing `V<major>.<minor>` collection version format.
+
+### User-visible changes
+
+- **Memory 3Layer:** installed launchers resolve memory relative to the installed project root, including when called from a nested directory outside a Git repository. Claude-only and Codex-only installation continue to create only the requested host assets.
+- **Multi-CLI host assets:** the private orchestrator triggers on an explicit orchestrator, `/kim-team`, or multi-engine request. An ordinary coding request or a standalone Codex/Gemini reference no longer opts the user into a multi-engine workflow. Existing explicit commands and workflow stages are retained.
+- **Command output handling:** `/kim-code` and `/kim-team` read existing outputs and create files when a stage produces real content; they no longer request empty placeholder files that conflict with the existing output rules.
+- **HookPrompt documentation:** correct the Claude entrypoint's existing argv compatibility, while preserving JSON stdin as the native event path and the Codex stdin-only boundary. Hook behavior is unchanged.
+
+### Breaking changes and migration
+
+No component or workflow is removed. Update to the complete V1.19 source or package; rerun the existing project-scoped memory installer or host-asset installer when those assets were previously copied into a project, preserving their normal conflict review and rollback. Existing memory records are retained. The ZCode bundle pairs Meta_Kim 3.15.1 with Kim 1.19.0 and compares upgrades against the published V1.18 bundle. DSH receives a rebuilt Service package; this repair does not add automatic memory Hooks or custom-agent registration to DSH, Gemini, ZCode or other hosts.
+
+### Verification
+
+[The repair verification record](docs/verification/minimal-compatibility-20261115.md) separates regression and package evidence from native-host execution. The local repair checks passed the root suite (246 passed, one existing skip), all 141 validation files across 97 components, and catalog/repository freshness checks. The release workflow requires successful CI for the exact final main commit, rebuilds source, DSH and ZCode packages, compares ZCode consumer payloads with V1.18, and checks uploaded asset identity and hashes. No personal model token was used; this release does not claim full native-host task certification.
+
+### Source revisions
+
+Previous release: [V1.18](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.18). The fixes are committed in `ad0e1651f9dbf0ad26fccbe979bb4c640cca4c1b`. Existing component source history is preserved; `catalog.json` records the actual component content. The V1.19 tag, `SOURCE-REVISION.txt` and attached checksums identify the final release source and packages.
+
 ## V1.18 - 2026-11-15
 
 ### Affected components
