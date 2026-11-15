@@ -1,6 +1,7 @@
 name: kim-orchestrator
 description: |
   Kim多AI协作编排技能 - 提供10种命令，按使用顺序排列
+  仅在用户明确调用 kim-orchestrator、/kim-team 或选择多引擎流程时使用本 Skill；以下命令仍可按用户的显式调用独立使用。
 
   【10个Kim命令（按序号排列）】
   1.  /kim-setup  = 环境配置检测（Claude）

@@ -41,11 +41,11 @@ argument-hint: [任务描述]
 
 ### 阶段0.2：初始化工作目录
 
-在开始任何阶段前，先创建工作目录和所有需要的空文件：
+在开始任何阶段前，先检查工作目录和已有阶段产物：
 
-批准后安全创建 `.kim-orchestrator/`，逐个检查四个目标文件；存在则读取，不存在才创建。
+批准后安全创建缺失的 `.kim-orchestrator/` 目录，逐个检查四个目标文件；存在则读取，不存在则等对应阶段产生实际内容后再安全创建，不预创建空文件。
 
-然后依次读取这些文件（可并行）：
+以下文件仅在已存在时读取（可并行）：
 - Read .kim-orchestrator/phase1_requirements.json
 - Read .kim-orchestrator/phase2_code.md
 - Read .kim-orchestrator/phase3_review.md

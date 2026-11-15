@@ -209,29 +209,63 @@ class InstallerContractTests(unittest.TestCase):
         self.assertFalse((self.project / ".memory-3layer").exists())
 
     def test_non_git_launcher_falls_back_to_ancestor_scan(self) -> None:
-        non_git_project = self.project / "非Git项目"
-        non_git_project.mkdir()
-        install(non_git_project, "codex")
-        config = json.loads(
-            (non_git_project / ".codex" / "hooks.json").read_text(encoding="utf-8")
-        )
-        handler = managed_handlers(config, "codex")[0]
-        command = handler.get("commandWindows") if os.name == "nt" else handler["command"]
-        nested = non_git_project / "嵌套" / "cwd"
-        nested.mkdir(parents=True)
-        result = subprocess.run(
-            command,
-            cwd=nested,
-            input='{"hook_event_name":"SessionStart","source":"startup"}',
-            capture_output=True,
-            text=True,
-            encoding="utf-8",
-            errors="replace",
-            shell=True,
-            check=False,
-        )
-        self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIsInstance(json.loads(result.stdout), dict)
+        for platform in ("claude", "codex"):
+            for configured in ("", ".project-memory"):
+                with self.subTest(platform=platform, memory_dir=configured), mock.patch.dict(
+                    os.environ, {"MEMORY_DIR": configured, "PYTHONDONTWRITEBYTECODE": "1"}
+                ):
+                    project = self.project / f"非Git项目 {platform} {configured or 'default'}"
+                    project.mkdir()
+                    install(project, platform)
+                    other_platform = "codex" if platform == "claude" else "claude"
+                    self.assertFalse((project / f".{other_platform}").exists())
+                    memory_root = project / (configured or ".memory-3layer")
+                    root_memory = "This memory belongs to the installed project root."
+                    (memory_root / "MEMORY.md").write_text(root_memory, encoding="utf-8")
+                    config_name = "settings.json" if platform == "claude" else "hooks.json"
+                    config = json.loads(
+                        (project / f".{platform}" / config_name).read_text(encoding="utf-8")
+                    )
+                    nested = project / "嵌套" / "cwd"
+                    nested.mkdir(parents=True)
+
+                    def run_hook(event: str, **payload: object) -> dict:
+                        handler = managed_handlers(
+                            {"hooks": {event: config["hooks"][event]}}, platform
+                        )[0]
+                        command = (
+                            handler.get("commandWindows", handler["command"])
+                            if os.name == "nt" else handler["command"]
+                        )
+                        result = subprocess.run(
+                            command, cwd=nested,
+                            input=json.dumps({"hook_event_name": event, **payload}),
+                            capture_output=True, text=True, encoding="utf-8",
+                            errors="replace", shell=True, check=False,
+                        )
+                        self.assertEqual(result.returncode, 0, result.stderr)
+                        return json.loads(result.stdout)
+
+                    loaded = run_hook("SessionStart", source="startup")
+                    context = loaded.get("hookSpecificOutput", {}).get("additionalContext", "")
+                    self.assertIn(root_memory, context)
+                    fact = "Confirmed facts stay at the installed project root."
+                    run_hook("PostToolUse", memory_fact=fact, memory_topic="root-binding")
+                    items_path = memory_root / "areas" / "topics" / "root-binding" / "items.json"
+                    items = json.loads(items_path.read_text(encoding="utf-8"))
+                    self.assertEqual([item["fact"] for item in items], [fact])
+                    self.assertTrue(any(
+                        fact in note.read_text(encoding="utf-8")
+                        for note in (memory_root / "memory").glob("*.md")
+                    ))
+                    run_hook("PreCompact", trigger="manual")
+                    state = json.loads(
+                        (memory_root / "data" / "session_state.json").read_text(encoding="utf-8")
+                    )
+                    self.assertEqual(state["compact_count"], 1)
+                    self.assertEqual(state["trigger"], "manual")
+                    for directory in {".memory-3layer", configured or ".memory-3layer"}:
+                        self.assertFalse((nested / directory).exists())
 
     def test_legacy_claude_hooks_upgrade_to_one_active_set(self) -> None:
         config_path = self.project / ".claude" / "settings.json"

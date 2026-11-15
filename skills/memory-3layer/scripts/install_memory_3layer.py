@@ -56,6 +56,8 @@ LAUNCHER = (
     "r=pathlib.Path(g.stdout.strip()) if g.returncode==0 and g.stdout.strip() else "
     "next((p for p in (c,*c.parents) if (p/sys.argv[1]).is_file()),c);"
     "sys.path.insert(0,str((r/sys.argv[1]).parent));"
+    # Keep every hook's existing root-relative path resolver on the install root.
+    "os.chdir(r);"
     "runpy.run_path(str(r/sys.argv[1]),run_name='__main__')"
 )
 

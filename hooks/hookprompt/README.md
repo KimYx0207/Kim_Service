@@ -284,7 +284,7 @@ Windows PowerShell 可以用课程中的真实任务句测试：
   node "$env:USERPROFILE\.claude\hooks\user-prompt-submit.js"
 ```
 
-输出中出现 `hookSpecificOutput` 和 `additionalContext`，说明脚本与输入协议正常。然后完全退出并重新打开 Claude Code，再输入同一句话验证真实 `UserPromptSubmit` 触发。直接运行 `node user-prompt-submit.js "测试"` 不是有效测试，因为 Hook 从标准输入读取事件 JSON，不读取这个位置参数。
+输出中出现 `hookSpecificOutput` 和 `additionalContext`，说明脚本与输入协议正常。然后完全退出并重新打开 Claude Code，再输入同一句话验证真实 `UserPromptSubmit` 触发。Claude 入口仍支持 `node user-prompt-submit.js "测试"` 这一位置参数兼容方式；它只检查 argv 输入路径。上面的标准输入 JSON 更接近真实宿主事件，Codex 入口始终使用标准输入。
 
 ### 没有显示优化过程
 

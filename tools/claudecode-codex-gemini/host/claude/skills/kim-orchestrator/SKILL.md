@@ -1,21 +1,21 @@
 ---
 name: kim-orchestrator
 description: |
-  多AI协作编排技能 - 自动协调Claude、Codex、Gemini完成需求分析→代码生成→代码审查工作流。
+  多AI协作编排技能 - 仅在用户明确调用 kim-orchestrator、/kim-team，或要求 Claude、Codex、Gemini 多引擎协作流程时使用，完成需求分析→代码生成→代码审查。
+  普通开发、修 Bug、重构请求或仅提到 Codex/Gemini 不触发本 Skill。以下任务类型仅说明已选流程的适用范围。
 
-  【核心触发场景】
+  【适用开发任务（须先明确选择本流程）】
   - 开发任务、写代码、实现功能、编程任务
   - 新功能开发、功能实现、代码实现
   - 重构、优化代码、代码改进
   - Bug修复、问题修复、错误处理
   - 系统设计、架构设计、模块设计
 
-  【显式触发词】
-  - "AI编排"、"ai编排"、"多AI协作"、"三引擎"、"三AI"
-  - "codex"、"gemini"、"kim team"、"kim-team"
-  - "协作开发"、"编排流程"
+  【明确选择本流程的示例】
+  - "使用 kim-orchestrator"、"/kim-team"、"用三引擎协作完成任务"
+  - "让 Claude、Codex、Gemini 协作开发"
 
-  【任务类型触发】
+  【适用任务类型（不单独触发）】
   - 实现XXX功能、开发XXX模块、写一个XXX
   - 创建XXX、构建XXX、搭建XXX
   - 添加XXX功能、新增XXX特性
@@ -24,7 +24,7 @@ description: |
   - 重构XXX、优化XXX性能
   - 设计XXX架构、规划XXX系统
 
-  【技术任务触发】
+  【适用技术任务（不单独触发）】
   - API开发、接口实现、后端开发、前端开发
   - 数据库设计、表结构、CRUD操作
   - 用户认证、登录注册、权限控制
@@ -106,11 +106,11 @@ allowed-tools: Read, Write, Bash, Task
 
 ```
 # 简单任务
-"实现用户登录功能"
+"使用 kim-orchestrator 实现用户登录功能"
 
 # 复杂任务
-"实现JWT登录，包含注册、登录、token刷新"
+"用三引擎协作实现JWT登录，包含注册、登录、token刷新"
 
 # 系统设计
-"设计RBAC权限系统"
+"使用 kim-orchestrator 设计RBAC权限系统"
 ```

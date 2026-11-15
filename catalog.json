@@ -1255,7 +1255,7 @@
       ],
       "version": "1.3.0",
       "contractSha256": "6bb178a22db72b04a15f4935629c0f4996be4dbeabcbbb3efcab1fc5edcec32a",
-      "contentSha256": "70ed01badbf4343be66e2cfd4abb6c4a26a857e425339539020c5d82ced70e62",
+      "contentSha256": "da4e1d8ce383f81b62848e3985321b3555d2653205616046b2e12da33c17225e",
       "required": [
         "README.md",
         "README_EN.md",
@@ -1791,7 +1791,7 @@
       "snapshot": "canonical-direct-sync",
       "version": "1.2.0",
       "contractSha256": "42da3f04fea7ce8ded30293245c8b9fa35eee871169250500c2ce3172699d034",
-      "contentSha256": "ae647ba692881c06da9f8e448adca39b498e39cf8203dad1998abb186a24b07d",
+      "contentSha256": "4a379da90f4ef195679b6366c9fec71e02b325c647d0cc478891da2e606be30f",
       "required": [
         "SKILL.md",
         "README.md",
@@ -2086,7 +2086,7 @@
       "snapshot": "committed-component-tree",
       "version": "1.0.0-kim-service.1",
       "contractSha256": "a5c633d21f8ff0a8c34bf2f1665591a2f40a7d97538db0f0ba03a7ef9b2aa459",
-      "contentSha256": "88e1211b094ed701da53b32daf0f11a582ee1cf031761a3d94a5f88b92c4799a",
+      "contentSha256": "ae1769f250a7c0f842bcfb3d45f54998e3f7db71f06da58ec954850321027826",
       "required": [
         "capability.json",
         "cli.mjs",
