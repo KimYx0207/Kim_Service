@@ -888,6 +888,103 @@
       ]
     },
     {
+      "componentContentSha256": "35303a0189d0bf89d11955c1f784448eac148a65ae0ecf43291cb49cceeeb50f",
+      "componentId": "agent-thinking-patterns",
+      "componentPath": "skills/agent-thinking-patterns",
+      "componentType": "skill",
+      "componentVersion": "0.1.0",
+      "contractSha256": "332ad5ec839f78b1e8d1dc5fad18107270452866d5e4b1acc908c50652d8f822",
+      "doNotUseWhen": [
+        "已经有足够证据直接完成的简单任务，无需另开思考流程",
+        "用户只要求直接生产交付物，且没有练习或重定目标的需求",
+        "仅为展示十种方法而机械调用全部方法，或企图取代专业 Agent 与宿主执行权限"
+      ],
+      "entrypoint": "SKILL.md",
+      "humanGate": {
+        "required": false,
+        "when": []
+      },
+      "id": "agent-thinking-patterns-apply",
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "agentRole": {
+            "type": "string"
+          },
+          "materials": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "selectedPatternIds": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "task": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "userSubmission": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "task"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "deliveryFormat": "conceptual-human-delivery",
+        "description": "当前专业 Agent 嵌入的通用方法投影，无自动执行 Adapter 或宿主状态变更。",
+        "properties": {
+          "application": {
+            "type": "string"
+          },
+          "evidenceGaps": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "evidenceStatus": {
+            "enum": [
+              "supported",
+              "evidence_required",
+              "awaiting_submission"
+            ]
+          },
+          "selectedPatternIds": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "selectedPatternIds",
+          "application",
+          "evidenceStatus"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "read-only user-provided materials within the active host authorization"
+      ],
+      "sideEffects": [],
+      "summary": "供任意专业 Agent 按需选用通用思考与执行模式，包括练习提交再反馈；以本职专业方法、现有授权和证据为准。",
+      "useWhen": [
+        "任何专业 Agent 遇到需要澄清、反证、倒推、方案比较、知识提炼或行动聚焦的真实不确定性",
+        "非教育 Agent 需要指导用户实际练习、提交作品并进行专业反馈",
+        "任何领域的专业工作存在可验证的机会、重复机制或战略取舍"
+      ],
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
       "componentContentSha256": "44919971d3db8dae572e33003315fd314c8cc485533cbc871a616f07c187a21e",
       "componentId": "agronomy-planner",
       "componentPath": "agents/agronomy-planner",
@@ -2892,7 +2989,7 @@
       ]
     },
     {
-      "componentContentSha256": "f7f7767870d62a560090bb9904fc905489a54ad7159ef84a679cc6f9115479f5",
+      "componentContentSha256": "892391d385d7af56edc37f083236f2429cf6714042df12285708351918566cf7",
       "componentId": "concept-tutor",
       "componentPath": "agents/concept-tutor",
       "componentType": "agent",
@@ -6688,7 +6785,7 @@
       ]
     },
     {
-      "componentContentSha256": "1636b2b78fef8b3f2112640f1dd43b71a18c2528f44a1192e68f4a2cb39d3107",
+      "componentContentSha256": "152d876530a15f281105d3d14b888b1e815378aa8e5c95e1870c45164aa7cdfe",
       "componentId": "exercise-designer",
       "componentPath": "agents/exercise-designer",
       "componentType": "agent",
@@ -15650,7 +15747,7 @@
       ]
     },
     {
-      "componentContentSha256": "b222dd0fad87edd952964bbd042b60d369503ef3033d15f7d435f8af972ae174",
+      "componentContentSha256": "744a1a74a0e5c43aa85763b438f49d2519d91fff08780d00fbf573a573f883f9",
       "componentId": "product-architect",
       "componentPath": "agents/product-architect",
       "componentType": "agent",
@@ -19693,7 +19790,7 @@
       ]
     },
     {
-      "componentContentSha256": "92cb93fd9833ae9ca3e8f12f5e832f40e4b7b00549cbb76b8cbb402e7aaf2e05",
+      "componentContentSha256": "cc5493b33075097ca294aeef0740263b85ff4edbfa60051fc2ae976b1c1bf884",
       "componentId": "source-evidence-analyst",
       "componentPath": "agents/source-evidence-analyst",
       "componentType": "agent",
@@ -23378,8 +23475,8 @@
       ]
     }
   ],
-  "capabilityCount": 112,
-  "componentCount": 97,
+  "capabilityCount": 113,
+  "componentCount": 98,
   "components": [
     {
       "capabilityIds": [
@@ -23509,7 +23606,7 @@
       ],
       "componentType": "agent",
       "componentVersion": "0.3.1",
-      "contentSha256": "f7f7767870d62a560090bb9904fc905489a54ad7159ef84a679cc6f9115479f5",
+      "contentSha256": "892391d385d7af56edc37f083236f2429cf6714042df12285708351918566cf7",
       "contractSha256": "62dbba67e38c9f99dc6188d7de429089aa4dc145c8b95b33c06a120ca0e92e86",
       "entrypoint": "AGENT.md",
       "id": "concept-tutor",
@@ -23679,7 +23776,7 @@
       ],
       "componentType": "agent",
       "componentVersion": "0.3.1",
-      "contentSha256": "1636b2b78fef8b3f2112640f1dd43b71a18c2528f44a1192e68f4a2cb39d3107",
+      "contentSha256": "152d876530a15f281105d3d14b888b1e815378aa8e5c95e1870c45164aa7cdfe",
       "contractSha256": "bc2f3e9a1d86a6d2ac5f43348a1f4b6c6eea9a852020383527fdb64fd1c2e08a",
       "entrypoint": "AGENT.md",
       "id": "exercise-designer",
@@ -23984,7 +24081,7 @@
       ],
       "componentType": "agent",
       "componentVersion": "0.6.0",
-      "contentSha256": "b222dd0fad87edd952964bbd042b60d369503ef3033d15f7d435f8af972ae174",
+      "contentSha256": "744a1a74a0e5c43aa85763b438f49d2519d91fff08780d00fbf573a573f883f9",
       "contractSha256": "8b4c10ae655aeb224a12402af7c33473b29253ad3acdc06f739dde5b6007deff",
       "entrypoint": "AGENT.md",
       "id": "product-architect",
@@ -24137,7 +24234,7 @@
       ],
       "componentType": "agent",
       "componentVersion": "0.3.1",
-      "contentSha256": "92cb93fd9833ae9ca3e8f12f5e832f40e4b7b00549cbb76b8cbb402e7aaf2e05",
+      "contentSha256": "cc5493b33075097ca294aeef0740263b85ff4edbfa60051fc2ae976b1c1bf884",
       "contractSha256": "bd741aad3ca085fec59ac05b905c5a6c7c87ecc3ea07109a03e0657e777c7bc5",
       "entrypoint": "AGENT.md",
       "id": "source-evidence-analyst",
@@ -24389,6 +24486,21 @@
       "validation": [
         "tests/runtime-contracts.test.mjs",
         "tests/test_installer.py"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "agent-thinking-patterns-apply"
+      ],
+      "componentType": "skill",
+      "componentVersion": "0.1.0",
+      "contentSha256": "35303a0189d0bf89d11955c1f784448eac148a65ae0ecf43291cb49cceeeb50f",
+      "contractSha256": "332ad5ec839f78b1e8d1dc5fad18107270452866d5e4b1acc908c50652d8f822",
+      "entrypoint": "SKILL.md",
+      "id": "agent-thinking-patterns",
+      "path": "skills/agent-thinking-patterns",
+      "validation": [
+        "tests/contract.test.mjs"
       ]
     },
     {

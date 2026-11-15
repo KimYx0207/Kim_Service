@@ -10,7 +10,7 @@ Kim Service is an open-source **library of professional methods for AI work**. Y
 
 You may know what you want without knowing which numbers a forecast must reconcile, which states a booking page needs, or how to compare supplier quotes. The methods make the work concrete: inspect materials and evidence, analyze or build the result, then check the actual delivery.
 
-**V1.19** includes **61 specialist Agents, 32 Skills, 2 Hooks, and 2 Tools**: 97 components with **112 searchable task capabilities**, paired with Meta_Kim v3.15.1. This compatibility repair fixes memory-root and multi-engine entrypoint conflicts; the complete source, DSH and ZCode packages retain all existing professional methods. See the [release changes](CHANGELOG.md#v119---2026-11-15).
+The current **main** branch contains **61 specialist Agents, 33 Skills, 2 Hooks, and 2 Tools**: 98 components and **113 searchable task capabilities**. This includes the new [cross-Agent thinking patterns](skills/agent-thinking-patterns/SKILL.md). V1.19 remains the latest formal release; these main-branch updates must not be described as V1.19 release contents. See the [release history](CHANGELOG.md#v119---2026-11-15).
 
 **[Browse capabilities and prepare a request](https://kimyx0207.github.io/Kim_Service/?lang=en)** · **[V1.19 downloads](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.19)** · **[Browse the source](https://github.com/KimYx0207/Kim_Service/tree/main)**
 
@@ -73,7 +73,7 @@ Financial modeling starts with periods, currency, and units, then connects sales
 ### What the four kinds of component do
 
 - **Agents handle a complete professional task.** Each role has a defined scope, inputs and outputs, reference material, decision steps, positive and negative examples, and quality checks. Financial modeling receives business data; design-system work receives screens, brand choices, and interaction requirements. Their methods lead to different, concrete deliverables.
-- **Skills support a particular step.** The 32 reusable skills cover requirements tracing, API contracts, database migration, accessibility, financial scenarios, experiments, retrieval evaluation, and learning assessment. They also include workflows for teamwork, memory, skill discovery, Xiaohongshu, and sticker production. Select the ones the current job needs.
+- **Skills support a particular step.** The 33 reusable skills cover requirements tracing, API contracts, database migration, accessibility, financial scenarios, experiments, retrieval evaluation, and learning assessment. They also include workflows for teamwork, shared thinking patterns across Agents, memory, skill discovery, Xiaohongshu, and sticker production. Select the ones the current job needs.
 - **Hooks clarify requests and record delivered versions.** In a supported, configured client, HookPrompt adds context about the goal, scope, output, and checks to substantive task prompts. It preserves decisions already made in the conversation. The opt-in evidence Hook records hashes of explicitly selected local artifacts.
 - **Tools connect and inspect execution capabilities.** The multi-CLI package can expose locally installed Codex and Gemini through MCP to a compatible client for coding or review, with project-level workflow entries. The offline MCP auditor examines tool-definition changes. The current client still controls the working directory and permitted file operations.
 
@@ -119,6 +119,8 @@ First determine whether the difficulty comes from retrieval, missing information
 | Follow usage and new feedback | `skills/customer-case-operations/`, `skills/feedback-to-requirements/` | Case phases, receipt/adoption records, open feedback, requirement candidates |
 
 Read an Agent's `AGENT.md` or a Skill's `SKILL.md`, then follow its references. Select the methods needed for the task and pass each result to the next step. Finally, check whether the assistant answers actual questions, cites its sources, and handles questions it cannot answer.
+
+See the [reference-adoption record](docs/verification/reference-adoption-20261116.md) for what was adopted from Craft Anything, the PRD graph reference and the X thread. The [ten shared thinking and action patterns](skills/agent-thinking-patterns/SKILL.md) are available to any specialist Agent when relevant; practice first and feedback after submission apply beyond education. MetaKim Live owns the human-readable PRD graph.
 
 ### Full-corpus practice: an enterprise technical-support knowledge workbench
 

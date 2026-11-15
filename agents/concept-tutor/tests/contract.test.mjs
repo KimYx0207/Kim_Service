@@ -27,3 +27,14 @@ test('standalone agent has a bounded, readable contract', () => {
   }
   for (const file of ['README.md', 'LICENSE', 'NOTICE', 'CHANGELOG.md']) assert.ok(fs.statSync(path.join(root, file)).isFile());
 });
+
+test('practice-first route waits for learner work and retains the explanation route', () => {
+  const method = fs.readFileSync(path.join(root, 'references/professional-method.md'), 'utf8');
+  const practice = method.split('## 先练后评的可选路径\n')[1]?.split('\n## ')[0] ?? '';
+  assert.match(practice, /学习者.*先.*(动手|独立)/, 'practice-first requires learner intent');
+  assert.match(practice, /先.*(小题|微任务)/, 'a concrete task comes before the answer');
+  assert.match(practice, /提交.*(作答|作品|测试)/, 'feedback follows submitted evidence');
+  assert.match(practice, /不.*提前.*(答案|解法)/, 'do not spoil the independent attempt');
+  assert.match(practice, /未.*提交.*(not_run|未验证)/, 'no mastery claim before observation');
+  assert.match(practice, /直接解释/, 'existing explanation remains available when needed');
+});

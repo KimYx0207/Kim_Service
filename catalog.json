@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "repository": "KimYx0207/Kim_Service",
-  "componentCount": 97,
+  "componentCount": 98,
   "release": {
     "repository": "KimYx0207/Kim_Service",
     "remoteName": "origin",
@@ -186,7 +186,7 @@
       "snapshot": "committed-component-tree",
       "version": "0.3.1",
       "contractSha256": "62dbba67e38c9f99dc6188d7de429089aa4dc145c8b95b33c06a120ca0e92e86",
-      "contentSha256": "f7f7767870d62a560090bb9904fc905489a54ad7159ef84a679cc6f9115479f5",
+      "contentSha256": "892391d385d7af56edc37f083236f2429cf6714042df12285708351918566cf7",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -405,7 +405,7 @@
       "snapshot": "committed-component-tree",
       "version": "0.3.1",
       "contractSha256": "bc2f3e9a1d86a6d2ac5f43348a1f4b6c6eea9a852020383527fdb64fd1c2e08a",
-      "contentSha256": "1636b2b78fef8b3f2112640f1dd43b71a18c2528f44a1192e68f4a2cb39d3107",
+      "contentSha256": "152d876530a15f281105d3d14b888b1e815378aa8e5c95e1870c45164aa7cdfe",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -795,7 +795,7 @@
       "snapshot": "committed-component-tree",
       "version": "0.6.0",
       "contractSha256": "8b4c10ae655aeb224a12402af7c33473b29253ad3acdc06f739dde5b6007deff",
-      "contentSha256": "b222dd0fad87edd952964bbd042b60d369503ef3033d15f7d435f8af972ae174",
+      "contentSha256": "744a1a74a0e5c43aa85763b438f49d2519d91fff08780d00fbf573a573f883f9",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -991,7 +991,7 @@
       "snapshot": "committed-component-tree",
       "version": "0.3.1",
       "contractSha256": "bd741aad3ca085fec59ac05b905c5a6c7c87ecc3ea07109a03e0657e777c7bc5",
-      "contentSha256": "92cb93fd9833ae9ca3e8f12f5e832f40e4b7b00549cbb76b8cbb402e7aaf2e05",
+      "contentSha256": "cc5493b33075097ca294aeef0740263b85ff4edbfa60051fc2ae976b1c1bf884",
       "required": [
         "AGENT.md",
         "capability.json",
@@ -1341,6 +1341,29 @@
       "validation": [
         "node tests/runtime-contracts.test.mjs",
         "python tests/test_installer.py"
+      ]
+    },
+    {
+      "id": "agent-thinking-patterns",
+      "kind": "skill",
+      "path": "skills/agent-thinking-patterns",
+      "source": "canonical:skills/agent-thinking-patterns",
+      "revision": "pending-local:332ad5ec839f78b1e8d1dc5fad18107270452866d5e4b1acc908c50652d8f822",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.0",
+      "contractSha256": "332ad5ec839f78b1e8d1dc5fad18107270452866d5e4b1acc908c50652d8f822",
+      "contentSha256": "35303a0189d0bf89d11955c1f784448eac148a65ae0ecf43291cb49cceeeb50f",
+      "required": [
+        "capability.json",
+        "CHANGELOG.md",
+        "LICENSE",
+        "NOTICE",
+        "README.md",
+        "SKILL.md",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs"
       ]
     },
     {

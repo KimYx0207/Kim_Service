@@ -10,6 +10,14 @@
 
 对技术事实给证据；对普通可逆设计给有依据建议；对改变用户目标、成本、公开行为或兼容边界的选择，给少量可比较选项、推荐和取舍。每项引用当前决定 ID；只问当前依赖已经明确的问题。未回答不等于同意，已回答不重复访谈。
 
+## 让研究、制作和验收使用同一条可恢复链路
+
+关键研究结论写入当前 productDesign 对应的 decisionRefs、technologyChoices.evidenceRefs 或模块：区分**直接观察**、**可复算推导**与**待验证推断**，保留来源版本、适用范围、反证和未覆盖条件。假设注明影响哪项选择、什么观察可推翻它；只消费影响决策和验收的证据。
+
+按真实依赖推进“研究→候选方案及人类决定→两层 PRD→制作→检查→改进”，不新建固定阶段状态机。关键选择未定不能视作批准，独立已定部分仍可继续。结构检查、构建检查、实际行为检查分别出回执；未运行标 not_run，失败仅返修受影响节点，不重复未改动部分。
+
+跨会话交接沿用 handoffContext、designBinding、researchEvaluation、knowledgeUsage、taskSlices：留下设计 ID/revision、决定、证据版本、未解假设、回执和下一步。接手先比对当前修订；变化时只重开受影响关系，不用旧摘要覆盖新决定。调度、并发和批准仍归宿主。
+
 ## 第一层：架构和技术选择
 
 在 productDesign.softwareDesign.architecture 中写 id、revision、summary、decisionRefs、technologyChoices、constraints、moduleIds。它是当前设计的子结构，不能作为第二个批准状态。
@@ -23,6 +31,14 @@
 modules 的每项包含 id、purpose、journeyRefs、decisionRefs、interfaceRefs、stateRefs、taskIds、acceptanceCriterionIds、states、businessRules、implementationNotes 和 removalCandidates。引用同一设计中的既有对象；architecture.moduleIds 与实际模块完全一致。
 
 每个状态说明真实行为和失败恢复，每条业务规则说明约束的动作与数据；implementationNotes 指向当前代码入口/复用点和接口差异。验收写“给定输入，做什么，观察什么”，不只写“功能正常”。拆解围绕可演示用户结果，不把前端/后端岗位名直接当任务。[spec-kit-spec]
+
+### 知识依赖图与代码 Graphify 互相定位
+
+一级 architecture、二级 modules 同属唯一 productDesign；知识依赖图是 researchEvaluation、decisionRefs、knowledgeUsage、taskSlices、acceptanceCriteria 的只读投影。可展示“证据→决定→模块→接口/状态→任务→验收”及支持、反驳、依赖关系；每条边引用现有 ID 和版本，不维护第二份知识真源。
+
+代码 Graphify 基于仓库固定提交、路径、符号与可核依赖；用 implementationNotes、interfaceRefs、taskIds、验收引用连接设计节点和代码观察。设计有消费者却找不到代码标“待核”；代码与设计冲突标“偏差”，复核后决定改哪一侧。提交或路径变化时重算受影响边；静态调用关系不等于真实运行事实。
+
+Live 展开节点可追溯理由、下游依赖、操作与回执，区分缺证、推断和未测试；用户改动后追踪影响并保留修订历史。保留原全景设计，图形展示不赋予修改或验收权限。
 
 详细交接前，从原需求回放一条正常路径和相关失败路径：谁在什么情况下开始，读取哪份输入，执行什么动作，看到什么结果，失败后如何保留或恢复。角色可以共用界面或流程，但权限、结果或管理责任不同的角色不能被一句混合受众抹平。每个接口与共享状态引用必须能解释本模块消费什么、由谁写入、冲突如何处理；同一个数据库不意味着所有状态由同一个任务负责。
 
@@ -57,3 +73,5 @@ modules 的每项包含 id、purpose、journeyRefs、decisionRefs、interfaceRef
 多个模块共享验收项可以合理，但需人工核该标准对每个模块的具体观察，不能用重复文案检测或“一模块一标准”的数量规则代替判断。调用方遗漏的原始用户要求不在 helper 可见范围内，仍须沿原始需求逐项复核；helper 未执行就没有本轮检查回执，structure_valid 也不证明专业方法已经应用。
 
 真正交付还需：每个决定有来源与取舍；模块状态和接口不矛盾；验收能观察用户结果；未知写影响和下一验证。前端以浏览器路径验收、后端以真实数据库/服务行为验收；缺环境保留 not_run。knowledgeUsage 记录实际资料使用，不能用来源列表冒充本轮查证。
+
+研究记忆、证据分级、未解问题与迭代检查的部分思路参考 [Craft Anything](https://github.com/storytold/craft-anything) 的公开设计；此处仅将方法适配到已有两层 PRD 和 Graphify 引用，不移植其 Rust 实现、独立执行器或 Alpha 项目当前尚未验证的能力。

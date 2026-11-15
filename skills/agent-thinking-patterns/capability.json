@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "id": "agent-thinking-patterns",
+  "componentType": "skill",
+  "componentVersion": "0.1.0",
+  "entrypoint": "SKILL.md",
+  "capabilities": [
+    {
+      "id": "agent-thinking-patterns-apply",
+      "summary": "供任意专业 Agent 按需选用通用思考与执行模式，包括练习提交再反馈；以本职专业方法、现有授权和证据为准。",
+      "useWhen": [
+        "任何专业 Agent 遇到需要澄清、反证、倒推、方案比较、知识提炼或行动聚焦的真实不确定性",
+        "非教育 Agent 需要指导用户实际练习、提交作品并进行专业反馈",
+        "任何领域的专业工作存在可验证的机会、重复机制或战略取舍"
+      ],
+      "doNotUseWhen": [
+        "已经有足够证据直接完成的简单任务，无需另开思考流程",
+        "用户只要求直接生产交付物，且没有练习或重定目标的需求",
+        "仅为展示十种方法而机械调用全部方法，或企图取代专业 Agent 与宿主执行权限"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "task": { "type": "string", "minLength": 1 },
+          "agentRole": { "type": "string" },
+          "materials": { "type": "array", "items": { "type": "string" } },
+          "selectedPatternIds": { "type": "array", "items": { "type": "string" } },
+          "userSubmission": { "type": "string" }
+        },
+        "required": ["task"]
+      },
+      "output": {
+        "type": "object",
+        "deliveryFormat": "conceptual-human-delivery",
+        "description": "当前专业 Agent 嵌入的通用方法投影，无自动执行 Adapter 或宿主状态变更。",
+        "properties": {
+          "selectedPatternIds": { "type": "array", "items": { "type": "string" } },
+          "application": { "type": "string" },
+          "evidenceStatus": { "enum": ["supported", "evidence_required", "awaiting_submission"] },
+          "evidenceGaps": { "type": "array", "items": { "type": "string" } }
+        },
+        "required": ["selectedPatternIds", "application", "evidenceStatus"]
+      },
+      "permissions": ["read-only user-provided materials within the active host authorization"],
+      "sideEffects": [],
+      "humanGate": { "required": false, "when": [] },
+      "validation": ["tests/contract.test.mjs"]
+    }
+  ]
+}

@@ -1,0 +1,148 @@
+{
+  "schemaVersion": 1,
+  "roleId": "agent-thinking-patterns",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "coordinationOwner": "caller",
+  "finalAcceptance": "caller_only",
+  "steps": [
+    "先读取当前专业 Agent 的任务、材料、已有结论与授权，不与原方法争夺专业 owner。",
+    "根据 patterns.json 的 trigger 和 skipWhen 只选能消除当前缺口的模式；没有缺口可以不选。",
+    "将选中模式转化为本领域的具体动作和证据检查，纳入原 Agent 的工作步骤而不是创建独立流程。",
+    "练习模式只在用户要练习或评价自己的作品时启用；无实际提交则等待，不给虚构的批改结论。",
+    "保留未知和反证，把可用成果交回宿主，决策、执行权限和最终验收继续由宿主负责。"
+  ],
+  "acceptance": [
+    "选用的模式与真实任务缺口对应，能说出会改变结果的证据，不以选中数量评分。",
+    "专业方法、宿主授权、用户已拍板的决策未被公共方法覆盖或扩大。",
+    "已执行、已学习和已核验只按可观察的实际材料判定。"
+  ],
+  "knowledgeAssets": [
+    {
+      "id": "thinking-patterns-method",
+      "path": "references/professional-method.md",
+      "appliesTo": ["always"],
+      "sourceRefs": ["paul-young-x", "user-practice", "existing-package"]
+    }
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "所有专业 Agent 共用的动态思考与行动方法选择，不接管专业执行与宿主权限",
+    "scope": [
+      "在任意领域按任务缺口选一项或少数有价值的通用模式，并将其落实为原 Agent 的具体动作。",
+      "仅在用户希望主动练习或评阅真实作品时使用先练、提交、证据反馈的方式。"
+    ],
+    "knowledgeAssetIds": ["thinking-patterns-method"],
+    "diagnosticSequence": [
+      {
+        "id": "need",
+        "question": "当前专业任务实际卡在什么需要改变判断的缺口？",
+        "evidenceRequired": ["用户目标和本职专业任务", "现有上下文和可核材料"],
+        "whenMissing": "先核已有上下文；无需补充方法时直接完成原任务。"
+      },
+      {
+        "id": "permission",
+        "question": "这次调用是否会被误解为新增权限、审批或另一套状态？",
+        "evidenceRequired": ["宿主当前权限与任务边界", "原专业 Agent 合同和用户已拍板的选择"],
+        "whenMissing": "仅做只读方法建议，不宣称调用、批准、执行或验收。"
+      },
+      {
+        "id": "practice",
+        "question": "用户是需要真正交付，还是选择先练习再反馈？有没有提交作品？",
+        "evidenceRequired": ["用户主动练习或评价意图", "可核对的原始作业或操作记录"],
+        "whenMissing": "若需练习则等待提交，保持 awaiting_submission；生产交付照原任务执行。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "relevance",
+        "when": "某方法能够改变路线、补足证据或推动练习反馈",
+        "action": "只选相关模式并嵌入专业 Agent 现有步骤",
+        "avoid": "把十种方法全套机械执行或用方法数量代替成果"
+      },
+      {
+        "id": "host-authority",
+        "when": "建议涉及真实外部写入、人类选择、执行或核验",
+        "action": "沿用宿主原有授权、权限、产物版本和回执",
+        "avoid": "公共思考方法自行创建第二套审批、路由或状态机"
+      },
+      {
+        "id": "feedback-evidence",
+        "when": "用户请求练习或者让 Agent 评阅自己的尝试",
+        "action": "给适当练习并等待实际提交，然后按真实问题给针对性反馈和迁移任务",
+        "avoid": "用户还没提交就生成批改报告或将直接交付强行改成练习"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "agent-thinking-patterns-apply",
+        "inputGuidance": [
+          {
+            "field": "task",
+            "interpretation": "需要完成的真实专业任务与用户目标，不是十种模式的编号。",
+            "onMissing": "无法判断意图时询问最关键的阻塞点。"
+          },
+          {
+            "field": "agentRole",
+            "interpretation": "当前专业 Agent 的职责身份，仅用于保持领域方法边界，不作教育角色白名单。",
+            "onMissing": "沿用宿主实际选中的 owner，不凭技能名猜角色。"
+          },
+          {
+            "field": "materials",
+            "interpretation": "已获得的用户资料、引用和核验信息；缺失不影响无证据声明。",
+            "onMissing": "只报告已读取材料，不虚构外部研究完成。"
+          },
+          {
+            "field": "selectedPatternIds",
+            "interpretation": "用户明确指定的模式可作偏好，但仍须与任务和原 Agent 权限相容。",
+            "onMissing": "由实际问题按需选择，不强制整套。"
+          },
+          {
+            "field": "userSubmission",
+            "interpretation": "用户真实提交的作业或操作结果，仅练习反馈时使用。",
+            "onMissing": "没有作品则 awaiting_submission，不输出批改完成。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "selected-patterns-acceptance",
+            "field": "selectedPatternIds",
+            "criterion": "每项模式确实解决本次任务缺口，来源于十种稳定 ID；零项合法。",
+            "rejectWhen": "强制选择全部十项、使用不存在的模式或无关模式堆砌。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": ["本次任务实际缺口", "references/patterns.json 中的模式及适用条件"],
+            "blocking": true
+          },
+          {
+            "id": "application-acceptance",
+            "field": "application",
+            "criterion": "原专业 Agent 仍可产生明确可用结果，模式动作、证据边界和宿主权限不漂移。",
+            "rejectWhen": "只是罗列口号，替换专业分析，或把建议写成已执行与已通过。",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": ["原专业任务与交付物", "模式在该领域的具体动作和边界"],
+            "blocking": true
+          },
+          {
+            "id": "evidence-status-acceptance",
+            "field": "evidenceStatus",
+            "criterion": "支持性证据足够时才是 supported；没有材料时 evidence_required；用户未提交则 awaiting_submission。",
+            "rejectWhen": "没有作业却声称批改完成，或以合同检查代替真实专业运行结果。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": ["用户提交的材料或明确缺失项", "当前宿主实际调用与动作回执"],
+            "blocking": true
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": ["本轮方法建议将改变用户已确定的重大选择或超出既有授权"],
+      "prohibitedClaims": ["仅因模式包存在就宣称已被各宿主自动加载", "未交作业却宣称已批改、已掌握", "未经授权的外部执行或业务状态变更"]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
+}

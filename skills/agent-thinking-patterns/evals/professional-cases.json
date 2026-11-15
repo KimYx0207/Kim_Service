@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "roleId": "agent-thinking-patterns",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "code-practice-outside-education",
+      "capabilityId": "agent-thinking-patterns-apply",
+      "category": "worked_example",
+      "scenario": "代码维护 Agent 收到用户的训练请求，用户想自己尝试修复并提交给 Agent 评阅。",
+      "input": {
+        "task": "给我一个重构练习，我做完后给我具体指出问题",
+        "agentRole": "code-reviewer",
+        "materials": ["已给出的可复现模块描述"],
+        "selectedPatternIds": ["practice-feedback"]
+      },
+      "candidateOutputExcerpt": {
+        "selectedPatternIds": ["practice-feedback"],
+        "application": "给一个保持行为不变的有界函数重构练习；用户提交补丁后再按测试和行为边界反馈。",
+        "evidenceStatus": "awaiting_submission",
+        "evidenceGaps": ["当前尚未提交任何补丁"]
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "任何专业 Agent 均可使用练习模式，但没有用户的实际作品时不作批改结论。",
+      "diagnosticRefs": ["need", "permission", "practice"],
+      "decisionRuleRefs": ["relevance", "host-authority", "feedback-evidence"]
+    },
+    {
+      "id": "forced-practice-during-production",
+      "capabilityId": "agent-thinking-patterns-apply",
+      "category": "failure_boundary",
+      "scenario": "用户明确要求直接修复线上故障，Agent 不该以练习为由要求用户先手动交作业。",
+      "input": {
+        "task": "现在把线上错误修好，验证后提交",
+        "agentRole": "site-reliability-engineer"
+      },
+      "candidateOutputExcerpt": {
+        "selectedPatternIds": ["practice-feedback"],
+        "application": "要求用户先回答十道题，否则不修故障。",
+        "evidenceStatus": "supported"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "无练习意图时强迫练习，且没有执行回执却写 supported。",
+      "diagnosticRefs": ["need", "practice"],
+      "decisionRuleRefs": ["relevance", "feedback-evidence"]
+    },
+    {
+      "id": "business-review-with-scope",
+      "capabilityId": "agent-thinking-patterns-apply",
+      "category": "worked_example",
+      "scenario": "电商 Agent 要做带证据边界的渠道选择，避免把热门当成盈利。",
+      "input": {
+        "task": "为我比较跨境电商两个渠道，标出会改变建议的条件",
+        "agentRole": "ecommerce-strategy-planner",
+        "materials": ["用户提供的预算和候选渠道"],
+        "selectedPatternIds": ["decision-tradeoffs", "adversarial-review"]
+      },
+      "candidateOutputExcerpt": {
+        "selectedPatternIds": ["decision-tradeoffs", "adversarial-review"],
+        "application": "先按预算硬约束排除不可行渠道，再比较获客、退货、履约和竞争证据，标出无法下结论的关键数据。",
+        "evidenceStatus": "evidence_required",
+        "evidenceGaps": ["缺实际渠道成本和转化数据"]
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "通用方法支持非教育专业决策，同时保留行业数据与不确定性。",
+      "diagnosticRefs": ["need", "permission"],
+      "decisionRuleRefs": ["relevance", "host-authority"]
+    }
+  ]
+}

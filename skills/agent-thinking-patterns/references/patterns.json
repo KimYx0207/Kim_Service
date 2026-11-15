@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "defaultBehavior": "select-relevant-only",
+  "runtimeInvocation": "host-dependent",
+  "patterns": [
+    {
+      "id": "clarify-real-problem",
+      "source": "https://x.com/PaulYoungX/status/2121474500466258014",
+      "trigger": "目标含糊、用户描述的是症状而非待解决问题",
+      "action": "先核已有上下文，再提出真正会改变路线的关键问题；把显式意图和推测分开",
+      "evidenceBoundary": "用户确认与可观察上下文不同于 Agent 推断",
+      "skipWhen": "用户已经锁定目标和约束，继续追问只会重复劳动"
+    },
+    {
+      "id": "adversarial-review",
+      "source": "https://x.com/PaulYoungX/status/2121474501858697239",
+      "trigger": "关键判断、设计或交付物存在可能改变结果的假设与失败风险",
+      "action": "寻找薄弱环节、反例、失效条件和代价，指出需要核验的最高风险",
+      "evidenceBoundary": "没有反证不等于命题已证实；区分发现的缺陷与推测",
+      "skipWhen": "风险低且既有证据充分，额外挑刺不会改变结果"
+    },
+    {
+      "id": "backcast-goal",
+      "source": "https://x.com/PaulYoungX/status/2121474503351906447",
+      "trigger": "知道想达到的结果，但路径、资源、能力或检查点不清楚",
+      "action": "从目标和验收条件倒推步骤、依赖、资源、不可逆决策和里程碑",
+      "evidenceBoundary": "计划只代表可执行建议，不能记为已经完成的行动",
+      "skipWhen": "任务只是一个明确的即时回答或现成操作"
+    },
+    {
+      "id": "expert-comparison",
+      "source": "https://x.com/PaulYoungX/status/2121474504618590365",
+      "trigger": "跨行业或专业任务需要辨别新手误区、成熟方法与适用条件",
+      "action": "用可核的领域资料和实际案例比较常见做法、专业取舍与失败边界",
+      "evidenceBoundary": "不能伪装成特定专家、虚称前1%经验或编造行业共识",
+      "skipWhen": "专业规则已有权威定义且无需另做方案比较"
+    },
+    {
+      "id": "decision-tradeoffs",
+      "source": "https://x.com/PaulYoungX/status/2121474506053017749",
+      "trigger": "存在影响范围、风险、成本、机会成本或长期结果的真实备选方案",
+      "action": "先排除硬约束失败的选项，再比较备选的收益、风险与会翻转选择的证据",
+      "evidenceBoundary": "未被用户批准的选择只可标 proposed，不是 adopted 或 executed",
+      "skipWhen": "唯一选项已确认且没有新增会改变决策的信息"
+    },
+    {
+      "id": "opportunity-scan",
+      "source": "https://x.com/PaulYoungX/status/2121474507449716898",
+      "trigger": "用户希望找商业、增长、降本或流程改进机会",
+      "action": "查受益者、待解决问题、可验证需求、付费或内部价值及最低验证动作",
+      "evidenceBoundary": "热度、使用意愿或猜测收益不得当作付费、采用和真实市场验证",
+      "skipWhen": "用户只要求完成既定产物，没有重新寻找机会的授权"
+    },
+    {
+      "id": "practice-feedback",
+      "source": "https://x.com/PaulYoungX/status/2121474508825501705",
+      "trigger": "任何专业 Agent 需要帮助用户通过实际操作掌握技能、复核尝试或迭代作品",
+      "action": "先给目标清楚、可完成的练习，等待用户提交原作/操作结果，再按具体证据反馈错因与下一次练习",
+      "evidenceBoundary": "用户没有提交作品就标 awaiting_submission/not_run；不可编造批改结论或偷看答案代替用户动手",
+      "skipWhen": "用户要求直接交付、故障修复或紧急求解，而不是练习或自测"
+    },
+    {
+      "id": "repeatable-system",
+      "source": "https://x.com/PaulYoungX/status/2121474510171918695",
+      "trigger": "同类任务需要持续复用，且有真实的再次触发和反馈条件",
+      "action": "用触发条件、输入、动作、检查点、反馈证据设计最小可复用方法",
+      "evidenceBoundary": "写下重复执行方案不等于建立自动化或未来每次都会运行",
+      "skipWhen": "一次性交付，没有外部触发或用户未要求持续化"
+    },
+    {
+      "id": "knowledge-extraction",
+      "source": "https://x.com/PaulYoungX/status/2121474511799279728",
+      "trigger": "材料太多、经验需要复用，或者需提炼可验证洞见与反面观点",
+      "action": "提炼结论、直接依据、反例、适用范围、过期条件和下一次使用入口",
+      "evidenceBoundary": "摘要不能代替全文核对；引用与推断分开，保留尚未读取的材料",
+      "skipWhen": "没有提供或取得足够的原始材料来支持提炼结论"
+    },
+    {
+      "id": "strategic-focus",
+      "source": "https://x.com/PaulYoungX/status/2121474513405645035",
+      "trigger": "投入分散、优先级难定或需要明确停止事项与下一步",
+      "action": "识别最可能改变目标结果的杠杆、应停止的低价值动作和可验证的紧邻下一步",
+      "evidenceBoundary": "排序必须与当前目标、资源和事实相关，不套固定优先级数量",
+      "skipWhen": "交付边界和优先级已经明确，新的战略建议会扩大用户范围"
+    }
+  ]
+}
