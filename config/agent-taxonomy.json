@@ -49,6 +49,13 @@
       },
       "roles": [
         {
+          "componentId": "ecommerce-strategy-planner",
+          "title": {
+            "zh-CN": "电商经营策略师",
+            "en": "Ecommerce strategy planner"
+          }
+        },
+        {
           "componentId": "commerce-operations-designer",
           "title": {
             "zh-CN": "商业运营设计师",
@@ -255,6 +262,13 @@
           "title": {
             "zh-CN": "标题与封面优化师",
             "en": "Headline and cover optimizer"
+          }
+        },
+        {
+          "componentId": "short-drama-strategist",
+          "title": {
+            "zh-CN": "短剧策略师",
+            "en": "Short drama strategist"
           }
         },
         {
@@ -499,6 +513,13 @@
         "en": "Cross-industry · Business and commercial operations"
       },
       "roles": [
+        {
+          "componentId": "global-expansion-strategist",
+          "title": {
+            "zh-CN": "出海策略师",
+            "en": "Global expansion strategist"
+          }
+        },
         {
           "componentId": "side-business-evaluator",
           "title": {

@@ -1,0 +1,145 @@
+{
+  "input": {
+    "brief": "合成案例：两人团队探索短剧与出海收入，路线未定。",
+    "acceptanceCriteria": [
+      {
+        "id": "route-decision",
+        "condition": "三条有不同生产/收入机制的路线及小样，推荐不冒充用户选择",
+        "evidenceRequired": "路线表、来源和决定状态"
+      }
+    ],
+    "handoffContext": {
+      "taskId": "synthetic-short-drama",
+      "upstreamArtifacts": [],
+      "permittedActions": [
+        "read_supplied_materials",
+        "prepare_strategy"
+      ],
+      "resourceLeases": []
+    }
+  },
+  "output": {
+    "opportunityFrame": {
+      "viewer": "待确定英语/西语人群",
+      "buyer": "三条路线分别识别委托方/版权方/自营观众",
+      "facts": "这里只演示方法，无客户订单或用户研究事实"
+    },
+    "routeOptions": [
+      {
+        "id": "live-action",
+        "name": "真人本地原创",
+        "targetCustomer": "有内容预算的品牌/制作委托方",
+        "audienceAndPromise": "当地职场关系与社区情感",
+        "productionModel": "当地演员、单场景拍摄、人工剪辑",
+        "assetsAndRights": "演员/场地/音乐/剧本与分发范围须有证据",
+        "monetization": "约定制作费及使用权",
+        "channels": "客户账号或已签发行方；平台合作新闻不是采购承诺",
+        "costDrivers": "拍摄日、演员、场地、收音、后期、补拍、权利",
+        "pilot": "先给客户六集梗概与报价，再按已授权预算拍前三集",
+        "metrics": "客户购买意向/接受范围；观看理解/续集行为；交付贡献",
+        "stopConditions": "无买方证据先停全季投入；超预算补拍先回剧本/场景",
+        "evidenceAndTradeoffs": "合成提案；真实客户与演员未验证"
+      },
+      {
+        "id": "ai-original",
+        "name": "AI原创系列",
+        "targetCustomer": "原创IP委托方；自营渠道收入另验证",
+        "audienceAndPromise": "幻想剧《借来的十分钟》的选择与记忆代价",
+        "productionModel": "原创角色资产、镜头生成、人工剪辑和审片",
+        "assetsAndRights": "原创剧本、参考资产与声音权利；不复制Huobao NC代码",
+        "monetization": "委托/授权费；渠道分成须先满足条件与真实数据",
+        "channels": "原创内容账号或有合同的授权方",
+        "costDrivers": "所有收费尝试、弃片、剪辑、声画审查、译配和分发",
+        "pilot": "先三镜头身份/动作/道具压力小样，再前三集",
+        "metrics": "关键连续性缺陷、接受秒数、全部返修成本、目标观众续看",
+        "stopConditions": "用户未授权不付费；预算耗尽停止新收费；关键连续性未过不扩量",
+        "evidenceAndTradeoffs": "合成提案；未调用模型、未有市场测试"
+      },
+      {
+        "id": "licensed-localization",
+        "name": "授权IP译制",
+        "targetCustomer": "具目标语言/地区权利的版权方",
+        "audienceAndPromise": "家庭悬疑的关系与动机在西语仍成立",
+        "productionModel": "术语/源文对照、翻译编辑、字幕时码、译配听检",
+        "assetsAndRights": "地域/语言/渠道/期限/改编及声音授权逐项查",
+        "monetization": "按接受分钟/整季收费，约定返修范围",
+        "channels": "客户许可范围内发行",
+        "costDrivers": "翻译、母语编辑、录音/TTS、时码、质检、返修",
+        "pilot": "术语/关系表和三个集段双语/译配对照",
+        "metrics": "关键关系错误、母语意见、客户验收、返修工时和净贡献",
+        "stopConditions": "权利未覆盖不分发/克隆声音；返修范围失控回报价",
+        "evidenceAndTradeoffs": "合成提案；已有素材与客户未知，不把Apache许可当素材权利"
+      }
+    ],
+    "decision": {
+      "recommendedRoute": "ai-original",
+      "selectedRoute": null,
+      "selectionStatus": "pending",
+      "selectionEvidenceRef": null,
+      "reason": "假设没有IP客户或本地团队，可先比较原创AI小样；只有用户选择后才安排相应生产。",
+      "questions": [
+        "有可授权素材/客户吗？可接受的小样预算和目标语言是什么？"
+      ]
+    },
+    "seriesBlueprint": {
+      "title": "借来的十分钟",
+      "season": "救回妹妹的过程逐步失去有关妹妹的记忆，结局兑现选择的代价",
+      "episodes": [
+        "借时救人，陌生的妹妹姓名作为尾钩",
+        "循照片找店，表的来历与预期冲突",
+        "归还手表获得线索，妹妹也在借时"
+      ],
+      "continuity": "左手银表/绿夹克/表盘裂纹；第三集交出表后不可无理由仍戴表；记录主角知情状态"
+    },
+    "productionAndLocalization": {
+      "production": "先三镜头压力小样，后前三集；每镜头保留参考资产、模型/版本、任务ID与接受版。",
+      "localization": "先术语/关系与情节禁改，再上下文翻译、母语审读、时码与听检；当前均未执行。",
+      "rights": "当前未知，受影响的生产或分发不执行；其余策略研究继续。"
+    },
+    "economicsAndPilot": {
+      "kind": "illustrative",
+      "currency": "USD",
+      "knownCosts": 9,
+      "acceptedSeconds": 30,
+      "costPerAcceptedMinute": 18,
+      "costScope": "假设三笔生成费各2.4加剪辑1.8；未包含音乐/译配/投放，不是全成本",
+      "netRevenue": null,
+      "pilot": "预算/时间窗/目标受众和阈值为待确认提案；未做生成、受众或付费验证。"
+    },
+    "researchLedger": {
+      "kind": "synthetic_example",
+      "instruction": "真实任务必须重新连接当前原始来源/固定commit及读取范围；本例不是新检索记录。"
+    },
+    "status": "partial",
+    "artifactRefs": [],
+    "criterionResults": [
+      {
+        "id": "route-decision",
+        "status": "not_run",
+        "evidenceRefs": [],
+        "scope": "合成示例；未对真实任务验收"
+      }
+    ],
+    "missingCapabilities": [
+      {
+        "slot": "media.inspect",
+        "state": "unverified",
+        "impact": "没有真实视频或听检记录",
+        "nextAction": "路线和小样范围确定后由调用方绑定执行/审查工具"
+      }
+    ],
+    "failures": [],
+    "stopReason": "synthetic_example_only",
+    "handoff": {
+      "nextOwner": "caller",
+      "acceptedScope": "三路线方法演示",
+      "remaining": [
+        "绑定真实客户/权利/预算",
+        "记录用户实质选择",
+        "获准后执行小样与独立审查"
+      ],
+      "requiresDecision": true
+    },
+    "nativeRuntimeVerified": false
+  }
+}

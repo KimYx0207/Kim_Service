@@ -1,0 +1,255 @@
+{
+  "schemaVersion": 1,
+  "roleId": "global-expansion-strategist",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "service-route",
+      "capabilityId": "global-expansion-strategist-deliver",
+      "category": "worked_example",
+      "scenario": "同一技能可做服务、软件与内容，价值选择尚未确认。",
+      "input": {
+        "intent": "我有自动化技能想出海，先比较怎么开始。",
+        "assets": "只有专业能力，无已知付费客户。"
+      },
+      "candidateOutputExcerpt": {
+        "marketRoutes": [
+          "服务项目：先查实际需求和交付容量",
+          "自助SaaS：需重复价值与复访证据",
+          "教程/IP：需权利与目标语言受众"
+        ],
+        "decisionMemo": "条件比较交用户选择，没有预定国家或selected路线。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "三条路线改变交付/经济，未知选择没有被伪装确认。",
+      "diagnosticRefs": [
+        "intent-scope",
+        "decision-experiment"
+      ],
+      "decisionRuleRefs": [
+        "different-models",
+        "distinct-options"
+      ]
+    },
+    {
+      "id": "saas-unit",
+      "capabilityId": "global-expansion-strategist-deliver",
+      "category": "worked_example",
+      "scenario": "合成账户月压力情景影响路线投入。",
+      "input": {
+        "intent": "比较SaaS账户月成本。",
+        "marketEvidence": "USD净收入30、变动现金12、时间3、固定300、容量50。"
+      },
+      "candidateOutputExcerpt": {
+        "economics": "现金贡献18，含时间15，固定覆盖分别需17/20账户月；若AI成本增加12，含时间贡献3、需100，超过容量。",
+        "validationPlan": "先查真实激活/复访，不因注册数估LTV。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "单位/容量与替代行动明确，数字是合成情景。",
+      "diagnosticRefs": [
+        "unit-economics",
+        "decision-experiment"
+      ],
+      "decisionRuleRefs": [
+        "same-unit-economics",
+        "bounded-observation"
+      ]
+    },
+    {
+      "id": "content-route",
+      "capabilityId": "global-expansion-strategist-deliver",
+      "category": "worked_example",
+      "scenario": "同一内容可分发或做授权，收入单位不同。",
+      "input": {
+        "intent": "我的教程想做多语言海外内容。"
+      },
+      "candidateOutputExcerpt": {
+        "marketRoutes": "按真实受众信号比较小批内容分发与B2B授权；软件服务是资产允许时的额外替代，不强塞。",
+        "localizationOperations": "核权利、账号资格与代表片段字幕/配音；音轨功能不自动制作配音。",
+        "economics": "授权包可按订单算；广告收入没有实际数据则保留未知。"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "区别权利/制作/收入来源，没有假装已发行。",
+      "diagnosticRefs": [
+        "business-feasibility",
+        "localization-observation"
+      ],
+      "decisionRuleRefs": [
+        "different-models",
+        "eligibility-by-product"
+      ]
+    },
+    {
+      "id": "commerce-collapse",
+      "capabilityId": "global-expansion-strategist-deliver",
+      "category": "failure_boundary",
+      "scenario": "一句出海意图被直接变成服装跨境电商。",
+      "input": {
+        "intent": "我想出海。"
+      },
+      "candidateOutputExcerpt": {
+        "marketRoutes": "首选某热门国家卖服装，马上囤货投广告。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "未检查资产/任务，地区排行替代研究且越过外部授权。",
+      "diagnosticRefs": [
+        "intent-scope",
+        "market-demand"
+      ],
+      "decisionRuleRefs": [
+        "different-models",
+        "distinct-options",
+        "caller-authority"
+      ]
+    },
+    {
+      "id": "service-mor",
+      "capabilityId": "global-expansion-strategist-deliver",
+      "category": "failure_boundary",
+      "scenario": "把人工咨询包装成自动化数字品以套支付资格。",
+      "input": {
+        "intent": "我提供人工咨询，想用数字品MoR收款。"
+      },
+      "candidateOutputExcerpt": {
+        "localizationOperations": "叫SaaS就符合Stripe Managed Payments，不需再核主体。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "实际交付、主体和产品资格未变，标签不能消除细则条件。",
+      "diagnosticRefs": [
+        "business-feasibility"
+      ],
+      "decisionRuleRefs": [
+        "eligibility-by-product"
+      ]
+    },
+    {
+      "id": "metadata-binary",
+      "capabilityId": "global-expansion-strategist-deliver",
+      "category": "failure_boundary",
+      "scenario": "App商店文字翻译完成而产品没有观察。",
+      "input": {
+        "intent": "我的App文案翻译好了，可以说已本地化吗？"
+      },
+      "candidateOutputExcerpt": {
+        "localizationOperations": "App Store元数据已翻译，所以当地产品任务验收全部通过。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "元数据和二进制任务体验是不同观察。",
+      "diagnosticRefs": [
+        "localization-observation"
+      ],
+      "decisionRuleRefs": [
+        "layered-localization"
+      ]
+    },
+    {
+      "id": "sdk-consent",
+      "capabilityId": "global-expansion-strategist-deliver",
+      "category": "failure_boundary",
+      "scenario": "默认SDK状态与完整数据地域被误认。",
+      "input": {
+        "intent": "接入PostHog检查海外用户体验。"
+      },
+      "candidateOutputExcerpt": {
+        "localizationOperations": "默认pending阻止所有采集，选EU就能证明全部业务合规。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "与已读默认行为不同，地区配置不能替代完整数据/义务核查。",
+      "diagnosticRefs": [
+        "research-depth",
+        "localization-observation"
+      ],
+      "decisionRuleRefs": [
+        "current-research",
+        "layered-localization"
+      ]
+    },
+    {
+      "id": "mixed-currency",
+      "capabilityId": "global-expansion-strategist-deliver",
+      "category": "failure_boundary",
+      "scenario": "不同币种与时间贡献混算。",
+      "input": {
+        "intent": "评估服务和商品路线。"
+      },
+      "candidateOutputExcerpt": {
+        "economics": "USD收入500减EUR成本300=利润200，经营者30小时视为零成本。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "缺汇率/口径且时间与容量被隐藏。",
+      "diagnosticRefs": [
+        "unit-economics"
+      ],
+      "decisionRuleRefs": [
+        "same-unit-economics"
+      ]
+    },
+    {
+      "id": "fabricated-research",
+      "capabilityId": "global-expansion-strategist-deliver",
+      "category": "failure_boundary",
+      "scenario": "存了URLs且读测试文件，就声称本次验证。",
+      "input": {
+        "intent": "请真实联网查最新并比较GitHub项目。"
+      },
+      "candidateOutputExcerpt": {
+        "researchLedger": "引用历史URL，未调用工具，但本次源码测试全部跑通。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "历史引用、阅读和执行混淆，虚报通过。",
+      "diagnosticRefs": [
+        "research-depth"
+      ],
+      "decisionRuleRefs": [
+        "current-research"
+      ]
+    },
+    {
+      "id": "visits-profit",
+      "capabilityId": "global-expansion-strategist-deliver",
+      "category": "failure_boundary",
+      "scenario": "点击、观看与未成熟留存推定盈利。",
+      "input": {
+        "intent": "有一百次注册和十万播放，是否继续投？"
+      },
+      "candidateOutputExcerpt": {
+        "economics": "用零流失计算无限LTV，项目肯定盈利。",
+        "validationPlan": "扩大预算，无停止条件。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "没有成本/成熟队列/收益证据，缺可逆验证和授权。",
+      "diagnosticRefs": [
+        "unit-economics",
+        "decision-experiment"
+      ],
+      "decisionRuleRefs": [
+        "same-unit-economics",
+        "bounded-observation"
+      ]
+    },
+    {
+      "id": "language-country",
+      "capabilityId": "global-expansion-strategist-deliver",
+      "category": "failure_boundary",
+      "scenario": "语言直接映射国家与法规。",
+      "input": {
+        "intent": "做英语SaaS试验。"
+      },
+      "candidateOutputExcerpt": {
+        "marketRoutes": "英语全部当美国市场，一个政策可覆盖全部购买者。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "语言不识别客户地区、主体或交易范围。",
+      "diagnosticRefs": [
+        "market-demand",
+        "business-feasibility"
+      ],
+      "decisionRuleRefs": [
+        "distinct-options",
+        "eligibility-by-product"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,296 @@
+{
+  "schemaVersion": 1,
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "input": {
+    "goal": "增加现有清洁替换布业务当期贡献并保住现金，比较内容带货和独立站，暂未决定。",
+    "businessContext": {
+      "market": "中国大陆",
+      "stage": "已有平台店",
+      "people": 2,
+      "retentionCohort": "not supplied"
+    },
+    "metrics": {
+      "currency": "CNY",
+      "paidOrders": 100,
+      "grossRevenue": 6000,
+      "refunds": 600,
+      "goodsCashPaid": 2000,
+      "goodsCostPerUnit": 20,
+      "restockableReturnedUnits": 6,
+      "outboundFulfillment": 600,
+      "returnHandling": 50,
+      "platformPaymentFees": 180,
+      "variableService": 100,
+      "acquisitionSpend": 900,
+      "actualSettledReceipts": 4000,
+      "suppliedAvailableQuantity": 45,
+      "twoDayFulfillmentCapacity": 60,
+      "existingCommittedOrders": 20,
+      "basis": "synthetic mature historical order cohort; tax excluded; fixed salary/rent excluded; all listed cost cash paid",
+      "settlementBasis": "Receipts are after refunds but before platform/payment fees; fees were paid separately and were not already deducted from receipts."
+    },
+    "constraints": {
+      "researchOnly": true,
+      "weeklyHours": 8,
+      "prospectiveValidationBudgetCNY": 200,
+      "noNewAdsOrExternalMessages": true
+    },
+    "settledDecisions": [
+      "先分析，不自动投放或建站"
+    ],
+    "researchRecords": []
+  },
+  "output": {
+    "diagnosis": {
+      "facts": [
+        "合成100单成熟队列可算列示成本贡献",
+        "两人且现金紧，复购队列未提供"
+      ],
+      "assumptions": [
+        "未来需求与复购未确认"
+      ],
+      "unknowns": [
+        "退货原因分层",
+        "当前平台资格/SLA全文",
+        "达人费用与自有客户触达",
+        "独立站获客/维护报价"
+      ]
+    },
+    "choiceCards": [
+      {
+        "decision": "当期贡献与新客验证",
+        "options": [
+          "修复现有店",
+          "小范围内容验证"
+        ],
+        "conditionalRecommendation": "先核查退款/履约；内容方案作为后续选择，不宣布已采用。"
+      },
+      {
+        "decision": "自有内容还是达人",
+        "options": [
+          "内部演示",
+          "外部佣金合作"
+        ],
+        "conditionalRecommendation": "先查费用与资格，不默认佣金、不联系达人。"
+      },
+      {
+        "decision": "是否现在建自营站",
+        "options": [
+          "补复购/获客证据后决定",
+          "继续现有渠道"
+        ],
+        "conditionalRecommendation": "暂缓建设，保留用户决定。"
+      }
+    ],
+    "routes": [
+      {
+        "id": "platform-repair",
+        "userOutcome": "把现有购买转成可留存贡献",
+        "audience": "中国大陆家庭清洁替换布购买者",
+        "customerValue": "规格适配、可解释用途与可兑现交付；需求范围仍需证据",
+        "channel": "现有平台店",
+        "businessModel": "现货商品交易",
+        "prerequisites": [
+          "已有订单和正贡献",
+          "当前交付可支持"
+        ],
+        "costs": [
+          "现有货品/履约/广告/平台费",
+          "内部核查工时"
+        ],
+        "tradeoffs": [
+          "依赖平台需求和规则",
+          "优先少量SKU"
+        ],
+        "successMeasure": "同口径成熟订单贡献、退货原因和履约",
+        "reverseWhen": [
+          "成熟贡献转负",
+          "无法修复的适配/资格问题"
+        ],
+        "evidenceRefs": [
+          "synthetic-input"
+        ],
+        "unknowns": [
+          "10单退货的具体原因"
+        ]
+      },
+      {
+        "id": "content-validation",
+        "userOutcome": "验证真实演示是否带来可履约购买",
+        "audience": "中国大陆家庭清洁替换布购买者",
+        "customerValue": "规格适配、可解释用途与可兑现交付；需求范围仍需证据",
+        "channel": "自有内容或合适达人",
+        "businessModel": "商品交易，合作佣金待核",
+        "prerequisites": [
+          "商品可演示",
+          "工时与产能支持"
+        ],
+        "costs": [
+          "制作/样品",
+          "达人或广告费用待核"
+        ],
+        "tradeoffs": [
+          "需要持续素材",
+          "需求可能集中爆发"
+        ],
+        "successMeasure": "内容到交付/成熟退款的队列贡献",
+        "reverseWhen": [
+          "只有播放无购买",
+          "费用吃掉贡献",
+          "产能不足"
+        ],
+        "evidenceRefs": [
+          "synthetic-input"
+        ],
+        "unknowns": [
+          "达人报价/资格",
+          "内容购买数据"
+        ]
+      },
+      {
+        "id": "owned-retention",
+        "userOutcome": "服务适合补货的客户并建立复购",
+        "audience": "中国大陆家庭清洁替换布购买者",
+        "customerValue": "规格适配、可解释用途与可兑现交付；需求范围仍需证据",
+        "channel": "自营客户触达与独立站（候选）",
+        "businessModel": "复购交易",
+        "prerequisites": [
+          "可触达客户",
+          "成熟复购证据",
+          "可承受回收期"
+        ],
+        "costs": [
+          "获客/支付",
+          "站点/插件/服务维护"
+        ],
+        "tradeoffs": [
+          "自负获客与运营责任",
+          "现在建设占用资金"
+        ],
+        "successMeasure": "新老客分队列贡献、复购间隔和回收期",
+        "reverseWhen": [
+          "缺自有触达",
+          "回收期超资金耐受"
+        ],
+        "evidenceRefs": [
+          "synthetic-input"
+        ],
+        "unknowns": [
+          "成熟复购",
+          "获客成本",
+          "维护报价"
+        ]
+      }
+    ],
+    "evidenceLedger": [
+      {
+        "id": "synthetic-input",
+        "kind": "supplied_synthetic",
+        "currentTaskExternalRead": false,
+        "readScope": "本例虚构商家数据",
+        "use": "演示计算与有条件路线比较",
+        "limitations": [
+          "不是真实账单或客户结果"
+        ]
+      },
+      {
+        "id": "author-provenance",
+        "kind": "package_reference",
+        "currentTaskExternalRead": false,
+        "readScope": "PROVENANCE中的作者研究；不代表样例任务联网",
+        "use": "库存状态与来源适用性反证",
+        "limitations": [
+          "US规则不适用此中国大陆商家",
+          "抖店open零行，不据摘要定当前门槛"
+        ]
+      }
+    ],
+    "economics": {
+      "currency": "CNY",
+      "basis": "100 paid orders; mature refunds; listed variable costs; no fixed salary/rent/tax determination",
+      "netGoodsCost": 1880,
+      "netRevenue": 5400,
+      "contributionBeforeAcquisition": 2590,
+      "contributionAfterListedCosts": 1690,
+      "contributionPerPaidOrder": 16.9,
+      "currentCashChange": 170,
+      "receivableNotCash": 1400,
+      "returnedInventoryAssetNotCash": 120,
+      "cashChangeIfAllReceivableSettles": 1570,
+      "contributionIfRecoveryUnverified": 1570,
+      "attributedNewCustomerCAC": null,
+      "lifetimeValue": null,
+      "limitations": [
+        "9元每支付单广告费不等于CAC",
+        "缺成熟复购不估LTV",
+        "库存恢复不是现金",
+        "未含固定开支，不称净利润"
+      ],
+      "settlementBasis": "4000收款已扣退款、未扣平台/支付费；180在本例另行支付，未重复扣费。"
+    },
+    "fulfillmentGuardrails": {
+      "availableQuantityAlreadyNetOfHolds": 45,
+      "remainingTwoDayCapacity": 40,
+      "planningUpperBound": 40,
+      "constraints": [
+        "需逐日排期与承运截止，40不是任意一天承诺",
+        "不重复扣available",
+        "退货未质检不恢复可售",
+        "具体中国平台资格/SLA仍待host读现行材料"
+      ]
+    },
+    "recommendation": {
+      "preferred": "platform-repair",
+      "secondary": "content-validation after evidence and current authorization",
+      "deferred": "owned-retention pending retention/acquisition evidence",
+      "selectedByUser": false,
+      "conditions": [
+        "给定正贡献与两人资源限制成立",
+        "先核退款原因和未到账应收"
+      ],
+      "reverseWhen": [
+        "成熟贡献转负",
+        "现金必付款超可用余额",
+        "复购/获客有新证据"
+      ]
+    },
+    "validationPlan": [
+      {
+        "step": "只读核查10单退货原因、库存语义和1400应收日期",
+        "budgetCNY": 0,
+        "executionStatus": "not_run",
+        "observation": "原始材料与同队列金额对账",
+        "stop": "材料不支持时缩小结论"
+      },
+      {
+        "step": "准备真实演示内容的最小验证草案，由用户决定发布/投放",
+        "budgetUpperBoundCNY": 200,
+        "hoursUpperBound": 8,
+        "executionStatus": "not_run",
+        "observation": "购买意图、交付、成熟退款和贡献，观察窗按当前渠道核实",
+        "stop": "产能、现金或成熟贡献不支持扩量"
+      }
+    ],
+    "handoff": {
+      "nextOwner": "caller",
+      "decisionsPending": [
+        "是否采用推荐",
+        "是否进入内容验证"
+      ],
+      "adjacentComponents": [
+        "store-performance-analyst",
+        "warehouse-operations-analyst",
+        "product-listing-writer"
+      ],
+      "limitations": [
+        "无真实商家实验",
+        "无本例当前联网",
+        "无原生运行"
+      ],
+      "requiresDecision": true
+    },
+    "status": "partial",
+    "nativeRuntimeVerified": false
+  }
+}

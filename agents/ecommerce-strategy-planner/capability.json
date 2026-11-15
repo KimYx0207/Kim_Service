@@ -1,0 +1,229 @@
+{
+  "schemaVersion": 1,
+  "id": "ecommerce-strategy-planner",
+  "componentType": "agent",
+  "componentVersion": "0.1.0",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "ecommerce-strategy-planner-advise",
+      "summary": "研究并比较电商受众、选品、渠道与经营路线，以单位经济、履约退款、现金和复购约束形成可核查的条件性建议。",
+      "useWhen": [
+        "想做电商但受众、商品、渠道或商业模式没定",
+        "比较平台店经营、内容/达人带货与独立站复购",
+        "销售增长却贡献或现金变差，想找经营路线和最小验证"
+      ],
+      "doNotUseWhen": [
+        "仅商品文案交 product-listing-writer，单纯账表复算交 store-performance-analyst",
+        "库存补货、仓配或订单实现交对应专业能力，本包不代替交易系统",
+        "投放、采购、退款、发布或外部消息由 host 沿用当前授权执行，本包只读建议"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "goal": {
+            "type": "string",
+            "description": "用户目标，可模糊；未知受众/渠道/商业模式先形成选择卡，不能默认已决定"
+          },
+          "businessContext": {
+            "type": [
+              "object",
+              "string",
+              "array"
+            ],
+            "description": "市场、受众、商品价值、阶段、现有渠道与来源；未知保留"
+          },
+          "metrics": {
+            "type": [
+              "object",
+              "array"
+            ],
+            "description": "本轮提供的订单队列、退款、费用、库存、履约与回款；口径和成熟期需核对"
+          },
+          "constraints": {
+            "type": [
+              "object",
+              "string",
+              "array"
+            ],
+            "description": "资金、工时、交付、现有授权与用户接受边界；不把建议当执行授权"
+          },
+          "settledDecisions": {
+            "type": [
+              "object",
+              "string",
+              "array"
+            ],
+            "description": "沿用已确定选择与来源，不重复访谈"
+          },
+          "researchRecords": {
+            "type": "array",
+            "description": "host 本轮真实检索/阅读/运行记录；包内 PROVENANCE 不能代替"
+          },
+          "runtimeBindings": {
+            "type": "array",
+            "description": "host 实际绑定工具、状态、范围和授权，缺失/拒绝保持真实"
+          }
+        },
+        "required": [
+          "goal"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "diagnosis": {
+            "type": "object",
+            "description": "事实、假设、品类差异和影响选择的缺口"
+          },
+          "choiceCards": {
+            "type": "array",
+            "description": "未定受众/价值/渠道/商业模式/成本的选择卡；已定时可为空"
+          },
+          "routes": {
+            "type": "array",
+            "minItems": 0,
+            "description": "按问题保留实质不同的可行路线，数量不固定；全部不成立时可为空，并在 diagnosis/recommendation 给淘汰依据与继续条件。",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "当前路线标识"
+                },
+                "userOutcome": {
+                  "type": "string",
+                  "description": "用户得到的经营结果"
+                },
+                "audience": {
+                  "type": "string",
+                  "description": "受众及购买问题"
+                },
+                "customerValue": {
+                  "type": "string",
+                  "description": "价值和需求证据"
+                },
+                "channel": {
+                  "type": "string",
+                  "description": "需求与成交渠道"
+                },
+                "businessModel": {
+                  "type": "string",
+                  "description": "交易、复购或收费机制"
+                },
+                "prerequisites": {
+                  "type": "array",
+                  "description": "成立条件"
+                },
+                "costs": {
+                  "type": "array",
+                  "description": "资金、工时与运营责任"
+                },
+                "tradeoffs": {
+                  "type": "array",
+                  "description": "实际取舍"
+                },
+                "successMeasure": {
+                  "type": "string",
+                  "description": "可观察结果与分母/时间口径"
+                },
+                "reverseWhen": {
+                  "type": "array",
+                  "description": "反转或重开条件"
+                },
+                "evidenceRefs": {
+                  "type": "array",
+                  "description": "当前真实来源或明确假设"
+                },
+                "unknowns": {
+                  "type": "array",
+                  "description": "未知及影响"
+                }
+              },
+              "required": [
+                "id",
+                "userOutcome",
+                "audience",
+                "customerValue",
+                "channel",
+                "businessModel",
+                "prerequisites",
+                "costs",
+                "tradeoffs",
+                "successMeasure",
+                "reverseWhen",
+                "evidenceRefs",
+                "unknowns"
+              ]
+            }
+          },
+          "evidenceLedger": {
+            "type": "array",
+            "description": "真实来源/工具/时间/范围/版本与采用、不采用、限制；没有当前搜索时明确说明"
+          },
+          "economics": {
+            "type": "object",
+            "description": "同口径列示成本贡献、现金和复购成熟度，未知不得填零"
+          },
+          "fulfillmentGuardrails": {
+            "type": "object",
+            "description": "库存语义、占用、退货质检、时序产能与当前规则适用范围"
+          },
+          "recommendation": {
+            "type": "object",
+            "description": "有条件建议、未定选择、反转条件；保留用户决定"
+          },
+          "validationPlan": {
+            "type": "array",
+            "description": "当前约束内的最小验证、观察成熟期和停止规则；未执行明确未执行"
+          },
+          "handoff": {
+            "type": "object",
+            "description": "现有产物、未读与待决项、下一责任者和邻接能力建议"
+          },
+          "status": {
+            "enum": [
+              "completed",
+              "partial",
+              "needs_input",
+              "blocked"
+            ],
+            "description": "仅本角色交付状态，不是用户经营结果或上线许可"
+          },
+          "nativeRuntimeVerified": {
+            "const": false,
+            "description": "静态包或算术检查不证明原生 Agent 加载"
+          }
+        },
+        "required": [
+          "diagnosis",
+          "choiceCards",
+          "routes",
+          "evidenceLedger",
+          "economics",
+          "fulfillmentGuardrails",
+          "recommendation",
+          "validationPlan",
+          "handoff",
+          "status",
+          "nativeRuntimeVerified"
+        ]
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "发布、外部消息、付款或生产写入沿用当前任务授权；已授权研究、计算和可逆工作继续，不重复审批。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    }
+  ]
+}

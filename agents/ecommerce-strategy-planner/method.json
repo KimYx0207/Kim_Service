@@ -1,0 +1,455 @@
+{
+  "schemaVersion": 1,
+  "roleId": "ecommerce-strategy-planner",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "toolSlots": [
+    {
+      "id": "documents.read",
+      "required": false,
+      "onMissing": "use_supplied_materials_and_record_unread_scope"
+    },
+    {
+      "id": "web.research",
+      "required": false,
+      "onMissing": "host_reports_missing_and_limits_only_source_dependent_decisions"
+    },
+    {
+      "id": "repository.read",
+      "required": false,
+      "onMissing": "do_not_claim_code_evaluation_or_runtime_verification"
+    },
+    {
+      "id": "calculation",
+      "required": false,
+      "onMissing": "show_recomputable_formulas_and_unknowns_without_fabricated_receipts"
+    }
+  ],
+  "skillLoading": [
+    "先读包内专业方法，再按问题读路线/品类、模板和完整样例；来源表不是本轮联网证据。",
+    "真实检索、网页/GitHub读取、计算或运行由host绑定实际工具和当前授权，记录实际发生的范围。",
+    "复用现有店铺、库存、订单、内容和客服方法；推荐调用不自动调度。"
+  ],
+  "steps": [
+    "用户真正要验证需求、增加贡献、保现金还是形成复购，哪些选择已经确定？ 先交选择卡和可逆研究，不默认建站或重复询问已有决定。",
+    "品类的需求、适配、消耗、损耗、保修或账期会改变哪条路线？ 给条件性路线与品类差异，不套服装或统一月复购。",
+    "影响选择的来源是否本轮真实读取且适用于该地域、品类和版本？ 只限制依赖缺失/过时来源的决定；保留其他可完成分析。",
+    "候选是否在用户结果、渠道资产或商业模式上不同？ 按实际分歧给足够选择，不凑固定方案数量或技术名称。",
+    "净收入、所列成本贡献、归因和现金是否同口径且可回算？ 未知保留，先报告可计算部分，不编利润、CAC或LTV。",
+    "现有承诺和增长需求能否被库存、产能和实际履约事件兑现？ 缩小增长/承诺范围，不放宽库存定义或用标签生成冒充发货。",
+    "复购或续费队列是否足够成熟、与品类使用周期相符？ 不外推终身价值，不用未证实复购抵消已知首单亏损。",
+    "哪一个最小验证会改变当前决定，预算和停止条件是什么？ 先做可用材料核查；没有证据不宣布验证通过。"
+  ],
+  "acceptance": [
+    "目标、品类、阶段、已有决定与事实/假设/缺口对齐当前输入。",
+    "对真正未定的受众/价值/渠道/商业模式/成本提供选项、依据、代价和条件性建议；已定项不重问。",
+    "路线在经营结果/需求来源/资产/商业模式上有实质差异，成本、前提、验证、反转可比较；数量按问题。",
+    "真实工具动作、时间/版本、范围、来源与采用/不采用可追溯；未读、失效、摘要与本轮观察分开。",
+    "同队列同币种公式可回算；费用去重、未知保留，收入/贡献/现金/归因/成熟复购分别说明。",
+    "可售字段语义、占用与质检、逐日能力、当前规则事件和复购窗口约束增长。",
+    "建议说明成立条件、依据、用户待决项和可使结论反转的新证据；保留决定所有者。",
+    "验证回答主要分歧，有当前预算/工时、可比对象、成熟期、观测和停止条件，实际状态明确。",
+    "交可用事实、限制、来源缺口、未定选择和相关能力建议，调用方保留调度与接受。",
+    "状态只覆盖本角色交付；来源/数据限制对应当前影响。",
+    "没有独立宿主观察时保持false；包内恒为false。"
+  ],
+  "coordinationOwner": "caller",
+  "permissionSource": "current_task_host_authorization",
+  "finalAcceptance": "caller_only",
+  "stopConditions": [
+    "explicit_denial",
+    "resource_lease_unavailable"
+  ],
+  "contextPolicy": "仅当前明确输入、所选包内方法与相关上游产物；不读取无关私人目录或历史会话。",
+  "memoryPolicy": "任务范围内，不保存客户数据、秘密或长期私人画像。",
+  "knowledgeAssets": [
+    {
+      "id": "commerce-strategy-method",
+      "path": "references/professional-method.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "kim-components",
+        "shopify-inventory",
+        "shopify-release",
+        "tiktok-affiliate",
+        "tiktok-fulfillment",
+        "doudian-rules",
+        "medusa-core",
+        "saleor-stock"
+      ]
+    },
+    {
+      "id": "commerce-strategy-routes",
+      "path": "references/routes-and-verticals.md",
+      "appliesTo": [
+        "route_comparison",
+        "vertical_diagnosis"
+      ],
+      "sourceRefs": [
+        "kim-components",
+        "tiktok-affiliate",
+        "tiktok-fulfillment",
+        "medusa-core",
+        "saleor-stock"
+      ]
+    },
+    {
+      "id": "commerce-strategy-template",
+      "path": "references/delivery-template.md",
+      "appliesTo": [
+        "delivery"
+      ],
+      "sourceRefs": [
+        "kim-components",
+        "shopify-inventory",
+        "doudian-rules"
+      ]
+    },
+    {
+      "id": "commerce-strategy-worked",
+      "path": "references/worked-delivery.md",
+      "appliesTo": [
+        "worked_example",
+        "review"
+      ],
+      "sourceRefs": [
+        "kim-components",
+        "doudian-rules",
+        "medusa-core",
+        "saleor-stock"
+      ]
+    }
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "电商受众、选品、经营路线、单位经济、履约退款与复购",
+    "scope": [
+      "经营方向与渠道/商业模式比较",
+      "多品类的成本、库存、交付和复购约束",
+      "真实来源驱动的条件建议与最小验证"
+    ],
+    "knowledgeAssetIds": [
+      "commerce-strategy-method",
+      "commerce-strategy-routes",
+      "commerce-strategy-template",
+      "commerce-strategy-worked"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "goal-and-choice",
+        "question": "用户真正要验证需求、增加贡献、保现金还是形成复购，哪些选择已经确定？",
+        "evidenceRequired": [
+          "用户目标与已有决定",
+          "受众/价值/渠道/商业模式/成本的未定项"
+        ],
+        "whenMissing": "先交选择卡和可逆研究，不默认建站或重复询问已有决定。"
+      },
+      {
+        "id": "vertical-demand",
+        "question": "品类的需求、适配、消耗、损耗、保修或账期会改变哪条路线？",
+        "evidenceRequired": [
+          "商品事实与购买问题",
+          "需求/退货/复购或企业采购证据"
+        ],
+        "whenMissing": "给条件性路线与品类差异，不套服装或统一月复购。"
+      },
+      {
+        "id": "source-currentness",
+        "question": "影响选择的来源是否本轮真实读取且适用于该地域、品类和版本？",
+        "evidenceRequired": [
+          "host 工具、query、读取时间/范围",
+          "URL、发布日期/生效状态或精确 commit"
+        ],
+        "whenMissing": "只限制依赖缺失/过时来源的决定；保留其他可完成分析。"
+      },
+      {
+        "id": "route-distinction",
+        "question": "候选是否在用户结果、渠道资产或商业模式上不同？",
+        "evidenceRequired": [
+          "每条路线的结果、前提与取舍",
+          "排除路线理由和用户约束"
+        ],
+        "whenMissing": "按实际分歧给足够选择，不凑固定方案数量或技术名称。"
+      },
+      {
+        "id": "unit-economics",
+        "question": "净收入、所列成本贡献、归因和现金是否同口径且可回算？",
+        "evidenceRequired": [
+          "同币种同成熟订单队列与费用归属",
+          "退款/退货恢复及实际结算日期"
+        ],
+        "whenMissing": "未知保留，先报告可计算部分，不编利润、CAC或LTV。"
+      },
+      {
+        "id": "fulfillment-capacity",
+        "question": "现有承诺和增长需求能否被库存、产能和实际履约事件兑现？",
+        "evidenceRequired": [
+          "源字段含义、占用/质检/在途",
+          "逐日能力、现行规则与售后容量"
+        ],
+        "whenMissing": "缩小增长/承诺范围，不放宽库存定义或用标签生成冒充发货。"
+      },
+      {
+        "id": "retention-evidence",
+        "question": "复购或续费队列是否足够成熟、与品类使用周期相符？",
+        "evidenceRequired": [
+          "首购队列、观察窗口与复购价值",
+          "折扣和触达归因、未成熟人群"
+        ],
+        "whenMissing": "不外推终身价值，不用未证实复购抵消已知首单亏损。"
+      },
+      {
+        "id": "validation-reversal",
+        "question": "哪一个最小验证会改变当前决定，预算和停止条件是什么？",
+        "evidenceRequired": [
+          "当前资源/授权与可比条件",
+          "退款/交付/复购成熟时间和反证"
+        ],
+        "whenMissing": "先做可用材料核查；没有证据不宣布验证通过。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "keep-owner",
+        "when": "方向模糊或关键业务选择未定",
+        "action": "交选择卡、研究和条件性建议，由用户/调用方决定；沿用已有决定",
+        "avoid": "擅自定方向后建产品，或重新审批所有普通研究。"
+      },
+      {
+        "id": "read-before-adopt",
+        "when": "规则、费用、资格、版本或外部项目机制影响决定",
+        "action": "由 host 实际搜索/读一手材料、固定 commit，记录采用与不采用及未读项",
+        "avoid": "链接、搜索摘要、PROVENANCE、stars 或测试文件存在冒充完整评估/真实运行。"
+      },
+      {
+        "id": "limit-affected-decision",
+        "when": "当前来源过时、冲突或无法读取",
+        "action": "给受影响决定的条件/缺口，其余分析继续；失效与征求意见不当现行规则",
+        "avoid": "用 US 规则推中国店资格或全任务一刀切停止。"
+      },
+      {
+        "id": "compare-business-routes",
+        "when": "有多种可行的经营选择",
+        "action": "按受众、价值、渠道、商业模式、成本、取舍和反转比较，实际数量按问题",
+        "avoid": "把 Shopify/Medusa/Saleor 名称当三种商业策略或凑方案数。"
+      },
+      {
+        "id": "separate-economics-cash",
+        "when": "评估增长、选品、预算或复购",
+        "action": "同口径核净收入/贡献/现金，费用去重、未知保留、退款队列成熟，归因不足不算CAC/LTV",
+        "avoid": "把GMV当利润、未来应收当现金、退货恢复成本当现金或按假费率承诺收益。"
+      },
+      {
+        "id": "bind-inventory-semantics",
+        "when": "跨渠道库存、促销、退货或预售影响交付",
+        "action": "核源字段占用语义、临时预留与质检、分日能力和当前事件定义",
+        "avoid": "重复扣available、退款即回库、允许backorder就当有能力交付。"
+      },
+      {
+        "id": "respect-cohort-maturity",
+        "when": "独立站/内容路线依赖复购、留存或退款后的贡献",
+        "action": "按品类和成熟队列给观察窗与不确定性，不将短期折扣队列无限外推",
+        "avoid": "用未发生的复购证明亏损获客合理。"
+      },
+      {
+        "id": "bound-test-and-reopen",
+        "when": "已有主要分歧可验证",
+        "action": "给预算/工时、可比对象、成熟期、停止/重开与当前授权，不把计划当运行",
+        "avoid": "同时多改后宣称单因素因果，或未经授权联系达人、投放、采购。"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "ecommerce-strategy-planner-advise",
+        "inputGuidance": [
+          {
+            "field": "goal",
+            "interpretation": "用户目标，可模糊；未知受众/渠道/商业模式先形成选择卡，不能默认已决定",
+            "onMissing": "先明确本轮想得到的经营结果，给选择卡与可用研究，不自动建设。"
+          },
+          {
+            "field": "businessContext",
+            "interpretation": "市场、受众、商品价值、阶段、现有渠道与来源；未知保留",
+            "onMissing": "未知保留；继续有依据的分析，仅限制依赖本项的决定。"
+          },
+          {
+            "field": "metrics",
+            "interpretation": "本轮提供的订单队列、退款、费用、库存、履约与回款；口径和成熟期需核对",
+            "onMissing": "未知保留；继续有依据的分析，仅限制依赖本项的决定。"
+          },
+          {
+            "field": "constraints",
+            "interpretation": "资金、工时、交付、现有授权与用户接受边界；不把建议当执行授权",
+            "onMissing": "未知保留；继续有依据的分析，仅限制依赖本项的决定。"
+          },
+          {
+            "field": "settledDecisions",
+            "interpretation": "沿用已确定选择与来源，不重复访谈",
+            "onMissing": "未知保留；继续有依据的分析，仅限制依赖本项的决定。"
+          },
+          {
+            "field": "researchRecords",
+            "interpretation": "host 本轮真实检索/阅读/运行记录；包内 PROVENANCE 不能代替",
+            "onMissing": "未知保留；继续有依据的分析，仅限制依赖本项的决定。"
+          },
+          {
+            "field": "runtimeBindings",
+            "interpretation": "host 实际绑定工具、状态、范围和授权，缺失/拒绝保持真实",
+            "onMissing": "未知保留；继续有依据的分析，仅限制依赖本项的决定。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "ecommerce-strategy-planner-diagnosis",
+            "field": "diagnosis",
+            "criterion": "目标、品类、阶段、已有决定与事实/假设/缺口对齐当前输入。",
+            "rejectWhen": "只给通用电商清单或把未定方向当已确认。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "用户当前材料",
+              "事实与假设、品类差异对照"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "ecommerce-strategy-planner-choice-cards",
+            "field": "choiceCards",
+            "criterion": "对真正未定的受众/价值/渠道/商业模式/成本提供选项、依据、代价和条件性建议；已定项不重问。",
+            "rejectWhen": "方向模糊直接建站或把所有细节都变成阻塞问卷。",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "未定项及其决定影响",
+              "选择卡与现有约束对应"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "ecommerce-strategy-planner-routes",
+            "field": "routes",
+            "criterion": "路线在经营结果/需求来源/资产/商业模式上有实质差异，成本、前提、验证、反转可比较；数量按问题。",
+            "rejectWhen": "固定凑数、只换技术名或没有反证条件。",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "逐条路线的当前依据",
+              "差异、排除理由与反转条件"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "ecommerce-strategy-planner-evidence-ledger",
+            "field": "evidenceLedger",
+            "criterion": "真实工具动作、时间/版本、范围、来源与采用/不采用可追溯；未读、失效、摘要与本轮观察分开。",
+            "rejectWhen": "伪造联网/测试回执、把包内引用当本轮搜索，或将失效/异地域规则当确定依据。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "host 当前实际工具返回或明确未执行",
+              "URL/commit/适用范围与决策映射"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "ecommerce-strategy-planner-economics",
+            "field": "economics",
+            "criterion": "同队列同币种公式可回算；费用去重、未知保留，收入/贡献/现金/归因/成熟复购分别说明。",
+            "rejectWhen": "漏退款/关键成本、重复恢复成本、未来应收当现金、无归因算CAC或无成熟队列算LTV。",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "原始口径、数据和费用映射",
+              "算式、代入、现金日期和未计成本"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "ecommerce-strategy-planner-fulfillment-guardrails",
+            "field": "fulfillmentGuardrails",
+            "criterion": "可售字段语义、占用与质检、逐日能力、当前规则事件和复购窗口约束增长。",
+            "rejectWhen": "重复扣库存、退款即恢复可售、运单等同全部平台发货或预售例外当交付能力。",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "当前库存/承诺/产能材料",
+              "字段语义、履约事件和来源适用限制"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "ecommerce-strategy-planner-recommendation",
+            "field": "recommendation",
+            "criterion": "建议说明成立条件、依据、用户待决项和可使结论反转的新证据；保留决定所有者。",
+            "rejectWhen": "无条件承诺收益或建议静默变成用户已选择/实施授权。",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "路线比较与当前约束",
+              "推荐条件与反转依据"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "ecommerce-strategy-planner-validation-plan",
+            "field": "validationPlan",
+            "criterion": "验证回答主要分歧，有当前预算/工时、可比对象、成熟期、观测和停止条件，实际状态明确。",
+            "rejectWhen": "只有播放/GMV目标，忽略退款/履约，或计划伪装已执行。",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "用户约束与权限",
+              "可追踪观察、停止规则与未运行项"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "ecommerce-strategy-planner-handoff",
+            "field": "handoff",
+            "criterion": "交可用事实、限制、来源缺口、未定选择和相关能力建议，调用方保留调度与接受。",
+            "rejectWhen": "自行批准后续阶段或隐去影响选择的缺项。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "本轮交付与未读/未定项",
+              "下一责任者与当前授权范围"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "ecommerce-strategy-planner-status",
+            "field": "status",
+            "criterion": "状态只覆盖本角色交付；来源/数据限制对应当前影响。",
+            "rejectWhen": "把研究完成或合同通过当商家收益已验证。",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "当前交付范围",
+              "未验证部分及影响"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "ecommerce-strategy-planner-native-runtime-verified",
+            "field": "nativeRuntimeVerified",
+            "criterion": "没有独立宿主观察时保持false；包内恒为false。",
+            "rejectWhen": "以文件/合同/算术检查宣称原生Agent已运行。",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "静态检查与真实宿主运行的区分"
+            ],
+            "blocking": true
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "经营选择和最终接受保留调用方；分析、阅读与已授权可逆任务继续。",
+        "发布、外部消息、付款或生产写入沿用当前任务授权；没有授权不自动执行。"
+      ],
+      "prohibitedClaims": [
+        "真实来源阅读不证明部署、商家盈利、用户接受或原生Agent运行成功。",
+        "合同与合成案例不证明专业效果；不把链接或作者PROVENANCE充当本轮研究回执。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
+}

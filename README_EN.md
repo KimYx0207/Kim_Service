@@ -10,11 +10,27 @@ Kim Service is an open-source **library of professional methods for AI work**. Y
 
 You may know what you want without knowing which numbers a forecast must reconcile, which states a booking page needs, or how to compare supplier quotes. The methods make the work concrete: inspect materials and evidence, analyze or build the result, then check the actual delivery.
 
-Source version **V1.17** includes **58 specialist Agents, 32 Skills, 2 Hooks, and 2 Tools**: 94 components with **109 searchable task capabilities**. Choose one for the job in front of you, or combine several methods within a project. This version pairs with Meta_Kim v3.14.0.
+Published **V1.17** includes **58 specialist Agents, 32 Skills, 2 Hooks, and 2 Tools**: 94 components with **109 searchable task capabilities**, paired with Meta_Kim v3.14.0. Current main additionally includes the three strategy methods below, recorded under Unreleased; the previous release downloads do not contain these additions.
 
 **[Browse capabilities and prepare a request](https://kimyx0207.github.io/Kim_Service/?lang=en)** · **[V1.17 downloads](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.17)** · **[Browse the source](https://github.com/KimYx0207/Kim_Service/tree/main)**
 
 Browse **11 industries and 8 shared professional domains → role/job**, or search for the result you need: “cash forecast,” “supplier comparison,” or “booking page.” Check the inputs and deliverables before choosing a method. An Agent here is first a complete professional method package read and executed by the current client; native Agent registration depends on the integration.
+
+Current main contains **61 Agents, 97 components and 112 task capabilities**. The three new strategy roles use the existing industry classification and invocation contract.
+
+## Ecommerce, global expansion and short drama: compare business routes first
+
+When the goal is still open, research the market and customer problem before choosing a product to build. The new methods on main call for actual current online research and, when relevant, reading external GitHub implementations, tests, versions and licenses. Included source notes are dated research snapshots, not evidence that a later task has already searched.
+
+| Direction to explore | Method | What to compare |
+| --- | --- | --- |
+| Ecommerce model and operations | [Ecommerce strategy](agents/ecommerce-strategy-planner/AGENT.md) | Marketplace operations, creator commerce, owned-channel repeat sales and business replenishment; distinguish product fit, shelf life, shipping and service while checking contribution, cash and fulfillment. |
+| Business and market for expansion | [Global expansion](agents/global-expansion-strategist/AGENT.md) | Physical goods, SaaS/Web, apps, content/IP and professional services; compare buyers, markets, channels, payments, localization, support and reversible experiments. |
+| Short-drama business route | [Short-drama strategy](agents/short-drama-strategist/AGENT.md) | Live-action originals/commissions, AI originals and licensed localization; connect serial storytelling and accepted-footage cost to rights, distribution, retention and payback. |
+
+Each viable alternative states the customer, value, acquisition and revenue model, initial and ongoing effort, conditions, unknowns and reasons to stop or switch. Recommendations are conditional. Unresolved material choices stay open, and existing user decisions are preserved. Once a direction is chosen, reuse the relevant content, operations, finance, software or media-production methods for delivery.
+
+The actual research is recorded in dated notes for [ecommerce](docs/research/ecommerce-strategy-2026-11-15.md), [global expansion](docs/research/global-expansion-2026-11-15.md) and [short drama](docs/research/short-drama-2026-11-15.md), including primary-source dates, fixed GitHub commits, reading depth and work not executed. These methods and synthetic examples do not establish real demand or commercial returns.
 
 ## Run one task: goal, materials, method, delivery
 
@@ -58,7 +74,7 @@ Financial modeling starts with periods, currency, and units, then connects sales
 
 ### What the four kinds of component do
 
-- **Agents handle a complete professional task.** Each of the 58 roles has a defined scope, inputs and outputs, reference material, decision steps, positive and negative examples, and quality checks. Financial modeling receives business data; design-system work receives screens, brand choices, and interaction requirements. Their methods lead to different, concrete deliverables.
+- **Agents handle a complete professional task.** Each role has a defined scope, inputs and outputs, reference material, decision steps, positive and negative examples, and quality checks. Financial modeling receives business data; design-system work receives screens, brand choices, and interaction requirements. Their methods lead to different, concrete deliverables.
 - **Skills support a particular step.** The 32 reusable skills cover requirements tracing, API contracts, database migration, accessibility, financial scenarios, experiments, retrieval evaluation, and learning assessment. They also include workflows for teamwork, memory, skill discovery, Xiaohongshu, and sticker production. Select the ones the current job needs.
 - **Hooks clarify requests and record delivered versions.** In a supported, configured client, HookPrompt adds context about the goal, scope, output, and checks to substantive task prompts. It preserves decisions already made in the conversation. The opt-in evidence Hook records hashes of explicitly selected local artifacts.
 - **Tools connect and inspect execution capabilities.** The multi-CLI package can expose locally installed Codex and Gemini through MCP to a compatible client for coding or review, with project-level workflow entries. The offline MCP auditor examines tool-definition changes. The current client still controls the working directory and permitted file operations.

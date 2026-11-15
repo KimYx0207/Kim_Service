@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "repository": "KimYx0207/Kim_Service",
-  "componentCount": 94,
+  "componentCount": 97,
   "release": {
     "repository": "KimYx0207/Kim_Service",
     "remoteName": "origin",
@@ -357,6 +357,25 @@
       ]
     },
     {
+      "id": "ecommerce-strategy-planner",
+      "kind": "agent",
+      "path": "agents/ecommerce-strategy-planner",
+      "source": "canonical:agents/ecommerce-strategy-planner",
+      "revision": "pending-local:727fc0560c296d7bac1b99034e1e87243ee5a0db8e1f1253cb56c84c0ffb24e6",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.0",
+      "contractSha256": "727fc0560c296d7bac1b99034e1e87243ee5a0db8e1f1253cb56c84c0ffb24e6",
+      "contentSha256": "15748d1458cb908619770b968f40194b01199e345f1701a22fd20086962507f1",
+      "required": [
+        "AGENT.md",
+        "capability.json",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
       "id": "energy-project-analyst",
       "kind": "agent",
       "path": "agents/energy-project-analyst",
@@ -457,6 +476,27 @@
       ],
       "validation": [
         "node tests/contract.test.mjs"
+      ]
+    },
+    {
+      "id": "global-expansion-strategist",
+      "kind": "agent",
+      "path": "agents/global-expansion-strategist",
+      "source": "canonical:agents/global-expansion-strategist",
+      "revision": "pending-local:0594d5b2d4aa8cfea2dff08bb53606c3e678c0fb027e985d5a0226ffb4ee1988",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.0",
+      "contractSha256": "0594d5b2d4aa8cfea2dff08bb53606c3e678c0fb027e985d5a0226ffb4ee1988",
+      "contentSha256": "ff37a51b278621e93b4b86d9078c497dd6632301719adc962e9c03d03bf4189c",
+      "required": [
+        "AGENT.md",
+        "capability.json",
+        "tests/contract.test.mjs",
+        "tests/economics.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs",
+        "node tests/economics.test.mjs"
       ]
     },
     {
@@ -895,6 +935,25 @@
       "version": "0.1.0",
       "contractSha256": "a2cecb16f11023ea2d630908807aca86a24cb90913c9f3829f3d82c3382e884d",
       "contentSha256": "21223a4d74552bebe6ad71ba672627f6143c945324be2fae42c421add2379bee",
+      "required": [
+        "AGENT.md",
+        "capability.json",
+        "tests/contract.test.mjs"
+      ],
+      "validation": [
+        "node tests/contract.test.mjs"
+      ]
+    },
+    {
+      "id": "short-drama-strategist",
+      "kind": "agent",
+      "path": "agents/short-drama-strategist",
+      "source": "canonical:agents/short-drama-strategist",
+      "revision": "pending-local:ff18541133b2ea96a08f4777a5d9e91da2ec055408907e60674f002a263eca45",
+      "snapshot": "capability-contract-pending-release",
+      "version": "0.1.0",
+      "contractSha256": "ff18541133b2ea96a08f4777a5d9e91da2ec055408907e60674f002a263eca45",
+      "contentSha256": "e6d7ebfefc3e07319c597bfbd34408789dd4d1a81d513f9a2c48842efc9e18a3",
       "required": [
         "AGENT.md",
         "capability.json",

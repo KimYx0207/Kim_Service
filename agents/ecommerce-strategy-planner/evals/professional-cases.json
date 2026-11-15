@@ -1,0 +1,258 @@
+{
+  "schemaVersion": 1,
+  "roleId": "ecommerce-strategy-planner",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "vague-intent-cards",
+      "capabilityId": "ecommerce-strategy-planner-advise",
+      "category": "worked_example",
+      "scenario": "只有想做电商，没有受众渠道",
+      "input": {
+        "goal": "想做电商，给我方向"
+      },
+      "candidateOutputExcerpt": {
+        "choiceCards": [
+          {
+            "decision": "受众/价值/渠道/商业模式/成本",
+            "options": [
+              "已有平台需求",
+              "可演示内容需求",
+              "已拥有客户的复购需求"
+            ],
+            "recommendation": "先研究与资源匹配，不自动开店"
+          }
+        ],
+        "recommendation": {
+          "conditional": true,
+          "selectedByUser": false
+        }
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "先把关键选择做成可比较对象，没有把建议变授权。",
+      "diagnosticRefs": [
+        "goal-and-choice",
+        "route-distinction"
+      ],
+      "decisionRuleRefs": [
+        "keep-owner",
+        "compare-business-routes"
+      ]
+    },
+    {
+      "id": "premature-store-build",
+      "capabilityId": "ecommerce-strategy-planner-advise",
+      "category": "failure_boundary",
+      "scenario": "方向尚未确定就开始建设",
+      "input": {
+        "goal": "想做电商但还没想清楚"
+      },
+      "candidateOutputExcerpt": {
+        "recommendation": {
+          "selectedByUser": true,
+          "action": "已经替你决定独立站，开始建设"
+        }
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "模糊意图不等于选择已定，也不等于实施授权。",
+      "diagnosticRefs": [
+        "goal-and-choice"
+      ],
+      "decisionRuleRefs": [
+        "keep-owner"
+      ]
+    },
+    {
+      "id": "bounded-unavailable-source",
+      "capabilityId": "ecommerce-strategy-planner-advise",
+      "category": "worked_example",
+      "scenario": "部分规则不可读但账表足够",
+      "input": {
+        "goal": "分析现有店，规则网页打不开"
+      },
+      "candidateOutputExcerpt": {
+        "evidenceLedger": [
+          {
+            "state": "unavailable",
+            "impact": "只限制当前资格和时限结论"
+          }
+        ],
+        "economics": {
+          "knownScope": "按给定同口径账表计算贡献",
+          "unknownCosts": [
+            "未提供费用保留未知"
+          ]
+        },
+        "status": "partial"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "缺一个来源不阻断其他有依据工作，也不把摘要当全文。",
+      "diagnosticRefs": [
+        "source-currentness",
+        "unit-economics"
+      ],
+      "decisionRuleRefs": [
+        "limit-affected-decision",
+        "read-before-adopt"
+      ]
+    },
+    {
+      "id": "us-rule-china-store",
+      "capabilityId": "ecommerce-strategy-planner-advise",
+      "category": "failure_boundary",
+      "scenario": "地域错误外推",
+      "input": {
+        "goal": "中国大陆抖店发货如何承诺"
+      },
+      "candidateOutputExcerpt": {
+        "fulfillmentGuardrails": {
+          "decision": "TikTok US所有门槛直接适用中国店"
+        }
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "官方来源也受地域和品类约束。",
+      "diagnosticRefs": [
+        "source-currentness",
+        "fulfillment-capacity"
+      ],
+      "decisionRuleRefs": [
+        "limit-affected-decision"
+      ]
+    },
+    {
+      "id": "gmv-is-not-cash",
+      "capabilityId": "ecommerce-strategy-planner-advise",
+      "category": "failure_boundary",
+      "scenario": "退款与未结算被忽略",
+      "input": {
+        "goal": "销售6000、退款600，实收4000，采购物流已付"
+      },
+      "candidateOutputExcerpt": {
+        "economics": {
+          "profit": 6000,
+          "cashAvailable": 6000
+        }
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "GMV、贡献和实际现金不是同一口径。",
+      "diagnosticRefs": [
+        "unit-economics"
+      ],
+      "decisionRuleRefs": [
+        "separate-economics-cash"
+      ]
+    },
+    {
+      "id": "refund-not-restock",
+      "capabilityId": "ecommerce-strategy-planner-advise",
+      "category": "failure_boundary",
+      "scenario": "退款但实物尚未质检",
+      "input": {
+        "goal": "10单已退款，货未收到"
+      },
+      "candidateOutputExcerpt": {
+        "fulfillmentGuardrails": {
+          "availableIncrease": 10
+        },
+        "economics": {
+          "goodsCostFullyRecovered": true
+        }
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "退款不证明收货、质检和恢复价值。",
+      "diagnosticRefs": [
+        "fulfillment-capacity",
+        "unit-economics"
+      ],
+      "decisionRuleRefs": [
+        "bind-inventory-semantics",
+        "separate-economics-cash"
+      ]
+    },
+    {
+      "id": "unmatured-ltv",
+      "capabilityId": "ecommerce-strategy-planner-advise",
+      "category": "failure_boundary",
+      "scenario": "短观察窗推长期收益",
+      "input": {
+        "goal": "新品两周，首单亏损但预期复购"
+      },
+      "candidateOutputExcerpt": {
+        "economics": {
+          "lifetimeValue": "必然很高，足以弥补亏损"
+        },
+        "recommendation": {
+          "expand": true
+        }
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "未成熟队列不能承担扩量收益证明。",
+      "diagnosticRefs": [
+        "retention-evidence"
+      ],
+      "decisionRuleRefs": [
+        "respect-cohort-maturity"
+      ]
+    },
+    {
+      "id": "reference-is-not-run",
+      "capabilityId": "ecommerce-strategy-planner-advise",
+      "category": "failure_boundary",
+      "scenario": "来源清单伪装本轮研究",
+      "input": {
+        "goal": "用包内资料比较路线"
+      },
+      "candidateOutputExcerpt": {
+        "evidenceLedger": [
+          {
+            "proof": "PROVENANCE有链接所以本轮已联网和测试通过"
+          }
+        ]
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "作者引用不证明当前工具动作或运行。",
+      "diagnosticRefs": [
+        "source-currentness"
+      ],
+      "decisionRuleRefs": [
+        "read-before-adopt"
+      ]
+    },
+    {
+      "id": "fixed-choice-no-ceremony",
+      "capabilityId": "ecommerce-strategy-planner-advise",
+      "category": "worked_example",
+      "scenario": "用户已有平台路线，只比较一个当前改进",
+      "input": {
+        "goal": "已决定继续平台店，只核退货造成的贡献缺口"
+      },
+      "candidateOutputExcerpt": {
+        "choiceCards": [],
+        "recommendation": {
+          "scope": "只围绕退货原因与成本核查",
+          "selectedByUser": true
+        },
+        "validationPlan": [
+          {
+            "executionStatus": "not_run",
+            "budget": 0,
+            "observation": "成熟队列退货原因与可恢复成本"
+          }
+        ]
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "沿用已有决定，只分析真实分歧，不重新凑三条路线。",
+      "diagnosticRefs": [
+        "goal-and-choice",
+        "validation-reversal"
+      ],
+      "decisionRuleRefs": [
+        "keep-owner",
+        "compare-business-routes",
+        "bound-test-and-reopen"
+      ]
+    }
+  ]
+}

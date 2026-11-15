@@ -4,6 +4,16 @@
 
 Kim Service collection releases use `V<major>.<minor>`. Each component keeps its own version and source history. Detailed past checks are in the [testing record](docs/verification-history.md).
 
+## Unreleased
+
+### Research before business and product selection
+
+- Add Ecommerce Strategy Planner, Global Expansion Strategist and Short Drama Strategist 0.1.0. Current main contains 61 Agents, 97 components and 112 capabilities, using the existing industry/role catalog and caller-owned acceptance.
+- Compare materially different business routes, including buyers, value, distribution, revenue, initial and ongoing effort, conditions, unknowns and reversible experiments. Keep recommendations conditional when a material user choice is unresolved; preserve existing choices and explain eliminated alternatives without filling a fixed quota.
+- Require actual current primary-source retrieval and relevant external GitHub implementation research for changing facts. Dated notes record six external repositories, fixed source revisions, reading scope and adoption limits. Existing source notes do not certify that another task has searched.
+- Add professional methods, delivery templates, complete synthetic examples, adversarial cases and bounded arithmetic aids. Ecommerce separates listed-cost contribution from cash; expansion separates goods, software, apps, content and services; drama connects serial design, accepted-footage cost, rights, localization and distribution economics.
+- Update both READMEs and the generated catalog. See [verification and limits](docs/verification/industry-strategy-20261115.md). These additions are on main; V1.17 remains the previous published package.
+
 ## V1.17 - 2026-11-15
 
 ### Affected components

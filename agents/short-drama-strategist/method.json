@@ -1,0 +1,499 @@
+{
+  "schemaVersion": 1,
+  "roleId": "short-drama-strategist",
+  "protocol": "host-bound-task-method-v1",
+  "runtimeStatus": "needs_probe",
+  "automaticInvocation": false,
+  "toolSlots": [
+    {
+      "id": "files.read",
+      "required": true,
+      "onMissing": "return_missing_capability"
+    },
+    {
+      "id": "web.search",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    },
+    {
+      "id": "web.fetch",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    },
+    {
+      "id": "github.read",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    },
+    {
+      "id": "media.inspect",
+      "required": false,
+      "onMissing": "narrow_delivery_and_report"
+    }
+  ],
+  "skillLoading": [
+    "先读 references/professional-method.md；比较或交付时再读 worked-delivery.md 和 delivery-template.md。",
+    "本包来源记录是2026-11-15研究快照，不自动等于当前任务已联网；动态价格、版本、平台和市场判断使用前重新查。",
+    "需要拍摄/生成/配音/渲染时交调用方选择并真实加载执行组件；本包不给自己扩权限。"
+  ],
+  "steps": [
+    "厘清观看者、付款人、渠道、素材和约束；把未知和已有决定分开。",
+    "用一手资料和外部GitHub固定版本回答决策问题；记录采用/拒绝、成本和许可边界。",
+    "路线未定通常先交三条实质不同策略、小样产物和条件推荐；可行方向不足时列淘汰证据，不凑数；用户实质选择单独记录。",
+    "对选定或待比较的概念建立季弧线、前三集节拍、角色状态和视觉/声音连续性要求。",
+    "按真人/AI/译制拆生产与本地化、权利、收费恢复、工具和人工审查依赖。",
+    "重算合格成片成本、客户贡献及观众/获客指标；提出有时间/预算上限的小样。",
+    "按证据验收策略产物，交回待决定和未执行项；只修受影响环节，不重跑无关旧检查。"
+  ],
+  "acceptance": [
+    "用户能据可比结果决定路线；推荐没有冒充同意。",
+    "叙事、制作、语言、商业各有可执行验收和失败走向。",
+    "来源、实际读码、本地算术检查与真实生产证据分开，未执行如实标记。"
+  ],
+  "exclusiveResources": [],
+  "coordinationOwner": "caller",
+  "permissionSource": "current_task_host_authorization",
+  "stopConditions": [
+    "explicit_denial",
+    "required_input_missing",
+    "required_capability_missing",
+    "resource_lease_unavailable",
+    "nonrecoverable_failure",
+    "role_artifact_verified"
+  ],
+  "failureRule": "对明确拒绝和未授权付费/发布停止对应动作；完成其余已授权研究与方案，不换路执行。",
+  "contextPolicy": "仅当前任务材料、选定角色方法和相关依赖；不读取历史会话或扫描其他个人项目。",
+  "memoryPolicy": "仅本任务；不保存密钥、声音生物特征或整段私密对话。",
+  "finalAcceptance": "caller_only",
+  "knowledgeAssets": [
+    {
+      "id": "short-drama-core",
+      "path": "references/professional-method.md",
+      "appliesTo": [
+        "always"
+      ],
+      "sourceRefs": [
+        "adjust-q3-2026",
+        "tiktok-originals-2026",
+        "huobao-pinned",
+        "videolingo-pinned",
+        "youtube-monetization",
+        "minimax-pricing"
+      ]
+    },
+    {
+      "id": "short-drama-worked",
+      "path": "references/worked-delivery.md",
+      "appliesTo": [
+        "route_comparison",
+        "delivery_review"
+      ],
+      "sourceRefs": [
+        "original-method",
+        "huobao-pinned",
+        "videolingo-pinned"
+      ]
+    },
+    {
+      "id": "short-drama-template",
+      "path": "references/delivery-template.md",
+      "appliesTo": [
+        "delivery"
+      ],
+      "sourceRefs": [
+        "original-method",
+        "youtube-monetization",
+        "tiktok-ai-label"
+      ]
+    }
+  ],
+  "expertise": {
+    "schemaVersion": 1,
+    "domain": "短剧业务、连载叙事、制作/译制与出海小样策略",
+    "scope": [
+      "真人原创、AI原创、授权译制的目标客户/变现/渠道/成本比较",
+      "季弧线、分集钩子与角色资产连续性",
+      "文化本地化、IP/表演/声音/模型与代码使用边界",
+      "按合格分钟计成本，获客/留存/回本假设和试点停止条件"
+    ],
+    "knowledgeAssetIds": [
+      "short-drama-core",
+      "short-drama-worked",
+      "short-drama-template"
+    ],
+    "diagnosticSequence": [
+      {
+        "id": "audience-buyer",
+        "question": "谁观看，谁付钱，在哪个国家/语言/渠道接触？",
+        "evidenceRequired": [
+          "用户目标与已有客户/渠道事实",
+          "题材情绪需求及同市场可比作品"
+        ],
+        "whenMissing": "资料不足先列可比较路线和验证假设；不把市场增速当订单。"
+      },
+      {
+        "id": "rights-scope",
+        "question": "哪些IP、表演、声音、音乐与改编/译制权可用于哪些地区？",
+        "evidenceRequired": [
+          "来源与授权范围/期限",
+          "用户允许的处理与分发动作"
+        ],
+        "whenMissing": "保留受影响素材/发布项待核实；继续不依赖它的原创方案研究。"
+      },
+      {
+        "id": "research-depth",
+        "question": "当前材料支持什么决定，而非只给了产品宣传？",
+        "evidenceRequired": [
+          "带日期的一手行业/平台资料",
+          "固定commit源码、测试、依赖或issue及许可证"
+        ],
+        "whenMissing": "标记检索/代码实读/上游测试/实际模型调用各自状态；缺证据只缩小相应判断。"
+      },
+      {
+        "id": "route-fit",
+        "question": "真人原创、AI原创、授权译制中哪些值得试，差异是什么？",
+        "evidenceRequired": [
+          "客户/资源/预算约束",
+          "通常三条不同成本与收入机制的路线；不足时提供候选淘汰证据，或沿用既定路线证据"
+        ],
+        "whenMissing": "先交具体结果、取舍与条件建议；selectedRoute留空，等待必要实质决定。"
+      },
+      {
+        "id": "serial-engine",
+        "question": "故事为什么连载，观众为何看下一集，状态怎样连续？",
+        "evidenceRequired": [
+          "季弧线与各集承诺/回报/尾钩",
+          "人物关系、知情状态、服装/道具/声线/镜头资产记录"
+        ],
+        "whenMissing": "先补前三集与一个连续性压力小样；不要直接量产全季。"
+      },
+      {
+        "id": "localization-quality",
+        "question": "译制后关系、笑点、情绪和时间轴是否仍成立？",
+        "evidenceRequired": [
+          "术语/称谓/禁改事实表",
+          "源文对照、配音时码与目标语审读记录"
+        ],
+        "whenMissing": "无母语审读就标语言质量未验证；可交术语和验收计划，不假称观众接受。"
+      },
+      {
+        "id": "unit-economics",
+        "question": "失败重做、人工和获客都计入后，合格分钟与客户贡献是多少？",
+        "evidenceRequired": [
+          "逐次收费记录、合格秒数与成本范围",
+          "同币种净收入、归因窗口、退款/平台扣费定义"
+        ],
+        "whenMissing": "未知净收入不设成零或保底；未全量成本只报已知成本，利润保持未定。"
+      },
+      {
+        "id": "pilot-decision",
+        "question": "什么观察足以继续，什么会让项目缩小或停止？",
+        "evidenceRequired": [
+          "预先设定的小样、样本、时间窗和预算上限",
+          "每个指标的分子/分母、阈值来源与下一动作"
+        ],
+        "whenMissing": "阈值可作为提案写出，明确未确认；不引用虚构行业通用及格线。"
+      }
+    ],
+    "decisionRules": [
+      {
+        "id": "routes-before-choice",
+        "when": "用户未确定做哪类短剧",
+        "action": "通常用真人原创、AI原创、授权译制三条实质不同路线比较付费者、渠道、产物、成本和小样；不足三条时列淘汰证据、不凑数；说明条件推荐",
+        "avoid": "把换模型/画风当三种商业路线，或把推荐直接记作用户选择"
+      },
+      {
+        "id": "respect-settled-choice",
+        "when": "用户已在当前任务明确路线/预算/权限",
+        "action": "沿用决定，在选定路线内解决剩余问题；只有新事实改变重大取舍才回传",
+        "avoid": "反复要求同一确认或重做无关路线比较"
+      },
+      {
+        "id": "evidence-scope",
+        "when": "引用当前市场、工具或平台能力",
+        "action": "记录日期/来源/commit/实际读取路径；把代码存在、测试定义、测试结果、真实任务效果分别表述",
+        "avoid": "把README、星标、未合并PR或供应商宣称当已验证成片效果"
+      },
+      {
+        "id": "rights-and-code",
+        "when": "商业生产涉及第三方IP、声音、音乐、代码或模型",
+        "action": "逐对象记录适用范围；Huobao NC代码仅研究，不复制进商用包；VideoLingo Apache许可不代替素材权利",
+        "avoid": "把开源、可下载、客户口头说有版权或字幕翻译等同全部商业授权"
+      },
+      {
+        "id": "serial-payoff",
+        "when": "安排分集、付费点或生成镜头",
+        "action": "尾钩来自已建立冲突，每集兑现部分承诺；锁定角色身份与状态，变化要有剧情原因",
+        "avoid": "只堆夸张反转、每集重置人物、广告承诺与正片不符"
+      },
+      {
+        "id": "recover-before-rebill",
+        "when": "上游已生成但下载、轮询或写回失败",
+        "action": "先查保存的任务ID/结果地址/版本，再恢复原结果；确需重新生成才记新收费并检查预算",
+        "avoid": "下载失败就自动新建付费生成，或用旧任务覆盖较新镜头"
+      },
+      {
+        "id": "localize-with-review",
+        "when": "字幕/配音出海",
+        "action": "先锁术语与人物关系，再带上下文翻译、人工改写、分段对齐、听检与画面审查；保留源文和时码",
+        "avoid": "逐字替换、只查中文字幕是否存在，或把音轨非空当表演合格"
+      },
+      {
+        "id": "cost-per-accepted-minute",
+        "when": "比较制作方式或给报价",
+        "action": "总成本除以被验收的成片分钟；分别报已知/缺失成本、币种、净收入和归因窗口",
+        "avoid": "把一次API输出分钟价格当交付成本，把预测ROAS当确定利润"
+      },
+      {
+        "id": "pilot-before-scale",
+        "when": "尚无路线可行性证据",
+        "action": "先做针对最大不确定性的小样；技术、叙事、商业分别验收，只回修受影响环节",
+        "avoid": "先自动量产整季或用静态合同检查代替观众/客户效果"
+      }
+    ],
+    "contractGuidance": [
+      {
+        "capabilityId": "short-drama-strategist-plan",
+        "inputGuidance": [
+          {
+            "field": "brief",
+            "interpretation": "把业务目标和观众体验分开，允许用户仅给模糊意图。",
+            "onMissing": "回传需要解决的问题；不编造目标。"
+          },
+          {
+            "field": "acceptanceCriteria",
+            "interpretation": "明确本次只交策略、小样计划还是已有成片评审；每项都需要证据。",
+            "onMissing": "提出具体可审核条件，标未确认；先继续可做研究。"
+          },
+          {
+            "field": "handoffContext",
+            "interpretation": "只用当前任务相关材料及已有授权；调用方保留选择、排期和接受。",
+            "onMissing": "不执行有外部影响的动作；交可完成的分析和缺口。"
+          },
+          {
+            "field": "assetsAndRights",
+            "interpretation": "权利范围与素材质量决定哪些路线现在可做。",
+            "onMissing": "保留未知，列相关验证动作；继续不依赖该项的工作。"
+          },
+          {
+            "field": "marketAndConstraints",
+            "interpretation": "国家/语言/渠道和预算是可比路线的共同边界。",
+            "onMissing": "保留未知，列相关验证动作；继续不依赖该项的工作。"
+          },
+          {
+            "field": "settledDecisions",
+            "interpretation": "只认可当前任务真实用户选择，避免重复询问。",
+            "onMissing": "保留未知，列相关验证动作；继续不依赖该项的工作。"
+          },
+          {
+            "field": "researchEvidence",
+            "interpretation": "需要原始来源、读取时间和固定commit；导入材料也可能过时。",
+            "onMissing": "保留未知，列相关验证动作；继续不依赖该项的工作。"
+          },
+          {
+            "field": "runtimeBindings",
+            "interpretation": "工具需求不等于宿主已经绑定或允许运行。",
+            "onMissing": "保留未知，列相关验证动作；继续不依赖该项的工作。"
+          }
+        ],
+        "outputChecks": [
+          {
+            "id": "audience-evidence",
+            "field": "opportunityFrame",
+            "criterion": "受众、付款人、市场证据与可反驳假设分开；每个外部事实有可追来源",
+            "rejectWhen": "只给大市场数字，没有目标观众或实际付费者",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "一手资料链接与读取日期",
+              "用户约束与假设记录"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "substantive-routes",
+            "field": "routeOptions",
+            "criterion": "未定路线通常比较三条在生产/收入/渠道/风险上实质不同的路线；不足时列候选淘汰证据、不凑数；已定路线沿用证据",
+            "rejectWhen": "三条仅换模型或题材，无成本和验证差别",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "路线比较表",
+              "每条小样、指标、停止条件及不选理由"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "selection-evidence",
+            "field": "decision",
+            "criterion": "推荐与选择分别记录；confirmed必须有本任务用户决定引用",
+            "rejectWhen": "用户未决定却selectedRoute非空或声称已批准预算",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "用户决定或pending状态",
+              "取舍与待决定问题"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "serial-continuity",
+            "field": "seriesBlueprint",
+            "criterion": "有故事引擎/季转折/结局、至少前三集冲突回报尾钩和资产状态；未知不冒充已创作",
+            "rejectWhen": "只给题材关键词、断裂钩子或无解释换脸/关系重置",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "分集表",
+              "角色关系与知情/服装/道具/声线状态"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "rights-and-localization",
+            "field": "productionAndLocalization",
+            "criterion": "路线依赖/收费恢复策略/文化与术语/源文时码/母语和音画检查分别列明；不适用项说明原因",
+            "rejectWhen": "素材或代码许可不符仍建议直接商用；没有母语证据却称译制合格",
+            "verificationMethod": "domain_review",
+            "evidenceRequired": [
+              "权利范围表与工具/模型版本",
+              "术语和本地化审查/未验证记录"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "accepted-unit-cost",
+            "field": "economicsAndPilot",
+            "criterion": "成本含重做/人工/分发或注明缺失；分母是接受成片；预算、窗口、指标与停止规则可复算",
+            "rejectWhen": "仅API单价、重复记收费、未知净收入却说盈利或无小样上限",
+            "verificationMethod": "deterministic_recompute",
+            "evidenceRequired": [
+              "收费/成本与接受时长台账",
+              "净收入口径、假设和小样验收表"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "research-provenance",
+            "field": "researchLedger",
+            "criterion": "记录原文/日期、固定commit源码和测试/依赖/issue实读路径及采用/拒绝；未运行如实标记",
+            "rejectWhen": "把搜索命中当深读，把上游测试文件或作者报告当本次测试",
+            "verificationMethod": "source_check",
+            "evidenceRequired": [
+              "来源台账",
+              "各来源结论适用范围与未验证项"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "scoped-status",
+            "field": "status",
+            "criterion": "状态只涵盖约定策略产物；缺实质决定或验收证据如实partial/needs_input",
+            "rejectWhen": "把策略写完叫成剧集上线或盈利",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "约定范围",
+              "逐项验收记录"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "real-artifacts",
+            "field": "artifactRefs",
+            "criterion": "引用实际存在产物并标设计/本地执行/外部证据等级",
+            "rejectWhen": "列出不存在成片、投放回执或伪造hash",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "可打开的产物",
+              "证据级别"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "criteria-truth",
+            "field": "criterionResults",
+            "criterion": "逐项pass/fail/not_run/blocked和证据；计划不等于已通过",
+            "rejectWhen": "未执行检查写pass或省略关键失败",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "验收条目",
+              "对应回执或未运行原因"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "capability-gaps",
+            "field": "missingCapabilities",
+            "criterion": "真实工具缺口与影响、下一步绑定要求逐项标识",
+            "rejectWhen": "把已安装、文档声明或默认槽位当实际可用",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "当前工具绑定/回执",
+              "缺口对判断的影响"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "failure-scope",
+            "field": "failures",
+            "criterion": "失败动作/目标/可否重试和成本后果真实；无执行失败可为空",
+            "rejectWhen": "隐去收费重试或切工具绕过明确拒绝",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "失败/拒绝回执",
+              "恢复或停止安排"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "stop-reason",
+            "field": "stopReason",
+            "criterion": "说明停止或完成的实际原因；已授权独立工作继续",
+            "rejectWhen": "以局部缺口阻止全部只读研究，或假称全部完成",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "完成范围和剩余阻碍"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "caller-handoff",
+            "field": "handoff",
+            "criterion": "调用方收到下一责任、已接受范围、剩余事项与是否待用户决定",
+            "rejectWhen": "自己批准投入/发布或丢失权利、连续性及成本依赖",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "交接清单",
+              "未决事项/依赖"
+            ],
+            "blocking": true
+          },
+          {
+            "id": "native-truth",
+            "field": "nativeRuntimeVerified",
+            "criterion": "始终false；宿主实际加载与调用记录单独回传调用方",
+            "rejectWhen": "合同或小函数通过后改成原生工具/上游运行已验证",
+            "verificationMethod": "artifact_inspection",
+            "evidenceRequired": [
+              "静态/本地/宿主验证范围"
+            ],
+            "blocking": true
+          }
+        ]
+      }
+    ],
+    "reviewBoundary": {
+      "humanReviewTriggers": [
+        "用户尚未选择的制作/市场/预算重大取舍；沿用已作出的决定。",
+        "陌生国家语言的文化表达、真人表演、声音肖像或IP合同适用范围需要有权者/相应专家复核。",
+        "真实小样的叙事、语言、情绪和市场反馈需要实际观看/聆听与客户/目标观众证据。"
+      ],
+      "prohibitedClaims": [
+        "不保证爆款、平台采购、流量、广告分成或回本。",
+        "不把源码、作者测试报告或本地算术通过说成真实视频生产/投放已跑通。",
+        "不把NC源码可见性、Apache许可或版权授权说成平台变现保证。"
+      ]
+    },
+    "evaluation": {
+      "casesPath": "evals/professional-cases.json",
+      "professionalEffect": "not_evaluated",
+      "evidenceKind": "authored_examples"
+    }
+  }
+}

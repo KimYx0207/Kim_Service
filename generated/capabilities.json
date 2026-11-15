@@ -5898,6 +5898,233 @@
       ]
     },
     {
+      "componentContentSha256": "15748d1458cb908619770b968f40194b01199e345f1701a22fd20086962507f1",
+      "componentId": "ecommerce-strategy-planner",
+      "componentPath": "agents/ecommerce-strategy-planner",
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contractSha256": "727fc0560c296d7bac1b99034e1e87243ee5a0db8e1f1253cb56c84c0ffb24e6",
+      "doNotUseWhen": [
+        "仅商品文案交 product-listing-writer，单纯账表复算交 store-performance-analyst",
+        "库存补货、仓配或订单实现交对应专业能力，本包不代替交易系统",
+        "投放、采购、退款、发布或外部消息由 host 沿用当前授权执行，本包只读建议"
+      ],
+      "entrypoint": "AGENT.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "发布、外部消息、付款或生产写入沿用当前任务授权；已授权研究、计算和可逆工作继续，不重复审批。"
+        ]
+      },
+      "id": "ecommerce-strategy-planner-advise",
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "businessContext": {
+            "description": "市场、受众、商品价值、阶段、现有渠道与来源；未知保留",
+            "type": [
+              "object",
+              "string",
+              "array"
+            ]
+          },
+          "constraints": {
+            "description": "资金、工时、交付、现有授权与用户接受边界；不把建议当执行授权",
+            "type": [
+              "object",
+              "string",
+              "array"
+            ]
+          },
+          "goal": {
+            "description": "用户目标，可模糊；未知受众/渠道/商业模式先形成选择卡，不能默认已决定",
+            "type": "string"
+          },
+          "metrics": {
+            "description": "本轮提供的订单队列、退款、费用、库存、履约与回款；口径和成熟期需核对",
+            "type": [
+              "object",
+              "array"
+            ]
+          },
+          "researchRecords": {
+            "description": "host 本轮真实检索/阅读/运行记录；包内 PROVENANCE 不能代替",
+            "type": "array"
+          },
+          "runtimeBindings": {
+            "description": "host 实际绑定工具、状态、范围和授权，缺失/拒绝保持真实",
+            "type": "array"
+          },
+          "settledDecisions": {
+            "description": "沿用已确定选择与来源，不重复访谈",
+            "type": [
+              "object",
+              "string",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "goal"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "choiceCards": {
+            "description": "未定受众/价值/渠道/商业模式/成本的选择卡；已定时可为空",
+            "type": "array"
+          },
+          "diagnosis": {
+            "description": "事实、假设、品类差异和影响选择的缺口",
+            "type": "object"
+          },
+          "economics": {
+            "description": "同口径列示成本贡献、现金和复购成熟度，未知不得填零",
+            "type": "object"
+          },
+          "evidenceLedger": {
+            "description": "真实来源/工具/时间/范围/版本与采用、不采用、限制；没有当前搜索时明确说明",
+            "type": "array"
+          },
+          "fulfillmentGuardrails": {
+            "description": "库存语义、占用、退货质检、时序产能与当前规则适用范围",
+            "type": "object"
+          },
+          "handoff": {
+            "description": "现有产物、未读与待决项、下一责任者和邻接能力建议",
+            "type": "object"
+          },
+          "nativeRuntimeVerified": {
+            "const": false,
+            "description": "静态包或算术检查不证明原生 Agent 加载"
+          },
+          "recommendation": {
+            "description": "有条件建议、未定选择、反转条件；保留用户决定",
+            "type": "object"
+          },
+          "routes": {
+            "description": "按问题保留实质不同的可行路线，数量不固定；全部不成立时可为空，并在 diagnosis/recommendation 给淘汰依据与继续条件。",
+            "items": {
+              "properties": {
+                "audience": {
+                  "description": "受众及购买问题",
+                  "type": "string"
+                },
+                "businessModel": {
+                  "description": "交易、复购或收费机制",
+                  "type": "string"
+                },
+                "channel": {
+                  "description": "需求与成交渠道",
+                  "type": "string"
+                },
+                "costs": {
+                  "description": "资金、工时与运营责任",
+                  "type": "array"
+                },
+                "customerValue": {
+                  "description": "价值和需求证据",
+                  "type": "string"
+                },
+                "evidenceRefs": {
+                  "description": "当前真实来源或明确假设",
+                  "type": "array"
+                },
+                "id": {
+                  "description": "当前路线标识",
+                  "type": "string"
+                },
+                "prerequisites": {
+                  "description": "成立条件",
+                  "type": "array"
+                },
+                "reverseWhen": {
+                  "description": "反转或重开条件",
+                  "type": "array"
+                },
+                "successMeasure": {
+                  "description": "可观察结果与分母/时间口径",
+                  "type": "string"
+                },
+                "tradeoffs": {
+                  "description": "实际取舍",
+                  "type": "array"
+                },
+                "unknowns": {
+                  "description": "未知及影响",
+                  "type": "array"
+                },
+                "userOutcome": {
+                  "description": "用户得到的经营结果",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "userOutcome",
+                "audience",
+                "customerValue",
+                "channel",
+                "businessModel",
+                "prerequisites",
+                "costs",
+                "tradeoffs",
+                "successMeasure",
+                "reverseWhen",
+                "evidenceRefs",
+                "unknowns"
+              ],
+              "type": "object"
+            },
+            "minItems": 0,
+            "type": "array"
+          },
+          "status": {
+            "description": "仅本角色交付状态，不是用户经营结果或上线许可",
+            "enum": [
+              "completed",
+              "partial",
+              "needs_input",
+              "blocked"
+            ]
+          },
+          "validationPlan": {
+            "description": "当前约束内的最小验证、观察成熟期和停止规则；未执行明确未执行",
+            "type": "array"
+          }
+        },
+        "required": [
+          "diagnosis",
+          "choiceCards",
+          "routes",
+          "evidenceLedger",
+          "economics",
+          "fulfillmentGuardrails",
+          "recommendation",
+          "validationPlan",
+          "handoff",
+          "status",
+          "nativeRuntimeVerified"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials"
+      ],
+      "sideEffects": [],
+      "summary": "研究并比较电商受众、选品、渠道与经营路线，以单位经济、履约退款、现金和复购约束形成可核查的条件性建议。",
+      "useWhen": [
+        "想做电商但受众、商品、渠道或商业模式没定",
+        "比较平台店经营、内容/达人带货与独立站复购",
+        "销售增长却贡献或现金变差，想找经营路线和最小验证"
+      ],
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
       "componentContentSha256": "37400ee065cd3e605c0311a9af0bab33e748b994cb8a954ac3e423c348e8b157",
       "componentId": "energy-project-analyst",
       "componentPath": "agents/energy-project-analyst",
@@ -8552,6 +8779,156 @@
       ],
       "validation": [
         "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "componentContentSha256": "ff37a51b278621e93b4b86d9078c497dd6632301719adc962e9c03d03bf4189c",
+      "componentId": "global-expansion-strategist",
+      "componentPath": "agents/global-expansion-strategist",
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contractSha256": "0594d5b2d4aa8cfea2dff08bb53606c3e678c0fb027e985d5a0226ffb4ee1988",
+      "doNotUseWhen": [
+        "只改商品标题或制作视频时交对应专业角色，本角色处理进入路线与证据。",
+        "已确定路线后的财务预测、订单执行与生产操作交既有能力，不重复执行。",
+        "不把分析当开户、投放、付款、发信或收益承诺；真实外部动作交当前宿主授权处理。"
+      ],
+      "entrypoint": "AGENT.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "开户、花钱、外部联系、合同承诺、公开发布与真实经营动作由当前宿主按当前授权处理；已授权可逆研究与草案继续，不重复请求许可。"
+        ]
+      },
+      "id": "global-expansion-strategist-deliver",
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "assets": {
+            "description": "已有产品、专业能力、内容权利、客户关系和证据；允许未知",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "constraints": {
+            "description": "时间、预算、主体、语言时区、容量与当前授权；允许未知",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "intent": {
+            "description": "想完成的出海结果；一句意图即可开始探索",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "marketEvidence": {
+            "description": "本次用户材料、实际外部读取和已有研究；历史来源与当前回执分开",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "intent"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "additionalProperties": false,
+        "deliveryFormat": "conceptual-human-delivery",
+        "properties": {
+          "decisionMemo": {
+            "description": "条件建议、未定用户选择及同一PRD/项目能力映射",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "economics": {
+            "description": "同币种、期间与业务单位的现金/时间贡献、容量和压力情景",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "handoff": {
+            "description": "当前可接手产物、真实检查范围与受影响的未知",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "localizationOperations": {
+            "description": "本地化、收款、支持、交付与区域条件的工作及验收",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "marketRoutes": {
+            "description": "多个实质不同且可行的市场×产品×渠道路线及适用/弃选条件；通常以三条展开，较少时说明证据和淘汰原因，不凑数",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "researchLedger": {
+            "description": "本次真实外部读取、来源日期/版本、问题到决定的关系与未观察项",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "validationPlan": {
+            "description": "可逆验证、样本/分母/窗口、预算假设和继续/停止/转向条件",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "researchLedger",
+          "marketRoutes",
+          "economics",
+          "localizationOperations",
+          "validationPlan",
+          "decisionMemo",
+          "handoff"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials",
+        "network:read-web-search",
+        "network:read-web-fetch"
+      ],
+      "sideEffects": [],
+      "summary": "出海策略与验证（global expansion / go-to-market）：比较实物、SaaS/App、内容/IP和专业服务的市场、渠道、交付与单位经济，交可逆验证和条件建议。",
+      "useWhen": [
+        "想出海但产品、市场、渠道还没选，需要几条能比较的路线。",
+        "已有软件、App、内容或专业技能，想获得第一批海外付费用户。",
+        "已有跨境业务，想比较扩地区、渠道、本地化与投入的先后。"
+      ],
+      "validation": [
+        "tests/contract.test.mjs",
+        "tests/economics.test.mjs"
       ]
     },
     {
@@ -18185,6 +18562,590 @@
       ]
     },
     {
+      "componentContentSha256": "e6d7ebfefc3e07319c597bfbd34408789dd4d1a81d513f9a2c48842efc9e18a3",
+      "componentId": "short-drama-strategist",
+      "componentPath": "agents/short-drama-strategist",
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contractSha256": "ff18541133b2ea96a08f4777a5d9e91da2ec055408907e60674f002a263eca45",
+      "doNotUseWhen": [
+        "只需要普通文章或一段口播：使用 script-writer",
+        "只要已定方案的实际渲染、转码或媒体参数检查：使用 media-production-engineer",
+        "要求代签IP授权、未经同意克隆声音、自动付费生成或直接投放发布：交调用方按本次授权处理"
+      ],
+      "entrypoint": "AGENT.md",
+      "humanGate": {
+        "required": true,
+        "when": [
+          "涉及尚未决定的制作路线、预算/目标市场/权利重大取舍时提交具体比较给用户；已有决定直接沿用",
+          "未授权的付费生成、签约、投放或发布交调用方取得对应授权；已授权阅读和可逆分析不重复确认",
+          "明确拒绝停止对应动作，不换工具、API或Agent绕过"
+        ]
+      },
+      "id": "short-drama-strategist-plan",
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "acceptanceCriteria": {
+            "items": {
+              "properties": {
+                "condition": {
+                  "type": "string"
+                },
+                "evidenceRequired": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "condition",
+                "evidenceRequired"
+              ],
+              "type": "object"
+            },
+            "minItems": 1,
+            "type": "array"
+          },
+          "assetsAndRights": {
+            "description": "原创或授权IP、素材、角色/声音/音乐权利，语言/地域/渠道/期限及改编范围；缺失可先比较方案",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "brief": {
+            "description": "用户希望服务谁、解决什么、为何做短剧；未知项显式列出，不把行业热度当购买证据",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "handoffContext": {
+            "description": "只给本角色相关材料与依赖产物；控制权保留调用方",
+            "properties": {
+              "permittedActions": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "resourceLeases": {
+                "items": {
+                  "properties": {
+                    "leaseRef": {
+                      "type": "string"
+                    },
+                    "ownerTaskId": {
+                      "type": "string"
+                    },
+                    "resource": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "resource",
+                    "ownerTaskId",
+                    "leaseRef"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "taskId": {
+                "type": "string"
+              },
+              "upstreamArtifacts": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "taskId",
+              "upstreamArtifacts",
+              "permittedActions",
+              "resourceLeases"
+            ],
+            "type": "object"
+          },
+          "marketAndConstraints": {
+            "description": "目标国家/语言/平台、时间/预算/团队/已有客户、能承担的风险；未知保留未知",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "researchEvidence": {
+            "description": "本次可追溯的原文、GitHub固定commit与源码/测试/依赖/issue、报价或客户证据及读取时间",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "runtimeBindings": {
+            "description": "宿主对本次任务实际工具的绑定；需求不等于权限。未知/拒绝必须保留",
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "authorizationRef": {
+                  "type": "string"
+                },
+                "receiptRef": {
+                  "type": "string"
+                },
+                "scope": {
+                  "type": "string"
+                },
+                "slot": {
+                  "type": "string"
+                },
+                "state": {
+                  "enum": [
+                    "available",
+                    "missing",
+                    "denied",
+                    "unverified"
+                  ]
+                },
+                "tool": {
+                  "type": "string"
+                },
+                "version": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "slot",
+                "state",
+                "scope"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "settledDecisions": {
+            "description": "用户已经决定的路线与当前授权证据；建议不算用户选择",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "brief",
+          "acceptanceCriteria",
+          "handoffContext"
+        ],
+        "type": "object"
+      },
+      "output": {
+        "deliveryFormat": "conceptual-human-delivery",
+        "description": "可用正文和表格交付；completed只表示约定策略产物已齐，不代表拍摄、上线或盈利。原生宿主运行证据另列。",
+        "properties": {
+          "artifactRefs": {
+            "items": {
+              "properties": {
+                "evidenceLevel": {
+                  "enum": [
+                    "design",
+                    "fixture",
+                    "local_execution",
+                    "host_execution",
+                    "external_verified"
+                  ]
+                },
+                "kind": {
+                  "type": "string"
+                },
+                "ref": {
+                  "type": "string"
+                },
+                "sha256": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "ref",
+                "kind",
+                "evidenceLevel"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "criterionResults": {
+            "items": {
+              "properties": {
+                "evidenceRefs": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "id": {
+                  "type": "string"
+                },
+                "scope": {
+                  "type": "string"
+                },
+                "status": {
+                  "enum": [
+                    "pass",
+                    "fail",
+                    "not_run",
+                    "blocked"
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "status",
+                "evidenceRefs",
+                "scope"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "decision": {
+            "properties": {
+              "questions": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "reason": {
+                "type": "string"
+              },
+              "recommendedRoute": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "selectedRoute": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "selectionEvidenceRef": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "selectionStatus": {
+                "enum": [
+                  "pending",
+                  "confirmed"
+                ]
+              }
+            },
+            "required": [
+              "recommendedRoute",
+              "selectedRoute",
+              "selectionStatus",
+              "selectionEvidenceRef",
+              "reason",
+              "questions"
+            ],
+            "type": "object"
+          },
+          "economicsAndPilot": {
+            "description": "按接受成片分钟计全部成本；净收入/获客/留存/回本定义；假设、预算封顶、小样通过/停止标准",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "failures": {
+            "items": {
+              "properties": {
+                "action": {
+                  "type": "string"
+                },
+                "code": {
+                  "type": "string"
+                },
+                "evidenceRef": {
+                  "type": "string"
+                },
+                "retryable": {
+                  "type": "boolean"
+                },
+                "target": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "code",
+                "action",
+                "target",
+                "retryable"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "handoff": {
+            "properties": {
+              "acceptedScope": {
+                "type": "string"
+              },
+              "nextOwner": {
+                "type": "string"
+              },
+              "remaining": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "requiresDecision": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "nextOwner",
+              "acceptedScope",
+              "remaining",
+              "requiresDecision"
+            ],
+            "type": "object"
+          },
+          "missingCapabilities": {
+            "items": {
+              "properties": {
+                "impact": {
+                  "type": "string"
+                },
+                "nextAction": {
+                  "type": "string"
+                },
+                "slot": {
+                  "type": "string"
+                },
+                "state": {
+                  "enum": [
+                    "missing",
+                    "denied",
+                    "unverified"
+                  ]
+                }
+              },
+              "required": [
+                "slot",
+                "state",
+                "impact",
+                "nextAction"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "nativeRuntimeVerified": {
+            "const": false,
+            "description": "包静态合同或本地helper检查不会升级原生宿主加载；真实探测由调用方另外保存"
+          },
+          "opportunityFrame": {
+            "description": "受众/情绪需求/付费者/市场证据与反证；观察事实、推断和待验证假设分开",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "productionAndLocalization": {
+            "description": "真人/AI/译制路线的材料、角色、工具与依赖；文化/术语/字幕/配音/时码人工审查与返修责任",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "researchLedger": {
+            "description": "当前来源日期、原文和固定commit路径、实读范围、采用/拒绝理由、模型/许可/成本限制及未验证项",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "routeOptions": {
+            "items": {
+              "properties": {
+                "assetsAndRights": {
+                  "type": [
+                    "string",
+                    "object",
+                    "array"
+                  ]
+                },
+                "audienceAndPromise": {
+                  "type": [
+                    "string",
+                    "object",
+                    "array"
+                  ]
+                },
+                "channels": {
+                  "type": [
+                    "string",
+                    "object",
+                    "array"
+                  ]
+                },
+                "costDrivers": {
+                  "type": [
+                    "string",
+                    "object",
+                    "array"
+                  ]
+                },
+                "evidenceAndTradeoffs": {
+                  "type": [
+                    "string",
+                    "object",
+                    "array"
+                  ]
+                },
+                "id": {
+                  "type": "string"
+                },
+                "metrics": {
+                  "type": [
+                    "string",
+                    "object",
+                    "array"
+                  ]
+                },
+                "monetization": {
+                  "type": [
+                    "string",
+                    "object",
+                    "array"
+                  ]
+                },
+                "name": {
+                  "type": "string"
+                },
+                "pilot": {
+                  "type": [
+                    "string",
+                    "object",
+                    "array"
+                  ]
+                },
+                "productionModel": {
+                  "type": [
+                    "string",
+                    "object",
+                    "array"
+                  ]
+                },
+                "stopConditions": {
+                  "type": [
+                    "string",
+                    "object",
+                    "array"
+                  ]
+                },
+                "targetCustomer": {
+                  "type": [
+                    "string",
+                    "object",
+                    "array"
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "name",
+                "targetCustomer",
+                "audienceAndPromise",
+                "productionModel",
+                "assetsAndRights",
+                "monetization",
+                "channels",
+                "costDrivers",
+                "pilot",
+                "metrics",
+                "stopConditions",
+                "evidenceAndTradeoffs"
+              ],
+              "type": "object"
+            },
+            "minItems": 1,
+            "type": "array"
+          },
+          "seriesBlueprint": {
+            "description": "故事引擎、季目标/转折/结局、逐集冲突/回报/尾钩、角色关系及服装/道具/声线/知识状态连续性",
+            "type": [
+              "string",
+              "object",
+              "array"
+            ]
+          },
+          "status": {
+            "enum": [
+              "completed",
+              "partial",
+              "needs_input",
+              "blocked"
+            ]
+          },
+          "stopReason": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "opportunityFrame",
+          "routeOptions",
+          "decision",
+          "seriesBlueprint",
+          "productionAndLocalization",
+          "economicsAndPilot",
+          "researchLedger",
+          "status",
+          "artifactRefs",
+          "criterionResults",
+          "missingCapabilities",
+          "failures",
+          "stopReason",
+          "handoff",
+          "nativeRuntimeVerified"
+        ],
+        "type": "object"
+      },
+      "permissions": [
+        "filesystem:read-user-materials",
+        "network:read-web-search",
+        "network:read-web-fetch"
+      ],
+      "sideEffects": [],
+      "summary": "把短剧与出海想法变成可比较的真人、AI、授权译制业务路线、系列设计和有停止条件的小样计划",
+      "useWhen": [
+        "想做短剧或短剧出海，但不知道选真人、AI还是授权译制",
+        "需要季弧线、分集钩子、角色连续性与制作/本地化计划",
+        "需要判断谁付费、怎么分发，以及合格成片成本、留存和回本是否成立"
+      ],
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
       "componentContentSha256": "6a9b6d3b3d080bd1c8a9f61f84e959868e607339fca2432af371dccc1beb4776",
       "componentId": "side-business-evaluator",
       "componentPath": "agents/side-business-evaluator",
@@ -22417,8 +23378,8 @@
       ]
     }
   ],
-  "capabilityCount": 109,
-  "componentCount": 94,
+  "capabilityCount": 112,
+  "componentCount": 97,
   "components": [
     {
       "capabilityIds": [
@@ -22683,6 +23644,21 @@
     },
     {
       "capabilityIds": [
+        "ecommerce-strategy-planner-advise"
+      ],
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contentSha256": "15748d1458cb908619770b968f40194b01199e345f1701a22fd20086962507f1",
+      "contractSha256": "727fc0560c296d7bac1b99034e1e87243ee5a0db8e1f1253cb56c84c0ffb24e6",
+      "entrypoint": "AGENT.md",
+      "id": "ecommerce-strategy-planner",
+      "path": "agents/ecommerce-strategy-planner",
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
         "energy-project-analyst-deliver"
       ],
       "componentType": "agent",
@@ -22758,6 +23734,22 @@
       "path": "agents/game-economy-designer",
       "validation": [
         "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "global-expansion-strategist-deliver"
+      ],
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contentSha256": "ff37a51b278621e93b4b86d9078c497dd6632301719adc962e9c03d03bf4189c",
+      "contractSha256": "0594d5b2d4aa8cfea2dff08bb53606c3e678c0fb027e985d5a0226ffb4ee1988",
+      "entrypoint": "AGENT.md",
+      "id": "global-expansion-strategist",
+      "path": "agents/global-expansion-strategist",
+      "validation": [
+        "tests/contract.test.mjs",
+        "tests/economics.test.mjs"
       ]
     },
     {
@@ -23105,6 +24097,21 @@
       "entrypoint": "AGENT.md",
       "id": "security-incident-responder",
       "path": "agents/security-incident-responder",
+      "validation": [
+        "tests/contract.test.mjs"
+      ]
+    },
+    {
+      "capabilityIds": [
+        "short-drama-strategist-plan"
+      ],
+      "componentType": "agent",
+      "componentVersion": "0.1.0",
+      "contentSha256": "e6d7ebfefc3e07319c597bfbd34408789dd4d1a81d513f9a2c48842efc9e18a3",
+      "contractSha256": "ff18541133b2ea96a08f4777a5d9e91da2ec055408907e60674f002a263eca45",
+      "entrypoint": "AGENT.md",
+      "id": "short-drama-strategist",
+      "path": "agents/short-drama-strategist",
       "validation": [
         "tests/contract.test.mjs"
       ]

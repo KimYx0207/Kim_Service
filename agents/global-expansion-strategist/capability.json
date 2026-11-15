@@ -1,0 +1,152 @@
+{
+  "schemaVersion": 1,
+  "id": "global-expansion-strategist",
+  "componentType": "agent",
+  "componentVersion": "0.1.0",
+  "entrypoint": "AGENT.md",
+  "capabilities": [
+    {
+      "id": "global-expansion-strategist-deliver",
+      "summary": "出海策略与验证（global expansion / go-to-market）：比较实物、SaaS/App、内容/IP和专业服务的市场、渠道、交付与单位经济，交可逆验证和条件建议。",
+      "useWhen": [
+        "想出海但产品、市场、渠道还没选，需要几条能比较的路线。",
+        "已有软件、App、内容或专业技能，想获得第一批海外付费用户。",
+        "已有跨境业务，想比较扩地区、渠道、本地化与投入的先后。"
+      ],
+      "doNotUseWhen": [
+        "只改商品标题或制作视频时交对应专业角色，本角色处理进入路线与证据。",
+        "已确定路线后的财务预测、订单执行与生产操作交既有能力，不重复执行。",
+        "不把分析当开户、投放、付款、发信或收益承诺；真实外部动作交当前宿主授权处理。"
+      ],
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "intent": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "想完成的出海结果；一句意图即可开始探索"
+          },
+          "assets": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "已有产品、专业能力、内容权利、客户关系和证据；允许未知"
+          },
+          "constraints": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "时间、预算、主体、语言时区、容量与当前授权；允许未知"
+          },
+          "marketEvidence": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "本次用户材料、实际外部读取和已有研究；历史来源与当前回执分开"
+          }
+        },
+        "required": [
+          "intent"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "researchLedger": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "本次真实外部读取、来源日期/版本、问题到决定的关系与未观察项"
+          },
+          "marketRoutes": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "多个实质不同且可行的市场×产品×渠道路线及适用/弃选条件；通常以三条展开，较少时说明证据和淘汰原因，不凑数"
+          },
+          "economics": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "同币种、期间与业务单位的现金/时间贡献、容量和压力情景"
+          },
+          "localizationOperations": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "本地化、收款、支持、交付与区域条件的工作及验收"
+          },
+          "validationPlan": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "可逆验证、样本/分母/窗口、预算假设和继续/停止/转向条件"
+          },
+          "decisionMemo": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "条件建议、未定用户选择及同一PRD/项目能力映射"
+          },
+          "handoff": {
+            "type": [
+              "string",
+              "object",
+              "array"
+            ],
+            "description": "当前可接手产物、真实检查范围与受影响的未知"
+          }
+        },
+        "required": [
+          "researchLedger",
+          "marketRoutes",
+          "economics",
+          "localizationOperations",
+          "validationPlan",
+          "decisionMemo",
+          "handoff"
+        ],
+        "deliveryFormat": "conceptual-human-delivery"
+      },
+      "permissions": [
+        "filesystem:read-user-materials",
+        "network:read-web-search",
+        "network:read-web-fetch"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": true,
+        "when": [
+          "开户、花钱、外部联系、合同承诺、公开发布与真实经营动作由当前宿主按当前授权处理；已授权可逆研究与草案继续，不重复请求许可。"
+        ]
+      },
+      "validation": [
+        "tests/contract.test.mjs",
+        "tests/economics.test.mjs"
+      ]
+    }
+  ]
+}

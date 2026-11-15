@@ -1,0 +1,451 @@
+{
+  "schemaVersion": 1,
+  "roleId": "short-drama-strategist",
+  "protocol": "professional-review-cases-v1",
+  "inputProvenance": "synthetic",
+  "evaluationStatus": "not_evaluated",
+  "cases": [
+    {
+      "id": "live-action-client-first",
+      "capabilityId": "short-drama-strategist-plan",
+      "category": "worked_example",
+      "scenario": "虚构本地品牌可讨论委托，但没有实际签约，先给可拍报价与前三集小样方案。",
+      "input": {
+        "brief": "合成案例：两人团队探索短剧与出海收入，路线未定。",
+        "acceptanceCriteria": [
+          {
+            "id": "route-decision",
+            "condition": "三条有不同生产/收入机制的路线及小样，推荐不冒充用户选择",
+            "evidenceRequired": "路线表、来源和决定状态"
+          }
+        ],
+        "handoffContext": {
+          "taskId": "synthetic-short-drama",
+          "upstreamArtifacts": [],
+          "permittedActions": [
+            "read_supplied_materials",
+            "prepare_strategy"
+          ],
+          "resourceLeases": []
+        },
+        "settledDecisions": "合成输入：用户只要求细化真人委托路线；不是实际选择记录。"
+      },
+      "candidateOutputExcerpt": {
+        "routeOptions": [
+          {
+            "id": "live-action",
+            "name": "真人本地原创",
+            "targetCustomer": "有内容预算的品牌/制作委托方",
+            "audienceAndPromise": "当地职场关系与社区情感",
+            "productionModel": "当地演员、单场景拍摄、人工剪辑",
+            "assetsAndRights": "演员/场地/音乐/剧本与分发范围须有证据",
+            "monetization": "约定制作费及使用权",
+            "channels": "客户账号或已签发行方；平台合作新闻不是采购承诺",
+            "costDrivers": "拍摄日、演员、场地、收音、后期、补拍、权利",
+            "pilot": "先给客户六集梗概与报价，再按已授权预算拍前三集",
+            "metrics": "客户购买意向/接受范围；观看理解/续集行为；交付贡献",
+            "stopConditions": "无买方证据先停全季投入；超预算补拍先回剧本/场景",
+            "evidenceAndTradeoffs": "合成提案；真实客户与演员未验证"
+          }
+        ],
+        "seriesBlueprint": {
+          "premise": "六集《周五前的租约》，社区咖啡馆在租约压力下公开关系与账目。",
+          "episodes": [
+            "先兑现团队共同目标再露出转让意向书",
+            "解释同事动机并发现账目时间错误",
+            "澄清账目并揭示租约附加条件"
+          ],
+          "continuity": "每集谁知道转让计划、服装时间和账本道具固定登记。"
+        },
+        "status": "partial"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "已有路线是合成输入；明确买方证据/拍摄预算和故事回报，没有把合作新闻当订单。",
+      "diagnosticRefs": [
+        "audience-buyer",
+        "serial-engine",
+        "pilot-decision"
+      ],
+      "decisionRuleRefs": [
+        "respect-settled-choice",
+        "serial-payoff",
+        "pilot-before-scale"
+      ]
+    },
+    {
+      "id": "ai-continuity-and-cost",
+      "capabilityId": "short-drama-strategist-plan",
+      "category": "worked_example",
+      "scenario": "用户尚未选路线且未授权付费，先比较三条并给AI小样条件推荐。",
+      "input": {
+        "brief": "合成案例：两人团队探索短剧与出海收入，路线未定。",
+        "acceptanceCriteria": [
+          {
+            "id": "route-decision",
+            "condition": "三条有不同生产/收入机制的路线及小样，推荐不冒充用户选择",
+            "evidenceRequired": "路线表、来源和决定状态"
+          }
+        ],
+        "handoffContext": {
+          "taskId": "synthetic-short-drama",
+          "upstreamArtifacts": [],
+          "permittedActions": [
+            "read_supplied_materials",
+            "prepare_strategy"
+          ],
+          "resourceLeases": []
+        }
+      },
+      "candidateOutputExcerpt": {
+        "routeOptions": [
+          {
+            "id": "live-action",
+            "name": "真人本地原创",
+            "targetCustomer": "有内容预算的品牌/制作委托方",
+            "audienceAndPromise": "当地职场关系与社区情感",
+            "productionModel": "当地演员、单场景拍摄、人工剪辑",
+            "assetsAndRights": "演员/场地/音乐/剧本与分发范围须有证据",
+            "monetization": "约定制作费及使用权",
+            "channels": "客户账号或已签发行方；平台合作新闻不是采购承诺",
+            "costDrivers": "拍摄日、演员、场地、收音、后期、补拍、权利",
+            "pilot": "先给客户六集梗概与报价，再按已授权预算拍前三集",
+            "metrics": "客户购买意向/接受范围；观看理解/续集行为；交付贡献",
+            "stopConditions": "无买方证据先停全季投入；超预算补拍先回剧本/场景",
+            "evidenceAndTradeoffs": "合成提案；真实客户与演员未验证"
+          },
+          {
+            "id": "ai-original",
+            "name": "AI原创系列",
+            "targetCustomer": "原创IP委托方；自营渠道收入另验证",
+            "audienceAndPromise": "幻想剧《借来的十分钟》的选择与记忆代价",
+            "productionModel": "原创角色资产、镜头生成、人工剪辑和审片",
+            "assetsAndRights": "原创剧本、参考资产与声音权利；不复制Huobao NC代码",
+            "monetization": "委托/授权费；渠道分成须先满足条件与真实数据",
+            "channels": "原创内容账号或有合同的授权方",
+            "costDrivers": "所有收费尝试、弃片、剪辑、声画审查、译配和分发",
+            "pilot": "先三镜头身份/动作/道具压力小样，再前三集",
+            "metrics": "关键连续性缺陷、接受秒数、全部返修成本、目标观众续看",
+            "stopConditions": "用户未授权不付费；预算耗尽停止新收费；关键连续性未过不扩量",
+            "evidenceAndTradeoffs": "合成提案；未调用模型、未有市场测试"
+          },
+          {
+            "id": "licensed-localization",
+            "name": "授权IP译制",
+            "targetCustomer": "具目标语言/地区权利的版权方",
+            "audienceAndPromise": "家庭悬疑的关系与动机在西语仍成立",
+            "productionModel": "术语/源文对照、翻译编辑、字幕时码、译配听检",
+            "assetsAndRights": "地域/语言/渠道/期限/改编及声音授权逐项查",
+            "monetization": "按接受分钟/整季收费，约定返修范围",
+            "channels": "客户许可范围内发行",
+            "costDrivers": "翻译、母语编辑、录音/TTS、时码、质检、返修",
+            "pilot": "术语/关系表和三个集段双语/译配对照",
+            "metrics": "关键关系错误、母语意见、客户验收、返修工时和净贡献",
+            "stopConditions": "权利未覆盖不分发/克隆声音；返修范围失控回报价",
+            "evidenceAndTradeoffs": "合成提案；已有素材与客户未知，不把Apache许可当素材权利"
+          }
+        ],
+        "decision": {
+          "recommendedRoute": "ai-original",
+          "selectedRoute": null,
+          "selectionStatus": "pending",
+          "selectionEvidenceRef": null,
+          "reason": "假设没有IP客户或本地团队，可先比较原创AI小样；只有用户选择后才安排相应生产。",
+          "questions": [
+            "有可授权素材/客户吗？可接受的小样预算和目标语言是什么？"
+          ]
+        },
+        "economicsAndPilot": {
+          "kind": "illustrative",
+          "currency": "USD",
+          "knownCosts": 9,
+          "acceptedSeconds": 30,
+          "costPerAcceptedMinute": 18,
+          "costScope": "假设三笔生成费各2.4加剪辑1.8；未包含音乐/译配/投放，不是全成本",
+          "netRevenue": null,
+          "pilot": "预算/时间窗/目标受众和阈值为待确认提案；未做生成、受众或付费验证。"
+        },
+        "status": "partial"
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "保留pending，不运行收费任务；按接受30秒算已知成本，并承认成本未齐/市场未验证。",
+      "diagnosticRefs": [
+        "route-fit",
+        "serial-engine",
+        "unit-economics"
+      ],
+      "decisionRuleRefs": [
+        "routes-before-choice",
+        "cost-per-accepted-minute",
+        "pilot-before-scale"
+      ]
+    },
+    {
+      "id": "licensed-localization-review",
+      "capabilityId": "short-drama-strategist-plan",
+      "category": "worked_example",
+      "scenario": "合成客户提供范围明确的译制权，需西语家庭剧样段和约定返修报价。",
+      "input": {
+        "brief": "合成案例：两人团队探索短剧与出海收入，路线未定。",
+        "acceptanceCriteria": [
+          {
+            "id": "route-decision",
+            "condition": "三条有不同生产/收入机制的路线及小样，推荐不冒充用户选择",
+            "evidenceRequired": "路线表、来源和决定状态"
+          }
+        ],
+        "handoffContext": {
+          "taskId": "synthetic-short-drama",
+          "upstreamArtifacts": [],
+          "permittedActions": [
+            "read_supplied_materials",
+            "prepare_strategy"
+          ],
+          "resourceLeases": []
+        },
+        "settledDecisions": "合成输入：只细化版权客户的西语译制试单。"
+      },
+      "candidateOutputExcerpt": {
+        "routeOptions": [
+          {
+            "id": "licensed-localization",
+            "name": "授权IP译制",
+            "targetCustomer": "具目标语言/地区权利的版权方",
+            "audienceAndPromise": "家庭悬疑的关系与动机在西语仍成立",
+            "productionModel": "术语/源文对照、翻译编辑、字幕时码、译配听检",
+            "assetsAndRights": "地域/语言/渠道/期限/改编及声音授权逐项查",
+            "monetization": "按接受分钟/整季收费，约定返修范围",
+            "channels": "客户许可范围内发行",
+            "costDrivers": "翻译、母语编辑、录音/TTS、时码、质检、返修",
+            "pilot": "术语/关系表和三个集段双语/译配对照",
+            "metrics": "关键关系错误、母语意见、客户验收、返修工时和净贡献",
+            "stopConditions": "权利未覆盖不分发/克隆声音；返修范围失控回报价",
+            "evidenceAndTradeoffs": "合成提案；已有素材与客户未知，不把Apache许可当素材权利"
+          }
+        ],
+        "productionAndLocalization": {
+          "rights": "假设授权限定西语/指定地区/一年/客户渠道；克隆声音范围另核。",
+          "review": "人物关系先核，姐的称呼按上下文，源时码保留；母语审稿、字幕和配音听检均为计划。"
+        },
+        "economicsAndPilot": {
+          "kind": "illustrative",
+          "netRevenue": 180,
+          "costsComplete": true,
+          "cost": 120,
+          "acceptedSeconds": 180,
+          "costPerAcceptedMinute": 40,
+          "netContribution": 60,
+          "caveat": "演示数值，不是市场报价或本次收入。"
+        }
+      },
+      "expectedAssessment": "acceptable_example",
+      "reason": "范围、情节语义、母语/听检与返修贡献分别列明，没有说译制已完成。",
+      "diagnosticRefs": [
+        "rights-scope",
+        "localization-quality",
+        "unit-economics"
+      ],
+      "decisionRuleRefs": [
+        "rights-and-code",
+        "localize-with-review",
+        "cost-per-accepted-minute"
+      ]
+    },
+    {
+      "id": "recommendation-not-approval",
+      "capabilityId": "short-drama-strategist-plan",
+      "category": "failure_boundary",
+      "scenario": "用户只说想做短剧，助理推荐AI后当成已选且开始安排预算。",
+      "input": {
+        "brief": "合成案例：两人团队探索短剧与出海收入，路线未定。",
+        "acceptanceCriteria": [
+          {
+            "id": "route-decision",
+            "condition": "三条有不同生产/收入机制的路线及小样，推荐不冒充用户选择",
+            "evidenceRequired": "路线表、来源和决定状态"
+          }
+        ],
+        "handoffContext": {
+          "taskId": "synthetic-short-drama",
+          "upstreamArtifacts": [],
+          "permittedActions": [
+            "read_supplied_materials",
+            "prepare_strategy"
+          ],
+          "resourceLeases": []
+        }
+      },
+      "candidateOutputExcerpt": {
+        "decision": {
+          "recommendedRoute": "ai-original",
+          "selectedRoute": "ai-original",
+          "selectionStatus": "confirmed",
+          "selectionEvidenceRef": null,
+          "reason": "模型认为最合适，所以当作用户确认。",
+          "questions": []
+        }
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "没有用户决定引用；推荐不能形成授权或替用户选路线。",
+      "diagnosticRefs": [
+        "route-fit"
+      ],
+      "decisionRuleRefs": [
+        "routes-before-choice"
+      ]
+    },
+    {
+      "id": "nc-license-commercial-shortcut",
+      "capabilityId": "short-drama-strategist-plan",
+      "category": "failure_boundary",
+      "scenario": "看到开源Huobao就建议复制它的生成服务对外收费。",
+      "input": {
+        "brief": "合成案例：两人团队探索短剧与出海收入，路线未定。",
+        "acceptanceCriteria": [
+          {
+            "id": "route-decision",
+            "condition": "三条有不同生产/收入机制的路线及小样，推荐不冒充用户选择",
+            "evidenceRequired": "路线表、来源和决定状态"
+          }
+        ],
+        "handoffContext": {
+          "taskId": "synthetic-short-drama",
+          "upstreamArtifacts": [],
+          "permittedActions": [
+            "read_supplied_materials",
+            "prepare_strategy"
+          ],
+          "resourceLeases": []
+        }
+      },
+      "candidateOutputExcerpt": {
+        "productionAndLocalization": "无需其他许可，直接复制Huobao源码进入商业包；VideoLingo开源所以任意演员声音也可克隆。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "NC边界与素材/声音权利均被跨越；两个代码许可证不能互换或替代内容授权。",
+      "diagnosticRefs": [
+        "rights-scope",
+        "research-depth"
+      ],
+      "decisionRuleRefs": [
+        "rights-and-code"
+      ]
+    },
+    {
+      "id": "paid-retry-and-wrong-denominator",
+      "capabilityId": "short-drama-strategist-plan",
+      "category": "failure_boundary",
+      "scenario": "同一上游任务下载失败被当成新生成，且拿全部产出秒数当成片。",
+      "input": {
+        "brief": "合成案例：两人团队探索短剧与出海收入，路线未定。",
+        "acceptanceCriteria": [
+          {
+            "id": "route-decision",
+            "condition": "三条有不同生产/收入机制的路线及小样，推荐不冒充用户选择",
+            "evidenceRequired": "路线表、来源和决定状态"
+          }
+        ],
+        "handoffContext": {
+          "taskId": "synthetic-short-drama",
+          "upstreamArtifacts": [],
+          "permittedActions": [
+            "read_supplied_materials",
+            "prepare_strategy"
+          ],
+          "resourceLeases": []
+        }
+      },
+      "candidateOutputExcerpt": {
+        "economicsAndPilot": "每次下载失败都重新付费生成；只按一次API价格计算全成本；所有未接受片段计入成片分钟，所以保证盈利。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "遗漏弃片/人工且重复发起收费；无实际净收入不能声称回本。",
+      "diagnosticRefs": [
+        "unit-economics"
+      ],
+      "decisionRuleRefs": [
+        "recover-before-rebill",
+        "cost-per-accepted-minute"
+      ]
+    },
+    {
+      "id": "translation-file-is-not-quality",
+      "capabilityId": "short-drama-strategist-plan",
+      "category": "failure_boundary",
+      "scenario": "上游集成测试只检查SRT/MP4存在和中文字符，却称西语关系/情绪均通过。",
+      "input": {
+        "brief": "合成案例：两人团队探索短剧与出海收入，路线未定。",
+        "acceptanceCriteria": [
+          {
+            "id": "route-decision",
+            "condition": "三条有不同生产/收入机制的路线及小样，推荐不冒充用户选择",
+            "evidenceRequired": "路线表、来源和决定状态"
+          }
+        ],
+        "handoffContext": {
+          "taskId": "synthetic-short-drama",
+          "upstreamArtifacts": [],
+          "permittedActions": [
+            "read_supplied_materials",
+            "prepare_strategy"
+          ],
+          "resourceLeases": []
+        }
+      },
+      "candidateOutputExcerpt": {
+        "productionAndLocalization": "文件非空且测试文件写了断言，因此人物称谓自然、配音情绪准确，不用母语人员看听。",
+        "researchLedger": "只读了测试代码，写成本次实际运行并全通过。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "既混淆测试定义与运行，又用结构信号替代语义与表演。",
+      "diagnosticRefs": [
+        "research-depth",
+        "localization-quality"
+      ],
+      "decisionRuleRefs": [
+        "evidence-scope",
+        "localize-with-review"
+      ]
+    },
+    {
+      "id": "views-not-payback",
+      "capabilityId": "short-drama-strategist-plan",
+      "category": "failure_boundary",
+      "scenario": "用全球会话增速和平台合作新闻推算本项目必有采购且付费回本。",
+      "input": {
+        "brief": "合成案例：两人团队探索短剧与出海收入，路线未定。",
+        "acceptanceCriteria": [
+          {
+            "id": "route-decision",
+            "condition": "三条有不同生产/收入机制的路线及小样，推荐不冒充用户选择",
+            "evidenceRequired": "路线表、来源和决定状态"
+          }
+        ],
+        "handoffContext": {
+          "taskId": "synthetic-short-drama",
+          "upstreamArtifacts": [],
+          "permittedActions": [
+            "read_supplied_materials",
+            "prepare_strategy"
+          ],
+          "resourceLeases": []
+        }
+      },
+      "candidateOutputExcerpt": {
+        "opportunityFrame": "大盘增长就是本项目付费需求，平台已有原创合作就是本剧已被采购。",
+        "economicsAndPilot": "没有同批观众/归因窗口/净收入与投放成本，但保证七天回本。"
+      },
+      "expectedAssessment": "reject_example",
+      "reason": "行业样本与他人合作不能代替本项目客户、留存和同口径净贡献证据。",
+      "diagnosticRefs": [
+        "audience-buyer",
+        "unit-economics",
+        "pilot-decision"
+      ],
+      "decisionRuleRefs": [
+        "evidence-scope",
+        "cost-per-accepted-minute",
+        "pilot-before-scale"
+      ]
+    }
+  ]
+}
