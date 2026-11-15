@@ -24,6 +24,8 @@ Checks cover complete copied resources and source declarations, output criteria,
 
 Review found and corrected two calculation boundaries before the combined run: a negative contribution cannot become viable merely because fixed costs are zero; drama net revenue can be negative after refunds, and derived arithmetic must not return nonfinite values.
 
+Catalog generation and repository validation passed for 97 components and 112 capabilities. Meta_Kim also discovered the actual local collection as `verified_local` with 61 Agents, then loaded all three new structured methods and their default professional references through `loadDependencyAgentMethod`. Full component hashes matched the indexed bytes. This is source integration evidence, not native-model invocation.
+
 ## Evidence limits
 
 These are package-contract, classification and local arithmetic checks. The professional evaluation cases remain `authored_examples` / `not_evaluated`, and runtime discovery remains `needs_probe`. There was no paid model execution, native-host certification, audience test, merchant trial, overseas customer interview, payment qualification review, real media production, human language review, advertising or measured commercial return.
