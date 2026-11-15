@@ -662,6 +662,129 @@
       "sourceSummary": "研究内容机会并制作含标题、正文、封面与 6 至 8 张内页的小红书图文发布包，保留视觉确认与发布边界。",
       "title": "Create a Xiaohongshu visual post package",
       "summary": "Research an opportunity and prepare a title, body, cover, and six to eight interior pages with visual approval and publication boundaries."
+    },
+    "ecommerce-strategy-planner-advise": {
+      "sourceSummary": "研究并比较电商受众、选品、渠道与经营路线，以单位经济、履约退款、现金和复购约束形成可核查的条件性建议。",
+      "title": "Compare ecommerce strategies",
+      "summary": "Research audiences, product choices, channels, and business models; compare contribution, fulfillment, refunds, cash, and repeat purchases to recommend a conditional route and a bounded validation plan.",
+      "detail": {
+        "useWhen": [
+          "Start an ecommerce business when the audience, products, channels, or business model are still undecided.",
+          "Compare marketplace operations, content or creator-led sales, and an independent store built around repeat purchases.",
+          "Investigate why sales are rising while contribution or cash is deteriorating, and identify a business route and the smallest useful validation."
+        ],
+        "doNotUseWhen": [
+          "Use product-listing-writer for product copy alone and store-performance-analyst for straightforward recalculation of store records.",
+          "Use the corresponding specialists for replenishment, warehousing, shipping, or order implementation; this package does not replace a transaction system.",
+          "The host handles advertising, purchasing, refunds, publication, and external messages under the current authorization; this package provides read-only advice."
+        ],
+        "humanGate": [
+          "Publication, external messages, payments, and production writes follow the current task authorization. Already authorized research, calculation, and reversible work continue without repeated approval."
+        ],
+        "fields": {
+          "goal": "The user goal, which may still be broad; offer choices for an unknown audience, channel, or business model without treating them as settled.",
+          "businessContext": "Market, audience, product value, stage, existing channels, and their sources; preserve unknowns.",
+          "metrics": "Order cohorts, refunds, fees, inventory, fulfillment, and cash receipts supplied for this task; verify definitions and observation maturity.",
+          "constraints": "Cash, working hours, delivery capacity, existing authorization, and the user acceptance boundaries; advice does not authorize execution.",
+          "settledDecisions": "Reuse established choices and their evidence without repeating the interview.",
+          "researchRecords": "Actual search, reading, and execution records from the host for this task; package provenance cannot replace them.",
+          "runtimeBindings": "Tools actually bound by the host, with their status, scope, and authorization; preserve missing or denied states.",
+          "diagnosis": "Facts, assumptions, product-category differences, and gaps that change the choice.",
+          "choiceCards": "Choices about the audience, value, channel, business model, or costs that remain open; this can be empty when those choices are settled.",
+          "routes": "Substantively different feasible routes, each with its customer outcome, audience, value, channel, business model, prerequisites, costs, tradeoffs, measures, reversal conditions, evidence, and unknowns. There is no fixed count; if none is feasible, explain the elimination evidence and conditions for continuing.",
+          "evidenceLedger": "Actual sources, tools, dates, scope, versions, adoption or rejection reasons, and limits; explicitly state when no current search occurred.",
+          "economics": "Comparable cost contribution, cash, and repeat-purchase maturity; unknown values must not become zero.",
+          "fulfillmentGuardrails": "Inventory definitions and reservations, return inspection, time-dependent capacity, and the applicable scope of current rules.",
+          "recommendation": "Conditional advice, unsettled choices, and reversal conditions, with the decision left to the user.",
+          "validationPlan": "The smallest useful validation within current constraints, including an adequate observation period and stopping rules; clearly identify unexecuted work.",
+          "handoff": "Available outputs, unread materials, pending decisions, the next responsible owner, and relevant adjacent capabilities.",
+          "status": "This role delivery status only: completed, partial, needs_input, or blocked. It does not establish a business result or permission to launch.",
+          "nativeRuntimeVerified": "Always false for this package: static package or arithmetic checks do not prove native agent loading."
+        },
+        "sourceContractSha256": "727fc0560c296d7bac1b99034e1e87243ee5a0db8e1f1253cb56c84c0ffb24e6"
+      }
+    },
+    "global-expansion-strategist-deliver": {
+      "sourceSummary": "出海策略与验证（global expansion / go-to-market）：比较实物、SaaS/App、内容/IP和专业服务的市场、渠道、交付与单位经济，交可逆验证和条件建议。",
+      "title": "Compare global expansion routes",
+      "summary": "Compare international markets, channels, delivery, and unit economics for physical goods, SaaS or apps, content or IP, and professional services; provide reversible validation and conditional advice.",
+      "detail": {
+        "useWhen": [
+          "Explore global expansion when the product, market, and channel are still undecided, and compare different feasible routes.",
+          "Find a path to the first overseas paying users for existing software, an app, content, or professional skills.",
+          "Compare the order of market expansion, channel changes, localization, and investment for an existing international business."
+        ],
+        "doNotUseWhen": [
+          "Use the relevant specialist for product-title edits or video production alone; this role covers market-entry routes and evidence.",
+          "Use existing capabilities for financial forecasting, order execution, and production operations after a route has been chosen; do not duplicate execution.",
+          "Analysis does not authorize account opening, advertising, payment, outreach, or promises of income. The current host handles real external actions under its authorization."
+        ],
+        "humanGate": [
+          "Account opening, spending, external contact, contractual commitments, publication, and real business actions are handled by the current host under the current authorization. Already authorized reversible research and drafts continue without asking again."
+        ],
+        "fields": {
+          "intent": "The intended global expansion outcome; a single statement of intent is enough to begin exploration.",
+          "assets": "Existing products, professional capabilities, content rights, customer relationships, and evidence; unknowns are allowed.",
+          "constraints": "Time, budget, business entity, supported languages and time zones, capacity, and current authorization; unknowns are allowed.",
+          "marketEvidence": "Materials for this task, actual external reading, and earlier research; distinguish historical sources from current tool receipts.",
+          "researchLedger": "Actual external reading for this task, source dates and versions, the connection from questions to decisions, and unobserved items.",
+          "marketRoutes": "Multiple substantively different feasible market, product, and channel routes, with conditions for use or rejection. Usually develop three; if fewer remain, explain the evidence and elimination reasons without padding the list.",
+          "economics": "Cash and time contributions, capacity, and stress scenarios on the same currency, period, and business-unit basis.",
+          "localizationOperations": "Specific localization, payment collection, support, delivery, and regional-condition work, with acceptance evidence.",
+          "validationPlan": "Reversible validation with samples, denominators, observation windows, budget assumptions, and conditions to continue, stop, or change route.",
+          "decisionMemo": "Conditional advice, unsettled user choices, and mappings into the same PRD and project capabilities.",
+          "handoff": "Outputs ready for the next owner, the actual checking scope, and unknowns that affect particular conclusions."
+        },
+        "sourceContractSha256": "0594d5b2d4aa8cfea2dff08bb53606c3e678c0fb027e985d5a0226ffb4ee1988"
+      }
+    },
+    "short-drama-strategist-plan": {
+      "sourceSummary": "把短剧与出海想法变成可比较的真人、AI、授权译制业务路线、系列设计和有停止条件的小样计划",
+      "title": "Plan a short drama business",
+      "summary": "Compare live-action, AI-generated, and licensed localization routes for short dramas and international distribution; develop a series plan and a bounded pilot with explicit stopping conditions.",
+      "detail": {
+        "useWhen": [
+          "Explore short dramas or international short-drama distribution when live-action, AI production, and licensed localization are still alternatives.",
+          "Develop a season arc, episode hooks, character continuity, and production or localization plans.",
+          "Determine who pays and how distribution works, and assess accepted-footage costs, retention, and cost recovery."
+        ],
+        "doNotUseWhen": [
+          "Use script-writer for an ordinary article or a short spoken script alone.",
+          "Use media-production-engineer for rendering, transcoding, or media-parameter checks under an already settled plan.",
+          "IP licensing commitments, voice cloning without consent, automatic paid generation, and direct advertising or publication must be handled by the caller under the current task authorization."
+        ],
+        "humanGate": [
+          "Present concrete alternatives for unsettled production routes or material budget, target-market, or rights tradeoffs; reuse decisions the user has already made.",
+          "The caller must obtain the relevant authorization for paid generation, signing, advertising, or publication when it is not already granted. Do not reconfirm authorized reading and reversible analysis.",
+          "Stop the corresponding action when it is explicitly denied; do not switch tools, APIs, or agents to bypass the denial."
+        ],
+        "fields": {
+          "brief": "Who the user wants to serve, what need the drama addresses, and why this format fits; identify unknowns and do not treat industry hype as purchase evidence.",
+          "assetsAndRights": "Original or licensed IP, footage, character, voice, and music rights, including language, territory, channel, term, and adaptation scope; missing details need not prevent initial comparison.",
+          "marketAndConstraints": "Target countries, languages, platforms, time, budget, team, existing customers, and tolerable risks; preserve unknowns.",
+          "settledDecisions": "Routes already chosen by the user and current authorization evidence; a recommendation is not a user selection.",
+          "researchEvidence": "Traceable primary material, fixed GitHub commits and relevant code, tests, dependencies or issues, quotations or customer evidence, and reading times for this task.",
+          "runtimeBindings": "Tools actually bound by the host for this task, including availability, scope, authorization, and receipts. A capability need is not permission; preserve unknown or denied states.",
+          "acceptanceCriteria": "Acceptance criteria, each with its identifier, condition, and required evidence.",
+          "handoffContext": "Relevant materials and dependency outputs, including task ID, upstream artifacts, permitted actions, and resource leases; the caller retains control.",
+          "opportunityFrame": "Audience, emotional needs, payer, market evidence, and counterevidence; separate observations, inferences, and hypotheses awaiting validation.",
+          "routeOptions": "Compare target customers, audience promise, production model, assets and rights, monetization, channels, cost drivers, pilot, metrics, stopping conditions, evidence, and tradeoffs for each route.",
+          "decision": "Keep the recommended route separate from the user-selected route; record pending or confirmed selection, the selection evidence, reasoning, and remaining questions.",
+          "seriesBlueprint": "Story engine, season goals, turns and ending, episode conflicts, payoffs and closing hooks, character relationships, and continuity of costumes, props, voices, and character knowledge.",
+          "productionAndLocalization": "Materials, roles, tools, and dependencies for live-action, AI, or licensed localization, including human review of cultural fit, terminology, subtitles, dubbing, timing, and responsibility for revisions.",
+          "economicsAndPilot": "All costs per accepted finished minute; definitions of net revenue, acquisition, retention, and cost recovery; assumptions, budget caps, and pilot pass or stop criteria.",
+          "researchLedger": "Current source dates, original material and fixed-commit paths, actual reading scope, adoption or rejection reasons, model, license and cost limits, and unverified items.",
+          "status": "The strategy delivery status: completed, partial, needs_input, or blocked. Completed does not mean the drama was filmed, launched, or profitable.",
+          "artifactRefs": "Artifact references with kind and evidence level; include hashes where available and distinguish design, fixture, local execution, host execution, and external verification.",
+          "criterionResults": "Each criterion result with pass, fail, not_run, or blocked status, evidence references, and the actual scope checked.",
+          "missingCapabilities": "Missing, denied, or unverified tool slots, their impact, and the next action.",
+          "failures": "Failure codes, attempted actions, targets, retryability, and available evidence references.",
+          "stopReason": "The concrete reason for stopping at the current scope.",
+          "handoff": "The next owner, accepted scope, remaining work, and whether a user decision is still required.",
+          "nativeRuntimeVerified": "Always false for this package: static contracts and local helper checks do not establish native host loading. The caller records any real probe separately."
+        },
+        "sourceContractSha256": "ff18541133b2ea96a08f4777a5d9e91da2ec055408907e60674f002a263eca45"
+      }
     }
   }
 }

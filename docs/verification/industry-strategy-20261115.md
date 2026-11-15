@@ -28,6 +28,8 @@ Catalog generation and repository validation passed for 97 components and 112 ca
 
 The first GitHub validation at `fc25e418dac785d07f06aa8896da7b66836bfd84` caught missing canonical source paths in the three new component changelogs after catalog provenance had been finalized. Those source labels were added, their exact component provenance and generated hashes rebuilt, and repository validation was rerun successfully on the finalized state. The original failed run remains visible; it is not counted as a pass. Method and arithmetic implementations did not change in this correction.
 
+The following run at `37d2432d719729d98a1a0901effd1081661fba1a` reached root regressions and exposed missing English task-browser mappings for the new capabilities. The three mappings now include the actual source-contract hashes, titles, summaries, inputs, outputs and use boundaries. `node --test scripts/task-browser-locales.test.mjs` passed **7 tests, 0 failed, 0 skipped**. The static page was regenerated and repository validation passed again. The checks themselves were not changed or skipped.
+
 ## Evidence limits
 
 These are package-contract, classification and local arithmetic checks. The professional evaluation cases remain `authored_examples` / `not_evaluated`, and runtime discovery remains `needs_probe`. There was no paid model execution, native-host certification, audience test, merchant trial, overseas customer interview, payment qualification review, real media production, human language review, advertising or measured commercial return.
