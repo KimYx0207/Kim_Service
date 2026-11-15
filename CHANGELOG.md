@@ -4,15 +4,31 @@
 
 Kim Service collection releases use `V<major>.<minor>`. Each component keeps its own version and source history. Detailed past checks are in the [testing record](docs/verification-history.md).
 
-## Unreleased
+## V1.18 - 2026-11-15
 
-### Research before business and product selection
+### Affected components
 
-- Add Ecommerce Strategy Planner, Global Expansion Strategist and Short Drama Strategist 0.1.0. Current main contains 61 Agents, 97 components and 112 capabilities, using the existing industry/role catalog and caller-owned acceptance.
+Ecommerce Strategy Planner, Global Expansion Strategist and Short Drama Strategist 0.1.0 join the collection. V1.18 contains 61 Agents, 32 Skills, 2 Hooks and 2 Tools: 97 components and 112 searchable capabilities, paired with Meta_Kim v3.15.0.
+
+### User-visible changes
+
+- Start with an intent in the current AI conversation. Research current sources and relevant external implementations, compare business routes, preserve existing decisions, then use the selected professional methods and inspect the actual delivery. The catalog remains an optional way to browse methods and prepare a request.
 - Compare materially different business routes, including buyers, value, distribution, revenue, initial and ongoing effort, conditions, unknowns and reversible experiments. Keep recommendations conditional when a material user choice is unresolved; preserve existing choices and explain eliminated alternatives without filling a fixed quota.
 - Require actual current primary-source retrieval and relevant external GitHub implementation research for changing facts. Dated notes record six external repositories, fixed source revisions, reading scope and adoption limits. Existing source notes do not certify that another task has searched.
 - Add professional methods, delivery templates, complete synthetic examples, adversarial cases and bounded arithmetic aids. Ecommerce separates listed-cost contribution from cash; expansion separates goods, software, apps, content and services; drama connects serial design, accepted-footage cost, rights, localization and distribution economics.
-- Update both READMEs and the generated catalog. See [verification and limits](docs/verification/industry-strategy-20261115.md). These additions are on main; V1.17 remains the previous published package.
+- Update both READMEs, the generated catalog and the localized workflow diagram. Show the branch between keeping an existing choice and asking for an unresolved material choice; failed checks return to the affected work.
+
+### Breaking changes and migration
+
+Use the complete V1.18 source or package to obtain the three new strategy methods. Existing component invocation and industry/role classifications are retained. The ZCode package pairs Meta_Kim 3.15.0 with Kim 1.18.0 and compares upgrades against the V1.17 bundle. Existing project-specific methods and decisions remain in their projects.
+
+### Verification
+
+The implementation at `0e3abbc0026e4e233c45ce7fb74d1233c4365485` passed [repository CI](https://github.com/KimYx0207/Kim_Service/actions/runs/43659280710), including Windows, macOS, Linux and real browser interactions; its [task browser publication](https://github.com/KimYx0207/Kim_Service/actions/runs/43659536718) succeeded. [The verification record](docs/verification/industry-strategy-20261115.md) records the targeted checks, actual source discovery and limits. The release publisher checks the final main commit and source, DSH and ZCode package identity. Professional examples remain authored and not evaluated; native model execution and real commercial outcomes are separate evidence.
+
+### Source revisions
+
+Previous release: [V1.17](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.17). New strategy implementation began at `a9da704`; component provenance and discovery corrections are included in `0e3abbc0026e4e233c45ce7fb74d1233c4365485`. Each component retains its exact source in `catalog.json` and its own provenance. The V1.18 tag, `SOURCE-REVISION.txt` and package checksums identify the final release source and assets.
 
 ## V1.17 - 2026-11-15
 

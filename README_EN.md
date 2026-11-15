@@ -10,17 +10,15 @@ Kim Service is an open-source **library of professional methods for AI work**. Y
 
 You may know what you want without knowing which numbers a forecast must reconcile, which states a booking page needs, or how to compare supplier quotes. The methods make the work concrete: inspect materials and evidence, analyze or build the result, then check the actual delivery.
 
-Published **V1.17** includes **58 specialist Agents, 32 Skills, 2 Hooks, and 2 Tools**: 94 components with **109 searchable task capabilities**, paired with Meta_Kim v3.14.0. Current main additionally includes the three strategy methods below, recorded under Unreleased; the previous release downloads do not contain these additions.
+**V1.18** includes **61 specialist Agents, 32 Skills, 2 Hooks, and 2 Tools**: 97 components with **112 searchable task capabilities**, paired with Meta_Kim v3.15.0. Ecommerce, global expansion and short-drama strategy methods are included in this version’s complete source, DSH and ZCode packages.
 
-**[Browse capabilities and prepare a request](https://kimyx0207.github.io/Kim_Service/?lang=en)** · **[V1.17 downloads](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.17)** · **[Browse the source](https://github.com/KimYx0207/Kim_Service/tree/main)**
+**[Browse capabilities and prepare a request](https://kimyx0207.github.io/Kim_Service/?lang=en)** · **[V1.18 downloads](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.18)** · **[Browse the source](https://github.com/KimYx0207/Kim_Service/tree/main)**
 
 Browse **11 industries and 8 shared professional domains → role/job**, or search for the result you need: “cash forecast,” “supplier comparison,” or “booking page.” Check the inputs and deliverables before choosing a method. An Agent here is first a complete professional method package read and executed by the current client; native Agent registration depends on the integration.
 
-Current main contains **61 Agents, 97 components and 112 task capabilities**. The three new strategy roles use the existing industry classification and invocation contract.
-
 ## Ecommerce, global expansion and short drama: compare business routes first
 
-When the goal is still open, research the market and customer problem before choosing a product to build. The new methods on main call for actual current online research and, when relevant, reading external GitHub implementations, tests, versions and licenses. Included source notes are dated research snapshots, not evidence that a later task has already searched.
+Describe the goal directly in the current Agent conversation, for example: “I want to start an ecommerce business but have not chosen a category or channel.” The AI reads existing materials and decisions, retrieves current official evidence that affects the choice, and studies relevant external GitHub implementations, tests, versions and licenses. It then compares business routes. Included research notes provide references; changing facts used in the current task need a fresh check.
 
 | Direction to explore | Method | What to compare |
 | --- | --- | --- |
@@ -28,7 +26,7 @@ When the goal is still open, research the market and customer problem before cho
 | Business and market for expansion | [Global expansion](agents/global-expansion-strategist/AGENT.md) | Physical goods, SaaS/Web, apps, content/IP and professional services; compare buyers, markets, channels, payments, localization, support and reversible experiments. |
 | Short-drama business route | [Short-drama strategy](agents/short-drama-strategist/AGENT.md) | Live-action originals/commissions, AI originals and licensed localization; connect serial storytelling and accepted-footage cost to rights, distribution, retention and payback. |
 
-Each viable alternative states the customer, value, acquisition and revenue model, initial and ongoing effort, conditions, unknowns and reasons to stop or switch. Recommendations are conditional. Unresolved material choices stay open, and existing user decisions are preserved. Once a direction is chosen, reuse the relevant content, operations, finance, software or media-production methods for delivery.
+Each viable alternative states the customer, value, acquisition and revenue model, initial and ongoing effort, conditions, unknowns and reasons to stop or switch. The AI makes an evidence-based recommendation. Existing valid choices are preserved; when a material direction is still open, you receive the options and tradeoffs to decide. Professional Agents and Skills then use the project rules to produce files, pages, code or media. Open the actual delivery and check the agreed criteria. Failed checks return to the affected work while independent tasks continue.
 
 The actual research is recorded in dated notes for [ecommerce](docs/research/ecommerce-strategy-2026-11-15.md), [global expansion](docs/research/global-expansion-2026-11-15.md) and [short drama](docs/research/short-drama-2026-11-15.md), including primary-source dates, fixed GitHub commits, reading depth and work not executed. These methods and synthetic examples do not establish real demand or commercial returns.
 
@@ -36,7 +34,7 @@ The actual research is recorded in dated notes for [ecommerce](docs/research/eco
 
 If Service is already connected through Meta_Kim or your current client, describe your goal, material locations, and constraints directly in the conversation for your actual work project. The source setup below is for a first standalone connection.
 
-1. **Get the source.** Obtain the complete V1.17 source, or use the two commands below to obtain main.
+1. **Get the source.** Obtain the complete V1.18 source, or use the two commands below to obtain main.
 2. **Make the files accessible to your AI.** Open `Kim_Service` in a project client such as Codex, Claude Code, Cursor, or Gemini CLI. If your work lives elsewhere, provide the full paths to both the method library and the task materials.
 3. **Describe the task directly.** In your AI client, say what you want to achieve, where the materials are, and what requirements apply. Ask it to find and read the appropriate complete method. To browse capabilities or prepare a request first, optionally open the catalog above or `docs/start.html` from the source checkout. The web page only prepares the request.
 4. **Open the delivery before calling it done.** Ask for file paths, checks actually performed, and unfinished items. Repair the affected step when a check fails, keeping the previous version.
@@ -59,12 +57,12 @@ Check periods, currency, units, and cash reconciliation. List actual output path
 **Input → output:** business goal + readable materials + selected method → editable artifacts + calculation or operation evidence + checks + next step. The complete workflow follows below; choose your client integration afterward. A first task can read the method directly.
 
 <p align="center">
-  <a href="docs/images/service-system-panorama.en.svg"><img src="docs/images/service-system-panorama.en.svg" alt="Kim Service task panorama: goals and materials enter the task browser; optional Meta_Kim orchestration combines Agent, Skill, Hook and Tool methods into a request; the current AI client produces real artifacts and verifies the handoff, with repair paths, necessary human choices and host-owned Work records" width="1000"></a>
+  <a href="docs/images/service-system-panorama.en.svg"><img src="docs/images/service-system-panorama.en.svg" alt="Kim Service workflow: describe the intent in the current Agent, research current official sources and external projects, compare viable routes, preserve an existing choice or resolve a material decision, execute professional methods, and inspect the actual result; failed checks return to the affected work" width="760"></a>
   <br>
   <a href="docs/images/service-system-panorama.en.svg">Open full-size image</a>
 </p>
 
-Start with the goal and materials at the top, then follow the dark arrows through method selection, the complete request, client execution and delivery checks. Meta_Kim is optional for complex work. Purple paths return issues to the affected task; orange paths request human input only when needed; dashed gray paths lead to records owned by the host. The client, model and tools are configured separately. Service supplies methods, references, examples and check criteria.
+Start with the conversational goal at the top, then see how current research informs the route comparison. The two middle branches preserve an existing choice or ask you to resolve an open material direction. They lead into the relevant professional work and actual delivery checks; the return path sends problems back to the affected step. Meta_Kim schedules dependencies for complex work, the current client supplies models and tools, and Service supplies methods and check criteria. Open the catalog whenever browsing would help.
 
 ## How it helps you do the work thoroughly
 
@@ -93,7 +91,7 @@ Together, the specialist Agent supplies the professional method, Skills support 
 
 **Keep general foundations global; maintain professional Agents, Skills and rules in each ongoing project.** Research the project, then write domain knowledge, brand, data permissions, technology versions, tools and acceptance cases into its local capabilities. The next task loads them again, preserving experience within that project.
 
-Two new methods support this work. **Technology option evaluation** compares candidates, version compatibility, evidence, costs and validation plans. **Knowledge architecture evaluation** considers combinations of retrieval, long context and caching, knowledge wikis and graphs, including citations, updates, permission revocation and operating cost. Value decisions also distinguish commercial products, internal efficiency and open-source projects, along with their current phase.
+Two methods support project research. **Technology option evaluation** compares candidates, version compatibility, evidence, costs and validation plans. **Knowledge architecture evaluation** considers combinations of retrieval, long context and caching, knowledge wikis and graphs, including citations, updates, permission revocation and operating cost. Value decisions also distinguish commercial products, internal efficiency and open-source projects, along with their current phase.
 
 UX methods carry general principles into domain, brand and task rules. Equipment maintenance needs clear alarms and action consequences; heritage apparel needs style, fit and purchase decisions. Each method asks how its rules appear in the actual artifact, page states and observation evidence.
 
@@ -126,7 +124,7 @@ Read an Agent's `AGENT.md` or a Skill's `SKILL.md`, then follow its references. 
 
 `examples/enterprise-knowledge/` contains a runnable case: import a fixed public IBM Cloud historical corpus, audit documents and passages, build lexical and vector indexes, and compare BM25, dense retrieval, RRF fusion and reranking on the same 188 public benchmark questions. Open source passages, inspect citations and failed queries, and exercise permission withdrawal, deletion, index rollback and interrupted-job recovery. The pinned archives contain 8,578 document records and 72,442 passages; every run audits its own inputs.
 
-This example is included in the **complete V1.17 source**. Download the source package or use the `git clone` command above. On Linux or WSL with Python 3.12 installed, run from the repository root:
+This example is included in the **complete V1.18 source**. Download the source package or use the `git clone` command above. On Linux or WSL with Python 3.12 installed, run from the repository root:
 
 ```bash
 cd examples/enterprise-knowledge
@@ -156,7 +154,7 @@ Open `http://127.0.0.1:4180`, enter a technical question and switch retrieval me
 
 **For physical operations and engineering projects,** work through manufacturing quality, system requirements and interfaces, construction information, energy projects, emissions accounting, field-water planning, or nonclinical healthcare service processes. The methods make scope, sources, units, exceptions, and on-site checks explicit, producing analysis, verification plans, or pilot proposals while retaining the items that need local evidence and professional judgment.
 
-The 109 capabilities describe the available task entries. Start with the result you need, search for it in the browser, and check the required materials. You do not need to memorize role names.
+The 112 capabilities describe the available task entries. Start with the result you need, search for it in the catalog, and check the required materials. You do not need to memorize role names.
 
 <a id="task-browser"></a>
 
@@ -379,7 +377,7 @@ In DSH, specialist Agent methods and Skills are discovered as native Skills, ret
 npm install --global @deepseek-ai/dsh@0.2.2-rc.1
 ```
 
-**Prepare the Service package.** The DSH package for this version is `Kim_Service-DSH-V1.17.zip`; its download location is the [V1.17 Release](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.17). You can also build it from the matching source. Replace the output below with your own full path; the directory must not exist yet:
+**Prepare the Service package.** The DSH package for this version is `Kim_Service-DSH-V1.18.zip`; its download location is the [V1.18 Release](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.18). You can also build it from the matching source. Replace the output below with your own full path; the directory must not exist yet:
 
 ```sh
 node scripts/build-dsh-package.mjs --output "/absolute/path/kim-service-dsh"
@@ -414,7 +412,7 @@ Use the Git root if the project has a repository, or the project directory if it
 
 ### ZCode
 
-The ZCode package for this version is **`Kim-ZCode-V1.17.zip`**, with Kim plugin version **1.17.0**; its download location is the [V1.17 Release](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.17). Extract it fully into a permanent location. Select the directory containing `marketplace.json` and keep all its plugin and resource folders.
+The ZCode package for this version is **`Kim-ZCode-V1.18.zip`**, with Kim plugin version **1.18.0**; its download location is the [V1.18 Release](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.18). Extract it fully into a permanent location. Select the directory containing `marketplace.json` and keep all its plugin and resource folders.
 
 Open a project in ZCode, then go to **Settings → Plugins → Create → Add marketplace** and choose that local directory. Install and enable `kim-service-local` from the personal source; add `meta-kim-local` if you also want Meta_Kim's task coordination. Inspect the installed roles and Skills in the plugin details, find a role such as `kim-service-local:financial-modeler` in the subagent list, and start with your goal and materials.
 
@@ -435,7 +433,7 @@ For an update, preserve personal changes and replace the original marketplace di
 
 The current beta integration lets you **select one Agent or Skill, export its complete Skill ZIP, and import it in the client**. Methods, knowledge, examples, scripts, and licenses stay together; an Agent is used as the professional method inside the Skill.
 
-**Prepare the sources.** Install Node.js **22.13.0 or later** and check it with `node --version`. Download and fully extract [Service V1.17](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.17) and [Meta_Kim v3.14.0](https://github.com/KimYx0207/Meta_Kim/releases/tag/v3.14.0). In a terminal at the Kim_Service root, replace the Meta path below with the source directory's actual absolute path. The output must be a new directory inside an existing parent directory. This exports financial modeling:
+**Prepare the sources.** Install Node.js **22.13.0 or later** and check it with `node --version`. Download and fully extract [Service V1.18](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.18) and [Meta_Kim v3.15.0](https://github.com/KimYx0207/Meta_Kim/releases/tag/v3.15.0). In a terminal at the Kim_Service root, replace the Meta path below with the source directory's actual absolute path. The output must be a new directory inside an existing parent directory. This exports financial modeling:
 
 ```sh
 node scripts/build-desktop-skill-package.mjs --meta-root "/absolute/path/Meta_Kim" --host workbuddy --component financial-modeler --output "/absolute/path/new-workbuddy-finance"
@@ -445,7 +443,7 @@ node scripts/build-desktop-skill-package.mjs --meta-root "/absolute/path/Meta_Ki
 For Doubao Work, replace `--host workbuddy` with `--host doubao` in both commands and choose a new output directory. On Windows PowerShell, use this complete form, changing the Meta source directory and client choice:
 
 ```powershell
-$KimMeta = (Resolve-Path 'C:/work/Meta_Kim-3.14.0').Path
+$KimMeta = (Resolve-Path 'C:/work/Meta_Kim-3.15.0').Path
 $KimClient = 'workbuddy' # Change to 'doubao' for Doubao Work
 $KimOutput = Join-Path ([IO.Path]::GetTempPath()) ('kim-finance-' + [guid]::NewGuid().ToString('N'))
 node scripts/build-desktop-skill-package.mjs --meta-root $KimMeta --host $KimClient --component financial-modeler --output $KimOutput

@@ -239,10 +239,82 @@ function projectExpertise(lang) {
   return svg(lang,'06',1140,t.title,t.sub,out,4,24);
 }
 
+const strategyCopy = {
+  'zh-CN': {
+    title: '从一句意图，到可验收的成果', sub: '当前证据进入方案，已有选择继续沿用',
+    goal: ['在当前 Agent 里说目标', ['带上材料、限制与已经确定的选择']],
+    research: ['本次实际研究', ['查官方资料与外部项目', '读取版本、源码和测试', '留下来源与采用依据']],
+    compare: ['比较可行路线', ['面向谁，解决什么问题', '成本、条件、代价与未知', '给出建议和不选的理由']],
+    choices: [
+      ['已有有效选择', ['沿用已确认方向', '继续后续专业工作']],
+      ['仍有关键选择', ['把方案与取舍交给你', '选定方向后接着做']],
+    ],
+    execute: ['专业方法进入任务', ['Agent / Skill ＋ 项目规则 ＋ 实际工具', '按依赖安排工作，交付文件、页面或代码']],
+    verify: ['打开成果，逐项验收', ['通过：保留成果、采用版本与下一步', '发现问题：返回受影响步骤修正']],
+    repair: '修正',
+    phases: ['从当前对话和已有材料开始', '实际读取会影响选择的当前来源', '让证据改变候选方案与推荐', '已有决定沿用，只补关键未决选择', '由当前客户端执行相关专业方法', '检查实际结果，修正后再验收'],
+    steady: '研究 → 比较 → 决定 → 执行 → 验收',
+    foot: ['能力目录按需浏览；Meta_Kim 编排复杂任务。', '一项选择待定时，无关的独立工作继续。'],
+  },
+  en: {
+    title: 'From intent to a checked result', sub: 'Use current evidence and preserve valid choices',
+    goal: ['State the goal in your current Agent', ['Bring materials, constraints and existing decisions']],
+    research: ['Research now', ['Current official sources', 'External code and tests', 'Dates, versions and reasons']],
+    compare: ['Compare viable routes', ['Buyer and useful outcome', 'Costs, conditions, unknowns', 'Recommendation and tradeoffs']],
+    choices: [
+      ['An existing valid choice', ['Keep the agreed direction', 'Continue the relevant work']],
+      ['A material choice is open', ['Show options and tradeoffs', 'You choose; work resumes']],
+    ],
+    execute: ['Use professional methods in the task', ['Agents / Skills + project rules + available tools', 'Follow dependencies; deliver files, pages or code']],
+    verify: ['Open the result and check the criteria', ['Pass: keep results, chosen versions and next steps', 'Problem: return to the affected work and repair it']],
+    repair: 'Repair',
+    phases: ['Start in the current conversation with available materials', 'Read current sources that affect the choice', 'Use evidence to compare routes and recommend', 'Preserve decisions; resolve open material choices', 'The current client executes the relevant methods', 'Inspect the actual result and verify repairs'],
+    steady: 'Research → compare → decide → execute → verify',
+    foot: ['Browse the catalog when useful; Meta_Kim schedules complex work.', 'An open choice leaves unrelated independent work free to continue.'],
+  },
+};
+
+function strategy(lang) {
+  const t = strategyCopy[lang];
+  const card = (x, y, w, h, row, color, phase, center = false, fill = '#fff') => {
+    const tx = center ? x + w / 2 : x + 24, align = center ? ' center' : '';
+    return `<g class="node" data-label="${esc(row[0])}">` + panel(x,y,w,h,color,phase,fill)
+      + text(tx,y+43,row[0],'strategy-label'+align)
+      + lines(tx,y+86,row[1],'strategy-body'+align,34) + '</g>';
+  };
+  let out = '<style>.strategy-label{font-size:29px;font-weight:700}.strategy-body{font-size:25px}</style>';
+  out += route('M480 310 V337 H262 V355',1) + arrow(262,362);
+  out += route('M460 460 H493',2,C.purple)
+    + `<path d="M486 453 L494 460 L486 467" fill="none" stroke="${C.purple}" stroke-width="3"/>`;
+  out += route('M698 555 V586 H262 V613',3,C.teal) + arrow(262,620,C.teal);
+  out += route('M698 555 V613',3,C.orange) + arrow(698,620,C.orange);
+  out += route('M262 775 V811 H480 V839',4,C.teal)
+    + route('M698 775 V811 H480',4,C.orange) + arrow(480,846,C.blue);
+  out += route('M480 995 V1043',5,C.teal) + arrow(480,1050,C.teal);
+  out += route('M896 1125 H931 V923 H903',5,C.orange)
+    + `<path d="M911 916 L903 923 L911 930" fill="none" stroke="${C.orange}" stroke-width="3"/>`
+    + `<text x="925" y="1029" transform="rotate(-90 925 1029)" class="tiny center" style="fill:${C.orange}">${esc(t.repair)}</text>`;
+  out += card(64,205,832,105,t.goal,C.blue,0,true,'#edf3ff');
+  out += card(64,365,396,190,t.research,C.blue,1)
+    + card(500,365,396,190,t.compare,C.purple,2);
+  out += card(64,630,396,145,t.choices[0],C.teal,3,false,'#edf8f6')
+    + card(500,630,396,145,t.choices[1],C.orange,3,false,'#fff7ed');
+  out += card(64,855,832,140,t.execute,C.blue,4,true)
+    + card(64,1060,832,140,t.verify,C.teal,5,true,'#edf8f6');
+  out += phaseBar(1230,t.phases,t.steady) + lines(480,1340,t.foot,'tiny center',31);
+  return svg(lang,'WORKFLOW',1410,t.title,t.sub,out,6,30);
+}
+
 const generated=[];
 for (const lang of Object.keys(copy)) {
-  for (const [name,build] of Object.entries({ capabilities, delivery, collaboration, 'work-context': workContext, layers, 'project-expertise': projectExpertise })) {
-    const relative=`docs/images/animated-service-${name}.${lang}.svg`;
+  const builds = {
+    'animated-service-capabilities': capabilities, 'animated-service-delivery': delivery,
+    'animated-service-collaboration': collaboration, 'animated-service-work-context': workContext,
+    'animated-service-layers': layers, 'animated-service-project-expertise': projectExpertise,
+    'service-system-panorama': strategy,
+  };
+  for (const [name,build] of Object.entries(builds)) {
+    const relative=`docs/images/${name}.${lang}.svg`;
     const content=build(lang), target=path.join(root,relative);
     if(check) {
       if(!fs.existsSync(target)||fs.readFileSync(target,'utf8')!==content) throw new Error(`Rebuild README animation: ${relative}`);

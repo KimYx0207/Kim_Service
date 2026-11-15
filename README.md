@@ -10,17 +10,15 @@ Kim Service 是一套开源的 **AI 专业工作方法库**。你提供业务目
 
 你知道想做什么，却未必知道经营预测该核对哪些数据、预约页面要补哪些状态，或供应商报价该怎样比较。这里把这些工作拆成具体做法：先查材料和依据，再做分析、设计或制作，最后检查实际成果。
 
-已发布的 **V1.17** 包含 **58 个专业 Agent、32 个 Skill、2 个 Hook 和 2 个 Tool**，共 94 个组件，提供 **109 项可搜索的任务能力**，配套 Meta_Kim v3.14.0。当前 main 另加入下面三个行业策略方法，变更记在 Unreleased；下载旧版本不会包含这些新增内容。
+**V1.18** 包含 **61 个专业 Agent、32 个 Skill、2 个 Hook 和 2 个 Tool**，共 97 个组件，提供 **112 项可搜索的任务能力**，配套 Meta_Kim v3.15.0。电商、出海和短剧策略方法随本版完整源码、DSH 和 ZCode 包提供。
 
-**[打开能力目录与请求准备页](https://kimyx0207.github.io/Kim_Service/?lang=zh-CN)** · **[本版下载 V1.17](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.17)** · **[查看源码](https://github.com/KimYx0207/Kim_Service/tree/main)**
+**[打开能力目录与请求准备页](https://kimyx0207.github.io/Kim_Service/?lang=zh-CN)** · **[本版下载 V1.18](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.18)** · **[查看源码](https://github.com/KimYx0207/Kim_Service/tree/main)**
 
 目录按 **11 个行业、8 个通用领域 → 角色／岗位** 浏览，也能直接搜索要完成的事。例如搜索“现金预测”“供应商比较”或“预约页面”，查看所需材料与交付物后再选择方法。Agent 在这里首先是完整的专业方法包；由当前客户端读取并执行，是否注册为原生 Agent 取决于接入方式。
 
-当前 main 共 **61 个 Agent、97 个组件、112 项任务能力**。新增三个策略角色沿用现有行业分类和调用方式。
-
 ## 电商、出海、短剧：先比较业务路线
 
-目标还不明确时，先研究市场与用户问题，交付可以选择的方案。当前 main 新增的方法会要求 AI 在本次任务中实际联网查资料，必要时读取 GitHub 上相关外部项目的源码、测试、版本和许可。包里的来源笔记是研究快照，不能冒充下一次任务已经完成搜索。
+直接在当前 Agent 对话里说出目标，例如“想做电商，但还没选品类和渠道”。AI 先读取已有材料和决定，实际联网核对会影响选择的官方资料，并按需研究 GitHub 上外部项目的源码、测试、版本和许可，再给出可比较的业务路线。包里的研究笔记提供参考；本次采用的变化事实要重新核实。
 
 | 你要判断的方向 | 专业方法 | 比较什么 |
 | --- | --- | --- |
@@ -28,7 +26,7 @@ Kim Service 是一套开源的 **AI 专业工作方法库**。你提供业务目
 | 什么业务适合出海 | [出海策略](agents/global-expansion-strategist/AGENT.md) | 跨境实物、SaaS/Web、App、内容/IP和专业服务；比较市场、买家、渠道、收款、本地化与支持，先做可逆验证。 |
 | 短剧走哪条商业路线 | [短剧策略](agents/short-drama-strategist/AGENT.md) | 真人原创/委托、AI原创、授权译制；同时检查故事连载、合格成片成本、权利、发行、留存与回本。 |
 
-每条候选方案说明目标用户、提供的价值、触达与收费方式、初期和持续成本、适用条件、未知项，以及什么结果会让它停止或转向。AI 可以给条件推荐；用户尚未决定的重要方向继续保留为待选，已有决定则直接沿用。路线确定后再复用商品内容、订单运营、财务、软件和媒体制作等方法执行。
+每条候选方案说明目标用户、提供的价值、触达与收费方式、初期和持续成本、适用条件、未知项，以及什么结果会让它停止或转向。AI 给出有依据的建议；已有有效选择直接沿用，影响方向的关键选择尚未决定时，再把方案与取舍交给你。路线明确后，专业 Agent 和 Skill 结合项目规则执行，交付文件、页面、代码或制作成果，实际打开并按标准验收。发现问题就返回受影响的步骤修正，其他独立工作继续。
 
 本轮真实研究分别记录在[电商](docs/research/ecommerce-strategy-2026-11-15.md)、[出海](docs/research/global-expansion-2026-11-15.md)、[短剧](docs/research/short-drama-2026-11-15.md)笔记中，注明官方资料日期、GitHub 固定提交、实际阅读范围和未运行项。这些方法与合成案例还不能证明真实市场需求或商业收益。
 
@@ -36,7 +34,7 @@ Kim Service 是一套开源的 **AI 专业工作方法库**。你提供业务目
 
 如果已经通过 Meta_Kim 或当前客户端接入了 Service，可以直接在实际工作项目的对话里说明目标、材料位置和限制。下面的源码步骤适用于第一次单独接入。
 
-1. **取得源码。** 取得 V1.17 完整源码，或用下面两条命令取得 main 源码。
+1. **取得源码。** 取得 V1.18 完整源码，或用下面两条命令取得 main 源码。
 2. **让 AI 能读到文件。** 在 Codex、Claude Code、Cursor、Gemini CLI 等项目客户端打开 `Kim_Service` 目录。若任务项目在别处，告诉 AI 方法库和业务材料各自的完整路径。
 3. **直接说明任务。** 在 AI 客户端的对话里说出要做什么、材料在哪里、有什么要求，让它查找并读取适合的完整方法。需要先浏览能力或整理请求时，可以打开页首目录，或用浏览器打开源码中的 `docs/start.html`；这是可选入口，网页本身只整理请求。
 4. **打开成果再判断完成。** 让 AI 给出输出文件路径、实际执行的检查和未完成项。检查发现问题后，返回对应步骤修正并保留上一版。
@@ -59,12 +57,12 @@ cd Kim_Service
 **输入 → 输出：** 业务目标＋可读取资料＋选定方法 → 可编辑产物＋计算或操作依据＋逐项检查＋下一步。先看下面完整流程，再按自己的客户端接入；首次任务直接读取方法即可。
 
 <p align="center">
-  <a href="docs/images/service-system-panorama.zh-CN.svg"><img src="docs/images/service-system-panorama.zh-CN.svg" alt="Kim Service 任务全景：目标与资料进入任务浏览器，按需经 Meta_Kim 组合 Agent、Skill、Hook、Tool 方法，完整请求交给当前 AI 客户端执行，真实产物通过核验后交付；紫线退回相关工作，橙线仅处理必要选择，虚线由宿主写入事项与交付记录" width="1000"></a>
+  <a href="docs/images/service-system-panorama.zh-CN.svg"><img src="docs/images/service-system-panorama.zh-CN.svg" alt="Kim Service 主流程：在当前 Agent 说明目标，实际联网研究官方资料和外部项目，比较可行路线；已有选择直接沿用，关键选择未定时由用户决定；专业方法执行后打开成果验收，问题返回受影响步骤" width="760"></a>
   <br>
   <a href="docs/images/service-system-panorama.zh-CN.svg">打开原图</a>
 </p>
 
-从顶部的目标与资料进入，沿深色箭头看方法如何组成请求、客户端如何执行、成果如何核验。复杂任务可接入 Meta_Kim；紫线把问题送回相关任务，橙线只在必要时请你补充或决定，灰色虚线指向宿主持有的记录。客户端、模型和工具分别配置，Service 提供方法、资料、示例和检查标准。
+先从顶部的对话目标进入，再看研究怎样影响路线比较。中间两条分支分别表示“已有选择继续用”和“关键方向请你选”，汇合后才进入对应专业工作。底部验收实际成果；右侧回线把问题交回相关步骤。复杂任务由 Meta_Kim 按依赖编排，当前客户端提供模型和工具，Service 提供专业方法与检查标准。能力目录可以随时打开浏览。
 
 ## 它怎样帮助你把事情做扎实
 
@@ -93,7 +91,7 @@ cd Kim_Service
 
 **全局保留通用基础，每个持续项目维护自己的专业 Agent、Skill 与规则。** 研究当前项目后，把行业知识、品牌风格、数据权限、技术版本、可用工具和验收案例写进本地能力。下一次任务继续加载它，项目经验也随之积累。
 
-这次补充了两项专业方法：**技术方案比较**把候选方案、版本兼容性、证据、代价与验证计划放在一起；**知识架构评估**比较检索、长上下文与缓存、知识 Wiki、图谱等方案如何组合，并检查引用、更新、权限撤回和运行成本。价值判断也会结合商业产品、内部效率或开源项目，以及当前所处阶段。
+两项专业方法支持项目研究：**技术方案比较**把候选方案、版本兼容性、证据、代价与验证计划放在一起；**知识架构评估**比较检索、长上下文与缓存、知识 Wiki、图谱等方案如何组合，并检查引用、更新、权限撤回和运行成本。价值判断也会结合商业产品、内部效率或开源项目，以及当前所处阶段。
 
 体验设计从通用原则继续细化到领域、品牌和当前任务。设备维护要把告警与操作后果说清楚；国风服装要照顾风格、版型和购买判断。专业方法会要求把规则对应到实际产物、页面状态和观察证据。
 
@@ -126,7 +124,7 @@ Agent 从各目录的 `AGENT.md` 进入，Skill 从 `SKILL.md` 进入，再按�
 
 `examples/enterprise-knowledge/` 提供可运行的完整案例：导入固定公开 IBM Cloud 历史资料，逐条核对文档与段落，建立关键词和向量索引，用同一组 188 道公开问题比较 BM25、语义检索、RRF 混合与重排。你可以打开原文、查看引用和失败题，继续验证权限撤回、删除、索引回滚与中断恢复。固定原包实数为 8,578 篇文档、72,442 个段落；每次运行仍重新核对。
 
-本案例包含在 **V1.17 完整源码**中。下载源码包或用页首的 `git clone` 命令取得完整仓库。在 Linux 或 WSL 中，安装 Python 3.12 后，从仓库根目录运行：
+本案例包含在 **V1.18 完整源码**中。下载源码包或用页首的 `git clone` 命令取得完整仓库。在 Linux 或 WSL 中，安装 Python 3.12 后，从仓库根目录运行：
 
 ```bash
 cd examples/enterprise-knowledge
@@ -156,7 +154,7 @@ python -m app.main --port 4180
 
 **推进线下运营和工程项目时，** 可以整理制造质量、系统需求与接口、建筑信息、能源项目、碳核算、农田水量以及医疗机构的非临床服务流程。方法会把边界、数据来源、单位、异常和现场待核条件说明白，交付分析、验证安排或试点方案；需要现场资料和专业判断的部分会继续标明。
 
-109 项能力是现有任务入口的覆盖范围。选择时先想清楚“我现在要得到什么”，在浏览器搜索这个结果，再看需要提供哪些材料。你不用先记住角色的英文名字。
+112 项能力是现有任务入口的覆盖范围。选择时先想清楚“我现在要得到什么”，在目录里搜索这个结果，再看需要提供哪些材料。你不用先记住角色的英文名字。
 
 <a id="task-browser"></a>
 
@@ -379,7 +377,7 @@ DSH 里，专业 Agent 方法和 Skill 会作为原生 Skills 被发现，并保
 npm install --global @deepseek-ai/dsh@0.2.2-rc.1
 ```
 
-**准备 Service 包。** 本版 DSH 包为 `Kim_Service-DSH-V1.17.zip`，下载位置为 [V1.17 Release](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.17)；也可从对应源码构建。下面的输出路径要换成自己的完整路径，且目录尚不存在：
+**准备 Service 包。** 本版 DSH 包为 `Kim_Service-DSH-V1.18.zip`，下载位置为 [V1.18 Release](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.18)；也可从对应源码构建。下面的输出路径要换成自己的完整路径，且目录尚不存在：
 
 ```sh
 node scripts/build-dsh-package.mjs --output "/absolute/path/kim-service-dsh"
@@ -414,7 +412,7 @@ node bin/meta-kim.mjs dsh check --scope project --project-root "/absolute/path/m
 
 ### ZCode
 
-本版 ZCode 包为 **`Kim-ZCode-V1.17.zip`**，对应 Kim 插件版本 **1.17.0**，下载位置为 [V1.17 Release](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.17)。完整解压到准备长期保留的位置，选择包含 `marketplace.json` 的目录，保留其下全部插件和资料。
+本版 ZCode 包为 **`Kim-ZCode-V1.18.zip`**，对应 Kim 插件版本 **1.18.0**，下载位置为 [V1.18 Release](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.18)。完整解压到准备长期保留的位置，选择包含 `marketplace.json` 的目录，保留其下全部插件和资料。
 
 在 ZCode 打开一个项目，再进入**设置 → 插件 → 创建 → 添加市场**，选择刚才的本地目录。在个人来源里安装并启用 `kim-service-local`；想同时使用 Meta_Kim 的任务组织方法，再安装 `meta-kim-local`。安装后，在插件详情核对角色和技能，在子 Agent 列表找到对应角色，例如 `kim-service-local:financial-modeler`，然后带上目标与材料开始任务。
 
@@ -435,7 +433,7 @@ zcode plugins list --json
 
 这两个客户端当前提供**选定一个 Agent 或 Skill，导出完整技能 ZIP，再在客户端导入**的 beta 接入。包内保留原方法、知识、案例、脚本和许可；Agent 作为 Skill 里的专业方法使用。
 
-**准备文件。** 先安装 Node.js **22.13.0 或更高版本**，运行 `node --version` 核对。下载并完整解压 [Service V1.17](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.17) 与 [Meta_Kim v3.14.0](https://github.com/KimYx0207/Meta_Kim/releases/tag/v3.14.0)。在终端进入 Kim_Service 根目录，把下面的 Meta 路径改成源码的实际绝对路径。输出目录必须是尚不存在的新目录，其父目录须已存在；例子导出财务建模：
+**准备文件。** 先安装 Node.js **22.13.0 或更高版本**，运行 `node --version` 核对。下载并完整解压 [Service V1.18](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.18) 与 [Meta_Kim v3.15.0](https://github.com/KimYx0207/Meta_Kim/releases/tag/v3.15.0)。在终端进入 Kim_Service 根目录，把下面的 Meta 路径改成源码的实际绝对路径。输出目录必须是尚不存在的新目录，其父目录须已存在；例子导出财务建模：
 
 ```sh
 node scripts/build-desktop-skill-package.mjs --meta-root "/absolute/path/Meta_Kim" --host workbuddy --component financial-modeler --output "/absolute/path/new-workbuddy-finance"
@@ -445,7 +443,7 @@ node scripts/build-desktop-skill-package.mjs --meta-root "/absolute/path/Meta_Ki
 豆包工作把两条命令中的 `--host workbuddy` 改为 `--host doubao`，并选新的输出目录。Windows PowerShell 可用以下完整写法，只需修改 Meta 源码目录和客户端选择：
 
 ```powershell
-$KimMeta = (Resolve-Path 'C:/work/Meta_Kim-3.14.0').Path
+$KimMeta = (Resolve-Path 'C:/work/Meta_Kim-3.15.0').Path
 $KimClient = 'workbuddy' # 豆包工作改为 'doubao'
 $KimOutput = Join-Path ([IO.Path]::GetTempPath()) ('kim-finance-' + [guid]::NewGuid().ToString('N'))
 node scripts/build-desktop-skill-package.mjs --meta-root $KimMeta --host $KimClient --component financial-modeler --output $KimOutput
