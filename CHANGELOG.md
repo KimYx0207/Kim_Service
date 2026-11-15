@@ -4,6 +4,22 @@
 
 Kim Service collection releases use `V<major>.<minor>`. Each component keeps its own version and source history. Detailed past checks are in the [testing record](docs/verification-history.md).
 
+## V1.20 - 2026-11-16
+
+### Scope
+
+This release aligns the ZCode bundle with **Meta_Kim v3.16.2** and includes the recently merged cross-Agent thinking methods and professional-method references. It retains 61 specialist Agents, 2 Hooks and 2 Tools; with 33 Skills the collection has **98 components and 113 searchable task capabilities**.
+
+### User-visible changes
+
+- **Aligned ZCode versions:** `Kim-ZCode-V1.20.zip` packages the **3.16.2 Meta_Kim** plugin and **1.20.0 Kim Service** plugin, rebuilt from the formal Meta_Kim v3.16.2 source rather than the 3.15.1 payload in V1.19.
+- **Cross-Agent methods:** includes the `agent-thinking-patterns` Skill and new reusable research, comparison, and handoff references for selected professional Agents, without dropping existing methods.
+- **Other hosts:** the DSH bundle is rebuilt from the same collection. ZCode must reload after plugin update; publishing the bundle does not verify live host activation.
+
+### Migration and verification boundary
+
+The release compares the actual ZCode bundle against the published V1.19 package and checks repository consistency, packaged versions, and asset checksums. The explicit repair for a stale Claude global MCP entry is supplied separately by **Meta_Kim v3.16.2**; installing a ZCode plugin does not alter Claude's configuration or overwrite other user MCP entries.
+
 ## V1.19 - 2026-11-15
 
 ### Affected components

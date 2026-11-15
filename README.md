@@ -10,9 +10,9 @@ Kim Service 是一套开源的 **AI 专业工作方法库**。你提供业务目
 
 你知道想做什么，却未必知道经营预测该核对哪些数据、预约页面要补哪些状态，或供应商报价该怎样比较。这里把这些工作拆成具体做法：先查材料和依据，再做分析、设计或制作，最后检查实际成果。
 
-当前 **main** 包含 **61 个专业 Agent、33 个 Skill、2 个 Hook 和 2 个 Tool**，共 98 个组件，提供 **113 项可搜索的任务能力**。其中新增[跨 Agent 通用思考方法](skills/agent-thinking-patterns/SKILL.md)。最近正式版本仍为 V1.19；新提交属于 main 更新，不能把它误写成已发布的 V1.19 功能。此前版本改动见[版本日志](CHANGELOG.zh-CN.md#v119---2026-11-15)。
+**V1.20** 包含 **61 个专业 Agent、33 个 Skill、2 个 Hook 和 2 个 Tool**，共 98 个组件，提供 **113 项可搜索的任务能力**。本版纳入[跨 Agent 通用思考方法](skills/agent-thinking-patterns/SKILL.md)，并将 ZCode 中的 Meta_Kim 插件与 v3.16.2 对齐。具体改动见[版本日志](CHANGELOG.zh-CN.md#v120---2026-11-16)。
 
-**[打开能力目录与请求准备页](https://kimyx0207.github.io/Kim_Service/?lang=zh-CN)** · **[本版下载 V1.19](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.19)** · **[查看源码](https://github.com/KimYx0207/Kim_Service/tree/main)**
+**[打开能力目录与请求准备页](https://kimyx0207.github.io/Kim_Service/?lang=zh-CN)** · **[本版下载 V1.20](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.20)** · **[查看源码](https://github.com/KimYx0207/Kim_Service/tree/main)**
 
 目录按 **11 个行业、8 个通用领域 → 角色／岗位** 浏览，也能直接搜索要完成的事。例如搜索“现金预测”“供应商比较”或“预约页面”，查看所需材料与交付物后再选择方法。Agent 在这里首先是完整的专业方法包；由当前客户端读取并执行，是否注册为原生 Agent 取决于接入方式。
 
@@ -34,7 +34,7 @@ Kim Service 是一套开源的 **AI 专业工作方法库**。你提供业务目
 
 如果已经通过 Meta_Kim 或当前客户端接入了 Service，可以直接在实际工作项目的对话里说明目标、材料位置和限制。下面的源码步骤适用于第一次单独接入。
 
-1. **取得源码。** 取得 V1.19 完整源码，或用下面两条命令取得 main 源码。
+1. **取得源码。** 取得 V1.20 完整源码，或用下面两条命令取得 main 源码。
 2. **让 AI 能读到文件。** 在 Codex、Claude Code、Cursor、Gemini CLI 等项目客户端打开 `Kim_Service` 目录。若任务项目在别处，告诉 AI 方法库和业务材料各自的完整路径。
 3. **直接说明任务。** 在 AI 客户端的对话里说出要做什么、材料在哪里、有什么要求，让它查找并读取适合的完整方法。需要先浏览能力或整理请求时，可以打开页首目录，或用浏览器打开源码中的 `docs/start.html`；这是可选入口，网页本身只整理请求。
 4. **打开成果再判断完成。** 让 AI 给出输出文件路径、实际执行的检查和未完成项。检查发现问题后，返回对应步骤修正并保留上一版。
@@ -126,7 +126,7 @@ Agent 从各目录的 `AGENT.md` 进入，Skill 从 `SKILL.md` 进入，再按�
 
 `examples/enterprise-knowledge/` 提供可运行的完整案例：导入固定公开 IBM Cloud 历史资料，逐条核对文档与段落，建立关键词和向量索引，用同一组 188 道公开问题比较 BM25、语义检索、RRF 混合与重排。你可以打开原文、查看引用和失败题，继续验证权限撤回、删除、索引回滚与中断恢复。固定原包实数为 8,578 篇文档、72,442 个段落；每次运行仍重新核对。
 
-本案例包含在 **V1.19 完整源码**中。下载源码包或用页首的 `git clone` 命令取得完整仓库。在 Linux 或 WSL 中，安装 Python 3.12 后，从仓库根目录运行：
+本案例包含在 **V1.20 完整源码**中。下载源码包或用页首的 `git clone` 命令取得完整仓库。在 Linux 或 WSL 中，安装 Python 3.12 后，从仓库根目录运行：
 
 ```bash
 cd examples/enterprise-knowledge
@@ -156,7 +156,7 @@ python -m app.main --port 4180
 
 **推进线下运营和工程项目时，** 可以整理制造质量、系统需求与接口、建筑信息、能源项目、碳核算、农田水量以及医疗机构的非临床服务流程。方法会把边界、数据来源、单位、异常和现场待核条件说明白，交付分析、验证安排或试点方案；需要现场资料和专业判断的部分会继续标明。
 
-112 项能力是现有任务入口的覆盖范围。选择时先想清楚“我现在要得到什么”，在目录里搜索这个结果，再看需要提供哪些材料。你不用先记住角色的英文名字。
+113 项能力是现有任务入口的覆盖范围。选择时先想清楚“我现在要得到什么”，在目录里搜索这个结果，再看需要提供哪些材料。你不用先记住角色的英文名字。
 
 <a id="task-browser"></a>
 
@@ -379,7 +379,7 @@ DSH 里，专业 Agent 方法和 Skill 会作为原生 Skills 被发现，并保
 npm install --global @deepseek-ai/dsh@0.2.2-rc.1
 ```
 
-**准备 Service 包。** 本版 DSH 包为 `Kim_Service-DSH-V1.19.zip`，下载位置为 [V1.19 Release](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.19)；也可从对应源码构建。下面的输出路径要换成自己的完整路径，且目录尚不存在：
+**准备 Service 包。** 本版 DSH 包为 `Kim_Service-DSH-V1.20.zip`，下载位置为 [V1.20 Release](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.20)；也可从对应源码构建。下面的输出路径要换成自己的完整路径，且目录尚不存在：
 
 ```sh
 node scripts/build-dsh-package.mjs --output "/absolute/path/kim-service-dsh"
@@ -414,7 +414,7 @@ node bin/meta-kim.mjs dsh check --scope project --project-root "/absolute/path/m
 
 ### ZCode
 
-本版 ZCode 包为 **`Kim-ZCode-V1.19.zip`**，对应 Kim 插件版本 **1.19.0**，下载位置为 [V1.19 Release](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.19)。完整解压到准备长期保留的位置，选择包含 `marketplace.json` 的目录，保留其下全部插件和资料。
+本版 ZCode 包为 **`Kim-ZCode-V1.20.zip`**，对应 Kim 插件版本 **1.20.0**、Meta_Kim 插件版本 **3.16.2**，下载位置为 [V1.20 Release](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.20)。完整解压到准备长期保留的位置，选择包含 `marketplace.json` 的目录，保留其下全部插件和资料。
 
 在 ZCode 打开一个项目，再进入**设置 → 插件 → 创建 → 添加市场**，选择刚才的本地目录。在个人来源里安装并启用 `kim-service-local`；想同时使用 Meta_Kim 的任务组织方法，再安装 `meta-kim-local`。安装后，在插件详情核对角色和技能，在子 Agent 列表找到对应角色，例如 `kim-service-local:financial-modeler`，然后带上目标与材料开始任务。
 
@@ -435,7 +435,7 @@ zcode plugins list --json
 
 这两个客户端当前提供**选定一个 Agent 或 Skill，导出完整技能 ZIP，再在客户端导入**的 beta 接入。包内保留原方法、知识、案例、脚本和许可；Agent 作为 Skill 里的专业方法使用。
 
-**准备文件。** 先安装 Node.js **22.13.0 或更高版本**，运行 `node --version` 核对。下载并完整解压 [Service V1.19](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.19) 与 [Meta_Kim v3.15.1](https://github.com/KimYx0207/Meta_Kim/releases/tag/v3.15.1)。在终端进入 Kim_Service 根目录，把下面的 Meta 路径改成源码的实际绝对路径。输出目录必须是尚不存在的新目录，其父目录须已存在；例子导出财务建模：
+**准备文件。** 先安装 Node.js **22.13.0 或更高版本**，运行 `node --version` 核对。下载并完整解压 [Service V1.20](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.20) 与 [Meta_Kim v3.16.2](https://github.com/KimYx0207/Meta_Kim/releases/tag/v3.16.2)。在终端进入 Kim_Service 根目录，把下面的 Meta 路径改成源码的实际绝对路径。输出目录必须是尚不存在的新目录，其父目录须已存在；例子导出财务建模：
 
 ```sh
 node scripts/build-desktop-skill-package.mjs --meta-root "/absolute/path/Meta_Kim" --host workbuddy --component financial-modeler --output "/absolute/path/new-workbuddy-finance"
