@@ -6,7 +6,7 @@ Kim Service collection releases use `V<major>.<minor>`. Each component keeps its
 
 ## V1.20 - 2026-11-16
 
-### Scope
+### Affected components
 
 This release aligns the ZCode bundle with **Meta_Kim v3.16.2** and includes the recently merged cross-Agent thinking methods and professional-method references. It retains 61 specialist Agents, 2 Hooks and 2 Tools; with 33 Skills the collection has **98 components and 113 searchable task capabilities**.
 
@@ -16,9 +16,17 @@ This release aligns the ZCode bundle with **Meta_Kim v3.16.2** and includes the 
 - **Cross-Agent methods:** includes the `agent-thinking-patterns` Skill and new reusable research, comparison, and handoff references for selected professional Agents, without dropping existing methods.
 - **Other hosts:** the DSH bundle is rebuilt from the same collection. ZCode must reload after plugin update; publishing the bundle does not verify live host activation.
 
-### Migration and verification boundary
+### Breaking changes and migration
 
-The release compares the actual ZCode bundle against the published V1.19 package and checks repository consistency, packaged versions, and asset checksums. The explicit repair for a stale Claude global MCP entry is supplied separately by **Meta_Kim v3.16.2**; installing a ZCode plugin does not alter Claude's configuration or overwrite other user MCP entries.
+No component is removed. Upgrade from the complete V1.20 source or bundled release and reload ZCode after replacing its marketplace package. The explicit repair for a stale Claude global MCP entry is supplied separately by **Meta_Kim v3.16.2**; installing a ZCode plugin does not alter Claude's configuration or overwrite other user MCP entries.
+
+### Verification
+
+The release checks repository consistency, validates 98 component contracts and 113 catalog capabilities, compares the new ZCode consumer payload against the published V1.19 bundle, and requires successful CI on the exact final main commit before publication. Local focused catalog, repository, ZCode and release-contract tests passed; live ZCode activation and the user's Windows Claude configuration remain separate host checks.
+
+### Source revisions
+
+Previous release: [V1.19](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.19). The `agent-thinking-patterns` catalog provenance references the committed source tree; the V1.20 tag, release manifests, `SOURCE-REVISION.txt`, and checksums bind the final published assets.
 
 ## V1.19 - 2026-11-15
 
