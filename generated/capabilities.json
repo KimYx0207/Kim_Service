@@ -888,7 +888,7 @@
       ]
     },
     {
-      "componentContentSha256": "35303a0189d0bf89d11955c1f784448eac148a65ae0ecf43291cb49cceeeb50f",
+      "componentContentSha256": "b78b98a741afeaff28580b92dd0d8ebda981ab2102ea4fced85069387787c998",
       "componentId": "agent-thinking-patterns",
       "componentPath": "skills/agent-thinking-patterns",
       "componentType": "skill",
@@ -24494,7 +24494,7 @@
       ],
       "componentType": "skill",
       "componentVersion": "0.1.0",
-      "contentSha256": "35303a0189d0bf89d11955c1f784448eac148a65ae0ecf43291cb49cceeeb50f",
+      "contentSha256": "b78b98a741afeaff28580b92dd0d8ebda981ab2102ea4fced85069387787c998",
       "contractSha256": "332ad5ec839f78b1e8d1dc5fad18107270452866d5e4b1acc908c50652d8f822",
       "entrypoint": "SKILL.md",
       "id": "agent-thinking-patterns",
