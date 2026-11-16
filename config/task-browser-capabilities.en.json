@@ -17,6 +17,11 @@
       "title": "Compare existing agent outputs",
       "summary": "Compare supplied outputs across clients using frozen cases, critical checks, missing results, and budgets."
     },
+    "agent-thinking-patterns-apply": {
+      "sourceSummary": "供任意专业 Agent 按需选用通用思考与执行模式，包括练习提交再反馈；以本职专业方法、现有授权和证据为准。",
+      "title": "Apply a focused thinking pattern",
+      "summary": "Choose a useful reasoning or execution pattern for a specialist task, including practice and feedback when requested, while keeping the specialist's evidence and authority boundaries."
+    },
     "agent-teams-orchestrate": {
       "sourceSummary": "为复杂任务设计并执行跨宿主的多 Agent 分工、并行协作、结果汇总与质量闸门。",
       "title": "Coordinate a team of AI agents",
