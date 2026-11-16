@@ -94,11 +94,38 @@ jobs:
         run: python tests/browser/outcome_trials.py
       - name: Capture default product screenshots for the README
         run: python scripts/capture-readme-screenshots.py
-      - name: Save actual browser screenshots
-        if: always()
+      # Tests still execute in full. Only the uploaded evidence differs by outcome.
+      - name: Prepare compact successful-run browser evidence
+        if: success()
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import shutil
+          root = Path('browser-artifacts')
+          target = Path('compact-browser-evidence')
+          target.mkdir(exist_ok=True)
+          for file in root.rglob('provenance.json'):
+              destination = target / file.relative_to(root)
+              destination.parent.mkdir(parents=True, exist_ok=True)
+              shutil.copy2(file, destination)
+          for file in sorted(root.rglob('*.png'))[:3]:
+              destination = target / file.relative_to(root)
+              destination.parent.mkdir(parents=True, exist_ok=True)
+              shutil.copy2(file, destination)
+          PY
+      - name: Save compact successful-run browser evidence
+        if: success()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: task-browser-success-evidence
+          path: compact-browser-evidence/
+          if-no-files-found: error
+          retention-days: 3
+      - name: Preserve full browser diagnostics on failure
+        if: failure() || cancelled()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: task-browser-screenshots
           path: browser-artifacts/
           if-no-files-found: warn
-          retention-days: 14
+          retention-days: 3
