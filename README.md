@@ -4,17 +4,49 @@
   <a href="README.md">简体中文</a> · <a href="README_EN.md">English</a>
 </p>
 
-**把专业工作的做法交给 AI，把能打开、修改和检查的成果交给你。**
+**面向开发者、产品团队与内容创作者的开源 AI 角色方法与技能套件（Agent Playbooks & Skill Packs）。**
 
-Kim Service 是一套开源的 **AI 专业工作方法库**。你提供业务目标和资料，它提供可以交给现有 AI 客户端使用的角色方法、参考资料、示例、计算脚本和验收标准，把“帮我分析一下”推进到可以打开、修改和核对的文件。
+Kim Service 将软件工程、产品设计、自媒体创作、商业财务与垂直运营中的实战方法论封装为**可直接安装、可离线检索、带输入输出契约与验证脚本**的标准组件包。无论是用 Claude Code / Codex / Cursor / Antigravity 写代码审接口，还是策划爆款选题、制作动态贴纸、搭建 12 个月现金流预测模型，都可以按领域套件一键装入你的 AI 客户端，把“帮我分析一下”升级为可打开、可复算、可核验的真实交付物。
 
-你知道想做什么，却未必知道经营预测该核对哪些数据、预约页面要补哪些状态，或供应商报价该怎样比较。这里把这些工作拆成具体做法：先查材料和依据，再做分析、设计或制作，最后检查实际成果。
+**[打开交互式能力工作台](https://kimyx0207.github.io/Kim_Service/?lang=zh-CN)** · **[V1.20 Release 下载](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.20)** · **[更新日志](CHANGELOG.zh-CN.md#v120---2026-11-16)** · **[GitHub 源码](https://github.com/KimYx0207/Kim_Service/tree/main)**
 
-**V1.20** 包含 **61 个专业 Agent、33 个 Skill、2 个 Hook 和 2 个 Tool**，共 98 个组件，提供 **113 项可搜索的任务能力**。本版纳入[跨 Agent 通用思考方法](skills/agent-thinking-patterns/SKILL.md)，并将 ZCode 中的 Meta_Kim 插件与 v3.16.2 对齐。具体改动见[版本日志](CHANGELOG.zh-CN.md#v120---2026-11-16)。
+---
 
-**[打开能力目录与请求准备页](https://kimyx0207.github.io/Kim_Service/?lang=zh-CN)** · **[本版下载 V1.20](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.20)** · **[查看源码](https://github.com/KimYx0207/Kim_Service/tree/main)**
+## 30 秒快速安装（零第三方依赖 CLI）
 
-目录按 **11 个行业、8 个通用领域 → 角色／岗位** 浏览，也能直接搜索要完成的事。例如搜索“现金预测”“供应商比较”或“预约页面”，查看所需材料与交付物后再选择方法。Agent 在这里首先是完整的专业方法包；由当前客户端读取并执行，是否注册为原生 Agent 取决于接入方式。
+无需整仓复制 98 个组件——通过内置 CLI 可按**精选领域套件**、**`--featured` 主力子集**或**单个组件 ID** 精准安装到当前项目或全局目录（原生支持 `claude`、`codex`、`cursor`、`antigravity`、`gemini`、`openclaw`）：
+
+```bash
+# 1. 查看 6 大精选领域套件与组件概览
+npx github:KimYx0207/Kim_Service packs
+
+# 2. 按领域套件一键安装到当前项目（示例：研发工程套件 → Claude Code；创作者套件 → Cursor）
+npx github:KimYx0207/Kim_Service install engineering --target claude
+npx github:KimYx0207/Kim_Service install creator-growth --target cursor
+
+# 3. 首次体验推荐：仅安装全仓 36 个高频主力组件，或安装单个组件到全局环境
+npx github:KimYx0207/Kim_Service install all --featured --target antigravity
+npx github:KimYx0207/Kim_Service install api-contract-review --target codex --scope global
+
+# 4. 预览将写入的目标文件（不落盘）或查看单个包详情
+npx github:KimYx0207/Kim_Service install product-design --target claude --dry-run
+npx github:KimYx0207/Kim_Service info financial-modeler
+```
+
+## 六大精选领域套件（98 个组件 · 113 项可检索能力）
+
+**V1.20** 共收录 **61 个专业 Agent、33 个工作流 Skill、2 个 Hook 和 2 个工程 Tool**（含 [跨 Agent 通用思考方法](skills/agent-thinking-patterns/SKILL.md)，并与 ZCode `Meta_Kim` v3.16.2 对齐）。全部组件按受众与高频场景划分为 6 大套件：
+
+| 套件 ID（CLI 安装名） | 适用人群与场景 | 规模 | 代表性主力组件（点击直达） |
+| --- | --- | --- | --- |
+| **`engineering`**<br>研发与 AI 工程套件 | 全栈研发、架构师、测试与安全工程师 | 29 个<br>（8 精选） | [前端工程](agents/frontend-engineer/AGENT.md) · [后端与数据](agents/backend-data-engineer/AGENT.md) · [应用 AI 工程](agents/applied-ai-engineer/AGENT.md) · [API 契约审查](skills/api-contract-review/SKILL.md) · [数据库渐进迁移](skills/database-migration/SKILL.md) · [跨客户端离线评测](skills/agent-evaluation/SKILL.md) · [多 CLI 协同](tools/claudecode-codex-gemini/README.md) |
+| **`product-design`**<br>产品架构与体验设计 | 产品经理、UI/UX 设计师、独立开发者 | 18 个<br>（6 精选） | [产品架构师](agents/product-architect/AGENT.md) · [设计系统](agents/design-system-designer/AGENT.md) · [交互设计](agents/interaction-designer/AGENT.md) · [无障碍审计](skills/accessibility-audit/SKILL.md) · [反馈转需求台账](skills/feedback-to-requirements/SKILL.md) · [游戏经济系统](agents/game-economy-designer/AGENT.md) |
+| **`creator-growth`**<br>创作者与增长视觉 | 自媒体博主、内容团队、品牌市场与短剧策划 | 15 个<br>（7 精选） | [选题策划](agents/topic-planner/AGENT.md) · [脚本与长文写作](agents/script-writer/AGENT.md) · [标题与封面优化](agents/headline-cover-optimizer/AGENT.md) · [小红书图文套图](skills/xiaohongshu-skill/SKILL.md) · [动态表情贴纸包](skills/kim-sticker-pack/SKILL.md) · [分阶段架构图解](skills/visual-explainer/SKILL.md) · [短剧商业策略](agents/short-drama-strategist/AGENT.md) |
+| **`commerce-finance`**<br>商业经营、财务与法务 | 创业者、电商操盘手、财务分析与商务法务 | 18 个<br>（7 精选） | [财务建模与现金预测](agents/financial-modeler/AGENT.md) · [电商经营策略](agents/ecommerce-strategy-planner/AGENT.md) · [出海业务策略](agents/global-expansion-strategist/AGENT.md) · [信用风险分析](agents/credit-risk-analyst/AGENT.md) · [资金流动性](agents/treasury-liquidity-analyst/AGENT.md) · [商业合同审查](agents/contract-review-analyst/AGENT.md) |
+| **`career-education`**<br>求职招聘、教育与办公 | 求职者、招聘面试官、课程讲师与知识工作者 | 8 个<br>（4 精选） | [简历优化](agents/resume-editor/AGENT.md) · [面试辅导](agents/interview-coach/AGENT.md) · [结构化招聘设计](agents/hiring-process-designer/AGENT.md) · [课程设计](agents/curriculum-designer/AGENT.md) · [测评题库设计](skills/learning-assessment-design/SKILL.md) · [SOP 规程](skills/sop-runbook/SKILL.md) |
+| **`industry-ops`**<br>实体运营与垂直工程 | 供应链、制造质量、工程控制、酒旅与农林能源 | 10 个<br>（4 精选） | [供应链计划](agents/supply-chain-planner/AGENT.md) · [设备维护可靠性](agents/maintenance-reliability-engineer/AGENT.md) · [仓储运营](agents/warehouse-operations-analyst/AGENT.md) · [工程项目控制](agents/construction-project-controller/AGENT.md) · [酒店收益管理](agents/hospitality-revenue-analyst/AGENT.md) · [农艺灌溉规划](agents/agronomy-planner/AGENT.md) |
+
+你也可以在[在线能力工作台](https://kimyx0207.github.io/Kim_Service/?lang=zh-CN)（或本地打开零依赖单文件 `docs/start.html`）按 **6 大领域套件** 或 **11 个行业、8 个通用领域 → 角色／岗位** 筛选能力，查看输入要求与交付物，一键复制命令或定制完整任务请求。
 
 ## 电商、出海、短剧：先比较业务路线
 

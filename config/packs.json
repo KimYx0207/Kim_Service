@@ -1,0 +1,241 @@
+{
+  "schemaVersion": 1,
+  "packs": [
+    {
+      "id": "engineering",
+      "icon": "</>",
+      "title": {
+        "zh-CN": "研发与 AI 工程套件",
+        "en": "Engineering & AI Systems"
+      },
+      "tagline": {
+        "zh-CN": "前后端架构、API 契约、数据库迁移、RAG 评测、多 CLI 协同与安全审计",
+        "en": "Full-stack implementation, API contracts, DB migrations, RAG evals, multi-CLI orchestration & security"
+      },
+      "audience": ["developer", "architect"],
+      "featured": [
+        "frontend-engineer",
+        "backend-data-engineer",
+        "applied-ai-engineer",
+        "api-contract-review",
+        "database-migration",
+        "test-automation-engineer",
+        "reliability-engineer",
+        "claudecode-codex-gemini"
+      ],
+      "components": [
+        "frontend-engineer",
+        "backend-data-engineer",
+        "mobile-app-engineer",
+        "applied-ai-engineer",
+        "data-pipeline-engineer",
+        "data-quality-analyst",
+        "test-automation-engineer",
+        "application-security-reviewer",
+        "security-incident-responder",
+        "reliability-engineer",
+        "delivery-verifier",
+        "systems-engineering-analyst",
+        "api-contract-review",
+        "database-migration",
+        "data-lineage-impact",
+        "retrieval-evaluation",
+        "knowledge-architecture-evaluation",
+        "technology-option-evaluation",
+        "semgrep-skill",
+        "incident-postmortem",
+        "agent-evaluation",
+        "agent-teams-playbook",
+        "memory-3layer",
+        "meta-skill-creator",
+        "find-skill",
+        "claudecode-codex-gemini",
+        "mcp-contract-auditor",
+        "evidence-receipt",
+        "hookprompt"
+      ]
+    },
+    {
+      "id": "product-design",
+      "icon": "◈",
+      "title": {
+        "zh-CN": "产品架构与体验设计套件",
+        "en": "Product & Design Systems"
+      },
+      "tagline": {
+        "zh-CN": "需求拆解、系统切片、设计令牌（Design Tokens）、交互状态表、无障碍与增长实验",
+        "en": "Product architecture, design tokens, interaction states, user research, a11y & experiment analysis"
+      },
+      "audience": ["product", "designer", "developer"],
+      "featured": [
+        "product-architect",
+        "design-system-designer",
+        "interaction-designer",
+        "brand-visual-designer",
+        "user-researcher",
+        "accessibility-audit"
+      ],
+      "components": [
+        "product-architect",
+        "design-system-designer",
+        "interaction-designer",
+        "brand-visual-designer",
+        "user-researcher",
+        "source-evidence-analyst",
+        "launch-planner",
+        "game-economy-designer",
+        "accessibility-audit",
+        "feedback-to-requirements",
+        "requirements-traceability",
+        "experiment-analysis",
+        "metric-contract",
+        "game-design-playtest",
+        "evidence-pack",
+        "kim-decision",
+        "agent-thinking-patterns",
+        "goalpro"
+      ]
+    },
+    {
+      "id": "creator-growth",
+      "icon": "✦",
+      "title": {
+        "zh-CN": "创作者与增长视觉套件",
+        "en": "Creator & Growth Studio"
+      },
+      "tagline": {
+        "zh-CN": "爆款选题、口播分镜脚本、标题封面优化、小红书图文套图、动态贴纸与短剧商业策略",
+        "en": "Topic planning, video scripts, cover optimization, Xiaohongshu visual kits, stickers & short drama"
+      },
+      "audience": ["creator", "marketer"],
+      "featured": [
+        "topic-planner",
+        "script-writer",
+        "headline-cover-optimizer",
+        "xiaohongshu-skill",
+        "kim-sticker-pack",
+        "short-drama-strategist",
+        "visual-explainer"
+      ],
+      "components": [
+        "topic-planner",
+        "script-writer",
+        "headline-cover-optimizer",
+        "media-production-engineer",
+        "short-drama-strategist",
+        "product-listing-writer",
+        "workplace-writer",
+        "customer-service-writer",
+        "xiaohongshu-skill",
+        "kim-sticker-pack",
+        "visual-explainer"
+      ]
+    },
+    {
+      "id": "commerce-finance",
+      "icon": "📈",
+      "title": {
+        "zh-CN": "商业经营与财务投研套件",
+        "en": "Commerce & Finance"
+      },
+      "tagline": {
+        "zh-CN": "12 个月现金流建模、电商渠道单位经济、出海选品策略、供应商到岸比价与授信风控",
+        "en": "12-month cash forecasting, ecommerce unit economics, global expansion, supplier TCO & credit risk"
+      },
+      "audience": ["founder", "operator", "analyst"],
+      "featured": [
+        "financial-modeler",
+        "ecommerce-strategy-planner",
+        "global-expansion-strategist",
+        "supplier-comparison-analyst",
+        "store-performance-analyst",
+        "pricing-cost-analyst"
+      ],
+      "components": [
+        "financial-modeler",
+        "business-finance-analyst",
+        "accounting-reconciliation-analyst",
+        "treasury-liquidity-analyst",
+        "credit-risk-analyst",
+        "investment-research-analyst",
+        "quantitative-researcher",
+        "insurance-claims-analyst",
+        "pricing-cost-analyst",
+        "ecommerce-strategy-planner",
+        "global-expansion-strategist",
+        "commerce-operations-designer",
+        "store-performance-analyst",
+        "sales-operations-analyst",
+        "supplier-comparison-analyst",
+        "side-business-evaluator",
+        "financial-scenario-modeling",
+        "inventory-replenishment"
+      ]
+    },
+    {
+      "id": "career-education",
+      "icon": "🎓",
+      "title": {
+        "zh-CN": "教学设计与职业进阶套件",
+        "en": "Learning & Career"
+      },
+      "tagline": {
+        "zh-CN": "概念拆解精讲、课程与练习设计、学习测评、简历打磨、模拟面试与结构化招聘",
+        "en": "Concept tutoring, lesson & exercise design, assessments, resume editing & structured hiring"
+      },
+      "audience": ["educator", "creator", "developer"],
+      "featured": [
+        "concept-tutor",
+        "lesson-planner",
+        "resume-editor",
+        "interview-coach"
+      ],
+      "components": [
+        "concept-tutor",
+        "lesson-planner",
+        "exercise-designer",
+        "resume-editor",
+        "interview-coach",
+        "hiring-process-designer",
+        "learning-assessment-design"
+      ]
+    },
+    {
+      "id": "industry-ops",
+      "icon": "⚙",
+      "title": {
+        "zh-CN": "企业合规与实体运营套件",
+        "en": "Enterprise & Vertical Ops"
+      },
+      "tagline": {
+        "zh-CN": "合同审查、招投标合规核查、供应链与仓储、设备可靠性、工程控制与 SOP 手册",
+        "en": "Contract review, tender compliance, supply chain & warehousing, reliability & SOP runbooks"
+      },
+      "audience": ["enterprise", "operations"],
+      "featured": [
+        "contract-review-analyst",
+        "supply-chain-planner",
+        "warehouse-operations-analyst",
+        "maintenance-reliability-engineer",
+        "tender-compliance"
+      ],
+      "components": [
+        "contract-review-analyst",
+        "supply-chain-planner",
+        "warehouse-operations-analyst",
+        "manufacturing-quality-analyst",
+        "maintenance-reliability-engineer",
+        "construction-project-controller",
+        "energy-project-analyst",
+        "sustainability-analyst",
+        "healthcare-operations-analyst",
+        "hospitality-revenue-analyst",
+        "agronomy-planner",
+        "customer-case-operations",
+        "sop-runbook",
+        "tender-compliance",
+        "construction-information-review"
+      ]
+    }
+  ]
+}

@@ -516,7 +516,7 @@ function checkSensitiveFiles() {
   const tokenPatterns = [
     ['AWS access key', /AKIA[0-9A-Z]{16}/g],
     ['GitHub token', /(?:gh[oprsu]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,})/g],
-    ['OpenAI or Anthropic token', /sk-(?:ant-)?[A-Za-z0-9_-]{24,}/g],
+    ['OpenAI or Anthropic token', /(?<![A-Za-z0-9])sk-(?:ant-)?[A-Za-z0-9_-]{24,}/g],
     ['Google API key', /AIza[0-9A-Za-z_-]{35}/g],
     ['Slack token', /xox[baprs]-[0-9A-Za-z-]{20,}/g]
   ];

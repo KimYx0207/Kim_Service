@@ -148,7 +148,22 @@ test('normal release gate checks Beta payloads and source-only checks are explic
   const checkout = path.join(scratch, 'release-checkout');
   const git = args => execFileSync('git', ['-c', 'core.hooksPath=' + path.join(scratch, 'no-hooks'), '-c', 'commit.gpgsign=false', ...args], { cwd: checkout, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
   // The public tree is portable; a Windows worktree's .git pointer is not a Linux Git repository.
-  fs.cpSync(root, checkout, { recursive: true, filter: source => path.relative(root, source).split(path.sep)[0] !== '.git' });
+  // Exclude local-only ignored files (including .git/info/exclude) from the synthetic checkout.
+  const rootIgnored = new Set(
+    execFileSync('git', ['ls-files', '--others', '-i', '--exclude-standard', '-z'], { cwd: root, encoding: 'utf8' })
+      .split('\0')
+      .filter(Boolean)
+      .map(rel => path.resolve(root, rel))
+  );
+  fs.cpSync(root, checkout, {
+    recursive: true,
+    filter: source => {
+      const rel = path.relative(root, source);
+      if (!rel) return true;
+      if (rel.split(path.sep)[0] === '.git') return false;
+      return !rootIgnored.has(path.resolve(source));
+    }
+  });
   // Keep this synthetic release aligned with its 1.9.0 bundle fixtures as the real repository advances.
   fs.writeFileSync(path.join(checkout, 'VERSION'), 'V1.9\n');
   git(['-c', 'init.templateDir=', 'init', '-q', '-b', 'main']);

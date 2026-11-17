@@ -12,7 +12,7 @@ import { copyRequest } from '../src/presentation/task-browser/copy-request.mjs';
 const root = path.resolve(import.meta.dirname,'..');
 const client = fs.readFileSync(path.join(root,'src/presentation/task-browser/page.js'),'utf8');
 const data = buildStartPageData(root);
-const { filterCapabilities,buildRequest,fields } = createTaskBrowser(data.ui);
+const { filterCapabilities,buildRequest,fields,packs,packOf,installCommand } = createTaskBrowser(data.ui);
 
 test('the offline page retains every capability, schema and real source link from the canonical builder',()=>{
   const canonical=buildCapabilityIndex(root);
@@ -161,4 +161,18 @@ test('check detects changed source contracts and changed generated HTML without 
     assert.equal(run('check').status,1);
     assert.equal(fs.readFileSync(output,'utf8'),edited);
   }finally{fs.rmSync(temporary,{recursive:true,force:true});}
+});
+
+test('curated domain packs partition all components and generate deterministic CLI install commands',()=>{
+  assert.equal(packs.length,6);
+  const allPackComponents=new Set(packs.flatMap(pack=>pack.components));
+  assert.equal(allPackComponents.size,data.componentCount);
+  const creatorFiltered=filterCapabilities(data.capabilities,'','all',{packId:'creator-growth'});
+  assert.ok(creatorFiltered.length>0);
+  assert.ok(creatorFiltered.every(item=>packOf(item)?.id==='creator-growth'));
+  const featuredFiltered=filterCapabilities(data.capabilities,'','all',{packId:'engineering',featuredOnly:true});
+  assert.ok(featuredFiltered.length>0);
+  assert.ok(featuredFiltered.every(item=>packOf(item)?.featured===true));
+  assert.equal(installCommand({selector:'creator-growth',target:'antigravity',featured:true}),
+    'npx github:KimYx0207/Kim_Service install creator-growth --target antigravity --featured');
 });

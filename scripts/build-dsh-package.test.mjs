@@ -200,6 +200,14 @@ test('source, output and ancestor links are refused', (t) => {
   fs.symlinkSync(other, linked, process.platform === 'win32' ? 'junction' : 'dir');
   assert.throws(() => writeDshPackage({ ...opts, output: path.join(linked, 'new') }), /links or junctions/u);
   assert.deepEqual(fs.readdirSync(other), []);
-  fs.symlinkSync(path.join(opts.root, 'LICENSE'), path.join(opts.root, 'agents/frontend-engineer/leak.txt'));
+  try {
+    fs.symlinkSync(path.join(opts.root, 'LICENSE'), path.join(opts.root, 'agents/frontend-engineer/leak.txt'));
+  } catch (error) {
+    if (process.platform === 'win32' && error?.code === 'EPERM') {
+      fs.symlinkSync(other, path.join(opts.root, 'agents/frontend-engineer/leak-dir'), 'junction');
+    } else {
+      throw error;
+    }
+  }
   assert.throws(() => buildDshFiles(opts.root), /symlink|link/iu);
 });

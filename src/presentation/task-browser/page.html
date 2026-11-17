@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="从你要做的事开始，查看 Kim Service 的能力、输入、交付与使用入口。支持离线关键词筛选。">
-  <title>从你要做的事开始 · Kim Service</title>
+  <meta name="description" content="开源 AI 角色方法包、技能工作流与工程工具套件。支持 Claude Code、Codex、Cursor、Antigravity 一键按需安装与离线检索。">
+  <title>Kim Service · 面向开发者与创作者的 AI 角色与技能套件</title>
   <style>/* PAGE_STYLE */</style>
 </head>
 <body>
   <a class="skip" href="#catalog" data-i18n="page.skip">跳到能力目录</a>
   <header class="site-header wrap">
-    <a class="brand" href="#"><span class="brand-mark" aria-hidden="true">K<span>·</span></span><span>Kim Service<small data-i18n="page.brandTagline">老金的专业能力库</small></span></a>
+    <a class="brand" href="#"><span class="brand-mark" aria-hidden="true">K<span>·</span></span><span>Kim Service<small data-i18n="page.brandTagline">开源 AI 角色与技能套件</small></span></a>
     <div class="header-actions">
       <label class="language-picker"><span data-i18n="page.languageLabel">语言</span><select id="language" class="language-select" aria-label="语言" data-i18n-aria="page.languageLabel"><option value="zh-CN">简体中文</option><option value="en">English</option></select></label>
       <a class="repo-link" href="<!-- REPOSITORY_URL -->" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
@@ -19,28 +19,59 @@
   <main class="wrap">
     <section class="hero" aria-labelledby="hero-title">
       <div>
-        <p class="eyebrow"><span aria-hidden="true"></span><span data-i18n="page.eyebrow">让具体的事，有合适的帮手</span></p>
-        <h1 id="hero-title"><span class="hero-lead" data-i18n="page.heroLead">说出你要的结果，</span><br><span data-i18n="page.heroAccent">接着把它做成。</span></h1>
-        <p class="intro"><span data-i18n="page.introFirst">先试试下面的成品，再选一项任务。</span><br class="desktop-break"><span data-i18n="page.introSecond">补好目标和材料，把请求交给你正在使用的 Agent。</span></p>
+        <p class="eyebrow"><span aria-hidden="true"></span><span data-i18n="page.eyebrow">OPEN-SOURCE AGENT &amp; SKILL PACKS</span></p>
+        <h1 id="hero-title"><span class="hero-lead" data-i18n="page.heroLead">为你的 AI 装上专业方法，</span><br><span data-i18n="page.heroAccent">直接交付可用成果。</span></h1>
+        <p class="intro"><span data-i18n="page.introFirst">覆盖研发工程、产品设计、内容创作、商业财务与垂直行业 6 大精选领域套件。</span><br class="desktop-break"><span data-i18n="page.introSecond">支持 npx 一键安装到 Claude Code / Codex / Cursor / Antigravity，也可在下方生成结构化任务请求。</span></p>
         <p class="inventory" id="inventory"></p>
       </div>
       <aside class="how-it-works" aria-label="使用步骤" data-i18n-aria="page.howAria">
-        <div class="aside-heading"><span data-i18n="page.howTitle">从想法到下一步</span><span aria-hidden="true">↗</span></div>
+        <div class="aside-heading"><span data-i18n="page.howTitle">三步接入工作流</span><span aria-hidden="true">↗</span></div>
         <ol>
-          <li><span class="step-number">01</span><div><strong data-i18n="page.step1Title">找到要做的事</strong><p data-i18n="page.step1Detail">用熟悉的关键词筛选能力。</p></div></li>
-          <li><span class="step-number">02</span><div><strong data-i18n="page.step2Title">看清要给什么、能交什么</strong><p data-i18n="page.step2Detail">对照输入、交付与适用范围。</p></div></li>
-          <li><span class="step-number">03</span><div><strong data-i18n="page.step3Title">复制请求，接着做</strong><p data-i18n="page.step3Detail">在已克隆仓库的 Agent 环境中使用。</p></div></li>
+          <li><span class="step-number">01</span><div><strong data-i18n="page.step1Title">选定领域套件或任务</strong><p data-i18n="page.step1Detail">按 6 大精选套件、岗位或关键词快速定位。</p></div></li>
+          <li><span class="step-number">02</span><div><strong data-i18n="page.step2Title">核对输入契约与交付物</strong><p data-i18n="page.step2Detail">看清所需材料、输出字段、内置脚本与成品示例。</p></div></li>
+          <li><span class="step-number">03</span><div><strong data-i18n="page.step3Title">CLI 安装或复制请求执行</strong><p data-i18n="page.step3Detail">一键安装到本地 AI 客户端，或复制结构化请求直接开干。</p></div></li>
         </ol>
-        <p class="aside-note" data-i18n="page.asideNote">成品示例可以直接体验。你的任务在所选 Agent 中执行。</p>
+        <p class="aside-note" data-i18n="page.asideNote">下方提供真实可交互的成品样板；实际任务在你所选的 AI 客户端中执行。</p>
       </aside>
     </section>
-    <section id="showcases" class="showcases" aria-labelledby="showcases-title" hidden><div class="section-heading"><h2 id="showcases-title" data-i18n="page.showcasesTitle">先看看，最后能拿到什么</h2><span data-i18n="page.showcasesCaption">可打开、可修改的示例</span></div><div id="showcase-cards" class="showcase-cards"></div></section>
+    <section class="cli-bar" aria-label="快速安装 CLI" data-i18n-aria="page.cliLabel">
+      <div class="cli-head">
+        <span class="cli-badge" data-i18n="page.cliLabel">快速安装 CLI</span>
+        <span class="cli-hint" data-i18n="page.cliHint">支持按领域包、单个组件 ID 或 --featured 精选集按需安装，零第三方依赖</span>
+      </div>
+      <div class="cli-controls">
+        <div class="cli-command-wrap">
+          <span class="cli-prompt" aria-hidden="true">$</span>
+          <code id="cli-command" class="cli-code">npx github:KimYx0207/Kim_Service install all --target claude</code>
+        </div>
+        <div class="cli-actions">
+          <label class="sr-only" for="cli-target" data-i18n="page.cliTargetAria">选择目标 AI 客户端</label>
+          <select id="cli-target" class="cli-select" aria-label="选择目标 AI 客户端" data-i18n-aria="page.cliTargetAria">
+            <option value="claude">Claude Code</option>
+            <option value="codex">Codex</option>
+            <option value="cursor">Cursor</option>
+            <option value="antigravity">Antigravity</option>
+            <option value="gemini">Gemini CLI</option>
+            <option value="openclaw">OpenClaw</option>
+          </select>
+          <button id="cli-copy" type="button" class="cli-copy-btn" data-i18n="page.cliCopy">复制命令</button>
+        </div>
+      </div>
+    </section>
+    <section id="showcases" class="showcases" aria-labelledby="showcases-title" hidden><div class="section-heading"><h2 id="showcases-title" data-i18n="page.showcasesTitle">交互式成品样板预览</h2><span data-i18n="page.showcasesCaption">可直接操作、修改参数并导出数据的真实交付物样板</span></div><div id="showcase-cards" class="showcase-cards"></div></section>
     <section id="catalog" class="catalog" aria-labelledby="catalog-title">
-      <div class="section-heading"><h2 id="catalog-title" data-i18n="page.catalogTitle">今天，你想完成什么？</h2><span data-i18n="page.catalogCaption">本地关键词筛选</span></div>
+      <div class="section-heading"><h2 id="catalog-title" data-i18n="page.catalogTitle">按领域与场景探索能力</h2><span data-i18n="page.catalogCaption">支持领域套件、行业岗位与本地关键词组合筛选</span></div>
+      <div id="packs" class="packs-grid" role="group" aria-label="按精选领域套件筛选" data-i18n-aria="page.packsAria"></div>
       <label for="search" class="sr-only" data-i18n="page.searchLabel">搜索任务、交付内容或能力名称</label>
-      <div class="search-box"><span aria-hidden="true" class="search-icon">⌕</span><input id="search" type="search" placeholder="例如：表情包、产品设计、视频、简历" data-i18n-placeholder="page.searchPlaceholder" autocomplete="off"><button id="clear-search" type="button" hidden aria-label="清空搜索" data-i18n="page.clearSearch" data-i18n-aria="page.clearSearchAria">清空</button><kbd aria-hidden="true">/</kbd></div>
+      <div class="search-box"><span aria-hidden="true" class="search-icon">⌕</span><input id="search" type="search" placeholder="搜索场景或能力 ID，如：API 契约、设计系统、经营预测、爆款选题、表情包…" data-i18n-placeholder="page.searchPlaceholder" autocomplete="off"><button id="clear-search" type="button" hidden aria-label="清空搜索" data-i18n="page.clearSearch" data-i18n-aria="page.clearSearchAria">清空</button><kbd aria-hidden="true">/</kbd></div>
       <div id="suggestions" class="suggestions" aria-label="试试这些关键词" data-i18n-aria="page.suggestionsAria"><span data-i18n="page.suggestionsLabel">试试</span></div>
-      <div class="results-toolbar"><div id="types" class="type-filters" role="group" aria-label="按能力包类型筛选" data-i18n-aria="page.filterAria"></div><p id="result-count" class="result-count" role="status" aria-live="polite"></p></div>
+      <div class="results-toolbar">
+        <div class="toolbar-left">
+          <div id="types" class="type-filters" role="group" aria-label="按能力包类型筛选" data-i18n-aria="page.filterAria"></div>
+          <button id="featured-toggle" type="button" class="featured-toggle" aria-pressed="false" data-i18n="page.featuredOnly">★ 仅看精选主力</button>
+        </div>
+        <p id="result-count" class="result-count" role="status" aria-live="polite"></p>
+      </div>
       <div class="agent-navigation" role="group" aria-label="按行业与岗位浏览" data-i18n-aria="page.agentNavigation">
         <label for="agent-group"><span data-i18n="page.agentGroup">行业 / 通用领域</span><select id="agent-group"></select></label>
         <span class="agent-navigation-arrow" aria-hidden="true">→</span>

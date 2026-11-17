@@ -1,0 +1,29 @@
+{
+  "name": "kim-service",
+  "version": "1.20.0",
+  "description": "Production-grade AI Agent & Skill packs for engineering, product design, creator growth, and business operations.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KimYx0207/Kim_Service.git"
+  },
+  "homepage": "https://kimyx0207.github.io/Kim_Service/",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "bin": {
+    "kim-service": "./bin/kim-service.mjs"
+  },
+  "scripts": {
+    "kim-service": "node ./bin/kim-service.mjs",
+    "catalog:build": "node scripts/catalog-automation.mjs build",
+    "catalog:check": "node scripts/catalog-automation.mjs check",
+    "start:build": "node scripts/start-page.mjs build",
+    "start:check": "node scripts/start-page.mjs check",
+    "build:site": "node scripts/build-site.mjs",
+    "check:repo": "node scripts/check-repository.mjs",
+    "check:components": "node scripts/check-components.mjs",
+    "check": "npm run catalog:check && npm run start:check && npm run check:repo && npm run check:components",
+    "test": "node --test scripts/*.test.mjs"
+  }
+}

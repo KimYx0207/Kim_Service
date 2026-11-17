@@ -266,7 +266,7 @@
       ]
     },
     {
-      "componentContentSha256": "2768ed6c924f511c211e71861dd1a8562002b0c6e08d5db1791bfa4cf715ebe5",
+      "componentContentSha256": "e215412d84669019b6a44b9bbf8833027675a50af29fbd7ca14a2b51b235edfa",
       "componentId": "agent-evaluation",
       "componentPath": "skills/agent-evaluation",
       "componentType": "skill",
@@ -1126,7 +1126,7 @@
       ]
     },
     {
-      "componentContentSha256": "7d61327c776c45f0c4040f75ff0fbefea81cf7a8bb656d494da787357047414d",
+      "componentContentSha256": "030378022174e5b5bac7cc316847c30b54707db166d68177ea8f0a528f7d181e",
       "componentId": "api-contract-review",
       "componentPath": "skills/api-contract-review",
       "componentType": "skill",
@@ -3358,7 +3358,7 @@
       ]
     },
     {
-      "componentContentSha256": "1a51e1e61b91af9c6890b203e5551327f611b1a17401235c92a1a65ded9e1482",
+      "componentContentSha256": "3e384275dc6343413f201136edc7aae4de507e4e4eeae03322d8a8e19cc5c6ad",
       "componentId": "contract-review-analyst",
       "componentPath": "agents/contract-review-analyst",
       "componentType": "agent",
@@ -3499,7 +3499,7 @@
       ]
     },
     {
-      "componentContentSha256": "d56ca010b8e206d066b4aa15e28b9a96bec2fb8609b56c25dea95c4304b5c2be",
+      "componentContentSha256": "55d51694e448c9b0b2475538096e950b5f92fa724297fcd7fad9588c84d7c8f7",
       "componentId": "credit-risk-analyst",
       "componentPath": "agents/credit-risk-analyst",
       "componentType": "agent",
@@ -5054,7 +5054,7 @@
       ]
     },
     {
-      "componentContentSha256": "dd6ec865188b08320e80a6e30b5664fc63d6c897bb9ae96915079b06e43b7c3e",
+      "componentContentSha256": "9427434a22643322d6498efac39b5ba2faefea0731b34a5424cb21975f0f2a0d",
       "componentId": "database-migration",
       "componentPath": "skills/database-migration",
       "componentType": "skill",
@@ -7028,7 +7028,7 @@
       ]
     },
     {
-      "componentContentSha256": "aa9a40b0967fc87434ae41d6df47a7a751ad9ff85efcb70a8ad01b5459d5dfa2",
+      "componentContentSha256": "ba3cc7150131f1abd05d21620f3dc338e2e8cefc2204ec6f3ff7ba76d4b090fc",
       "componentId": "feedback-to-requirements",
       "componentPath": "skills/feedback-to-requirements",
       "componentType": "skill",
@@ -8738,7 +8738,7 @@
       ]
     },
     {
-      "componentContentSha256": "97fd1007f1079ac2a4ee51f8ca0f77274fb837ef6e1c639da787b5c8c19972eb",
+      "componentContentSha256": "46b6934597803d8a53fbe8a9820c961e2cac0609b3dc3b309e3ace5fb4136a36",
       "componentId": "game-economy-designer",
       "componentPath": "agents/game-economy-designer",
       "componentType": "agent",
@@ -9189,7 +9189,7 @@
       ]
     },
     {
-      "componentContentSha256": "23de8743817d2c85ad7531fa6214ebc9f7d84c349c90a5b85707ee6ada3f165e",
+      "componentContentSha256": "7f61d5b9c8b7157098cba357ff279b4cccf9fdf107e00597b95db92443449cf1",
       "componentId": "headline-cover-optimizer",
       "componentPath": "agents/headline-cover-optimizer",
       "componentType": "agent",
@@ -18293,7 +18293,7 @@
       ]
     },
     {
-      "componentContentSha256": "9d90108b2a845a1a7c6969690247b0d3dc1100258ba22f7576c481a2b9e73e20",
+      "componentContentSha256": "d9c8df6fb01d830bfc82c9c15721986ae62a41bf5ab3223007d3fcd036fff940",
       "componentId": "script-writer",
       "componentPath": "agents/script-writer",
       "componentType": "agent",
@@ -18518,7 +18518,7 @@
       ]
     },
     {
-      "componentContentSha256": "21223a4d74552bebe6ad71ba672627f6143c945324be2fae42c421add2379bee",
+      "componentContentSha256": "75c64df916ac5a3a305175bca1f4050ce98aa8efeffc32d2638ff4b1fff0a180",
       "componentId": "security-incident-responder",
       "componentPath": "agents/security-incident-responder",
       "componentType": "agent",
@@ -21702,7 +21702,7 @@
       ]
     },
     {
-      "componentContentSha256": "f826eca7c38f0cd82685029efd1c50a9dec196315c0d025f0cf5864fa79d86c8",
+      "componentContentSha256": "936356ba406284a7b06111e53e1bb9890fadf391487cae642ac4db2ffb4191d6",
       "componentId": "topic-planner",
       "componentPath": "agents/topic-planner",
       "componentType": "agent",
@@ -21882,7 +21882,7 @@
       ]
     },
     {
-      "componentContentSha256": "6fc41e9467e11cf9aef51ef846e51d408b1a16d5922d723de3b609b465e1f9c1",
+      "componentContentSha256": "05842a50786308bf15bd80adc46898d2bfea7eb51c6eadd3d6fcafa9ef77220a",
       "componentId": "treasury-liquidity-analyst",
       "componentPath": "agents/treasury-liquidity-analyst",
       "componentType": "agent",
@@ -22711,7 +22711,7 @@
       ]
     },
     {
-      "componentContentSha256": "b33f1504a87a582d4bac51ec4b042f1149f6cf8de33bd632cc8208213db1a8ba",
+      "componentContentSha256": "0d5e2e1266979b3ec0990ae133418705d5dfdf22cab6b624300f1aea170ab7bc",
       "componentId": "visual-explainer",
       "componentPath": "skills/visual-explainer",
       "componentType": "skill",
@@ -23636,7 +23636,7 @@
       ],
       "componentType": "agent",
       "componentVersion": "0.1.0",
-      "contentSha256": "1a51e1e61b91af9c6890b203e5551327f611b1a17401235c92a1a65ded9e1482",
+      "contentSha256": "3e384275dc6343413f201136edc7aae4de507e4e4eeae03322d8a8e19cc5c6ad",
       "contractSha256": "6a173be5ccc9e9cce3f663aa9665a87d9b41949d914af9c744f2d5fc639e5d4f",
       "entrypoint": "AGENT.md",
       "id": "contract-review-analyst",
@@ -23651,7 +23651,7 @@
       ],
       "componentType": "agent",
       "componentVersion": "0.1.0",
-      "contentSha256": "d56ca010b8e206d066b4aa15e28b9a96bec2fb8609b56c25dea95c4304b5c2be",
+      "contentSha256": "55d51694e448c9b0b2475538096e950b5f92fa724297fcd7fad9588c84d7c8f7",
       "contractSha256": "8bb876903218878b417f9c2fd9ddc544b79ebff8b4aa9cf71090906e069d1372",
       "entrypoint": "AGENT.md",
       "id": "credit-risk-analyst",
@@ -23824,7 +23824,7 @@
       ],
       "componentType": "agent",
       "componentVersion": "0.1.0",
-      "contentSha256": "97fd1007f1079ac2a4ee51f8ca0f77274fb837ef6e1c639da787b5c8c19972eb",
+      "contentSha256": "46b6934597803d8a53fbe8a9820c961e2cac0609b3dc3b309e3ace5fb4136a36",
       "contractSha256": "dc5398f7c3f55b60e57e730d61f51bead5768d5cccf2ae3115a6065529fcc53d",
       "entrypoint": "AGENT.md",
       "id": "game-economy-designer",
@@ -23855,7 +23855,7 @@
       ],
       "componentType": "agent",
       "componentVersion": "0.3.0",
-      "contentSha256": "23de8743817d2c85ad7531fa6214ebc9f7d84c349c90a5b85707ee6ada3f165e",
+      "contentSha256": "7f61d5b9c8b7157098cba357ff279b4cccf9fdf107e00597b95db92443449cf1",
       "contractSha256": "0c41d24b5d01667bd416760d21d411dc9e3827485b7d6b30ce5fff4f20eb7353",
       "entrypoint": "AGENT.md",
       "id": "headline-cover-optimizer",
@@ -24174,7 +24174,7 @@
       ],
       "componentType": "agent",
       "componentVersion": "0.5.0",
-      "contentSha256": "9d90108b2a845a1a7c6969690247b0d3dc1100258ba22f7576c481a2b9e73e20",
+      "contentSha256": "d9c8df6fb01d830bfc82c9c15721986ae62a41bf5ab3223007d3fcd036fff940",
       "contractSha256": "9269e8935f0a4fa924cc2d95b0fda24da34d6c9160d93dfb0ca200a5bb84e283",
       "entrypoint": "AGENT.md",
       "id": "script-writer",
@@ -24189,7 +24189,7 @@
       ],
       "componentType": "agent",
       "componentVersion": "0.1.0",
-      "contentSha256": "21223a4d74552bebe6ad71ba672627f6143c945324be2fae42c421add2379bee",
+      "contentSha256": "75c64df916ac5a3a305175bca1f4050ce98aa8efeffc32d2638ff4b1fff0a180",
       "contractSha256": "a2cecb16f11023ea2d630908807aca86a24cb90913c9f3829f3d82c3382e884d",
       "entrypoint": "AGENT.md",
       "id": "security-incident-responder",
@@ -24341,7 +24341,7 @@
       ],
       "componentType": "agent",
       "componentVersion": "0.3.0",
-      "contentSha256": "f826eca7c38f0cd82685029efd1c50a9dec196315c0d025f0cf5864fa79d86c8",
+      "contentSha256": "936356ba406284a7b06111e53e1bb9890fadf391487cae642ac4db2ffb4191d6",
       "contractSha256": "3a0dd2927c712a98589cf7747e9bc16b8a0d8554cc82ba37c691931da7648947",
       "entrypoint": "AGENT.md",
       "id": "topic-planner",
@@ -24356,7 +24356,7 @@
       ],
       "componentType": "agent",
       "componentVersion": "0.1.0",
-      "contentSha256": "6fc41e9467e11cf9aef51ef846e51d408b1a16d5922d723de3b609b465e1f9c1",
+      "contentSha256": "05842a50786308bf15bd80adc46898d2bfea7eb51c6eadd3d6fcafa9ef77220a",
       "contractSha256": "83988f4565a3b43d290805711b39f949b0b6e2f8800aaed9b698d62dc353bf43",
       "entrypoint": "AGENT.md",
       "id": "treasury-liquidity-analyst",
@@ -24463,7 +24463,7 @@
       ],
       "componentType": "skill",
       "componentVersion": "0.1.0",
-      "contentSha256": "2768ed6c924f511c211e71861dd1a8562002b0c6e08d5db1791bfa4cf715ebe5",
+      "contentSha256": "e215412d84669019b6a44b9bbf8833027675a50af29fbd7ca14a2b51b235edfa",
       "contractSha256": "80d4be3ffb907dd06db482b5e9af24098473038e0e1659f78428ffb65c6a135e",
       "entrypoint": "SKILL.md",
       "id": "agent-evaluation",
@@ -24509,7 +24509,7 @@
       ],
       "componentType": "skill",
       "componentVersion": "0.1.0",
-      "contentSha256": "7d61327c776c45f0c4040f75ff0fbefea81cf7a8bb656d494da787357047414d",
+      "contentSha256": "030378022174e5b5bac7cc316847c30b54707db166d68177ea8f0a528f7d181e",
       "contractSha256": "7924450cf755da0cdbf8e24f2b3a9b0b1432f1df56e5c7b7441f9a6c162bc602",
       "entrypoint": "SKILL.md",
       "id": "api-contract-review",
@@ -24569,7 +24569,7 @@
       ],
       "componentType": "skill",
       "componentVersion": "0.1.0",
-      "contentSha256": "dd6ec865188b08320e80a6e30b5664fc63d6c897bb9ae96915079b06e43b7c3e",
+      "contentSha256": "9427434a22643322d6498efac39b5ba2faefea0731b34a5424cb21975f0f2a0d",
       "contractSha256": "6e004a2658703280d5b09f4d948577cc517a588a7465ed2fd1e425ada54f6258",
       "entrypoint": "SKILL.md",
       "id": "database-migration",
@@ -24614,7 +24614,7 @@
       ],
       "componentType": "skill",
       "componentVersion": "0.1.0",
-      "contentSha256": "aa9a40b0967fc87434ae41d6df47a7a751ad9ff85efcb70a8ad01b5459d5dfa2",
+      "contentSha256": "ba3cc7150131f1abd05d21620f3dc338e2e8cefc2204ec6f3ff7ba76d4b090fc",
       "contractSha256": "62da1f35071fd93855309789ca7c2776162ee6d9f46b6416929a4ddf443de346",
       "entrypoint": "SKILL.md",
       "id": "feedback-to-requirements",
@@ -24944,7 +24944,7 @@
       ],
       "componentType": "skill",
       "componentVersion": "0.1.0",
-      "contentSha256": "b33f1504a87a582d4bac51ec4b042f1149f6cf8de33bd632cc8208213db1a8ba",
+      "contentSha256": "0d5e2e1266979b3ec0990ae133418705d5dfdf22cab6b624300f1aea170ab7bc",
       "contractSha256": "279f3007508fd0532ae9d7ac70731a77135ac00c3a50a7e2987b56c037841339",
       "entrypoint": "SKILL.md",
       "id": "visual-explainer",

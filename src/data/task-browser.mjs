@@ -89,12 +89,58 @@ export function readShowcases(root, capabilities) {
 }
 
 /** Repository declarations remain the only capability source; the page is a view. */
+export function readPacksConfig(root = ROOT, componentIds = []) {
+  const packsFile = regularFile(root, 'config/packs.json', { optional: true });
+  if (!packsFile) return { packs: [], componentExtras: {} };
+  const raw = JSON.parse(fs.readFileSync(packsFile, 'utf8'));
+  if (raw.schemaVersion !== 1 || !Array.isArray(raw.packs)) throw new Error('Invalid packs configuration');
+  const knownIds = new Set(componentIds);
+  const packIds = new Set();
+  const componentExtras = {};
+  const packs = raw.packs.map((pack) => {
+    if (!/^[a-z0-9-]+$/u.test(pack.id) || packIds.has(pack.id) || typeof pack.icon !== 'string' ||
+        !pack.title?.['zh-CN'] || !pack.title?.en || !pack.tagline?.['zh-CN'] || !pack.tagline?.en ||
+        !Array.isArray(pack.components) || !Array.isArray(pack.featured)) {
+      throw new Error(`Invalid pack definition: ${pack?.id}`);
+    }
+    packIds.add(pack.id);
+    const featuredSet = new Set(pack.featured);
+    for (const componentId of pack.components) {
+      if (knownIds.size && !knownIds.has(componentId)) {
+        throw new Error(`Pack ${pack.id} references unknown component: ${componentId}`);
+      }
+      componentExtras[componentId] = {
+        packId: pack.id,
+        featured: featuredSet.has(componentId)
+      };
+    }
+    return {
+      id: pack.id,
+      icon: pack.icon,
+      title: pack.title,
+      tagline: pack.tagline,
+      featured: pack.featured,
+      components: pack.components
+    };
+  });
+  return { packs, componentExtras };
+}
+
 export function buildStartPageData(root = ROOT) {
   const index = buildCapabilityIndex(root);
   const agentIds = index.components.filter(component => component.componentType === 'agent').map(component => component.id);
   const taxonomyFile = regularFile(root, 'config/agent-taxonomy.json', { optional: true });
   const taxonomy = validateAgentTaxonomy(taxonomyFile ? JSON.parse(fs.readFileSync(taxonomyFile, 'utf8'))
     : { schemaVersion: 1, groups: [] }, agentIds);
+  const { packs, componentExtras } = readPacksConfig(root, index.components.map(component => component.id));
+  for (const component of index.components) {
+    const scriptsDir = path.join(root, component.path, 'scripts');
+    const hasScripts = fs.existsSync(scriptsDir) && !fs.lstatSync(scriptsDir).isSymbolicLink() && fs.lstatSync(scriptsDir).isDirectory();
+    componentExtras[component.id] = {
+      ...(componentExtras[component.id] || { packId: '', featured: false }),
+      hasScripts
+    };
+  }
   const classification = new Map(taxonomy.groups.flatMap(group => group.roles.map(role => [role.componentId,
     { groupId: group.id, groupTitle: group.title, roleTitle: role.title }])));
   const capabilities = index.capabilities.map((capability) => {
@@ -108,5 +154,6 @@ export function buildStartPageData(root = ROOT) {
     };
   });
   return { componentCount: index.componentCount, capabilityCount: index.capabilityCount,
-    ui: { ...readBrowserConfig(root), agentTaxonomy: taxonomy }, showcases: readShowcases(root, capabilities), capabilities };
+    ui: { ...readBrowserConfig(root), agentTaxonomy: taxonomy, packs, componentExtras },
+    showcases: readShowcases(root, capabilities), capabilities };
 }

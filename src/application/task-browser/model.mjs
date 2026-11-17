@@ -9,6 +9,18 @@ export function createTaskBrowser(config, { locale: requestedLocale = config.def
   const COMMON_FIELDS = new Set(config.commonFields);
   const hosts = config.hosts.map(host => ({ ...host, label: language.hostLabels?.[host.id] || host.label }));
   const suggestions = language.suggestions || config.suggestions;
+  const packs = (config.packs || []).map(pack => ({
+    id: pack.id,
+    icon: pack.icon,
+    title: pack.title?.[locale] || pack.id,
+    tagline: pack.tagline?.[locale] || '',
+    featuredCount: (pack.featured || []).length,
+    componentCount: (pack.components || []).length,
+    featured: pack.featured || [],
+    components: pack.components || []
+  }));
+  const packById = new Map(packs.map(pack => [pack.id, pack]));
+  const componentExtras = config.componentExtras || {};
   const text = (key, values = {}) => (language.messages?.[key] || key)
     .replace(/\{([a-zA-Z0-9_]+)\}/gu, (_, name) => String(values[name] ?? ''));
   const humanize = value => String(value).replace(/([a-z0-9])([A-Z])/gu, '$1 $2')
@@ -64,6 +76,23 @@ export function createTaskBrowser(config, { locale: requestedLocale = config.def
     const c = capability.classification;
     return c ? { group: c.groupTitle[locale], role: c.roleTitle[locale] } : null;
   }
+  function packOf(capability) {
+    const extra = componentExtras[capability.componentId];
+    if (!extra) return null;
+    const pack = packById.get(extra.packId);
+    return {
+      id: extra.packId || '',
+      icon: pack?.icon || '',
+      title: pack?.title || '',
+      featured: Boolean(extra.featured),
+      hasScripts: Boolean(extra.hasScripts)
+    };
+  }
+  function installCommand({ selector = 'all', target = 'claude', featured = false } = {}) {
+    const safeSelector = /^[a-z0-9-]+$/u.test(selector) ? selector : 'all';
+    const safeTarget = /^[a-z0-9-]+$/u.test(target) ? target : 'claude';
+    return `npx github:KimYx0207/Kim_Service install ${safeSelector} --target ${safeTarget}${featured ? ' --featured' : ''}`;
+  }
   function searchableText(capability) {
     return [capability.id, capability.componentId, capability.summary, summaryOf(capability), titleOf(capability),
       ...(capability.classification ? [...Object.values(capability.classification.groupTitle), ...Object.values(capability.classification.roleTitle)] : []),
@@ -83,12 +112,15 @@ export function createTaskBrowser(config, { locale: requestedLocale = config.def
     });
   }
 
-  function filterCapabilities(capabilities, query = '', type = 'all', { groupId = '', componentId = '' } = {}) {
+  function filterCapabilities(capabilities, query = '', type = 'all', { groupId = '', componentId = '', packId = '', featuredOnly = false } = {}) {
     const terms = queryTerms(query);
     return capabilities.filter(capability => {
       if (type !== 'all' && capability.componentType !== type) return false;
       if (groupId && capability.classification?.groupId !== groupId) return false;
       if (componentId && capability.componentId !== componentId) return false;
+      const extra = componentExtras[capability.componentId];
+      if (packId && extra?.packId !== packId) return false;
+      if (featuredOnly && !extra?.featured) return false;
       const value = searchableText(capability);
       return terms.every(alternatives => alternatives.some(word => {
         if (/^[a-z0-9][a-z0-9 -]*$/u.test(word)) {
@@ -162,7 +194,7 @@ export function createTaskBrowser(config, { locale: requestedLocale = config.def
     return translated ? { ...sample, title: translated.title, description: translated.description,
       inputs: translated.inputs, outputs: translated.outputs } : sample;
   }
-  return Object.freeze({ locale, text, hosts, suggestions, detailOf, summaryOf, showcaseOf, classificationOf,
+  return Object.freeze({ locale, text, hosts, suggestions, packs, packOf, installCommand, detailOf, summaryOf, showcaseOf, classificationOf,
     filterCapabilities, buildRequest, requestAttachments, requestForDraft, fields, titleOf, briefLabel, sourceUrl, sampleUrl,
     commonFields: COMMON_FIELDS, typeNames: TYPE_NAMES });
 }

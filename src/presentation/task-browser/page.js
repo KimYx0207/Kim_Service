@@ -5,7 +5,7 @@
   const pageUrl = new URL(location.href);
   let app = createTaskBrowser(data.ui, { locale: pageUrl.searchParams.get('lang') });
   let {filterCapabilities,buildRequest,requestAttachments,requestForDraft,fields,titleOf,briefLabel,sourceUrl,sampleUrl,
-    commonFields:COMMON_FIELDS,typeNames:TYPE_NAMES,locale,text:t,hosts,suggestions,
+    commonFields:COMMON_FIELDS,typeNames:TYPE_NAMES,locale,text:t,hosts,suggestions,packs,packOf,installCommand,
     detailOf,summaryOf,showcaseOf,classificationOf}=app;
   function applyStaticLanguage() {
     // Explicit template keys select authored messages; source text is never searched or replaced.
@@ -27,8 +27,15 @@
   const cards = document.getElementById('cards');
   const dialog = document.getElementById('detail');
   const detailContent = document.getElementById('detail-content');
+  const packsContainer = document.getElementById('packs');
+  const featuredToggle = document.getElementById('featured-toggle');
+  const cliTarget = document.getElementById('cli-target');
+  const cliCommandNode = document.getElementById('cli-command');
+  const cliCopyButton = document.getElementById('cli-copy');
   let selectedType = 'all';
   let selectedGroup = '', selectedRole = '';
+  let selectedPack = '';
+  let featuredOnly = false;
   const groupPicker = document.getElementById('agent-group');
   const rolePicker = document.getElementById('agent-role');
   let lastTrigger = null;
@@ -38,14 +45,51 @@
   const browsingOrder = [...data.capabilities].sort((left,right) =>
     types.indexOf(left.componentType)-types.indexOf(right.componentType) || titleOf(left).localeCompare(titleOf(right),locale));
 
+  function updateCliBar() {
+    if (!cliCommandNode || !cliTarget) return;
+    const selector = selectedRole || selectedPack || 'all';
+    cliCommandNode.textContent = installCommand({
+      selector,
+      target: cliTarget.value,
+      featured: featuredOnly && !selectedRole
+    });
+  }
+
+  async function copyCliText(value, button) {
+    let copied = false;
+    if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+      try { await navigator.clipboard.writeText(value); copied = true; } catch { copied = false; }
+    }
+    if (copied) {
+      button.textContent = t('page.cliCopied');
+      setTimeout(() => { button.textContent = t('page.cliCopy'); }, 1600);
+    }
+  }
+
+  if (cliTarget) {
+    cliTarget.addEventListener('change', () => {
+      updateCliBar();
+      if (activeId) {
+        const detailCode = detailContent.querySelector?.('.detail-cli-code');
+        const activeCap = data.capabilities.find(item => item.id === activeId);
+        if (detailCode && activeCap) {
+          detailCode.textContent = installCommand({ selector: activeCap.componentId, target: cliTarget.value });
+        }
+      }
+    });
+  }
+  if (cliCopyButton && cliCommandNode) {
+    cliCopyButton.addEventListener('click', () => copyCliText(cliCommandNode.textContent, cliCopyButton));
+  }
+
   function switchLanguage(value) {
     app = createTaskBrowser(data.ui,{locale:value});
     ({filterCapabilities,buildRequest,requestAttachments,requestForDraft,fields,titleOf,briefLabel,sourceUrl,sampleUrl,
-      commonFields:COMMON_FIELDS,typeNames:TYPE_NAMES,locale,text:t,hosts,suggestions,
+      commonFields:COMMON_FIELDS,typeNames:TYPE_NAMES,locale,text:t,hosts,suggestions,packs,packOf,installCommand,
       detailOf,summaryOf,showcaseOf,classificationOf}=app);
     applyStaticLanguage();
     browsingOrder.sort((left,right)=>types.indexOf(left.componentType)-types.indexOf(right.componentType)||titleOf(left).localeCompare(titleOf(right),locale));
-    renderTypeFilters();renderSuggestions();renderShowcases();renderAgentNavigation();renderResults();
+    renderPacks();renderTypeFilters();renderSuggestions();renderShowcases();renderAgentNavigation();updateCliBar();renderResults();
     if(activeId){
       const capability=data.capabilities.find(item=>item.id===activeId);
       lastTrigger=[...cards.querySelectorAll('.details-button')].find(button=>button.closest('[data-capability]').dataset.capability===activeId)||null;
@@ -91,13 +135,73 @@
       : (locale==='en' ? t('ui.unspecified') : schema.description || t('ui.unspecified'));
   }
 
+  function renderPacks() {
+    if (!packsContainer || !featuredToggle) return;
+    if (!packs.length) {
+      packsContainer.hidden = true;
+      featuredToggle.hidden = true;
+      return;
+    }
+    packsContainer.hidden = false;
+    featuredToggle.hidden = false;
+    featuredToggle.setAttribute('aria-pressed', String(featuredOnly));
+    packsContainer.replaceChildren();
+    const allBtn = element('button', 'pack-card');
+    allBtn.type = 'button';
+    allBtn.dataset.pack = '';
+    allBtn.setAttribute('aria-pressed', String(selectedPack === ''));
+    const allTop = element('div', 'pack-card-top');
+    allTop.append(element('span', 'pack-icon', '❖'), element('strong', 'pack-title', t('page.allPacks')), element('span', 'pack-count', String(data.componentCount)));
+    allBtn.append(allTop, element('span', 'pack-tagline', t('page.allPacksTagline')));
+    allBtn.addEventListener('click', () => {
+      selectedPack = '';
+      renderPacks();
+      updateCliBar();
+      renderResults();
+    });
+    packsContainer.append(allBtn);
+
+    for (const pack of packs) {
+      const btn = element('button', 'pack-card');
+      btn.type = 'button';
+      btn.dataset.pack = pack.id;
+      btn.setAttribute('aria-pressed', String(selectedPack === pack.id));
+      const top = element('div', 'pack-card-top');
+      top.append(element('span', 'pack-icon', pack.icon), element('strong', 'pack-title', pack.title), element('span', 'pack-count', String(pack.componentCount)));
+      btn.append(top, element('span', 'pack-tagline', pack.tagline));
+      btn.addEventListener('click', () => {
+        selectedPack = selectedPack === pack.id ? '' : pack.id;
+        if (selectedPack) { clearClassification(); selectedType = 'all'; }
+        renderPacks();
+        updateCliBar();
+        renderResults();
+      });
+      packsContainer.append(btn);
+    }
+  }
+
+  if (featuredToggle) {
+    featuredToggle.addEventListener('click', () => {
+      featuredOnly = !featuredOnly;
+      featuredToggle.setAttribute('aria-pressed', String(featuredOnly));
+      updateCliBar();
+      renderResults();
+    });
+  }
+
   function renderCard(capability) {
-    const article = element('article','card');
+    const packInfo = packOf(capability);
+    const article = element('article', packInfo?.featured ? 'card card-featured' : 'card');
     article.dataset.capability = capability.id;
     const meta = element('div','card-meta');
+    const metaLeft = element('div','card-badges');
     const label = element('span','type-label',TYPE_NAMES[capability.componentType]);
     label.dataset.type = capability.componentType;
-    meta.append(label,element('span','version','v'+capability.componentVersion));
+    metaLeft.append(label);
+    if (packInfo?.featured) metaLeft.append(element('span','badge-featured',t('ui.featuredBadge')));
+    if (packInfo?.hasScripts) metaLeft.append(element('span','badge-asset',t('ui.scriptsBadge')));
+    if (capability.examples.length) metaLeft.append(element('span','badge-asset',t('ui.examplesBadge')));
+    meta.append(metaLeft,element('span','version','v'+capability.componentVersion));
     const classification = classificationOf(capability);
     if (classification) meta.append(element('span','classification',classification.group + ' → ' + classification.role));
     const title = element('h3','',classification?.role || titleOf(capability));
@@ -120,7 +224,12 @@
   }
 
   function renderResults() {
-    const filtered = filterCapabilities(browsingOrder,search.value,selectedType,{groupId:selectedGroup,componentId:selectedRole});
+    const filtered = filterCapabilities(browsingOrder,search.value,selectedType,{
+      groupId:selectedGroup,
+      componentId:selectedRole,
+      packId:selectedPack,
+      featuredOnly
+    });
     cards.replaceChildren(...filtered.map(renderCard));
     document.getElementById('empty').hidden = filtered.length !== 0;
     document.getElementById('clear-search').hidden = !search.value;
@@ -174,6 +283,17 @@
     const runtime = element('div','runtime-note');
     const [runtimeTitle,runtimeDescription] = runtimeCopy(capability);
     runtime.append(element('strong','',runtimeTitle),element('p','',runtimeDescription));
+
+    const detailCli = element('div','detail-cli');
+    const detailCliLabel = element('span','detail-cli-label',t('ui.cliInstallTitle'));
+    const detailCliRow = element('div','detail-cli-row');
+    const detailCliCode = element('code','detail-cli-code',installCommand({ selector: capability.componentId, target: cliTarget?.value || 'claude' }));
+    const detailCliCopy = element('button','cli-copy-btn',t('page.cliCopy'));
+    detailCliCopy.type = 'button';
+    detailCliCopy.addEventListener('click',()=>copyCliText(detailCliCode.textContent,detailCliCopy));
+    detailCliRow.append(detailCliCode,detailCliCopy);
+    detailCli.append(detailCliLabel,detailCliRow);
+
     const io = element('div','detail-io');
     for (const [title,schema] of [[t('ui.needInputs'),capability.input],[t('ui.declaredOutputs'),capability.output]]) {
       const section = element('section');
@@ -331,7 +451,7 @@
     note.append(fileLink(`${capability.componentPath}/capability.json`,`${capability.componentPath}/capability.json`));
     note.append(document.createTextNode(t('ui.sourceSuffix')));
     const useWhen=locale==='en'?translatedDetail?.useWhen||[]:capability.useWhen;
-    detailContent.replaceChildren(heading,element('p','component-name',capability.id),element('p','detail-summary',summaryOf(capability)),runtime,
+    detailContent.replaceChildren(heading,element('p','component-name',capability.id),element('p','detail-summary',summaryOf(capability)),runtime,detailCli,
       ...(useWhen.length?[listBlock(t('ui.useWhen'),useWhen)]:[]),io,extra,links,validation,requestBox,note);
     if (!dialog.open) dialog.showModal();
     dialog.scrollTop = 0;
@@ -363,9 +483,10 @@
   }
   groupPicker.addEventListener('change',()=>{
     selectedGroup=groupPicker.value;selectedRole='';selectedType=selectedGroup?'agent':'all';
-    renderAgentNavigation();renderResults();
+    if(selectedGroup){selectedPack='';featuredOnly=false;renderPacks();}
+    updateCliBar();renderAgentNavigation();renderResults();
   });
-  rolePicker.addEventListener('change',()=>{selectedRole=rolePicker.value;renderResults();});
+  rolePicker.addEventListener('change',()=>{selectedRole=rolePicker.value;updateCliBar();renderResults();});
   function clearClassification(){selectedGroup='';selectedRole='';renderAgentNavigation();}
   function renderTypeFilters(){
     const filters = document.getElementById('types');
@@ -387,11 +508,11 @@
     container.replaceChildren(element('span','',t('page.suggestionsLabel')));
     for(const query of suggestions){
       const button=element('button','',query);button.type='button';button.dataset.query=query;
-      button.addEventListener('click',()=>{search.value=query;selectedType='all';clearClassification();renderResults();search.focus();});
+      button.addEventListener('click',()=>{search.value=query;selectedType='all';selectedPack='';featuredOnly=false;clearClassification();renderPacks();updateCliBar();renderResults();search.focus();});
       container.append(button);
     }
   }
-  document.getElementById('reset').addEventListener('click',()=>{search.value='';selectedType='all';clearClassification();renderResults();search.focus();});
+  document.getElementById('reset').addEventListener('click',()=>{search.value='';selectedType='all';selectedPack='';featuredOnly=false;clearClassification();renderPacks();updateCliBar();renderResults();search.focus();});
   document.getElementById('close-detail').addEventListener('click',closeDetail);
   dialog.addEventListener('click',(event)=>{if(event.target===dialog){const box=dialog.getBoundingClientRect();if(event.clientX<box.left||event.clientX>box.right||event.clientY<box.top||event.clientY>box.bottom)closeDetail();}});
   dialog.addEventListener('close',()=>{
@@ -426,10 +547,12 @@
     document.getElementById('showcases').hidden=data.showcases.length===0;
   }
   applyStaticLanguage();
+  renderPacks();
   renderAgentNavigation();
   renderTypeFilters();
   renderSuggestions();
   renderShowcases();
+  updateCliBar();
   renderResults();
   openFromHash();
 })();

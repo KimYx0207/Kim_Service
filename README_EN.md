@@ -4,17 +4,49 @@
   <a href="README.md">简体中文</a> · <a href="README_EN.md">English</a>
 </p>
 
-**Give your AI the methods for a professional task. Get results you can open, change, and check.**
+**Open-source AI Agent Playbooks & Skill Packs for developers, product teams, and creators.**
 
-Kim Service is an open-source **library of professional methods for AI work**. You supply a business goal and source materials. It supplies role instructions, references, examples, calculation scripts, and acceptance criteria for your existing AI client, turning “help me analyze this” into files you can open, edit, and check.
+Kim Service packages practitioner workflows across software engineering, product design, creator growth, corporate finance, and industry operations into **installable, contract-verified Agent and Skill bundles**—complete with structured input/output schemas, practitioner reference matrices, runnable scripts, and interactive deliverable showcases. Install curated domain packs into Claude Code, Codex, Cursor, or Antigravity in seconds, turning vague prompts into auditable, editable deliverables.
 
-You may know what you want without knowing which numbers a forecast must reconcile, which states a booking page needs, or how to compare supplier quotes. The methods make the work concrete: inspect materials and evidence, analyze or build the result, then check the actual delivery.
+**[Open Interactive Web Workbench](https://kimyx0207.github.io/Kim_Service/?lang=en)** · **[V1.20 Release Downloads](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.20)** · **[Changelog](CHANGELOG.md#v120---2026-11-16)** · **[Browse Source](https://github.com/KimYx0207/Kim_Service/tree/main)**
 
-**V1.20** contains **61 specialist Agents, 33 Skills, 2 Hooks, and 2 Tools**: 98 components and **113 searchable task capabilities**. This release includes the new [cross-Agent thinking patterns](skills/agent-thinking-patterns/SKILL.md) and aligns the ZCode Meta_Kim plugin with v3.16.2. See the [release history](CHANGELOG.md#v120---2026-11-16).
+---
 
-**[Browse capabilities and prepare a request](https://kimyx0207.github.io/Kim_Service/?lang=en)** · **[V1.20 downloads](https://github.com/KimYx0207/Kim_Service/releases/tag/V1.20)** · **[Browse the source](https://github.com/KimYx0207/Kim_Service/tree/main)**
+## 30-Second Quick Install (Zero-Dependency CLI)
 
-Browse **11 industries and 8 shared professional domains → role/job**, or search for the result you need: “cash forecast,” “supplier comparison,” or “booking page.” Check the inputs and deliverables before choosing a method. An Agent here is first a complete professional method package read and executed by the current client; native Agent registration depends on the integration.
+No need to load all 98 packages at once—install by **curated domain pack**, **`--featured` flagship subset**, or **individual component ID** into your project or global profile (`claude`, `codex`, `cursor`, `antigravity`, `gemini`, `openclaw`):
+
+```bash
+# 1. Inspect the 6 curated domain packs
+npx github:KimYx0207/Kim_Service packs
+
+# 2. Install a domain pack into your project (e.g. Engineering -> Claude Code; Creator -> Cursor)
+npx github:KimYx0207/Kim_Service install engineering --target claude
+npx github:KimYx0207/Kim_Service install creator-growth --target cursor
+
+# 3. Recommended starter: install the 36 featured flagship packages, or install one package globally
+npx github:KimYx0207/Kim_Service install all --featured --target antigravity
+npx github:KimYx0207/Kim_Service install api-contract-review --target codex --scope global
+
+# 4. Preview target paths (--dry-run) or inspect a single package contract
+npx github:KimYx0207/Kim_Service install product-design --target claude --dry-run
+npx github:KimYx0207/Kim_Service info financial-modeler
+```
+
+## Six Curated Domain Packs (98 Packages · 113 Searchable Capabilities)
+
+**V1.20** ships **61 specialist Agents, 33 workflow Skills, 2 Hooks, and 2 engineering Tools** (including [cross-Agent thinking patterns](skills/agent-thinking-patterns/SKILL.md) and ZCode `Meta_Kim` v3.16.2 alignment), organized into six domain packs:
+
+| Pack ID (CLI Selector) | Audience & Focus | Size | Flagship Packages |
+| --- | --- | --- | --- |
+| **`engineering`**<br>Engineering & AI Systems | Full-stack developers, architects, QA & AppSec engineers | 29 pkgs<br>(8 featured) | [Frontend Engineer](agents/frontend-engineer/AGENT.md) · [Backend & Data](agents/backend-data-engineer/AGENT.md) · [Applied AI](agents/applied-ai-engineer/AGENT.md) · [API Contract Review](skills/api-contract-review/SKILL.md) · [Database Migration](skills/database-migration/SKILL.md) · [Agent Evaluation](skills/agent-evaluation/SKILL.md) · [Multi-CLI Bridge](tools/claudecode-codex-gemini/README.md) |
+| **`product-design`**<br>Product & Design Systems | Product managers, UI/UX designers, indie builders | 18 pkgs<br>(6 featured) | [Product Architect](agents/product-architect/AGENT.md) · [Design System](agents/design-system-designer/AGENT.md) · [Interaction Design](agents/interaction-designer/AGENT.md) · [Accessibility Audit](skills/accessibility-audit/SKILL.md) · [Feedback to Requirements](skills/feedback-to-requirements/SKILL.md) · [Game Economy](agents/game-economy-designer/AGENT.md) |
+| **`creator-growth`**<br>Creator & Growth Studio | Content creators, video producers, brand marketers | 15 pkgs<br>(7 featured) | [Topic Planner](agents/topic-planner/AGENT.md) · [Script & Essay Writer](agents/script-writer/AGENT.md) · [Headline & Cover Optimizer](agents/headline-cover-optimizer/AGENT.md) · [Xiaohongshu Visual Kit](skills/xiaohongshu-skill/SKILL.md) · [Sticker Pack Studio](skills/kim-sticker-pack/SKILL.md) · [Visual Explainer](skills/visual-explainer/SKILL.md) · [Short-Drama Strategy](agents/short-drama-strategist/AGENT.md) |
+| **`commerce-finance`**<br>Commerce, Finance & Legal | Founders, ecommerce operators, FP&A, credit & legal teams | 18 pkgs<br>(7 featured) | [Financial Modeler](agents/financial-modeler/AGENT.md) · [Ecommerce Strategy](agents/ecommerce-strategy-planner/AGENT.md) · [Global Expansion](agents/global-expansion-strategist/AGENT.md) · [Credit Risk](agents/credit-risk-analyst/AGENT.md) · [Treasury Liquidity](agents/treasury-liquidity-analyst/AGENT.md) · [Contract Review](agents/contract-review-analyst/AGENT.md) |
+| **`career-education`**<br>Career, Education & Ops | Job seekers, hiring managers, educators, ops leads | 8 pkgs<br>(4 featured) | [Resume Editor](agents/resume-editor/AGENT.md) · [Interview Coach](agents/interview-coach/AGENT.md) · [Hiring Process Design](agents/hiring-process-designer/AGENT.md) · [Curriculum Designer](agents/curriculum-designer/AGENT.md) · [Assessment Design](skills/learning-assessment-design/SKILL.md) · [SOP Runbook](skills/sop-runbook/SKILL.md) |
+| **`industry-ops`**<br>Industry & Field Operations | Supply chain, reliability, construction, hospitality & agronomy | 10 pkgs<br>(4 featured) | [Supply Chain Planner](agents/supply-chain-planner/AGENT.md) · [Maintenance Reliability](agents/maintenance-reliability-engineer/AGENT.md) · [Warehouse Ops](agents/warehouse-operations-analyst/AGENT.md) · [Construction Control](agents/construction-project-controller/AGENT.md) · [Hospitality Revenue](agents/hospitality-revenue-analyst/AGENT.md) · [Agronomy Planner](agents/agronomy-planner/AGENT.md) |
+
+You can also browse by **Domain Pack** or **11 industries and 8 shared domains → role/job** in the [Web Workbench](https://kimyx0207.github.io/Kim_Service/?lang=en) (or open the self-contained offline `docs/start.html`), inspect inputs and deliverables, and copy CLI commands or structured task requests.
 
 ## Ecommerce, global expansion and short drama: compare business routes first
 
